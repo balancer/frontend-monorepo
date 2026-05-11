@@ -1,30 +1,35 @@
 /**
  * Hourly protocol-snapshot writer.
  *
- * Hits api-v3 once for `protocolMetricsAggregated(chains: [...])`. That single
- * call returns the cross-chain aggregate plus a per-chain breakdown
- * (`chains: GqlProtocolMetricsChain[]`), so we get ~11 rows per tick without
- * fan-out. Each row is keyed on `(ts, chain)` where:
- *   - `ts` is the unix-seconds top-of-hour bucket (we floor `now()` to the
- *     hour so re-runs in the same window upsert the same row idempotently)
- *   - `chain = 'ALL'` for the aggregate row; otherwise the `GqlChain` enum
- *     name (e.g. `'MAINNET'`, `'ARBITRUM'`)
+ * One GraphQL call to api-v3 returns two aliases:
+ *   - `core` = `protocolMetricsAggregated(chains: [...])` — cross-chain
+ *     aggregate plus per-chain breakdown. This is the "everything api-v3
+ *     sees" headline; it already includes CoW AMM in its numbers.
+ *   - `cowAmm` = all `poolGetPools(poolTypeIn: [COW_AMM])` with their chain
+ *     + dynamicData. We sum these per chain locally to produce the COW_AMM
+ *     breakdown rows. CoW AMM is a *subset of* CORE — never additive.
+ *
+ * Each tick produces 2 × (1 aggregate + N chains) rows keyed on
+ * `(ts, chain, protocol)`. `ts` is unix-seconds top-of-hour, so re-running
+ * inside the same window upserts the same rows idempotently.
  *
  * Vercel cron injects `Authorization: Bearer ${CRON_SECRET}`; we verify it
- * before doing any work. The same route can be hit manually with that header
- * to force a write outside the cron cadence (useful for debugging on a fresh
- * deploy).
- *
- * What this does NOT do: backfill. api-v3 only exposes point-in-time metrics
- * (`swapVolume24h` etc are trailing-24h rolling values), so there is no
- * historical endpoint to walk. The series grows forward from first cron run.
+ * before doing any work.
  */
 
 import 'server-only'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import networkConfigs from '@repo/lib/config/networks'
 import { isChainDeprecated } from '@repo/lib/modules/chains/chain.utils'
-import { ensureSchema, sql, AGGREGATE_KEY, type SnapshotRow } from '@analytics/lib/db'
+import {
+  ensureSchema,
+  sql,
+  AGGREGATE_KEY,
+  PROTOCOL_CORE,
+  PROTOCOL_COW_AMM,
+  SOURCE_API,
+  type SnapshotRow,
+} from '@analytics/lib/db'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -50,7 +55,7 @@ const ACTIVE_CHAINS: GqlChain[] = Object.values(GqlChain).filter(
 
 const QUERY = /* GraphQL */ `
   query ProtocolSnapshot($chains: [GqlChain!]!) {
-    protocolMetricsAggregated(chains: $chains) {
+    core: protocolMetricsAggregated(chains: $chains) {
       totalLiquidity
       swapVolume24h
       swapFee24h
@@ -69,6 +74,19 @@ const QUERY = /* GraphQL */ `
         numLiquidityProviders
       }
     }
+    cowAmm: poolGetPools(
+      where: { chainIn: $chains, poolTypeIn: [COW_AMM] }
+      first: 1000
+    ) {
+      chain
+      dynamicData {
+        totalLiquidity
+        volume24h
+        fees24h
+        yieldCapture24h
+        surplus24h
+      }
+    }
   }
 `
 
@@ -83,8 +101,19 @@ type RawMetrics = {
 }
 type RawChainMetrics = RawMetrics & { chainId: string }
 type RawAggregated = RawMetrics & { chains: RawChainMetrics[] }
+type RawCowAmmPool = {
+  chain: GqlChain
+  dynamicData: {
+    totalLiquidity: string | null
+    volume24h: string | null
+    fees24h: string | null
+    yieldCapture24h: string | null
+    surplus24h: string | null
+  }
+}
+type RawResponse = { core: RawAggregated; cowAmm: RawCowAmmPool[] }
 
-async function fetchMetrics(): Promise<RawAggregated> {
+async function fetchMetrics(): Promise<RawResponse> {
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -92,19 +121,17 @@ async function fetchMetrics(): Promise<RawAggregated> {
     cache: 'no-store',
   })
   if (!res.ok) throw new Error(`api-v3 HTTP ${res.status}`)
-  const json = (await res.json()) as {
-    data?: { protocolMetricsAggregated: RawAggregated }
-    errors?: unknown
-  }
+  const json = (await res.json()) as { data?: RawResponse; errors?: unknown }
   if (json.errors) throw new Error(`api-v3 errors: ${JSON.stringify(json.errors)}`)
   if (!json.data) throw new Error('api-v3 returned no data')
-  return json.data.protocolMetricsAggregated
+  return json.data
 }
 
-function toRow(m: RawMetrics, ts: number, chain: string): SnapshotRow {
+function coreRow(m: RawMetrics, ts: number, chain: string): SnapshotRow {
   return {
     ts,
     chain,
+    protocol: PROTOCOL_CORE,
     totalLiquidity: Number.parseFloat(m.totalLiquidity) || 0,
     swapVolume24h: Number.parseFloat(m.swapVolume24h) || 0,
     swapFee24h: Number.parseFloat(m.swapFee24h) || 0,
@@ -112,35 +139,90 @@ function toRow(m: RawMetrics, ts: number, chain: string): SnapshotRow {
     surplus24h: Number.parseFloat(m.surplus24h) || 0,
     poolCount: Number.parseInt(m.poolCount, 10) || 0,
     numLps: Number.parseInt(m.numLiquidityProviders, 10) || 0,
+    source: SOURCE_API,
   }
+}
+
+// CoW AMM has no aggregate endpoint — we fold the pool list locally. LP count
+// isn't derivable per-pool, so num_lps stays 0 on CoW AMM rows. Chart should
+// treat 0-valued fields on COW_AMM rows as "unknown", not "zero".
+function aggregateCowAmm(pools: RawCowAmmPool[], ts: number): SnapshotRow[] {
+  type Bucket = {
+    totalLiquidity: number
+    swapVolume24h: number
+    swapFee24h: number
+    yieldCapture24h: number
+    surplus24h: number
+    poolCount: number
+  }
+  const empty = (): Bucket => ({
+    totalLiquidity: 0,
+    swapVolume24h: 0,
+    swapFee24h: 0,
+    yieldCapture24h: 0,
+    surplus24h: 0,
+    poolCount: 0,
+  })
+  const all = empty()
+  const byChain = new Map<GqlChain, Bucket>()
+  for (const p of pools) {
+    const dd = p.dynamicData
+    const v = {
+      totalLiquidity: Number.parseFloat(dd.totalLiquidity ?? '0') || 0,
+      swapVolume24h: Number.parseFloat(dd.volume24h ?? '0') || 0,
+      swapFee24h: Number.parseFloat(dd.fees24h ?? '0') || 0,
+      yieldCapture24h: Number.parseFloat(dd.yieldCapture24h ?? '0') || 0,
+      surplus24h: Number.parseFloat(dd.surplus24h ?? '0') || 0,
+    }
+    all.totalLiquidity += v.totalLiquidity
+    all.swapVolume24h += v.swapVolume24h
+    all.swapFee24h += v.swapFee24h
+    all.yieldCapture24h += v.yieldCapture24h
+    all.surplus24h += v.surplus24h
+    all.poolCount += 1
+    const b = byChain.get(p.chain) ?? empty()
+    b.totalLiquidity += v.totalLiquidity
+    b.swapVolume24h += v.swapVolume24h
+    b.swapFee24h += v.swapFee24h
+    b.yieldCapture24h += v.yieldCapture24h
+    b.surplus24h += v.surplus24h
+    b.poolCount += 1
+    byChain.set(p.chain, b)
+  }
+  const toRow = (b: Bucket, chain: string): SnapshotRow => ({
+    ts,
+    chain,
+    protocol: PROTOCOL_COW_AMM,
+    ...b,
+    numLps: 0,
+    source: SOURCE_API,
+  })
+  return [toRow(all, AGGREGATE_KEY), ...Array.from(byChain, ([c, b]) => toRow(b, c))]
 }
 
 async function upsertRows(rows: SnapshotRow[]): Promise<void> {
   if (rows.length === 0) return
-  // `sql.transaction([...])` batches N parameterised statements into one HTTP
-  // round-trip, so 11 rows ≠ 11 trips. Per-row INSERT keeps the parameter
-  // map readable; building one big multi-VALUES statement would need
-  // `sql.query(text, params)` which isn't exposed by the tagged-template
-  // client typings.
   await sql.transaction(
     rows.map(
       r => sql`
         INSERT INTO protocol_snapshots (
-          ts, chain, total_liquidity, swap_volume_24h, swap_fee_24h,
-          yield_capture_24h, surplus_24h, pool_count, num_lps
+          ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
+          yield_capture_24h, surplus_24h, pool_count, num_lps, source
         ) VALUES (
-          ${r.ts}, ${r.chain}, ${r.totalLiquidity}, ${r.swapVolume24h},
+          ${r.ts}, ${r.chain}, ${r.protocol}, ${r.totalLiquidity}, ${r.swapVolume24h},
           ${r.swapFee24h}, ${r.yieldCapture24h}, ${r.surplus24h},
-          ${r.poolCount}, ${r.numLps}
+          ${r.poolCount}, ${r.numLps}, ${r.source}
         )
-        ON CONFLICT (ts, chain) DO UPDATE SET
+        ON CONFLICT (ts, chain, protocol) DO UPDATE SET
           total_liquidity   = EXCLUDED.total_liquidity,
           swap_volume_24h   = EXCLUDED.swap_volume_24h,
           swap_fee_24h      = EXCLUDED.swap_fee_24h,
           yield_capture_24h = EXCLUDED.yield_capture_24h,
           surplus_24h       = EXCLUDED.surplus_24h,
           pool_count        = EXCLUDED.pool_count,
-          num_lps           = EXCLUDED.num_lps
+          num_lps           = EXCLUDED.num_lps,
+          source            = EXCLUDED.source,
+          captured_at       = now()
       `
     )
   )
@@ -163,19 +245,21 @@ export async function GET(req: Request) {
 
   try {
     const data = await fetchMetrics()
-    rows.push(toRow(data, ts, AGGREGATE_KEY))
-    for (const c of data.chains) {
+    // CORE rows: aggregate + per-chain from protocolMetricsAggregated.
+    rows.push(coreRow(data.core, ts, AGGREGATE_KEY))
+    for (const c of data.core.chains) {
       const chainId = Number.parseInt(c.chainId, 10)
       const chain = Number.isFinite(chainId) ? CHAIN_BY_ID.get(chainId) : undefined
       if (!chain) {
         // Unknown chain id from api-v3 — don't silently fold it into the
-        // aggregate by mislabelling. Logged in the response so we can spot
-        // new chains we need to teach @repo/lib about.
+        // aggregate by mislabelling. Logged so we can spot new chains.
         skipped.push(c.chainId)
         continue
       }
-      rows.push(toRow(c, ts, chain))
+      rows.push(coreRow(c, ts, chain))
     }
+    // COW_AMM rows: rolled up from the pool list.
+    rows.push(...aggregateCowAmm(data.cowAmm, ts))
     await upsertRows(rows)
   } catch (e) {
     error = String(e)
