@@ -106,6 +106,7 @@ export function usePoolListLogic({
                 chainIn: [chain],
                 tokensIn,
                 minTvl: 50_000,
+                reviewedOnly: true,
               },
             },
           })

@@ -307,6 +307,7 @@ export function usePoolListQueryState() {
           : null,
       tagNotIn: ['BLACK_LISTED'],
       protocolVersionIn: protocolVersion ? [protocolVersion] : undefined,
+      reviewedOnly: true,
     },
     textSearch,
   }
