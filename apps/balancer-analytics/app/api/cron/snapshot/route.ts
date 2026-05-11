@@ -20,7 +20,7 @@
 import 'server-only'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import networkConfigs from '@repo/lib/config/networks'
-import { isChainDeprecated } from '@repo/lib/modules/chains/chain.utils'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import {
   ensureSchema,
   sql,
@@ -46,12 +46,12 @@ for (const [chain, cfg] of Object.entries(networkConfigs)) {
   if (cfg) CHAIN_BY_ID.set(cfg.chainId, chain as GqlChain)
 }
 
-// Pass every non-deprecated chain to the aggregator. The api silently drops
-// chains with no v3 activity, so this is safe to keep maximal — when a new
-// chain comes online we don't need to redeploy.
-const ACTIVE_CHAINS: GqlChain[] = Object.values(GqlChain).filter(
-  c => !isChainDeprecated(c)
-)
+// Match the chain set used by the hero KPI (`useProtocolStats` →
+// `PROJECT_CONFIG.supportedNetworks`). Using a broader set here produces a
+// chart total that disagrees with the headline TVL — the gap surfaced as the
+// Sonic-shaped $9M discrepancy. Source of truth for "what counts as the
+// protocol" lives in supportedNetworks; this tracks it.
+const ACTIVE_CHAINS: GqlChain[] = PROJECT_CONFIG.supportedNetworks
 
 const QUERY = /* GraphQL */ `
   query ProtocolSnapshot($chains: [GqlChain!]!) {

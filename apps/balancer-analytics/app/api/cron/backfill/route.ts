@@ -10,10 +10,18 @@
  *   - `/summary/dexs/{slug}?dataType=dailyVolume` → swap volume
  *   - `/summary/fees/{slug}?dataType=dailyFees`   → swap fees
  *
- * We fetch three slugs and combine:
- *   - `CORE`   = balancer-v2 + balancer-v3 + balancer-cow-amm  (matches
- *               api-v3's "everything it sees" definition)
+ * We fetch three slugs and write four protocol breakdowns per (ts, chain):
+ *   - `V2`     = balancer-v2 alone
+ *   - `V3`     = balancer-v3 alone
  *   - `COW_AMM` = balancer-cow-amm alone
+ *   - `CORE`   = V2 + V3 + COW_AMM   (matches api-v3's "everything it sees"
+ *               aggregate; consumers showing a single headline TVL should
+ *               read CORE)
+ *
+ * Chain set: only `PROJECT_CONFIG.supportedNetworks` rows are written, to
+ * keep the dataset aligned with the hero KPI (`useProtocolStats`). Chains
+ * appearing in DefiLlama but not in supportedNetworks (e.g. Sonic) are
+ * skipped and reported under `unmappedChains`.
  *
  * Fields DefiLlama doesn't expose stay at 0 on backfill rows
  * (yieldCapture24h, surplus24h, poolCount, numLiquidityProviders). Charts
@@ -21,20 +29,24 @@
  *
  * Idempotency: `ON CONFLICT DO NOTHING`. Re-running fills gaps and never
  * clobbers a cron row. `?force=1` overwrites existing defillama rows (still
- * won't touch api-v3 rows).
+ * won't touch api-v3 rows) and also deletes orphaned defillama rows for any
+ * chain that's no longer in supportedNetworks.
  *
  * Auth: same `CRON_SECRET` Bearer as the hourly cron. Not on a Vercel cron
- * schedule — run manually after first deploy:
+ * schedule — run manually:
  *   curl -H "Authorization: Bearer $CRON_SECRET" .../api/cron/backfill
  */
 
 import 'server-only'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import {
   ensureSchema,
   sql,
   AGGREGATE_KEY,
   PROTOCOL_CORE,
+  PROTOCOL_V2,
+  PROTOCOL_V3,
   PROTOCOL_COW_AMM,
   SOURCE_DEFILLAMA,
   type Protocol,
@@ -46,13 +58,20 @@ export const dynamic = 'force-dynamic'
 export const maxDuration = 300
 
 const DAY_S = 24 * 60 * 60
-const SLUGS = ['balancer-v2', 'balancer-v3', 'balancer-cow-amm'] as const
-type Slug = (typeof SLUGS)[number]
-const COW_AMM_SLUG: Slug = 'balancer-cow-amm'
 
-// DefiLlama chain name → GqlChain enum. Some endpoints (protocol TVL) use
-// "Optimism" while others (dex summaries) use "OP Mainnet" — handle both.
-// "xDai" is DefiLlama's legacy name for Gnosis Chain.
+// Slug → protocol. The order here also defines fetch order; CORE is derived
+// from the three slug pivots at write time.
+const SLUG_TO_PROTOCOL = {
+  'balancer-v2': PROTOCOL_V2,
+  'balancer-v3': PROTOCOL_V3,
+  'balancer-cow-amm': PROTOCOL_COW_AMM,
+} as const
+type Slug = keyof typeof SLUG_TO_PROTOCOL
+const SLUGS = Object.keys(SLUG_TO_PROTOCOL) as Slug[]
+
+// DefiLlama chain name → GqlChain enum. Protocol-TVL responses use
+// "Optimism"; dex/fees breakdowns use "OP Mainnet" — both alias. "xDai" is
+// DefiLlama's legacy name for Gnosis Chain.
 const CHAIN_MAP: Record<string, GqlChain> = {
   Ethereum: GqlChain.Mainnet,
   Arbitrum: GqlChain.Arbitrum,
@@ -71,6 +90,8 @@ const CHAIN_MAP: Record<string, GqlChain> = {
   'Hyperliquid L1': GqlChain.Hyperevm,
   Plasma: GqlChain.Plasma,
 }
+
+const SUPPORTED = new Set<GqlChain>(PROJECT_CONFIG.supportedNetworks)
 
 type Bucket = { tvl: number; volume: number; fees: number }
 type DayMap = Map<number, Map<GqlChain | typeof AGGREGATE_KEY, Bucket>>
@@ -102,6 +123,20 @@ function ensureDay(pivot: DayMap, ts: number) {
     pivot.set(ts, m)
   }
   return m
+}
+
+// Merge `src` into `dst`, adding bucket values. Used to derive CORE from
+// the three slug pivots without re-fetching.
+function mergePivot(dst: DayMap, src: DayMap) {
+  for (const [ts, byChain] of src) {
+    const day = ensureDay(dst, ts)
+    for (const [chain, b] of byChain) {
+      const target = getBucket(day, chain)
+      target.tvl += b.tvl
+      target.volume += b.volume
+      target.fees += b.fees
+    }
+  }
 }
 
 // --- DefiLlama fetchers ----------------------------------------------------
@@ -137,21 +172,44 @@ async function fetchFees(slug: Slug): Promise<DexSummary | null> {
 
 // --- folding into a (day, chain) pivot -------------------------------------
 
-function foldTvl(pivot: DayMap, data: ProtocolTvl | null, unknown: Set<string>) {
+type FoldCtx = { unknown: Set<string>; unmapped: Set<string> }
+
+function resolveChain(chainName: string, ctx: FoldCtx): GqlChain | null {
+  const chain = CHAIN_MAP[chainName]
+  if (!chain) {
+    ctx.unknown.add(chainName)
+    return null
+  }
+  if (!SUPPORTED.has(chain)) {
+    ctx.unmapped.add(chainName)
+    return null
+  }
+  return chain
+}
+
+function foldTvl(pivot: DayMap, data: ProtocolTvl | null, ctx: FoldCtx) {
   if (!data?.chainTvls) return
   for (const [chainName, ct] of Object.entries(data.chainTvls)) {
-    const chain = CHAIN_MAP[chainName]
     // DefiLlama uses "*" aliases for borrowed/staked tvl variants (e.g.
     // "Ethereum-borrowed"). They double-count, skip them.
     if (chainName.includes('-')) continue
-    if (!chain) {
-      unknown.add(chainName)
-      continue
-    }
+    const chain = resolveChain(chainName, ctx)
+    if (!chain) continue
+    // DefiLlama can publish multiple TVL points for the in-flight day — a
+    // canonical 00:00 snapshot plus a fresher mid-day refresh — both falling
+    // into the same midnight-UTC bucket. Summing them double-counts today.
+    // Keep only the latest point per bucket per chain.
+    const latestByDay = new Map<number, { rawDate: number; value: number }>()
     for (const point of ct.tvl ?? []) {
       const ts = midnightUtc(point.date)
-      const day = ensureDay(pivot, ts)
       const value = Number(point.totalLiquidityUSD) || 0
+      const cur = latestByDay.get(ts)
+      if (!cur || point.date > cur.rawDate) {
+        latestByDay.set(ts, { rawDate: point.date, value })
+      }
+    }
+    for (const [ts, { value }] of latestByDay) {
+      const day = ensureDay(pivot, ts)
       getBucket(day, chain).tvl += value
       getBucket(day, AGGREGATE_KEY).tvl += value
     }
@@ -161,7 +219,7 @@ function foldTvl(pivot: DayMap, data: ProtocolTvl | null, unknown: Set<string>) 
 function foldBreakdown(
   pivot: DayMap,
   data: DexSummary | null,
-  unknown: Set<string>,
+  ctx: FoldCtx,
   field: 'volume' | 'fees'
 ) {
   if (!data?.totalDataChartBreakdown) return
@@ -169,11 +227,8 @@ function foldBreakdown(
     const ts = midnightUtc(Number(rawTs))
     const day = ensureDay(pivot, ts)
     for (const [chainName, byProduct] of Object.entries(byChain)) {
-      const chain = CHAIN_MAP[chainName]
-      if (!chain) {
-        unknown.add(chainName)
-        continue
-      }
+      const chain = resolveChain(chainName, ctx)
+      if (!chain) continue
       const total = Object.values(byProduct).reduce((a, b) => a + (Number(b) || 0), 0)
       getBucket(day, chain)[field] += total
       getBucket(day, AGGREGATE_KEY)[field] += total
@@ -209,48 +264,96 @@ function pivotToRows(pivot: DayMap, protocol: Protocol): SnapshotRow[] {
 
 async function upsertRows(rows: SnapshotRow[], force: boolean): Promise<void> {
   if (rows.length === 0) return
-  // Neon's HTTP transaction has a per-request size budget — chunk to keep
-  // each round-trip reasonable. ~500 statements per chunk is well within
-  // limits and means a 2,000-day backfill is ~10 round trips.
+  // Chunk + parallelize. A large backfill is many chunks of 500 — running
+  // them serially over Neon's HTTP driver takes minutes and trips Vercel's
+  // 60s edge timeout even though the function's maxDuration is higher.
+  // Promise.all here cuts wall time roughly proportional to PARALLELISM.
+  // Neon serverless tolerates this — each transaction is a single HTTP req.
   const CHUNK = 500
-  for (let i = 0; i < rows.length; i += CHUNK) {
-    const slice = rows.slice(i, i + CHUNK)
-    await sql.transaction(
-      slice.map(r => {
-        if (force) {
-          // Force mode: overwrite only rows already marked defillama. Never
-          // clobber api-v3 cron data.
-          return sql`
-            INSERT INTO protocol_snapshots (
-              ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
-              yield_capture_24h, surplus_24h, pool_count, num_lps, source
-            ) VALUES (
-              ${r.ts}, ${r.chain}, ${r.protocol}, ${r.totalLiquidity}, ${r.swapVolume24h},
-              ${r.swapFee24h}, ${r.yieldCapture24h}, ${r.surplus24h},
-              ${r.poolCount}, ${r.numLps}, ${r.source}
-            )
-            ON CONFLICT (ts, chain, protocol) DO UPDATE SET
-              total_liquidity = EXCLUDED.total_liquidity,
-              swap_volume_24h = EXCLUDED.swap_volume_24h,
-              swap_fee_24h    = EXCLUDED.swap_fee_24h,
-              captured_at     = now()
-            WHERE protocol_snapshots.source = 'defillama'
-          `
-        }
-        return sql`
-          INSERT INTO protocol_snapshots (
-            ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
-            yield_capture_24h, surplus_24h, pool_count, num_lps, source
-          ) VALUES (
-            ${r.ts}, ${r.chain}, ${r.protocol}, ${r.totalLiquidity}, ${r.swapVolume24h},
-            ${r.swapFee24h}, ${r.yieldCapture24h}, ${r.surplus24h},
-            ${r.poolCount}, ${r.numLps}, ${r.source}
-          )
-          ON CONFLICT (ts, chain, protocol) DO NOTHING
-        `
-      })
+  const PARALLELISM = 6
+  const chunks: SnapshotRow[][] = []
+  for (let i = 0; i < rows.length; i += CHUNK) chunks.push(rows.slice(i, i + CHUNK))
+  for (let i = 0; i < chunks.length; i += PARALLELISM) {
+    const batch = chunks.slice(i, i + PARALLELISM)
+    await Promise.all(
+      batch.map(slice =>
+        sql.transaction(
+          slice.map(r => {
+            if (force) {
+              // Force mode: overwrite only rows already marked defillama. Never
+              // clobber api-v3 cron data.
+              return sql`
+                INSERT INTO protocol_snapshots (
+                  ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
+                  yield_capture_24h, surplus_24h, pool_count, num_lps, source
+                ) VALUES (
+                  ${r.ts}, ${r.chain}, ${r.protocol}, ${r.totalLiquidity}, ${r.swapVolume24h},
+                  ${r.swapFee24h}, ${r.yieldCapture24h}, ${r.surplus24h},
+                  ${r.poolCount}, ${r.numLps}, ${r.source}
+                )
+                ON CONFLICT (ts, chain, protocol) DO UPDATE SET
+                  total_liquidity = EXCLUDED.total_liquidity,
+                  swap_volume_24h = EXCLUDED.swap_volume_24h,
+                  swap_fee_24h    = EXCLUDED.swap_fee_24h,
+                  captured_at     = now()
+                WHERE protocol_snapshots.source = 'defillama'
+              `
+            }
+            return sql`
+              INSERT INTO protocol_snapshots (
+                ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
+                yield_capture_24h, surplus_24h, pool_count, num_lps, source
+              ) VALUES (
+                ${r.ts}, ${r.chain}, ${r.protocol}, ${r.totalLiquidity}, ${r.swapVolume24h},
+                ${r.swapFee24h}, ${r.yieldCapture24h}, ${r.surplus24h},
+                ${r.poolCount}, ${r.numLps}, ${r.source}
+              )
+              ON CONFLICT (ts, chain, protocol) DO NOTHING
+            `
+          })
+        )
+      )
     )
   }
+}
+
+// Drop rows for chains that are no longer in supportedNetworks. Only run
+// with `?force=1` — destructive, gated explicitly.
+//
+// Defillama rows: delete per-chain rows for unsupported chains.
+//
+// Api-v3 cron rows: more delicate. A cron tick wrote both the per-chain
+// rows AND an 'ALL' aggregate computed across whatever chain set the cron
+// was configured with at the time. If the chain set changes, both the
+// per-chain orphans AND the now-stale aggregate need to go — the aggregate
+// can't be retroactively recomputed because api-v3 doesn't expose history.
+// We delete every api-v3 row at any timestamp that has at least one
+// unsupported-chain row; the next cron tick will write a fresh, correctly
+// scoped aggregate.
+async function purgeUnsupported(): Promise<{ defillama: number; apiv3: number }> {
+  const supported = [AGGREGATE_KEY, ...PROJECT_CONFIG.supportedNetworks]
+  const dl = (await sql`
+    DELETE FROM protocol_snapshots
+    WHERE source = 'defillama'
+      AND chain <> ALL(${supported}::text[])
+    RETURNING ts
+  `) as { ts: string }[]
+
+  // Find timestamps where api-v3 wrote an unsupported-chain row.
+  const stale = (await sql`
+    SELECT DISTINCT ts FROM protocol_snapshots
+    WHERE source = 'api-v3'
+      AND chain <> ALL(${supported}::text[])
+  `) as { ts: string }[]
+  if (stale.length === 0) return { defillama: dl.length, apiv3: 0 }
+  const staleTs = stale.map(r => Number(r.ts))
+  const apiv3 = (await sql`
+    DELETE FROM protocol_snapshots
+    WHERE source = 'api-v3'
+      AND ts = ANY(${staleTs}::bigint[])
+    RETURNING ts
+  `) as { ts: string }[]
+  return { defillama: dl.length, apiv3: apiv3.length }
 }
 
 function unauthorized() {
@@ -266,9 +369,14 @@ export async function GET(req: Request) {
 
   await ensureSchema()
 
-  const unknownChains = new Set<string>()
-  let coreRows: SnapshotRow[] = []
-  let cowAmmRows: SnapshotRow[] = []
+  const ctx: FoldCtx = { unknown: new Set(), unmapped: new Set() }
+  const rowsByProtocol: Record<Protocol, SnapshotRow[]> = {
+    [PROTOCOL_CORE]: [],
+    [PROTOCOL_V2]: [],
+    [PROTOCOL_V3]: [],
+    [PROTOCOL_COW_AMM]: [],
+  }
+  let purged: { defillama: number; apiv3: number } = { defillama: 0, apiv3: 0 }
   let error: string | undefined
 
   try {
@@ -278,24 +386,29 @@ export async function GET(req: Request) {
       Promise.all(SLUGS.map(fetchFees)),
     ])
 
-    // CORE pivot: sum across all 3 slugs.
-    const corePivot: DayMap = new Map()
+    // Per-slug pivot — directly maps to V2 / V3 / COW_AMM rows.
+    const slugPivots: DayMap[] = SLUGS.map(() => new Map())
     for (let i = 0; i < SLUGS.length; i++) {
-      foldTvl(corePivot, protocols[i], unknownChains)
-      foldBreakdown(corePivot, dexes[i], unknownChains, 'volume')
-      foldBreakdown(corePivot, fees[i], unknownChains, 'fees')
+      foldTvl(slugPivots[i], protocols[i], ctx)
+      foldBreakdown(slugPivots[i], dexes[i], ctx, 'volume')
+      foldBreakdown(slugPivots[i], fees[i], ctx, 'fees')
+      const protocol = SLUG_TO_PROTOCOL[SLUGS[i]]
+      rowsByProtocol[protocol] = pivotToRows(slugPivots[i], protocol)
     }
-    coreRows = pivotToRows(corePivot, PROTOCOL_CORE)
 
-    // COW_AMM pivot: balancer-cow-amm slug alone.
-    const cowIdx = SLUGS.indexOf(COW_AMM_SLUG)
-    const cowPivot: DayMap = new Map()
-    foldTvl(cowPivot, protocols[cowIdx], unknownChains)
-    foldBreakdown(cowPivot, dexes[cowIdx], unknownChains, 'volume')
-    foldBreakdown(cowPivot, fees[cowIdx], unknownChains, 'fees')
-    cowAmmRows = pivotToRows(cowPivot, PROTOCOL_COW_AMM)
+    // CORE = V2 + V3 + COW_AMM. Build by merging the three slug pivots.
+    const corePivot: DayMap = new Map()
+    for (const p of slugPivots) mergePivot(corePivot, p)
+    rowsByProtocol[PROTOCOL_CORE] = pivotToRows(corePivot, PROTOCOL_CORE)
 
-    await upsertRows([...coreRows, ...cowAmmRows], force)
+    const all = [
+      ...rowsByProtocol[PROTOCOL_CORE],
+      ...rowsByProtocol[PROTOCOL_V2],
+      ...rowsByProtocol[PROTOCOL_V3],
+      ...rowsByProtocol[PROTOCOL_COW_AMM],
+    ]
+    await upsertRows(all, force)
+    if (force) purged = await purgeUnsupported()
   } catch (e) {
     error = String(e)
   }
@@ -303,9 +416,15 @@ export async function GET(req: Request) {
   return Response.json({
     ok: !error,
     force,
-    coreRows: coreRows.length,
-    cowAmmRows: cowAmmRows.length,
-    unknownChains: Array.from(unknownChains).sort(),
+    rowsByProtocol: {
+      CORE: rowsByProtocol[PROTOCOL_CORE].length,
+      V2: rowsByProtocol[PROTOCOL_V2].length,
+      V3: rowsByProtocol[PROTOCOL_V3].length,
+      COW_AMM: rowsByProtocol[PROTOCOL_COW_AMM].length,
+    },
+    purged,
+    unknownChains: Array.from(ctx.unknown).sort(),
+    unmappedChains: Array.from(ctx.unmapped).sort(),
     error,
     ranAt: new Date().toISOString(),
   })

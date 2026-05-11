@@ -4,16 +4,21 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
  * Shape persisted by the cron-driven snapshotter.
  *
  * Top-level fields are the **CORE** series — `protocolMetricsAggregated` from
- * api-v3, which already includes CoW AMM in its numbers. `cowAmm` (when
- * present) is a *breakdown of* CORE for the same `(timestamp, chain)`, so
- * charts can split CoW AMM out as a stacked component. Never sum CORE + CoW
- * AMM — that double-counts.
+ * api-v3 (forward) / `balancer-v2 + balancer-v3 + balancer-cow-amm` summed
+ * from DefiLlama (historical). `breakdowns` carries the optional per-version
+ * sub-series for the same `(timestamp, chain)` so charts can stack:
+ *   - V2      — Balancer V2 alone
+ *   - V3      — Balancer V3 alone
+ *   - COW_AMM — Balancer CoW AMM alone
+ *
+ * Stacking V2 + V3 + COW_AMM approximates CORE. From DefiLlama backfill rows
+ * they sum exactly (CORE was derived as the sum). From api-v3 cron rows
+ * only COW_AMM is populated (no clean V2/V3 split available without BPT
+ * double-counting), so the stack only renders for historical days.
  *
  * Source: `'api-v3'` rows come from the hourly cron. `'defillama'` rows come
- * from the one-shot historical backfill (only TVL / volume / fees are
- * populated; the other CORE fields are 0 on backfilled rows). `'mixed'` is
- * for the rare timestamp where the aggregate row and a per-chain row
- * disagree.
+ * from the one-shot historical backfill (only TVL / volume / fees populated;
+ * the Balancer-specific fields are 0).
  */
 
 export type SnapshotSource = 'api-v3' | 'defillama' | 'mixed'
@@ -28,7 +33,7 @@ export type ChainSnapshotPoint = {
   numLiquidityProviders: number
 }
 
-export type CowAmmBreakdown = {
+export type ProtocolBreakdown = {
   totalLiquidity: number
   swapVolume24h: number
   swapFee24h: number
@@ -38,10 +43,12 @@ export type CowAmmBreakdown = {
   byChain: Partial<Record<GqlChain, ChainSnapshotPoint>>
 }
 
+export type ProtocolKey = 'V2' | 'V3' | 'COW_AMM'
+
 export type ProtocolSnapshotPoint = {
   /** Unix seconds. Hour-aligned for cron rows; midnight-UTC-aligned for backfill rows. */
   timestamp: number
-  /** Aggregated across all chains in the capture run (CORE). */
+  /** CORE aggregated across all chains (= V2 + V3 + COW_AMM for backfilled rows). */
   totalLiquidity: number
   swapVolume24h: number
   swapFee24h: number
@@ -51,8 +58,8 @@ export type ProtocolSnapshotPoint = {
   numLiquidityProviders: number
   /** Per-chain CORE breakdown. Sparse — chains absent at capture time are omitted. */
   byChain: Partial<Record<GqlChain, ChainSnapshotPoint>>
-  /** CoW AMM breakdown for the same timestamp. Subset of CORE; not additive. */
-  cowAmm?: CowAmmBreakdown
+  /** Optional per-version sub-series (V2 / V3 / COW_AMM). Always present for defillama rows, COW_AMM-only for api-v3 rows. */
+  breakdowns?: Partial<Record<ProtocolKey, ProtocolBreakdown>>
   /** Where this point came from. */
   source?: SnapshotSource
 }

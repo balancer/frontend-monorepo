@@ -5,13 +5,13 @@
  * `useProtocolSnapshots()` is coded against. One DB row per
  * `(ts, chain, protocol)`; we fold them back into one `ProtocolSnapshotPoint`
  * per timestamp:
- *   - `protocol = 'CORE'`, `chain = 'ALL'` → top-level fields
- *   - `protocol = 'CORE'`, `chain = ...`   → `byChain[...]`
- *   - `protocol = 'COW_AMM'`               → `cowAmm` breakdown
+ *   - `protocol = 'CORE'`, `chain = 'ALL'`            → top-level fields
+ *   - `protocol = 'CORE'`, `chain = ...`              → `byChain[...]`
+ *   - `protocol = 'V2' | 'V3' | 'COW_AMM'`, ALL/chain → `breakdowns[P]`
  *
- * `?days=N` bounds the window (default 90, max ~5y). Hourly cron writes are
- * ~24×11 rows/day for CORE plus ~24×5 rows/day for COW_AMM; a 90-day query
- * scans ~35k rows behind the `(ts)` index — fine.
+ * `?days=N` bounds the window (default 90, max ~5y). With 4 protocol rows
+ * per chain × ~10 chains × hourly cron + daily defillama, a 90-day query
+ * scans ~30-40k rows behind the `(ts)` index — fine.
  *
  * Cached `revalidate = 600` (10 min). Cron writes hourly, so up to 10 min
  * staleness is well under the snapshot cadence.
@@ -19,10 +19,18 @@
 
 import 'server-only'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { sql, AGGREGATE_KEY, PROTOCOL_CORE, PROTOCOL_COW_AMM } from '@analytics/lib/db'
+import {
+  sql,
+  AGGREGATE_KEY,
+  PROTOCOL_CORE,
+  PROTOCOL_V2,
+  PROTOCOL_V3,
+  PROTOCOL_COW_AMM,
+} from '@analytics/lib/db'
 import type {
   ChainSnapshotPoint,
-  CowAmmBreakdown,
+  ProtocolBreakdown,
+  ProtocolKey,
   ProtocolSnapshotPoint,
   ProtocolSnapshotSeries,
   SnapshotSource,
@@ -33,6 +41,12 @@ export const revalidate = 600
 
 const DEFAULT_DAYS = 90
 const MAX_DAYS = 365 * 5
+
+const PROTOCOL_TO_KEY: Record<string, ProtocolKey> = {
+  [PROTOCOL_V2]: 'V2',
+  [PROTOCOL_V3]: 'V3',
+  [PROTOCOL_COW_AMM]: 'COW_AMM',
+}
 
 type DbRow = {
   ts: string
@@ -60,7 +74,7 @@ function chainMetrics(r: DbRow): ChainSnapshotPoint {
   }
 }
 
-function emptyCowAmm(): CowAmmBreakdown {
+function emptyBreakdown(): ProtocolBreakdown {
   return {
     totalLiquidity: 0,
     swapVolume24h: 0,
@@ -124,19 +138,24 @@ export async function GET(req: Request) {
       } else {
         ;(p.byChain as Record<string, ChainSnapshotPoint>)[r.chain as GqlChain] = m
       }
-    } else if (r.protocol === PROTOCOL_COW_AMM) {
-      if (!p.cowAmm) p.cowAmm = emptyCowAmm()
+    } else {
+      const key = PROTOCOL_TO_KEY[r.protocol]
+      if (!key) continue
+      if (!p.breakdowns) p.breakdowns = {}
+      let b = p.breakdowns[key]
+      if (!b) {
+        b = emptyBreakdown()
+        p.breakdowns[key] = b
+      }
       if (r.chain === AGGREGATE_KEY) {
-        p.cowAmm.totalLiquidity = m.totalLiquidity
-        p.cowAmm.swapVolume24h = m.swapVolume24h
-        p.cowAmm.swapFee24h = m.swapFee24h
-        p.cowAmm.yieldCapture24h = m.yieldCapture24h
-        p.cowAmm.surplus24h = m.surplus24h
-        p.cowAmm.poolCount = m.poolCount
+        b.totalLiquidity = m.totalLiquidity
+        b.swapVolume24h = m.swapVolume24h
+        b.swapFee24h = m.swapFee24h
+        b.yieldCapture24h = m.yieldCapture24h
+        b.surplus24h = m.surplus24h
+        b.poolCount = m.poolCount
       } else {
-        ;(p.cowAmm.byChain as Record<string, ChainSnapshotPoint>)[
-          r.chain as GqlChain
-        ] = m
+        ;(b.byChain as Record<string, ChainSnapshotPoint>)[r.chain as GqlChain] = m
       }
     }
   }
