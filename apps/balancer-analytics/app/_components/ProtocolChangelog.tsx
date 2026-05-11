@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Card, Flex, Heading, IconButton, Text, VStack } from '@chakra-ui/react'
+import { Box, Card, Flex, HStack, Heading, IconButton, Tag, Text, VStack } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { useProtocolChangelog } from '@analytics/lib/hooks/useProtocolChangelog'
 
@@ -17,7 +17,12 @@ export function ProtocolChangelog() {
   return (
     <Card variant="level1">
       <Flex align="center" justify="space-between" mb="md">
-        <Heading size="h6">Protocol changes</Heading>
+        <HStack spacing="xs">
+          <Heading size="h6">Protocol changes</Heading>
+          <Tag colorScheme="orange" size="sm" variant="subtle">
+            WIP
+          </Tag>
+        </HStack>
         <Text color="font.secondary" fontSize="xs">
           last 30d
         </Text>

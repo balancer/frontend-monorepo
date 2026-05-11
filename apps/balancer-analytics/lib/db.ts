@@ -43,7 +43,11 @@ export type Protocol =
 
 export const SOURCE_API = 'api-v3' as const
 export const SOURCE_DEFILLAMA = 'defillama' as const
-export type SnapshotSource = typeof SOURCE_API | typeof SOURCE_DEFILLAMA
+export const SOURCE_MANUAL = 'manual' as const
+export type SnapshotSource =
+  | typeof SOURCE_API
+  | typeof SOURCE_DEFILLAMA
+  | typeof SOURCE_MANUAL
 
 /**
  * One DB row. Aggregate-across-all-chains rows use `chain = 'ALL'`; per-chain

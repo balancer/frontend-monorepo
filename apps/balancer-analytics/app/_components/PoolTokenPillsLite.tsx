@@ -114,10 +114,24 @@ function StablePills({ tokens }: { tokens: PillToken[] }) {
   )
 }
 
+// Next/Image throws "Failed to construct 'URL'" synchronously (before
+// onError can fire) if `src` is non-empty but unparseable — e.g. a token
+// metadata blob that stuck a bare symbol into `logoURI`. Guard at parse time.
+function isValidImgSrc(src: string | null | undefined): src is string {
+  if (!src) return false
+  if (src.startsWith('/')) return true
+  try {
+    const u = new URL(src)
+    return u.protocol === 'http:' || u.protocol === 'https:' || u.protocol === 'data:'
+  } catch {
+    return false
+  }
+}
+
 function TokenAvatar({ token }: { token: PillToken }) {
   const [errored, setErrored] = useState(false)
   const fallbackChar = (token.symbol || token.address || '?').slice(0, 1).toUpperCase()
-  const showImage = !!token.logoURI && !errored
+  const showImage = isValidImgSrc(token.logoURI) && !errored
 
   return (
     <Box

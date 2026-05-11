@@ -5,6 +5,7 @@ import '@repo/lib/assets/css/global.css'
 import { PropsWithChildren } from 'react'
 import { Providers } from './providers'
 import { ThemeProvider } from '@analytics/lib/services/chakra/ThemeProvider'
+import { Navbar } from './_components/Navbar'
 
 export const metadata: Metadata = {
   title: 'Balancer Analytics',
@@ -24,7 +25,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body className={satoshiFont.className}>
         <NextTopLoader color="#7f6ae8" showSpinner={false} />
         <ThemeProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            <Navbar />
+            {children}
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

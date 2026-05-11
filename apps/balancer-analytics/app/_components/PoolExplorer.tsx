@@ -436,7 +436,7 @@ function TableHeader({
         <SortableHeader
           align="right"
           isSorted={sorted('USAGE')}
-          label="Usage"
+          label="Utilization"
           onSort={() => handleSort('USAGE')}
           sorting={sorting}
         />
