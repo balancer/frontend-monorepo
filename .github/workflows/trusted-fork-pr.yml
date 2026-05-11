@@ -1,0 +1,26 @@
+# allow gh ci actions to run for trusted users
+name: Trusted fork PR gate
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  gate:
+    # 20125808 - groninge01
+    if: contains(
+      fromJson('[20125808]'),
+      github.event.pull_request.user.id
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger normal CI workflow
+        run: |
+          gh workflow run checks.yml \
+            --ref "${{ github.event.pull_request.head.sha }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
