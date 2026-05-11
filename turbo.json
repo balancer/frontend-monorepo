@@ -26,7 +26,10 @@
     "TZ",
     "NEXT_PRIVATE_MAGPIE_API_KEY",
     "TEST_ACCOUNT_MNEMONIC",
-    "SLACK_BOT_TOKEN"
+    "SLACK_BOT_TOKEN",
+    "DATABASE_URL",
+    "POSTGRES_URL",
+    "CRON_SECRET"
   ],
   "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
   "tasks": {

@@ -1,0 +1,524 @@
+'use client'
+
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Skeleton,
+  Text,
+  VStack,
+  useColorModeValue,
+} from '@chakra-ui/react'
+import { DownloadIcon } from '@chakra-ui/icons'
+import Link from 'next/link'
+import { useCallback, useMemo } from 'react'
+import {
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsString,
+  parseAsStringEnum,
+  parseAsStringLiteral,
+  useQueryState,
+} from 'nuqs'
+import {
+  GqlChain,
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
+import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
+import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
+import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
+import {
+  EnrichedPool,
+  SortKey,
+  SortDir,
+  usePoolExplorer,
+} from '@analytics/lib/hooks/usePoolExplorer'
+import { PoolTokenPillsLite } from './PoolTokenPillsLite'
+import { PoolDetailsCellLite } from './PoolDetailsCellLite'
+import { PoolExplorerFilters } from './PoolExplorerFilters'
+
+const SORT_KEYS = ['TVL', 'VOLUME', 'FEES', 'APR', 'YIELD_DAY', 'USAGE', 'HOLDERS'] as const
+
+// Mirrors PoolListTable column widths: chain icon · pool · details · TVL · vol · fees · apr · usage · holders
+// Hidden on narrow screens via horizontal scroll on the Card.
+const GRID_COLS = '36px minmax(280px, 1.6fr) minmax(220px, 1fr) 120px 120px 120px 100px 100px 90px'
+
+const usd = (n: number, abbrev = true) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    notation: abbrev ? 'compact' : 'standard',
+    maximumFractionDigits: 2,
+  }).format(n || 0)
+
+const num = (n: number) =>
+  new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(n || 0)
+
+const pct = (n: number, digits = 2) => `${(n * 100).toFixed(digits)}%`
+
+function getPoolHref(p: EnrichedPool): string {
+  const slug = chainToSlugMap[p.chain] ?? 'ethereum'
+  const variant = p.protocolVersion === 3 ? 'v3' : 'v2'
+  return `https://balancer.fi/pools/${slug}/${variant}/${p.id}`
+}
+
+function buildCsv(rows: EnrichedPool[]): string {
+  const headers = [
+    'name',
+    'symbol',
+    'chain',
+    'type',
+    'protocolVersion',
+    'hook',
+    'address',
+    'id',
+    'tvl',
+    'volume24h',
+    'fees24h',
+    'totalApr',
+    'yieldApr',
+    'yieldPerDay',
+    'usage24h',
+    'holders',
+    'swapFee',
+  ]
+  const escape = (val: unknown) => {
+    const s = String(val ?? '')
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+  }
+  const lines = rows.map(p =>
+    [
+      p.name,
+      p.symbol,
+      p.chain,
+      p.type,
+      p.protocolVersion,
+      p._hookType ?? '',
+      p.address,
+      p.id,
+      Number(p.dynamicData.totalLiquidity ?? 0),
+      Number(p.dynamicData.volume24h ?? 0),
+      Number(p.dynamicData.fees24h ?? 0),
+      p._totalApr,
+      p._yieldApr,
+      p._yieldPerDay,
+      p._usage,
+      p._holders,
+      Number(p.dynamicData.swapFee ?? 0),
+    ]
+      .map(escape)
+      .join(',')
+  )
+  return [headers.join(','), ...lines].join('\n')
+}
+
+function downloadCsv(rows: EnrichedPool[]) {
+  const csv = buildCsv(rows)
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `balancer-pools-${new Date().toISOString().slice(0, 19)}.csv`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+export function PoolExplorer() {
+  // URL state — shareable view. SearchInput debounces internally, so we point
+  // it directly at the nuqs param rather than maintaining a separate draft.
+  const [search, setSearch] = useQueryState('q', parseAsString.withDefault(''))
+  const [chains, setChains] = useQueryState(
+    'chain',
+    parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChain))).withDefault([])
+  )
+  const [types, setTypes] = useQueryState(
+    'type',
+    parseAsArrayOf(parseAsStringEnum<GqlPoolType>(Object.values(GqlPoolType))).withDefault([])
+  )
+  const [protocolVersion, setProtocolVersion] = useQueryState(
+    'v',
+    parseAsInteger
+  )
+  const [hookTypes, setHookTypes] = useQueryState(
+    'hook',
+    parseAsArrayOf(parseAsString).withDefault([])
+  )
+  const [minTvl, setMinTvl] = useQueryState('minTvl', parseAsInteger.withDefault(0))
+  const [sortKey, setSortKey] = useQueryState(
+    'sort',
+    parseAsStringLiteral(SORT_KEYS).withDefault('TVL')
+  )
+  const [sortDir, setSortDir] = useQueryState(
+    'dir',
+    parseAsStringLiteral(['asc', 'desc'] as const).withDefault('desc')
+  )
+  const [pageIndex, setPageIndex] = useQueryState('page', parseAsInteger.withDefault(0))
+  const [pageSize, setPageSize] = useQueryState('size', parseAsInteger.withDefault(25))
+
+  const filters = useMemo(
+    () => ({
+      search,
+      chains,
+      types,
+      protocolVersion,
+      hookTypes,
+      minTvl,
+    }),
+    [search, chains, types, protocolVersion, hookTypes, minTvl]
+  )
+
+  const {
+    loading,
+    error,
+    totalCount,
+    filteredCount,
+    aggregates,
+    pageItems,
+    allFilteredSorted,
+    availableChains,
+    availableTypes,
+    availableHooks,
+  } = usePoolExplorer({
+    filters,
+    sortKey,
+    sortDir,
+    pageIndex,
+    pageSize,
+  })
+
+  // Reset page whenever filters change so we never land on an empty page.
+  const resetPage = useCallback(() => setPageIndex(0), [setPageIndex])
+
+  const filterSetters = useMemo(
+    () => ({
+      setSearch: (v: string) => {
+        setSearch(v || null)
+        resetPage()
+      },
+      setChains: (v: GqlChain[]) => {
+        setChains(v.length ? v : null)
+        resetPage()
+      },
+      setTypes: (v: GqlPoolType[]) => {
+        setTypes(v.length ? v : null)
+        resetPage()
+      },
+      setProtocolVersion: (v: number | null) => {
+        setProtocolVersion(v)
+        resetPage()
+      },
+      setHookTypes: (v: string[]) => {
+        setHookTypes(v.length ? v : null)
+        resetPage()
+      },
+      setMinTvl: (v: number) => {
+        setMinTvl(v > 0 ? v : null)
+        resetPage()
+      },
+      resetAll: () => {
+        setSearch(null)
+        setChains(null)
+        setTypes(null)
+        setProtocolVersion(null)
+        setHookTypes(null)
+        setMinTvl(null)
+        resetPage()
+      },
+    }),
+    [setSearch, setChains, setTypes, setProtocolVersion, setHookTypes, setMinTvl, resetPage]
+  )
+
+  const handleSort = useCallback(
+    (key: SortKey) => {
+      if (sortKey === key) {
+        setSortDir(sortDir === 'desc' ? 'asc' : 'desc')
+      } else {
+        setSortKey(key)
+        setSortDir('desc')
+      }
+      resetPage()
+    },
+    [sortKey, sortDir, setSortDir, setSortKey, resetPage]
+  )
+
+  const paginationProps = getPaginationProps(
+    filteredCount,
+    { pageIndex, pageSize },
+    state => {
+      setPageIndex(state.pageIndex)
+      setPageSize(state.pageSize)
+    }
+  )
+
+  const aggBorder = useColorModeValue('border.base', 'border.subduedZen')
+
+  return (
+    <Card overflow="hidden" p={{ base: 'sm', md: 'md' }} variant="level1">
+      <VStack align="stretch" spacing="md">
+        <Flex align="flex-start" flexWrap="wrap" gap="md" justify="space-between">
+          <VStack align="flex-start" spacing="xs">
+            <Heading size="h6">Pool monitor</Heading>
+            <Text color="font.secondary" fontSize="xs">
+              {filteredCount.toLocaleString()} of {totalCount.toLocaleString()} pools matching
+              filters
+            </Text>
+          </VStack>
+          <Button
+            isDisabled={!allFilteredSorted.length}
+            leftIcon={<DownloadIcon />}
+            onClick={() => downloadCsv(allFilteredSorted)}
+            size="sm"
+            variant="tertiary"
+          >
+            CSV
+          </Button>
+        </Flex>
+
+        <PoolExplorerFilters
+          availableChains={availableChains}
+          availableHooks={availableHooks}
+          availableTypes={availableTypes}
+          filters={filters}
+          isSearching={loading}
+          setters={filterSetters}
+        />
+
+        <Grid
+          border="1px solid"
+          borderColor={aggBorder}
+          borderRadius="md"
+          gap={0}
+          templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(5, 1fr)' }}
+        >
+          <AggCell label="Pools" loading={loading} value={num(aggregates.count)} />
+          <AggCell label="TVL" loading={loading} value={usd(aggregates.tvl)} />
+          <AggCell label="Vol 24h" loading={loading} value={usd(aggregates.volume24h)} />
+          <AggCell label="Fees 24h" loading={loading} value={usd(aggregates.fees24h)} />
+          <AggCell
+            label="Yield 24h"
+            last
+            loading={loading}
+            value={usd(aggregates.yield24h)}
+          />
+        </Grid>
+
+        {error && (
+          <Text color="red.300" fontSize="sm">
+            Failed to load: {error.message}
+          </Text>
+        )}
+
+        <Card overflowX="auto" p={0} variant="subSection">
+          <Box minW="1100px">
+            <PaginatedTable<EnrichedPool>
+              getRowId={p => `${p.chain}-${p.id}`}
+              items={pageItems}
+              loading={loading}
+              loadingLength={pageSize}
+              loadingSpinnerPosition="top"
+              noItemsFoundLabel="No pools match these filters"
+              paginationProps={paginationProps}
+              renderTableHeader={() => (
+                <TableHeader handleSort={handleSort} sortDir={sortDir} sortKey={sortKey} />
+              )}
+              renderTableRow={({ item, index }) => <TableRow index={index} pool={item} />}
+              showPagination={filteredCount > pageSize}
+            />
+          </Box>
+        </Card>
+      </VStack>
+    </Card>
+  )
+}
+
+function AggCell({
+  label,
+  value,
+  loading,
+  last,
+}: {
+  label: string
+  value: string
+  loading: boolean
+  last?: boolean
+}) {
+  return (
+    <GridItem
+      borderRight={last ? 'none' : { md: '1px solid' }}
+      borderRightColor="border.base"
+      px="md"
+      py="sm"
+    >
+      <Text color="font.secondary" fontSize="2xs" textTransform="uppercase">
+        {label}
+      </Text>
+      {loading ? (
+        <Skeleton h="20px" mt="xxs" w="80px" />
+      ) : (
+        <Text fontSize="md" fontWeight="bold">
+          {value}
+        </Text>
+      )}
+    </GridItem>
+  )
+}
+
+function TableHeader({
+  sortKey,
+  sortDir,
+  handleSort,
+}: {
+  sortKey: SortKey
+  sortDir: SortDir
+  handleSort: (k: SortKey) => void
+}) {
+  const sorted = (k: SortKey) => sortKey === k
+  const sorting = sortDir === 'desc' ? Sorting.desc : Sorting.asc
+
+  return (
+    <Grid alignItems="center" gap="sm" gridTemplateColumns={GRID_COLS} px="md" py="sm" w="full">
+      <GridItem />
+      <GridItem>
+        <Text color="font.secondary" fontSize="xs" fontWeight="bold">
+          Pool
+        </Text>
+      </GridItem>
+      <GridItem>
+        <Text color="font.secondary" fontSize="xs" fontWeight="bold">
+          Details
+        </Text>
+      </GridItem>
+      <GridItem justifySelf="end">
+        <SortableHeader
+          align="right"
+          isSorted={sorted('TVL')}
+          label="TVL"
+          onSort={() => handleSort('TVL')}
+          sorting={sorting}
+        />
+      </GridItem>
+      <GridItem justifySelf="end">
+        <SortableHeader
+          align="right"
+          isSorted={sorted('VOLUME')}
+          label="Vol 24h"
+          onSort={() => handleSort('VOLUME')}
+          sorting={sorting}
+        />
+      </GridItem>
+      <GridItem justifySelf="end">
+        <SortableHeader
+          align="right"
+          isSorted={sorted('FEES')}
+          label="Fees 24h"
+          onSort={() => handleSort('FEES')}
+          sorting={sorting}
+        />
+      </GridItem>
+      <GridItem justifySelf="end">
+        <SortableHeader
+          align="right"
+          isSorted={sorted('APR')}
+          label="APR"
+          onSort={() => handleSort('APR')}
+          sorting={sorting}
+        />
+      </GridItem>
+      <GridItem justifySelf="end">
+        <SortableHeader
+          align="right"
+          isSorted={sorted('USAGE')}
+          label="Usage"
+          onSort={() => handleSort('USAGE')}
+          sorting={sorting}
+        />
+      </GridItem>
+      <GridItem justifySelf="end">
+        <SortableHeader
+          align="right"
+          isSorted={sorted('HOLDERS')}
+          label="Holders"
+          onSort={() => handleSort('HOLDERS')}
+          sorting={sorting}
+        />
+      </GridItem>
+    </Grid>
+  )
+}
+
+function TableRow({ pool, index }: { pool: EnrichedPool; index: number }) {
+  const tvl = Number(pool.dynamicData.totalLiquidity ?? 0)
+  const vol = Number(pool.dynamicData.volume24h ?? 0)
+  const fees = Number(pool.dynamicData.fees24h ?? 0)
+  const usageColor =
+    pool._usage >= 0.5 ? 'green.400' : pool._usage >= 0.1 ? 'orange.300' : 'font.secondary'
+
+  return (
+    <Box
+      _hover={{ bg: 'background.level0' }}
+      borderBottom={index === 0 ? undefined : '1px solid'}
+      borderColor="border.base"
+      transition="background 0.15s"
+      w="full"
+    >
+      <Link href={getPoolHref(pool)} prefetch={false} role="group" target="_blank">
+        <Grid
+          alignItems="center"
+          gap="sm"
+          gridTemplateColumns={GRID_COLS}
+          px="md"
+          py="ms"
+          w="full"
+        >
+          <GridItem>
+            <NetworkIcon chain={pool.chain} size={6} />
+          </GridItem>
+          <GridItem minW={0}>
+            <PoolTokenPillsLite pool={pool} />
+          </GridItem>
+          <GridItem minW={0}>
+            <PoolDetailsCellLite pool={pool} />
+          </GridItem>
+          <GridItem justifySelf="end">
+            <Text fontWeight="medium" textAlign="right" title={usd(tvl, false)}>
+              {usd(tvl)}
+            </Text>
+          </GridItem>
+          <GridItem justifySelf="end">
+            <Text fontWeight="medium" textAlign="right" title={usd(vol, false)}>
+              {usd(vol)}
+            </Text>
+          </GridItem>
+          <GridItem justifySelf="end">
+            <Text fontWeight="medium" textAlign="right" title={usd(fees, false)}>
+              {usd(fees)}
+            </Text>
+          </GridItem>
+          <GridItem justifySelf="end">
+            <Text fontWeight="medium" textAlign="right">
+              {pct(pool._totalApr)}
+            </Text>
+          </GridItem>
+          <GridItem justifySelf="end">
+            <Text color={usageColor} fontWeight="medium" textAlign="right">
+              {pct(pool._usage, 1)}
+            </Text>
+          </GridItem>
+          <GridItem justifySelf="end">
+            <Text color="font.secondary" fontSize="sm" textAlign="right">
+              {num(pool._holders)}
+            </Text>
+          </GridItem>
+        </Grid>
+      </Link>
+    </Box>
+  )
+}
