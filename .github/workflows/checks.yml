@@ -3,7 +3,6 @@ name: Checks
 on:
   pull_request:
     types: [opened, synchronize]
-  workflow_dispatch:
 
 env:
   NEXT_PUBLIC_BALANCER_API_URL: https://test-api-v3.balancer.fi/graphql
