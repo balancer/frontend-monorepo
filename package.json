@@ -9,6 +9,7 @@
     "dev:bal:fork": "NEXT_PUBLIC_E2E_DEV=1 pnpm dev:bal",
     "dev:beets": "turbo dev --filter beets-frontend-v3",
     "dev:beets:fork": "NEXT_PUBLIC_E2E_DEV=1 pnpm dev:beets",
+    "dev:analytics": "turbo dev --filter balancer-analytics",
     "graphql:gen": "turbo graphql:gen",
     "lint:all": "turbo run lint format --continue",
     "lint:all:fix": "turbo run lint:fix format:fix --continue --force",
