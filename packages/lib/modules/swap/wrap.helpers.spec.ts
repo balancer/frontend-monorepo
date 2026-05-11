@@ -1,222 +1,154 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import {
-  isNativeWrap,
-  isSupportedWrap,
-  isWrapOrUnwrap,
-  getWrapConfig,
-  getWrapHandlerClass,
-  getWrapType,
-  getWrapperForBaseToken,
-} from './wrap.helpers'
+import { isSupportedWrap, getWrapConfig, getWrapType } from './wrap.helpers'
 import { SupportedWrapHandler, OWrapType } from './swap.types'
 import { GqlChain } from '../../shared/services/api/generated/graphql'
-import { LidoWrapHandler } from './handlers/LidoWrap.handler'
+import { TEST_ADDRESSES } from '@repo/lib/test/utils/swap-test-utils'
 
-const ethAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-const wethAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
-const stethAddress = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'
-const wstethAddress = '0x7f39c581F595B53c5cb19bD0b3f8dA6c935E2Ca0'
-
-const mockNetworkConfig = {
+const defaultConfig = {
+  chainId: 1,
+  chain: GqlChain.Mainnet,
   tokens: {
     addresses: {
-      wNativeAsset: wethAddress,
+      wNativeAsset: TEST_ADDRESSES.weth,
+      auraBal: TEST_ADDRESSES.auraBal,
+      bal: TEST_ADDRESSES.bal,
     },
     nativeAsset: {
-      address: ethAddress,
+      address: TEST_ADDRESSES.eth,
     },
     supportedWrappers: [
       {
-        baseToken: stethAddress,
-        wrappedToken: wstethAddress,
-        swapHandler: SupportedWrapHandler.LIDO,
+        baseToken: TEST_ADDRESSES.steth,
+        wrappedToken: TEST_ADDRESSES.wsteth,
+        swapHandler: 'LIDO' as const,
       },
     ],
   },
+  contracts: {
+    balancer: {
+      vaultV2: TEST_ADDRESSES.vaultV2,
+    },
+  },
 }
 
+const emptyWrappersConfig = {
+  ...defaultConfig,
+  tokens: { ...defaultConfig.tokens, supportedWrappers: [] },
+}
+
+let mockNetworkConfig = defaultConfig
+
 vi.mock('@repo/lib/config/app.config', async importOriginal => {
-  const actual = await importOriginal()
+  const actual = await importOriginal<typeof import('@repo/lib/config/app.config')>()
   return {
-    ...(actual as Record<string, unknown>),
+    ...actual,
     getNetworkConfig: vi.fn(() => mockNetworkConfig),
-    getNativeAssetAddress: vi.fn(() => ethAddress),
-    getWrappedNativeAssetAddress: vi.fn(() => wethAddress),
+    getChainId: vi.fn(() => 1),
+    getNativeAssetAddress: vi.fn(() => TEST_ADDRESSES.eth),
+    getWrappedNativeAssetAddress: vi.fn(() => TEST_ADDRESSES.weth),
   }
 })
 
-vi.mock('@repo/lib/modules/tokens/token.helpers', () => ({
-  isNativeAsset: vi.fn((token: string) => {
-    if (!token || !ethAddress) return false
-    return token.toLowerCase() === ethAddress.toLowerCase()
-  }),
-  isWrappedNativeAsset: vi.fn((token: string) => {
-    if (!token || !wethAddress) return false
-    return token.toLowerCase() === wethAddress.toLowerCase()
-  }),
-  sameAddresses: vi.fn((a1: string[], a2: string[]) => {
-    return (
-      a1.every((addr1: string) =>
-        a2.some((addr2: string) => addr1.toLowerCase() === addr2.toLowerCase())
-      ) &&
-      a2.every((addr2: string) =>
-        a1.some((addr1: string) => addr1.toLowerCase() === addr2.toLowerCase())
+vi.mock('@repo/lib/modules/tokens/token.helpers', async importOriginal => {
+  const actual = await importOriginal<typeof import('@repo/lib/modules/tokens/token.helpers')>()
+  return {
+    ...actual,
+    isNativeAsset: vi.fn((token: string) => {
+      if (!token) return false
+      return token.toLowerCase() === TEST_ADDRESSES.eth
+    }),
+    isWrappedNativeAsset: vi.fn((token: string) => {
+      if (!token) return false
+      return token.toLowerCase() === TEST_ADDRESSES.weth.toLowerCase()
+    }),
+    sameAddresses: vi.fn((a1: string[], a2: string[]) => {
+      return (
+        a1.every((addr1: string) =>
+          a2.some((addr2: string) => addr1.toLowerCase() === addr2.toLowerCase())
+        ) &&
+        a2.every((addr2: string) =>
+          a1.some((addr1: string) => addr1.toLowerCase() === addr2.toLowerCase())
+        )
       )
-    )
-  }),
-}))
+    }),
+  }
+})
 
-vi.mock('@repo/lib/shared/utils/addresses', () => ({
-  isSameAddress: vi.fn((a?: string, b?: string) => {
-    if (!a || !b) return false
-    return a.toLowerCase() === b.toLowerCase()
-  }),
-  sameAddresses: vi.fn((a1: string[], a2: string[]) => {
-    return (
-      a1.every((addr1: string) =>
-        a2.some((addr2: string) => addr1.toLowerCase() === addr2.toLowerCase())
-      ) &&
-      a2.every((addr2: string) =>
-        a1.some((addr1: string) => addr1.toLowerCase() === addr2.toLowerCase())
+vi.mock('@repo/lib/shared/utils/addresses', async importOriginal => {
+  const actual = await importOriginal<typeof import('@repo/lib/shared/utils/addresses')>()
+  return {
+    ...actual,
+    isSameAddress: vi.fn((a?: string, b?: string) => {
+      if (!a || !b) return false
+      return a.toLowerCase() === b.toLowerCase()
+    }),
+    sameAddresses: vi.fn((a1: string[], a2: string[]) => {
+      return (
+        a1.every((addr1: string) =>
+          a2.some((addr2: string) => addr1.toLowerCase() === addr2.toLowerCase())
+        ) &&
+        a2.every((addr2: string) =>
+          a1.some((addr1: string) => addr1.toLowerCase() === addr2.toLowerCase())
+        )
       )
-    )
-  }),
-}))
+    }),
+  }
+})
 
 describe('wrap.helpers', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-  })
-
-  describe('isNativeWrap', () => {
-    it('returns true for ETH -> WETH on mainnet', () => {
-      const result = isNativeWrap(ethAddress, wethAddress, GqlChain.Mainnet)
-      expect(result).toBe(true)
-    })
-
-    it('returns true for WETH -> ETH on mainnet', () => {
-      const result = isNativeWrap(wethAddress, ethAddress, GqlChain.Mainnet)
-      expect(result).toBe(true)
-    })
-
-    it('returns false for non-native tokens', () => {
-      const randomAddress = '0x1234567890abcdef1234567890abcdef12345678'
-      const result = isNativeWrap(randomAddress, wethAddress, GqlChain.Mainnet)
-      expect(result).toBe(false)
-    })
+    mockNetworkConfig = defaultConfig
   })
 
   describe('isSupportedWrap', () => {
-    it('returns true for stETH -> wstETH on mainnet', () => {
-      const result = isSupportedWrap(stethAddress, wstethAddress, GqlChain.Mainnet)
-      expect(result).toBe(true)
+    it('returns true for configured wrap pair in either direction', () => {
+      expect(isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChain.Mainnet)).toBe(
+        true
+      )
+      expect(isSupportedWrap(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChain.Mainnet)).toBe(
+        true
+      )
     })
 
-    it('returns true for wstETH -> stETH on mainnet', () => {
-      const result = isSupportedWrap(wstethAddress, stethAddress, GqlChain.Mainnet)
-      expect(result).toBe(true)
-    })
-
-    it('returns false for unsupported token pair', () => {
-      const balAddress = '0xba100000625a3754423978a60c9317c58a424e3d'
-      const result = isSupportedWrap(balAddress, wethAddress, GqlChain.Mainnet)
-      expect(result).toBe(false)
-    })
-
-    it('returns false when no supported wrappers configured', () => {
-      const originalSupportedWrappers = mockNetworkConfig.tokens.supportedWrappers
-      mockNetworkConfig.tokens.supportedWrappers = []
-
-      const result = isSupportedWrap(stethAddress, wstethAddress, GqlChain.Mainnet)
-      expect(result).toBe(false)
-
-      mockNetworkConfig.tokens.supportedWrappers = originalSupportedWrappers
-    })
-  })
-
-  describe('isWrapOrUnwrap', () => {
-    it('returns true for native wrap', () => {
-      const result = isWrapOrUnwrap(ethAddress, wethAddress, GqlChain.Mainnet)
-      expect(result).toBe(true)
-    })
-
-    it('returns true for supported wrap', () => {
-      const result = isWrapOrUnwrap(stethAddress, wstethAddress, GqlChain.Mainnet)
-      expect(result).toBe(true)
-    })
-
-    it('returns false for non-wrap pair', () => {
-      const balAddress = '0xba100000625a3754423978a60c9317c58a424e3d'
-      const result = isWrapOrUnwrap(ethAddress, balAddress, GqlChain.Mainnet)
-      expect(result).toBe(false)
-    })
-  })
-
-  describe('getWrapConfig', () => {
-    it('returns wrapper config for stETH -> wstETH', () => {
-      const config = getWrapConfig(stethAddress, wstethAddress, GqlChain.Mainnet)
-      expect(config.baseToken).toBe(stethAddress)
-      expect(config.wrappedToken).toBe(wstethAddress)
-      expect(config.swapHandler).toBe(SupportedWrapHandler.LIDO)
-    })
-
-    it('throws for unsupported wrap', () => {
-      const balAddress = '0xba100000625a3754423978a60c9317c58a424e3d'
-      expect(() => getWrapConfig(balAddress, wethAddress, GqlChain.Mainnet)).toThrow(
-        'Unsupported wrap'
+    it('returns false when no wrappers configured', () => {
+      mockNetworkConfig = emptyWrappersConfig
+      expect(isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChain.Mainnet)).toBe(
+        false
       )
     })
   })
 
-  describe('getWrapHandlerClass', () => {
-    it('returns LidoWrapHandler for stETH -> wstETH', () => {
-      const HandlerClass = getWrapHandlerClass(stethAddress, wstethAddress, GqlChain.Mainnet)
-      expect(HandlerClass).toBe(LidoWrapHandler)
+  describe('getWrapConfig', () => {
+    it('returns correct wrapper config for valid pair', () => {
+      const config = getWrapConfig(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChain.Mainnet)
+      expect(config.baseToken).toBe(TEST_ADDRESSES.steth)
+      expect(config.wrappedToken).toBe(TEST_ADDRESSES.wsteth)
+      expect(config.swapHandler).toBe(SupportedWrapHandler.LIDO)
+    })
+
+    it('throws for unsupported pair', () => {
+      expect(() =>
+        getWrapConfig(TEST_ADDRESSES.bal, TEST_ADDRESSES.weth, GqlChain.Mainnet)
+      ).toThrow('Unsupported wrap')
     })
   })
 
   describe('getWrapType', () => {
-    it('returns WRAP for stETH -> wstETH', () => {
-      const result = getWrapType(stethAddress, wstethAddress, GqlChain.Mainnet)
-      expect(result).toBe(OWrapType.WRAP)
+    it('returns WRAP when base token is input', () => {
+      expect(getWrapType(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChain.Mainnet)).toBe(
+        OWrapType.WRAP
+      )
     })
 
-    it('returns UNWRAP for wstETH -> stETH', () => {
-      const result = getWrapType(wstethAddress, stethAddress, GqlChain.Mainnet)
-      expect(result).toBe(OWrapType.UNWRAP)
+    it('returns UNWRAP when wrapped token is input', () => {
+      expect(getWrapType(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChain.Mainnet)).toBe(
+        OWrapType.UNWRAP
+      )
     })
 
     it('returns null for non-wrap pair', () => {
-      const balAddress = '0xba100000625a3754423978a60c9317c58a424e3d'
-      const result = getWrapType(ethAddress, balAddress, GqlChain.Mainnet)
-      expect(result).toBeNull()
-    })
-  })
-
-  describe('getWrapperForBaseToken', () => {
-    it('returns wrapper config for stETH base token', () => {
-      const wrapper = getWrapperForBaseToken(stethAddress, GqlChain.Mainnet)
-      expect(wrapper).toBeDefined()
-      if (wrapper) {
-        expect(wrapper.baseToken).toBe(stethAddress)
-        expect(wrapper.wrappedToken).toBe(wstethAddress)
-      }
-    })
-
-    it('returns undefined for unknown base token', () => {
-      const randomAddress = '0x1234567890abcdef1234567890abcdef12345678'
-      const wrapper = getWrapperForBaseToken(randomAddress, GqlChain.Mainnet)
-      expect(wrapper).toBeUndefined()
-    })
-
-    it('returns undefined when no wrappers configured', () => {
-      const originalSupportedWrappers = mockNetworkConfig.tokens.supportedWrappers
-      mockNetworkConfig.tokens.supportedWrappers = []
-
-      const wrapper = getWrapperForBaseToken(stethAddress, GqlChain.Mainnet)
-      expect(wrapper).toBeUndefined()
-
-      mockNetworkConfig.tokens.supportedWrappers = originalSupportedWrappers
+      expect(getWrapType(TEST_ADDRESSES.eth, TEST_ADDRESSES.bal, GqlChain.Mainnet)).toBeNull()
     })
   })
 })

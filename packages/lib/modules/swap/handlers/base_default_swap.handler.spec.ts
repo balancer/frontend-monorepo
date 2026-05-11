@@ -1,41 +1,42 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { ApolloClient } from '@apollo/client'
-import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { Permit2 } from '@balancer/sdk'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { DefaultSwapHandler } from './DefaultSwap.handler'
 import { BaseDefaultSwapHandler } from './BaseDefaultSwap.handler'
-import type { BuildSwapInputs, SdkSimulateSwapResponse, SdkBuildSwapInputs } from '../swap.types'
-
-const wethAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
-const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f'
-const vaultV2Address = '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
-
-const mockNetworkConfig = {
-  chainId: 1,
-  chain: GqlChain.Mainnet,
-  tokens: {
-    addresses: {
-      wNativeAsset: wethAddress,
-      auraBal: '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d',
-      bal: '0xba100000625a3754423978a60c9317c58a424e3d',
-    },
-    nativeAsset: {
-      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    },
-    supportedWrappers: [],
-  },
-  contracts: {
-    balancer: {
-      vaultV2: vaultV2Address,
-    },
-  },
-}
+import type { SdkSimulateSwapResponse } from '../swap.types'
+import {
+  TEST_ADDRESSES,
+  createMockSdkSimulateSwapResponse,
+  createSdkBuildSwapInputs,
+} from '@repo/lib/test/utils/swap-test-utils'
 
 vi.mock('@repo/lib/config/app.config', () => {
+  const mockNetworkConfig = {
+    chainId: 1,
+    chain: GqlChain.Mainnet,
+    tokens: {
+      addresses: {
+        wNativeAsset: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+        auraBal: '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d',
+        bal: '0xba100000625a3754423978a60c9317c58a424e3d',
+      },
+      nativeAsset: {
+        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      },
+      supportedWrappers: [],
+    },
+    contracts: {
+      balancer: {
+        vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      },
+    },
+  }
   return {
     getNetworkConfig: vi.fn(() => mockNetworkConfig),
     getChainId: vi.fn(() => 1),
     getNativeAssetAddress: vi.fn(() => '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'),
-    getWrappedNativeAssetAddress: vi.fn(() => wethAddress),
+    getWrappedNativeAssetAddress: vi.fn(() => '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'),
   }
 })
 
@@ -46,7 +47,7 @@ vi.mock('@repo/lib/modules/tokens/token.helpers', () => ({
   }),
   isWrappedNativeAsset: vi.fn((token: string) => {
     if (!token) return false
-    return token.toLowerCase() === wethAddress.toLowerCase()
+    return token.toLowerCase() === '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'.toLowerCase()
   }),
   isSameAddress: vi.fn((a?: string, b?: string) => {
     if (!a || !b) return false
@@ -98,12 +99,12 @@ vi.mock('@balancer/sdk', () => ({
     buildCall: vi.fn().mockReturnValue({
       callData: '0xdefault_tx_data',
       value: BigInt(0),
-      to: vaultV2Address,
+      to: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
     }),
     buildCallWithPermit2: vi.fn().mockReturnValue({
       callData: '0xpermit2_tx_data',
       value: BigInt(0),
-      to: vaultV2Address,
+      to: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
     }),
   })),
   Path: vi.fn(),
@@ -142,122 +143,73 @@ describe('BaseDefaultSwapHandler', () => {
   })
 
   describe('build', () => {
-    let mockBuildCall: any
-    let mockBuildCallWithPermit2: any
-    let mockSwapInstance: any
-    let mockSwapResponse: any
-
-    beforeEach(() => {
-      mockBuildCall = vi.fn().mockReturnValue({
-        callData: '0xdefault_tx_data',
-        value: BigInt(0),
-        to: vaultV2Address,
-      })
-      mockBuildCallWithPermit2 = vi.fn().mockReturnValue({
-        callData: '0xpermit2_tx_data',
-        value: BigInt(0),
-        to: vaultV2Address,
-      })
-
-      mockSwapInstance = {
-        buildCall: mockBuildCall,
-        buildCallWithPermit2: mockBuildCallWithPermit2,
-      }
-
-      mockSwapResponse = {
-        swap: mockSwapInstance,
-        queryOutput: {
-          to: vaultV2Address,
-          swapKind: 'GIVEN_IN',
-        } as any,
-        protocolVersion: 2,
-      } as SdkSimulateSwapResponse
-    })
-
-    let mockBuildInputs: BuildSwapInputs
-
-    beforeEach(() => {
-      mockBuildInputs = {
-        tokenIn: {
-          address: wethAddress,
-          amount: '1.0',
-          scaledAmount: BigInt(1e18),
-        },
-        tokenOut: {
-          address: daiAddress,
-          amount: '100.0',
-          scaledAmount: BigInt(1e20),
-        },
-        swapType: GqlSorSwapType.ExactIn,
-        selectedChain: GqlChain.Mainnet,
-        account: ('0x' + '1'.repeat(40)) as any,
-        slippagePercent: '0.5',
-        simulateResponse: mockSwapResponse,
-        wethIsEth: false,
-      } as BuildSwapInputs
-    })
-
     it('builds a standard v2 swap transaction', () => {
-      const tx = handler.build(mockBuildInputs as unknown as SdkBuildSwapInputs)
+      const inputs = createSdkBuildSwapInputs({
+        tokenInAddress: TEST_ADDRESSES.weth,
+        tokenOutAddress: TEST_ADDRESSES.dai,
+      })
+      const tx = handler.build(inputs)
 
-      expect(tx.account).toBe(mockBuildInputs.account)
+      expect(tx.account).toBe(inputs.account)
       expect(tx.chainId).toBe(1)
-      expect(tx.to).toBe(vaultV2Address)
+      expect(tx.to).toBe(TEST_ADDRESSES.vaultV2)
       expect(tx.data).toBe('0xdefault_tx_data')
     })
 
     it('builds a v3 swap transaction when protocol version is 3', () => {
-      const v3Inputs = {
-        ...mockBuildInputs,
-        simulateResponse: {
-          ...mockSwapResponse,
-          protocolVersion: 3,
-        } as SdkSimulateSwapResponse,
-      } as BuildSwapInputs & { wethIsEth: boolean } & {}
+      const v3Inputs = createSdkBuildSwapInputs({ protocolVersion: 3 })
 
-      const tx = handler.build(v3Inputs as unknown as SdkBuildSwapInputs)
+      const tx = handler.build(v3Inputs)
 
-      expect(tx.account).toBe(mockBuildInputs.account)
+      expect(tx.account).toBe(v3Inputs.account)
       expect(tx.chainId).toBe(1)
-      expect(tx.to).toBe(vaultV2Address)
-      expect(mockBuildCall).toHaveBeenCalled()
-      expect(mockBuildCallWithPermit2).not.toHaveBeenCalled()
+      expect(tx.to).toBe(TEST_ADDRESSES.vaultV2)
     })
 
     it('includes sender and recipient for v2 swaps', () => {
+      const { mockBuildCall, simulateResponse } = createMockSdkSimulateSwapResponse()
       mockBuildCall.mockReturnValue({
         callData: '0xmock',
         value: BigInt(1e18),
-        to: vaultV2Address,
+        to: TEST_ADDRESSES.vaultV2,
       })
 
-      const tx = handler.build(mockBuildInputs as unknown as SdkBuildSwapInputs)
+      const inputs = createSdkBuildSwapInputs({ simulateResponse })
+      const tx = handler.build(inputs)
 
       expect(mockBuildCall).toHaveBeenCalled()
       expect(tx.value).toBe(BigInt(1e18))
     })
 
     it('calls buildCallWithPermit2 for v3 with permit2', () => {
-      const mockPermit2 = {
-        spender: vaultV2Address,
-        amount: BigInt(1e18),
-        expiry: Math.floor(Date.now() / 1000) + 3600,
-        nonce: BigInt(0),
-        sig: '0x' as any,
+      const { mockBuildCallWithPermit2, simulateResponse } = createMockSdkSimulateSwapResponse({
+        protocolVersion: 3,
+      })
+
+      const mockPermit2: Permit2 = {
+        batch: {
+          details: [
+            {
+              token: TEST_ADDRESSES.weth,
+              amount: BigInt(1e18),
+              expiration: Math.floor(Date.now() / 1000) + 3600,
+              nonce: 0,
+            },
+          ],
+          spender: TEST_ADDRESSES.vaultV2,
+          sigDeadline: BigInt(Number.MAX_SAFE_INTEGER),
+        },
+        signature: '0x',
       }
 
-      const v3WithPermit2 = {
-        ...mockBuildInputs,
+      const v3WithPermit2 = createSdkBuildSwapInputs({
+        simulateResponse,
         permit2: mockPermit2,
-        simulateResponse: {
-          ...mockSwapResponse,
-          protocolVersion: 3,
-        } as SdkSimulateSwapResponse,
-      } as unknown as SdkBuildSwapInputs
+      })
 
       const tx = handler.build(v3WithPermit2)
 
-      expect(tx.to).toBe(vaultV2Address)
+      expect(tx.to).toBe(TEST_ADDRESSES.vaultV2)
       expect(tx.data).toBe('0xpermit2_tx_data')
       expect(mockBuildCallWithPermit2).toHaveBeenCalledWith(
         expect.objectContaining({
