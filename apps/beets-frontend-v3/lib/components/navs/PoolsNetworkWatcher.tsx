@@ -28,7 +28,7 @@ export function PoolsNetworkWatcher() {
       : undefined
 
   const [prevNetworks, setPrevNetworks] = useState(derivedNetworks)
-  if (derivedNetworks !== undefined && prevNetworks !== derivedNetworks) {
+  if (derivedNetworks !== undefined && !Object.is(prevNetworks, derivedNetworks)) {
     setPrevNetworks(derivedNetworks)
     setNetworks(derivedNetworks)
   }

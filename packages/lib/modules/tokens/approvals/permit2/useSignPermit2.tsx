@@ -61,7 +61,7 @@ export function useSignPermit2({
       : undefined
 
   const [prevInitState, setPrevInitState] = useState(initState)
-  if (initState !== undefined && prevInitState !== initState) {
+  if (initState !== undefined && !Object.is(prevInitState, initState)) {
     setPrevInitState(initState)
     if (!isLoading && isSimulationReady) {
       setPermit2Signature(undefined)

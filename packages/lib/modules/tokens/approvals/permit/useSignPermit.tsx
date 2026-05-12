@@ -34,7 +34,7 @@ export function useSignPermit({
   // Derive initial state from SDK loading status (replaces useEffect)
   const initState = isLoading ? SignatureState.Preparing : SignatureState.Ready
   const [prevInitState, setPrevInitState] = useState(initState)
-  if (prevInitState !== initState) {
+  if (!Object.is(prevInitState, initState)) {
     setPrevInitState(initState)
     setSignPermitState(initState)
   }

@@ -57,7 +57,7 @@ export function AddLiquidityFormCheckbox() {
     : hasAcceptedPoolRisks
 
   const [prevAcceptPoolRisks, setPrevAcceptPoolRisks] = useState(derivedAcceptPoolRisks)
-  if (prevAcceptPoolRisks !== derivedAcceptPoolRisks) {
+  if (!Object.is(prevAcceptPoolRisks, derivedAcceptPoolRisks)) {
     setPrevAcceptPoolRisks(derivedAcceptPoolRisks)
     setAcceptPoolRisks(derivedAcceptPoolRisks)
   }
