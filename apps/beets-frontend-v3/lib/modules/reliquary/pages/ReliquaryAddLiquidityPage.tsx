@@ -26,7 +26,10 @@ import { AddLiquidityFormTabs } from '@repo/lib/modules/pool/actions/add-liquidi
 import { AddLiquidityPotentialWeeklyYield } from '@repo/lib/modules/pool/actions/add-liquidity/form/AddLiquidityPotentialWeeklyYield'
 import { useGetPoolRewards } from '@repo/lib/modules/pool/useGetPoolRewards'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
-import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import {
+  PriceImpactInput,
+  usePriceImpact,
+} from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { cannotCalculatePriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -93,7 +96,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
   )
 
   const { pool } = usePool()
-  const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
+  const { priceImpactColor, priceImpact } = usePriceImpact()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
   const { calculatePotentialYield } = useGetPoolRewards(pool)
@@ -107,10 +110,6 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
     setTabIndex(1)
     setWantsProportional(true)
   }
-
-  useEffect(() => {
-    setPriceImpact(priceImpactQuery.data)
-  }, [priceImpactQuery.data])
 
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
@@ -140,6 +139,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
+      <PriceImpactInput value={priceImpactQuery.data} />
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">

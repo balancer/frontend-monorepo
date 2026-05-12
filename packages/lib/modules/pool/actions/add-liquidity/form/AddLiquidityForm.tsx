@@ -30,7 +30,10 @@ import {
 } from '../../LiquidityActionHelpers'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
-import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import {
+  PriceImpactInput,
+  usePriceImpact,
+} from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
@@ -92,7 +95,7 @@ function AddLiquidityMainForm() {
   } = useAddLiquidity()
 
   const { pool } = usePool()
-  const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
+  const { priceImpactColor, priceImpact } = usePriceImpact()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
@@ -108,10 +111,6 @@ function AddLiquidityMainForm() {
     setTabIndex(1)
     setWantsProportional(true)
   }
-
-  useEffect(() => {
-    setPriceImpact(priceImpactQuery.data)
-  }, [priceImpactQuery.data])
 
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
@@ -174,6 +173,7 @@ function AddLiquidityMainForm() {
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
+      <PriceImpactInput value={priceImpactQuery.data} />
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">

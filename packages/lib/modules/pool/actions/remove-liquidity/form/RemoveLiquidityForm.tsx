@@ -32,7 +32,10 @@ import { TransactionSettings } from '@repo/lib/modules/user/settings/Transaction
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
-import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import {
+  PriceImpactInput,
+  usePriceImpact,
+} from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { parseUnits } from 'viem'
 import { RemoveSimulationError } from '@repo/lib/shared/components/errors/RemoveSimulationError'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
@@ -97,15 +100,11 @@ export function RemoveLiquidityForm() {
     setNeedsToAcceptHighPI,
     amountsOut,
   } = useRemoveLiquidity()
-  const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
+  const { priceImpactColor, priceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)
   const { startTokenPricePolling } = useTokens()
   const { slippage } = useUserSettings()
-
-  useEffect(() => {
-    setPriceImpact(priceImpactQuery.data)
-  }, [priceImpactQuery.data])
 
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-' // If it's 0 we want to display 0.
@@ -162,6 +161,7 @@ export function RemoveLiquidityForm() {
   return (
     <TokenBalancesProvider extTokens={validTokens}>
       <Box h="full" maxW="lg" mx="auto" pb="2xl" w="full">
+        <PriceImpactInput value={priceImpactQuery.data} />
         <Card>
           <CardHeader>
             <HStack justify="space-between" w="full">

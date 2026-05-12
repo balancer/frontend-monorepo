@@ -89,3 +89,28 @@ export function PriceImpactProvider({ children }: PropsWithChildren) {
 }
 
 export const usePriceImpact = (): Result => useMandatoryContext(PriceImpactContext, 'PriceImpact')
+
+/**
+ * Renders nothing. Feeds a price-impact value into the PriceImpactProvider
+ * at render time using the React-recommended "deriving state during render"
+ * pattern, avoiding a useEffect-based state mirror.
+ *
+ * Consumer components that receive price impact from a react-query or other
+ * source at render time should render <PriceImpactInput value={data} />
+ * instead of calling setPriceImpact() inside a useEffect.
+ *
+ * @see https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+ */
+export function PriceImpactInput({ value }: { value: string | number | undefined | null }) {
+  const { setPriceImpact } = usePriceImpact()
+  const [prevValue, setPrevValue] = useState(value)
+
+  // During render: if the value changed, update provider state and
+  // reset acceptance risk. The prevValue check prevents infinite loops.
+  if (!Object.is(prevValue, value)) {
+    setPrevValue(value)
+    setPriceImpact(value)
+  }
+
+  return null
+}

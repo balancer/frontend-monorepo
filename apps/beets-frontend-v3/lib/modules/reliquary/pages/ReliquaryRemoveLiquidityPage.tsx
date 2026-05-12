@@ -21,7 +21,10 @@ import { useRemoveLiquidity } from '@repo/lib/modules/pool/actions/remove-liquid
 import { RemoveLiquidityProportional } from '@repo/lib/modules/pool/actions/remove-liquidity/form/RemoveLiquidityProportional'
 import { RemoveLiquiditySingleToken } from '@repo/lib/modules/pool/actions/remove-liquidity/form/RemoveLiquiditySingleToken'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
-import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import {
+  PriceImpactInput,
+  usePriceImpact,
+} from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TransactionSettings } from '@repo/lib/modules/user/settings/TransactionSettings'
@@ -85,13 +88,9 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
   } = useRemoveLiquidity()
 
   const { pool, chain } = usePool()
-  const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
+  const { priceImpactColor, priceImpact } = usePriceImpact()
   const { startTokenPricePolling } = useTokens()
   const { slippage } = useUserSettings()
-
-  useEffect(() => {
-    setPriceImpact(priceImpactQuery.data)
-  }, [priceImpactQuery.data])
 
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
@@ -122,6 +121,7 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
+      <PriceImpactInput value={priceImpactQuery.data} />
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
