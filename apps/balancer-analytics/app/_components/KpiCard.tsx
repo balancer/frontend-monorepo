@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Card, Flex, Skeleton, Text } from '@chakra-ui/react'
+import { Card, Flex, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { Sparkline } from './Sparkline'
 import { DeltaPill } from './DeltaPill'
 
@@ -11,7 +11,6 @@ type Props = {
   delta?: number | null
   spark?: number[]
   sparkColor?: string
-  accent?: string
   big?: boolean
   isLoading?: boolean
 }
@@ -23,58 +22,57 @@ export function KpiCard({
   delta,
   spark,
   sparkColor = 'green.400',
-  accent,
   big,
   isLoading,
 }: Props) {
   return (
-    <Card overflow="hidden" position="relative" variant="level1">
-      {accent && (
-        <Box
-          bg={accent}
-          bottom={0}
-          left={0}
-          opacity={0.7}
-          position="absolute"
-          top={0}
-          width="2px"
-        />
-      )}
-      <Flex align="center" justify="space-between" mb="xs">
-        <Text fontSize="xs" textTransform="uppercase" variant="eyebrow">
-          {label}
-        </Text>
-        {delta != null && <DeltaPill value={delta} />}
-      </Flex>
-      <Flex align="baseline" gap="ms" justify="space-between">
-        {isLoading ? (
-          <Skeleton h={big ? '8' : '7'} w="60%" />
-        ) : (
+    <Card h="full" p={{ base: 'md', md: big ? 'lg' : 'md' }} variant="level2">
+      <VStack align="stretch" h="full" justify="space-between" spacing="md">
+        <Flex align="center" gap="sm" justify="space-between">
           <Text
-            as="span"
-            color="font.maxContrast"
-            fontSize={big ? '3xl' : '2xl'}
-            fontWeight="bold"
-            letterSpacing="-0.6px"
-            lineHeight="1.05"
+            color="font.secondary"
+            fontSize="xs"
+            fontWeight="medium"
+            letterSpacing="0.4px"
+            textTransform="uppercase"
           >
-            {value}
+            {label}
+          </Text>
+          {delta != null && <DeltaPill value={delta} />}
+        </Flex>
+
+        <Flex align="baseline" gap="ms" justify="space-between">
+          {isLoading ? (
+            <Skeleton h={big ? '10' : '8'} w="60%" />
+          ) : (
+            <Text
+              as="span"
+              className="home-stats"
+              color="font.maxContrast"
+              fontSize={big ? '4xl' : '2xl'}
+              fontWeight="bold"
+              letterSpacing="-0.8px"
+              lineHeight="1.05"
+            >
+              {value}
+            </Text>
+          )}
+          {spark && (
+            <Sparkline
+              height={big ? 42 : 30}
+              stroke={sparkColor}
+              values={spark}
+              width={big ? 110 : 80}
+            />
+          )}
+        </Flex>
+
+        {sub && (
+          <Text color="font.secondary" fontSize="xs">
+            {sub}
           </Text>
         )}
-        {spark && (
-          <Sparkline
-            height={big ? 38 : 28}
-            stroke={sparkColor}
-            values={spark}
-            width={big ? 100 : 80}
-          />
-        )}
-      </Flex>
-      {sub && (
-        <Text color="font.secondary" fontSize="xs" mt="xs">
-          {sub}
-        </Text>
-      )}
+      </VStack>
     </Card>
   )
 }

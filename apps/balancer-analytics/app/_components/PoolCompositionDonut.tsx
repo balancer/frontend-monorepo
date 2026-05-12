@@ -11,9 +11,9 @@ import {
 type Mode = 'TYPE' | 'VERSION'
 
 const COLORS: Record<Mode, string[]> = {
-  TYPE: ['#9f95f0', '#E6C6A0', '#EA9A43', '#25e2a4', '#718096'],
+  TYPE: ['#E6C6A0', '#9f95f0', '#EA9A43', '#25e2a4', '#56c596', '#b3aef5', '#718096'],
   // v3 amber-accent (the brand "special" tone) on top, v2 muted, CoW grey
-  VERSION: ['#E6C6A0', '#9f95f0', '#718096'],
+  VERSION: ['#E6C6A0', '#9f95f0', '#25e2a4'],
 }
 
 const usd = (n: number) =>
@@ -24,16 +24,53 @@ const usd = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n)
 
+// More verbose than @repo/lib's `getPoolTypeLabel` (which collapses every
+// stable variant to "Stable" and renames QuantAMM to "BTF"). For an analytics
+// breakdown we want to preserve the underlying pool engineering so curious
+// users can see e.g. that ComposableStable and MetaStable are distinct.
+const POOL_TYPE_OVERRIDES: Record<string, string> = {
+  COMPOSABLE_STABLE: 'Composable Stable',
+  META_STABLE: 'Meta Stable',
+  PHANTOM_STABLE: 'Phantom Stable',
+  QUANT_AMM_WEIGHTED: 'QuantAMM Weighted',
+  COW_AMM: 'CoW AMM',
+  LIQUIDITY_BOOTSTRAPPING: 'Liquidity Bootstrapping',
+  FIXED_LBP: 'Fixed LBP',
+  RECLAMM: 'reCLAMM',
+  GYRO: 'Gyro 2-CLP',
+  GYRO3: 'Gyro 3-CLP',
+  GYROE: 'Gyro E-CLP',
+  FX: 'FX',
+}
+
+function humanizePoolType(raw: string): string {
+  const upper = raw.toUpperCase()
+  if (POOL_TYPE_OVERRIDES[upper]) return POOL_TYPE_OVERRIDES[upper]
+  return upper
+    .split('_')
+    .filter(Boolean)
+    .map(seg => seg.charAt(0) + seg.slice(1).toLowerCase())
+    .join(' ')
+}
+
 export function PoolCompositionDonut() {
   const [mode, setMode] = useState<Mode>('TYPE')
   const typeBreakdown = usePoolTypeBreakdown()
   const versionBreakdown = useVersionTvlBreakdown()
 
-  const { data, loading } =
-    mode === 'TYPE' ? typeBreakdown : versionBreakdown
+  const { data: rawData, loading } = mode === 'TYPE' ? typeBreakdown : versionBreakdown
   const palette = COLORS[mode]
 
-  const total = (data ?? []).reduce((a, b) => a + b.tvl, 0)
+  const data = useMemo(
+    () =>
+      (rawData ?? []).map(d => ({
+        ...d,
+        displayName: mode === 'TYPE' ? humanizePoolType(d.name) : d.name,
+      })),
+    [rawData, mode]
+  )
+
+  const total = data.reduce((a, b) => a + b.tvl, 0)
   const option = useMemo(
     () => ({
       tooltip: {
@@ -45,13 +82,13 @@ export function PoolCompositionDonut() {
       series: [
         {
           type: 'pie',
-          radius: ['50%', '78%'],
+          radius: ['52%', '80%'],
           avoidLabelOverlap: false,
           label: { show: false },
           labelLine: { show: false },
           itemStyle: { borderColor: '#383E47', borderWidth: 2 },
-          data: (data ?? []).map((d, i) => ({
-            name: d.name,
+          data: data.map((d, i) => ({
+            name: d.displayName,
             value: d.tvl,
             itemStyle: { color: palette[i % palette.length] },
           })),
@@ -67,7 +104,7 @@ export function PoolCompositionDonut() {
         <Heading size="h6">Pool composition</Heading>
         <ModeToggle mode={mode} onChange={setMode} />
       </Flex>
-      {loading || !data ? (
+      {loading || !data.length ? (
         <Skeleton h="200px" />
       ) : (
         <HStack align="center" spacing="md">
@@ -93,7 +130,7 @@ export function PoolCompositionDonut() {
                   w="8px"
                 />
                 <Text color="font.secondary" flex={1} fontSize="sm" noOfLines={1}>
-                  {d.name}
+                  {d.displayName}
                 </Text>
                 <Text color="font.secondary" fontSize="xs">
                   {total > 0 ? ((d.tvl / total) * 100).toFixed(1) : '0.0'}%

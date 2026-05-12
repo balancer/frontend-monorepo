@@ -1,52 +1,177 @@
-import { Box, Container, HStack, Heading, Text } from '@chakra-ui/react'
-import Image from 'next/image'
-import Link from 'next/link'
+'use client'
 
-// NOTE: don't use DefaultPageContainer here — it pads the top by
-// `var(--navbar-height, 72px)` to leave room *for* a navbar.
+import { Box, Container, HStack, Heading, IconButton, Link, Text } from '@chakra-ui/react'
+import Image from 'next/image'
+import NextLink from 'next/link'
+import { motion } from 'motion/react'
+import { useEffect, useState } from 'react'
+import { ArrowUpRight, GitHub } from 'react-feather'
+
+const NAVBAR_HEIGHT = '72px'
+
+const NAV_LINKS: { label: string; href: string; section: string }[] = [
+  { label: 'Overview', href: '#overview', section: 'overview' },
+  { label: 'Liquidity', href: '#liquidity', section: 'liquidity' },
+  { label: 'Pools', href: '#pools', section: 'pools' },
+]
+
+const EXTERNAL_LINKS: { label: string; href: string }[] = [
+  { label: 'Balancer', href: 'https://balancer.fi' },
+]
+
 export function Navbar() {
+  const [scrolled, setScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState<string>('overview')
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--navbar-height', NAVBAR_HEIGHT)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 8)
+
+      const offset = 96
+      let current = NAV_LINKS[0].section
+      for (const link of NAV_LINKS) {
+        const el = document.getElementById(link.section)
+        if (!el) continue
+        if (el.getBoundingClientRect().top - offset <= 0) current = link.section
+      }
+      setActiveSection(current)
+    }
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <Box
-      as="nav"
-      bg="background.level0"
-      borderBottom="1px solid"
-      borderColor="border.subduedZen"
-      position="sticky"
-      top={0}
-      w="full"
-      zIndex={10}
+    <motion.div
+      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: -8 }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+      }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
     >
-      <Container maxW="maxContent" px={['ms', 'md']} py="sm">
-        <HStack justify="space-between" w="full">
-          <Link
-            aria-label="DeFilytica homepage"
-            href="https://defilytica.com"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <HStack spacing="sm">
-              <Image
-                alt="DeFilytica"
-                height={28}
-                priority
-                src="/images/defilytica.png"
-                width={28}
-              />
-              <Heading
-                fontSize="md"
-                fontWeight="bold"
-                letterSpacing="-0.2px"
-                size="h6"
+      <Box
+        _before={{
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          bg: scrolled ? 'background.level1' : 'transparent',
+          opacity: scrolled ? 0.7 : 0,
+          transition: 'opacity 0.25s ease',
+          zIndex: -1,
+        }}
+        as="nav"
+        backdropFilter={scrolled ? 'blur(10px)' : 'none'}
+        borderBottom="1px solid"
+        borderColor={scrolled ? 'border.base' : 'transparent'}
+        boxShadow={scrolled ? 'lg' : 'none'}
+        h={NAVBAR_HEIGHT}
+        transitionDuration="0.25s"
+        transitionProperty="background, box-shadow, border-color, backdrop-filter"
+        w="full"
+      >
+        <Container h="full" maxW="maxContent" px={['ms', 'md']}>
+          <HStack align="center" h="full" justify="space-between" w="full">
+            <HStack spacing="xl">
+              <Link
+                _hover={{ textDecoration: 'none' }}
+                aria-label="DeFilytica homepage"
+                as={NextLink}
+                href="https://defilytica.com"
+                isExternal
+                rel="noopener noreferrer"
               >
-                DeFilytica
-              </Heading>
+                <HStack spacing="sm">
+                  <Image
+                    alt="DeFilytica"
+                    height={28}
+                    priority
+                    src="/images/defilytica.png"
+                    width={28}
+                  />
+                  <Heading
+                    display={{ base: 'none', sm: 'block' }}
+                    fontSize="md"
+                    fontWeight="bold"
+                    letterSpacing="-0.2px"
+                    size="h6"
+                  >
+                    DeFilytica
+                  </Heading>
+                </HStack>
+              </Link>
+
+              <HStack display={{ base: 'none', md: 'flex' }} spacing="lg">
+                {NAV_LINKS.map(link => {
+                  const isActive = activeSection === link.section
+                  return (
+                    <Link
+                      _hover={{ color: 'font.maxContrast', textDecoration: 'none' }}
+                      as={NextLink}
+                      color={isActive ? 'font.maxContrast' : 'font.secondary'}
+                      fontSize="sm"
+                      fontWeight="medium"
+                      href={link.href}
+                      key={link.href}
+                      transition="color 0.15s"
+                    >
+                      {link.label}
+                    </Link>
+                  )
+                })}
+              </HStack>
             </HStack>
-          </Link>
-          <Text color="font.secondary" fontSize="xs">
-            Balancer Analytics
-          </Text>
-        </HStack>
-      </Container>
-    </Box>
+
+            <HStack spacing={{ base: 'xs', md: 'sm' }}>
+              <Text
+                color="font.secondary"
+                display={{ base: 'none', lg: 'block' }}
+                fontSize="xs"
+                letterSpacing="0.4px"
+                textTransform="uppercase"
+              >
+                Balancer Analytics
+              </Text>
+              {EXTERNAL_LINKS.map(link => (
+                <Link
+                  _hover={{ color: 'font.maxContrast', textDecoration: 'none' }}
+                  as={NextLink}
+                  color="font.secondary"
+                  fontSize="sm"
+                  fontWeight="medium"
+                  href={link.href}
+                  isExternal
+                  key={link.href}
+                >
+                  <HStack spacing="xxs">
+                    <Box as="span">{link.label}</Box>
+                    <Box as="span" color="grayText" position="relative" top="-2px">
+                      <ArrowUpRight size={12} />
+                    </Box>
+                  </HStack>
+                </Link>
+              ))}
+              <IconButton
+                aria-label="GitHub"
+                as={NextLink}
+                href="https://github.com/defilytica"
+                icon={<GitHub size={16} />}
+                size="sm"
+                target="_blank"
+                variant="tertiary"
+              />
+            </HStack>
+          </HStack>
+        </Container>
+      </Box>
+    </motion.div>
   )
 }

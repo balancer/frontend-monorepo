@@ -31,7 +31,6 @@ export function HeroKpiStrip() {
       <Grid gap="md" mb="md" templateColumns={{ base: '1fr', md: '1.4fr 1fr 1fr 1fr' }}>
         <GridItem>
           <KpiCard
-            accent="#E6C6A0"
             big
             delta={sparks.tvl.delta24h}
             isLoading={loading}
@@ -70,7 +69,6 @@ export function HeroKpiStrip() {
 
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing="md">
         <KpiCard
-          accent="#25e2a4"
           delta={sparks.lps.delta24h}
           isLoading={loading}
           label="Liquidity providers"
@@ -79,7 +77,6 @@ export function HeroKpiStrip() {
           value={num(Number(d?.numLiquidityProviders ?? 0))}
         />
         <KpiCard
-          accent="#E6C6A0"
           delta={sparks.pools.delta24h}
           isLoading={loading}
           label="Active pools"
@@ -88,7 +85,6 @@ export function HeroKpiStrip() {
           value={num(Number(d?.poolCount ?? 0))}
         />
         <KpiCard
-          accent="#9f95f0"
           delta={sparks.surplus.delta24h}
           isLoading={loading}
           label="Surplus · 24h"

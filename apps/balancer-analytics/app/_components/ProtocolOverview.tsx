@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, SimpleGrid, Text, VStack } from '@chakra-ui/react'
+import { Box, Grid, GridItem, Heading, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { HeroKpiStrip } from './HeroKpiStrip'
@@ -13,12 +13,10 @@ import { PoolExplorer } from './PoolExplorer'
 
 export function ProtocolOverview() {
   return (
-    // `noVerticalPadding` strips the 72px navbar-clearance pad on the outer
-    // Box (we render our own navbar), then we add a tight `pt` ourselves.
-    <DefaultPageContainer noVerticalPadding pb="2xl" pt={['md', 'lg']}>
+    <DefaultPageContainer pb="2xl" pt={['md', 'lg']}>
       <VStack align="stretch" spacing={{ base: 'lg', md: 'xl' }}>
         <FadeInOnView animateOnce={false}>
-          <Box>
+          <Box id="overview" scrollMarginTop="96px">
             <Heading pb="sm" size="h3" sx={{ textWrap: 'balance' }} variant="special">
               Balancer Analytics
             </Heading>
@@ -33,19 +31,32 @@ export function ProtocolOverview() {
         </FadeInOnView>
 
         <FadeInOnView animateOnce={false}>
-          <TvlOverviewChart />
+          <Box id="liquidity" scrollMarginTop="96px">
+            <TvlOverviewChart />
+          </Box>
         </FadeInOnView>
 
         <FadeInOnView animateOnce={false}>
-          <SimpleGrid columns={{ base: 1, lg: 3 }} spacing="md">
-            <TvlByChainBars />
-            <PoolCompositionDonut />
-            <LiveSwapTape />
-          </SimpleGrid>
+          <Grid
+            gap="md"
+            templateColumns={{ base: '1fr', lg: '1fr 1fr 1.4fr' }}
+          >
+            <GridItem minW={0}>
+              <TvlByChainBars />
+            </GridItem>
+            <GridItem minW={0}>
+              <PoolCompositionDonut />
+            </GridItem>
+            <GridItem minW={0}>
+              <LiveSwapTape />
+            </GridItem>
+          </Grid>
         </FadeInOnView>
 
         <FadeInOnView animateOnce={false}>
-          <PoolExplorer />
+          <Box id="pools" scrollMarginTop="96px">
+            <PoolExplorer />
+          </Box>
         </FadeInOnView>
 
         <FadeInOnView animateOnce={false}>

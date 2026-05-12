@@ -1,15 +1,23 @@
 'use client'
 
-import { Box, Card, Flex, HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Card,
+  Divider,
+  Flex,
+  HStack,
+  Heading,
+  Skeleton,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { useMemo, useState } from 'react'
-import { useTvlSeries } from '@analytics/lib/hooks/useTvlSeries'
+import { useTvlSeries, type MetricKey, type Range } from '@analytics/lib/hooks/useTvlSeries'
 import { DeltaPill } from './DeltaPill'
 
-type Mode = 'TVL' | 'VOLUME'
-type Range = '7D' | '30D' | '90D' | '1Y' | 'ALL'
-
-const usd = (n: number) =>
+const usdCompact = (n: number) =>
   new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -17,18 +25,42 @@ const usd = (n: number) =>
     maximumFractionDigits: 2,
   }).format(n || 0)
 
-// "Feb 1" by default; promotes to "Feb 1, 2026" when the range crosses year boundaries.
+const numCompact = (n: number) =>
+  new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(n || 0)
+
+const usdFull = (n: number) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(n || 0)
+
+const numFull = (n: number) =>
+  new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n || 0)
+
 const dateLabelFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' })
 const dateLabelLongFmt = new Intl.DateTimeFormat('en-US', {
   month: 'short',
   day: 'numeric',
   year: 'numeric',
 })
+const hourLabelFmt = new Intl.DateTimeFormat('en-US', {
+  hour: 'numeric',
+  minute: '2-digit',
+  hour12: false,
+})
 const tooltipDateFmt = new Intl.DateTimeFormat('en-US', {
   weekday: 'short',
   month: 'short',
   day: 'numeric',
   year: 'numeric',
+})
+const tooltipHourFmt = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: '2-digit',
+  hour12: false,
 })
 
 const SERIES_COLORS = {
@@ -43,10 +75,35 @@ const SERIES_LABEL = {
   cow: 'CoW AMM',
 } as const
 
+type MetricDef = {
+  key: MetricKey
+  label: string
+  group: string
+  unit: 'USD' | 'COUNT'
+  headline: string
+  color: string
+}
+
+const METRICS: MetricDef[] = [
+  { key: 'TVL', label: 'TVL', group: 'Liquidity', unit: 'USD', headline: 'Total value locked', color: '#E6C6A0' },
+  { key: 'VOLUME', label: 'Volume', group: 'Activity', unit: 'USD', headline: 'Swap volume · 24h', color: '#EA9A43' },
+  { key: 'FEES', label: 'Swap fees', group: 'Revenue', unit: 'USD', headline: 'Swap fees · 24h', color: '#56c596' },
+  { key: 'YIELD', label: 'Yield', group: 'Revenue', unit: 'USD', headline: 'Yield captured · 24h', color: '#b3aef5' },
+  { key: 'SURPLUS', label: 'Surplus', group: 'Revenue', unit: 'USD', headline: 'Surplus · 24h', color: '#9f95f0' },
+  { key: 'LPS', label: 'LPs', group: 'Participation', unit: 'COUNT', headline: 'Liquidity providers', color: '#25e2a4' },
+  { key: 'POOLS', label: 'Pools', group: 'Participation', unit: 'COUNT', headline: 'Active pools', color: '#E6C6A0' },
+]
+
+function fmt(value: number, unit: 'USD' | 'COUNT', { full = false }: { full?: boolean } = {}) {
+  if (unit === 'USD') return full ? usdFull(value) : usdCompact(value)
+  return full ? numFull(value) : numCompact(value)
+}
+
 export function TvlOverviewChart() {
-  const [mode, setMode] = useState<Mode>('TVL')
+  const [metric, setMetric] = useState<MetricKey>('TVL')
   const [range, setRange] = useState<Range>('90D')
-  const { data, loading } = useTvlSeries({ range, mode })
+  const active = METRICS.find(m => m.key === metric)!
+  const { data, loading } = useTvlSeries({ range, mode: metric })
 
   // When the range spans multiple years, axis labels include the year.
   const showYearInAxis = useMemo(() => {
@@ -59,21 +116,94 @@ export function TvlOverviewChart() {
   const option = useMemo(() => {
     if (!data) return null
     const pts = data.points
+    const isIntraday = range === '24H'
     const fmtAxis = (val: number) =>
-      (showYearInAxis ? dateLabelLongFmt : dateLabelFmt).format(new Date(val))
+      isIntraday
+        ? hourLabelFmt.format(new Date(val))
+        : (showYearInAxis ? dateLabelLongFmt : dateLabelFmt).format(new Date(val))
+    const fmtTooltipDate = (val: number) =>
+      isIntraday
+        ? tooltipHourFmt.format(new Date(val))
+        : tooltipDateFmt.format(new Date(val))
 
-    const mkArea = (key: 'v2' | 'v3' | 'cow') => ({
-      name: SERIES_LABEL[key],
-      type: 'line' as const,
-      stack: 'protocol',
-      smooth: true,
-      showSymbol: false,
-      lineStyle: { width: 0 },
-      areaStyle: { color: SERIES_COLORS[key], opacity: 0.85 },
-      emphasis: { focus: 'series' as const },
-      data: pts.map(p => [p.t, p[key]]),
-    })
+    if (data.stacked) {
+      const mkArea = (key: 'v2' | 'v3' | 'cow') => ({
+        name: SERIES_LABEL[key],
+        type: 'line' as const,
+        stack: 'protocol',
+        smooth: true,
+        showSymbol: false,
+        lineStyle: { width: 0 },
+        areaStyle: { color: SERIES_COLORS[key], opacity: 0.85 },
+        emphasis: { focus: 'series' as const },
+        data: pts.map(p => [p.t, p[key]]),
+      })
 
+      return {
+        grid: { left: 8, right: 56, top: 12, bottom: 24 },
+        tooltip: {
+          trigger: 'axis',
+          backgroundColor: '#383E47',
+          borderColor: 'rgba(229,211,190,0.08)',
+          textStyle: { color: '#E5D3BE' },
+          formatter: (params: any) => {
+            if (!Array.isArray(params) || !params.length) return ''
+            const ts = params[0].value?.[0] ?? params[0].axisValue
+            const date = fmtTooltipDate(ts)
+            const rows = params
+              .slice()
+              .reverse()
+              .map(p => {
+                const v = Array.isArray(p.value) ? Number(p.value[1]) : Number(p.value)
+                return `
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
+                    <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${p.color}"></span>
+                    <span style="flex:1;color:#A0AEC0">${p.seriesName}</span>
+                    <span style="font-weight:600">${fmt(v, active.unit)}</span>
+                  </div>`
+              })
+              .join('')
+            const total = params.reduce((acc: number, p: any) => {
+              const v = Array.isArray(p.value) ? Number(p.value[1]) : Number(p.value)
+              return acc + (Number.isFinite(v) ? v : 0)
+            }, 0)
+            return `
+              <div style="min-width:200px">
+                <div style="color:#E5D3BE;font-weight:600;margin-bottom:4px">${date}</div>
+                ${rows}
+                <div style="display:flex;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:1px solid rgba(229,211,190,0.12)">
+                  <span style="color:#A0AEC0">Total</span>
+                  <span style="font-weight:700">${fmt(total, active.unit)}</span>
+                </div>
+              </div>`
+          },
+        },
+        legend: { show: false },
+        xAxis: {
+          type: 'time',
+          axisLine: { lineStyle: { color: 'rgba(229,211,190,0.06)' } },
+          axisLabel: {
+            color: '#718096',
+            fontSize: 10,
+            hideOverlap: true,
+            formatter: fmtAxis,
+          },
+        },
+        yAxis: {
+          type: 'value',
+          position: 'right',
+          splitLine: { lineStyle: { color: 'rgba(229,211,190,0.05)', type: 'dashed' } },
+          axisLabel: {
+            color: '#718096',
+            fontSize: 10,
+            formatter: (v: number) => fmt(v, active.unit),
+          },
+        },
+        series: [mkArea('v2'), mkArea('v3'), mkArea('cow')],
+      }
+    }
+
+    // Single-series area chart (fees, yield, surplus, LPs, pools)
     return {
       grid: { left: 8, right: 56, top: 12, bottom: 24 },
       tooltip: {
@@ -85,109 +215,402 @@ export function TvlOverviewChart() {
           if (!Array.isArray(params) || !params.length) return ''
           const ts = params[0].value?.[0] ?? params[0].axisValue
           const date = tooltipDateFmt.format(new Date(ts))
-          const rows = params
-            .slice()
-            .reverse() // cow on top of legend mirrors visual stack order
-            .map(p => {
-              const v = Array.isArray(p.value) ? Number(p.value[1]) : Number(p.value)
-              return `
-                <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
-                  <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${p.color}"></span>
-                  <span style="flex:1;color:#A0AEC0">${p.seriesName}</span>
-                  <span style="font-weight:600">${usd(v)}</span>
-                </div>`
-            })
-            .join('')
-          const total = params.reduce((acc: number, p: any) => {
-            const v = Array.isArray(p.value) ? Number(p.value[1]) : Number(p.value)
-            return acc + (Number.isFinite(v) ? v : 0)
-          }, 0)
+          const v = Array.isArray(params[0].value)
+            ? Number(params[0].value[1])
+            : Number(params[0].value)
           return `
-            <div style="min-width:200px">
+            <div style="min-width:180px">
               <div style="color:#E5D3BE;font-weight:600;margin-bottom:4px">${date}</div>
-              ${rows}
-              <div style="display:flex;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:1px solid rgba(229,211,190,0.12)">
-                <span style="color:#A0AEC0">Total</span>
-                <span style="font-weight:700">${usd(total)}</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${active.color}"></span>
+                <span style="flex:1;color:#A0AEC0">${active.label}</span>
+                <span style="font-weight:700">${fmt(v, active.unit, { full: active.unit === 'COUNT' })}</span>
               </div>
             </div>`
         },
       },
-      legend: {
-        show: false,
-      },
       xAxis: {
         type: 'time',
         axisLine: { lineStyle: { color: 'rgba(229,211,190,0.06)' } },
-        axisLabel: {
-          color: '#718096',
-          fontSize: 10,
-          hideOverlap: true,
-          formatter: fmtAxis,
-        },
+        axisLabel: { color: '#718096', fontSize: 10, hideOverlap: true, formatter: fmtAxis },
       },
       yAxis: {
         type: 'value',
         position: 'right',
         splitLine: { lineStyle: { color: 'rgba(229,211,190,0.05)', type: 'dashed' } },
-        axisLabel: { color: '#718096', fontSize: 10, formatter: usd },
+        axisLabel: {
+          color: '#718096',
+          fontSize: 10,
+          formatter: (v: number) => fmt(v, active.unit),
+        },
       },
-      series: [mkArea('v2'), mkArea('v3'), mkArea('cow')],
+      series: [
+        {
+          name: active.label,
+          type: 'line' as const,
+          smooth: true,
+          showSymbol: false,
+          lineStyle: { width: 2, color: active.color },
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                { offset: 0, color: `${active.color}99` },
+                { offset: 1, color: `${active.color}00` },
+              ],
+            },
+          },
+          data: pts.map(p => [p.t, p.value]),
+        },
+      ],
     }
-  }, [data, showYearInAxis])
+  }, [data, showYearInAxis, active, range])
 
   const latest = data?.points.at(-1)
   const totalNow = latest?.value ?? 0
+  const hasAnyData = !!data && data.realPointCount > 0
+  const canPlot = !!data && data.realPointCount >= 2
+  const headlineValue = hasAnyData
+    ? fmt(totalNow, active.unit, { full: active.unit === 'COUNT' })
+    : '—'
+  const firstDataLabel =
+    data?.firstDataAt != null
+      ? new Intl.DateTimeFormat('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        }).format(new Date(data.firstDataAt))
+      : null
 
   return (
-    <Card overflow="hidden" position="relative" variant="level1">
-      <Flex align="flex-start" flexWrap="wrap" gap="ms" justify="space-between" mb="md">
-        <VStack align="flex-start" spacing="xs">
-          <Heading size="h6">Protocol {mode === 'TVL' ? 'liquidity' : 'volume'}</Heading>
-          <HStack spacing="md">
-            <LegendSwatch color={SERIES_COLORS.v2} label="v2" />
-            <LegendSwatch color={SERIES_COLORS.v3} label="v3" />
-            <LegendSwatch color={SERIES_COLORS.cow} label="CoW AMM" />
-          </HStack>
-        </VStack>
-        <HStack spacing="sm">
-          <SegBtns onChange={setMode} options={['TVL', 'VOLUME']} value={mode} />
+    <Card
+      overflow="hidden"
+      p={{ base: 'sm', md: 'md' }}
+      position="relative"
+      variant="level1"
+    >
+      <VStack align="stretch" spacing="md">
+        <Flex align="flex-start" flexWrap="wrap" gap="ms" justify="space-between">
+          <VStack align="flex-start" spacing="xs">
+            <Heading size="h5">Protocol metrics</Heading>
+            <Text color="font.secondary" fontSize="xs">
+              Historical browse · indexed snapshot data
+            </Text>
+          </VStack>
           <SegBtns
             onChange={setRange}
-            options={['7D', '30D', '90D', '1Y', 'ALL']}
+            options={['24H', '7D', '30D', '90D', '1Y', 'ALL']}
             value={range}
           />
-        </HStack>
-      </Flex>
+        </Flex>
 
-      <HStack align="baseline" mb="sm" spacing="md">
-        <Heading color="font.maxContrast" letterSpacing="-0.6px" size="h3">
-          {data ? usd(totalNow) : '—'}
-        </Heading>
-        {data?.change24h != null && <DeltaPill value={data.change24h} />}
-        <Text color="font.secondary" fontSize="xs">
-          vs 24h ago
-        </Text>
-      </HStack>
+        <MetricTabs metric={metric} onChange={setMetric} />
 
-      {loading || !option ? (
-        <Skeleton h="288px" />
-      ) : (
-        <Box h="288px">
-          <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
-        </Box>
-      )}
+        <Stack
+          align="stretch"
+          direction={{ base: 'column', lg: 'row' }}
+          spacing="md"
+        >
+          {/* Bento sidebar – stats */}
+          <Card
+            flexShrink={0}
+            variant="subSection"
+            w={{ base: 'full', lg: '280px' }}
+          >
+            <VStack align="stretch" h="full" p="md" spacing="md">
+              <Box>
+                <Text
+                  color="font.secondary"
+                  fontSize="xs"
+                  fontWeight="medium"
+                  letterSpacing="0.4px"
+                  textTransform="uppercase"
+                >
+                  {active.headline}
+                </Text>
+                <HStack align="baseline" mt="xs" spacing="sm">
+                  <Heading
+                    color="font.maxContrast"
+                    letterSpacing="-0.8px"
+                    size="h2"
+                  >
+                    {headlineValue}
+                  </Heading>
+                </HStack>
+                <HStack mt="xs" spacing="sm">
+                  {data?.change24h != null ? (
+                    <>
+                      <DeltaPill value={data.change24h} />
+                      <Text color="font.secondary" fontSize="xs">
+                        vs previous {range === '24H' ? 'hour' : '24h'}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text color="font.secondary" fontSize="xs">
+                      {hasAnyData ? 'change unavailable' : 'No data captured yet'}
+                    </Text>
+                  )}
+                </HStack>
+                {data?.sparse && firstDataLabel && (
+                  <Text color="font.secondary" fontSize="2xs" mt="xs">
+                    Indexed since {firstDataLabel}
+                  </Text>
+                )}
+              </Box>
+
+              {data?.stacked ? (
+                <>
+                  <Divider />
+                  <VStack align="stretch" spacing="sm">
+                    <Text
+                      color="font.secondary"
+                      fontSize="xs"
+                      fontWeight="medium"
+                      letterSpacing="0.4px"
+                      textTransform="uppercase"
+                    >
+                      By protocol
+                    </Text>
+                    <BreakdownRow
+                      color={SERIES_COLORS.v3}
+                      label={SERIES_LABEL.v3}
+                      total={totalNow}
+                      unit={active.unit}
+                      value={latest?.v3 ?? 0}
+                    />
+                    <BreakdownRow
+                      color={SERIES_COLORS.v2}
+                      label={SERIES_LABEL.v2}
+                      total={totalNow}
+                      unit={active.unit}
+                      value={latest?.v2 ?? 0}
+                    />
+                    <BreakdownRow
+                      color={SERIES_COLORS.cow}
+                      label={SERIES_LABEL.cow}
+                      total={totalNow}
+                      unit={active.unit}
+                      value={latest?.cow ?? 0}
+                    />
+                  </VStack>
+                </>
+              ) : (
+                <>
+                  <Divider />
+                  <VStack align="stretch" spacing="xs">
+                    <Text
+                      color="font.secondary"
+                      fontSize="xs"
+                      fontWeight="medium"
+                      letterSpacing="0.4px"
+                      textTransform="uppercase"
+                    >
+                      Range
+                    </Text>
+                    <RangeStat data={data} unit={active.unit} />
+                  </VStack>
+                </>
+              )}
+            </VStack>
+          </Card>
+
+          {/* Bento main – chart */}
+          <Card flex={1} variant="subSection">
+            <Box h={{ base: '260px', md: '320px' }} p="sm">
+              {loading ? (
+                <Skeleton h="full" w="full" />
+              ) : !canPlot ? (
+                <SparseDataPlaceholder
+                  active={active}
+                  firstDataLabel={firstDataLabel}
+                  hasAnyData={hasAnyData}
+                  range={range}
+                  realPointCount={data?.realPointCount ?? 0}
+                  value={hasAnyData ? headlineValue : null}
+                />
+              ) : (
+                // `notMerge` + a stack-aware key force ECharts to drop the
+                // previous option fully when switching metric type — otherwise
+                // the stacked TVL series persists underneath a single-line
+                // chart like Fees / Yield and looks like wrong data.
+                <ReactECharts
+                  key={data?.stacked ? 'stacked' : 'single'}
+                  notMerge
+                  option={option!}
+                  style={{ height: '100%', width: '100%' }}
+                />
+              )}
+            </Box>
+          </Card>
+        </Stack>
+      </VStack>
     </Card>
   )
 }
 
-function LegendSwatch({ color, label }: { color: string; label: string }) {
+function BreakdownRow({
+  color,
+  label,
+  value,
+  total,
+  unit,
+}: {
+  color: string
+  label: string
+  value: number
+  total: number
+  unit: 'USD' | 'COUNT'
+}) {
+  const pct = total > 0 ? (value / total) * 100 : 0
   return (
-    <HStack spacing="xxs">
-      <Box bg={color} borderRadius="2px" h="8px" w="8px" />
+    <Flex align="center" gap="sm">
+      <Box bg={color} borderRadius="2px" flexShrink={0} h="8px" w="8px" />
+      <Text color="font.secondary" flex={1} fontSize="sm">
+        {label}
+      </Text>
+      <VStack align="flex-end" spacing={0}>
+        <Text fontSize="sm" fontWeight="medium">
+          {fmt(value, unit)}
+        </Text>
+        <Text color="font.secondary" fontSize="2xs">
+          {pct.toFixed(1)}%
+        </Text>
+      </VStack>
+    </Flex>
+  )
+}
+
+function RangeStat({
+  data,
+  unit,
+}: {
+  data: { points: { value: number }[] } | null
+  unit: 'USD' | 'COUNT'
+}) {
+  if (!data?.points.length) return null
+  // Drop zero/non-finite values so sparse metrics (1-2 real days surrounded by
+  // backfill blanks) don't report `Low: 0` and a misleading deflated `Avg`.
+  const values = data.points.map(p => p.value).filter(v => Number.isFinite(v) && v > 0)
+  if (!values.length) {
+    return (
+      <Text color="font.secondary" fontSize="xs">
+        Not enough data yet.
+      </Text>
+    )
+  }
+  const max = Math.max(...values)
+  const min = Math.min(...values)
+  const avg = values.reduce((a, b) => a + b, 0) / values.length
+  return (
+    <VStack align="stretch" spacing="xs">
+      <RangeRow label="High" unit={unit} value={max} />
+      <RangeRow label="Low" unit={unit} value={min} />
+      <RangeRow label="Avg" unit={unit} value={avg} />
+    </VStack>
+  )
+}
+
+function SparseDataPlaceholder({
+  active,
+  firstDataLabel,
+  hasAnyData,
+  range,
+  realPointCount,
+  value,
+}: {
+  active: MetricDef
+  firstDataLabel: string | null
+  hasAnyData: boolean
+  range: Range
+  realPointCount: number
+  value: string | null
+}) {
+  return (
+    <VStack align="center" h="full" justify="center" px="md" spacing="sm" textAlign="center">
+      <Box
+        bg={`${active.color}22`}
+        borderRadius="full"
+        color={active.color}
+        fontSize="xs"
+        fontWeight="medium"
+        letterSpacing="0.4px"
+        px="sm"
+        py="2px"
+        textTransform="uppercase"
+      >
+        {active.label}
+      </Box>
+      <Heading color="font.maxContrast" letterSpacing="-0.6px" size="h3">
+        {hasAnyData ? value : '—'}
+      </Heading>
+      <Text color="font.secondary" fontSize="sm" maxW="320px">
+        {hasAnyData
+          ? `Only ${realPointCount} data point${realPointCount === 1 ? '' : 's'} indexed so far — not enough history to plot the ${range} chart.`
+          : `${active.label} hasn't been captured in the selected range yet.`}
+      </Text>
+      {firstDataLabel && (
+        <Text color="font.secondary" fontSize="xs">
+          First captured on {firstDataLabel}
+        </Text>
+      )}
+    </VStack>
+  )
+}
+
+function RangeRow({
+  label,
+  value,
+  unit,
+}: {
+  label: string
+  value: number
+  unit: 'USD' | 'COUNT'
+}) {
+  return (
+    <Flex align="baseline" justify="space-between">
       <Text color="font.secondary" fontSize="xs">
         {label}
       </Text>
+      <Text fontSize="sm" fontWeight="medium">
+        {fmt(value, unit)}
+      </Text>
+    </Flex>
+  )
+}
+
+function MetricTabs({ metric, onChange }: { metric: MetricKey; onChange: (m: MetricKey) => void }) {
+  return (
+    <HStack
+      bg="background.level0"
+      border="1px solid"
+      borderColor="border.subduedZen"
+      borderRadius="full"
+      flexWrap="wrap"
+      p="3px"
+      spacing="2px"
+    >
+      {METRICS.map(m => (
+        <Box
+          _hover={{ color: 'font.maxContrast' }}
+          as="button"
+          bg={metric === m.key ? 'background.level3' : 'transparent'}
+          borderRadius="full"
+          color={metric === m.key ? 'font.maxContrast' : 'font.secondary'}
+          fontSize="xs"
+          fontWeight="medium"
+          key={m.key}
+          onClick={() => onChange(m.key)}
+          px="ms"
+          py="xs"
+          transition="all 0.15s"
+        >
+          {m.label}
+        </Box>
+      ))}
     </HStack>
   )
 }

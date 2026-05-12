@@ -142,7 +142,17 @@ export function PoolExplorerFilters(props: Props) {
         justify="space-between"
         w="full"
       >
-        <Box flex="1" maxW={{ md: 'sm' }} w="full">
+        <Box
+          flex="1"
+          maxW={{ md: '420px', lg: '520px', xl: '640px' }}
+          sx={{
+            '& input': {
+              fontSize: 'md',
+              height: '48px',
+            },
+          }}
+          w="full"
+        >
           <SearchInput
             ariaLabel="Search pools"
             autoFocus={false}
