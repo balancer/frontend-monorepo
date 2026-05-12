@@ -16,6 +16,7 @@
  */
 
 import 'server-only'
+import { unstable_cache } from 'next/cache'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import type { BiggestSwap, BiggestSwapsPayload } from '@analytics/lib/biggest-swaps/types'
@@ -94,20 +95,10 @@ async function fetchSwaps(): Promise<RawEvent[]> {
   return json.data?.poolEvents ?? []
 }
 
-export async function GET() {
+async function buildPayload(): Promise<BiggestSwapsPayload> {
   const now = Math.floor(Date.now() / 1000)
   const cutoff = now - WINDOW_SECONDS
-
-  let events: RawEvent[]
-  try {
-    events = await fetchSwaps()
-  } catch (err) {
-    return Response.json(
-      { items: [], generatedAt: now, windowSeconds: WINDOW_SECONDS, error: String(err) },
-      { status: 502 }
-    )
-  }
-
+  const events = await fetchSwaps()
   const items: BiggestSwap[] = events
     .filter(e => e.timestamp >= cutoff && Number.isFinite(e.valueUSD))
     .sort((a, b) => b.valueUSD - a.valueUSD)
@@ -124,11 +115,26 @@ export async function GET() {
       tokenInAmount: e.tokenIn?.amount ?? '0',
       tokenOutAmount: e.tokenOut?.amount ?? '0',
     }))
+  return { items, generatedAt: now, windowSeconds: WINDOW_SECONDS }
+}
 
-  const payload: BiggestSwapsPayload = {
-    items,
-    generatedAt: now,
-    windowSeconds: WINDOW_SECONDS,
+// Fixed cache key — the route takes no params, so an attacker varying the
+// query string can't shape a new cache entry. The api-v3 call runs at most
+// once per `revalidate` window across all visitors.
+const getBiggestSwapsPayload = unstable_cache(
+  buildPayload,
+  ['biggest-swaps'],
+  { revalidate: 300, tags: ['biggest-swaps'] }
+)
+
+export async function GET() {
+  try {
+    return Response.json(await getBiggestSwapsPayload())
+  } catch (err) {
+    const now = Math.floor(Date.now() / 1000)
+    return Response.json(
+      { items: [], generatedAt: now, windowSeconds: WINDOW_SECONDS, error: String(err) },
+      { status: 502 }
+    )
   }
-  return Response.json(payload)
 }

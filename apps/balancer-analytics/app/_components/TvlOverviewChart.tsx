@@ -75,6 +75,35 @@ const SERIES_LABEL = {
   cow: 'CoW AMM',
 } as const
 
+const HOVER_COLOR = '#ec4899'
+
+/**
+ * Convert a `#rrggbb` hex to `rgba(r,g,b,a)`. Used to derive translucent
+ * gradient stops from the solid series palette without hard-coding rgba
+ * triplets next to each color.
+ */
+function rgba(hex: string, alpha: number): string {
+  const h = hex.replace('#', '')
+  const r = parseInt(h.slice(0, 2), 16)
+  const g = parseInt(h.slice(2, 4), 16)
+  const b = parseInt(h.slice(4, 6), 16)
+  return `rgba(${r},${g},${b},${alpha})`
+}
+
+function verticalGradient(top: string, bottom: string) {
+  return {
+    type: 'linear' as const,
+    x: 0,
+    y: 0,
+    x2: 0,
+    y2: 1,
+    colorStops: [
+      { offset: 0, color: top },
+      { offset: 1, color: bottom },
+    ],
+  }
+}
+
 type MetricDef = {
   key: MetricKey
   label: string
@@ -97,6 +126,25 @@ const METRICS: MetricDef[] = [
 function fmt(value: number, unit: 'USD' | 'COUNT', { full = false }: { full?: boolean } = {}) {
   if (unit === 'USD') return full ? usdFull(value) : usdCompact(value)
   return full ? numFull(value) : numCompact(value)
+}
+
+/**
+ * Collapse hourly rolling-window samples down to one point per UTC day,
+ * picking the latest reading inside each day. The cron writes hourly rows
+ * for `*24h` metrics — those are rolling 24h windows sampled every hour, so
+ * 24 consecutive points represent the same flow and bar charts cluster into
+ * an unreadable wall. One-per-day matches the older defillama backfill
+ * cadence and gives bars a sensible width.
+ */
+function downsampleDaily<T extends { t: number }>(points: T[]): T[] {
+  if (points.length === 0) return points
+  const byDay = new Map<string, T>()
+  for (const p of points) {
+    const d = new Date(p.t)
+    const key = `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`
+    byDay.set(key, p) // last write wins → latest sample of the day
+  }
+  return Array.from(byDay.values()).sort((a, b) => a.t - b.t)
 }
 
 export function TvlOverviewChart() {
@@ -126,6 +174,45 @@ export function TvlOverviewChart() {
         ? tooltipHourFmt.format(new Date(val))
         : tooltipDateFmt.format(new Date(val))
 
+    // Chart shape per metric:
+    //  - TVL          → stacked area (a stock — v2/v3/cow composition matters)
+    //  - VOLUME       → stacked bars, one per day (daily flow)
+    //  - FEES/YIELD/SURPLUS → single-series daily bars (flows)
+    //  - LPS/POOLS    → single-series area (cumulative-ish counts)
+    //
+    // On the 24H range we revert flow metrics to a thin line: the underlying
+    // value is a rolling 24h window sampled hourly, so "one bar per hour"
+    // would show 24 near-identical overlapping windows — misleading and ugly.
+    const isFlowMetric =
+      metric === 'VOLUME' || metric === 'FEES' || metric === 'YIELD' || metric === 'SURPLUS'
+    const isBar = isFlowMetric && !isIntraday
+    // Bars are one-per-day across all non-24H ranges (the cron writes hourly
+    // rolling windows; daily downsample undoes that without dropping history).
+    const barPts = isBar ? downsampleDaily(pts) : pts
+
+    const baseAxis = {
+      xAxis: {
+        type: 'time' as const,
+        axisLine: { lineStyle: { color: 'rgba(229,211,190,0.06)' } },
+        axisLabel: {
+          color: '#718096',
+          fontSize: 10,
+          hideOverlap: true,
+          formatter: fmtAxis,
+        },
+      },
+      yAxis: {
+        type: 'value' as const,
+        position: 'right' as const,
+        splitLine: { lineStyle: { color: 'rgba(229,211,190,0.05)', type: 'dashed' as const } },
+        axisLabel: {
+          color: '#718096',
+          fontSize: 10,
+          formatter: (v: number) => fmt(v, active.unit),
+        },
+      },
+    }
+
     if (data.stacked) {
       const mkArea = (key: 'v2' | 'v3' | 'cow') => ({
         name: SERIES_LABEL[key],
@@ -133,16 +220,45 @@ export function TvlOverviewChart() {
         stack: 'protocol',
         smooth: true,
         showSymbol: false,
-        lineStyle: { width: 0 },
-        areaStyle: { color: SERIES_COLORS[key], opacity: 0.85 },
+        lineStyle: { width: 1.5, color: SERIES_COLORS[key] },
+        itemStyle: { color: SERIES_COLORS[key] },
+        areaStyle: {
+          color: verticalGradient(
+            rgba(SERIES_COLORS[key], 0.55),
+            rgba(SERIES_COLORS[key], 0.05)
+          ),
+        },
         emphasis: { focus: 'series' as const },
         data: pts.map(p => [p.t, p[key]]),
       })
+
+      const mkBar = (key: 'v2' | 'v3' | 'cow', isTop: boolean) => ({
+        name: SERIES_LABEL[key],
+        type: 'bar' as const,
+        stack: 'protocol',
+        barMaxWidth: 22,
+        itemStyle: {
+          color: verticalGradient(rgba(SERIES_COLORS[key], 1), rgba(SERIES_COLORS[key], 0.45)),
+          // Round only the visible top edge of the stack so inner segments don't
+          // open thin gaps where their rounded corners would otherwise show.
+          borderRadius: isTop ? [3, 3, 0, 0] : 0,
+        },
+        emphasis: {
+          focus: 'series' as const,
+          itemStyle: { color: HOVER_COLOR },
+        },
+        data: barPts.map(p => [p.t, p[key]]),
+      })
+
+      const series = isBar
+        ? [mkBar('v2', false), mkBar('v3', false), mkBar('cow', true)]
+        : [mkArea('v2'), mkArea('v3'), mkArea('cow')]
 
       return {
         grid: { left: 8, right: 56, top: 12, bottom: 24 },
         tooltip: {
           trigger: 'axis',
+          axisPointer: { type: isBar ? ('shadow' as const) : ('line' as const) },
           backgroundColor: '#383E47',
           borderColor: 'rgba(229,211,190,0.08)',
           textStyle: { color: '#E5D3BE' },
@@ -157,7 +273,7 @@ export function TvlOverviewChart() {
                 const v = Array.isArray(p.value) ? Number(p.value[1]) : Number(p.value)
                 return `
                   <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
-                    <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${p.color}"></span>
+                    <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${SERIES_COLORS[(p.seriesName === SERIES_LABEL.v2 ? 'v2' : p.seriesName === SERIES_LABEL.v3 ? 'v3' : 'cow')]}"></span>
                     <span style="flex:1;color:#A0AEC0">${p.seriesName}</span>
                     <span style="font-weight:600">${fmt(v, active.unit)}</span>
                   </div>`
@@ -179,35 +295,42 @@ export function TvlOverviewChart() {
           },
         },
         legend: { show: false },
-        xAxis: {
-          type: 'time',
-          axisLine: { lineStyle: { color: 'rgba(229,211,190,0.06)' } },
-          axisLabel: {
-            color: '#718096',
-            fontSize: 10,
-            hideOverlap: true,
-            formatter: fmtAxis,
-          },
-        },
-        yAxis: {
-          type: 'value',
-          position: 'right',
-          splitLine: { lineStyle: { color: 'rgba(229,211,190,0.05)', type: 'dashed' } },
-          axisLabel: {
-            color: '#718096',
-            fontSize: 10,
-            formatter: (v: number) => fmt(v, active.unit),
-          },
-        },
-        series: [mkArea('v2'), mkArea('v3'), mkArea('cow')],
+        ...baseAxis,
+        series,
       }
     }
 
-    // Single-series area chart (fees, yield, surplus, LPs, pools)
+    // Single-series — bars for flow metrics (fees/yield/surplus), area for
+    // count metrics (LPs, pools).
+    const singleSeries = isBar
+      ? {
+          name: active.label,
+          type: 'bar' as const,
+          barMaxWidth: 22,
+          itemStyle: {
+            color: verticalGradient(rgba(active.color, 1), rgba(active.color, 0.3)),
+            borderRadius: [3, 3, 0, 0],
+          },
+          emphasis: { itemStyle: { color: HOVER_COLOR } },
+          data: barPts.map(p => [p.t, p.value]),
+        }
+      : {
+          name: active.label,
+          type: 'line' as const,
+          smooth: true,
+          showSymbol: false,
+          lineStyle: { width: 2, color: active.color },
+          areaStyle: {
+            color: verticalGradient(rgba(active.color, 0.6), rgba(active.color, 0)),
+          },
+          data: pts.map(p => [p.t, p.value]),
+        }
+
     return {
       grid: { left: 8, right: 56, top: 12, bottom: 24 },
       tooltip: {
         trigger: 'axis',
+        axisPointer: { type: isBar ? ('shadow' as const) : ('line' as const) },
         backgroundColor: '#383E47',
         borderColor: 'rgba(229,211,190,0.08)',
         textStyle: { color: '#E5D3BE' },
@@ -229,46 +352,10 @@ export function TvlOverviewChart() {
             </div>`
         },
       },
-      xAxis: {
-        type: 'time',
-        axisLine: { lineStyle: { color: 'rgba(229,211,190,0.06)' } },
-        axisLabel: { color: '#718096', fontSize: 10, hideOverlap: true, formatter: fmtAxis },
-      },
-      yAxis: {
-        type: 'value',
-        position: 'right',
-        splitLine: { lineStyle: { color: 'rgba(229,211,190,0.05)', type: 'dashed' } },
-        axisLabel: {
-          color: '#718096',
-          fontSize: 10,
-          formatter: (v: number) => fmt(v, active.unit),
-        },
-      },
-      series: [
-        {
-          name: active.label,
-          type: 'line' as const,
-          smooth: true,
-          showSymbol: false,
-          lineStyle: { width: 2, color: active.color },
-          areaStyle: {
-            color: {
-              type: 'linear',
-              x: 0,
-              y: 0,
-              x2: 0,
-              y2: 1,
-              colorStops: [
-                { offset: 0, color: `${active.color}99` },
-                { offset: 1, color: `${active.color}00` },
-              ],
-            },
-          },
-          data: pts.map(p => [p.t, p.value]),
-        },
-      ],
+      ...baseAxis,
+      series: [singleSeries],
     }
-  }, [data, showYearInAxis, active, range])
+  }, [data, showYearInAxis, active, range, metric])
 
   const latest = data?.points.at(-1)
   const totalNow = latest?.value ?? 0
@@ -298,7 +385,7 @@ export function TvlOverviewChart() {
           <VStack align="flex-start" spacing="xs">
             <Heading size="h5">Protocol metrics</Heading>
             <Text color="font.secondary" fontSize="xs">
-              Historical browse · indexed snapshot data
+              Browse historical data
             </Text>
           </VStack>
           <SegBtns
@@ -433,12 +520,12 @@ export function TvlOverviewChart() {
                   value={hasAnyData ? headlineValue : null}
                 />
               ) : (
-                // `notMerge` + a stack-aware key force ECharts to drop the
+                // `notMerge` + a shape-aware key force ECharts to drop the
                 // previous option fully when switching metric type — otherwise
                 // the stacked TVL series persists underneath a single-line
                 // chart like Fees / Yield and looks like wrong data.
                 <ReactECharts
-                  key={data?.stacked ? 'stacked' : 'single'}
+                  key={`${data?.stacked ? 's' : '1'}-${metric}`}
                   notMerge
                   option={option!}
                   style={{ height: '100%', width: '100%' }}
@@ -585,13 +672,16 @@ function RangeRow({
 function MetricTabs({ metric, onChange }: { metric: MetricKey; onChange: (m: MetricKey) => void }) {
   return (
     <HStack
+      alignSelf="flex-start"
       bg="background.level0"
       border="1px solid"
       borderColor="border.subduedZen"
       borderRadius="full"
       flexWrap="wrap"
+      maxW="full"
       p="3px"
       spacing="2px"
+      w="fit-content"
     >
       {METRICS.map(m => (
         <Box

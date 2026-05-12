@@ -8,7 +8,7 @@ import { TvlOverviewChart } from './TvlOverviewChart'
 import { TvlByChainBars } from './TvlByChainBars'
 import { BiggestSwaps } from './BiggestSwaps'
 import { PoolCompositionDonut } from './PoolCompositionDonut'
-import { ProtocolChangelog } from './ProtocolChangelog'
+import { Governance } from './Governance'
 import { PoolExplorer } from './PoolExplorer'
 
 export function ProtocolOverview() {
@@ -60,7 +60,9 @@ export function ProtocolOverview() {
         </FadeInOnView>
 
         <FadeInOnView animateOnce={false}>
-          <ProtocolChangelog />
+          <Box id="governance" scrollMarginTop="96px">
+            <Governance />
+          </Box>
         </FadeInOnView>
       </VStack>
     </DefaultPageContainer>

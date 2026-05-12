@@ -9,15 +9,22 @@
  *   - `protocol = 'CORE'`, `chain = ...`              → `byChain[...]`
  *   - `protocol = 'V2' | 'V3' | 'COW_AMM'`, ALL/chain → `breakdowns[P]`
  *
- * `?days=N` bounds the window (default 90, max ~5y). With 4 protocol rows
- * per chain × ~10 chains × hourly cron + daily defillama, a 90-day query
- * scans ~30-40k rows behind the `(ts)` index — fine.
+ * `?days=N` bounds the window (default 90, max ~5y).
  *
- * Cached `revalidate = 600` (10 min). Cron writes hourly, so up to 10 min
- * staleness is well under the snapshot cadence.
+ * `?granularity=daily|hourly` selects sampling cadence (default hourly). In
+ * `daily` mode a `DISTINCT ON (chain, protocol, ts/86400)` picks the latest
+ * row per UTC day per (chain, protocol). Defillama backfill rows are already
+ * one-per-day so they pass through unchanged; the hourly cron writes get
+ * collapsed ~24×. Long-range charts (30D / 90D / 1Y / ALL) don't need
+ * intra-day fidelity, so daily mode is the right default there — payload,
+ * network egress, and client-side parsing all drop proportionally.
+ *
+ * Cached `revalidate = 600` (10 min). Different `granularity` values get
+ * independent cache entries, so daily-for-90D and hourly-for-7D coexist.
  */
 
 import 'server-only'
+import { unstable_cache } from 'next/cache'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   sql,
@@ -41,6 +48,25 @@ export const revalidate = 600
 
 const DEFAULT_DAYS = 90
 const MAX_DAYS = 365 * 5
+// Allowed `days` buckets. Incoming requests get snapped UP to the next
+// bucket so the number of distinct (days, granularity) cache keys is bounded
+// regardless of input — an attacker can't force unbounded Postgres reads by
+// varying `?days=N`. Mirrors the values the in-app hook actually sends.
+const ALLOWED_DAYS = [30, 90, 365, MAX_DAYS] as const
+type AllowedDays = (typeof ALLOWED_DAYS)[number]
+type Granularity = 'daily' | 'hourly'
+
+function snapDays(raw: string | null): AllowedDays {
+  const n = Number(raw)
+  if (!Number.isFinite(n) || n <= 0) return DEFAULT_DAYS
+  const rounded = Math.min(MAX_DAYS, Math.round(n))
+  for (const b of ALLOWED_DAYS) if (rounded <= b) return b
+  return MAX_DAYS
+}
+
+function parseGranularity(raw: string | null): Granularity {
+  return raw === 'daily' ? 'daily' : 'hourly'
+}
 
 const PROTOCOL_TO_KEY: Record<string, ProtocolKey> = {
   [PROTOCOL_V2]: 'V2',
@@ -100,22 +126,38 @@ function emptyPoint(ts: number): ProtocolSnapshotPoint {
   }
 }
 
-export async function GET(req: Request) {
-  const url = new URL(req.url)
-  const requested = Number(url.searchParams.get('days'))
-  const days = Number.isFinite(requested) && requested > 0
-    ? Math.min(MAX_DAYS, Math.round(requested))
-    : DEFAULT_DAYS
+async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<DbRow[]> {
   const cutoff = Math.floor(Date.now() / 1000) - days * 24 * 60 * 60
-
-  const rows = (await sql`
+  // Daily mode: DISTINCT ON returns one row per (chain, protocol, UTC day),
+  // keeping the latest reading inside that day (ORDER BY ... ts DESC). The
+  // outer SELECT re-sorts ascending because downstream `byTs` folding assumes
+  // ts-ASC. Defillama backfill rows pre-cron are already daily — they pass
+  // through unchanged.
+  if (granularity === 'daily') {
+    return (await sql`
+      SELECT ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
+             yield_capture_24h, surplus_24h, pool_count, num_lps, source
+      FROM (
+        SELECT DISTINCT ON (chain, protocol, ts / 86400)
+               ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
+               yield_capture_24h, surplus_24h, pool_count, num_lps, source
+        FROM protocol_snapshots
+        WHERE ts >= ${cutoff}
+        ORDER BY chain, protocol, ts / 86400, ts DESC
+      ) latest
+      ORDER BY ts ASC
+    `) as DbRow[]
+  }
+  return (await sql`
     SELECT ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
            yield_capture_24h, surplus_24h, pool_count, num_lps, source
     FROM protocol_snapshots
     WHERE ts >= ${cutoff}
     ORDER BY ts ASC
   `) as DbRow[]
+}
 
+function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
   const byTs = new Map<number, ProtocolSnapshotPoint>()
   for (const r of rows) {
     const ts = Number(r.ts)
@@ -159,11 +201,29 @@ export async function GET(req: Request) {
       }
     }
   }
-
   const points = Array.from(byTs.values())
-  const series: ProtocolSnapshotSeries = {
-    points,
-    generatedAt: points.at(-1)?.timestamp ?? null,
-  }
+  return { points, generatedAt: points.at(-1)?.timestamp ?? null }
+}
+
+// Cache the entire folded payload. Keyed on the validated (days, granularity)
+// tuple so the only distinct keys ever generated are
+// `4 buckets × 2 granularities = 8`, regardless of what the URL string
+// contains. This is the cache-busting amplification fix — random or
+// adversarial query strings hit the route handler but never run Postgres
+// more than once per (days, granularity) per `revalidate` window.
+const getSnapshotSeries = unstable_cache(
+  async (days: AllowedDays, granularity: Granularity): Promise<ProtocolSnapshotSeries> => {
+    const rows = await fetchRows(days, granularity)
+    return foldRows(rows)
+  },
+  ['protocol-snapshots'],
+  { revalidate: 600, tags: ['protocol-snapshots'] }
+)
+
+export async function GET(req: Request) {
+  const url = new URL(req.url)
+  const days = snapDays(url.searchParams.get('days'))
+  const granularity = parseGranularity(url.searchParams.get('granularity'))
+  const series = await getSnapshotSeries(days, granularity)
   return Response.json(series)
 }

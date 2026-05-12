@@ -1,7 +1,10 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useProtocolSnapshots } from '@analytics/lib/snapshots/useProtocolSnapshots'
+import {
+  useProtocolSnapshots,
+  type SnapshotGranularity,
+} from '@analytics/lib/snapshots/useProtocolSnapshots'
 import type { ProtocolSnapshotPoint } from '@analytics/lib/snapshots/types'
 
 export type Range = '24H' | '7D' | '30D' | '90D' | '1Y' | 'ALL'
@@ -28,6 +31,18 @@ const RANGE_DAYS: Record<Range, number> = {
   '90D': 90,
   '1Y': 365,
   ALL: 1825,
+}
+
+// Hourly cadence only matters for short windows where intra-day shape is
+// actually visible. For 30D+ we collapse server-side to one point per UTC
+// day, which is what the chart downsamples to client-side anyway.
+const RANGE_GRANULARITY: Record<Range, SnapshotGranularity> = {
+  '24H': 'hourly',
+  '7D': 'hourly',
+  '30D': 'daily',
+  '90D': 'daily',
+  '1Y': 'daily',
+  ALL: 'daily',
 }
 
 // Trim points older than the actual visible window. We over-fetch for short
@@ -254,7 +269,8 @@ export function useTvlSeries({
   mode: MetricKey
 }): { data: TvlSeries | null; loading: boolean } {
   const days = RANGE_DAYS[range]
-  const { data: snapshots, loading } = useProtocolSnapshots({ days })
+  const granularity = RANGE_GRANULARITY[range]
+  const { data: snapshots, loading } = useProtocolSnapshots({ days, granularity })
   const data = useMemo(() => buildSeries(snapshots.points, range, mode), [snapshots, range, mode])
   return { data, loading }
 }

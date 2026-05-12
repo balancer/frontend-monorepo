@@ -13,6 +13,7 @@ const NAV_LINKS: { label: string; href: string; section: string }[] = [
   { label: 'Overview', href: '#overview', section: 'overview' },
   { label: 'Liquidity', href: '#liquidity', section: 'liquidity' },
   { label: 'Pools', href: '#pools', section: 'pools' },
+  { label: 'Governance', href: '#governance', section: 'governance' },
 ]
 
 const EXTERNAL_LINKS: { label: string; href: string }[] = [
