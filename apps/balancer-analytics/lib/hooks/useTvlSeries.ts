@@ -15,22 +15,27 @@ export type MetricKey =
   | 'POOLS'
 
 // Maps the visible range to the number of days the snapshot endpoint should
-// return. `24H` uses 2 days so we always include the previous midnight as a
-// reference point (the cron lands hourly, so 24h ≈ 24 points).
+// return. Short ranges (24H, 7D) deliberately over-fetch so the v2/v3 ratio
+// warmup in `buildSeries` can find a DefiLlama backfill row — only those rows
+// carry explicit V2/V3 splits, the hourly api-v3 cron does not. Without the
+// warmup, 24H mode renders the entire stack as v2 (and v3 silently vanishes).
+// Bonus: 24H/7D/30D now share a snapshot fetch, so switching between them
+// hits the cache instead of re-fetching.
 const RANGE_DAYS: Record<Range, number> = {
-  '24H': 2,
-  '7D': 7,
+  '24H': 30,
+  '7D': 30,
   '30D': 30,
   '90D': 90,
   '1Y': 365,
   ALL: 1825,
 }
 
-// Trim points older than the actual visible window. For multi-day ranges the
-// API cutoff already does this — but for 24H we asked for 2 days of data so
-// we still need to trim down to the last 24h before plotting.
+// Trim points older than the actual visible window. We over-fetch for short
+// ranges (see `RANGE_DAYS` above) so the chart's visible cutoff has to be
+// applied explicitly — the API's cutoff is broader than what we plot.
 const RANGE_VISIBLE_SECONDS: Partial<Record<Range, number>> = {
   '24H': 24 * 60 * 60,
+  '7D': 7 * 24 * 60 * 60,
 }
 
 // Metrics that were only added to the cron snapshotter recently. Their older
@@ -153,6 +158,29 @@ function buildSeries(
   // 100% v2 (pre-v3 era) so points before the first explicit split don't
   // accidentally show v3 attribution.
   const ratio = { v2: 1, v3: 0, known: false }
+
+  // Warm the ratio from snapshots *before* the visible window. Only the
+  // DefiLlama backfill rows carry explicit V2/V3 splits — the hourly api-v3
+  // cron rows do not. Short ranges (24H, 7D) often see only cron rows inside
+  // their visible slice, so without this preheat the ratio stays at the
+  // {v2:1, v3:0} default and v3 silently disappears from the stack. We walk
+  // ascending so the final value reflects the *most recent* known split.
+  if (stacked) {
+    for (const p of snapshots) {
+      if (p.timestamp >= effectiveCutoff) break
+      const v2 = pickBreakdownMetric(p.breakdowns?.V2, metric)
+      const v3 = pickBreakdownMetric(p.breakdowns?.V3, metric)
+      if (v2 !== undefined && v3 !== undefined) {
+        const sum = v2 + v3
+        if (sum > 0) {
+          ratio.v2 = v2 / sum
+          ratio.v3 = v3 / sum
+          ratio.known = true
+        }
+      }
+    }
+  }
+
   const points: SeriesPoint[] = []
   let realPointCount = 0
 

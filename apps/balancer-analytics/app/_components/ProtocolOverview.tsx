@@ -6,7 +6,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { HeroKpiStrip } from './HeroKpiStrip'
 import { TvlOverviewChart } from './TvlOverviewChart'
 import { TvlByChainBars } from './TvlByChainBars'
-import { LiveSwapTape } from './LiveSwapTape'
+import { BiggestSwaps } from './BiggestSwaps'
 import { PoolCompositionDonut } from './PoolCompositionDonut'
 import { ProtocolChangelog } from './ProtocolChangelog'
 import { PoolExplorer } from './PoolExplorer'
@@ -48,7 +48,7 @@ export function ProtocolOverview() {
               <PoolCompositionDonut />
             </GridItem>
             <GridItem minW={0}>
-              <LiveSwapTape />
+              <BiggestSwaps />
             </GridItem>
           </Grid>
         </FadeInOnView>
