@@ -3,7 +3,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
 import { useToast } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { usePermitSignature } from '../permit2/PermitSignatureProvider'
 import { SdkQueryRemoveLiquidityOutput } from '@repo/lib/modules/pool/actions/remove-liquidity/remove-liquidity.types'
 import {
@@ -31,13 +31,13 @@ export function useSignPermit({
   const [error, setError] = useState<string | undefined>()
   const { sdkClient, isLoading } = useSdkWalletClient()
 
-  useEffect(() => {
-    if (isLoading) {
-      setSignPermitState(SignatureState.Preparing)
-    } else {
-      setSignPermitState(SignatureState.Ready)
-    }
-  }, [isLoading])
+  // Derive initial state from SDK loading status (replaces useEffect)
+  const initState = isLoading ? SignatureState.Preparing : SignatureState.Ready
+  const [prevInitState, setPrevInitState] = useState(initState)
+  if (prevInitState !== initState) {
+    setPrevInitState(initState)
+    setSignPermitState(initState)
+  }
 
   async function signPermit() {
     if (!queryOutput) throw new Error('No input provided for permit signature')
