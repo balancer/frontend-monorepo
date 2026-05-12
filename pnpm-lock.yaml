@@ -236,8 +236,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(next@16.2.6(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(@playwright/test@1.59.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       bignumber.js:
-        specifier: 11.0.0
-        version: 11.0.0
+        specifier: 11.1.1
+        version: 11.1.1
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -501,8 +501,8 @@ importers:
         specifier: 5.99.2
         version: 5.99.2(@tanstack/react-query@5.99.2(react@19.2.6))(react@19.2.6)
       bignumber.js:
-        specifier: 11.0.0
-        version: 11.0.0
+        specifier: 11.1.1
+        version: 11.1.1
       chakra-react-select:
         specifier: 5.1.0
         version: 5.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.6))(@types/react@19.2.10)(react@19.2.6))(@types/react@19.2.10)(framer-motion@12.38.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.6))(@types/react@19.2.10)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -4355,8 +4355,8 @@ packages:
   big.js@6.2.2:
     resolution: {integrity: sha512-y/ie+Faknx7sZA5MfGA2xKlu0GDv8RWrXGsmlteyJQ2lvoKv9GBK/fpRMc2qlSoBAgNxrixICFCBefIq8WCQpQ==}
 
-  bignumber.js@11.0.0:
-    resolution: {integrity: sha512-pkOSwKRi2HLwEbmTNf7C0M9lw3Z5dXQ1irbanJvySh/nJQBcFsMxF+g5o2JEn5BPFmfAqYalrhOwoFdLJXohEg==}
+  bignumber.js@11.1.1:
+    resolution: {integrity: sha512-LNkCYMieJqAts/Sj5094B92c5q+yRPlXWpABJnHMbUjB/F8AUjELmSmYX5mxbNiY/QnGnJvJIrnRuW5gUqbW5Q==}
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -13915,7 +13915,7 @@ snapshots:
   big.js@6.2.2:
     optional: true
 
-  bignumber.js@11.0.0: {}
+  bignumber.js@11.1.1: {}
 
   binary-extensions@2.3.0: {}
 
