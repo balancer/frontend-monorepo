@@ -7,7 +7,7 @@ import {
 } from '@repo/lib/modules/web3/signatures/signature.helpers'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTokens } from '../../TokensProvider'
 import { usePermit2Signature } from './Permit2SignatureProvider'
 import { getTokenSymbolsForPermit2 } from './permit2.helpers'
@@ -53,15 +53,21 @@ export function useSignPermit2({
 
   const [error, setError] = useState<string | undefined>()
 
-  useEffect(() => {
-    if (isLoading) {
-      return setSignPermit2State(SignatureState.Preparing)
-    }
-    if (isSimulationReady) {
+  // Derive initial state from SDK loading and simulation status (replaces useEffect)
+  const initState: SignatureState | undefined = isLoading
+    ? SignatureState.Preparing
+    : isSimulationReady
+      ? SignatureState.Ready
+      : undefined
+
+  const [prevInitState, setPrevInitState] = useState(initState)
+  if (initState !== undefined && prevInitState !== initState) {
+    setPrevInitState(initState)
+    if (!isLoading && isSimulationReady) {
       setPermit2Signature(undefined)
-      setSignPermit2State(SignatureState.Ready)
     }
-  }, [isSimulationReady, isLoading])
+    setSignPermit2State(initState)
+  }
 
   async function signPermit2() {
     if (!tokenAmountsIn) throw new Error('No tokenAmountsIn provided for permit2 signature')
