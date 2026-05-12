@@ -17,7 +17,7 @@ import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { TextShine } from '@repo/lib/shared/components/TextShine/TextShine'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { isBoosted } from '../../../pool.helpers'
 import { usePoolsMetadata } from '../../../metadata/PoolsMetadataProvider'
@@ -51,13 +51,16 @@ export function AddLiquidityFormCheckbox() {
   }
   const boostedRiskDescription = `I accept that by adding tokens to this Boosted Pool, my tokens are deposited into ${dynamicProtocolString} compromised, I may lose all my tokens in this pool.`
 
-  useEffect(() => {
-    if (isBoostedPool) {
-      setAcceptPoolRisks(hasAcceptedPoolRisks && hasAcceptedBoostedRisks)
-    } else {
-      setAcceptPoolRisks(hasAcceptedPoolRisks)
-    }
-  }, [hasAcceptedPoolRisks, hasAcceptedBoostedRisks, setAcceptPoolRisks, isBoostedPool])
+  // Derive during render (replaces useEffect-based state mirror)
+  const derivedAcceptPoolRisks = isBoostedPool
+    ? hasAcceptedPoolRisks && hasAcceptedBoostedRisks
+    : hasAcceptedPoolRisks
+
+  const [prevAcceptPoolRisks, setPrevAcceptPoolRisks] = useState(derivedAcceptPoolRisks)
+  if (prevAcceptPoolRisks !== derivedAcceptPoolRisks) {
+    setPrevAcceptPoolRisks(derivedAcceptPoolRisks)
+    setAcceptPoolRisks(derivedAcceptPoolRisks)
+  }
 
   return (
     <FadeInOnView scaleUp={false}>
