@@ -4,7 +4,7 @@ import { usePoolListQueryState } from '@repo/lib/modules/pool/PoolList/usePoolLi
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useState } from 'react'
 
 const POOLS_PATH = '/pools'
 
@@ -14,17 +14,24 @@ export function PoolsNetworkWatcher() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  useEffect(() => {
-    if (pathname === POOLS_PATH && chain) {
-      if (searchParams.size === 0 || (searchParams.size === 1 && networks.length > 0)) {
-        if (chain.id === 146) {
-          setNetworks([GqlChain.Sonic])
-        } else if (chain.id === 10) {
-          setNetworks([GqlChain.Optimism])
-        }
-      }
-    }
-  }, [chain, pathname, searchParams.size])
+  // Derive during render (replaces useEffect-based state mirror)
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  const derivedNetworks: GqlChain[] | undefined =
+    pathname === POOLS_PATH &&
+    chain &&
+    (searchParams.size === 0 || (searchParams.size === 1 && networks.length > 0))
+      ? chain.id === 146
+        ? [GqlChain.Sonic]
+        : chain.id === 10
+          ? [GqlChain.Optimism]
+          : undefined
+      : undefined
+
+  const [prevNetworks, setPrevNetworks] = useState(derivedNetworks)
+  if (derivedNetworks !== undefined && prevNetworks !== derivedNetworks) {
+    setPrevNetworks(derivedNetworks)
+    setNetworks(derivedNetworks)
+  }
 
   return <>{null}</>
 }
