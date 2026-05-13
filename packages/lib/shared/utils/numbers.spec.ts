@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import {
   bn,
   fNum,
@@ -163,7 +164,7 @@ describe('bn', () => {
     expect(bn('0.0000000000000035').toFixed()).toBe('0.0000000000000035')
   })
 
-  test('returns NaN for invalid string inputs instead of throwing', () => {
+  test('returns NaN for invalid string inputs', () => {
     expect(bn('').isNaN()).toBe(true)
     expect(bn(' ').isNaN()).toBe(true)
     expect(bn('abc').isNaN()).toBe(true)
@@ -172,6 +173,11 @@ describe('bn', () => {
   test('throws for nullish inputs passed at runtime', () => {
     expect(() => bn(undefined as any)).toThrow(TypeError)
     expect(() => bn(null as any)).toThrow(TypeError)
+  })
+
+  test('enables strict mode globally', () => {
+    expect(() => new BigNumber('abc')).toThrow()
+    expect(() => new BigNumber('')).toThrow()
   })
 })
 

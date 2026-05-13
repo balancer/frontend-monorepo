@@ -15,9 +15,9 @@ BigInt.prototype.toJSON = function () {
   return this.toString()
 }
 
-// TODO: Remove this once all calls to bn() have been checked for strict mode compliance
-// https://github.com/balancer/frontend-monorepo/issues/2395
-BigNumber.set({ STRICT: false })
+// Enable strict mode globally. The bn() helper below catches invalid inputs
+// and returns NaN to preserve backwards compatibility for callers.
+BigNumber.set({ STRICT: true })
 
 export const MAX_BIGINT = BigInt(MAX_UINT256)
 export const MAX_BIGNUMBER = bn(MAX_UINT256)
@@ -71,7 +71,16 @@ export type Numberish = string | number | bigint | BigNumber
 export type NumberFormatter = (val: Numberish) => string
 
 export function bn(val: Numberish): BigNumber {
-  return new BigNumber(val.toString())
+  // Programmer errors (null/undefined) should still throw
+  if (val == null) {
+    throw new TypeError(`Cannot create BigNumber from ${val}`)
+  }
+  try {
+    return new BigNumber(val.toString())
+  } catch {
+    // Preserve backwards compatibility: callers expect NaN for invalid input
+    return new BigNumber(NaN)
+  }
 }
 
 type FormatOpts = {
