@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Flex, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Box, Card, Flex, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { Sparkline } from './Sparkline'
 import { DeltaPill } from './DeltaPill'
 
@@ -13,6 +13,11 @@ type Props = {
   sparkColor?: string
   big?: boolean
   isLoading?: boolean
+  /** Apply the monorepo slate texture as a card backdrop. Pulled from
+   *  apps/frontend-v3/public/images/textures/slate-square-small-dark.jpg.
+   *  Off by default so existing call sites (pool detail snapshots) stay
+   *  visually unchanged. */
+  textured?: boolean
 }
 
 export function KpiCard({
@@ -24,10 +29,29 @@ export function KpiCard({
   sparkColor = 'green.400',
   big,
   isLoading,
+  textured,
 }: Props) {
   return (
-    <Card h="full" p={{ base: 'md', md: big ? 'lg' : 'md' }} variant="level2">
-      <VStack align="stretch" h="full" justify="space-between" spacing="md">
+    <Card
+      h="full"
+      overflow="hidden"
+      p={{ base: 'md', md: big ? 'lg' : 'md' }}
+      position="relative"
+      variant="level2"
+    >
+      {textured ? (
+        <Box
+          aria-hidden
+          backgroundImage="url('/images/textures/slate-square-small-dark.jpg')"
+          backgroundPosition="center"
+          backgroundSize="cover"
+          inset={0}
+          opacity={0.35}
+          pointerEvents="none"
+          position="absolute"
+        />
+      ) : null}
+      <VStack align="stretch" h="full" justify="space-between" position="relative" spacing="md">
         <Flex align="center" gap="sm" justify="space-between">
           <Text
             color="font.secondary"

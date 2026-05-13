@@ -1,26 +1,57 @@
 'use client'
 
-import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react'
-import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
+import { HStack, Icon } from '@chakra-ui/react'
+import { ArrowDown, ArrowUp } from 'react-feather'
 
 type Props = {
-  value: number       // 0.0124 means +1.24%
-  currency?: boolean  // format absolute as $ instead of %
+  value: number // 0.0124 means +1.24%
+  currency?: boolean // format absolute as $ instead of %
 }
 
+const usdAbs = (n: number) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    notation: 'compact',
+    maximumFractionDigits: 2,
+  }).format(n)
+
+/**
+ * Compact up/down delta chip. Up = green, down = warm red. Built on plain
+ * `HStack` rather than Chakra's `Tag` because Tag's `subtle` variant in dark
+ * mode produced a low-contrast washed-out pill — the arrow and digits both
+ * read at a glance now.
+ */
 export function DeltaPill({ value, currency = false }: Props) {
   if (value == null || !Number.isFinite(value)) return null
   const pos = value > 0
   const neg = value < 0
-  const colorScheme = pos ? 'green' : neg ? 'red' : 'gray'
+
+  // Dark base from the color scale for the pill background, bright tone for
+  // the text+arrow so they pop against the dark background.
+  const bg = pos ? 'green.900' : neg ? 'red.900' : 'background.level3'
+  const fg = pos ? 'green.300' : neg ? 'red.300' : 'font.tertiary'
+  const ArrowIcon = pos ? ArrowUp : neg ? ArrowDown : null
+
   const text = currency
-    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 2 }).format(Math.abs(value))
+    ? usdAbs(Math.abs(value))
     : `${(Math.abs(value) * 100).toFixed(2)}%`
+
   return (
-    <Tag colorScheme={colorScheme} fontFamily="mono" fontSize="xs" size="sm" variant="subtle">
-      {pos && <TagLeftIcon as={TriangleUpIcon} boxSize="2.5" />}
-      {neg && <TagLeftIcon as={TriangleDownIcon} boxSize="2.5" />}
-      <TagLabel>{text}</TagLabel>
-    </Tag>
+    <HStack
+      bg={bg}
+      borderRadius="full"
+      color={fg}
+      fontFamily="mono"
+      fontSize="xs"
+      fontWeight="bold"
+      lineHeight={1}
+      px="2"
+      py="1"
+      spacing="1"
+    >
+      {ArrowIcon ? <Icon as={ArrowIcon} boxSize="10px" strokeWidth={3} /> : null}
+      <span>{text}</span>
+    </HStack>
   )
 }
