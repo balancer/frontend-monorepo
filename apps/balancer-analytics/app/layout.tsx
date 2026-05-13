@@ -6,6 +6,7 @@ import { PropsWithChildren } from 'react'
 import { Providers } from './providers'
 import { ThemeProvider } from '@analytics/lib/services/chakra/ThemeProvider'
 import { Navbar } from './_components/Navbar'
+import { Footer } from './_components/Footer'
 
 export const metadata: Metadata = {
   title: 'Balancer Analytics',
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <Providers>
             <Navbar />
             {children}
+            <Footer />
           </Providers>
         </ThemeProvider>
       </body>

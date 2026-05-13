@@ -82,16 +82,40 @@ export function PoolCompositionDonut() {
       series: [
         {
           type: 'pie',
-          radius: ['52%', '80%'],
+          // Thinner donut + larger outer radius for the frontend-v3
+          // PoolWeightChart feel.
+          radius: ['70%', '99%'],
           avoidLabelOverlap: false,
-          label: { show: false },
+          label: { show: false, position: 'center' },
           labelLine: { show: false },
-          itemStyle: { borderColor: '#383E47', borderWidth: 2 },
-          data: data.map((d, i) => ({
-            name: d.displayName,
-            value: d.tvl,
-            itemStyle: { color: palette[i % palette.length] },
-          })),
+          // Borderless: slices butt directly against each other so the ring
+          // reads as one continuous donut rather than segmented pills.
+          itemStyle: { borderWidth: 0 },
+          // Disable the default scale-on-hover so slices feel solid; the
+          // tooltip alone carries the interaction signal.
+          emphasis: { scale: false },
+          data: data.map((d, i) => {
+            const c = palette[i % palette.length]
+            // Vertical gradient per slice (top full → bottom 35%) so the
+            // donut reads with depth, matching the v3 pool weight chart.
+            return {
+              name: d.displayName,
+              value: d.tvl,
+              itemStyle: {
+                color: {
+                  type: 'linear',
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    { offset: 0, color: c },
+                    { offset: 1, color: `${c}59` },
+                  ],
+                },
+              },
+            }
+          }),
         },
       ],
     }),

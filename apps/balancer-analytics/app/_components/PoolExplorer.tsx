@@ -8,10 +8,9 @@ import {
   Grid,
   GridItem,
   Heading,
-  Skeleton,
+  Stack,
   Text,
   VStack,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import { DownloadIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
@@ -187,7 +186,6 @@ export function PoolExplorer() {
     error,
     totalCount,
     filteredCount,
-    aggregates,
     pageItems,
     allFilteredSorted,
     availableChains,
@@ -265,12 +263,10 @@ export function PoolExplorer() {
     }
   )
 
-  const aggBorder = useColorModeValue('border.base', 'border.subduedZen')
-
   return (
     <Card overflow="hidden" p={{ base: 'sm', md: 'md' }} variant="level1">
       <VStack align="stretch" spacing="md">
-        <Flex align="flex-start" flexWrap="wrap" gap="md" justify="space-between">
+        <Flex align="flex-start" gap="md" justify="space-between">
           <VStack align="flex-start" spacing="xs">
             <Heading size="h5">Pool monitor</Heading>
             <Text color="font.secondary" fontSize="xs">
@@ -278,15 +274,26 @@ export function PoolExplorer() {
               filters
             </Text>
           </VStack>
-          <Button
-            isDisabled={!allFilteredSorted.length}
-            leftIcon={<DownloadIcon />}
-            onClick={() => downloadCsv(allFilteredSorted)}
-            size="sm"
-            variant="tertiary"
-          >
-            CSV
-          </Button>
+          <Stack align="stretch" direction="column" minW="120px" spacing="xs">
+            <Button
+              isDisabled={!allFilteredSorted.length}
+              leftIcon={<DownloadIcon />}
+              onClick={() => downloadCsv(allFilteredSorted)}
+              size="sm"
+              variant="tertiary"
+            >
+              CSV
+            </Button>
+            <PoolExplorerFilters
+              availableChains={availableChains}
+              availableHooks={availableHooks}
+              availableTypes={availableTypes}
+              filters={filters}
+              isSearching={loading}
+              setters={filterSetters}
+              variant="trigger-only"
+            />
+          </Stack>
         </Flex>
 
         <PoolExplorerFilters
@@ -296,26 +303,8 @@ export function PoolExplorer() {
           filters={filters}
           isSearching={loading}
           setters={filterSetters}
+          variant="search-and-chips"
         />
-
-        <Grid
-          border="1px solid"
-          borderColor={aggBorder}
-          borderRadius="md"
-          gap={0}
-          templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(5, 1fr)' }}
-        >
-          <AggCell label="Pools" loading={loading} value={num(aggregates.count)} />
-          <AggCell label="TVL" loading={loading} value={usd(aggregates.tvl)} />
-          <AggCell label="Vol 24h" loading={loading} value={usd(aggregates.volume24h)} />
-          <AggCell label="Fees 24h" loading={loading} value={usd(aggregates.fees24h)} />
-          <AggCell
-            label="Yield 24h"
-            last
-            loading={loading}
-            value={usd(aggregates.yield24h)}
-          />
-        </Grid>
 
         {error && (
           <Text color="red.300" fontSize="sm">
@@ -348,38 +337,6 @@ export function PoolExplorer() {
         </Card>
       </VStack>
     </Card>
-  )
-}
-
-function AggCell({
-  label,
-  value,
-  loading,
-  last,
-}: {
-  label: string
-  value: string
-  loading: boolean
-  last?: boolean
-}) {
-  return (
-    <GridItem
-      borderRight={last ? 'none' : { md: '1px solid' }}
-      borderRightColor="border.base"
-      px="md"
-      py="sm"
-    >
-      <Text color="font.secondary" fontSize="2xs" textTransform="uppercase">
-        {label}
-      </Text>
-      {loading ? (
-        <Skeleton h="20px" mt="xxs" w="80px" />
-      ) : (
-        <Text fontSize="md" fontWeight="bold">
-          {value}
-        </Text>
-      )}
-    </GridItem>
   )
 }
 

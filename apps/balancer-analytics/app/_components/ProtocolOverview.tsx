@@ -21,7 +21,7 @@ export function ProtocolOverview() {
               Balancer Analytics
             </Heading>
             <Text maxW="540px" sx={{ textWrap: 'balance' }} variant="secondary">
-              Aggregated metrics across Balancer v2 and v3, live from the Balancer API.
+              Live protocol metrics across Balancer v2 and v3.
             </Text>
           </Box>
         </FadeInOnView>

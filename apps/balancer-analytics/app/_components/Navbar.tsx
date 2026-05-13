@@ -1,11 +1,10 @@
 'use client'
 
-import { Box, Container, HStack, Heading, IconButton, Link, Text } from '@chakra-ui/react'
+import { Box, Container, HStack, Heading, Link } from '@chakra-ui/react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { ArrowUpRight, GitHub } from 'react-feather'
 
 const NAVBAR_HEIGHT = '72px'
 
@@ -14,10 +13,6 @@ const NAV_LINKS: { label: string; href: string; section: string }[] = [
   { label: 'Liquidity', href: '#liquidity', section: 'liquidity' },
   { label: 'Pools', href: '#pools', section: 'pools' },
   { label: 'Governance', href: '#governance', section: 'governance' },
-]
-
-const EXTERNAL_LINKS: { label: string; href: string }[] = [
-  { label: 'Balancer', href: 'https://balancer.fi' },
 ]
 
 export function Navbar() {
@@ -131,45 +126,6 @@ export function Navbar() {
               </HStack>
             </HStack>
 
-            <HStack spacing={{ base: 'xs', md: 'sm' }}>
-              <Text
-                color="font.secondary"
-                display={{ base: 'none', lg: 'block' }}
-                fontSize="xs"
-                letterSpacing="0.4px"
-                textTransform="uppercase"
-              >
-                Balancer Analytics
-              </Text>
-              {EXTERNAL_LINKS.map(link => (
-                <Link
-                  _hover={{ color: 'font.maxContrast', textDecoration: 'none' }}
-                  as={NextLink}
-                  color="font.secondary"
-                  fontSize="sm"
-                  fontWeight="medium"
-                  href={link.href}
-                  isExternal
-                  key={link.href}
-                >
-                  <HStack spacing="xxs">
-                    <Box as="span">{link.label}</Box>
-                    <Box as="span" color="grayText" position="relative" top="-2px">
-                      <ArrowUpRight size={12} />
-                    </Box>
-                  </HStack>
-                </Link>
-              ))}
-              <IconButton
-                aria-label="GitHub"
-                as={NextLink}
-                href="https://github.com/defilytica"
-                icon={<GitHub size={16} />}
-                size="sm"
-                target="_blank"
-                variant="tertiary"
-              />
-            </HStack>
           </HStack>
         </Container>
       </Box>

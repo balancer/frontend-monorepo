@@ -122,16 +122,55 @@ type Props = {
   availableTypes: GqlPoolType[]
   availableHooks: string[]
   isSearching?: boolean
+  /**
+   * Layout variant:
+   *  - `full` (default): renders search input + filter trigger + chips together.
+   *  - `trigger-only`: renders just the Filters popover trigger button (used
+   *    when the caller wants to place it in a side rail next to a CSV button).
+   *  - `search-and-chips`: renders the search input full-width + chips below,
+   *    without the trigger button.
+   */
+  variant?: 'full' | 'trigger-only' | 'search-and-chips'
 }
 
 export function PoolExplorerFilters(props: Props) {
-  const { filters, setters } = props
+  const { filters, setters, variant = 'full' } = props
   const totalFilterCount =
     filters.chains.length +
     filters.types.length +
     filters.hookTypes.length +
     (filters.protocolVersion !== null ? 1 : 0) +
     (filters.minTvl > 0 ? 1 : 0)
+
+  if (variant === 'trigger-only') {
+    return <FilterPopover {...props} totalFilterCount={totalFilterCount} />
+  }
+
+  if (variant === 'search-and-chips') {
+    return (
+      <VStack align="stretch" spacing="sm" w="full">
+        <Box
+          sx={{
+            '& input': {
+              fontSize: 'md',
+              height: '48px',
+            },
+          }}
+          w="full"
+        >
+          <SearchInput
+            ariaLabel="Search pools"
+            autoFocus={false}
+            isLoading={props.isSearching}
+            placeholder="Search pool, token, address, hook…"
+            search={filters.search}
+            setSearch={setters.setSearch}
+          />
+        </Box>
+        <FilterChips filters={filters} setters={setters} />
+      </VStack>
+    )
+  }
 
   return (
     <VStack align="stretch" spacing="sm" w="full">

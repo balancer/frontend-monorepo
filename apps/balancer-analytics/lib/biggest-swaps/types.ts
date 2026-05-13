@@ -11,6 +11,11 @@ export type BiggestSwap = {
   tokenOutAddress: string
   tokenInAmount: string
   tokenOutAmount: string
+  /** Server-resolved token metadata, when available from api-v3's token list. */
+  tokenInSymbol?: string
+  tokenOutSymbol?: string
+  tokenInLogo?: string
+  tokenOutLogo?: string
 }
 
 export type BiggestSwapsPayload = {

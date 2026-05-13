@@ -17,6 +17,7 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { getBlockExplorerName, getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { ExternalLink } from 'react-feather'
 import { useBiggestSwaps, type BiggestSwap } from '@analytics/lib/hooks/useBiggestSwaps'
+import { TokenIconLite } from './TokenIconLite'
 
 const usd = (n: number) =>
   new Intl.NumberFormat('en-US', {
@@ -111,9 +112,27 @@ function SwapRow({ swap, index }: { swap: BiggestSwap; index: number }) {
       <NetworkIcon chain={swap.chain} size={5} />
 
       <VStack align="flex-start" minW={0} spacing="2px">
-        <Text color="font.maxContrast" fontSize="sm" fontWeight="medium" noOfLines={1}>
-          {shortAddress(swap.tokenInAddress)} → {shortAddress(swap.tokenOutAddress)}
-        </Text>
+        <HStack minW={0} spacing="xxs">
+          <TokenIconLite
+            address={swap.tokenInAddress}
+            logo={swap.tokenInLogo}
+            symbol={swap.tokenInSymbol}
+          />
+          <Text color="font.maxContrast" fontSize="sm" fontWeight="medium" noOfLines={1}>
+            {swap.tokenInSymbol ?? shortAddress(swap.tokenInAddress)}
+          </Text>
+          <Text as="span" color="font.secondary" fontSize="sm" px="2px">
+            →
+          </Text>
+          <TokenIconLite
+            address={swap.tokenOutAddress}
+            logo={swap.tokenOutLogo}
+            symbol={swap.tokenOutSymbol}
+          />
+          <Text color="font.maxContrast" fontSize="sm" fontWeight="medium" noOfLines={1}>
+            {swap.tokenOutSymbol ?? shortAddress(swap.tokenOutAddress)}
+          </Text>
+        </HStack>
         <Text color="font.secondary" fontSize="2xs" noOfLines={1}>
           pool {shortAddress(swap.poolId)} · {relativeTime(swap.timestamp)}
         </Text>

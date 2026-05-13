@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { useMemo, useState } from 'react'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useTvlSeries, type MetricKey, type Range } from '@analytics/lib/hooks/useTvlSeries'
 import { DeltaPill } from './DeltaPill'
 
@@ -236,12 +237,14 @@ export function TvlOverviewChart() {
         name: SERIES_LABEL[key],
         type: 'bar' as const,
         stack: 'protocol',
-        barMaxWidth: 22,
+        // No barMaxWidth — ECharts auto-sizes bars from data density on the
+        // time axis. Capping it (we tried 22px) leaves big white gaps when
+        // points are sparse. Matches frontend-v3 PoolCharts.
         itemStyle: {
           color: verticalGradient(rgba(SERIES_COLORS[key], 1), rgba(SERIES_COLORS[key], 0.45)),
-          // Round only the visible top edge of the stack so inner segments don't
-          // open thin gaps where their rounded corners would otherwise show.
-          borderRadius: isTop ? [3, 3, 0, 0] : 0,
+          // Top series gets a pill-rounded top edge; inner stack segments stay
+          // flat so they don't open thin gaps where their corners would round.
+          borderRadius: isTop ? [100, 100, 0, 0] : 0,
         },
         emphasis: {
           focus: 'series' as const,
@@ -306,10 +309,10 @@ export function TvlOverviewChart() {
       ? {
           name: active.label,
           type: 'bar' as const,
-          barMaxWidth: 22,
+          // No barMaxWidth — let ECharts auto-size by data density.
           itemStyle: {
             color: verticalGradient(rgba(active.color, 1), rgba(active.color, 0.3)),
-            borderRadius: [3, 3, 0, 0],
+            borderRadius: [100, 100, 0, 0],
           },
           emphasis: { itemStyle: { color: HOVER_COLOR } },
           data: barPts.map(p => [p.t, p.value]),
@@ -505,34 +508,42 @@ export function TvlOverviewChart() {
             </VStack>
           </Card>
 
-          {/* Bento main – chart */}
-          <Card flex={1} variant="subSection">
-            <Box h={{ base: '260px', md: '320px' }} p="sm">
-              {loading ? (
-                <Skeleton h="full" w="full" />
-              ) : !canPlot ? (
-                <SparseDataPlaceholder
-                  active={active}
-                  firstDataLabel={firstDataLabel}
-                  hasAnyData={hasAnyData}
-                  range={range}
-                  realPointCount={data?.realPointCount ?? 0}
-                  value={hasAnyData ? headlineValue : null}
-                />
-              ) : (
-                // `notMerge` + a shape-aware key force ECharts to drop the
-                // previous option fully when switching metric type — otherwise
-                // the stacked TVL series persists underneath a single-line
-                // chart like Fees / Yield and looks like wrong data.
-                <ReactECharts
-                  key={`${data?.stacked ? 's' : '1'}-${metric}`}
-                  notMerge
-                  option={option!}
-                  style={{ height: '100%', width: '100%' }}
-                />
-              )}
-            </Box>
-          </Card>
+          {/* Bento main – chart, wrapped in NoisyCard for the frontend-v3
+              "soft bento" treatment (noise texture, inner shadow, hover
+              radial gradient). */}
+          <Box flex={1} minH={{ base: '320px', md: '420px' }} minW={0} position="relative">
+            <NoisyCard
+              cardProps={{ height: 'full', overflow: 'hidden' }}
+              contentProps={{ display: 'flex', flexDirection: 'column', height: 'full', p: 'sm' }}
+            >
+              <Box flex={1} minH={0} w="full">
+                {loading ? (
+                  <Skeleton h="full" w="full" />
+                ) : !canPlot ? (
+                  <SparseDataPlaceholder
+                    active={active}
+                    firstDataLabel={firstDataLabel}
+                    hasAnyData={hasAnyData}
+                    range={range}
+                    realPointCount={data?.realPointCount ?? 0}
+                    value={hasAnyData ? headlineValue : null}
+                  />
+                ) : (
+                  // `notMerge` + a shape-aware key force ECharts to drop the
+                  // previous option fully when switching metric type —
+                  // otherwise the stacked TVL series persists underneath a
+                  // single-line chart like Fees / Yield and looks like wrong
+                  // data.
+                  <ReactECharts
+                    key={`${data?.stacked ? 's' : '1'}-${metric}`}
+                    notMerge
+                    option={option!}
+                    style={{ height: '100%', width: '100%' }}
+                  />
+                )}
+              </Box>
+            </NoisyCard>
+          </Box>
         </Stack>
       </VStack>
     </Card>

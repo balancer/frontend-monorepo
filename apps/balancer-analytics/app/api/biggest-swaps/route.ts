@@ -60,6 +60,17 @@ const QUERY = /* GraphQL */ `
   }
 `
 
+const TOKENS_QUERY = /* GraphQL */ `
+  query SwapTokens($chains: [GqlChain!]!) {
+    tokenGetTokens(chains: $chains) {
+      chain
+      address
+      symbol
+      logoURI
+    }
+  }
+`
+
 type RawEvent = {
   id: string
   poolId: string
@@ -95,11 +106,38 @@ async function fetchSwaps(): Promise<RawEvent[]> {
   return json.data?.poolEvents ?? []
 }
 
+type TokenInfo = { chain: GqlChain; address: string; symbol: string | null; logoURI: string | null }
+
+// Bulk-fetch token metadata for the chains that actually appear in the top
+// swaps. Done once per route refresh (inside the cached function), so the
+// upstream `tokenGetTokens` call is throttled by the same 5-min revalidate
+// window as the swaps fetch.
+async function fetchTokenMap(chains: GqlChain[]): Promise<Map<string, TokenInfo>> {
+  if (chains.length === 0) return new Map()
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query: TOKENS_QUERY, variables: { chains } }),
+    cache: 'no-store',
+  })
+  if (!res.ok) throw new Error(`api-v3 tokens HTTP ${res.status}`)
+  const json = (await res.json()) as {
+    data?: { tokenGetTokens: TokenInfo[] }
+    errors?: unknown
+  }
+  if (json.errors) throw new Error(`api-v3 tokens errors: ${JSON.stringify(json.errors)}`)
+  const out = new Map<string, TokenInfo>()
+  for (const t of json.data?.tokenGetTokens ?? []) {
+    out.set(`${t.chain}:${t.address.toLowerCase()}`, t)
+  }
+  return out
+}
+
 async function buildPayload(): Promise<BiggestSwapsPayload> {
   const now = Math.floor(Date.now() / 1000)
   const cutoff = now - WINDOW_SECONDS
   const events = await fetchSwaps()
-  const items: BiggestSwap[] = events
+  const top: BiggestSwap[] = events
     .filter(e => e.timestamp >= cutoff && Number.isFinite(e.valueUSD))
     .sort((a, b) => b.valueUSD - a.valueUSD)
     .slice(0, TOP_N)
@@ -115,6 +153,29 @@ async function buildPayload(): Promise<BiggestSwapsPayload> {
       tokenInAmount: e.tokenIn?.amount ?? '0',
       tokenOutAmount: e.tokenOut?.amount ?? '0',
     }))
+
+  // Enrich with symbol + logoURI from api-v3's token list. Token lookup is
+  // best-effort: a failure here degrades to short-address rendering rather
+  // than failing the whole route.
+  const chains = Array.from(new Set(top.map(s => s.chain)))
+  let tokens: Map<string, TokenInfo> = new Map()
+  try {
+    tokens = await fetchTokenMap(chains)
+  } catch {
+    // swallow — icons just won't render
+  }
+  const items: BiggestSwap[] = top.map(s => {
+    const tin = tokens.get(`${s.chain}:${s.tokenInAddress.toLowerCase()}`)
+    const tout = tokens.get(`${s.chain}:${s.tokenOutAddress.toLowerCase()}`)
+    return {
+      ...s,
+      tokenInSymbol: tin?.symbol ?? undefined,
+      tokenOutSymbol: tout?.symbol ?? undefined,
+      tokenInLogo: tin?.logoURI ?? undefined,
+      tokenOutLogo: tout?.logoURI ?? undefined,
+    }
+  })
+
   return { items, generatedAt: now, windowSeconds: WINDOW_SECONDS }
 }
 
