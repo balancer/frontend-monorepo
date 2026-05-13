@@ -35,6 +35,9 @@ export const metadata: Metadata = {
     siteName: 'Balancer',
     type: 'website',
   },
+  other: {
+    'base:app_id': '6a030a6b0ec9a0da335752af',
+  },
 }
 
 export default function RootLayout({ children }: PropsWithChildren) {
