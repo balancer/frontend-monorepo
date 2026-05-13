@@ -7,7 +7,7 @@
   "prConcurrentLimit": 5,
   "automerge": false,
 
-  "ignoreDeps": ["viem", "@balancer/sdk", "@nktkas/hyperliquid"],
+  "ignoreDeps": ["viem", "@balancer/sdk"],
 
   "packageRules": [
     {
@@ -186,6 +186,11 @@
       "description": "Block vitest-mock-extended major upgrades — v4 requires vitest 4 which is not yet in the project.",
       "matchPackageNames": ["vitest-mock-extended"],
       "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block @nktkas/hyperliquid updates. The library introduces frequent breaking changes (client redesigns, schema refactors, renamed parameters) between minor versions. Updating past 0.23.1 would require significant refactoring of packages/lib/modules/chains/hyperevm/useHyperEvm.ts.",
+      "matchPackageNames": ["@nktkas/hyperliquid"],
       "enabled": false
     }
   ]
