@@ -63,7 +63,7 @@ jobs:
       #     retention-days: 30
 
   Integration-Test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Setup
@@ -72,19 +72,6 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1.8.0
         # with:
         #   cache: false # Disable cache after foundry-toolchain upgrade
-      - name: Test Anvil Sepolia fork directly
-        run: |
-          anvil --fork-url https://lb.drpc.live/sepolia/$NEXT_PRIVATE_DRPC_KEY \
-                --fork-block-number 10295680 \
-                --port 8845 \
-                --mnemonic "$TEST_ACCOUNT_MNEMONIC" &
-          ANVIL_PID=$!
-          sleep 15
-          # Verify it started
-          curl -s -X POST http://127.0.0.1:8845 \
-            -H "Content-Type: application/json" \
-            -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
-          kill $ANVIL_PID 2>/dev/null || true
       - name: Run integration tests
         run: pnpm test:integration
 
