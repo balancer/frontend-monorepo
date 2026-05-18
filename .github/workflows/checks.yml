@@ -69,7 +69,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@c7450ba673e133f5ee30098b3b54f444d3a2ca2d # v1
+        uses: foundry-rs/foundry-toolchain@v1
         # with:
         #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
@@ -104,7 +104,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@c7450ba673e133f5ee30098b3b54f444d3a2ca2d # v1
+        uses: foundry-rs/foundry-toolchain@v1
       - name: Start anvil fork in mainnet
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
@@ -130,7 +130,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@c7450ba673e133f5ee30098b3b54f444d3a2ca2d # v1
+        uses: foundry-rs/foundry-toolchain@v1
       - name: Start anvil fork in sonic
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
