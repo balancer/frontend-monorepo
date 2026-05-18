@@ -87,8 +87,8 @@ From [react hooks testing library](https://react-hooks-testing-library.com/#the-
 - Push anvil cache to use in CI
 - Add automatic retries to Test-Integration GHA to avoid false positives due to connectivity
   problems (see )
-- Use [createProxy](https://github.com/wagmi-dev/anvil.js/#createproxy) from @viem/anvil to boost
-  integration tests by using a different instance by vitest thread.
+- Use [Prool](https://github.com/wevm/prool) to run Anvil integration test instances keyed by Vitest
+  thread.
 
 ## Credits
 

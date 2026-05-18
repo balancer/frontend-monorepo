@@ -69,7 +69,7 @@
     "react-hotkeys-hook": "5.2.4",
     "react-swipeable": "7.0.2",
     "react-use-measure": "^2.1.7",
-    "react-virtuoso": "4.18.6",
+    "react-virtuoso": "4.18.7",
     "tinycolor2": "^1.6.0",
     "use-debounce": "10.1.1",
     "use-sound": "5.0.0",
@@ -104,7 +104,6 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/tinycolor2": "1.4.6",
-    "@viem/anvil": "0.0.10",
     "@vitejs/plugin-react": "4.7.0",
     "@wagmi/cli": "2.10.0",
     "autoprefixer": "10.5.0",
@@ -112,6 +111,7 @@
     "eslint": "9.39.4",
     "lokijs": "1.5.12",
     "msw": "2.13.6",
+    "prool": "0.2.4",
     "sentry-testkit": "6.4.1"
   }
 }

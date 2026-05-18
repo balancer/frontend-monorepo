@@ -1,14 +1,12 @@
-import { startProxy } from '@viem/anvil'
 import { loadEnvFile } from 'node:process'
 import { dirname, resolve } from 'path'
+import { Instance, Server } from 'prool'
 import { fileURLToPath } from 'url'
 
 import { ANVIL_NETWORKS, getForkUrl } from './anvil-setup'
 import { testChains } from './testWagmiConfig'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
-const DEFAULT_ANVIL_START_TIMEOUT_MS = 60_000
-const DEFAULT_ANVIL_STOP_TIMEOUT_MS = 20_000
 
 function loadEnvFileIfExists(path: string) {
   try {
@@ -29,35 +27,32 @@ async function sleep(time: number) {
 export async function setup() {
   const promises = []
   for (const chain of Object.values(testChains)) {
+    const forkUrl = getForkUrl(chain.id, false)
+
     console.log('Starting proxy ', {
       port: chain.port,
-      forkUrl: getForkUrl(chain.id, false),
+      forkUrl,
       forkBlockNumber: ANVIL_NETWORKS[chain.id].forkBlockNumber,
-      startTimeout: DEFAULT_ANVIL_START_TIMEOUT_MS,
     })
-    promises.push(
-      startProxy({
-        port: chain.port,
-        host: '::',
-        options: {
-          startTimeout: DEFAULT_ANVIL_START_TIMEOUT_MS,
-          stopTimeout: DEFAULT_ANVIL_STOP_TIMEOUT_MS,
-          chainId: chain.id,
-          forkUrl: getForkUrl(chain.id, false),
-          forkBlockNumber: ANVIL_NETWORKS[chain.id].forkBlockNumber,
-          noMining: false,
-          mnemonic: process.env.TEST_ACCOUNT_MNEMONIC,
-        },
-      })
-    )
+
+    const server = Server.create({
+      port: chain.port,
+      host: '::',
+      instance: Instance.anvil({
+        chainId: chain.id,
+        forkUrl,
+        forkBlockNumber: ANVIL_NETWORKS[chain.id].forkBlockNumber,
+        mnemonic: process.env.TEST_ACCOUNT_MNEMONIC,
+      }),
+    })
+
+    promises.push(server.start().then(() => server.stop.bind(server)))
   }
   const results = await Promise.all(promises)
   // Wait for the proxy to start
   await sleep(2000)
 
-  return () => {
-    for (const shutdown of results) {
-      shutdown()
-    }
+  return async () => {
+    await Promise.all(results.map(shutdown => shutdown()))
   }
 }
