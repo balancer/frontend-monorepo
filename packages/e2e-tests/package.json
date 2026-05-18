@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@balancer/sdk": "5.2.3",
+    "@balancer/sdk": "5.2.8",
     "@playwright/test": "1.59.1",
     "@repo/lib": "workspace:*",
     "@repo/typescript-config": "workspace:*",
