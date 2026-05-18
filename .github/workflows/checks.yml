@@ -72,6 +72,12 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1.8.0
         # with:
         #   cache: false # Disable cache after foundry-toolchain upgrade
+      - name: Debug DRPC Sepolia connectivity
+        run: |
+          curl -s -X POST https://lb.drpc.live/sepolia/$NEXT_PRIVATE_DRPC_KEY \
+          -H "Content-Type: application/json" \
+          -d '{"jsonrpc":"2.0","method":"eth_getTransactionCount","params":["0x647939beEe5F15FB63052b4C8F338e88eE74BA95","0x9D1B40"],"id":1}' \
+          --max-time 30
       - name: Run integration tests
         run: pnpm test:integration
 
