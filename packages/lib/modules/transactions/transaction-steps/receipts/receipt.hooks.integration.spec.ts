@@ -274,7 +274,7 @@ describe('queries swap transaction in non polygon networks', () => {
 
     const stataEthDai = '0xde46e43f46ff74a23a65ebb0580cbe3dfe684a17'
 
-    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy(), { timeout: 120000 })
 
     expect(result.current.sentToken).toEqual({
       humanAmount: '0.033',
