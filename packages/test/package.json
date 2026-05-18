@@ -12,9 +12,9 @@
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@types/node": "24.0.3",
-    "@viem/anvil": "^0.0.10",
     "cross-fetch": "4.1.0",
     "eslint": "9.27.0",
+    "prool": "0.2.4",
     "viem": "2.46.2",
     "wagmi": "3.5.0"
   },

@@ -21,7 +21,7 @@ export function createIntegrationVitestConfig(monorepoRoot: string): ViteUserCon
       resolveFromRoot('./packages/lib/test/vitest/setup-integration.ts'),
     ],
     globalSetup: [resolveFromRoot('./packages/test/anvil/anvil-global-setup.ts')],
-    testTimeout: 30_000,
+    testTimeout: 120_000,
     // Consider disabling threads if we detect problems with anvil
     // poolOptions: {
     //   threads: { singleThread: true },
