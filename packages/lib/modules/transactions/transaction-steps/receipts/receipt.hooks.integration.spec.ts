@@ -153,7 +153,7 @@ test('queries add liquidity in V3 GNOSIS pool', async () => {
 
   const result = await testAddReceipt(userAddress, txHash, gnosis.id)
 
-  await waitFor(() => expect(result.current.isLoading).toBeFalsy(), { timeout: 120000 })
+  await waitFor(() => expect(result.current.isLoading).toBeFalsy())
   await waitFor(() => expect(result.current.sentTokens).toBeDefined())
 
   expect(result.current.sentTokens).toEqual([
@@ -274,7 +274,7 @@ describe('queries swap transaction in non polygon networks', () => {
 
     const stataEthDai = '0xde46e43f46ff74a23a65ebb0580cbe3dfe684a17'
 
-    await waitFor(() => expect(result.current.isLoading).toBeFalsy(), { timeout: 120000 })
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
     expect(result.current.sentToken).toEqual({
       humanAmount: '0.033',
