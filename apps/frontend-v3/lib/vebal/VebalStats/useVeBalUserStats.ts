@@ -22,7 +22,10 @@ export function useVebalUserStats() {
 
   const userStats: VebalUserStatsValues | undefined = useMemo(() => {
     if (isConnected) {
-      const percentOfAllSupply = bn(formatUnits(veBALBalance, 18)).div(lockedInfo.totalSupply || 0)
+      const totalSupply = bn(lockedInfo.totalSupply || 0)
+      const percentOfAllSupply = totalSupply.isZero()
+        ? bn(0)
+        : bn(formatUnits(veBALBalance, 18)).div(totalSupply)
 
       const lockedUntil = lockedInfo.lockedEndDate
         ? format(lockedInfo.lockedEndDate, 'yyyy-MM-dd')

@@ -44,9 +44,13 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
     '0.00'
   )
 
-  const reliquaryPoolRatio = bn(globalStats?.totalBalance || '').div(data.totalShares)
+  const totalShares = bn(data.totalShares || '0')
+  const totalRelics = bn(globalStats?.relicCount || '0')
+  const reliquaryPoolRatio = totalShares.isZero()
+    ? bn(0)
+    : bn(globalStats?.totalBalance || '0').div(totalShares)
   const tvl = reliquaryPoolRatio.times(data.totalLiquidity)
-  const avgValuePerRelic = tvl.div(globalStats?.relicCount || '')
+  const avgValuePerRelic = totalRelics.isZero() ? bn(0) : tvl.div(totalRelics)
 
   const baseApr = pool.dynamicData.aprItems.find(
     item => item.title === 'BEETS reward APR' && item.type === 'MABEETS_EMISSIONS'
