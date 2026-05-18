@@ -39,7 +39,7 @@ export const sonicTest = {
 export const testChains = [
   mainnetTest,
   polygonTest,
-  sepoliaTest,
+  // sepoliaTest, // Disabled - using manual Anvil fork for Sepolia
   gnosisTest,
   baseTest,
   sonicTest,
@@ -72,7 +72,7 @@ function createTestWagmiConfig() {
     transports: {
       [mainnetTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
       [polygonTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
-      [sepoliaTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
+      // [sepoliaTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
       [baseTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
       [gnosisTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
       [sonicTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
