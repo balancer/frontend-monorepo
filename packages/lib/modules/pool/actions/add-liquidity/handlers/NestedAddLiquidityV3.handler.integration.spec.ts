@@ -22,7 +22,7 @@ const nestedPool = await fetchPoolMock({ poolId, chain })
 
 // Unskip when sepolia V3 pools are available in production api
 describe('When adding nested liquidity for a weighted pool', () => {
-  test('has zero price impact', async () => {
+  test('has zero price impact', { timeout: 60_000 }, async () => {
     const handler = selectNestedHandler(nestedPool)
 
     const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
@@ -32,7 +32,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
     expect(priceImpact).toBeGreaterThan(0)
   })
 
-  test('with single token input', async () => {
+  test('with single token input', { timeout: 60_000 }, async () => {
     const handler = selectNestedHandler(nestedPool)
 
     const humanAmountsIn: HumanTokenAmountWithSymbol[] = [

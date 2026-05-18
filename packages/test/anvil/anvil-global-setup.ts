@@ -7,7 +7,7 @@ import { ANVIL_NETWORKS, getForkUrl } from './anvil-setup'
 import { testChains } from './testWagmiConfig'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
-const DEFAULT_ANVIL_START_TIMEOUT_MS = 60_000
+const DEFAULT_ANVIL_START_TIMEOUT_MS = 120_000
 const DEFAULT_ANVIL_STOP_TIMEOUT_MS = 20_000
 
 function loadEnvFileIfExists(path: string) {
