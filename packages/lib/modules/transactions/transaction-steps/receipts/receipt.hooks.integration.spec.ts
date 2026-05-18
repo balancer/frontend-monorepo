@@ -153,7 +153,7 @@ test('queries add liquidity in V3 GNOSIS pool', async () => {
 
   const result = await testAddReceipt(userAddress, txHash, gnosis.id)
 
-  await waitFor(() => expect(result.current.isLoading).toBeFalsy(), { timeout: 120000 })
+  await waitFor(() => expect(result.current.isLoading).toBeFalsy())
   await waitFor(() => expect(result.current.sentTokens).toBeDefined())
 
   expect(result.current.sentTokens).toEqual([
