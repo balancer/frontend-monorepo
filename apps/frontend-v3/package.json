@@ -78,7 +78,8 @@
     "concurrently": "9.2.1",
     "cross-fetch": "4.1.0",
     "eslint": "9.39.4",
-    "lokijs": "1.5.12"
+    "lokijs": "1.5.12",
+    "prool": "0.2.4"
   },
   "engines": {
     "node": "24.x"
