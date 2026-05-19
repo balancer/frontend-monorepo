@@ -45,7 +45,7 @@ export function getSwapFeePercentageOptions(poolType: PoolType): { value: string
     ]
   } else {
     return [
-      { value: '0.30', tip: 'Best for most reCLAMM pairs' },
+      { value: '0.30', tip: 'Best for most AutoRange pairs' },
       { value: '1.00', tip: 'Best for exotic pairs' },
     ]
   }
@@ -98,7 +98,7 @@ export function isCustomWeightedPool(
   return poolType === PoolType.Weighted && weightedPoolStructure === WeightedPoolStructure.Custom
 }
 
-export function isReClammPool(poolType: PoolType): boolean {
+export function isAutoRangePool(poolType: PoolType): boolean {
   return poolType === PoolType.ReClamm
 }
 
@@ -119,6 +119,6 @@ export function isBalancerProtocol(protocol: string): boolean {
 }
 
 export function isPoolCreatorEnabled(poolType: PoolType): boolean {
-  // reclamm and eclp factories still require zero address
+  // AutoRange and eclp factories still require zero address
   return poolType === PoolType.Stable || poolType === PoolType.Weighted
 }

@@ -16,18 +16,18 @@ import {
   PriceAdjustmentRateSlowSVG,
   PriceAdjustmentRateStandardSVG,
   PriceAdjustmentRateFastSVG,
-} from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
+} from '@repo/lib/shared/components/imgs/AutoRangeConfigSvgs'
 import { useWatch } from 'react-hook-form'
-import { ConfigOptionsGroupProps } from './ReClammConfiguration'
-import { ReClammConfig } from '../../types'
+import { ConfigOptionsGroupProps } from './AutoRangeConfiguration'
+import { AutoRangeConfig } from '../../types'
 
-export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClammConfig>[] {
-  const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
+export function useAutoRangeConfigurationOptions(): ConfigOptionsGroupProps<AutoRangeConfig>[] {
+  const { poolCreationForm, autoRangeConfigForm } = usePoolCreationForm()
   const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
 
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
-  const reClammConfig = useWatch({ control: reClammConfigForm.control })
-  const { initialTargetPrice, priceRangePercentage } = reClammConfig
+  const autoRangeConfig = useWatch({ control: autoRangeConfigForm.control })
+  const { initialTargetPrice, priceRangePercentage } = autoRangeConfig
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
 
@@ -47,13 +47,13 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
 
   const updatePriceBounds = (targetPrice: string, spread: string) => {
     const { initialMinPrice, initialMaxPrice } = calculatePriceBounds(targetPrice, spread)
-    reClammConfigForm.setValue('initialMinPrice', initialMinPrice, { shouldValidate: true })
-    reClammConfigForm.setValue('initialMaxPrice', initialMaxPrice, { shouldValidate: true })
+    autoRangeConfigForm.setValue('initialMinPrice', initialMinPrice, { shouldValidate: true })
+    autoRangeConfigForm.setValue('initialMaxPrice', initialMaxPrice, { shouldValidate: true })
   }
 
-  const targetPrice: ConfigOptionsGroupProps<ReClammConfig> = {
+  const targetPrice: ConfigOptionsGroupProps<AutoRangeConfig> = {
     name: 'initialTargetPrice',
-    control: reClammConfigForm.control,
+    control: autoRangeConfigForm.control,
     label: `Target price: ${tokenSymbolsString}`,
     customInputLabel: 'Custom target price',
     options: [
@@ -78,7 +78,7 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
     ],
     tooltip: 'The initial target price of token A in terms of token B',
     updateFn: (rawValue: string) => {
-      reClammConfigForm.setValue('initialTargetPrice', rawValue, { shouldValidate: true })
+      autoRangeConfigForm.setValue('initialTargetPrice', rawValue, { shouldValidate: true })
       if (priceRangePercentage) {
         updatePriceBounds(rawValue, priceRangePercentage)
       }
@@ -89,10 +89,10 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
     },
   }
 
-  const priceRangeBoundaries: ConfigOptionsGroupProps<ReClammConfig> = {
+  const priceRangeBoundaries: ConfigOptionsGroupProps<AutoRangeConfig> = {
     label: `Target concentration density of liquidity`,
     name: 'priceRangePercentage',
-    control: reClammConfigForm.control,
+    control: autoRangeConfigForm.control,
     customInputLabel: '???',
     options: [
       { label: 'Narrow', displayValue: '± 25.00%', rawValue: '25', svg: TargetRangeNarrowSVG },
@@ -101,12 +101,12 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
     ],
     tooltip: 'The target concentration density of liquidity',
     updateFn: (rawValue: string) => {
-      reClammConfigForm.setValue('priceRangePercentage', rawValue, { shouldValidate: true })
+      autoRangeConfigForm.setValue('priceRangePercentage', rawValue, { shouldValidate: true })
       if (rawValue) {
         updatePriceBounds(initialTargetPrice || '', rawValue)
       } else {
-        reClammConfigForm.setValue('initialMinPrice', '', { shouldValidate: true })
-        reClammConfigForm.setValue('initialMaxPrice', '', { shouldValidate: true })
+        autoRangeConfigForm.setValue('initialMinPrice', '', { shouldValidate: true })
+        autoRangeConfigForm.setValue('initialMaxPrice', '', { shouldValidate: true })
       }
     },
     validateFn: (value: string) => {
@@ -115,9 +115,9 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
     },
   }
 
-  const marginBuffer: ConfigOptionsGroupProps<ReClammConfig> = {
+  const marginBuffer: ConfigOptionsGroupProps<AutoRangeConfig> = {
     name: 'centerednessMargin',
-    control: reClammConfigForm.control,
+    control: autoRangeConfigForm.control,
     label: `Margin buffer`,
     customInputLabel: 'Custom margin buffer',
     options: [
@@ -127,7 +127,7 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
     ],
     tooltip: 'How far the price can be from the center before the price range starts to move',
     updateFn: (rawValue: string) => {
-      reClammConfigForm.setValue('centerednessMargin', rawValue, { shouldValidate: true })
+      autoRangeConfigForm.setValue('centerednessMargin', rawValue, { shouldValidate: true })
     },
     validateFn: (value: string) => {
       const numValue = Number(value)
@@ -137,9 +137,9 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
     },
   }
 
-  const dailyPriceReadjustmentRate: ConfigOptionsGroupProps<ReClammConfig> = {
+  const dailyPriceReadjustmentRate: ConfigOptionsGroupProps<AutoRangeConfig> = {
     name: 'priceShiftDailyRate',
-    control: reClammConfigForm.control,
+    control: autoRangeConfigForm.control,
     label: `Daily price re-adjustment rate, when out-of-range`,
     customInputLabel: 'Custom rate',
     options: [
@@ -159,7 +159,7 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
     ],
     tooltip: 'Controls the speed of the price shift when out-of-range',
     updateFn: (rawValue: string) => {
-      reClammConfigForm.setValue('priceShiftDailyRate', rawValue, { shouldValidate: true })
+      autoRangeConfigForm.setValue('priceShiftDailyRate', rawValue, { shouldValidate: true })
     },
     validateFn: (value: string) => {
       const numValue = Number(value)
@@ -169,27 +169,29 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClam
     },
   }
 
-  const isInitialReClammConfig = Object.values(reClammConfig).every(value => value === '')
+  const isInitialAutoRangeConfig = Object.values(autoRangeConfig).every(value => value === '')
 
   // auto-fill config with default values
   useEffect(() => {
-    if (isInitialReClammConfig) {
+    if (isInitialAutoRangeConfig) {
       const currentPrice = targetPrice.options[1].rawValue
       const priceRangePercentage = priceRangeBoundaries.options[1].rawValue
       const centerednessMargin = marginBuffer.options[1].rawValue
       const priceShiftDailyRate = dailyPriceReadjustmentRate.options[1].rawValue
 
-      reClammConfigForm.setValue('initialTargetPrice', currentPrice, { shouldValidate: true })
-      reClammConfigForm.setValue('priceRangePercentage', priceRangePercentage, {
+      autoRangeConfigForm.setValue('initialTargetPrice', currentPrice, { shouldValidate: true })
+      autoRangeConfigForm.setValue('priceRangePercentage', priceRangePercentage, {
         shouldValidate: true,
       })
-      reClammConfigForm.setValue('centerednessMargin', centerednessMargin, { shouldValidate: true })
-      reClammConfigForm.setValue('priceShiftDailyRate', priceShiftDailyRate, {
+      autoRangeConfigForm.setValue('centerednessMargin', centerednessMargin, {
+        shouldValidate: true,
+      })
+      autoRangeConfigForm.setValue('priceShiftDailyRate', priceShiftDailyRate, {
         shouldValidate: true,
       })
       updatePriceBounds(currentPrice, priceRangePercentage)
     }
-  }, [isInitialReClammConfig])
+  }, [isInitialAutoRangeConfig])
 
   useEffect(() => {
     if (!initialTargetPrice || !priceRangePercentage) return

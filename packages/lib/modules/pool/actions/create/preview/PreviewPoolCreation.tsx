@@ -8,14 +8,14 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
 import { getGqlPoolType } from '../helpers'
 import { LearnMoreModal } from '@repo/lib/shared/components/modals/LearnMoreModal'
-import { PreviewReClammConfig } from './PreviewReClammConfig'
-import { ReclAmmChartProvider } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
+import { PreviewAutoRangeConfig } from './PreviewAutoRangeConfig'
+import { AutoRangeChartProvider } from '@repo/lib/modules/autorange/AutoRangeChartProvider'
 import { EclpChartProvider } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
-import { usePreviewReclAmmChartData } from './usePreviewReclammChartData'
+import { usePreviewAutoRangeChartData } from './usePreviewAutoRangeChartData'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewGyroEclpConfig } from './PreviewGyroEclpConfig'
 import { usePreviewEclpLiquidityProfile } from './usePreviewEclpLiquidityProfile'
-import { isGyroEllipticPool, isReClammPool } from '../helpers'
+import { isGyroEllipticPool, isAutoRangePool } from '../helpers'
 import { useWatch } from 'react-hook-form'
 import { useProtocolSearchParams } from '../modal/useProtocolSearchParams'
 
@@ -91,8 +91,8 @@ function PreviewPoolChart() {
 
   const eclpLiquidityProfile = usePreviewEclpLiquidityProfile()
 
-  const reclammChartData = usePreviewReclAmmChartData()
-  const { lowerMarginValue, upperMarginValue } = reclammChartData || {}
+  const autoRangeChartData = usePreviewAutoRangeChartData()
+  const { lowerMarginValue, upperMarginValue } = autoRangeChartData || {}
 
   if (isGyroEllipticPool(poolType)) {
     return (
@@ -102,15 +102,15 @@ function PreviewPoolChart() {
     )
   }
 
-  if (isReClammPool(poolType)) {
+  if (isAutoRangePool(poolType)) {
     return (
-      <ReclAmmChartProvider chartData={reclammChartData}>
-        <PreviewReClammConfig
+      <AutoRangeChartProvider chartData={autoRangeChartData}>
+        <PreviewAutoRangeConfig
           isBeforeStep={isBeforeStep('Details')}
           lowerMarginValue={lowerMarginValue}
           upperMarginValue={upperMarginValue}
         />
-      </ReclAmmChartProvider>
+      </AutoRangeChartProvider>
     )
   }
 

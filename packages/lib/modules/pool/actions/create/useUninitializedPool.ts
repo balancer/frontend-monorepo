@@ -5,7 +5,7 @@ import { AddressProvider } from '@balancer/sdk'
 import { vaultExtensionAbi_V3 } from '@balancer/sdk'
 import { useReadContracts, useReadContract } from 'wagmi'
 import {
-  reClammPoolAbi,
+  autoRangePoolAbi,
   balancerV3WeightedPoolAbi,
   balancerV3StablePoolAbi,
   gyroEclpPoolAbi,
@@ -14,7 +14,7 @@ import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { getCreatePathParams } from './getCreatePathParams'
 import { useParams } from 'next/navigation'
 import { getChainId } from '@repo/lib/config/app.config'
-import { isStablePool, isWeightedPool, isReClammPool, isGyroEllipticPool } from './helpers'
+import { isStablePool, isWeightedPool, isAutoRangePool, isGyroEllipticPool } from './helpers'
 import { formatUnits } from 'viem'
 import { PERCENTAGE_DECIMALS, WeightedPoolStructure } from './constants'
 import { PoolCreationToken } from './types'
@@ -67,7 +67,7 @@ export function useUninitializedPool() {
   const chainId = networkParam ? getChainId(networkParam) : undefined
   const isStablePoolType = poolTypeParam && isStablePool(poolTypeParam)
   const isWeightedPoolType = poolTypeParam && isWeightedPool(poolTypeParam)
-  const isReClammPoolType = poolTypeParam && isReClammPool(poolTypeParam)
+  const isAutoRangePoolType = poolTypeParam && isAutoRangePool(poolTypeParam)
   const isGyroEclpType = poolTypeParam && isGyroEllipticPool(poolTypeParam)
 
   const areAllParamsDefined = !!networkParam && !!poolTypeParam && !!poolAddressParam
@@ -212,12 +212,12 @@ export function useUninitializedPool() {
       query: { enabled: isStablePoolType && shouldHydratePoolCreationForm },
     })
 
-  const { data: reClammConfig, isLoading: isLoadingReClammConfig } = useReadContract({
+  const { data: autoRangeConfig, isLoading: isLoadingAutoRangeConfig } = useReadContract({
     address: poolAddressParam,
-    abi: reClammPoolAbi,
+    abi: autoRangePoolAbi,
     functionName: 'getReClammPoolImmutableData',
     chainId,
-    query: { enabled: isReClammPoolType && shouldHydratePoolCreationForm },
+    query: { enabled: isAutoRangePoolType && shouldHydratePoolCreationForm },
   })
 
   const poolFormData = useMemo(() => {
@@ -251,7 +251,7 @@ export function useUninitializedPool() {
 
     const hasRequiredWeightedInfo = !isWeightedPoolType || !!normalizedWeights
     const hasRequiredStableInfo = !isStablePoolType || !!amplificationParameter
-    const hasRequiredReClammInfo = !isReClammPoolType || !!reClammConfig
+    const hasRequiredAutoRangeInfo = !isAutoRangePoolType || !!autoRangeConfig
 
     if (
       !network ||
@@ -267,7 +267,7 @@ export function useUninitializedPool() {
       !poolHooksContract ||
       !hasRequiredWeightedInfo ||
       !hasRequiredStableInfo ||
-      !hasRequiredReClammInfo
+      !hasRequiredAutoRangeInfo
     ) {
       return undefined
     }
@@ -290,8 +290,8 @@ export function useUninitializedPool() {
     }
   }, [amplificationParameterRes, poolTokens])
 
-  const reClammFormData = useMemo(() => {
-    if (!reClammConfig || !isReClammPoolType) return undefined
+  const autoRangeFormData = useMemo(() => {
+    if (!autoRangeConfig || !isAutoRangePoolType) return undefined
 
     const {
       initialMinPrice,
@@ -299,7 +299,7 @@ export function useUninitializedPool() {
       initialMaxPrice,
       initialDailyPriceShiftExponent,
       initialCenterednessMargin,
-    } = reClammConfig
+    } = autoRangeConfig
 
     return {
       initialMinPrice: formatUnits(initialMinPrice, 18),
@@ -308,7 +308,7 @@ export function useUninitializedPool() {
       priceShiftDailyRate: formatUnits(initialDailyPriceShiftExponent, PERCENTAGE_DECIMALS),
       centerednessMargin: formatUnits(initialCenterednessMargin, PERCENTAGE_DECIMALS),
     }
-  }, [reClammConfig, isReClammPoolType])
+  }, [autoRangeConfig, isAutoRangePoolType])
 
   const { data: eclpParams, isLoading: isLoadingEclpParams } = useReadContract({
     address: poolAddressParam,
@@ -341,12 +341,12 @@ export function useUninitializedPool() {
     isLoadingPoolTokenDetails ||
     isLoadingAmplificationParameter ||
     isLoadingWeights ||
-    isLoadingReClammConfig ||
+    isLoadingAutoRangeConfig ||
     isLoadingEclpParams
 
   return {
     poolFormData,
-    reClammFormData,
+    autoRangeFormData,
     eclpFormData,
     isLoadingPool,
     shouldHydratePoolCreationForm,

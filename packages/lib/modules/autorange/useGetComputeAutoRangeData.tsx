@@ -1,39 +1,39 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import { usePool } from '../pool/PoolProvider'
-import { reClammPoolAbi } from '../web3/contracts/abi/generated'
+import { autoRangePoolAbi } from '../web3/contracts/abi/generated'
 import { Address } from 'viem'
 import { useReadContracts } from 'wagmi'
 
-export function useGetComputeReclAmmData() {
+export function useGetComputeAutoRangeData() {
   const { pool, chain } = usePool()
   const chainId = getChainId(chain)
 
-  const reclAmmPoolContract = {
+  const autoRangePoolContract = {
     address: pool.address as Address,
-    abi: reClammPoolAbi,
+    abi: autoRangePoolAbi,
     chainId,
   } as const
 
   const results = useReadContracts({
     contracts: [
       {
-        ...reclAmmPoolContract,
+        ...autoRangePoolContract,
         functionName: 'computeCurrentPriceRange',
       },
       {
-        ...reclAmmPoolContract,
+        ...autoRangePoolContract,
         functionName: 'computeCurrentVirtualBalances',
       },
       {
-        ...reclAmmPoolContract,
+        ...autoRangePoolContract,
         functionName: 'getCurrentLiveBalances',
       },
       {
-        ...reclAmmPoolContract,
+        ...autoRangePoolContract,
         functionName: 'getCenterednessMargin',
       },
       {
-        ...reclAmmPoolContract,
+        ...autoRangePoolContract,
         functionName: 'isPoolWithinTargetRangeUsingCurrentVirtualBalances', // first item in the array is 'isWithinTargetRange'
       },
     ],

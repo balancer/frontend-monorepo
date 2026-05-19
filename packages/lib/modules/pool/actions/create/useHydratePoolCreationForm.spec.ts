@@ -24,7 +24,7 @@ describe('useHydratePoolCreationForm', () => {
 
     ;(useUninitializedPool as ReturnType<typeof vi.fn>).mockReturnValue({
       poolFormData: null,
-      reClammFormData: null,
+      autoRangeFormData: null,
       eclpFormData: null,
       isLoadingPool: false,
       shouldHydratePoolCreationForm: false,
@@ -34,7 +34,7 @@ describe('useHydratePoolCreationForm', () => {
     ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
       poolCreationForm: { reset: vi.fn() },
       setPoolAddress,
-      reClammConfigForm: { reset: vi.fn() },
+      autoRangeConfigForm: { reset: vi.fn() },
       eclpConfigForm: { reset: vi.fn() },
       goToLastStep: vi.fn(),
     })
@@ -48,18 +48,18 @@ describe('useHydratePoolCreationForm', () => {
     const { usePoolCreationForm } = await import('./PoolCreationFormProvider')
 
     const mockPoolFormData = { name: 'Test Pool', symbol: 'TEST' }
-    const mockReClammFormData = { initialTargetPrice: '100' }
+    const mockAutoRangeFormData = { initialTargetPrice: '100' }
     const mockEclpFormData = { alpha: '1.5' }
 
     const poolCreationFormReset = vi.fn()
-    const reClammConfigFormReset = vi.fn()
+    const autoRangeConfigFormReset = vi.fn()
     const eclpConfigFormReset = vi.fn()
     const setPoolAddress = vi.fn()
     const goToLastStep = vi.fn()
 
     ;(useUninitializedPool as ReturnType<typeof vi.fn>).mockReturnValue({
       poolFormData: mockPoolFormData,
-      reClammFormData: mockReClammFormData,
+      autoRangeFormData: mockAutoRangeFormData,
       eclpFormData: mockEclpFormData,
       isLoadingPool: false,
       shouldHydratePoolCreationForm: true,
@@ -69,7 +69,7 @@ describe('useHydratePoolCreationForm', () => {
     ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
       poolCreationForm: { reset: poolCreationFormReset },
       setPoolAddress,
-      reClammConfigForm: { reset: reClammConfigFormReset },
+      autoRangeConfigForm: { reset: autoRangeConfigFormReset },
       eclpConfigForm: { reset: eclpConfigFormReset },
       goToLastStep,
     })
@@ -78,7 +78,7 @@ describe('useHydratePoolCreationForm', () => {
     await waitFor(() => expect(poolCreationFormReset).toHaveBeenCalled())
 
     expect(poolCreationFormReset).toHaveBeenCalledWith(mockPoolFormData)
-    expect(reClammConfigFormReset).toHaveBeenCalledWith(mockReClammFormData)
+    expect(autoRangeConfigFormReset).toHaveBeenCalledWith(mockAutoRangeFormData)
     expect(eclpConfigFormReset).toHaveBeenCalledWith(mockEclpFormData)
     expect(setPoolAddress).toHaveBeenCalledWith('0xpoolAddress123')
     expect(goToLastStep).toHaveBeenCalled()
@@ -92,7 +92,7 @@ describe('useHydratePoolCreationForm', () => {
 
     ;(useUninitializedPool as ReturnType<typeof vi.fn>).mockReturnValue({
       poolFormData: { name: 'Test' },
-      reClammFormData: null,
+      autoRangeFormData: null,
       eclpFormData: null,
       isLoadingPool: true,
       shouldHydratePoolCreationForm: true,
@@ -102,7 +102,7 @@ describe('useHydratePoolCreationForm', () => {
     ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
       poolCreationForm: { reset: poolCreationFormReset },
       setPoolAddress: vi.fn(),
-      reClammConfigForm: { reset: vi.fn() },
+      autoRangeConfigForm: { reset: vi.fn() },
       eclpConfigForm: { reset: vi.fn() },
       goToLastStep: vi.fn(),
     })
@@ -122,14 +122,14 @@ describe('useHydratePoolCreationForm', () => {
     ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
       poolCreationForm: { reset: poolCreationFormReset },
       setPoolAddress,
-      reClammConfigForm: { reset: vi.fn() },
+      autoRangeConfigForm: { reset: vi.fn() },
       eclpConfigForm: { reset: vi.fn() },
       goToLastStep,
     })
 
     const mockImpl = vi.fn(() => ({
       poolFormData: { name: 'Test' },
-      reClammFormData: null,
+      autoRangeFormData: null,
       eclpFormData: null,
       isLoadingPool: false,
       shouldHydratePoolCreationForm: false,
@@ -144,7 +144,7 @@ describe('useHydratePoolCreationForm', () => {
 
     mockImpl.mockReturnValueOnce({
       poolFormData: { name: 'Test' },
-      reClammFormData: null,
+      autoRangeFormData: null,
       eclpFormData: null,
       isLoadingPool: false,
       shouldHydratePoolCreationForm: true,

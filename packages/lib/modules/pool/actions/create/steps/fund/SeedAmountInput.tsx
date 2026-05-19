@@ -1,9 +1,9 @@
-import { useReClammInitAmounts } from './useReClammInitAmounts'
+import { useAutoRangeInitAmounts } from './useAutoRangeInitAmounts'
 import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect, useRef } from 'react'
 import { formatUnits } from 'viem'
 import { useGyroEclpInitAmountsRatio } from './useGyroEclpInitAmountsRatio'
-import { isReClammPool, isGyroEllipticPool } from '../../helpers'
+import { isAutoRangePool, isGyroEllipticPool } from '../../helpers'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useWatch } from 'react-hook-form'
@@ -21,7 +21,11 @@ interface TokenAmountInputProps {
 export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmountInputProps) {
   const { updatePoolToken, poolAddress, poolCreationForm } = usePoolCreationForm()
   const [network] = useWatch({ control: poolCreationForm.control, name: ['network'] })
-  const { reClammInitAmounts } = useReClammInitAmounts(isReClammPool(poolType), poolAddress, token)
+  const { autoRangeInitAmounts } = useAutoRangeInitAmounts(
+    isAutoRangePool(poolType),
+    poolAddress,
+    token
+  )
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
   const { setValidationError, removeValidationErrors } = useTokenInputsValidation()
@@ -64,9 +68,9 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
     updatePoolToken(idx, { amount })
   }
 
-  // autofill other token amount for ReClamm using response from contract
+  // autofill other token amount for AutoRange using response from contract
   useEffect(() => {
-    if (!reClammInitAmounts || lastUserUpdatedAmountIdx.current !== idx) return
+    if (!autoRangeInitAmounts || lastUserUpdatedAmountIdx.current !== idx) return
 
     if (!otherToken?.address || !otherToken?.data?.decimals) return
 
@@ -79,12 +83,12 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
 
     // Update the other token's amount using the corresponding value from initAmounts
     const otherTokenAmount = formatUnits(
-      reClammInitAmounts[otherTokenAmountIdx],
+      autoRangeInitAmounts[otherTokenAmountIdx],
       otherToken.data.decimals
     )
     updatePoolToken(otherTokenInputIdx, { amount: otherTokenAmount })
     lastUserUpdatedAmountIdx.current = null
-  }, [idx, updatePoolToken, reClammInitAmounts, poolTokens])
+  }, [idx, updatePoolToken, autoRangeInitAmounts, poolTokens])
 
   return (
     <VStack align="start" key={idx} spacing="sm" w="full">

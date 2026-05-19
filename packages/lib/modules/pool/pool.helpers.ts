@@ -89,7 +89,7 @@ export function isGyroEPool(pool: Pool): pool is GqlPoolGyro {
   return pool.type === GqlPoolType.Gyroe
 }
 
-export function isReclAmm(poolType: GqlPoolType): boolean {
+export function isAutoRange(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.Reclamm
 }
 
@@ -144,7 +144,7 @@ export function isStableLike(poolType: GqlPoolType): boolean {
     isComposableStable(poolType) ||
     isFx(poolType) ||
     isGyro(poolType) ||
-    isReclAmm(poolType)
+    isAutoRange(poolType)
   )
 }
 
@@ -561,7 +561,7 @@ export function poolTypeLabel(poolType: GqlPoolType) {
     case GqlPoolType.QuantAmmWeighted:
       return 'QuantAMM BTF'
     case GqlPoolType.Reclamm:
-      return 'reCLAMM'
+      return 'AutoRange'
     default:
       return getPoolTypeLabel(poolType)
   }

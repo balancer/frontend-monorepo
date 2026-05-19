@@ -3,11 +3,11 @@ import { fNum, invert } from '@repo/lib/shared/utils/numbers'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
-import type { ReclAmmChartData } from './useReclAmmChartData'
+import type { AutoRangeChartData } from './useAutoRangeChartData'
 
-type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
+type AutoRangeChartContextType = ReturnType<typeof useAutoRangeChartLogic>
 
-const ReclAmmChartContext = createContext<ReclAmmChartContextType | null>(null)
+const AutoRangeChartContext = createContext<AutoRangeChartContextType | null>(null)
 
 function getGradientColor(colorStops: string[]) {
   return {
@@ -20,7 +20,7 @@ function getGradientColor(colorStops: string[]) {
   }
 }
 
-export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
+export function useAutoRangeChartLogic(chartData: AutoRangeChartData | undefined) {
   const { isMobile } = useBreakpoints()
   const [isReversed, setIsReversed] = useState(false)
   const [chartInstance, setChartInstance] = useState<any>(null)
@@ -411,13 +411,13 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
   }, [chartData, isReversed])
 
   const outOfRangeText =
-    'The price has moved outside the range, so Liquidity Providers are not currently earning swap fees. The reCLAMM pool is automatically readjusting to center liquidity around the current price to maximize swap fees. '
+    'The price has moved outside the range, so Liquidity Providers are not currently earning swap fees. The AutoRange pool is automatically readjusting to center liquidity around the current price to maximize swap fees. '
 
   const inRangeReadjustingText =
-    'The price is outside the target range but within the margin, so Liquidity Providers still earn swap fees. The reCLAMM pool is automatically readjusting to center liquidity around the current price to maximize swap fees.'
+    'The price is outside the target range but within the margin, so Liquidity Providers still earn swap fees. The AutoRange pool is automatically readjusting to center liquidity around the current price to maximize swap fees.'
 
   const inRangeText =
-    'The current price is between the target range for this Readjusting Concentrated Liquidity AMM (reCLAMM) pool. In range pools earn high swap fees.'
+    'The current price is between the target range for this Readjusting Concentrated Liquidity AMM (AutoRange) pool. In range pools earn high swap fees.'
 
   // Apply hover effects when chart instance is available and chart data is ready
   useEffect(() => {
@@ -677,15 +677,15 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
   }
 }
 
-export function ReclAmmChartProvider({
+export function AutoRangeChartProvider({
   children,
   chartData,
 }: PropsWithChildren<{
-  chartData: ReclAmmChartData | undefined
+  chartData: AutoRangeChartData | undefined
 }>) {
-  const hook = useReclAmmChartLogic(chartData)
-  return <ReclAmmChartContext.Provider value={hook}>{children}</ReclAmmChartContext.Provider>
+  const hook = useAutoRangeChartLogic(chartData)
+  return <AutoRangeChartContext.Provider value={hook}>{children}</AutoRangeChartContext.Provider>
 }
 
-export const useReclAmmChart = (): ReclAmmChartContextType =>
-  useMandatoryContext(ReclAmmChartContext, 'ReclAmmChart')
+export const useAutoRangeChart = (): AutoRangeChartContextType =>
+  useMandatoryContext(AutoRangeChartContext, 'AutoRangeChart')

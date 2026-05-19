@@ -202,11 +202,11 @@ export const ProjectConfigBalancer: ProjectConfig = {
     },
     {
       id: 1,
-      icon: 'reclamm',
-      label: 'reCLAMM Pools',
+      icon: 'autorange',
+      label: 'AutoRange Pools',
       title: 'New readjusting Concentrated Liquidity Pools',
       description:
-        'Maximize capital efficiency with reCLAMMs: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
+        'Maximize capital efficiency with AutoRange pools: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
       buttonText: 'View pools',
       buttonLink: '/pools?poolTypes=RECLAMM',
       linkText: 'Learn more',

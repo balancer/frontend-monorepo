@@ -6,7 +6,7 @@ import {
   PoolTypeDetails,
   PoolCreationToken,
   PoolCreationForm,
-  ReClammConfig,
+  AutoRangeConfig,
   EclpConfigForm,
 } from './types'
 import { getSwapFeePercentageOptions } from './helpers'
@@ -76,7 +76,7 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
       'Concentrated liquidity pools that use an elliptical price curve to focus liquidity asymmetrically within customizable bounds. E-CLPs provide deeper liquidity and lower slippage for trades while maximizing LP capital efficiency within expected price ranges.',
   },
   [PoolType.ReClamm]: {
-    label: 'reCLAMM',
+    label: 'AutoRange',
     maxTokens: 2,
     description:
       'A concentrated liquidity pool with self-adjusting parameters. A "fire-and-forget" solution to maintenance-free concentrated liquidity provision.',
@@ -168,7 +168,7 @@ export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   hasAcceptedSimilarPoolsWarning: false,
 }
 
-export const INITIAL_RECLAMM_CONFIG: ReClammConfig = {
+export const INITIAL_AUTORANGE_CONFIG: AutoRangeConfig = {
   initialTargetPrice: '',
   initialMinPrice: '',
   initialMaxPrice: '',

@@ -18,7 +18,7 @@ import { PromoHookIcon } from '../icons/promos/PromoHookIcon'
 import { PromoMonadIcon } from '../icons/promos/PromoMonadIcon'
 import { PromoVThreeIcon } from '../icons/promos/PromoVThreeIcon'
 import { PromoBoostedIcon } from '../icons/promos/PromoBoostedIcon'
-import { PromoReclammIcon } from '../icons/promos/PromoReclammIcon'
+import { PromoAutoRangeIcon } from '../icons/promos/PromoAutoRangeIcon'
 import { PromoItem } from '@repo/lib/config/config.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 // import { getRandomInt } from '@repo/lib/shared/utils/numbers'
@@ -33,8 +33,8 @@ function getIconElement(icon: string) {
       return <PromoMonadIcon size={44} />
     case 'hook':
       return <PromoHookIcon size={44} />
-    case 'reclamm':
-      return <PromoReclammIcon size={44} />
+    case 'autorange':
+      return <PromoAutoRangeIcon size={44} />
     default:
       return null
   }

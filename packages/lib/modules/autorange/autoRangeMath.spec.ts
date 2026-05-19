@@ -7,7 +7,7 @@ import {
   calculateInvariant,
   recalculateVirtualBalances,
   calculateInitialBalances,
-} from './reclAmmMath'
+} from './autoRangeMath'
 
 describe('computeCenteredness', () => {
   it('returns zero centeredness when balanceA is 0', () => {

@@ -10,7 +10,7 @@ import {
   balancerV2GaugeV5Abi,
   balancerV2VaultAbi,
   feeDistributorAbi,
-  reClammPoolAbi,
+  autoRangePoolAbi,
   rewardDistributorAbi,
   veBalAbi,
   veDelegationProxyAbi,
@@ -42,7 +42,7 @@ export const AbiMap = {
   'balancer.omniVotingEscrowAbi': OmniVotingEscrowAbi,
   'balancer.gaugeControllerAbi': GaugeControllerAbi,
   'balancer.liquidityGaugeV5Abi': LiquidityGaugeV5Abi,
-  'balancer.reClammPool': reClammPoolAbi,
+  'balancer.autoRangePool': autoRangePoolAbi,
   'snapshot.delegateRegistry': DelegateRegistryAbi,
   'balancer.rewardDistributor': rewardDistributorAbi, // hidden hand rewards
   'beets.lstStaking': sonicStakingAbi,

@@ -3,16 +3,16 @@ import {
   calculateLowerMargin,
   calculateUpperMargin,
   computeCenteredness,
-} from '@repo/lib/modules/reclamm/reclAmmMath'
-import { calculateInitialBalances } from '@repo/lib/modules/reclamm/reclAmmMath'
+} from '@repo/lib/modules/autorange/autoRangeMath'
+import { calculateInitialBalances } from '@repo/lib/modules/autorange/autoRangeMath'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useWatch } from 'react-hook-form'
 
-export function usePreviewReclAmmChartData() {
-  const { reClammConfigForm } = usePoolCreationForm()
+export function usePreviewAutoRangeChartData() {
+  const { autoRangeConfigForm } = usePoolCreationForm()
   const [initialMinPrice, initialMaxPrice, initialTargetPrice, centerednessMargin] = useWatch({
-    control: reClammConfigForm.control,
+    control: autoRangeConfigForm.control,
     name: ['initialMinPrice', 'initialMaxPrice', 'initialTargetPrice', 'centerednessMargin'],
   })
 

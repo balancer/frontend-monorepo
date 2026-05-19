@@ -904,7 +904,7 @@ describe('supportsProportionalAddLiquidityKind', () => {
     expect(supportsProportionalAddLiquidityReasons(pool)).toBeUndefined()
   })
 
-  it('should allow proportional add for other pools (e.g. reClamm)', () => {
+  it('should allow proportional add for other pools (e.g. autoRange)', () => {
     const pool = getApiPoolMock(sDAIWeighted)
     pool.type = GqlPoolType.Reclamm
     pool.protocolVersion = 3
