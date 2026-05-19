@@ -1,7 +1,10 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
-import { PartnerVariant, PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
+import { PartnerVariant, PoolDisplayType, PoolFilterType } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isProd, isDev, isStaging } from '@repo/lib/config/app.config'
+
+const prodHiddenPoolTypes = [GqlPoolType.LiquidityBootstrapping] satisfies PoolFilterType[]
+const hiddenPoolTypes: PoolFilterType[] = [GqlPoolType.Fx, ...(isProd ? prodHiddenPoolTypes : [])]
 
 export const ProjectConfigBalancer: ProjectConfig = {
   projectId: 'balancer',
@@ -42,7 +45,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: ['DYNAMIC_ECLP'],
-    hidePoolTypes: [GqlPoolType.Fx, ...(isProd ? [GqlPoolType.LiquidityBootstrapping] : [])],
+    hidePoolTypes: hiddenPoolTypes,
     hideProtocolVersion: [],
     showPoolName: false,
     showMaBeets: false,
