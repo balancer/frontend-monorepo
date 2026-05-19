@@ -34,7 +34,7 @@ export function useGetComputeAutoRangeData() {
       },
       {
         ...autoRangePoolContract,
-        functionName: 'isPoolWithinTargetRangeUsingCurrentVirtualBalances', // first item in the array is 'isWithinTargetRange'
+        functionName: 'isPoolWithinTargetRange',
       },
     ],
   })
@@ -51,7 +51,7 @@ export function useGetComputeAutoRangeData() {
       liveBalanceB: results.data?.[2]?.result?.[1],
     },
     centerednessMargin: results.data?.[3]?.result,
-    isPoolWithinTargetRange: results.data?.[4]?.result?.[0],
+    isPoolWithinTargetRange: results.data?.[4]?.result,
     tokenA: pool.poolTokens[0],
     tokenB: pool.poolTokens[1],
   }
