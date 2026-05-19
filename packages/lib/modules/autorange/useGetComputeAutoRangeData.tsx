@@ -1,6 +1,6 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import { usePool } from '../pool/PoolProvider'
-import { autoRangePoolAbi } from '../web3/contracts/abi/generated'
+import { reClammPoolAbi } from '../web3/contracts/abi/generated'
 import { Address } from 'viem'
 import { useReadContracts } from 'wagmi'
 
@@ -10,7 +10,7 @@ export function useGetComputeAutoRangeData() {
 
   const autoRangePoolContract = {
     address: pool.address as Address,
-    abi: autoRangePoolAbi,
+    abi: reClammPoolAbi,
     chainId,
   } as const
 

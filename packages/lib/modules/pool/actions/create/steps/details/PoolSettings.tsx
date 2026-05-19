@@ -9,7 +9,7 @@ import { validatePoolSettings } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
 import { usePublicClient } from 'wagmi'
-import { autoRangePoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
+import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -90,7 +90,7 @@ export function PoolSettings() {
       if (!publicClient) return 'missing public client for hooks validation'
       const hookFlags = await publicClient.readContract({
         address: address as Address,
-        abi: autoRangePoolAbi,
+        abi: reClammPoolAbi,
         functionName: 'getHookFlags',
         args: [],
       })

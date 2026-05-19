@@ -6002,13 +6002,13 @@ export const gyroEclpPoolConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// AutoRangePool
+// ReClammPool
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xb847e40603aff979ff645f5a9a949d4ce80c3d01)
  */
-export const autoRangePoolAbi = [
+export const reClammPoolAbi = [
   {
     type: 'constructor',
     inputs: [
@@ -7371,16 +7371,16 @@ export const autoRangePoolAbi = [
 /**
  * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xb847e40603aff979ff645f5a9a949d4ce80c3d01)
  */
-export const autoRangePoolAddress = {
+export const reClammPoolAddress = {
   1: '0xB847E40603AfF979FF645F5A9a949D4Ce80C3d01',
 } as const
 
 /**
  * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xb847e40603aff979ff645f5a9a949d4ce80c3d01)
  */
-export const autoRangePoolConfig = {
-  address: autoRangePoolAddress,
-  abi: autoRangePoolAbi,
+export const reClammPoolConfig = {
+  address: reClammPoolAddress,
+  abi: reClammPoolAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

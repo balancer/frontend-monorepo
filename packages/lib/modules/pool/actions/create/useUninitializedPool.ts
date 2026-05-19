@@ -5,7 +5,7 @@ import { AddressProvider } from '@balancer/sdk'
 import { vaultExtensionAbi_V3 } from '@balancer/sdk'
 import { useReadContracts, useReadContract } from 'wagmi'
 import {
-  autoRangePoolAbi,
+  reClammPoolAbi,
   balancerV3WeightedPoolAbi,
   balancerV3StablePoolAbi,
   gyroEclpPoolAbi,
@@ -214,7 +214,7 @@ export function useUninitializedPool() {
 
   const { data: autoRangeConfig, isLoading: isLoadingAutoRangeConfig } = useReadContract({
     address: poolAddressParam,
-    abi: autoRangePoolAbi,
+    abi: reClammPoolAbi,
     functionName: 'getReClammPoolImmutableData',
     chainId,
     query: { enabled: isAutoRangePoolType && shouldHydratePoolCreationForm },
