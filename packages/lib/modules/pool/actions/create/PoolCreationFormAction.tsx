@@ -27,8 +27,9 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 
   useEffect(() => {
     // trigger modal close if AutoRange and token amounts have not been set
-    if (poolAddress && isAutoRangePool(poolType) && !hasTokenAmounts)
-      {previewModalDisclosure.onClose()}
+    if (poolAddress && isAutoRangePool(poolType) && !hasTokenAmounts) {
+      previewModalDisclosure.onClose()
+    }
   }, [poolAddress, poolType, hasTokenAmounts])
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
