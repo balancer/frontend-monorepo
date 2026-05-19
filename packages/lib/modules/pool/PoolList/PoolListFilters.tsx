@@ -50,6 +50,7 @@ import ButtonGroup, {
 import { useCow } from '../../cow/useCow'
 import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
+import { hasMultipleNetworks } from '../pool.utils'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 import NextLink from 'next/link'
@@ -540,7 +541,8 @@ export function PoolListFilters() {
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
-  const { options } = PROJECT_CONFIG
+  const { options, supportedNetworks } = PROJECT_CONFIG
+  const showNetworkFilters = hasMultipleNetworks(supportedNetworks)
 
   return (
     <VStack w="full">
@@ -605,16 +607,18 @@ export function PoolListFilters() {
                         </Box>
                       ) : null}
                       {/* TODO: filter for cow networks when 'isCowPath' is true */}
-                      <Box as={motion.div} variants={staggeredFadeInUp} w="full">
-                        <Heading as="h3" mb="sm" size="sm">
-                          Networks
-                        </Heading>
-                        <PoolNetworkFilters
-                          setNetworks={setNetworks}
-                          toggledNetworks={toggledNetworks}
-                          toggleNetwork={toggleNetwork}
-                        />
-                      </Box>
+                      {showNetworkFilters && (
+                        <Box as={motion.div} variants={staggeredFadeInUp} w="full">
+                          <Heading as="h3" mb="sm" size="sm">
+                            Networks
+                          </Heading>
+                          <PoolNetworkFilters
+                            setNetworks={setNetworks}
+                            toggledNetworks={toggledNetworks}
+                            toggleNetwork={toggleNetwork}
+                          />
+                        </Box>
+                      )}
                       {!isCowPath && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
                           <Heading as="h3" mb="sm" size="sm">

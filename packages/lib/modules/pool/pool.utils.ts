@@ -322,3 +322,7 @@ export function removeHookDataFromPoolIfNecessary(pool: Pool | PoolListItem) {
 
   return clone
 }
+
+export function hasMultipleNetworks(supportedNetworks: GqlChain[]) {
+  return supportedNetworks.length > 1
+}

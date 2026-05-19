@@ -58,10 +58,10 @@ const partnerInfo: PartnerInfo = {
   },
   [RedirectPartner.Beets]: {
     shortName: 'Beets',
-    fullName: 'Beethoven X',
+    fullName: 'Beets',
     category: 'AMM / DEX',
     description:
-      'Beethoven X is a community-driven DEX and DeFi power house. Governed by the BEETS token and living on the Fantom Opera and Optimism chains.',
+      'Beets is a community-driven DEX and DeFi powerhouse governed by the BEETS token and living on Sonic.',
     url: 'https://beets.fi',
     imageName: 'beets',
   },
