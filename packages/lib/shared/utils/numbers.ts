@@ -19,6 +19,8 @@ BigInt.prototype.toJSON = function () {
 // and returns NaN to preserve backwards compatibility for callers.
 BigNumber.set({ STRICT: true })
 
+const BigNumberNonStrict = BigNumber.clone({ STRICT: false })
+
 export const MAX_BIGINT = BigInt(MAX_UINT256)
 export const MAX_BIGNUMBER = bn(MAX_UINT256)
 
@@ -79,7 +81,7 @@ export function bn(val: Numberish): BigNumber {
     return new BigNumber(val.toString())
   } catch {
     // Preserve backwards compatibility: callers expect NaN for invalid input
-    return new BigNumber(NaN)
+    return new BigNumberNonStrict(NaN)
   }
 }
 

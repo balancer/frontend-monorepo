@@ -195,7 +195,7 @@ export function noInitLiquidity(pool: GqlPoolBase): boolean {
   //   '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014'
   // )
   //   return true;
-  return new BigNumber(pool.dynamicData.totalShares || '0').eq(0)
+  return bn(pool.dynamicData.totalShares || '0').eq(0)
 }
 export function preMintedBptIndex(pool: GqlPoolBase): number | void {
   return allPoolTokens(pool).findIndex(token => isSameAddress(token.address, pool.address))
