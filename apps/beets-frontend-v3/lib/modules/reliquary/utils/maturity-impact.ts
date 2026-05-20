@@ -34,7 +34,8 @@ export function calculateMaturityImpact(input: MaturityImpactInput): MaturityImp
   } = input
 
   const maturityLevels = maturityThresholds.map(maturity => BigInt(maturity))
-  const weight = bn(amount).div(bn(amount).plus(positionAmount)).toNumber()
+  const totalAmount = bn(amount).plus(positionAmount)
+  const weight = totalAmount.isZero() ? 0 : bn(amount).div(totalAmount).toNumber()
   const nowTimestamp = nowOverride ?? Math.floor(millisecondsToSeconds(Date.now()))
   const maturity = nowTimestamp - positionEntry
   const entryTimestampAfterAddLiquidity = Math.round(positionEntry + maturity * weight)

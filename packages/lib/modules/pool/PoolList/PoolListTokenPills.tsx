@@ -45,6 +45,14 @@ function walletBadgeHighlightStyles(hasWalletBalance: boolean) {
   }
 }
 
+function formatTokenWeight(weight: string | null | undefined, preciseWeight: boolean) {
+  if (!weight) return null
+
+  return preciseWeight
+    ? fNum('weight', weight, { abbreviated: false, decimals: 1 })
+    : fNum('weight', weight)
+}
+
 function NestedTokenPill({
   nestedTokens,
   chain,
@@ -101,6 +109,7 @@ function WeightedTokenPills({
       {tokens.map((token, index) => {
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
         const hasWalletBalance = Boolean(isTokenInWallet?.(token.address))
+        const tokenWeight = formatTokenWeight(token.weight, preciseWeight)
 
         return (
           <Badge
@@ -139,15 +148,15 @@ function WeightedTokenPills({
                         {token.symbol}
                       </Text>
                     )}
-                    <Text
-                      _groupHover={{ color: 'font.maxContrast' }}
-                      fontSize="xs"
-                      transition="color 0.2s var(--ease-out-cubic)"
-                    >
-                      {preciseWeight
-                        ? fNum('weight', token.weight || '', { abbreviated: false, decimals: 1 })
-                        : fNum('weight', token.weight || '')}
-                    </Text>
+                    {tokenWeight && (
+                      <Text
+                        _groupHover={{ color: 'font.maxContrast' }}
+                        fontSize="xs"
+                        transition="color 0.2s var(--ease-out-cubic)"
+                      >
+                        {tokenWeight}
+                      </Text>
+                    )}
                   </HStack>
                 </>
               )}
@@ -168,15 +177,15 @@ function WeightedTokenPills({
                     >
                       {token.name}
                     </Text>
-                    <Text
-                      _groupHover={{ color: 'font.maxContrast' }}
-                      fontSize="xs"
-                      transition="color 0.2s var(--ease-out-cubic)"
-                    >
-                      {preciseWeight
-                        ? fNum('weight', token.weight || '', { abbreviated: false, decimals: 1 })
-                        : fNum('weight', token.weight || '')}
-                    </Text>
+                    {tokenWeight && (
+                      <Text
+                        _groupHover={{ color: 'font.maxContrast' }}
+                        fontSize="xs"
+                        transition="color 0.2s var(--ease-out-cubic)"
+                      >
+                        {tokenWeight}
+                      </Text>
+                    )}
                   </HStack>
                 </>
               )}

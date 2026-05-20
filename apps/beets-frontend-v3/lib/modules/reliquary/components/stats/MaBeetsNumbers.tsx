@@ -31,9 +31,10 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
     priceFor(networkConfig.tokens.addresses.beets || zeroAddress, networkConfig.chain)
   )
 
+  const totalBalance = bn(globalStats?.totalBalance || '0')
   const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
     level: bn(balance.level).plus(1),
-    percentageOfTotal: bn(balance.balance).div(globalStats.totalBalance),
+    percentageOfTotal: totalBalance.isZero() ? bn(0) : bn(balance.balance).div(totalBalance),
   }))
 
   const avgRelicMaturity = fNumCustom(
@@ -46,9 +47,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
 
   const totalShares = bn(data.totalShares || '0')
   const totalRelics = bn(globalStats?.relicCount || '0')
-  const reliquaryPoolRatio = totalShares.isZero()
-    ? bn(0)
-    : bn(globalStats?.totalBalance || '0').div(totalShares)
+  const reliquaryPoolRatio = totalShares.isZero() ? bn(0) : totalBalance.div(totalShares)
   const tvl = reliquaryPoolRatio.times(data.totalLiquidity)
   const avgValuePerRelic = totalRelics.isZero() ? bn(0) : tvl.div(totalRelics)
 

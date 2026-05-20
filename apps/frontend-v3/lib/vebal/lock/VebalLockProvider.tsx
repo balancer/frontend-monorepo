@@ -158,9 +158,11 @@ export function useVebalLockLogic() {
   })
 
   const shareOfVeBal = useMemo(() => {
-    if (!mainnetLockedInfo.totalSupply) return null
+    const totalSupply = bn(mainnetLockedInfo.totalSupply || 0)
 
-    return bn(totalAmount).div(bn(mainnetLockedInfo.totalSupply))
+    if (totalSupply.isZero()) return null
+
+    return bn(totalAmount).div(totalSupply)
   }, [totalAmount, mainnetLockedInfo.totalSupply])
 
   return {

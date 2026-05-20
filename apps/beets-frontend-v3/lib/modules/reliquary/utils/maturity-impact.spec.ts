@@ -88,6 +88,18 @@ describe('calculateMaturityImpact', () => {
       // New maturity should be near 0
       expect(result.newMaturity).toBeLessThan(weekInSeconds)
     })
+
+    test('handles zero amount and zero position amount without NaN values', () => {
+      const entry = 1_700_000_000
+      const now = entry + 4 * weekInSeconds
+
+      const result = calculateMaturityImpact(
+        makeInput({ positionEntry: entry, nowTimestamp: now, amount: '0', positionAmount: '0' })
+      )
+
+      expect(result.newMaturity).toBe(result.oldMaturity)
+      expect(Number.isNaN(result.addLiquidityMaturityImpactTimeInMilliseconds)).toBe(false)
+    })
   })
 
   describe('level calculation', () => {
