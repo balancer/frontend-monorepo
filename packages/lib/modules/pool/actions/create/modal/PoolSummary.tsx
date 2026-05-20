@@ -22,7 +22,7 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { TransactionStepsResponse } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
-import { isReClammPool } from '../helpers'
+import { isAutoRangePool } from '../helpers'
 import { useWatch } from 'react-hook-form'
 import { isCowPool } from '../helpers'
 
@@ -34,7 +34,7 @@ export function PoolSummary({ transactionSteps }: { transactionSteps: Transactio
     name: ['network', 'poolType'],
   })
 
-  const showTokenAmountSummary = !isReClammPool(poolType) || poolAddress
+  const showTokenAmountSummary = !isAutoRangePool(poolType) || poolAddress
 
   return (
     <AnimateHeightChange spacing={3} w="full">

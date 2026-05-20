@@ -12,7 +12,7 @@ export enum PoolChartTab {
   FEES = 'fees',
   SURPLUS = 'surplus',
   LIQUIDITY_PROFILE = 'liquidity_profile',
-  RECLAMM = 'reclamm',
+  AUTORANGE = 'autorange',
   PRICE = 'price',
   FUNDS_RAISED = 'funds_raised',
 }
@@ -44,7 +44,7 @@ const POOL_SPECIFIC_TABS: PoolTabsMap = {
     { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity profile' },
     ...TABS_WITH_FEES,
   ],
-  [GqlPoolType.Reclamm]: [{ value: PoolChartTab.RECLAMM, label: 'reCLAMM' }, ...TABS_WITH_FEES],
+  [GqlPoolType.Reclamm]: [{ value: PoolChartTab.AUTORANGE, label: 'AutoRange' }, ...TABS_WITH_FEES],
   [GqlPoolType.LiquidityBootstrapping]: [
     { value: PoolChartTab.PRICE, label: 'Price' },
     ...TABS_WITH_FEES,

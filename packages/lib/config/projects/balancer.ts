@@ -1,7 +1,10 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
-import { PartnerVariant, PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
+import { PartnerVariant, PoolDisplayType, PoolFilterType } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isProd, isDev, isStaging } from '@repo/lib/config/app.config'
+
+const prodHiddenPoolTypes = [GqlPoolType.LiquidityBootstrapping] satisfies PoolFilterType[]
+const hiddenPoolTypes: PoolFilterType[] = [GqlPoolType.Fx, ...(isProd ? prodHiddenPoolTypes : [])]
 
 export const ProjectConfigBalancer: ProjectConfig = {
   projectId: 'balancer',
@@ -42,7 +45,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: ['DYNAMIC_ECLP'],
-    hidePoolTypes: [GqlPoolType.Fx, ...(isProd ? [GqlPoolType.LiquidityBootstrapping] : [])],
+    hidePoolTypes: hiddenPoolTypes,
     hideProtocolVersion: [],
     showPoolName: false,
     showMaBeets: false,
@@ -202,13 +205,13 @@ export const ProjectConfigBalancer: ProjectConfig = {
     },
     {
       id: 1,
-      icon: 'reclamm',
-      label: 'reCLAMM Pools',
+      icon: 'autorange',
+      label: 'AutoRange Pools',
       title: 'New readjusting Concentrated Liquidity Pools',
       description:
-        'Maximize capital efficiency with reCLAMMs: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
+        'Maximize capital efficiency with AutoRange pools: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
       buttonText: 'View pools',
-      buttonLink: '/pools?poolTypes=RECLAMM',
+      buttonLink: '/pools?poolTypes=AUTORANGE',
       linkText: 'Learn more',
       linkURL:
         'https://medium.com/balancer-protocol/introducing-reclamms-self-readjusting-trustless-passive-lping-for-clamms-b5528429588e',

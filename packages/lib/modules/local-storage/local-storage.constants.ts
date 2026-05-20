@@ -25,7 +25,7 @@ export const LS_KEYS = {
     Form: 'poolCreation.form',
     StepIndex: 'poolCreation.stepIndex',
     Address: 'poolCreation.address',
-    ReClammConfig: 'poolCreation.reClammConfig',
+    AutoRangeConfig: 'poolCreation.autoRangeConfig',
     EclpConfig: 'poolCreation.eclpConfig',
   },
 }

@@ -1,6 +1,6 @@
 import { SVGProps } from 'react'
 
-export function PromoReclammIcon({
+export function PromoAutoRangeIcon({
   size = 24,
   ...props
 }: { size?: number } & SVGProps<SVGSVGElement>) {

@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/react'
-import { useReclAmmChart } from './ReclAmmChartProvider'
+import { useAutoRangeChart } from './AutoRangeChartProvider'
 import ReactECharts from 'echarts-for-react'
 import { useRef, useEffect } from 'react'
 
-export function ReclAmmChart() {
-  const { options, setChartInstance } = useReclAmmChart()
+export function AutoRangeChart() {
+  const { options, setChartInstance } = useAutoRangeChart()
   const chartRef = useRef<any>(null)
 
   useEffect(() => {

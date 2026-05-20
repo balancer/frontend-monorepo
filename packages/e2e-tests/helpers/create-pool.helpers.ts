@@ -47,7 +47,7 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
       { symbol: 'GHO', amount: undefined },
     ],
   },
-  // reclamm pool creation has been temporarily disabled for audit investigations
+  // AutoRange pool creation has been temporarily disabled for audit investigations
   // {
   //   type: PoolType.ReClamm,
   //   tokens: [
@@ -95,7 +95,7 @@ export class CreatePoolPage {
     return this.config.type === PoolType.GyroE
   }
 
-  get isReClamm() {
+  get isAutoRange() {
     return this.config.type === PoolType.ReClamm
   }
 
@@ -126,7 +126,7 @@ export class CreatePoolPage {
   }
 
   async fillTokenAmounts() {
-    const shouldOnlyFillOneAmount = this.isReClamm || this.isGyroEclp
+    const shouldOnlyFillOneAmount = this.isAutoRange || this.isGyroEclp
 
     if (shouldOnlyFillOneAmount) {
       await this.page.getByLabel('Token 1').fill(this.config.tokens[0].amount)
@@ -186,7 +186,7 @@ export class CreatePoolPage {
 
     const generalRisksCheckbox = await checkbox(this.page, 'I accept the Risks and Terms')
 
-    if (this.isReClamm) {
+    if (this.isAutoRange) {
       await generalRisksCheckbox.click()
       await clickButton(this.page, 'Create Pool')
       await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
@@ -199,11 +199,11 @@ export class CreatePoolPage {
       await proportionalRiskCheckbox.click()
     }
 
-    if (!this.isReClamm) await generalRisksCheckbox.click()
+    if (!this.isAutoRange) await generalRisksCheckbox.click()
   }
 
   async transactionSteps() {
-    if (this.isReClamm) {
+    if (this.isAutoRange) {
       await clickButton(this.page, 'Initialize Pool')
     } else {
       await clickButton(this.page, 'Create Pool')

@@ -7,7 +7,7 @@ import { invertNumber } from '@repo/lib/shared/utils/numbers'
 import { CreatePoolInput } from '../types'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
-  const { poolCreationForm, reClammConfigForm, eclpConfigForm } = usePoolCreationForm()
+  const { poolCreationForm, autoRangeConfigForm, eclpConfigForm } = usePoolCreationForm()
   const {
     poolType,
     symbol,
@@ -86,7 +86,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       initialTargetPrice,
       priceShiftDailyRate,
       centerednessMargin,
-    } = reClammConfigForm.getValues()
+    } = autoRangeConfigForm.getValues()
 
     // must invert params if tokens are not in order
     const minPrice = areTokensInOrder ? initialMinPrice : invertNumber(initialMaxPrice)
@@ -97,7 +97,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       initialMinPrice: parseUnits(minPrice, DEFAULT_DECIMALS),
       initialMaxPrice: parseUnits(maxPrice, DEFAULT_DECIMALS),
       initialTargetPrice: parseUnits(targetPrice, DEFAULT_DECIMALS),
-      // hardcoded prices to not include rate until new reclamm deployments.
+      // hardcoded prices to not include rate until new AutoRange deployments.
       // without rate means boosted must be priced in terms of underlying
       tokenAPriceIncludesRate: false,
       tokenBPriceIncludesRate: false,

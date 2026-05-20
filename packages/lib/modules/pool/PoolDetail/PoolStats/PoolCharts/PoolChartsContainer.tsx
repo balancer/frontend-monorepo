@@ -28,14 +28,14 @@ import { PoolChartsProvider, usePoolCharts } from './PoolChartsProvider'
 import { EclpChart } from '@repo/lib/modules/eclp/components/EclpChart'
 import { PoolCharts } from './PoolCharts'
 import {
-  ReclAmmChartProvider,
-  useReclAmmChart,
-} from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
-import { ReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChart'
+  AutoRangeChartProvider,
+  useAutoRangeChart,
+} from '@repo/lib/modules/autorange/AutoRangeChartProvider'
+import { AutoRangeChart } from '@repo/lib/modules/autorange/AutoRangeChart'
 import { ReversedToggleButton } from '@repo/lib/shared/components/btns/ReversedToggleButton'
 import { ThumbsDown, ThumbsUp } from 'react-feather'
 import { WandIcon } from '@repo/lib/shared/components/icons/WandIcon'
-import { useReclAmmChartData } from '@repo/lib/modules/reclamm/useReclAmmChartData'
+import { useAutoRangeChartData } from '@repo/lib/modules/autorange/useAutoRangeChartData'
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
@@ -55,16 +55,16 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
 }
 
 export function PoolChartsContainer() {
-  const reclammChartData = useReclAmmChartData()
+  const autoRangeChartData = useAutoRangeChartData()
   const eclpLiquidityProfile = useGetECLPLiquidityProfile()
 
   return (
     <PoolChartTabsProvider>
       <PoolChartsProvider>
         <EclpChartProvider eclpLiquidityProfile={eclpLiquidityProfile}>
-          <ReclAmmChartProvider chartData={reclammChartData}>
+          <AutoRangeChartProvider chartData={autoRangeChartData}>
             <PoolChartsContent />
-          </ReclAmmChartProvider>
+          </AutoRangeChartProvider>
         </EclpChartProvider>
       </PoolChartsProvider>
     </PoolChartTabsProvider>
@@ -84,16 +84,16 @@ function PoolChartsContent({ ...props }: any) {
   } = useEclpChart()
 
   const {
-    hasChartData: hasReclAmmChartData,
-    isLoading: isLoadingReclAmmChartData,
+    hasChartData: hasAutoRangeChartData,
+    isLoading: isLoadingAutoRangeChartData,
     isPoolWithinTargetRange,
-    outOfRangeText: reclammOutOfRangeText,
-    inRangeText: reclammInRangeText,
-    inRangeReadjustingText: reclammInRangeReadjustingText,
+    outOfRangeText: autoRangeOutOfRangeText,
+    inRangeText: autoRangeInRangeText,
+    inRangeReadjustingText: autoRangeInRangeReadjustingText,
     isPoolWithinRange,
-    toggleIsReversed: toggleIsReversedReclamm,
-    tokens: tokensReclamm,
-  } = useReclAmmChart()
+    toggleIsReversed: toggleIsReversedAutoRange,
+    tokens: tokensAutoRange,
+  } = useAutoRangeChart()
 
   const {
     hasChartData: hasPoolChartData,
@@ -102,13 +102,13 @@ function PoolChartsContent({ ...props }: any) {
     activePeriod,
   } = usePoolCharts()
 
-  const isLoading = isLoadingEclpChartData || isLoadingPoolChartsData || isLoadingReclAmmChartData
-  const hasChartData = hasEclpChartData || hasPoolChartData || hasReclAmmChartData
+  const isLoading = isLoadingEclpChartData || isLoadingPoolChartsData || isLoadingAutoRangeChartData
+  const hasChartData = hasEclpChartData || hasPoolChartData || hasAutoRangeChartData
 
   const showPoolCharts =
-    activeTab.value !== PoolChartTab.RECLAMM && activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE
+    activeTab.value !== PoolChartTab.AUTORANGE && activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE
 
-  const showReclammChart = activeTab.value === PoolChartTab.RECLAMM
+  const showAutoRangeChart = activeTab.value === PoolChartTab.AUTORANGE
   const showLiquidityProfileChart = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
 
   const clpBadgeConfigs = {
@@ -118,13 +118,13 @@ function PoolChartsContent({ ...props }: any) {
       headerText: `CLP ${poolIsInRange ? 'in' : 'out of'} range`,
       icon: poolIsInRange ? ThumbsUp : ThumbsDown,
     },
-    reclamm: {
+    autorange: {
       bgColor: isPoolWithinTargetRange ? 'green.400' : isPoolWithinRange ? 'orange.300' : 'red.400',
       bodyText: isPoolWithinTargetRange
-        ? reclammInRangeText
+        ? autoRangeInRangeText
         : isPoolWithinRange
-          ? reclammInRangeReadjustingText
-          : reclammOutOfRangeText,
+          ? autoRangeInRangeReadjustingText
+          : autoRangeOutOfRangeText,
       headerText: isPoolWithinTargetRange ? 'Pool in range' : 'Pool readjusting',
       icon: isPoolWithinTargetRange ? ThumbsUp : WandIcon,
     },
@@ -147,12 +147,12 @@ function PoolChartsContent({ ...props }: any) {
                     options={tabsList}
                     size="xxs"
                   />
-                  {(showReclammChart || showLiquidityProfileChart) && (
+                  {(showAutoRangeChart || showLiquidityProfileChart) && (
                     <ReversedToggleButton
                       toggleIsReversed={
-                        showReclammChart ? toggleIsReversedReclamm : toggleIsReversedEclp
+                        showAutoRangeChart ? toggleIsReversedAutoRange : toggleIsReversedEclp
                       }
-                      tokenPair={showReclammChart ? tokensReclamm : tokensEclp}
+                      tokenPair={showAutoRangeChart ? tokensAutoRange : tokensEclp}
                     />
                   )}
                   {showPoolCharts && (
@@ -167,8 +167,8 @@ function PoolChartsContent({ ...props }: any) {
                   spacing="0"
                 >
                   {showLiquidityProfileChart && <ClpBadge {...clpBadgeConfigs.liquidityProfile} />}
-                  {showReclammChart && <ClpBadge {...clpBadgeConfigs.reclamm} />}
-                  {!showLiquidityProfileChart && !showReclammChart && (
+                  {showAutoRangeChart && <ClpBadge {...clpBadgeConfigs.autorange} />}
+                  {!showLiquidityProfileChart && !showAutoRangeChart && (
                     <>
                       <Heading fontWeight="bold" size="h5">
                         {chartValueSum}
@@ -181,7 +181,7 @@ function PoolChartsContent({ ...props }: any) {
                 </VStack>
               </Stack>
               <Box
-                h={[showReclammChart ? '500px' : '300px', '400px', 'full']}
+                h={[showAutoRangeChart ? '500px' : '300px', '400px', 'full']}
                 overflow="hidden"
                 position="relative"
                 w="full"
@@ -203,7 +203,7 @@ function PoolChartsContent({ ...props }: any) {
                       <EclpChart />
                     </motion.div>
                   )}
-                  {showReclammChart && (
+                  {showAutoRangeChart && (
                     <motion.div
                       animate={{ x: '0%' }}
                       exit={{ x: '-100%' }}
@@ -216,7 +216,7 @@ function PoolChartsContent({ ...props }: any) {
                       }}
                       transition={{ duration: 0.3, ease: 'easeInOut' }}
                     >
-                      <ReclAmmChart />
+                      <AutoRangeChart />
                     </motion.div>
                   )}
                   {showPoolCharts && <PoolCharts key={`default-chart-${activeTab.value}`} />}

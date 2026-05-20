@@ -5,13 +5,13 @@ import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import {
   INITIAL_TOKEN_CONFIG,
   INITIAL_POOL_CREATION_FORM,
-  INITIAL_RECLAMM_CONFIG,
+  INITIAL_AUTORANGE_CONFIG,
   INITIAL_ECLP_CONFIG,
   NUM_FORMAT,
   BALANCER_PROTOCOL_ID,
   POOL_CREATION_FORM_STEPS,
 } from './constants'
-import { PoolCreationForm, PoolCreationToken, ReClammConfig, EclpConfigForm } from './types'
+import { PoolCreationForm, PoolCreationToken, AutoRangeConfig, EclpConfigForm } from './types'
 import { Address } from 'viem'
 import { useLocalStorage } from 'usehooks-ts'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
@@ -36,9 +36,9 @@ export function usePoolFormLogic() {
     undefined
   )
 
-  const reClammConfigForm = usePersistentForm<ReClammConfig>(
-    LS_KEYS.PoolCreation.ReClammConfig,
-    INITIAL_RECLAMM_CONFIG,
+  const autoRangeConfigForm = usePersistentForm<AutoRangeConfig>(
+    LS_KEYS.PoolCreation.AutoRangeConfig,
+    INITIAL_AUTORANGE_CONFIG,
     { mode: 'all' }
   )
 
@@ -63,13 +63,13 @@ export function usePoolFormLogic() {
     poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
 
-  const invertReClammPriceParams = () => {
-    const { initialMinPrice, initialMaxPrice, initialTargetPrice } = reClammConfigForm.getValues()
-    reClammConfigForm.setValue('initialMinPrice', invertNumber(initialMaxPrice))
-    reClammConfigForm.setValue('initialMaxPrice', invertNumber(initialMinPrice))
-    reClammConfigForm.setValue('initialTargetPrice', invertNumber(initialTargetPrice))
+  const invertAutoRangePriceParams = () => {
+    const { initialMinPrice, initialMaxPrice, initialTargetPrice } = autoRangeConfigForm.getValues()
+    autoRangeConfigForm.setValue('initialMinPrice', invertNumber(initialMaxPrice))
+    autoRangeConfigForm.setValue('initialMaxPrice', invertNumber(initialMinPrice))
+    autoRangeConfigForm.setValue('initialTargetPrice', invertNumber(initialTargetPrice))
 
-    // keep order of pool tokens consistent with reclamm params
+    // keep order of pool tokens consistent with AutoRange params
     const { poolTokens } = poolCreationForm.getValues()
     poolCreationForm.setValue('poolTokens', [...poolTokens].reverse())
   }
@@ -127,7 +127,7 @@ export function usePoolFormLogic() {
   const resetPoolCreationForm = () => {
     setPoolAddress(undefined)
     poolCreationForm.resetToInitial()
-    reClammConfigForm.resetToInitial()
+    autoRangeConfigForm.resetToInitial()
     eclpConfigForm.resetToInitial()
     formSteps.resetSteps()
   }
@@ -149,12 +149,12 @@ export function usePoolFormLogic() {
   return {
     ...formSteps,
     poolCreationForm,
-    reClammConfigForm,
+    autoRangeConfigForm,
     eclpConfigForm,
     updatePoolToken,
     removePoolToken,
     addPoolToken,
-    invertReClammPriceParams,
+    invertAutoRangePriceParams,
     invertGyroEclpPriceParams,
     resetPoolCreationForm,
     tokenList,

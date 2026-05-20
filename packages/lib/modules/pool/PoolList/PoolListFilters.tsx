@@ -192,7 +192,7 @@ export interface PoolTypeFiltersArgs {
   poolTypeLabel: (poolType: PoolFilterType) => string
   setPoolTypes: (value: PoolFilterType[] | null) => void
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
-  hidePoolTypes?: GqlPoolType[]
+  hidePoolTypes?: PoolFilterType[]
 }
 
 export function PoolTypeFilters({

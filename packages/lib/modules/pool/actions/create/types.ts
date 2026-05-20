@@ -5,7 +5,7 @@ import {
   CreatePoolV3WeightedInput,
   CreatePoolV3StableInput,
   CreatePoolStableSurgeInput,
-  CreatePoolReClammInput,
+  CreatePoolReClammInput as CreatePoolAutoRangeInput,
   CreatePoolGyroECLPInput,
   CreatePoolLiquidityBootstrappingInput,
   CreatePoolLiquidityBootstrappingFixedPriceInput,
@@ -67,7 +67,7 @@ export type PoolCreationForm = {
   hasAcceptedSimilarPoolsWarning: boolean
 }
 
-export type ReClammConfig = {
+export type AutoRangeConfig = {
   initialMinPrice: string
   initialTargetPrice: string
   initialMaxPrice: string
@@ -98,7 +98,7 @@ export type CreatePoolInput =
   | CreatePoolV3WeightedInput
   | CreatePoolV3StableInput
   | CreatePoolStableSurgeInput
-  | CreatePoolReClammInput
+  | CreatePoolAutoRangeInput
   | CreatePoolGyroECLPInput
   | CreateCowAmmInput
   | CreatePoolLiquidityBootstrappingInput

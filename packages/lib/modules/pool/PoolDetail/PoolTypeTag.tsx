@@ -134,7 +134,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
     case GqlPoolType.Reclamm:
       return (
         <TagWrapper pl="8px">
-          <Text {...TEXT_PROPS}>reCLAMM</Text>
+          <Text {...TEXT_PROPS}>AutoRange</Text>
         </TagWrapper>
       )
 

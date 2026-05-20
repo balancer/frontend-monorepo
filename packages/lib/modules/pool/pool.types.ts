@@ -91,7 +91,7 @@ export const poolTypeFilters = [
   GqlPoolType.CowAmm,
   GqlPoolType.Fx,
   GqlPoolType.QuantAmmWeighted,
-  GqlPoolType.Reclamm,
+  'AUTORANGE', // will be mapped to GqlPoolType.Reclamm
 ] as const
 
 export type PoolFilterType = (typeof poolTypeFilters)[number]
@@ -105,7 +105,7 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.CowAmm]: [GqlPoolType.CowAmm],
   [GqlPoolType.Fx]: [GqlPoolType.Fx],
   [GqlPoolType.QuantAmmWeighted]: [GqlPoolType.QuantAmmWeighted],
-  [GqlPoolType.Reclamm]: [GqlPoolType.Reclamm],
+  AUTORANGE: [GqlPoolType.Reclamm],
 }
 
 export const poolTagFilters = [

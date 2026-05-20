@@ -5,7 +5,7 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import {
   INITIAL_POOL_CREATION_FORM,
   INITIAL_ECLP_CONFIG,
-  INITIAL_RECLAMM_CONFIG,
+  INITIAL_AUTORANGE_CONFIG,
 } from './constants'
 import { act, waitFor } from '@testing-library/react'
 
@@ -40,7 +40,7 @@ describe('usePoolFormLogic', () => {
       act(() => {
         result.current.poolCreationForm.setValue('name', 'Persisted name')
         result.current.poolCreationForm.setValue('symbol', 'PERSIST')
-        result.current.reClammConfigForm.setValue('initialTargetPrice', '42')
+        result.current.autoRangeConfigForm.setValue('initialTargetPrice', '42')
         result.current.eclpConfigForm.setValue('alpha', '1.5')
       })
 
@@ -56,7 +56,7 @@ describe('usePoolFormLogic', () => {
 
       expect(remounted.current.poolCreationForm.getValues('name')).toBe('Persisted name')
       expect(remounted.current.poolCreationForm.getValues('symbol')).toBe('PERSIST')
-      expect(remounted.current.reClammConfigForm.getValues('initialTargetPrice')).toBe('42')
+      expect(remounted.current.autoRangeConfigForm.getValues('initialTargetPrice')).toBe('42')
       expect(remounted.current.eclpConfigForm.getValues('alpha')).toBe('1.5')
     })
   })
@@ -79,7 +79,7 @@ describe('usePoolFormLogic', () => {
         result.current.poolCreationForm.setValue('symbol', 'MUT')
         result.current.poolCreationForm.setValue('protocol', 'CoW')
         result.current.addPoolToken()
-        result.current.reClammConfigForm.setValue('initialTargetPrice', '100')
+        result.current.autoRangeConfigForm.setValue('initialTargetPrice', '100')
         result.current.eclpConfigForm.setValue('alpha', '1.5')
         result.current.setPoolAddress(dirtyPoolAddress)
       })
@@ -96,7 +96,7 @@ describe('usePoolFormLogic', () => {
         ...INITIAL_POOL_CREATION_FORM,
         protocol: initialProtocol,
       })
-      expect(result.current.reClammConfigForm.getValues()).toEqual(INITIAL_RECLAMM_CONFIG)
+      expect(result.current.autoRangeConfigForm.getValues()).toEqual(INITIAL_AUTORANGE_CONFIG)
       expect(result.current.eclpConfigForm.getValues()).toEqual(INITIAL_ECLP_CONFIG)
       expect(result.current.poolAddress).toBeUndefined()
       expect(result.current.currentStepIndex).toBe(0)
@@ -108,8 +108,8 @@ describe('usePoolFormLogic', () => {
         })
       })
       expect(
-        JSON.parse(window.localStorage.getItem(LS_KEYS.PoolCreation.ReClammConfig) ?? '{}')
-      ).toEqual(INITIAL_RECLAMM_CONFIG)
+        JSON.parse(window.localStorage.getItem(LS_KEYS.PoolCreation.AutoRangeConfig) ?? '{}')
+      ).toEqual(INITIAL_AUTORANGE_CONFIG)
       expect(
         JSON.parse(window.localStorage.getItem(LS_KEYS.PoolCreation.EclpConfig) ?? '{}')
       ).toEqual(INITIAL_ECLP_CONFIG)
@@ -153,7 +153,7 @@ describe('usePoolFormLogic', () => {
     })
   })
 
-  describe('invertReClammPriceParams', () => {
+  describe('invertAutoRangePriceParams', () => {
     it('inverts target price, swaps min<->max with inversion, and reverses poolTokens', async () => {
       const { result } = await renderPoolForm()
 
@@ -162,19 +162,19 @@ describe('usePoolFormLogic', () => {
 
       act(() => {
         result.current.poolCreationForm.setValue('poolTokens', [tokenA, tokenB])
-        result.current.reClammConfigForm.setValue('initialMinPrice', '2')
-        result.current.reClammConfigForm.setValue('initialMaxPrice', '8')
-        result.current.reClammConfigForm.setValue('initialTargetPrice', '4')
+        result.current.autoRangeConfigForm.setValue('initialMinPrice', '2')
+        result.current.autoRangeConfigForm.setValue('initialMaxPrice', '8')
+        result.current.autoRangeConfigForm.setValue('initialTargetPrice', '4')
       })
 
       act(() => {
-        result.current.invertReClammPriceParams()
+        result.current.invertAutoRangePriceParams()
       })
 
-      const reclamm = result.current.reClammConfigForm.getValues()
-      expect(reclamm.initialMinPrice).toBe('0.125')
-      expect(reclamm.initialMaxPrice).toBe('0.5')
-      expect(reclamm.initialTargetPrice).toBe('0.25')
+      const autoRange = result.current.autoRangeConfigForm.getValues()
+      expect(autoRange.initialMinPrice).toBe('0.125')
+      expect(autoRange.initialMaxPrice).toBe('0.5')
+      expect(autoRange.initialTargetPrice).toBe('0.25')
 
       expect(result.current.poolCreationForm.getValues('poolTokens')).toEqual([tokenB, tokenA])
     })

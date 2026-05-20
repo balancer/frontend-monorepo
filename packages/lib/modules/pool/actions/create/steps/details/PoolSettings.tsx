@@ -15,7 +15,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isStablePool, isStableSurgePool, isPoolCreatorEnabled } from '../../helpers'
 import { useWatch } from 'react-hook-form'
-import { ConfigOptionsGroup } from './ReClammConfiguration'
+import { ConfigOptionsGroup } from './AutoRangeConfiguration'
 import {
   SteepCurve,
   FlatCurve,
