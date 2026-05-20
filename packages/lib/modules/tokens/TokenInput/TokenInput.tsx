@@ -119,6 +119,7 @@ type TokenInputFooterProps = {
   isDisabled?: boolean
   customUsdPrice?: number
   priceImpactProps: PriceImpactProps | undefined
+  hideBalance?: boolean
 }
 
 function TokenInputFooter({
@@ -132,6 +133,7 @@ function TokenInputFooter({
   isDisabled,
   customUsdPrice,
   priceImpactProps,
+  hideBalance = false,
 }: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
@@ -161,8 +163,6 @@ function TokenInputFooter({
     // We return for _isNativeAsset because you can't use your full native asset
     // balance, you need to save some for a swap.
     if (hasDisabledInteraction) return
-
-    if (customUserBalance && !customUserBalance.isFinite()) return
 
     if (value && bn(value).eq(userBalance)) {
       updateValue('')
@@ -196,7 +196,7 @@ function TokenInputFooter({
       {isBalancesLoading || !isMounted ? (
         <Skeleton h="full" w="12" />
       ) : (
-        userBalance.isFinite() && (
+        !hideBalance && (
           <HStack
             _hover={hasDisabledInteraction ? {} : { color: 'font.highlight' }}
             color={inputLabelColor}
@@ -241,6 +241,7 @@ type Props = {
   customUserBalance?: BigNumber
   customUsdPrice?: number
   priceImpactProps?: PriceImpactProps
+  hideBalance?: boolean
 }
 
 export const TokenInput = forwardRef(
@@ -261,6 +262,7 @@ export const TokenInput = forwardRef(
       customUserBalance,
       customUsdPrice,
       priceImpactProps,
+      hideBalance = false,
       ...inputProps
     }: InputProps & Props,
     ref
@@ -387,6 +389,7 @@ export const TokenInput = forwardRef(
             customUsdPrice={customUsdPrice}
             customUserBalance={customUserBalance}
             hasPriceImpact={hasPriceImpact}
+            hideBalance={hideBalance}
             isDisabled={inputProps.isDisabled}
             isLoadingPriceImpact={isLoadingPriceImpact}
             priceImpactProps={priceImpactProps}

@@ -3,7 +3,7 @@ import { TokenBalancesProvider, useTokenBalances } from '../../../tokens/TokenBa
 import { useLbpForm } from '../../LbpFormProvider'
 import { useTokens } from '../../../tokens/TokensProvider'
 import { TokenInput } from '../../../tokens/TokenInput/TokenInput'
-import { isGreaterThanZeroValidation, bn, MAX_BIGNUMBER } from '@repo/lib/shared/utils/numbers'
+import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
 import { SaleStructureForm } from '../../lbp.types'
 import { Control, Controller, useFormState, useWatch } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -134,8 +134,8 @@ function CollateralTokenAmountInput({
             <TokenInput
               address={collateralTokenAddress}
               chain={selectedChain}
-              customUserBalance={isSeedless ? MAX_BIGNUMBER : undefined}
               disableBalanceValidation={isSeedless}
+              hideBalance={isSeedless}
               id="collateral-token-amount"
               onChange={e => {
                 field.onChange(e.currentTarget.value)
