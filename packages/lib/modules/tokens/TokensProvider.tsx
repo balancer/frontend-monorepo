@@ -119,8 +119,11 @@ export function useTokensLogic() {
     chain: GqlChain
   ): string => {
     const tokenPrice = priceFor(tokenAddress, chain)
+    const totalLiquidityBn = bn(totalLiquidity || 0)
 
-    return bn(tokenPrice).times(tokenBalance).div(totalLiquidity).toString()
+    if (totalLiquidityBn.isZero()) return '0'
+
+    return bn(tokenPrice).times(tokenBalance).div(totalLiquidityBn).toString()
   }
 
   const calcTotalUsdValue = useCallback(

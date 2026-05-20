@@ -134,8 +134,8 @@ function CollateralTokenAmountInput({
             <TokenInput
               address={collateralTokenAddress}
               chain={selectedChain}
-              customUserBalance={isSeedless ? bn(Infinity) : undefined}
               disableBalanceValidation={isSeedless}
+              hideBalance={isSeedless}
               id="collateral-token-amount"
               onChange={e => {
                 field.onChange(e.currentTarget.value)
