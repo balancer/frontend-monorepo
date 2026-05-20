@@ -211,7 +211,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
       description:
         'Maximize capital efficiency with AutoRange pools: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
       buttonText: 'View pools',
-      buttonLink: '/pools?poolTypes=RECLAMM',
+      buttonLink: '/pools?poolTypes=AUTORANGE',
       linkText: 'Learn more',
       linkURL:
         'https://medium.com/balancer-protocol/introducing-reclamms-self-readjusting-trustless-passive-lping-for-clamms-b5528429588e',
