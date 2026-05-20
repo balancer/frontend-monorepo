@@ -21,8 +21,11 @@ export type StakedBalancesByPoolId = ReturnType<
 export function useUserStakedBalance(pools: Pool[] = []) {
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor } = useTokens()
-  const poolByStaking = createPoolByStakingRecord(pools)
-  const contracts = poolContracts(poolByStaking, userAddress)
+  const poolByStaking = useMemo(() => createPoolByStakingRecord(pools), [pools])
+  const contracts = useMemo(
+    () => poolContracts(poolByStaking, userAddress),
+    [poolByStaking, userAddress]
+  )
 
   const {
     data: stakedPoolBalances = [],
@@ -71,14 +74,18 @@ export function useUserStakedBalance(pools: Pool[] = []) {
     )
   }, [stakedPoolBalances, contracts, poolByStaking, userAddress, isFetching])
 
-  const stakedBalancesByPoolId = groupBy(stakedBalances, 'poolId')
+  const stakedBalancesByPoolId = useMemo(() => {
+    const byPoolId = groupBy(stakedBalances, 'poolId')
 
-  // return empty results for pools without stakings
-  pools.forEach(pool => {
-    if (!stakedBalancesByPoolId[pool.id]) {
-      stakedBalancesByPoolId[pool.id] = []
-    }
-  })
+    // return empty results for pools without stakings
+    pools.forEach(pool => {
+      if (!byPoolId[pool.id]) {
+        byPoolId[pool.id] = []
+      }
+    })
+
+    return byPoolId
+  }, [stakedBalances, pools])
 
   return {
     stakedBalancesByPoolId,
