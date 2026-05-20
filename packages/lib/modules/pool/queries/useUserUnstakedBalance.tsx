@@ -20,6 +20,21 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
   // All pool version will implement balanceOf the same ABI function is shared
   const balanceOfAbi = parseAbi(['function balanceOf(address account) view returns (uint256)'])
 
+  const contracts = useMemo(
+    () =>
+      pools.map(
+        pool =>
+          ({
+            abi: balanceOfAbi,
+            address: pool.address as Address,
+            functionName: 'balanceOf',
+            args: [userAddress as Address],
+            chainId: getChainId(pool.chain),
+          }) as const
+      ),
+    [pools, userAddress]
+  )
+
   const {
     data: unstakedPoolBalances = [],
     isLoading,
@@ -31,16 +46,7 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
     query: {
       enabled: isConnected,
     },
-    contracts: pools.map(
-      pool =>
-        ({
-          abi: balanceOfAbi,
-          address: pool.address as Address,
-          functionName: 'balanceOf',
-          args: [userAddress as Address],
-          chainId: getChainId(pool.chain),
-        }) as const
-    ),
+    contracts,
   })
 
   // for each pool get the unstaked balance

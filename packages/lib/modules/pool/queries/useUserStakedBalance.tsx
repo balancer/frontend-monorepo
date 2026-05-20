@@ -21,8 +21,11 @@ export type StakedBalancesByPoolId = ReturnType<
 export function useUserStakedBalance(pools: Pool[] = []) {
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor } = useTokens()
-  const poolByStaking = createPoolByStakingRecord(pools)
-  const contracts = poolContracts(poolByStaking, userAddress)
+  const poolByStaking = useMemo(() => createPoolByStakingRecord(pools), [pools])
+  const contracts = useMemo(
+    () => poolContracts(poolByStaking, userAddress),
+    [poolByStaking, userAddress]
+  )
 
   const {
     data: stakedPoolBalances = [],
