@@ -10,6 +10,7 @@ import {
   Divider,
   Heading,
   HStack,
+  Skeleton,
   Stack,
   Text,
   useBreakpointValue,
@@ -163,33 +164,49 @@ export function PortfolioTable() {
             w={{ base: '100vw', lg: 'full' }}
           >
             <Box minW="max-content" w="full">
-              <PaginatedTable
-                alignItems="flex-start"
-                getRowId={row => row.uniqueKey}
-                items={sortedPools}
-                left={{ base: '-4px', sm: '0' }}
-                loading={isLoadingPortfolio}
-                noItemsFoundLabel="You have no current positions"
-                paginationProps={undefined}
-                position="relative"
-                renderTableHeader={() => (
+              {isLoadingPortfolio ? (
+                <>
                   <PortfolioTableHeader
                     currentSortingObj={currentSortingObj}
                     setCurrentSortingObj={setSorting}
                     {...rowProps(hasStakingBoost)}
                   />
-                )}
-                renderTableRow={({ item }) => {
-                  return (
-                    <PortfolioTableRow
-                      keyValue={item.id}
-                      pool={item}
+                  <Divider />
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Box key={`skeleton-${i}`} px="xs" py="xs" w="full">
+                      <Skeleton height="68px" w="full" />
+                    </Box>
+                  ))}
+                </>
+              ) : (
+                <PaginatedTable
+                  alignItems="flex-start"
+                  getRowId={row => row.uniqueKey}
+                  items={sortedPools}
+                  left={{ base: '-4px', sm: '0' }}
+                  loading={false}
+                  noItemsFoundLabel="You have no current positions"
+                  paginationProps={undefined}
+                  position="relative"
+                  renderTableHeader={() => (
+                    <PortfolioTableHeader
+                      currentSortingObj={currentSortingObj}
+                      setCurrentSortingObj={setSorting}
                       {...rowProps(hasStakingBoost)}
                     />
-                  )
-                }}
-                showPagination={false}
-              />
+                  )}
+                  renderTableRow={({ item }) => {
+                    return (
+                      <PortfolioTableRow
+                        keyValue={item.id}
+                        pool={item}
+                        {...rowProps(hasStakingBoost)}
+                      />
+                    )
+                  }}
+                  showPagination={false}
+                />
+              )}
             </Box>
           </Card>
         ) : (
