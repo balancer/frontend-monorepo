@@ -411,13 +411,13 @@ export function useAutoRangeChartLogic(chartData: AutoRangeChartData | undefined
   }, [chartData, isReversed])
 
   const outOfRangeText =
-    'The price has moved outside the range, so Liquidity Providers are not currently earning swap fees. The AutoRange pool is automatically readjusting to center liquidity around the current price to maximize swap fees. '
+    "The current price has moved beyond this AutoRange Pool's range, so it isn't earning swap fees right now. Its range keeps shifting to follow the price and resume earning, with no manual rebalancing needed."
 
   const inRangeReadjustingText =
-    'The price is outside the target range but within the margin, so Liquidity Providers still earn swap fees. The AutoRange pool is automatically readjusting to center liquidity around the current price to maximize swap fees.'
+    'The current price has moved past the target range but stays within the margin, so the AutoRange Pool keeps earning swap fees while it automatically readjusts its range to re-center liquidity around the price.'
 
   const inRangeText =
-    'The current price is between the target range for this Readjusting Concentrated Liquidity AMM (AutoRange) pool. In range pools earn high swap fees.'
+    "The current price sits within this AutoRange Pool's target range, so liquidity stays concentrated around it and earns high swap fees."
 
   // Apply hover effects when chart instance is available and chart data is ready
   useEffect(() => {
