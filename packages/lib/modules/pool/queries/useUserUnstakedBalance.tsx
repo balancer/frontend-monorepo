@@ -9,6 +9,9 @@ import { BPT_DECIMALS } from '../pool.constants'
 import { useMemo } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 
+// All pool versions implement balanceOf, so the same ABI can be reused.
+const balanceOfAbi = parseAbi(['function balanceOf(address account) view returns (uint256)'])
+
 export type UnstakedBalanceByPoolId = ReturnType<
   typeof useUserUnstakedBalance
 >['unstakedBalanceByPoolId']
@@ -16,9 +19,6 @@ export type UnstakedBalanceByPoolId = ReturnType<
 export function useUserUnstakedBalance(pools: Pool[] = []) {
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor } = useTokens()
-
-  // All pool version will implement balanceOf the same ABI function is shared
-  const balanceOfAbi = parseAbi(['function balanceOf(address account) view returns (uint256)'])
 
   const contracts = useMemo(
     () =>
