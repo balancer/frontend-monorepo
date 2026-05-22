@@ -38,7 +38,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   isWeightedPool,
   isCustomWeightedPool,
-  isReClammPool,
+  isAutoRangePool,
   isGyroEllipticPool,
   isCowPool,
 } from '../../helpers'
@@ -50,7 +50,7 @@ import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWi
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
   const tokenSelectDisclosure = useDisclosure()
-  const { updatePoolToken, addPoolToken, poolCreationForm, reClammConfigForm, eclpConfigForm } =
+  const { updatePoolToken, addPoolToken, poolCreationForm, autoRangeConfigForm, eclpConfigForm } =
     usePoolCreationForm()
   const [network, poolTokens, weightedPoolStructure, poolType] = useWatch({
     control: poolCreationForm.control,
@@ -109,7 +109,7 @@ export function ChoosePoolTokens() {
     poolCreationForm.setValue('hasAcceptedSimilarPoolsWarning', false)
     poolCreationForm.setValue('name', '')
     poolCreationForm.setValue('symbol', '')
-    if (isReClammPool(poolType)) reClammConfigForm.resetToInitial()
+    if (isAutoRangePool(poolType)) autoRangeConfigForm.resetToInitial()
     if (isGyroEllipticPool(poolType)) eclpConfigForm.resetToInitial()
   }
 
@@ -345,7 +345,7 @@ function AddTokenButton({
       case PoolType.StableSurge:
         return 'Only 5 tokens can be added to a Stable pool'
       case PoolType.ReClamm:
-        return 'Only 2 tokens can be added to a reCLAMM pool'
+        return 'Only 2 tokens can be added to an AutoRange pool'
       case PoolType.GyroE:
         return 'Only 2 tokens can be added to a Gyro pool'
       default:

@@ -200,7 +200,7 @@ const poolTypeLabelMap: Partial<Record<GqlPoolType, string>> = {
   [GqlPoolType.ComposableStable]: 'Stable',
   [GqlPoolType.CowAmm]: 'CoW AMM',
   [GqlPoolType.QuantAmmWeighted]: 'BTF',
-  [GqlPoolType.Reclamm]: 'reCLAMM',
+  [GqlPoolType.Reclamm]: 'AutoRange',
   [GqlPoolType.FixedLbp]: 'Fixed LBP',
 }
 

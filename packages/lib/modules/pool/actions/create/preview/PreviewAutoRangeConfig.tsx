@@ -13,7 +13,7 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RefreshCcw } from 'react-feather'
 import { formatNumber } from '../helpers'
 import ReactECharts from 'echarts-for-react'
-import { useReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
+import { useAutoRangeChart } from '@repo/lib/modules/autorange/AutoRangeChartProvider'
 import { useWatch } from 'react-hook-form'
 
 type Props = {
@@ -22,16 +22,21 @@ type Props = {
   upperMarginValue: number | undefined
 }
 
-export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarginValue }: Props) {
-  const { options } = useReclAmmChart()
-  const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
+export function PreviewAutoRangeConfig({
+  isBeforeStep,
+  lowerMarginValue,
+  upperMarginValue,
+}: Props) {
+  const { options } = useAutoRangeChart()
+  const { autoRangeConfigForm, poolCreationForm, invertAutoRangePriceParams } =
+    usePoolCreationForm()
   const [initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate] = useWatch({
-    control: reClammConfigForm.control,
+    control: autoRangeConfigForm.control,
     name: ['initialTargetPrice', 'initialMinPrice', 'initialMaxPrice', 'priceShiftDailyRate'],
   })
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
-  const reClammConfigCards = [
+  const autoRangeConfigCards = [
     {
       label: 'Min Price',
       value: initialMinPrice ? formatNumber(initialMinPrice) : '-',
@@ -62,7 +67,7 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
       <CardBody>
         <VStack spacing="lg">
           <SimpleGrid columns={5} spacing={3} w="full">
-            {reClammConfigCards.map(({ label, value }) => (
+            {autoRangeConfigCards.map(({ label, value }) => (
               <Card key={label} variant="subSection">
                 <Text color="font.secondary" fontSize="sm">
                   {label}
@@ -86,7 +91,7 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
                 <Button
                   flexDirection="row"
                   gap="2"
-                  onClick={invertReClammPriceParams}
+                  onClick={invertAutoRangePriceParams}
                   size="sm"
                   variant="tertiary"
                 >

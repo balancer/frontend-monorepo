@@ -13,7 +13,7 @@ import {
   hasHooks,
   hasHookType,
   isQuantAmmPool,
-  isReclAmm,
+  isAutoRange,
   isV3LBP,
 } from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
@@ -57,7 +57,7 @@ export enum RiskKey {
   StableSurgeHook = 'stablesurge-hook',
   MEVCaptureHook = 'mevcapture-hook',
   QuantAmmWeighted = 'btf',
-  ReclAmm = 'reclamm',
+  AutoRange = 'autorange',
   LiquidityBootstrappingPool = 'lbp',
 }
 
@@ -93,7 +93,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.StableSurgeHook]: 'StableSurge hook',
   [RiskKey.MEVCaptureHook]: 'MEV Capture hook',
   [RiskKey.QuantAmmWeighted]: 'BTF pool',
-  [RiskKey.ReclAmm]: 'reCLAMM pool',
+  [RiskKey.AutoRange]: 'AutoRange pool',
   [RiskKey.LiquidityBootstrappingPool]: 'Liquidity Bootstrapping pool',
 }
 
@@ -161,11 +161,11 @@ const RISK_CONDITIONS: RiskDefinition[] = [
     condition: pool => isQuantAmmPool(pool.type),
   },
   {
-    key: RiskKey.ReclAmm,
-    title: RISK_TITLES[RiskKey.ReclAmm],
-    path: `/risks#${RiskKey.ReclAmm}`,
+    key: RiskKey.AutoRange,
+    title: RISK_TITLES[RiskKey.AutoRange],
+    path: `/risks#${RiskKey.AutoRange}`,
     category: RiskCategory.PoolSpecific,
-    condition: pool => isReclAmm(pool.type),
+    condition: pool => isAutoRange(pool.type),
   },
   {
     key: RiskKey.LiquidityBootstrappingPool,

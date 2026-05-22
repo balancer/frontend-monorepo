@@ -26,7 +26,7 @@ pnpm workspaces + Turborepo. Both `apps/frontend-v3` (Balancer) and `apps/beets-
 - **Data fetching**: Apollo Client for GraphQL (Balancer API), react-query for other async state. GraphQL codegen runs concurrently with `next dev` (via `graphql:gen --watch`) and runs once before `next build`; generated types land in `packages/lib/shared/services/api/generated/` — don't run `graphql:gen` manually unless regenerating outside a dev/build cycle.
 - **Multi-chain**: Chain-specific config in `modules/chains/`.
 - **URL state**: `nuqs` for query-string-based state management.
-- **Pool types**: Weighted, Stable, CowAmm, LBP, reCLAMM, ECLP — each with specific UI and action handlers.
+- **Pool types**: Weighted, Stable, CowAmm, LBP, AutoRange, ECLP — each with specific UI and action handlers.
 
 ## Testing
 

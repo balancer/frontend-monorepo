@@ -1,6 +1,6 @@
 import { Heading, VStack, Text, HStack, Radio, SimpleGrid, useRadioGroup } from '@chakra-ui/react'
 import { InfoIconPopover } from '../../InfoIconPopover'
-import { useReClammConfigurationOptions } from './useReClammConfigurationOptions'
+import { useAutoRangeConfigurationOptions } from './useAutoRangeConfigurationOptions'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -10,15 +10,15 @@ import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 import { useWatch, Control, FieldPath, FieldValues } from 'react-hook-form'
 import { useState, SVGProps } from 'react'
 
-export function ReClammConfiguration() {
-  const reClammConfigurationOptions = useReClammConfigurationOptions()
+export function AutoRangeConfiguration() {
+  const autoRangeConfigurationOptions = useAutoRangeConfigurationOptions()
 
   return (
     <VStack align="start" spacing="xl" w="full">
       <Heading color="font.maxContrast" size="md">
-        reCLAMM configuration
+        AutoRange configuration
       </Heading>
-      {reClammConfigurationOptions.map(option => (
+      {autoRangeConfigurationOptions.map(option => (
         <ConfigOptionsGroup
           control={option.control}
           customInputLabel={option.customInputLabel}
@@ -61,9 +61,9 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
   customInputLabel,
   tooltip,
 }: ConfigOptionsGroupProps<T>) {
-  const { reClammConfigForm } = usePoolCreationForm()
+  const { autoRangeConfigForm } = usePoolCreationForm()
   const [initialMinPrice, initialTargetPrice, initialMaxPrice] = useWatch({
-    control: reClammConfigForm.control,
+    control: autoRangeConfigForm.control,
     name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'],
   })
   const [forceCustom, setForceCustom] = useState(false)
@@ -170,7 +170,7 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
       {isCustomPriceRange ? (
         <VStack align="start" spacing="md" w="full">
           <NumberInput
-            control={reClammConfigForm.control}
+            control={autoRangeConfigForm.control}
             label={'Range low price'}
             name={'initialMinPrice'}
             percentageLabel={
@@ -191,7 +191,7 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
             width="full"
           />
           <NumberInput
-            control={reClammConfigForm.control}
+            control={autoRangeConfigForm.control}
             label={'Range high price'}
             name={'initialMaxPrice'}
             percentageLabel={

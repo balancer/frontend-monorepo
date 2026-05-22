@@ -80,7 +80,7 @@ export function PoolDetails() {
 function getSuggestions(poolTokens: PoolCreationToken[], poolType: SupportedPoolTypes) {
   const poolTypePrefixMap: Partial<Record<SupportedPoolTypes, string>> = {
     [PoolType.StableSurge]: 'surge',
-    [PoolType.ReClamm]: 'reCLAMM',
+    [PoolType.ReClamm]: 'AutoRange',
   }
 
   const poolTypePrefix = poolTypePrefixMap[poolType] ?? ''

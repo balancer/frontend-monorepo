@@ -6,7 +6,7 @@ import { useUninitializedPool } from './useUninitializedPool'
 export function useHydratePoolCreationForm() {
   const {
     poolFormData,
-    reClammFormData,
+    autoRangeFormData,
     eclpFormData,
     isLoadingPool,
     shouldHydratePoolCreationForm,
@@ -14,7 +14,7 @@ export function useHydratePoolCreationForm() {
     poolAddressParam,
   } = useUninitializedPool()
 
-  const { poolCreationForm, setPoolAddress, reClammConfigForm, eclpConfigForm, goToLastStep } =
+  const { poolCreationForm, setPoolAddress, autoRangeConfigForm, eclpConfigForm, goToLastStep } =
     usePoolCreationForm()
 
   // allows user to switch between uninitialzed pools
@@ -25,7 +25,7 @@ export function useHydratePoolCreationForm() {
   useEffect(() => {
     if (!isLoadingPool && shouldHydratePoolCreationForm) {
       if (poolFormData) poolCreationForm.reset(poolFormData)
-      if (reClammFormData) reClammConfigForm.reset(reClammFormData)
+      if (autoRangeFormData) autoRangeConfigForm.reset(autoRangeFormData)
       if (eclpFormData) eclpConfigForm.reset(eclpFormData)
 
       setPoolAddress(poolAddressParam)

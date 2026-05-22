@@ -4,7 +4,7 @@ import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useEffect } from 'react'
 import { usePoolHooksContract } from './usePoolHooksContract'
-import { isStableSurgePool, isReClammPool } from '../../helpers'
+import { isStableSurgePool, isAutoRangePool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
@@ -37,7 +37,7 @@ export function LiquidityManagement() {
 
   const isUnbalancedToggleDisabled =
     isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
-  const isDonationToggleDisabled = isReClammPool(poolType)
+  const isDonationToggleDisabled = isAutoRangePool(poolType)
 
   const donationsToolTip = isDonationToggleDisabled
     ? 'The selected pool type does not allow donations to be enabled'

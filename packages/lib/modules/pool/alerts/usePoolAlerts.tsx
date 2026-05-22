@@ -261,16 +261,16 @@ export function usePoolAlerts(pool: Pool) {
   const getPoolAlerts = (pool: Pool): PoolAlert[] => {
     const alerts: PoolAlert[] = []
 
-    // alert for specific reclamm pool
+    // alert for specific AutoRange pool
     // https://balancer.fi/pools/plasma/v3/0xe14ba497a7c51f34896d327ec075f3f18210a270
     if (pool.id === '0xe14ba497a7c51f34896d327ec075f3f18210a270') {
       alerts.push({
-        identifier: 'poolIsReclamm',
+        identifier: 'poolIsAutoRange',
         content:
-          'By auto-adjusting their concentrated liquidity range, reCLAMM’s can get more swap fees but also increase the risk of impermanent loss.',
+          'By auto-adjusting their concentrated liquidity range, AutoRange pools can get more swap fees but also increase the risk of impermanent loss.',
         status: 'info',
         isSoftWarning: false,
-        learnMoreLink: '/risks#reclamm',
+        learnMoreLink: '/risks#autorange',
       })
     }
 

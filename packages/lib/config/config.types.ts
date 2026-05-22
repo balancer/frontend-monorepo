@@ -1,9 +1,9 @@
 import { Address } from 'viem'
-import { GqlChain, GqlPoolType } from '../shared/services/api/generated/graphql'
+import { GqlChain } from '../shared/services/api/generated/graphql'
 import { chains } from '@repo/lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'
-import { PartnerVariant, PoolDisplayType } from '../modules/pool/pool.types'
+import { PartnerVariant, PoolDisplayType, PoolFilterType } from '../modules/pool/pool.types'
 import { AppLink } from '../shared/components/navs/useNav'
 import { LinkSection } from '../shared/components/navs/footer.types'
 import { NetworkConfigs } from './networks'
@@ -150,7 +150,7 @@ type VariantConfig = {
 type OptionsConfig = {
   poolDisplayType: PoolDisplayType
   hidePoolTags: string[]
-  hidePoolTypes: GqlPoolType[]
+  hidePoolTypes: PoolFilterType[]
   hideProtocolVersion: string[]
   showPoolName: boolean
   showMaBeets: boolean

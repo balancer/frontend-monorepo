@@ -3,15 +3,15 @@ import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolDetails } from './PoolDetails'
 import { PoolSettings } from './PoolSettings'
-import { ReClammConfiguration } from './ReClammConfiguration'
+import { AutoRangeConfiguration } from './AutoRangeConfiguration'
 import { SimilarPoolsModal } from '../../modal/SimilarPoolsModal'
 import { GyroEclpConfiguration } from './GyroEclpConfiguration'
 import { useValidateEclpParams } from './useValidateEclpParams'
-import { isReClammPool, isGyroEllipticPool, isCowPool } from '../../helpers'
+import { isAutoRangePool, isGyroEllipticPool, isCowPool } from '../../helpers'
 import { useFormState, useWatch } from 'react-hook-form'
 
 export function PoolDetailsStep() {
-  const { poolCreationForm, reClammConfigForm, eclpConfigForm } = usePoolCreationForm()
+  const { poolCreationForm, autoRangeConfigForm, eclpConfigForm } = usePoolCreationForm()
   const [poolType] = useWatch({ control: poolCreationForm.control, name: ['poolType'] })
   const { isEclpParamsValid } = useValidateEclpParams()
 
@@ -20,19 +20,19 @@ export function PoolDetailsStep() {
 
   const poolCreationFormState = useFormState({ control: poolCreationForm.control })
   const isPoolCreationFormInvalid = !poolCreationFormState.isValid
-  const reclammFormState = useFormState({ control: reClammConfigForm.control })
-  const isReClammFormInvalid = isReClammPool(poolType) && !reclammFormState.isValid
+  const autoRangeFormState = useFormState({ control: autoRangeConfigForm.control })
+  const isAutoRangeFormInvalid = isAutoRangePool(poolType) && !autoRangeFormState.isValid
   const eclpFormState = useFormState({ control: eclpConfigForm.control })
   const isGyroEclpFormInvalid =
     isGyroEllipticPool(poolType) && (!eclpFormState.isValid || !isEclpParamsValid)
 
-  const isDisabled = isPoolCreationFormInvalid || isReClammFormInvalid || isGyroEclpFormInvalid
+  const isDisabled = isPoolCreationFormInvalid || isAutoRangeFormInvalid || isGyroEclpFormInvalid
 
   return (
     <>
       <Box as="form" style={{ width: '100%' }}>
         <VStack align="start" spacing="xl" w="full">
-          {isReClammPool(poolType) && <ReClammConfiguration />}
+          {isAutoRangePool(poolType) && <AutoRangeConfiguration />}
           {isGyroEllipticPool(poolType) && <GyroEclpConfiguration />}
           <PoolDetails />
           {showPoolSettings && <PoolSettings />}

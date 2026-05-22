@@ -111,8 +111,8 @@ export default function Privacy() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="risks#reclamm">
-                          ReCLAMM - Readjusting Concentrated Liquidity AMM
+                        <Link href="risks#autorange">
+                          AutoRange - Readjusting Concentrated Liquidity AMM
                         </Link>
                       </li>
                       <li>
@@ -1465,11 +1465,11 @@ export default function Privacy() {
               </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
-                  <h4 className="anchor" id="reclamm">
-                    ReCLAMMs
+                  <h4 className="anchor" id="autorange">
+                    AutoRange pools
                   </h4>
                   <p>
-                    ReCLAMM (Readjusting Concentrated Liquidity AMM) is a novel pool type built on
+                    AutoRange (Readjusting Concentrated Liquidity AMM) is a novel pool type built on
                     Balancer, designed to offer concentrated liquidity with self-readjusting price
                     ranges and fungible liquidity. While they aim to reduce the active management
                     burden for LPs, higher swap fees and better capital efficiency when in range,
@@ -1477,14 +1477,14 @@ export default function Privacy() {
                   </p>
                   <ul>
                     <li>
-                      <b>Impermanent Loss and Parametrization Risk</b>: ReCLAMMs' self-readjusting
-                      ranges aim to keep liquidity active, but impermanent loss remains a core risk
-                      that in this case can be potentially exacerbated by suboptimal range, margin
-                      and “daily price shift exponent” adjustments. The efficacy of the parameters
-                      in the mechanism which replaces manual LP intervention, introduces risks,
-                      including (but not limited to): potential for miscalculation, inefficient
-                      capital utilization, or exploitability if rebalancing patterns are
-                      predictable.
+                      <b>Impermanent Loss and Parametrization Risk</b>: AutoRange pools'
+                      self-adjusting ranges aim to keep liquidity active, but impermanent loss
+                      remains a core risk that in this case can be potentially exacerbated by
+                      suboptimal range, margin and “daily price shift exponent” adjustments. The
+                      efficacy of the parameters in the mechanism which replaces manual LP
+                      intervention, introduces risks, including (but not limited to): potential for
+                      miscalculation, inefficient capital utilization, or exploitability if
+                      rebalancing patterns are predictable.
                     </li>
                     <li>
                       <b>Path Dependency Risk</b>: Unlike traditional CFMM (Constant Function Market
@@ -1494,10 +1494,10 @@ export default function Privacy() {
                       during certain price fluctuations can become “permanent”.
                     </li>
                     <li>
-                      <b>Low liquidity and price manipulation</b>: ReCLAMM is not suitable for great
-                      volatility and assets with low liquidity that can be easily exploitable, for
-                      the reasons and risks detailed above, where the pool can easily fall out of
-                      range and losses can become permanent.
+                      <b>Low liquidity and price manipulation</b>: AutoRange pools are not suitable
+                      for great volatility and assets with low liquidity that can be easily
+                      exploitable, for the reasons and risks detailed above, where the pool can
+                      easily fall out of range and losses can become permanent.
                     </li>
                     <li>
                       <b>Admin Parametrization</b>: By changing the sensitivity and behavior of the

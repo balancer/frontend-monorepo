@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { formatUnits } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
-import { calculateLowerMargin, calculateUpperMargin, computeCenteredness } from './reclAmmMath'
+import { useGetComputeAutoRangeData } from './useGetComputeAutoRangeData'
+import { calculateLowerMargin, calculateUpperMargin, computeCenteredness } from './autoRangeMath'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 
 const DEFAULT_PRICE_RATE = '1'
 
-export type ReclAmmChartData =
+export type AutoRangeChartData =
   | {
       maxPriceValue: number
       minPriceValue: number
@@ -25,29 +25,29 @@ export type ReclAmmChartData =
     }
   | undefined
 
-export function useReclAmmChartData(): ReclAmmChartData {
-  const reclAmmData = useGetComputeReclAmmData()
+export function useAutoRangeChartData(): AutoRangeChartData {
+  const autoRangeData = useGetComputeAutoRangeData()
   const { pool } = usePool()
 
   return useMemo(() => {
     if (
-      !reclAmmData.priceRange ||
-      !reclAmmData.virtualBalances ||
-      !reclAmmData.virtualBalances.virtualBalanceA ||
-      !reclAmmData.virtualBalances.virtualBalanceB ||
-      !reclAmmData.centerednessMargin ||
-      !reclAmmData.liveBalances ||
-      !reclAmmData.liveBalances.liveBalanceA ||
-      !reclAmmData.liveBalances.liveBalanceB
+      !autoRangeData.priceRange ||
+      !autoRangeData.virtualBalances ||
+      !autoRangeData.virtualBalances.virtualBalanceA ||
+      !autoRangeData.virtualBalances.virtualBalanceB ||
+      !autoRangeData.centerednessMargin ||
+      !autoRangeData.liveBalances ||
+      !autoRangeData.liveBalances.liveBalanceA ||
+      !autoRangeData.liveBalances.liveBalanceB
     ) {
       return undefined
     }
 
-    const balanceA = formatUnits(reclAmmData.liveBalances.liveBalanceA, 18)
-    const balanceB = formatUnits(reclAmmData.liveBalances.liveBalanceB, 18)
-    const margin = formatUnits(reclAmmData.centerednessMargin, 16)
-    const virtualBalanceA = formatUnits(reclAmmData.virtualBalances.virtualBalanceA, 18)
-    const virtualBalanceB = formatUnits(reclAmmData.virtualBalances.virtualBalanceB, 18)
+    const balanceA = formatUnits(autoRangeData.liveBalances.liveBalanceA, 18)
+    const balanceB = formatUnits(autoRangeData.liveBalances.liveBalanceB, 18)
+    const margin = formatUnits(autoRangeData.centerednessMargin, 16)
+    const virtualBalanceA = formatUnits(autoRangeData.virtualBalances.virtualBalanceA, 18)
+    const virtualBalanceB = formatUnits(autoRangeData.virtualBalances.virtualBalanceB, 18)
 
     const invariant = bn(bn(balanceA).plus(virtualBalanceA)).times(
       bn(balanceB).plus(virtualBalanceB)
@@ -128,9 +128,9 @@ export function useReclAmmChartData(): ReclAmmChartData {
       marginValue,
       poolCenteredness,
       isPoolAboveCenter,
-      isLoading: !!reclAmmData.isLoading,
-      isPoolWithinTargetRange: !!reclAmmData.isPoolWithinTargetRange,
+      isLoading: !!autoRangeData.isLoading,
+      isPoolWithinTargetRange: !!autoRangeData.isPoolWithinTargetRange,
       poolTokens,
     }
-  }, [reclAmmData, pool])
+  }, [autoRangeData, pool])
 }

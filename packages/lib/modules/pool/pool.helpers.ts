@@ -31,7 +31,7 @@ import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { vaultAbi_V3 } from '@balancer/sdk'
-import { LbpV3, Pool, PoolCore } from './pool.types'
+import { LbpV3, Pool, PoolCore, PoolFilterType } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 import { PoolMetadata } from './metadata/getPoolsMetadata'
@@ -89,7 +89,7 @@ export function isGyroEPool(pool: Pool): pool is GqlPoolGyro {
   return pool.type === GqlPoolType.Gyroe
 }
 
-export function isReclAmm(poolType: GqlPoolType): boolean {
+export function isAutoRange(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.Reclamm
 }
 
@@ -144,7 +144,7 @@ export function isStableLike(poolType: GqlPoolType): boolean {
     isComposableStable(poolType) ||
     isFx(poolType) ||
     isGyro(poolType) ||
-    isReclAmm(poolType)
+    isAutoRange(poolType)
   )
 }
 
@@ -544,7 +544,7 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
   return true
 }
 
-export function poolTypeLabel(poolType: GqlPoolType) {
+export function poolTypeLabel(poolType: PoolFilterType) {
   switch (poolType) {
     case GqlPoolType.Weighted:
       return 'Weighted'
@@ -560,8 +560,8 @@ export function poolTypeLabel(poolType: GqlPoolType) {
       return 'FX'
     case GqlPoolType.QuantAmmWeighted:
       return 'QuantAMM BTF'
-    case GqlPoolType.Reclamm:
-      return 'reCLAMM'
+    case 'AUTORANGE':
+      return 'AutoRange'
     default:
       return getPoolTypeLabel(poolType)
   }
