@@ -411,10 +411,13 @@ export default function Privacy() {
                 DAO Governance risk
               </h4>
               <p>
-                Balancer currently uses off-chain voting mechanisms to signal the will of veBAL
-                token holders (vote-escrow BAL). This off-chain voting is done via{' '}
-                <a href="https://snapshot.org/">Snapshot</a>
-                —originally developed in-house by Balancer Labs.
+                Balancer uses off-chain voting via <a href="https://snapshot.org/">Snapshot</a>
+                —originally developed in-house by Balancer Labs—to signal the will of BAL token
+                holders. Following{' '}
+                <a href="https://forum.balancer.fi/t/bip-919-bal-tokenomics-revamp/7001">BIP-919</a>
+                , the veBAL system is winding down: protocol fee distributions to veBAL have ceased
+                and any BAL holder can participate in governance without locking. Existing veBAL
+                positions retain their voting power for the remainder of their lock.
               </p>
               <p>A summary of the immutability of the Balancer Protocol&rsquo;s smart contracts:</p>
               <ul>
@@ -447,36 +450,58 @@ export default function Privacy() {
                       may change the swap fee for pools created by the dynamic-fee pool factory that
                       will be deployed by Balancer Labs
                     </li>
-                    <li>Add and remove veBAL gauges</li>
+                    <li>Add and remove gauges</li>
                   </ul>
+                </li>
+                <li>
+                  Balancer V3 contracts are also immutable. As with V2, a limited set of parameters
+                  can be tweaked via the Authorizer under DAO governance—e.g. protocol fee
+                  parameters, registration of new pool factories, and approval of hook contracts.
+                  New factories, novel pool types and new chain deployments require a DAO Multisig
+                  vote per{' '}
+                  <a href="https://forum.balancer.fi/t/bip-918-operational-restructuring-for-balancer/7000">
+                    BIP-918
+                  </a>
+                  .
                 </li>
               </ul>
               <p>
-                Note: The system of Balancer Governance may change in the future. For example,
-                Balancer community members have expressed interest in moving from the Multisig
-                towards on-chain governance execution by veBAL token holders.
+                Following{' '}
+                <a href="https://forum.balancer.fi/t/bip-918-operational-restructuring-for-balancer/7000">
+                  BIP-918
+                </a>
+                , authority is split between the core team and the DAO Multisig under a published{' '}
+                <a href="https://docs.balancer.fi/concepts/governance/multisig.html#multisig-mandate-authorizations">
+                  multisig mandate
+                </a>
+                . Operational decisions—protocol fee parameter adjustments, new chain deployments,
+                vendor and sprint prioritization, chain deprecation, budget-approved hiring, and
+                partner fee-split negotiations—are made by the core team without a Snapshot vote.
+                Decisions that materially change the protocol—introducing new pool factories or
+                novel pool types, formal new chain approvals, and any change to BAL supply or
+                minting parameters—require a Snapshot vote ratified by the DAO Multisig. Treasury,
+                legal entity, and onchain operations are managed by separate Treasury Council,
+                Directors, and Onchain Ltd multisigs respectively.
               </p>
-              <p>
-                The main risk with this setup consisting of off-chain voting executed by MultiSigs:
-              </p>
+              <p>The main risks with this setup of off-chain voting executed by multisigs:</p>
               <ul>
                 <li>
                   The{' '}
-                  <a href="https://docs.balancer.fi/concepts/governance/multisig.html#dao-multisig-signer-set">
-                    Multisig signer set
+                  <a href="https://docs.balancer.fi/concepts/governance/multisig.html#multisig-mandate-authorizations">
+                    multisig
                   </a>{' '}
-                  could go rogue and disregard the decision made by veBAL holders in the off-chain
+                  could go rogue and disregard the decision made by BAL holders in the off-chain
                   voting.
                 </li>
                 <li>
                   The{' '}
                   <a href="https://docs.balancer.fi/concepts/governance/multisig.html#dao-multisig-signer-set">
-                    Multisig signer set
+                    multisig signer set
                   </a>{' '}
                   could mistakenly execute the wrong instruction without malice.
                 </li>
                 <li>
-                  An individual or an entity could acquire substantial veBAL and vote against the
+                  An individual or an entity could acquire substantial BAL and vote against the
                   interests of the majority of the community.
                 </li>
               </ul>
@@ -489,9 +514,26 @@ export default function Privacy() {
                 </li>
                 <li>
                   The Multisig does&nbsp;not&nbsp;have custody of, nor control over, funds from
-                  liquidity providers locked inside Balancer Protocol contracts. Balancer V2 was
-                  designed so that even if a multisig goes rogue, all the liquidity is safe and can
-                  be withdrawn by their rightful owners.
+                  liquidity providers locked inside Balancer Protocol contracts. Balancer V2 and V3
+                  were designed so that even if a multisig goes rogue, all the liquidity is safe and
+                  can be withdrawn by their rightful owners.
+                </li>
+                <li>
+                  The DAO Multisig{' '}
+                  <a href="https://docs.balancer.fi/concepts/governance/multisig.html#dao-multisig-signer-set">
+                    signer set
+                  </a>{' '}
+                  is intentionally diverse—drawn from independent organizations across the
+                  ecosystem—and signers forfeit their position if they act contrary to token holder
+                  voting outcomes or remain inactive.
+                </li>
+                <li>
+                  Per{' '}
+                  <a href="https://forum.balancer.fi/t/bip-918-operational-restructuring-for-balancer/7000">
+                    BIP-918
+                  </a>
+                  , the core team is accountable through mandatory quarterly transparency reports
+                  and 6- and 12-month KPI checkpoints.
                 </li>
               </ul>
               <h5>How LPs can mitigate this risk:</h5>
