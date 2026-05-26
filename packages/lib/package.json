@@ -101,7 +101,7 @@
     "@types/node": "24.12.4",
     "@types/numeral": "2.0.5",
     "@types/pluralize": "0.0.33",
-    "@types/react": "19.2.14",
+    "@types/react": "19.2.15",
     "@types/react-dom": "19.2.3",
     "@types/tinycolor2": "1.4.6",
     "@vitejs/plugin-react": "4.7.0",
