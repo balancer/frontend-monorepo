@@ -351,26 +351,25 @@ export function ClaimNetworkPools() {
                 </SimpleGrid>
               )
             })()}
-
-            <ClaimProtocolRevenueModal
-              isOpen={isOpenedProtocolRevenueModal}
-              onClose={() => setIsOpenedProtocolRevenueModal(false)}
-            />
-            <ClaimHiddenHandRewardsModal
-              isOpen={isOpenedHiddenHandRewardsModal}
-              onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
-            />
-            <ClaimRecoveredFundsModal
-              isOpen={isClaimRecoveredFundModalOpen}
-              onClose={onClaimRecoveredFundModalClose}
-            />
-            <RecoveredFundsLearnMoreModal
-              isOpen={isRecoveredFundsLearnMoreModalOpen}
-              onClose={onRecoveredFundsLearnMoreModalClose}
-            />
           </>
         )}
       </Stack>
+      <ClaimProtocolRevenueModal
+        isOpen={isOpenedProtocolRevenueModal}
+        onClose={() => setIsOpenedProtocolRevenueModal(false)}
+      />
+      <ClaimHiddenHandRewardsModal
+        isOpen={isOpenedHiddenHandRewardsModal}
+        onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
+      />
+      <ClaimRecoveredFundsModal
+        isOpen={isClaimRecoveredFundModalOpen}
+        onClose={onClaimRecoveredFundModalClose}
+      />
+      <RecoveredFundsLearnMoreModal
+        isOpen={isRecoveredFundsLearnMoreModalOpen}
+        onClose={onRecoveredFundsLearnMoreModalClose}
+      />
     </FadeInOnView>
   )
 }
