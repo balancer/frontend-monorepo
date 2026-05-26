@@ -72,7 +72,7 @@ export function useUserStakedBalance(pools: Pool[] = []) {
         }
       })
     )
-  }, [stakedPoolBalances, contracts, poolByStaking, userAddress, isFetching])
+  }, [stakedPoolBalances, contracts, poolByStaking, isFetching, priceFor])
 
   const stakedBalancesByPoolId = useMemo(() => {
     const byPoolId = groupBy(stakedBalances, 'poolId')

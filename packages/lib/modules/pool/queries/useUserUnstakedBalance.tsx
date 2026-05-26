@@ -69,9 +69,9 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
         }
       })
     )
-  }, [isLoading, unstakedPoolBalances, pools, userAddress, isFetching])
+  }, [unstakedPoolBalances, pools, isFetching, priceFor])
 
-  const unstakedBalanceByPoolId = keyBy(balances, 'poolId')
+  const unstakedBalanceByPoolId = useMemo(() => keyBy(balances, 'poolId'), [balances])
 
   return {
     unstakedBalanceByPoolId,

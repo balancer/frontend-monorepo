@@ -33,7 +33,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../../pool/migrations/MigrationAlert'
 import { isChainDeprecated } from '../../chains/chain.utils'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 
 const rowProps = (needsLastColumnWider: boolean) => ({
   px: [0, 4],
@@ -51,6 +51,7 @@ export function PortfolioTable() {
   const hasStakingBoost = sortedPools.some(pool =>
     pool.dynamicData?.aprItems?.some(item => item.type === 'STAKING_BOOST')
   )
+  const tableRowProps = useMemo(() => rowProps(hasStakingBoost), [hasStakingBoost])
 
   const {
     selectedNetworks,
@@ -166,9 +167,9 @@ export function PortfolioTable() {
             <Box minW="max-content" w="full">
               <PortfolioTableLoadingGate
                 currentSortingObj={currentSortingObj}
-                hasStakingBoost={hasStakingBoost}
                 setSorting={setSorting}
                 sortedPools={sortedPools}
+                tableRowProps={tableRowProps}
               />
             </Box>
           </Card>
@@ -185,7 +186,7 @@ export function PortfolioTable() {
             <PortfolioTableHeader
               currentSortingObj={currentSortingObj}
               setCurrentSortingObj={setSorting}
-              {...rowProps(hasStakingBoost)}
+              {...tableRowProps}
             />
             <Divider />
             <Center h="160px" rounded="lg" w="full">
@@ -215,24 +216,24 @@ export function PortfolioTable() {
 
 const PortfolioTableLoadingGate = memo(function PortfolioTableLoadingGate({
   currentSortingObj,
-  hasStakingBoost,
   setSorting,
   sortedPools,
+  tableRowProps,
 }: {
   currentSortingObj: ReturnType<typeof usePortfolioSorting>['currentSortingObj']
-  hasStakingBoost: boolean
   setSorting: ReturnType<typeof usePortfolioSorting>['setSorting']
   sortedPools: ReturnType<typeof usePortfolioSorting>['sortedPools']
+  tableRowProps: ReturnType<typeof rowProps>
 }) {
   const { isLoadingPortfolio } = usePortfolio()
 
-  if (isLoadingPortfolio) {
+  if (isLoadingPortfolio && sortedPools.length === 0) {
     return (
       <>
         <PortfolioTableHeader
           currentSortingObj={currentSortingObj}
           setCurrentSortingObj={setSorting}
-          {...rowProps(hasStakingBoost)}
+          {...tableRowProps}
         />
         <Divider />
         {Array.from({ length: 5 }).map((_, i) => (
@@ -247,23 +248,23 @@ const PortfolioTableLoadingGate = memo(function PortfolioTableLoadingGate({
   return (
     <LoadedPortfolioTableContent
       currentSortingObj={currentSortingObj}
-      hasStakingBoost={hasStakingBoost}
       setSorting={setSorting}
       sortedPools={sortedPools}
+      tableRowProps={tableRowProps}
     />
   )
 })
 
 const LoadedPortfolioTableContent = memo(function LoadedPortfolioTableContent({
   currentSortingObj,
-  hasStakingBoost,
   setSorting,
   sortedPools,
+  tableRowProps,
 }: {
   currentSortingObj: ReturnType<typeof usePortfolioSorting>['currentSortingObj']
-  hasStakingBoost: boolean
   setSorting: ReturnType<typeof usePortfolioSorting>['setSorting']
   sortedPools: ReturnType<typeof usePortfolioSorting>['sortedPools']
+  tableRowProps: ReturnType<typeof rowProps>
 }) {
   return (
     <PaginatedTable
@@ -279,11 +280,11 @@ const LoadedPortfolioTableContent = memo(function LoadedPortfolioTableContent({
         <PortfolioTableHeader
           currentSortingObj={currentSortingObj}
           setCurrentSortingObj={setSorting}
-          {...rowProps(hasStakingBoost)}
+          {...tableRowProps}
         />
       )}
       renderTableRow={({ item }) => {
-        return <PortfolioTableRow keyValue={item.id} pool={item} {...rowProps(hasStakingBoost)} />
+        return <PortfolioTableRow keyValue={item.id} pool={item} {...tableRowProps} />
       }}
       showPagination={false}
     />
