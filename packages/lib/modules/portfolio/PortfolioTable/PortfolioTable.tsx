@@ -227,7 +227,7 @@ const PortfolioTableLoadingGate = memo(function PortfolioTableLoadingGate({
 }) {
   const { isLoadingPortfolio } = usePortfolio()
 
-  if (isLoadingPortfolio && sortedPools.length === 0) {
+  if (isLoadingPortfolio) {
     return (
       <>
         <PortfolioTableHeader
