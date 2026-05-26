@@ -235,120 +235,122 @@ export function ClaimNetworkPools() {
                 ))}
               </SimpleGrid>
             )}
-            <SimpleGrid columns={claimGridColumns} spacing="md">
-              {(() => {
-                // Collect all claimable items
-                const claimableItems = []
+            {(() => {
+              // Collect all claimable items
+              const claimableItems = []
 
-                poolsWithChain.forEach(([, pools]) => {
-                  if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
-                    claimableItems.push({
-                      type: 'chain',
-                      chain: pools[0].chain,
-                      amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
-                    })
-                  }
+              poolsWithChain.forEach(([, pools]) => {
+                if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
+                  claimableItems.push({
+                    type: 'chain',
+                    chain: pools[0].chain,
+                    amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
+                  })
+                }
+              })
+
+              if (hasProtocolRewards) {
+                claimableItems.push({
+                  type: 'protocol',
+                  chain: GqlChain.Mainnet,
+                  amount: protocolRewardsBalance.toNumber(),
                 })
+              }
 
-                if (hasProtocolRewards) {
-                  claimableItems.push({
-                    type: 'protocol',
-                    chain: GqlChain.Mainnet,
-                    amount: protocolRewardsBalance.toNumber(),
-                  })
-                }
+              if (hasHiddenHandRewards && !isPastJulyFirst) {
+                claimableItems.push({
+                  type: 'hidden-hand',
+                  chain: PROJECT_CONFIG.defaultNetwork,
+                  amount: hiddenHandRewardsData.totalValueUsd,
+                })
+              }
 
-                if (hasHiddenHandRewards && !isPastJulyFirst) {
-                  claimableItems.push({
-                    type: 'hidden-hand',
-                    chain: PROJECT_CONFIG.defaultNetwork,
-                    amount: hiddenHandRewardsData.totalValueUsd,
-                  })
-                }
+              if (isBalancer && hasRecoveredFunds) {
+                claimableItems.push({
+                  type: 'recovered-funds',
+                  chain: PROJECT_CONFIG.defaultNetwork,
+                  amount: sumRecoveredFundsTotal(recoveredFundsClaims),
+                  icon: '/images/icons/heart.svg',
+                })
+              }
 
-                if (isBalancer && hasRecoveredFunds) {
-                  claimableItems.push({
-                    type: 'recovered-funds',
-                    chain: PROJECT_CONFIG.defaultNetwork,
-                    amount: sumRecoveredFundsTotal(recoveredFundsClaims),
-                    icon: '/images/icons/heart.svg',
-                  })
-                }
+              // Sort by amount (highest first)
+              claimableItems.sort((a, b) => b.amount - a.amount)
 
-                // Sort by amount (highest first)
-                claimableItems.sort((a, b) => b.amount - a.amount)
+              // If no claimable items, don't render the grid. An empty grid adds stack gap.
+              if (claimableItems.length === 0) {
+                return null
+              }
 
-                // If no claimable items, don't render anything
-                if (claimableItems.length === 0) {
-                  return null
-                }
-
-                // Render all claimable items
-                const items = claimableItems.map((item, index) => {
-                  const handleClick = () => {
-                    switch (item.type) {
-                      case 'protocol':
-                        setIsOpenedProtocolRevenueModal(true)
-                        break
-                      case 'hidden-hand':
-                        setIsOpenedHiddenHandRewardsModal(true)
-                        break
-                      case 'recovered-funds':
-                        openClaimRecoveredFundModal()
-                        break
-                      default:
-                        router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
-                    }
+              // Render all claimable items
+              const items = claimableItems.map((item, index) => {
+                const handleClick = () => {
+                  switch (item.type) {
+                    case 'protocol':
+                      setIsOpenedProtocolRevenueModal(true)
+                      break
+                    case 'hidden-hand':
+                      setIsOpenedHiddenHandRewardsModal(true)
+                      break
+                    case 'recovered-funds':
+                      openClaimRecoveredFundModal()
+                      break
+                    default:
+                      router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
                   }
+                }
 
-                  return (
-                    <motion.div
-                      animate={{ opacity: 1, scale: 1 }}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      key={`item-${index}`}
-                      style={{ transformOrigin: 'top' }}
-                      transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
-                    >
-                      <ClaimNetworkBlock
-                        chain={item.chain}
-                        icon={item.icon}
-                        networkTotalClaimableFiatBalance={item.amount}
-                        onClick={handleClick}
-                        title={getCardTitle(item.type)}
-                      />
-                    </motion.div>
+                return (
+                  <motion.div
+                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    key={`item-${index}`}
+                    style={{ transformOrigin: 'top' }}
+                    transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
+                  >
+                    <ClaimNetworkBlock
+                      chain={item.chain}
+                      icon={item.icon}
+                      networkTotalClaimableFiatBalance={item.amount}
+                      onClick={handleClick}
+                      title={getCardTitle(item.type)}
+                    />
+                  </motion.div>
+                )
+              })
+
+              // Add placeholders only if we have fewer items than max columns
+              if (claimableItems.length < networkSlotCount) {
+                const placeholdersNeeded = networkSlotCount - claimableItems.length
+
+                for (let i = 0; i < placeholdersNeeded; i++) {
+                  const slotIndex = claimableItems.length + i
+
+                  const displayProps =
+                    slotIndex === 2
+                      ? { base: 'none', md: 'none', lg: 'block' }
+                      : { base: 'none', md: 'block' }
+
+                  items.push(
+                    <Card
+                      display={displayProps}
+                      flex="1"
+                      key={`placeholder-${i}`}
+                      p={['sm', 'md']}
+                      shadow="innerLg"
+                      variant="level1"
+                      w="full"
+                    />
                   )
-                })
-
-                // Add placeholders only if we have fewer items than max columns
-                if (claimableItems.length < networkSlotCount) {
-                  const placeholdersNeeded = networkSlotCount - claimableItems.length
-
-                  for (let i = 0; i < placeholdersNeeded; i++) {
-                    const slotIndex = claimableItems.length + i
-
-                    const displayProps =
-                      slotIndex === 2
-                        ? { base: 'none', md: 'none', lg: 'block' }
-                        : { base: 'none', md: 'block' }
-
-                    items.push(
-                      <Card
-                        display={displayProps}
-                        flex="1"
-                        key={`placeholder-${i}`}
-                        p={['sm', 'md']}
-                        shadow="innerLg"
-                        variant="level1"
-                        w="full"
-                      />
-                    )
-                  }
                 }
+              }
 
-                return items
-              })()}
-            </SimpleGrid>
+              return (
+                <SimpleGrid columns={claimGridColumns} spacing="md">
+                  {items}
+                </SimpleGrid>
+              )
+            })()}
 
             <ClaimProtocolRevenueModal
               isOpen={isOpenedProtocolRevenueModal}
