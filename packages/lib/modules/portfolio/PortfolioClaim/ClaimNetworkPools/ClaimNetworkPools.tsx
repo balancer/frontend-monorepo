@@ -64,11 +64,6 @@ const balancerNetworksConfig: NetworkConfig[] = [
 
 const beetsNetworksConfig: NetworkConfig[] = [
   { chain: GqlChain.Sonic, name: 'Sonic', displayProps: {} },
-  {
-    chain: GqlChain.Optimism,
-    name: 'Optimism',
-    displayProps: { display: { base: 'none', md: 'block' } },
-  },
 ]
 
 export function ClaimNetworkPools() {
@@ -109,6 +104,14 @@ export function ClaimNetworkPools() {
   const iconSize = isDesktop ? 12 : 8
 
   const currentNetworks = isBeets ? beetsNetworksConfig : balancerNetworksConfig
+  const networkSlotCount = currentNetworks.length
+  const claimGridColumns = { base: 1, md: Math.min(networkSlotCount, 2), lg: networkSlotCount }
+  const loadingGridColumns = {
+    base: 1,
+    md: 1,
+    lg: Math.min(networkSlotCount, 2),
+    xl: networkSlotCount,
+  }
 
   const poolsWithChain = Object.entries(poolsByChainMap).sort(
     ([a], [b]) =>
@@ -159,22 +162,15 @@ export function ClaimNetworkPools() {
         {deprecatedChains.length > 0 && <DeprecatedChainsAlert chains={deprecatedChains} />}
 
         {isLoadingRewards || isLoadingPortfolio ? (
-          <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: isBeets ? 2 : 3 }} spacing="md">
-            <Skeleton height="85px" w="full" />
-            <Skeleton height="85px" w="full" />
-            {!isBeets && <Skeleton height="85px" w="full" />}
+          <SimpleGrid columns={loadingGridColumns} spacing="md">
+            {Array.from({ length: networkSlotCount }).map((_, index) => (
+              <Skeleton height="85px" key={`claim-network-skeleton-${index}`} w="full" />
+            ))}
           </SimpleGrid>
         ) : !isConnected ? (
           <ConnectButton.Custom>
             {({ openConnectModal }: { openConnectModal: () => void }) => (
-              <SimpleGrid
-                columns={{
-                  base: 1,
-                  md: 2,
-                  lg: isBeets ? 2 : 3,
-                }}
-                spacing="md"
-              >
+              <SimpleGrid columns={claimGridColumns} spacing="md">
                 {currentNetworks.map(network => (
                   <Card
                     flex="1"
@@ -211,14 +207,7 @@ export function ClaimNetworkPools() {
           <>
             {hasMerklRewards && <MerklAlert />}
             {noRewards && (
-              <SimpleGrid
-                columns={{
-                  base: 1,
-                  md: 2,
-                  lg: isBeets ? 2 : 3,
-                }}
-                spacing="md"
-              >
+              <SimpleGrid columns={claimGridColumns} spacing="md">
                 {currentNetworks.map(network => (
                   <Card
                     flex="1"
@@ -246,14 +235,7 @@ export function ClaimNetworkPools() {
                 ))}
               </SimpleGrid>
             )}
-            <SimpleGrid
-              columns={{
-                base: 1,
-                md: 2,
-                lg: isBeets ? 2 : 3,
-              }}
-              spacing="md"
-            >
+            <SimpleGrid columns={claimGridColumns} spacing="md">
               {(() => {
                 // Collect all claimable items
                 const claimableItems = []
@@ -301,9 +283,6 @@ export function ClaimNetworkPools() {
                   return null
                 }
 
-                // Determine max columns for first row based on breakpoint
-                const maxColumns = isBeets ? 2 : 3
-
                 // Render all claimable items
                 const items = claimableItems.map((item, index) => {
                   const handleClick = () => {
@@ -342,16 +321,14 @@ export function ClaimNetworkPools() {
                 })
 
                 // Add placeholders only if we have fewer items than max columns
-                if (claimableItems.length < maxColumns) {
-                  const placeholdersNeeded = maxColumns - claimableItems.length
+                if (claimableItems.length < networkSlotCount) {
+                  const placeholdersNeeded = networkSlotCount - claimableItems.length
 
                   for (let i = 0; i < placeholdersNeeded; i++) {
                     const slotIndex = claimableItems.length + i
 
-                    // For !isBeets: slot 0-1 show on md+, slot 2 shows only on lg+
-                    // For isBeets: slots 0-1 show on md+
                     const displayProps =
-                      !isBeets && slotIndex === 2
+                      slotIndex === 2
                         ? { base: 'none', md: 'none', lg: 'block' }
                         : { base: 'none', md: 'block' }
 
