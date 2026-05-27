@@ -125,13 +125,7 @@ export const nestedPoolMock: GqlPoolElement = {
         },
       ],
     },
-    aura: {
-      id: '0x28da1695c117f6876d79120a418cd3347a57adb2',
-      apr: 0.0113,
-      auraPoolAddress: '0x28da1695c117f6876d79120a418cd3347a57adb2',
-      auraPoolId: '84',
-      isShutdown: false,
-    },
+    aura: null,
   },
   userBalance: {
     totalBalance: '0',
