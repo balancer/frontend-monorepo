@@ -84,7 +84,7 @@ export function PortfolioTable() {
         .sort(
           (a, b) => (b.userBalance?.totalBalanceUsd || 0) - (a.userBalance?.totalBalanceUsd || 0)
         )
-        .filter((item, pos, ary) => !pos || item.id != ary[pos - 1].id), // deduplication
+        .filter((item, pos, ary) => !pos || item.id !== ary[pos - 1].id), // deduplication
     [sortedPools, needsMigration]
   )
 

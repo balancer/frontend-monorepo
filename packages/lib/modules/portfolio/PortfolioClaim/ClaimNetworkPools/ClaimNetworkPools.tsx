@@ -67,6 +67,9 @@ const beetsNetworksConfig: NetworkConfig[] = [
   { chain: GqlChain.Sonic, name: 'Sonic', displayProps: {} },
 ]
 
+const SLOT_COUNT = 3
+const GRID_COLUMNS = { base: 1, md: 2, lg: 3 }
+
 export function ClaimNetworkPools() {
   const {
     poolsByChainMap,
@@ -181,9 +184,6 @@ export function ClaimNetworkPools() {
     recoveredFundsClaims,
   ])
 
-  const slotCount = 3
-  const gridColumns = { base: 1, md: 2, lg: 3 }
-
   return (
     <FadeInOnView>
       <Stack gap={5}>
@@ -218,15 +218,15 @@ export function ClaimNetworkPools() {
           </AnimatedAlert>
         )}
         {isLoadingRewards || isLoadingPortfolio ? (
-          <SimpleGrid columns={gridColumns} spacing="md">
-            {Array.from({ length: slotCount }).map((_, index) => (
+          <SimpleGrid columns={GRID_COLUMNS} spacing="md">
+            {Array.from({ length: SLOT_COUNT }).map((_, index) => (
               <Skeleton height="85px" key={`claim-network-skeleton-${index}`} w="full" />
             ))}
           </SimpleGrid>
         ) : !isConnected ? (
           <ConnectButton.Custom>
             {({ openConnectModal }: { openConnectModal: () => void }) => (
-              <SimpleGrid columns={gridColumns} spacing="md">
+              <SimpleGrid columns={GRID_COLUMNS} spacing="md">
                 {currentNetworks.map(network => (
                   <Card
                     flex="1"
@@ -267,7 +267,7 @@ export function ClaimNetworkPools() {
               </AnimatedAlert>
             )}
             {noRewards && (
-              <SimpleGrid columns={gridColumns} spacing="md">
+              <SimpleGrid columns={GRID_COLUMNS} spacing="md">
                 {currentNetworks.map(network => (
                   <Card
                     flex="1"
@@ -296,7 +296,7 @@ export function ClaimNetworkPools() {
               </SimpleGrid>
             )}
             {claimableItems.length > 0 && (
-              <SimpleGrid columns={gridColumns} spacing="md">
+              <SimpleGrid columns={GRID_COLUMNS} spacing="md">
                 {claimableItems.map((item, index) => {
                   const handleClick = () => {
                     switch (item.type) {
@@ -332,8 +332,8 @@ export function ClaimNetworkPools() {
                     </motion.div>
                   )
                 })}
-                {claimableItems.length < slotCount &&
-                  Array.from({ length: slotCount - claimableItems.length }).map((_, i) => {
+                {claimableItems.length < SLOT_COUNT &&
+                  Array.from({ length: SLOT_COUNT - claimableItems.length }).map((_, i) => {
                     const slotIndex = claimableItems.length + i
 
                     const displayProps =
