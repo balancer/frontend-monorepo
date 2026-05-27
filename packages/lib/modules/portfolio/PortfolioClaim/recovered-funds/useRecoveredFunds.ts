@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { MerklReward, MerklRewardsResponse } from '../../merkl/merkl.types'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { Address } from 'viem'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { useState } from 'react'
 import { NORMALIZED_WRAPPER_TOKENS } from './wrapper-tokens'
@@ -73,7 +73,9 @@ export function useRecoveredFunds() {
 function toRecoveredTokenClaim(item: MerklReward): RecoveredTokenClaim {
   return {
     amount: {
-      humanAmount: bn(item.amount).shiftedBy(-item.token.decimals).toString() as HumanAmount,
+      humanAmount: isValidNumber(item.amount)
+        ? (bn(item.amount).shiftedBy(-item.token.decimals).toString() as HumanAmount)
+        : ('0' as HumanAmount),
       tokenAddress: item.token.address as Address,
       symbol: item.token.symbol,
     },
