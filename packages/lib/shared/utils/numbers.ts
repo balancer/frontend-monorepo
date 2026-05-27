@@ -15,11 +15,8 @@ BigInt.prototype.toJSON = function () {
   return this.toString()
 }
 
-// Enable strict mode globally. The bn() helper below catches invalid inputs
-// and returns NaN to preserve backwards compatibility for callers.
+// Enable strict mode globally. bn() throws on invalid inputs (no NaN fallback).
 BigNumber.set({ STRICT: true })
-
-const BigNumberNonStrict = BigNumber.clone({ STRICT: false })
 
 export const MAX_BIGINT = BigInt(MAX_UINT256)
 export const MAX_BIGNUMBER = bn(MAX_UINT256)
@@ -77,12 +74,7 @@ export function bn(val: Numberish): BigNumber {
   if (val == null) {
     throw new TypeError(`Cannot create BigNumber from ${val}`)
   }
-  try {
-    return new BigNumber(val.toString())
-  } catch {
-    // Preserve backwards compatibility: callers expect NaN for invalid input
-    return new BigNumberNonStrict(NaN)
-  }
+  return new BigNumber(val.toString())
 }
 
 type FormatOpts = {
