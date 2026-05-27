@@ -139,7 +139,7 @@ export class LiquidityActionHelpers {
     if (!humanAmountsIn.length) return []
 
     return humanAmountsIn
-      .filter(({ humanAmount }) => bn(humanAmount).gt(0))
+      .filter(({ humanAmount }) => humanAmount && bn(humanAmount).gt(0))
       .map(({ tokenAddress, humanAmount, symbol }) => {
         const chain = this.pool.chain
         if (isNativeAsset(tokenAddress, chain)) {
