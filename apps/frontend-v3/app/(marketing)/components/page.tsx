@@ -768,12 +768,7 @@ export default function Components() {
             </Link>
           </Box>
         </Box>
-        <Box mb="8">
-          <Text variant="eyebrow">External link</Text>
-          <Box>
-            <a href="https://aura.finance/">Learn more on Aura</a>
-          </Box>
-        </Box>
+
         <Box mb="8">
           <Text variant="eyebrow">Eyebrow</Text>
           <Text variant="eyebrow">Lorem ipsum</Text>

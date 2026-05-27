@@ -14,7 +14,6 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { BeetsIcon } from '@repo/lib/shared/components/icons/logos/BeetsIcon'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
-import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
 import { GyroIcon } from '@repo/lib/shared/components/icons/logos/GyroIcon'
 import { XaveIcon } from '@repo/lib/shared/components/icons/logos/XaveIcon'
 import { QuantAmmIcon } from '@repo/lib/shared/components/icons/logos/QuantAmmIcon'
@@ -65,7 +64,7 @@ function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
 }
 
 export function Grow() {
-  const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
+  const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.CoW)
   const partnerRedirectDisclosure = useDisclosure()
   const { isMobile } = useBreakpoints()
   const { protocolData } = useProtocolStats()
@@ -189,12 +188,6 @@ export function Grow() {
             />
           </MotionGridItem>
           <MotionGridItem colSpan={{ base: 6, lg: 2 }} order={5} variants={gridItemVariants}>
-            <PartnerButton
-              icon={<AuraIcon size={80} />}
-              onClick={() => openRedirectModal(RedirectPartner.Aura)}
-            />
-          </MotionGridItem>
-          <MotionGridItem colSpan={{ base: 6, lg: 2 }} order={6} variants={gridItemVariants}>
             <PartnerButton
               icon={<BeetsIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Beets)}
