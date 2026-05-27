@@ -179,24 +179,32 @@ export function ClaimNetworkPools() {
           Claimable incentives
         </Heading>
         {hasHiddenHandRewards && !isPastJulyFirst && (
-          <BalAlert
-            content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
-            status="warning"
-          />
+          <AnimatedAlert>
+            <BalAlert
+              content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
+              status="warning"
+            />
+          </AnimatedAlert>
         )}
         {isBalancer && hasRecoveredFunds && (
-          <BalAlert
-            content={
-              <Text color="font.dark" fontWeight="medium">
-                Claim your share of recovered funds from the November 2025 security incident
-                affecting some v2 Composable Stable pools.{' '}
-                <BalAlertLink onClick={openRecoveredFundsLearnMoreModal}>Learn more</BalAlertLink>
-              </Text>
-            }
-            status="warning"
-          />
+          <AnimatedAlert>
+            <BalAlert
+              content={
+                <Text color="font.dark" fontWeight="medium">
+                  Claim your share of recovered funds from the November 2025 security incident
+                  affecting some v2 Composable Stable pools.{' '}
+                  <BalAlertLink onClick={openRecoveredFundsLearnMoreModal}>Learn more</BalAlertLink>
+                </Text>
+              }
+              status="warning"
+            />
+          </AnimatedAlert>
         )}
-        {deprecatedChains.length > 0 && <DeprecatedChainsAlert chains={deprecatedChains} />}
+        {deprecatedChains.length > 0 && (
+          <AnimatedAlert>
+            <DeprecatedChainsAlert chains={deprecatedChains} />
+          </AnimatedAlert>
+        )}
         {isLoadingRewards || isLoadingPortfolio ? (
           <SimpleGrid columns={gridColumns} spacing="md">
             {Array.from({ length: slotCount }).map((_, index) => (
@@ -241,7 +249,11 @@ export function ClaimNetworkPools() {
           </ConnectButton.Custom>
         ) : (
           <>
-            {hasMerklRewards && <MerklAlert />}
+            {hasMerklRewards && (
+              <AnimatedAlert>
+                <MerklAlert />
+              </AnimatedAlert>
+            )}
             {noRewards && (
               <SimpleGrid columns={gridColumns} spacing="md">
                 {currentNetworks.map(network => (
@@ -341,6 +353,14 @@ export function ClaimNetworkPools() {
         onClose={onRecoveredFundsLearnMoreModalClose}
       />
     </FadeInOnView>
+  )
+}
+
+function AnimatedAlert({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div animate={{ opacity: 1, height: 'auto' }} initial={{ opacity: 0, height: 0 }} layout>
+      {children}
+    </motion.div>
   )
 }
 
