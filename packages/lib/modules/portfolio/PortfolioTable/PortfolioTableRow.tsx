@@ -129,7 +129,6 @@ export function PortfolioTableRow({ pool, keyValue, ...rest }: Props) {
 
 function StakingIcons({ pool, showIcon }: { pool: ExpandedPoolInfo; showIcon: boolean }) {
   const canStake = getCanStake(pool)
-
   const shouldHideIcon = pool.poolType === ExpandedPoolType.Unstaked || !canStake
 
   if (shouldHideIcon || !showIcon) {
@@ -140,12 +139,10 @@ function StakingIcons({ pool, showIcon }: { pool: ExpandedPoolInfo; showIcon: bo
     pool.poolType === ExpandedPoolType.StakedBal || pool.poolType === ExpandedPoolType.Locked
 
   return (
-    <>
-      {showBalIcon && (
-        <TooltipWithTouch label="Balancer">
-          <ProtocolIcon protocol={Protocol.Balancer} />
-        </TooltipWithTouch>
-      )}
-    </>
+    showBalIcon && (
+      <TooltipWithTouch label="Balancer">
+        <ProtocolIcon protocol={Protocol.Balancer} />
+      </TooltipWithTouch>
+    )
   )
 }
