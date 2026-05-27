@@ -77,10 +77,16 @@ export function PortfolioTable() {
   }
 
   const { needsMigration } = usePoolMigrations()
-  const poolsThatNeedMigration = sortedPools
-    .filter(pool => needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id))
-    .sort((a, b) => (b.userBalance?.totalBalanceUsd || 0) - (a.userBalance?.totalBalanceUsd || 0))
-    .filter((item, pos, ary) => !pos || item.id != ary[pos - 1].id) // deduplication
+  const poolsThatNeedMigration = useMemo(
+    () =>
+      sortedPools
+        .filter(pool => needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id))
+        .sort(
+          (a, b) => (b.userBalance?.totalBalanceUsd || 0) - (a.userBalance?.totalBalanceUsd || 0)
+        )
+        .filter((item, pos, ary) => !pos || item.id != ary[pos - 1].id), // deduplication
+    [sortedPools, needsMigration]
+  )
 
   const deprecatedChainPools = sortedPools.filter(pool => isChainDeprecated(pool.chain)).length
 

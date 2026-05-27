@@ -19,7 +19,7 @@ import { ClaimNetworkBlock } from './ClaimNetworkBlock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import ClaimProtocolRevenueModal from '../ClaimProtocolRevenueModal'
 import ClaimHiddenHandRewardsModal from '../ClaimHiddenHandRewardsModal'
 import { useRouter } from 'next/navigation'
@@ -129,45 +129,57 @@ export function ClaimNetworkPools() {
     .filter(chain => isChainDeprecated(chain as GqlChain)) as GqlChain[]
 
   // Build claimable items
-  const claimableItems = []
+  const claimableItems = useMemo(() => {
+    const items = []
 
-  poolsWithChain.forEach(([, pools]) => {
-    if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
-      claimableItems.push({
-        type: 'chain',
-        chain: pools[0].chain,
-        amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
+    poolsWithChain.forEach(([, pools]) => {
+      if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
+        items.push({
+          type: 'chain',
+          chain: pools[0].chain,
+          amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
+        })
+      }
+    })
+
+    if (hasProtocolRewards) {
+      items.push({
+        type: 'protocol',
+        chain: GqlChain.Mainnet,
+        amount: protocolRewardsBalance.toNumber(),
       })
     }
-  })
 
-  if (hasProtocolRewards) {
-    claimableItems.push({
-      type: 'protocol',
-      chain: GqlChain.Mainnet,
-      amount: protocolRewardsBalance.toNumber(),
-    })
-  }
+    if (hasHiddenHandRewards && !isPastJulyFirst) {
+      items.push({
+        type: 'hidden-hand',
+        chain: PROJECT_CONFIG.defaultNetwork,
+        amount: hiddenHandRewardsData.totalValueUsd,
+      })
+    }
 
-  if (hasHiddenHandRewards && !isPastJulyFirst) {
-    claimableItems.push({
-      type: 'hidden-hand',
-      chain: PROJECT_CONFIG.defaultNetwork,
-      amount: hiddenHandRewardsData.totalValueUsd,
-    })
-  }
+    if (isBalancer && hasRecoveredFunds) {
+      items.push({
+        type: 'recovered-funds',
+        chain: PROJECT_CONFIG.defaultNetwork,
+        amount: sumRecoveredFundsTotal(recoveredFundsClaims),
+        icon: '/images/icons/heart.svg',
+      })
+    }
 
-  if (isBalancer && hasRecoveredFunds) {
-    claimableItems.push({
-      type: 'recovered-funds',
-      chain: PROJECT_CONFIG.defaultNetwork,
-      amount: sumRecoveredFundsTotal(recoveredFundsClaims),
-      icon: '/images/icons/heart.svg',
-    })
-  }
-
-  // Sort by amount (highest first)
-  claimableItems.sort((a, b) => b.amount - a.amount)
+    // Sort by amount (highest first)
+    return items.sort((a, b) => b.amount - a.amount)
+  }, [
+    poolsWithChain,
+    totalFiatClaimableBalanceByChain,
+    hasProtocolRewards,
+    protocolRewardsBalance,
+    hasHiddenHandRewards,
+    isPastJulyFirst,
+    hiddenHandRewardsData,
+    hasRecoveredFunds,
+    recoveredFundsClaims,
+  ])
 
   const slotCount = 3
   const gridColumns = { base: 1, md: 2, lg: 3 }
@@ -329,7 +341,7 @@ export function ClaimNetworkPools() {
                         ? { base: 'none', md: 'none', lg: 'block' }
                         : { base: 'none', md: 'block' }
 
-                    return <Box display={displayProps} key={`placeholder-${i}`} />
+                    return <Box aria-hidden display={displayProps} key={`placeholder-${i}`} />
                   })}
               </SimpleGrid>
             )}
@@ -356,7 +368,7 @@ export function ClaimNetworkPools() {
   )
 }
 
-function AnimatedAlert({ children }: { children: React.ReactNode }) {
+function AnimatedAlert({ children }: { children: ReactNode }) {
   return (
     <motion.div animate={{ opacity: 1, height: 'auto' }} initial={{ opacity: 0, height: 0 }} layout>
       {children}
