@@ -5,8 +5,6 @@ import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolPath } from '../../pool/pool.utils'
-import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
-import { Protocol } from '../../protocols/useProtocols'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import {
   ExpandedPoolInfo,
@@ -16,7 +14,6 @@ import {
   STAKING_LABEL_MAP,
 } from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
 import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
@@ -26,6 +23,8 @@ import { AlertTriangle } from 'react-feather'
 import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
 import { getChainId } from '@repo/lib/config/app.config'
 import { isChainDeprecated } from '../../chains/chain.utils'
+import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
+import { Protocol } from '../../protocols/useProtocols'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -38,7 +37,6 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 const getStakingFilterKey = (poolType: ExpandedPoolType): StakingFilterKeyType => {
   switch (poolType) {
     case ExpandedPoolType.StakedBal:
-    case ExpandedPoolType.StakedAura:
       return StakingFilterKey.Staked
     case ExpandedPoolType.Locked:
       return StakingFilterKey.Locked
@@ -114,24 +112,13 @@ export function PortfolioTableRow({ pool, keyValue, ...rest }: Props) {
               </HStack>
             </GridItem>
             <GridItem justifySelf="end" px="sm">
-              {pool.poolType === ExpandedPoolType.StakedAura ? (
-                pool.staking?.aura?.apr ? (
-                  <AuraAprTooltip
-                    auraApr={pool.staking?.aura?.apr}
-                    textProps={{ fontWeight: 'medium' }}
-                  />
-                ) : (
-                  ' - '
-                )
-              ) : (
-                <MemoizedMainAprTooltip
-                  aprItems={pool.dynamicData.aprItems}
-                  chain={pool.chain}
-                  pool={pool}
-                  poolId={pool.id}
-                  textProps={{ fontWeight: 'medium' }}
-                />
-              )}
+              <MemoizedMainAprTooltip
+                aprItems={pool.dynamicData.aprItems}
+                chain={pool.chain}
+                pool={pool}
+                poolId={pool.id}
+                textProps={{ fontWeight: 'medium' }}
+              />
             </GridItem>
           </Grid>
         </Link>
@@ -149,18 +136,11 @@ function StakingIcons({ pool, showIcon }: { pool: ExpandedPoolInfo; showIcon: bo
     return null
   }
 
-  const showAuraIcon = pool.poolType === ExpandedPoolType.StakedAura
-
   const showBalIcon =
     pool.poolType === ExpandedPoolType.StakedBal || pool.poolType === ExpandedPoolType.Locked
 
   return (
     <>
-      {showAuraIcon && (
-        <TooltipWithTouch label="Aura">
-          <ProtocolIcon protocol={Protocol.Aura} />
-        </TooltipWithTouch>
-      )}
       {showBalIcon && (
         <TooltipWithTouch label="Balancer">
           <ProtocolIcon protocol={Protocol.Balancer} />
