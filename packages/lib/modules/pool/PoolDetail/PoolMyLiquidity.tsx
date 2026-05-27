@@ -21,10 +21,7 @@ import { Address } from 'viem'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { keyBy } from 'lodash'
-import {
-  getProportionalExitAmountsFromScaledBptIn,
-  getXavePoolLink,
-} from '../pool.utils'
+import { getProportionalExitAmountsFromScaledBptIn, getXavePoolLink } from '../pool.utils'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import {
   getUserTotalBalanceInt,
@@ -124,8 +121,8 @@ export default function PoolMyLiquidity() {
     switch (activeTab.value) {
       case 'total':
         return rawTotalBalance
-        case 'gauge':
-          return calcStakedBalanceInt(pool, getStakingType(activeTab.value))
+      case 'gauge':
+        return calcStakedBalanceInt(pool, getStakingType(activeTab.value))
       case 'unstaked':
         return getUserWalletBalanceInt(pool)
       default:
@@ -283,41 +280,41 @@ export default function PoolMyLiquidity() {
           </HStack>
           <Divider />
           <VStack alignItems="flex-start" h={`${height - 270}px`} spacing="md" width="full">
-              {compositionTokens.map(poolToken => {
-                return (
-                  <VStack key={`pool-${poolToken.address}`} w="full">
-                    <TokenRow
-                      abbreviated={false}
-                      address={poolToken.address as Address}
-                      chain={chain}
-                      pool={pool}
-                      showZeroAmountAsDash
-                      value={tokenBalanceFor(poolToken.address)}
-                      {...(poolToken.hasNestedPool && {
-                        isNestedBpt: true,
+            {compositionTokens.map(poolToken => {
+              return (
+                <VStack key={`pool-${poolToken.address}`} w="full">
+                  <TokenRow
+                    abbreviated={false}
+                    address={poolToken.address as Address}
+                    chain={chain}
+                    pool={pool}
+                    showZeroAmountAsDash
+                    value={tokenBalanceFor(poolToken.address)}
+                    {...(poolToken.hasNestedPool && {
+                      isNestedBpt: true,
+                    })}
+                  />
+                  {poolToken.hasNestedPool && poolToken.nestedPool && (
+                    <VStack pl="8" w="full">
+                      {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
+                        return (
+                          <TokenRow
+                            abbreviated={false}
+                            address={nestedPoolToken.address as Address}
+                            chain={chain}
+                            iconSize={35}
+                            isNestedToken
+                            key={`nested-pool-${nestedPoolToken.address}`}
+                            showZeroAmountAsDash
+                            value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
+                          />
+                        )
                       })}
-                    />
-                    {poolToken.hasNestedPool && poolToken.nestedPool && (
-                      <VStack pl="8" w="full">
-                        {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
-                          return (
-                            <TokenRow
-                              abbreviated={false}
-                              address={nestedPoolToken.address as Address}
-                              chain={chain}
-                              iconSize={35}
-                              isNestedToken
-                              key={`nested-pool-${nestedPoolToken.address}`}
-                              showZeroAmountAsDash
-                              value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
-                            />
-                          )
-                        })}
-                      </VStack>
-                    )}
-                  </VStack>
-                )
-              })}
+                    </VStack>
+                  )}
+                </VStack>
+              )
+            })}
             <PartnerRedirectModal
               isOpen={partnerRedirectDisclosure.isOpen}
               onClose={partnerRedirectDisclosure.onClose}

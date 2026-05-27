@@ -105,19 +105,19 @@ export function UserSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-            <LabelWithTooltip
-              label="My APR"
-              tooltip={`The APR you are likely to earn this week from staking in this pool on ${PROJECT_CONFIG.projectName}.`}
-            />
+          <LabelWithTooltip
+            label="My APR"
+            tooltip={`The APR you are likely to earn this week from staking in this pool on ${PROJECT_CONFIG.projectName}.`}
+          />
           {poolMyStatsValues && poolMyStatsValues.myLiquidity ? (
-              <MemoizedMainAprTooltip
-                aprItems={pool.dynamicData.aprItems}
-                chain={pool.chain}
-                height="28px"
-                pool={pool}
-                poolId={pool.id}
-                textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
-              />
+            <MemoizedMainAprTooltip
+              aprItems={pool.dynamicData.aprItems}
+              chain={pool.chain}
+              height="28px"
+              pool={pool}
+              poolId={pool.id}
+              textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
+            />
           ) : (
             <Heading size="h4">&mdash;</Heading>
           )}

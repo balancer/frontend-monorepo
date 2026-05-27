@@ -92,10 +92,7 @@ export function calcNonOnChainFetchedStakedBalance(pool: Pool): string {
   if (!userBalance) return '0'
 
   const nonOnChainFetchedStakedBalances = userBalance.stakedBalances
-    .filter(
-      balance =>
-        balance.stakingType !== GqlPoolStakingType.Gauge
-    )
+    .filter(balance => balance.stakingType !== GqlPoolStakingType.Gauge)
     .map(stakedBalance => stakedBalance.balance)
 
   return safeSum(nonOnChainFetchedStakedBalances)

@@ -50,7 +50,7 @@ export function useUserStakedBalance(pools: Pool[] = []) {
         const bptPrice = priceFor(pool.address, pool.chain)
         const humanStakedBalance = formatUnits(rawBalance || 0n, BPT_DECIMALS)
 
-const stakingType = GqlPoolStakingType.Gauge
+        const stakingType = GqlPoolStakingType.Gauge
 
         const stakedBalance: GqlUserStakedBalance = {
           __typename: 'GqlUserStakedBalance',

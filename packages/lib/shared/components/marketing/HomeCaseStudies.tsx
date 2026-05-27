@@ -18,7 +18,7 @@ export function HomeCaseStudies() {
 
   const logos = [
     { icon: CowIcon, name: 'Cow', partner: RedirectPartner.CoW },
-        { icon: BeetsIcon, name: 'Beets', partner: RedirectPartner.Beets },
+    { icon: BeetsIcon, name: 'Beets', partner: RedirectPartner.Beets },
     { icon: AaveIcon, name: 'Aave', partner: RedirectPartner.Aave },
     { icon: GyroIcon, name: 'Gyro', partner: RedirectPartner.Gyro },
     { icon: XaveIcon, name: 'Xave', partner: RedirectPartner.Xave },

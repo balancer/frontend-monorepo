@@ -1,14 +1,9 @@
-import {
-    Button
-} from '@chakra-ui/react'
-import { bn } from "@repo/lib/shared/utils/numbers"
+import { Button } from '@chakra-ui/react'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { usePathname, useRouter } from 'next/navigation'
 import { getCanStake } from '../actions/stake.helpers'
 import { Pool } from '../pool.types'
-import {
-    calcGaugeStakedBalance,
-    getUserWalletBalance
-} from '../user-balance.helpers'
+import { calcGaugeStakedBalance, getUserWalletBalance } from '../user-balance.helpers'
 
 type StakeUnstakeButtonProps = {
   pool: Pool
