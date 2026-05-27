@@ -47,7 +47,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     protocolVersion
     staking {
       address
-
       chain
       gauge {
         gaugeAddress

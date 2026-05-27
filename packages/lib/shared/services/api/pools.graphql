@@ -74,7 +74,6 @@ query GetPools(
           tokenAddress
         }
       }
-
     }
     factory
     id
