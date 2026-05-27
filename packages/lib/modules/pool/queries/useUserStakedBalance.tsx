@@ -50,10 +50,7 @@ export function useUserStakedBalance(pools: Pool[] = []) {
         const bptPrice = priceFor(pool.address, pool.chain)
         const humanStakedBalance = formatUnits(rawBalance || 0n, BPT_DECIMALS)
 
-        const stakingType =
-          stakingAddress === pool.staking?.aura?.auraPoolAddress
-            ? GqlPoolStakingType.Aura
-            : GqlPoolStakingType.Gauge
+const stakingType = GqlPoolStakingType.Gauge
 
         const stakedBalance: GqlUserStakedBalance = {
           __typename: 'GqlUserStakedBalance',
@@ -94,7 +91,7 @@ export function useUserStakedBalance(pools: Pool[] = []) {
   One contract call for each stakingAddress in a pool.
 */
 function poolContracts(poolByStaking: Record<Address, Pool>, userAddress: Address) {
-  // All staking should implement balanceOf so we take this abi that should work for v2 & v3 pools and also for Aura pools
+  // All staking should implement balanceOf so this abi works for v2 and v3 pools.
   const stakingAbi = balancerV2GaugeV5Abi
 
   const stakingAddresses = Object.keys(poolByStaking) as Address[]
@@ -130,13 +127,7 @@ function createPoolByStakingRecord(pools: Pool[]): Record<Address, Pool> {
 
 function getStakingAddresses(pool: Pool): Address[] {
   const preferentialGaugeAddress = pool.staking?.gauge?.gaugeAddress as Address
-  const auraPoolAddress = pool.staking?.aura?.auraPoolAddress as Address
   const nonPreferentialGaugeAddresses =
     pool.staking?.gauge?.otherGauges?.map(otherGauge => otherGauge.gaugeAddress as Address) || []
-  const stakingAddresses = [
-    auraPoolAddress,
-    preferentialGaugeAddress,
-    ...nonPreferentialGaugeAddresses,
-  ].filter(Boolean)
-  return stakingAddresses
+  return [preferentialGaugeAddress, ...nonPreferentialGaugeAddresses].filter(Boolean)
 }

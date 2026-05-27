@@ -3,7 +3,6 @@ import { ReactNode, useRef, useState } from 'react'
 import { Box, BoxProps, Flex, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { BeetsIcon } from '@repo/lib/shared/components/icons/logos/BeetsIcon'
 import { AaveIcon } from '@repo/lib/shared/components/icons/logos/AaveIcon'
-import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 import { GyroIcon } from '@repo/lib/shared/components/icons/logos/GyroIcon'
 import { CronIcon } from '@repo/lib/shared/components/icons/logos/CronIcon'
@@ -12,15 +11,14 @@ import { FjordIcon } from '@repo/lib/shared/components/icons/logos/FjordIcon'
 import { PartnerRedirectModal, RedirectPartner } from '../modals/PartnerRedirectModal'
 
 export function HomeCaseStudies() {
-  const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
+  const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.CoW)
   const mouseX = useMotionValue(Infinity)
 
   const partnerRedirectDisclosure = useDisclosure()
 
   const logos = [
     { icon: CowIcon, name: 'Cow', partner: RedirectPartner.CoW },
-    { icon: AuraIcon, name: 'Aura', partner: RedirectPartner.Aura },
-    { icon: BeetsIcon, name: 'Beets', partner: RedirectPartner.Beets },
+        { icon: BeetsIcon, name: 'Beets', partner: RedirectPartner.Beets },
     { icon: AaveIcon, name: 'Aave', partner: RedirectPartner.Aave },
     { icon: GyroIcon, name: 'Gyro', partner: RedirectPartner.Gyro },
     { icon: XaveIcon, name: 'Xave', partner: RedirectPartner.Xave },
