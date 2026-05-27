@@ -104,14 +104,6 @@ export function ClaimNetworkPools() {
   const iconSize = isDesktop ? 12 : 8
 
   const currentNetworks = isBeets ? beetsNetworksConfig : balancerNetworksConfig
-  const networkSlotCount = currentNetworks.length
-  const claimGridColumns = { base: 1, md: Math.min(networkSlotCount, 2), lg: networkSlotCount }
-  const loadingGridColumns = {
-    base: 1,
-    md: 1,
-    lg: Math.min(networkSlotCount, 2),
-    xl: networkSlotCount,
-  }
 
   const poolsWithChain = Object.entries(poolsByChainMap).sort(
     ([a], [b]) =>
@@ -131,6 +123,58 @@ export function ClaimNetworkPools() {
   const deprecatedChains = poolsWithChain
     .map(item => item[0])
     .filter(chain => isChainDeprecated(chain as GqlChain)) as GqlChain[]
+
+  // Build claimable items
+  const claimableItems = []
+
+  poolsWithChain.forEach(([, pools]) => {
+    if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
+      claimableItems.push({
+        type: 'chain',
+        chain: pools[0].chain,
+        amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
+      })
+    }
+  })
+
+  if (hasProtocolRewards) {
+    claimableItems.push({
+      type: 'protocol',
+      chain: GqlChain.Mainnet,
+      amount: protocolRewardsBalance.toNumber(),
+    })
+  }
+
+  if (hasHiddenHandRewards && !isPastJulyFirst) {
+    claimableItems.push({
+      type: 'hidden-hand',
+      chain: PROJECT_CONFIG.defaultNetwork,
+      amount: hiddenHandRewardsData.totalValueUsd,
+    })
+  }
+
+  if (isBalancer && hasRecoveredFunds) {
+    claimableItems.push({
+      type: 'recovered-funds',
+      chain: PROJECT_CONFIG.defaultNetwork,
+      amount: sumRecoveredFundsTotal(recoveredFundsClaims),
+      icon: '/images/icons/heart.svg',
+    })
+  }
+
+  // Sort by amount (highest first)
+  claimableItems.sort((a, b) => b.amount - a.amount)
+
+  const networkSlotCount =
+    claimableItems.length > 0 ? claimableItems.length : currentNetworks.length
+  const loadingSlotCount = isBeets ? 2 : 3
+  const claimGridColumns = { base: 1, md: Math.min(networkSlotCount, 2), lg: networkSlotCount }
+  const loadingGridColumns = {
+    base: 1,
+    md: 1,
+    lg: Math.min(loadingSlotCount, 2),
+    xl: loadingSlotCount,
+  }
 
   return (
     <FadeInOnView>
@@ -163,7 +207,7 @@ export function ClaimNetworkPools() {
 
         {isLoadingRewards || isLoadingPortfolio ? (
           <SimpleGrid columns={loadingGridColumns} spacing="md">
-            {Array.from({ length: networkSlotCount }).map((_, index) => (
+            {Array.from({ length: loadingSlotCount }).map((_, index) => (
               <Skeleton height="85px" key={`claim-network-skeleton-${index}`} w="full" />
             ))}
           </SimpleGrid>
@@ -235,122 +279,45 @@ export function ClaimNetworkPools() {
                 ))}
               </SimpleGrid>
             )}
-            {(() => {
-              // Collect all claimable items
-              const claimableItems = []
-
-              poolsWithChain.forEach(([, pools]) => {
-                if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
-                  claimableItems.push({
-                    type: 'chain',
-                    chain: pools[0].chain,
-                    amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
-                  })
-                }
-              })
-
-              if (hasProtocolRewards) {
-                claimableItems.push({
-                  type: 'protocol',
-                  chain: GqlChain.Mainnet,
-                  amount: protocolRewardsBalance.toNumber(),
-                })
-              }
-
-              if (hasHiddenHandRewards && !isPastJulyFirst) {
-                claimableItems.push({
-                  type: 'hidden-hand',
-                  chain: PROJECT_CONFIG.defaultNetwork,
-                  amount: hiddenHandRewardsData.totalValueUsd,
-                })
-              }
-
-              if (isBalancer && hasRecoveredFunds) {
-                claimableItems.push({
-                  type: 'recovered-funds',
-                  chain: PROJECT_CONFIG.defaultNetwork,
-                  amount: sumRecoveredFundsTotal(recoveredFundsClaims),
-                  icon: '/images/icons/heart.svg',
-                })
-              }
-
-              // Sort by amount (highest first)
-              claimableItems.sort((a, b) => b.amount - a.amount)
-
-              // If no claimable items, don't render the grid. An empty grid adds stack gap.
-              if (claimableItems.length === 0) {
-                return null
-              }
-
-              // Render all claimable items
-              const items = claimableItems.map((item, index) => {
-                const handleClick = () => {
-                  switch (item.type) {
-                    case 'protocol':
-                      setIsOpenedProtocolRevenueModal(true)
-                      break
-                    case 'hidden-hand':
-                      setIsOpenedHiddenHandRewardsModal(true)
-                      break
-                    case 'recovered-funds':
-                      openClaimRecoveredFundModal()
-                      break
-                    default:
-                      router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
+            {claimableItems.length > 0 && (
+              <SimpleGrid columns={claimGridColumns} spacing="md">
+                {claimableItems.map((item, index) => {
+                  const handleClick = () => {
+                    switch (item.type) {
+                      case 'protocol':
+                        setIsOpenedProtocolRevenueModal(true)
+                        break
+                      case 'hidden-hand':
+                        setIsOpenedHiddenHandRewardsModal(true)
+                        break
+                      case 'recovered-funds':
+                        openClaimRecoveredFundModal()
+                        break
+                      default:
+                        router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
+                    }
                   }
-                }
 
-                return (
-                  <motion.div
-                    animate={{ opacity: 1, scale: 1 }}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    key={`item-${index}`}
-                    style={{ transformOrigin: 'top' }}
-                    transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
-                  >
-                    <ClaimNetworkBlock
-                      chain={item.chain}
-                      icon={item.icon}
-                      networkTotalClaimableFiatBalance={item.amount}
-                      onClick={handleClick}
-                      title={getCardTitle(item.type)}
-                    />
-                  </motion.div>
-                )
-              })
-
-              // Add placeholders only if we have fewer items than max columns
-              if (claimableItems.length < networkSlotCount) {
-                const placeholdersNeeded = networkSlotCount - claimableItems.length
-
-                for (let i = 0; i < placeholdersNeeded; i++) {
-                  const slotIndex = claimableItems.length + i
-
-                  const displayProps =
-                    slotIndex === 2
-                      ? { base: 'none', md: 'none', lg: 'block' }
-                      : { base: 'none', md: 'block' }
-
-                  items.push(
-                    <Card
-                      display={displayProps}
-                      flex="1"
-                      key={`placeholder-${i}`}
-                      p={['sm', 'md']}
-                      shadow="innerLg"
-                      variant="level1"
-                      w="full"
-                    />
+                  return (
+                    <motion.div
+                      animate={{ opacity: 1, scale: 1 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      key={`item-${index}`}
+                      style={{ transformOrigin: 'top' }}
+                      transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
+                    >
+                      <ClaimNetworkBlock
+                        chain={item.chain}
+                        icon={item.icon}
+                        networkTotalClaimableFiatBalance={item.amount}
+                        onClick={handleClick}
+                        title={getCardTitle(item.type)}
+                      />
+                    </motion.div>
                   )
-                }
-              }
-
-              return (
-                <SimpleGrid columns={claimGridColumns} spacing="md">
-                  {items}
-                </SimpleGrid>
-              )
-            })()}
+                })}
+              </SimpleGrid>
+            )}
           </>
         )}
       </Stack>
