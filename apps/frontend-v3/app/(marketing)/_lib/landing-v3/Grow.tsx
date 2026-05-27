@@ -188,6 +188,9 @@ export function Grow() {
             />
           </MotionGridItem>
           <MotionGridItem colSpan={{ base: 6, lg: 2 }} order={5} variants={gridItemVariants}>
+            {/* EMPTY */}
+          </MotionGridItem>
+          <MotionGridItem colSpan={{ base: 6, lg: 2 }} order={6} variants={gridItemVariants}>
             <PartnerButton
               icon={<BeetsIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Beets)}
