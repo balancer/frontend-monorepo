@@ -770,6 +770,13 @@ export default function Components() {
         </Box>
 
         <Box mb="8">
+          <Text variant="eyebrow">External link</Text>
+          <Box>
+            <a href="https://beets.fi/">Learn more on Beets</a>
+          </Box>
+        </Box>
+
+        <Box mb="8">
           <Text variant="eyebrow">Eyebrow</Text>
           <Text variant="eyebrow">Lorem ipsum</Text>
         </Box>
