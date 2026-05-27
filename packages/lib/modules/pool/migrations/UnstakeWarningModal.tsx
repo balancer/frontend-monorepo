@@ -12,12 +12,10 @@ import {
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { usePathname, useRouter } from 'next/navigation'
 import { Pool } from '../pool.types'
-import { hasBalancerStakedBalance } from '../user-balance.helpers'
 
 export function UnstakeWarningModal({
   isOpen = false,
   onClose = () => {},
-  pool,
 }: UseDisclosureProps & { pool: Pool }) {
   const router = useRouter()
   const pathname = usePathname()
