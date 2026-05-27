@@ -4,7 +4,7 @@ import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useGetMinimumWrapAmount } from '@repo/lib/shared/hooks/useGetMinimumWrapAmount'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { Address, formatUnits, zeroAddress } from 'viem'
 import { getCompositionTokens } from '../../pool-tokens.utils'
 import { usePool } from '../../PoolProvider'
@@ -23,7 +23,9 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
   const { minimumWrapAmount } = useGetMinimumWrapAmount(chain)
   const { minimumTradeAmount } = useGetMinimumTradeAmount(chain)
 
-  if (bn(totalUSDValue).isZero()) return { isMinimumDepositMet: true, errors: {} }
+  if (!isValidNumber(totalUSDValue) || bn(totalUSDValue).isZero()) {
+    return { isMinimumDepositMet: true, errors: {} }
+  }
 
   const compositionTokens = getCompositionTokens(pool)
   const totalPoolLiquidity = calcTotalUsdValue(compositionTokens, pool.chain)
