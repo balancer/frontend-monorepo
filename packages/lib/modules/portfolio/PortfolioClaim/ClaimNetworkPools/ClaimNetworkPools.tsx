@@ -12,6 +12,7 @@ import {
   Button,
   useDisclosure,
   Link,
+  Box,
 } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
@@ -81,16 +82,19 @@ export function ClaimNetworkPools() {
 
   const [isOpenedProtocolRevenueModal, setIsOpenedProtocolRevenueModal] = useState(false)
   const [isOpenedHiddenHandRewardsModal, setIsOpenedHiddenHandRewardsModal] = useState(false)
+
   const {
     isOpen: isClaimRecoveredFundModalOpen,
     onOpen: openClaimRecoveredFundModal,
     onClose: onClaimRecoveredFundModalClose,
   } = useDisclosure()
+
   const {
     isOpen: isRecoveredFundsLearnMoreModalOpen,
     onOpen: openRecoveredFundsLearnMoreModal,
     onClose: onRecoveredFundsLearnMoreModalClose,
   } = useDisclosure()
+
   const { isConnected } = useUserAccount()
   const router = useRouter()
 
@@ -165,16 +169,8 @@ export function ClaimNetworkPools() {
   // Sort by amount (highest first)
   claimableItems.sort((a, b) => b.amount - a.amount)
 
-  const networkSlotCount =
-    claimableItems.length > 0 ? claimableItems.length : currentNetworks.length
-  const loadingSlotCount = isBeets ? 2 : 3
-  const claimGridColumns = { base: 1, md: Math.min(networkSlotCount, 2), lg: networkSlotCount }
-  const loadingGridColumns = {
-    base: 1,
-    md: 1,
-    lg: Math.min(loadingSlotCount, 2),
-    xl: loadingSlotCount,
-  }
+  const slotCount = 3
+  const gridColumns = { base: 1, md: 2, lg: 3 }
 
   return (
     <FadeInOnView>
@@ -182,14 +178,12 @@ export function ClaimNetworkPools() {
         <Heading size="h4" variant="special">
           Claimable incentives
         </Heading>
-
         {hasHiddenHandRewards && !isPastJulyFirst && (
           <BalAlert
             content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
             status="warning"
           />
         )}
-
         {isBalancer && hasRecoveredFunds && (
           <BalAlert
             content={
@@ -202,19 +196,17 @@ export function ClaimNetworkPools() {
             status="warning"
           />
         )}
-
         {deprecatedChains.length > 0 && <DeprecatedChainsAlert chains={deprecatedChains} />}
-
         {isLoadingRewards || isLoadingPortfolio ? (
-          <SimpleGrid columns={loadingGridColumns} spacing="md">
-            {Array.from({ length: loadingSlotCount }).map((_, index) => (
+          <SimpleGrid columns={gridColumns} spacing="md">
+            {Array.from({ length: slotCount }).map((_, index) => (
               <Skeleton height="85px" key={`claim-network-skeleton-${index}`} w="full" />
             ))}
           </SimpleGrid>
         ) : !isConnected ? (
           <ConnectButton.Custom>
             {({ openConnectModal }: { openConnectModal: () => void }) => (
-              <SimpleGrid columns={claimGridColumns} spacing="md">
+              <SimpleGrid columns={gridColumns} spacing="md">
                 {currentNetworks.map(network => (
                   <Card
                     flex="1"
@@ -251,7 +243,7 @@ export function ClaimNetworkPools() {
           <>
             {hasMerklRewards && <MerklAlert />}
             {noRewards && (
-              <SimpleGrid columns={claimGridColumns} spacing="md">
+              <SimpleGrid columns={gridColumns} spacing="md">
                 {currentNetworks.map(network => (
                   <Card
                     flex="1"
@@ -280,7 +272,7 @@ export function ClaimNetworkPools() {
               </SimpleGrid>
             )}
             {claimableItems.length > 0 && (
-              <SimpleGrid columns={claimGridColumns} spacing="md">
+              <SimpleGrid columns={gridColumns} spacing="md">
                 {claimableItems.map((item, index) => {
                   const handleClick = () => {
                     switch (item.type) {
@@ -316,6 +308,17 @@ export function ClaimNetworkPools() {
                     </motion.div>
                   )
                 })}
+                {claimableItems.length < slotCount &&
+                  Array.from({ length: slotCount - claimableItems.length }).map((_, i) => {
+                    const slotIndex = claimableItems.length + i
+
+                    const displayProps =
+                      slotIndex === 2
+                        ? { base: 'none', md: 'none', lg: 'block' }
+                        : { base: 'none', md: 'block' }
+
+                    return <Box display={displayProps} key={`placeholder-${i}`} />
+                  })}
               </SimpleGrid>
             )}
           </>
