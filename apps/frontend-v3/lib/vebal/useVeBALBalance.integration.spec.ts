@@ -10,11 +10,21 @@ function testUseUserVeBal(address: `0x${string}`) {
   return result
 }
 
+async function waitForLoaded(result: {
+  current: { isLoading: boolean; isError: boolean; error: unknown }
+}) {
+  await waitFor(() => expect(result.current.isLoading).toBeFalsy(), { timeout: 30000 })
+
+  if (result.current.isError) {
+    throw new Error(`veBAL query failed: ${result.current.error}`)
+  }
+}
+
 describe('returns the veBAL balance of the user when', () => {
   test('user has no veBal', async () => {
     const result = testUseUserVeBal(ACCOUNT_WITHOUT_VEBAL)
 
-    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    await waitForLoaded(result)
 
     expect(result.current.veBALBalance).toBe(0n)
   })
@@ -22,7 +32,7 @@ describe('returns the veBAL balance of the user when', () => {
   test('user has veBal', async () => {
     const result = testUseUserVeBal(ACCOUNT_WITH_VEBAL)
 
-    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    await waitForLoaded(result)
 
     expect(result.current.veBALBalance).toBeGreaterThan(0n)
   })
