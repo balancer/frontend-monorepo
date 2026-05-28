@@ -104,7 +104,10 @@ export function LbpPreview() {
                     info={launchTokenPriceUsd}
                     title={`${launchTokenMetadata.symbol} sale price`}
                   />
-                  <SimpleInfoCard info={fNum('token', saleTokenAmount)} title="Tokens for sale" />
+                  <SimpleInfoCard
+                    info={fNum('token', saleTokenAmount || 0)}
+                    title="Tokens for sale"
+                  />
                   <SimpleInfoCard info={totalValueUsd} title="Max sale total" />
                 </HStack>
                 <FixedProjectedPrice
