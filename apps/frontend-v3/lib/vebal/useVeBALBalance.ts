@@ -6,7 +6,7 @@ import { veBalAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { Address } from 'viem'
 
 export function useVeBALBalance(accountAddress: Address) {
-  const { data, isLoading, refetch, queryKey } = useReadContract({
+  const { data, error, isLoading, isError, refetch, queryKey, status } = useReadContract({
     chainId: mainnet.id,
     abi: veBalAbi,
     address: mainnetNetworkConfig.contracts.veBAL,
@@ -17,8 +17,11 @@ export function useVeBALBalance(accountAddress: Address) {
 
   return {
     veBALBalance: data || 0n,
+    error,
+    isError,
     isLoading,
     refetch,
     queryKey: queryKey as InvalidateQueryFilters,
+    status,
   }
 }
