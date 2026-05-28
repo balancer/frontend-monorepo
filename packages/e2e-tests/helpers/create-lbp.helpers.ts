@@ -108,8 +108,11 @@ export async function doSaleStructureStep(
   }
 
   if (lbpConfig.saleType === 'fixed-price') {
-    await page.locator('#token-select').click()
-    await page.locator('[id^="react-select"]').getByText('USDC', { exact: true }).click()
+    await page.locator('#token-select').click({ force: true })
+    await page
+      .locator('[id^="react-select"]')
+      .getByText('USDC', { exact: true })
+      .click({ force: true })
     await expect(page.getByRole('heading', { name: 'Sale configuration' })).toBeVisible()
     await page
       .getByLabel(`${lbpConfig.saleToken.symbol} token sale price (against USDC)`)
