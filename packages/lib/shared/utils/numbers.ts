@@ -323,7 +323,7 @@ export function isTooSmallToRemoveUsd(value: Numberish): boolean {
 }
 
 export const isValidNumber = (value: string | number | undefined | null): boolean =>
-  isNumber(toNumber(value)) && !isNaN(toNumber(value))
+  value !== '' && isNumber(toNumber(value)) && !isNaN(toNumber(value))
 
 // Parses a fixed-point decimal string into a bigint
 // If we do not have enough decimals to express the number, we truncate it
