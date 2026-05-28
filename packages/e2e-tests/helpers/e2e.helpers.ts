@@ -55,15 +55,6 @@ export async function setForkBalances(page: Page, forkOptions?: ForkOptions) {
   }, forkOptions || defaultForkOptions)
 }
 
-export function captureConsoleErrors(page: Page): string[] {
-  const errors: string[] = []
-  page.on('console', msg => {
-    if (msg.type() === 'error') errors.push(msg.text())
-  })
-  page.on('pageerror', error => errors.push(error.message))
-  return errors
-}
-
 export async function acceptPolicies(page: Page) {
   await page
     .getByRole('dialog', { name: 'Accept Balancer policies' })

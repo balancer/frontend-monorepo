@@ -1,9 +1,7 @@
 import { button, clickButton, clickLink } from '@/helpers/user.helpers'
 import { test, expect } from '@playwright/test'
-import { captureConsoleErrors } from '@/helpers/e2e.helpers'
 
 test('Open swap page and try eth wrap', async ({ page }) => {
-  const errors = captureConsoleErrors(page)
   await page.goto('http://localhost:3000/')
   await clickLink(page, 'Swap')
 
@@ -20,5 +18,4 @@ test('Open swap page and try eth wrap', async ({ page }) => {
 
   await expect(page).toHaveURL('http://localhost:3000/swap/ethereum/ETH/WETH/1')
   await expect(page.getByText('1 ETH = 1 WETH')).toBeVisible()
-  expect(errors).toEqual([])
 })

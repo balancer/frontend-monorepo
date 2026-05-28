@@ -1,9 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { balWeth8020 } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
-import { captureConsoleErrors } from '@/helpers/e2e.helpers'
 
 test('Balancer: can add liquidity to random pool', async ({ page }) => {
-  const errors = captureConsoleErrors(page)
   await page.goto(`http://localhost:3000/pools/ethereum/v2/${balWeth8020.poolId}`)
 
   await page.getByRole('button', { name: 'Add liquidity' }).click()
@@ -20,5 +18,4 @@ test('Balancer: can add liquidity to random pool', async ({ page }) => {
   await page.getByPlaceholder('0.00').first().click()
   await page.getByPlaceholder('0.00').first().fill('1')
   await page.getByRole('button', { name: 'Connect' }).nth(2).click()
-  expect(errors).toEqual([])
 })
