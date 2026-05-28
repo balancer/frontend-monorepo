@@ -124,13 +124,7 @@ export const b_50sDAI_50wstETHMock = {
         },
       ],
     },
-    aura: {
-      id: '0x49aadc30b5ccc57bddd55ac8bd7d8db7cf1f2b8b',
-      apr: 0.2671,
-      auraPoolAddress: '0x49aadc30b5ccc57bddd55ac8bd7d8db7cf1f2b8b',
-      auraPoolId: '19',
-      isShutdown: false,
-    },
+    aura: null,
   },
   userBalance: {
     totalBalance: '0',

@@ -146,13 +146,7 @@ export const b_csUSDC_csUSDLMock = {
         },
       ],
     },
-    aura: {
-      id: '0x1d2714c00246ee6a2fb83dfd0787e2dffd6a5993',
-      apr: 0.1181,
-      auraPoolAddress: '0x1d2714c00246ee6a2fb83dfd0787e2dffd6a5993',
-      auraPoolId: '245',
-      isShutdown: false,
-    },
+    aura: null,
   },
   userBalance: {
     totalBalance: '0',

@@ -285,13 +285,7 @@ export const aave_GHO_USDT_USDCMock = {
   protocolVersion: 3,
   staking: {
     address: '0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f',
-    aura: {
-      apr: 0.0668,
-      auraPoolAddress: '0x8e89d41c563e6c3d9901ad75b75e2d8e140def04',
-      auraPoolId: '246',
-      id: '0x8e89d41c563e6c3d9901ad75b75e2d8e140def04',
-      isShutdown: false,
-    },
+    aura: null,
     chain: 'MAINNET',
     gauge: {
       gaugeAddress: '0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f',

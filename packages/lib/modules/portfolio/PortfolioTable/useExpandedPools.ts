@@ -1,12 +1,11 @@
 import { useMemo } from 'react'
 import { Pool } from '../../pool/pool.types'
 import { isVebalPool } from '../../pool/pool.helpers'
-import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { getCanStake } from '../../pool/actions/stake.helpers'
+import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export enum ExpandedPoolType {
   StakedBal = 'staked-bal',
-  StakedAura = 'staked-aura',
   Unstaked = 'unstaked',
   Locked = 'locked',
   Unlocked = 'unlocked',
@@ -35,7 +34,7 @@ export type StakingFilterKeyType = (typeof StakingFilterKey)[keyof typeof Stakin
 
 // Maps UI filter keys to the actual pool types they represent
 export const STAKING_FILTER_MAP: Record<StakingFilterKeyType, ExpandedPoolType[]> = {
-  [StakingFilterKey.Staked]: [ExpandedPoolType.StakedBal, ExpandedPoolType.StakedAura],
+  [StakingFilterKey.Staked]: [ExpandedPoolType.StakedBal],
   [StakingFilterKey.Locked]: [ExpandedPoolType.Locked],
   [StakingFilterKey.Unlocked]: [ExpandedPoolType.Unlocked],
   [StakingFilterKey.Unstaked]: [ExpandedPoolType.Unstaked],
@@ -60,12 +59,13 @@ export function useExpandedPools(pools: Pool[]) {
 
       const stakedBalancesBalUsd =
         pool.userBalance?.stakedBalances
-          .filter(balance => balance.stakingType !== GqlPoolStakingType.Aura)
-          .reduce((acc, balance) => acc + Number(balance.balanceUsd), 0) || 0
-
-      const stakedBalancesAuraUsd =
-        pool.userBalance?.stakedBalances
-          .filter(balance => balance.stakingType === GqlPoolStakingType.Aura)
+          ?.filter(balance =>
+            [
+              GqlPoolStakingType.Gauge,
+              GqlPoolStakingType.Vebal,
+              GqlPoolStakingType.FreshBeets,
+            ].includes(balance.stakingType)
+          )
           .reduce((acc, balance) => acc + Number(balance.balanceUsd), 0) || 0
 
       const walletBalanceUsd = pool.userBalance?.walletBalanceUsd || 0
@@ -76,16 +76,6 @@ export function useExpandedPools(pools: Pool[]) {
           ...pool,
           poolType,
           poolPositionUsd: stakedBalancesBalUsd,
-          uniqueKey: generateUniqueKey(pool.id, poolType),
-        })
-      }
-
-      if (stakedBalancesAuraUsd > 0) {
-        const poolType = ExpandedPoolType.StakedAura
-        expandedPools.push({
-          ...pool,
-          poolType,
-          poolPositionUsd: stakedBalancesAuraUsd,
           uniqueKey: generateUniqueKey(pool.id, poolType),
         })
       }
@@ -105,7 +95,7 @@ export function useExpandedPools(pools: Pool[]) {
         })
       }
 
-      if (stakedBalancesBalUsd === 0 && stakedBalancesAuraUsd === 0 && walletBalanceUsd === 0) {
+      if (stakedBalancesBalUsd === 0 && walletBalanceUsd === 0) {
         const poolType = ExpandedPoolType.Default
         expandedPools.push({
           ...pool,
