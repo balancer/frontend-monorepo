@@ -21,7 +21,6 @@ import { GqlPoolAprItemType } from '@repo/lib/shared/services/api/generated/grap
 import StarIcon from '../../icons/StarIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isPool } from '@repo/lib/modules/pool/pool-tokens.utils'
-import { bn } from '@repo/lib/shared/utils/numbers'
 
 interface Props extends Omit<
   BaseAprTooltipProps,
@@ -137,7 +136,7 @@ function MainAprTooltip({
   ...props
 }: Props) {
   const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, true)
-  const isAprNegative = bn(aprToShow.replace('%', '')).lt(0)
+  const isAprNegative = aprToShow.trim().startsWith('-')
 
   // hoverColor here is used for the text and therefore can use a semantic token
   const hoverColor = isLBP(pool.type)
