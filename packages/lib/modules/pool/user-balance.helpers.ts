@@ -29,10 +29,6 @@ export function calcGaugeStakedBalance(pool: Pool | PoolListItem): HumanAmount {
   return calcStakedBalance(pool, GqlPoolStakingType.Gauge)
 }
 
-export function calcAuraStakedBalance(pool: Pool | PoolListItem): HumanAmount {
-  return calcStakedBalance(pool, GqlPoolStakingType.Aura)
-}
-
 export function calcTotalStakedBalanceUsd(pool: Pool): number {
   const userBalance = pool.userBalance
   if (!userBalance) return 0
@@ -96,11 +92,7 @@ export function calcNonOnChainFetchedStakedBalance(pool: Pool): string {
   if (!userBalance) return '0'
 
   const nonOnChainFetchedStakedBalances = userBalance.stakedBalances
-    .filter(
-      balance =>
-        balance.stakingType !== GqlPoolStakingType.Gauge &&
-        balance.stakingType !== GqlPoolStakingType.Aura
-    )
+    .filter(balance => balance.stakingType !== GqlPoolStakingType.Gauge)
     .map(stakedBalance => stakedBalance.balance)
 
   return safeSum(nonOnChainFetchedStakedBalances)
@@ -121,7 +113,7 @@ export function getStakedBalance(pool: Pool, stakingType: GqlPoolStakingType): S
   if (!userBalance) return zeroStakedBalance
 
   const stakingAddress =
-    stakingType === GqlPoolStakingType.Gauge ? pool.staking?.gauge?.id : pool.staking?.aura?.id
+    stakingType === GqlPoolStakingType.Gauge ? pool.staking?.gauge?.id : undefined
   const stakedBalance = userBalance.stakedBalances.find(
     balance =>
       balance.stakingType === stakingType &&
@@ -150,16 +142,8 @@ export function calcGaugeStakedBalanceUsd(pool: Pool): number {
   return calcStakedBalanceUsd(pool, GqlPoolStakingType.Gauge)
 }
 
-export function calcAuraStakedBalanceUsd(pool: Pool): number {
-  return calcStakedBalanceUsd(pool, GqlPoolStakingType.Aura)
-}
-
 export function hasTotalBalance(pool: Pool) {
   return bn(getUserTotalBalance(pool)).gt(0)
-}
-
-export function hasAuraStakedBalance(pool: Pool | PoolListItem): boolean {
-  return hasStakedBalanceFor(pool, GqlPoolStakingType.Aura)
 }
 
 export function hasBalancerStakedBalance(pool: Pool | PoolListItem): boolean {

@@ -21,11 +21,7 @@ import { Address } from 'viem'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { keyBy } from 'lodash'
-import {
-  getAuraPoolLink,
-  getProportionalExitAmountsFromScaledBptIn,
-  getXavePoolLink,
-} from '../pool.utils'
+import { getProportionalExitAmountsFromScaledBptIn, getXavePoolLink } from '../pool.utils'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import {
   getUserTotalBalanceInt,
@@ -49,8 +45,6 @@ import {
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
-import { ArrowUpRight } from 'react-feather'
-import { getChainId } from '@repo/lib/config/app.config'
 import {
   PartnerRedirectModal,
   RedirectPartner,
@@ -84,31 +78,11 @@ export default function PoolMyLiquidity() {
   const { isConnected, isConnecting } = useUserAccount()
   const router = useRouter()
   const partnerRedirectDisclosure = useDisclosure()
-  const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
+  const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Xave)
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
 
   const isVeBal = isVebalPool(pool.id)
-  const tabs = useMemo(() => {
-    const tabsArr = getTabs(isVeBal)
-
-    if (
-      pool.staking?.aura &&
-      !pool.staking.aura.isShutdown &&
-      tabsArr.findIndex(tab => tab.value === 'aura') === -1
-    ) {
-      tabsArr.push({
-        value: 'aura',
-        label: 'Aura',
-      })
-    } else if (!pool.staking?.aura) {
-      const index = tabsArr.findIndex(tab => tab.value === 'aura')
-      if (index > -1) {
-        tabsArr.splice(index, 1)
-      }
-    }
-
-    return tabsArr
-  }, [isVeBal, pool])
+  const tabs = useMemo(() => getTabs(isVeBal), [isVeBal])
 
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>(tabs[0])
   const pathname = usePathname()
@@ -136,8 +110,6 @@ export default function PoolMyLiquidity() {
       case 'gauge':
         if (isVeBal) return GqlPoolStakingType.Vebal
         return GqlPoolStakingType.Gauge
-      case 'aura':
-        return GqlPoolStakingType.Aura
       default:
         return GqlPoolStakingType.Gauge
     }
@@ -150,7 +122,6 @@ export default function PoolMyLiquidity() {
       case 'total':
         return rawTotalBalance
       case 'gauge':
-      case 'aura':
         return calcStakedBalanceInt(pool, getStakingType(activeTab.value))
       case 'unstaked':
         return getUserWalletBalanceInt(pool)
@@ -182,8 +153,6 @@ export default function PoolMyLiquidity() {
         return 'My total balance'
       case 'gauge':
         return isVeBal ? 'Locked' : 'Staked on Balancer'
-      case 'aura':
-        return 'Staked on Aura'
       case 'unstaked':
         return isVeBal ? 'Unlocked' : 'My unstaked balance'
       default:
@@ -201,7 +170,6 @@ export default function PoolMyLiquidity() {
       case 'total':
         return getUserTotalBalanceUsd(pool)
       case 'gauge':
-      case 'aura':
         return stakedBalance
       case 'unstaked':
         return unstakedBalance
@@ -227,8 +195,6 @@ export default function PoolMyLiquidity() {
   const shareofPoolLabel = bn(shareOfPool).gt(0)
     ? fNum('sharePercent', shareOfPool)
     : ZERO_VALUE_DASH
-  const chainId = getChainId(chain)
-
   const options = useMemo(() => {
     return tabs.map(tab => ({
       ...tab,
@@ -239,9 +205,7 @@ export default function PoolMyLiquidity() {
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
     let url
-    if (partner === RedirectPartner.Aura && pool?.staking?.aura?.auraPoolId) {
-      url = getAuraPoolLink(chainId, pool.staking.aura.auraPoolId)
-    } else if (partner === RedirectPartner.Xave && pool?.address && pool.chain) {
+    if (partner === RedirectPartner.Xave && pool?.address && pool.chain) {
       url = getXavePoolLink(pool.chain, pool.address)
     }
     setRedirectPartnerUrl(url)
@@ -316,70 +280,41 @@ export default function PoolMyLiquidity() {
           </HStack>
           <Divider />
           <VStack alignItems="flex-start" h={`${height - 270}px`} spacing="md" width="full">
-            {activeTab.value === 'aura' && !totalBalanceUsd && pool.staking?.aura ? (
-              <HStack
-                bg="aura.purple"
-                justify="space-between"
-                mb="3xl"
-                px="3"
-                py="2"
-                rounded="md"
-                w="full"
-              >
-                <Text color="white" fontSize="sm" fontWeight="bold">
-                  Aura APR: {fNum('apr', pool.staking.aura.apr)}
-                </Text>
-                <Button
-                  color="white"
-                  onClick={() => openRedirectModal(RedirectPartner.Aura)}
-                  size="xs"
-                  variant="outline"
-                >
-                  <HStack gap="1">
-                    <Text color="white" fontSize="sm" fontWeight="bold">
-                      Learn more
-                    </Text>
-                    <ArrowUpRight size={14} />
-                  </HStack>
-                </Button>
-              </HStack>
-            ) : (
-              compositionTokens.map(poolToken => {
-                return (
-                  <VStack key={`pool-${poolToken.address}`} w="full">
-                    <TokenRow
-                      abbreviated={false}
-                      address={poolToken.address as Address}
-                      chain={chain}
-                      pool={pool}
-                      showZeroAmountAsDash
-                      value={tokenBalanceFor(poolToken.address)}
-                      {...(poolToken.hasNestedPool && {
-                        isNestedBpt: true,
+            {compositionTokens.map(poolToken => {
+              return (
+                <VStack key={`pool-${poolToken.address}`} w="full">
+                  <TokenRow
+                    abbreviated={false}
+                    address={poolToken.address as Address}
+                    chain={chain}
+                    pool={pool}
+                    showZeroAmountAsDash
+                    value={tokenBalanceFor(poolToken.address)}
+                    {...(poolToken.hasNestedPool && {
+                      isNestedBpt: true,
+                    })}
+                  />
+                  {poolToken.hasNestedPool && poolToken.nestedPool && (
+                    <VStack pl="8" w="full">
+                      {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
+                        return (
+                          <TokenRow
+                            abbreviated={false}
+                            address={nestedPoolToken.address as Address}
+                            chain={chain}
+                            iconSize={35}
+                            isNestedToken
+                            key={`nested-pool-${nestedPoolToken.address}`}
+                            showZeroAmountAsDash
+                            value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
+                          />
+                        )
                       })}
-                    />
-                    {poolToken.hasNestedPool && poolToken.nestedPool && (
-                      <VStack pl="8" w="full">
-                        {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
-                          return (
-                            <TokenRow
-                              abbreviated={false}
-                              address={nestedPoolToken.address as Address}
-                              chain={chain}
-                              iconSize={35}
-                              isNestedToken
-                              key={`nested-pool-${nestedPoolToken.address}`}
-                              showZeroAmountAsDash
-                              value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
-                            />
-                          )
-                        })}
-                      </VStack>
-                    )}
-                  </VStack>
-                )
-              })
-            )}
+                    </VStack>
+                  )}
+                </VStack>
+              )
+            })}
             <PartnerRedirectModal
               isOpen={partnerRedirectDisclosure.isOpen}
               onClose={partnerRedirectDisclosure.onClose}

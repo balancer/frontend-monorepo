@@ -92,13 +92,7 @@ export const b_auraBAL_STABLEMock = {
         },
       ],
     },
-    aura: {
-      id: '0x89d3d732da8bf0f88659cf3738e5e44e553f9ed7',
-      apr: 0.1645,
-      auraPoolAddress: '0x89d3d732da8bf0f88659cf3738e5e44e553f9ed7',
-      auraPoolId: '101',
-      isShutdown: false,
-    },
+    aura: null,
   },
   userBalance: {
     totalBalance: '0',

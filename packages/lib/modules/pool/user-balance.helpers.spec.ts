@@ -15,7 +15,6 @@ import {
   getUserTotalBalanceUsd,
   getUserWalletBalance,
   getUserWalletBalanceUsd,
-  hasAuraStakedBalance,
   hasStakedBalanceFor,
   hasBalancerStakedBalance,
   hasTinyBalance,
@@ -36,13 +35,6 @@ const apiStakedBalances: GqlUserStakedBalance[] = [
     stakingId: '0x55ec14e951b1c25ab09132dae12363bea0d20105', //Non preferential gauge
     __typename: 'GqlUserStakedBalance',
   },
-  {
-    balance: '22',
-    balanceUsd: 50,
-    stakingType: GqlPoolStakingType.Aura,
-    stakingId: '',
-    __typename: 'GqlUserStakedBalance',
-  },
 ]
 
 test('User balance helpers', () => {
@@ -61,9 +53,9 @@ test('User balance helpers', () => {
   expect(getUserTotalBalanceUsd(pool)).toBe(300)
   expect(getUserTotalBalanceInt(pool)).toBe(175000000000000000000n)
 
-  expect(calcTotalStakedBalance(pool)).toBe('74.123') // (preferential staked + non-preferential staked + aura staked) = 0 + 52.123 + 22
-  expect(calcTotalStakedBalanceUsd(pool)).toBe(57.9)
-  expect(calcTotalStakedBalanceInt(pool)).toBe(74123000000000000000n)
+  expect(calcTotalStakedBalance(pool)).toBe('52.123')
+  expect(calcTotalStakedBalanceUsd(pool)).toBe(7.9)
+  expect(calcTotalStakedBalanceInt(pool)).toBe(52123000000000000000n)
 
   expect(getUserWalletBalance(pool)).toBe('100')
   expect(getUserWalletBalanceUsd(pool)).toBe(200)
@@ -71,7 +63,6 @@ test('User balance helpers', () => {
 
   expect(calcNonOnChainFetchedStakedBalance(pool)).toBe('0')
 
-  expect(hasAuraStakedBalance(pool)).toBeTruthy()
   expect(hasBalancerStakedBalance(pool)).toBeTruthy()
   expect(hasStakedBalanceFor(pool, GqlPoolStakingType.FreshBeets)).toBeFalsy()
   expect(hasTinyBalance(pool)).toBeFalsy()
