@@ -22,10 +22,9 @@ export function createIntegrationVitestConfig(monorepoRoot: string): ViteUserCon
     ],
     globalSetup: [resolveFromRoot('./packages/test/anvil/anvil-global-setup.ts')],
     testTimeout: 120_000,
-    // Consider disabling threads if we detect problems with anvil
-    // poolOptions: {
-    //   threads: { singleThread: true },
-    // },
+    // The integration suite shares one set of anvil forks. Keep test files serial so
+    // concurrent workers do not overload or mutate the same forked RPC state.
+    maxWorkers: 1,
     retry: 1,
     // Uncomment the next line to exclude test for debug reasons
     // exclude: ['lib/modules/tokens/useTokenBalances.integration.spec.ts', 'node_modules', 'dist'],
