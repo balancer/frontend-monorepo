@@ -134,13 +134,7 @@ export const aave_USDC_USDTMock = {
         },
       ],
     },
-    aura: {
-      id: '0xa68646458d5591e53d1eb8f2ccbaac58a33fb27b',
-      apr: 0.0357,
-      auraPoolAddress: '0xa68646458d5591e53d1eb8f2ccbaac58a33fb27b',
-      auraPoolId: '242',
-      isShutdown: false,
-    },
+    aura: null,
   },
   userBalance: {
     totalBalance: '0',

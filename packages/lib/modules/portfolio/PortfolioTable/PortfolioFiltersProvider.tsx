@@ -112,10 +112,7 @@ export function usePortfolioFiltersLogic() {
 
     expandedPools.forEach(pool => {
       if (pool.poolType) {
-        if (
-          pool.poolType === ExpandedPoolType.StakedBal ||
-          pool.poolType === ExpandedPoolType.StakedAura
-        ) {
+        if (pool.poolType === ExpandedPoolType.StakedBal) {
           foundFilterKeys.add(StakingFilterKey.Staked)
         } else if (pool.poolType === ExpandedPoolType.Locked) {
           foundFilterKeys.add(StakingFilterKey.Locked)

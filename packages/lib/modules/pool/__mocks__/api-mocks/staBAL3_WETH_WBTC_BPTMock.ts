@@ -92,13 +92,7 @@ export const staBAL3_WETH_WBTC_BPTMock = {
         },
       ],
     },
-    aura: {
-      id: '0x112ea63d3a70bb7926f95da81eadf71aba0f0955',
-      apr: 0.046,
-      auraPoolAddress: '0x112ea63d3a70bb7926f95da81eadf71aba0f0955',
-      auraPoolId: '13',
-      isShutdown: false,
-    },
+    aura: null,
   },
   userBalance: {
     totalBalance: '0',

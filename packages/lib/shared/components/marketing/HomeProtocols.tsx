@@ -81,7 +81,7 @@ export function HomeProtocols() {
               </Heading>
               <Text>
                 In addition to your own points / token, boost your liquidity by utilizing the veBAL
-                system for BAL and AURA incentives.
+                system for BAL incentives.
               </Text>
             </Box>
             <Box>

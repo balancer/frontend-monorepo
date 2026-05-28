@@ -17,7 +17,6 @@ import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../other/Picture'
 
 export enum RedirectPartner {
-  Aura = 'aura',
   Beets = 'beets',
   CoW = 'cow',
   Aave = 'aave',
@@ -47,15 +46,6 @@ type PartnerInfo = {
 }
 
 const partnerInfo: PartnerInfo = {
-  [RedirectPartner.Aura]: {
-    shortName: 'Aura',
-    fullName: 'Aura Finance',
-    category: 'DeFi yield booster',
-    description:
-      "Aura Finance is a protocol built on top of the Balancer protocol to provide maximum incentives to Balancer liquidity providers and BAL stakers (into veBAL) through social aggregation of BAL deposits and via additional incentives of Aura's native token.",
-    url: 'https://app.aura.finance',
-    imageName: 'aura',
-  },
   [RedirectPartner.Beets]: {
     shortName: 'Beets',
     fullName: 'Beets',

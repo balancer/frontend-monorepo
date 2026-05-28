@@ -26,7 +26,7 @@ export function UserVebalStatsValues() {
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
-        <TooltipWithTouch label="Your rank does not include all other veBAL holders using 3rd party platforms like Aura and StakeDAO.">
+        <TooltipWithTouch label="Your rank does not include all other veBAL holders using 3rd party platforms like StakeDAO.">
           <Text
             fontSize="sm"
             fontWeight="semibold"

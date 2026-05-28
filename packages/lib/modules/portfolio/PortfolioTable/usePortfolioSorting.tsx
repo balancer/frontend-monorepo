@@ -38,7 +38,6 @@ const generateStakingWeightForSort = (pool: ExpandedPoolInfo) => {
     return (
       Number(pool.poolType === ExpandedPoolType.Unlocked) * 50 +
       Number(pool.poolType === ExpandedPoolType.StakedBal) * 20 +
-      Number(pool.poolType === ExpandedPoolType.StakedAura) * 15 +
       Number(pool.poolType === ExpandedPoolType.Unstaked) * 10
     )
   } else {
@@ -151,14 +150,8 @@ export function usePortfolioSorting() {
       }
 
       if (currentSortingObj.id === 'apr') {
-        const [aApr] =
-          a.poolType === ExpandedPoolType.StakedAura
-            ? [a.staking?.aura?.apr ?? 0]
-            : getTotalApr(a.dynamicData.aprItems)
-        const [bApr] =
-          b.poolType === ExpandedPoolType.StakedAura
-            ? [b.staking?.aura?.apr ?? 0]
-            : getTotalApr(b.dynamicData.aprItems)
+        const [aApr] = getTotalApr(a.dynamicData.aprItems)
+        const [bApr] = getTotalApr(b.dynamicData.aprItems)
         return currentSortingObj.desc
           ? bn(bApr).minus(aApr).toNumber()
           : bn(aApr).minus(bApr).toNumber()

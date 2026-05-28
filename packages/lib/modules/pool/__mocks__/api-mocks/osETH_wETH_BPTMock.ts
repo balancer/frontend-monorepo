@@ -129,13 +129,7 @@ export const osETH_wETH_BPTMock = {
         },
       ],
     },
-    aura: {
-      id: '0x5f032f15b4e910252edaddb899f7201e89c8cd6b',
-      apr: 0.0352,
-      auraPoolAddress: '0x5f032f15b4e910252edaddb899f7201e89c8cd6b',
-      auraPoolId: '179',
-      isShutdown: false,
-    },
+    aura: null,
   },
   userBalance: {
     totalBalance: '0',

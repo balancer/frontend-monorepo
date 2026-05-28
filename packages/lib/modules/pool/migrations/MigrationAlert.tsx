@@ -4,11 +4,7 @@ import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButto
 import { BaseVariant, Pool } from '../pool.types'
 import { HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
 import { UnstakeWarningModal } from './UnstakeWarningModal'
-import {
-  hasAuraStakedBalance,
-  hasBalancerStakedBalance,
-  hasTotalBalance,
-} from '../user-balance.helpers'
+import { hasBalancerStakedBalance, hasTotalBalance } from '../user-balance.helpers'
 import { useRouter } from 'next/navigation'
 import { chainToSlugMap, getPoolPath } from '../pool.utils'
 import { usePoolMigrations } from './PoolMigrationsProvider'
@@ -36,7 +32,7 @@ function AlertWithBalance({ pool }: Props) {
   const migration = getMigration(pool.protocolVersion, getChainId(pool.chain), pool.id)
   const poolPath = `/pools/${chainToSlugMap[pool.chain]}/${BaseVariant.v3}/${migration?.new.id || ''}`
 
-  const hasStakedBalance = hasBalancerStakedBalance(pool) || hasAuraStakedBalance(pool)
+  const hasStakedBalance = hasBalancerStakedBalance(pool)
 
   const migrate = () => {
     if (hasStakedBalance) {
