@@ -238,7 +238,7 @@ function getIncomingWithdrawals(
   protocolVersion: ProtocolVersion,
   userAddress?: Address
 ) {
-  if (!userAddress) return []
+  if (!userAddress) return undefined
   const networkConfig = getNetworkConfig(chain)
 
   const from =
