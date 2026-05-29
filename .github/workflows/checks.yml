@@ -75,43 +75,17 @@ jobs:
       - name: Run integration tests
         run: pnpm test:integration
 
-  Playwright-Browsers:
-    runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.playwright-cache-key.outputs.cache-key }}
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - name: Setup
-        uses: ./.github/actions/setup
-      - name: Get Playwright cache key
-        id: playwright-cache-key
-        run: echo "cache-key=playwright-${{ runner.os }}-$(pnpm --filter=e2e-tests exec playwright --version | cut -d ' ' -f 2)" >> "$GITHUB_OUTPUT"
-      - name: Cache Playwright Browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ steps.playwright-cache-key.outputs.cache-key }}
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm playwright:install:chromium # CI only tests in chromium
-
   E2E-Smoke-Test:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    needs: Playwright-Browsers
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Setup
         uses: ./.github/actions/setup
-      - name: Restore Playwright Browsers
-        uses: actions/cache/restore@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ needs.Playwright-Browsers.outputs.cache-key }}
-          fail-on-cache-miss: true
-      - name: Install Playwright system dependencies
-        run: pnpm --filter=e2e-tests exec playwright install-deps chromium
       - name: Run Playwright smoke tests
         run: pnpm test:e2e:build
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -125,9 +99,11 @@ jobs:
   E2E-Dev-Test-Balancer:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    needs: Playwright-Browsers
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
     env:
       NEXT_PUBLIC_PROJECT_ID: balancer
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Setup
@@ -136,14 +112,6 @@ jobs:
         uses: foundry-rs/foundry-toolchain@c7450ba673e133f5ee30098b3b54f444d3a2ca2d # v1
       - name: Start anvil fork in mainnet
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
-      - name: Restore Playwright Browsers
-        uses: actions/cache/restore@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ needs.Playwright-Browsers.outputs.cache-key }}
-          fail-on-cache-miss: true
-      - name: Install Playwright system dependencies
-        run: pnpm --filter=e2e-tests exec playwright install-deps chromium
       - name: Run Playwright dev tests (Balancer)
         run: pnpm test:e2e:dev:bal
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -157,10 +125,12 @@ jobs:
   E2E-Dev-Test-Beets:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    needs: Playwright-Browsers
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
     env:
       NEXT_PUBLIC_PROJECT_ID: beets
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Setup
@@ -169,14 +139,6 @@ jobs:
         uses: foundry-rs/foundry-toolchain@c7450ba673e133f5ee30098b3b54f444d3a2ca2d # v1
       - name: Start anvil fork in sonic
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
-      - name: Restore Playwright Browsers
-        uses: actions/cache/restore@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ needs.Playwright-Browsers.outputs.cache-key }}
-          fail-on-cache-miss: true
-      - name: Install Playwright system dependencies
-        run: pnpm --filter=e2e-tests exec playwright install-deps chromium
       - name: Run Playwright dev tests (Beets)
         run: pnpm test:e2e:dev:beets
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
