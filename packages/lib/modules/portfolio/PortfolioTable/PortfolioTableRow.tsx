@@ -50,7 +50,11 @@ const getStakingFilterKey = (poolType: ExpandedPoolType): StakingFilterKeyType =
   }
 }
 
-export function PortfolioTableRow({ pool, keyValue, ...rest }: Props) {
+export const PortfolioTableRow = memo(function PortfolioTableRow({
+  pool,
+  keyValue,
+  ...rest
+}: Props) {
   const { toCurrency } = useCurrency()
   const { name } = usePoolMetadata(pool)
   const { needsMigration } = usePoolMigrations()
@@ -125,7 +129,7 @@ export function PortfolioTableRow({ pool, keyValue, ...rest }: Props) {
       </Box>
     </FadeInOnView>
   )
-}
+})
 
 function StakingIcons({ pool, showIcon }: { pool: ExpandedPoolInfo; showIcon: boolean }) {
   const canStake = getCanStake(pool)

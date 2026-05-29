@@ -12,13 +12,14 @@ import {
   Button,
   useDisclosure,
   Link,
+  Box,
 } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import ClaimProtocolRevenueModal from '../ClaimProtocolRevenueModal'
 import ClaimHiddenHandRewardsModal from '../ClaimHiddenHandRewardsModal'
 import { useRouter } from 'next/navigation'
@@ -64,12 +65,10 @@ const balancerNetworksConfig: NetworkConfig[] = [
 
 const beetsNetworksConfig: NetworkConfig[] = [
   { chain: GqlChain.Sonic, name: 'Sonic', displayProps: {} },
-  {
-    chain: GqlChain.Optimism,
-    name: 'Optimism',
-    displayProps: { display: { base: 'none', md: 'block' } },
-  },
 ]
+
+const SLOT_COUNT = 3
+const GRID_COLUMNS = { base: 1, md: 2, lg: 3 }
 
 export function ClaimNetworkPools() {
   const {
@@ -86,16 +85,19 @@ export function ClaimNetworkPools() {
 
   const [isOpenedProtocolRevenueModal, setIsOpenedProtocolRevenueModal] = useState(false)
   const [isOpenedHiddenHandRewardsModal, setIsOpenedHiddenHandRewardsModal] = useState(false)
+
   const {
     isOpen: isClaimRecoveredFundModalOpen,
     onOpen: openClaimRecoveredFundModal,
     onClose: onClaimRecoveredFundModalClose,
   } = useDisclosure()
+
   const {
     isOpen: isRecoveredFundsLearnMoreModalOpen,
     onOpen: openRecoveredFundsLearnMoreModal,
     onClose: onRecoveredFundsLearnMoreModalClose,
   } = useDisclosure()
+
   const { isConnected } = useUserAccount()
   const router = useRouter()
 
@@ -129,52 +131,102 @@ export function ClaimNetworkPools() {
     .map(item => item[0])
     .filter(chain => isChainDeprecated(chain as GqlChain)) as GqlChain[]
 
+  // Build claimable items
+  const claimableItems = useMemo(() => {
+    const items = []
+
+    poolsWithChain.forEach(([, pools]) => {
+      if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
+        items.push({
+          type: 'chain',
+          chain: pools[0].chain,
+          amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
+        })
+      }
+    })
+
+    if (hasProtocolRewards) {
+      items.push({
+        type: 'protocol',
+        chain: GqlChain.Mainnet,
+        amount: protocolRewardsBalance.toNumber(),
+      })
+    }
+
+    if (hasHiddenHandRewards && !isPastJulyFirst) {
+      items.push({
+        type: 'hidden-hand',
+        chain: PROJECT_CONFIG.defaultNetwork,
+        amount: hiddenHandRewardsData.totalValueUsd,
+      })
+    }
+
+    if (isBalancer && hasRecoveredFunds) {
+      items.push({
+        type: 'recovered-funds',
+        chain: PROJECT_CONFIG.defaultNetwork,
+        amount: sumRecoveredFundsTotal(recoveredFundsClaims),
+        icon: '/images/icons/heart.svg',
+      })
+    }
+
+    // Sort by amount (highest first)
+    return items.sort((a, b) => b.amount - a.amount)
+  }, [
+    poolsWithChain,
+    totalFiatClaimableBalanceByChain,
+    hasProtocolRewards,
+    protocolRewardsBalance,
+    hasHiddenHandRewards,
+    isPastJulyFirst,
+    hiddenHandRewardsData,
+    hasRecoveredFunds,
+    recoveredFundsClaims,
+  ])
+
   return (
     <FadeInOnView>
       <Stack gap={5}>
         <Heading size="h4" variant="special">
           Claimable incentives
         </Heading>
-
         {hasHiddenHandRewards && !isPastJulyFirst && (
-          <BalAlert
-            content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
-            status="warning"
-          />
+          <AnimatedAlert>
+            <BalAlert
+              content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
+              status="warning"
+            />
+          </AnimatedAlert>
         )}
-
         {isBalancer && hasRecoveredFunds && (
-          <BalAlert
-            content={
-              <Text color="font.dark" fontWeight="medium">
-                Claim your share of recovered funds from the November 2025 security incident
-                affecting some v2 Composable Stable pools.{' '}
-                <BalAlertLink onClick={openRecoveredFundsLearnMoreModal}>Learn more</BalAlertLink>
-              </Text>
-            }
-            status="warning"
-          />
+          <AnimatedAlert>
+            <BalAlert
+              content={
+                <Text color="font.dark" fontWeight="medium">
+                  Claim your share of recovered funds from the November 2025 security incident
+                  affecting some v2 Composable Stable pools.{' '}
+                  <BalAlertLink onClick={openRecoveredFundsLearnMoreModal}>Learn more</BalAlertLink>
+                </Text>
+              }
+              status="warning"
+            />
+          </AnimatedAlert>
         )}
-
-        {deprecatedChains.length > 0 && <DeprecatedChainsAlert chains={deprecatedChains} />}
-
+        {deprecatedChains.length > 0 && (
+          <AnimatedAlert>
+            <DeprecatedChainsAlert chains={deprecatedChains} />
+          </AnimatedAlert>
+        )}
         {isLoadingRewards || isLoadingPortfolio ? (
-          <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: isBeets ? 2 : 3 }} spacing="md">
-            <Skeleton height="85px" w="full" />
-            <Skeleton height="85px" w="full" />
-            {!isBeets && <Skeleton height="85px" w="full" />}
+          <SimpleGrid columns={GRID_COLUMNS} spacing="md">
+            {Array.from({ length: SLOT_COUNT }).map((_, index) => (
+              <Skeleton height="85px" key={`claim-network-skeleton-${index}`} w="full" />
+            ))}
           </SimpleGrid>
         ) : !isConnected ? (
           <ConnectButton.Custom>
             {({ openConnectModal }: { openConnectModal: () => void }) => (
-              <SimpleGrid
-                columns={{
-                  base: 1,
-                  md: 2,
-                  lg: isBeets ? 2 : 3,
-                }}
-                spacing="md"
-              >
+              <SimpleGrid columns={GRID_COLUMNS} spacing="md">
                 {currentNetworks.map(network => (
                   <Card
                     flex="1"
@@ -209,16 +261,13 @@ export function ClaimNetworkPools() {
           </ConnectButton.Custom>
         ) : (
           <>
-            {hasMerklRewards && <MerklAlert />}
+            {hasMerklRewards && (
+              <AnimatedAlert>
+                <MerklAlert />
+              </AnimatedAlert>
+            )}
             {noRewards && (
-              <SimpleGrid
-                columns={{
-                  base: 1,
-                  md: 2,
-                  lg: isBeets ? 2 : 3,
-                }}
-                spacing="md"
-              >
+              <SimpleGrid columns={GRID_COLUMNS} spacing="md">
                 {currentNetworks.map(network => (
                   <Card
                     flex="1"
@@ -246,66 +295,9 @@ export function ClaimNetworkPools() {
                 ))}
               </SimpleGrid>
             )}
-            <SimpleGrid
-              columns={{
-                base: 1,
-                md: 2,
-                lg: isBeets ? 2 : 3,
-              }}
-              spacing="md"
-            >
-              {(() => {
-                // Collect all claimable items
-                const claimableItems = []
-
-                poolsWithChain.forEach(([, pools]) => {
-                  if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
-                    claimableItems.push({
-                      type: 'chain',
-                      chain: pools[0].chain,
-                      amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
-                    })
-                  }
-                })
-
-                if (hasProtocolRewards) {
-                  claimableItems.push({
-                    type: 'protocol',
-                    chain: GqlChain.Mainnet,
-                    amount: protocolRewardsBalance.toNumber(),
-                  })
-                }
-
-                if (hasHiddenHandRewards && !isPastJulyFirst) {
-                  claimableItems.push({
-                    type: 'hidden-hand',
-                    chain: PROJECT_CONFIG.defaultNetwork,
-                    amount: hiddenHandRewardsData.totalValueUsd,
-                  })
-                }
-
-                if (isBalancer && hasRecoveredFunds) {
-                  claimableItems.push({
-                    type: 'recovered-funds',
-                    chain: PROJECT_CONFIG.defaultNetwork,
-                    amount: sumRecoveredFundsTotal(recoveredFundsClaims),
-                    icon: '/images/icons/heart.svg',
-                  })
-                }
-
-                // Sort by amount (highest first)
-                claimableItems.sort((a, b) => b.amount - a.amount)
-
-                // If no claimable items, don't render anything
-                if (claimableItems.length === 0) {
-                  return null
-                }
-
-                // Determine max columns for first row based on breakpoint
-                const maxColumns = isBeets ? 2 : 3
-
-                // Render all claimable items
-                const items = claimableItems.map((item, index) => {
+            {claimableItems.length > 0 && (
+              <SimpleGrid columns={GRID_COLUMNS} spacing="md">
+                {claimableItems.map((item, index) => {
                   const handleClick = () => {
                     switch (item.type) {
                       case 'protocol':
@@ -339,60 +331,48 @@ export function ClaimNetworkPools() {
                       />
                     </motion.div>
                   )
-                })
-
-                // Add placeholders only if we have fewer items than max columns
-                if (claimableItems.length < maxColumns) {
-                  const placeholdersNeeded = maxColumns - claimableItems.length
-
-                  for (let i = 0; i < placeholdersNeeded; i++) {
+                })}
+                {claimableItems.length < SLOT_COUNT &&
+                  Array.from({ length: SLOT_COUNT - claimableItems.length }).map((_, i) => {
                     const slotIndex = claimableItems.length + i
 
-                    // For !isBeets: slot 0-1 show on md+, slot 2 shows only on lg+
-                    // For isBeets: slots 0-1 show on md+
                     const displayProps =
-                      !isBeets && slotIndex === 2
+                      slotIndex === 2
                         ? { base: 'none', md: 'none', lg: 'block' }
                         : { base: 'none', md: 'block' }
 
-                    items.push(
-                      <Card
-                        display={displayProps}
-                        flex="1"
-                        key={`placeholder-${i}`}
-                        p={['sm', 'md']}
-                        shadow="innerLg"
-                        variant="level1"
-                        w="full"
-                      />
-                    )
-                  }
-                }
-
-                return items
-              })()}
-            </SimpleGrid>
-
-            <ClaimProtocolRevenueModal
-              isOpen={isOpenedProtocolRevenueModal}
-              onClose={() => setIsOpenedProtocolRevenueModal(false)}
-            />
-            <ClaimHiddenHandRewardsModal
-              isOpen={isOpenedHiddenHandRewardsModal}
-              onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
-            />
-            <ClaimRecoveredFundsModal
-              isOpen={isClaimRecoveredFundModalOpen}
-              onClose={onClaimRecoveredFundModalClose}
-            />
-            <RecoveredFundsLearnMoreModal
-              isOpen={isRecoveredFundsLearnMoreModalOpen}
-              onClose={onRecoveredFundsLearnMoreModalClose}
-            />
+                    return <Box aria-hidden display={displayProps} key={`placeholder-${i}`} />
+                  })}
+              </SimpleGrid>
+            )}
           </>
         )}
       </Stack>
+      <ClaimProtocolRevenueModal
+        isOpen={isOpenedProtocolRevenueModal}
+        onClose={() => setIsOpenedProtocolRevenueModal(false)}
+      />
+      <ClaimHiddenHandRewardsModal
+        isOpen={isOpenedHiddenHandRewardsModal}
+        onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
+      />
+      <ClaimRecoveredFundsModal
+        isOpen={isClaimRecoveredFundModalOpen}
+        onClose={onClaimRecoveredFundModalClose}
+      />
+      <RecoveredFundsLearnMoreModal
+        isOpen={isRecoveredFundsLearnMoreModalOpen}
+        onClose={onRecoveredFundsLearnMoreModalClose}
+      />
     </FadeInOnView>
+  )
+}
+
+function AnimatedAlert({ children }: { children: ReactNode }) {
+  return (
+    <motion.div animate={{ opacity: 1, height: 'auto' }} initial={{ opacity: 0, height: 0 }} layout>
+      {children}
+    </motion.div>
   )
 }
 

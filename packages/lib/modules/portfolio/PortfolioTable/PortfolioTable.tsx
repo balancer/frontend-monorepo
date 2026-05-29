@@ -10,6 +10,7 @@ import {
   Divider,
   Heading,
   HStack,
+  Skeleton,
   Stack,
   Text,
   useBreakpointValue,
@@ -32,6 +33,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../../pool/migrations/MigrationAlert'
 import { isChainDeprecated } from '../../chains/chain.utils'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { memo, useMemo } from 'react'
 
 const rowProps = (needsLastColumnWider: boolean) => ({
   px: [0, 4],
@@ -41,7 +43,6 @@ const rowProps = (needsLastColumnWider: boolean) => ({
 })
 
 export function PortfolioTable() {
-  const { isLoadingPortfolio } = usePortfolio()
   const { isConnected } = useUserAccount()
   const isFilterVisible = usePortfolioFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
@@ -50,6 +51,7 @@ export function PortfolioTable() {
   const hasStakingBoost = sortedPools.some(pool =>
     pool.dynamicData?.aprItems?.some(item => item.type === 'STAKING_BOOST')
   )
+  const tableRowProps = useMemo(() => rowProps(hasStakingBoost), [hasStakingBoost])
 
   const {
     selectedNetworks,
@@ -75,10 +77,16 @@ export function PortfolioTable() {
   }
 
   const { needsMigration } = usePoolMigrations()
-  const poolsThatNeedMigration = sortedPools
-    .filter(pool => needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id))
-    .sort((a, b) => (b.userBalance?.totalBalanceUsd || 0) - (a.userBalance?.totalBalanceUsd || 0))
-    .filter((item, pos, ary) => !pos || item.id != ary[pos - 1].id) // deduplication
+  const poolsThatNeedMigration = useMemo(
+    () =>
+      sortedPools
+        .filter(pool => needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id))
+        .sort(
+          (a, b) => (b.userBalance?.totalBalanceUsd || 0) - (a.userBalance?.totalBalanceUsd || 0)
+        )
+        .filter((item, pos, ary) => !pos || item.id !== ary[pos - 1].id), // deduplication
+    [sortedPools, needsMigration]
+  )
 
   const deprecatedChainPools = sortedPools.filter(pool => isChainDeprecated(pool.chain)).length
 
@@ -163,32 +171,11 @@ export function PortfolioTable() {
             w={{ base: '100vw', lg: 'full' }}
           >
             <Box minW="max-content" w="full">
-              <PaginatedTable
-                alignItems="flex-start"
-                getRowId={row => row.uniqueKey}
-                items={sortedPools}
-                left={{ base: '-4px', sm: '0' }}
-                loading={isLoadingPortfolio}
-                noItemsFoundLabel="You have no current positions"
-                paginationProps={undefined}
-                position="relative"
-                renderTableHeader={() => (
-                  <PortfolioTableHeader
-                    currentSortingObj={currentSortingObj}
-                    setCurrentSortingObj={setSorting}
-                    {...rowProps(hasStakingBoost)}
-                  />
-                )}
-                renderTableRow={({ item }) => {
-                  return (
-                    <PortfolioTableRow
-                      keyValue={item.id}
-                      pool={item}
-                      {...rowProps(hasStakingBoost)}
-                    />
-                  )
-                }}
-                showPagination={false}
+              <PortfolioTableLoadingGate
+                currentSortingObj={currentSortingObj}
+                setSorting={setSorting}
+                sortedPools={sortedPools}
+                tableRowProps={tableRowProps}
               />
             </Box>
           </Card>
@@ -205,7 +192,7 @@ export function PortfolioTable() {
             <PortfolioTableHeader
               currentSortingObj={currentSortingObj}
               setCurrentSortingObj={setSorting}
-              {...rowProps(hasStakingBoost)}
+              {...tableRowProps}
             />
             <Divider />
             <Center h="160px" rounded="lg" w="full">
@@ -232,3 +219,80 @@ export function PortfolioTable() {
     </FadeInOnView>
   )
 }
+
+const PortfolioTableLoadingGate = memo(function PortfolioTableLoadingGate({
+  currentSortingObj,
+  setSorting,
+  sortedPools,
+  tableRowProps,
+}: {
+  currentSortingObj: ReturnType<typeof usePortfolioSorting>['currentSortingObj']
+  setSorting: ReturnType<typeof usePortfolioSorting>['setSorting']
+  sortedPools: ReturnType<typeof usePortfolioSorting>['sortedPools']
+  tableRowProps: ReturnType<typeof rowProps>
+}) {
+  const { isLoadingPortfolio } = usePortfolio()
+
+  if (isLoadingPortfolio) {
+    return (
+      <>
+        <PortfolioTableHeader
+          currentSortingObj={currentSortingObj}
+          setCurrentSortingObj={setSorting}
+          {...tableRowProps}
+        />
+        <Divider />
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Box key={`skeleton-${i}`} px="xs" py="xs" w="full">
+            <Skeleton height="68px" w="full" />
+          </Box>
+        ))}
+      </>
+    )
+  }
+
+  return (
+    <LoadedPortfolioTableContent
+      currentSortingObj={currentSortingObj}
+      setSorting={setSorting}
+      sortedPools={sortedPools}
+      tableRowProps={tableRowProps}
+    />
+  )
+})
+
+const LoadedPortfolioTableContent = memo(function LoadedPortfolioTableContent({
+  currentSortingObj,
+  setSorting,
+  sortedPools,
+  tableRowProps,
+}: {
+  currentSortingObj: ReturnType<typeof usePortfolioSorting>['currentSortingObj']
+  setSorting: ReturnType<typeof usePortfolioSorting>['setSorting']
+  sortedPools: ReturnType<typeof usePortfolioSorting>['sortedPools']
+  tableRowProps: ReturnType<typeof rowProps>
+}) {
+  return (
+    <PaginatedTable
+      alignItems="flex-start"
+      getRowId={row => row.uniqueKey}
+      items={sortedPools}
+      left={{ base: '-4px', sm: '0' }}
+      loading={false}
+      noItemsFoundLabel="You have no current positions"
+      paginationProps={undefined}
+      position="relative"
+      renderTableHeader={() => (
+        <PortfolioTableHeader
+          currentSortingObj={currentSortingObj}
+          setCurrentSortingObj={setSorting}
+          {...tableRowProps}
+        />
+      )}
+      renderTableRow={({ item }) => {
+        return <PortfolioTableRow keyValue={item.id} pool={item} {...tableRowProps} />
+      }}
+      showPagination={false}
+    />
+  )
+})

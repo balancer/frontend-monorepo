@@ -79,9 +79,9 @@ export function usePortfolioLogic() {
     skip: !isConnected || idIn.length === 0,
   })
 
-  const poolsData = uniqBy(
-    [...(poolsUserAddressData?.pools || []), ...(poolsIdData?.pools || [])],
-    'id'
+  const poolsData = useMemo(
+    () => uniqBy([...(poolsUserAddressData?.pools || []), ...(poolsIdData?.pools || [])], 'id'),
+    [poolsUserAddressData?.pools, poolsIdData?.pools]
   )
 
   const { data: poolsWithOnchainUserBalances, isLoading: isLoadingOnchainUserBalances } =
