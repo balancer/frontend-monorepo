@@ -9,6 +9,8 @@ import { usePool } from '../../../PoolProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isQuantAmmPool } from '../../../pool.helpers'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { getCanStake } from '../../stake.helpers'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function StakingOptions() {
   const { pool } = usePool()
@@ -16,12 +18,16 @@ export function StakingOptions() {
   const { projectName, projectId } = PROJECT_CONFIG
   const canBeNegative = isQuantAmmPool(pool.type)
 
-  const canStake = !!pool.staking
+  const canStake = getCanStake(pool)
   const stakePath = getPoolActionPath({
     id: pool.id,
     chain: pool.chain,
     action: 'stake',
   })
+
+  const stakeTooltipLabel = !canStake
+    ? 'Staking is currently disabled because this pool has no active rewards.'
+    : ''
 
   return (
     <>
@@ -37,7 +43,7 @@ export function StakingOptions() {
         >
           <Tooltip
             display="inline-block"
-            label="You’ve just added liquidity and received LP tokens for a pool eligible for liquidity mining incentives. To earn your share, stake your LP tokens. There’s no lock-up period—you can stake or unstake anytime."
+            label="You've just added liquidity and received LP tokens for a pool eligible for liquidity mining incentives. To earn your share, stake your LP tokens. There's no lock-up period—you can stake or unstake anytime."
           >
             <InfoIcon display="inline-block" />
           </Tooltip>
@@ -66,16 +72,18 @@ export function StakingOptions() {
                 width={30}
               />
             </Flex>
-            <Button
-              as={Link}
-              href={stakePath}
-              isDisabled={!canStake}
-              prefetch
-              variant={canStake ? 'primary' : 'disabled'}
-              w="full"
-            >
-              Stake
-            </Button>
+            <TooltipWithTouch label={stakeTooltipLabel}>
+              <Button
+                as={Link}
+                href={stakePath}
+                isDisabled={!canStake}
+                prefetch
+                variant={canStake ? 'primary' : 'disabled'}
+                w="full"
+              >
+                Stake
+              </Button>
+            </TooltipWithTouch>
           </VStack>
         </Card>
       </HStack>
