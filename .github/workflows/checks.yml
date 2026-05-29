@@ -101,6 +101,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: 0
     #needs: Playwright-Browsers
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -132,6 +134,7 @@ jobs:
     #needs: Playwright-Browsers
     env:
       NEXT_PUBLIC_PROJECT_ID: balancer
+      PLAYWRIGHT_BROWSERS_PATH: 0
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Setup
@@ -167,6 +170,7 @@ jobs:
     env:
       NEXT_PUBLIC_PROJECT_ID: beets
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
+      PLAYWRIGHT_BROWSERS_PATH: 0
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Setup
