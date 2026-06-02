@@ -479,9 +479,6 @@ importers:
       '@layerzerolabs/scan-client':
         specifier: ^0.0.8
         version: 0.0.8(axios@1.16.0)
-      '@metamask/connect-evm':
-        specifier: ^1.3.1
-        version: 1.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@nikolovlazar/chakra-ui-prose':
         specifier: ^1.2.1
         version: 1.2.1(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.6))(@types/react@19.2.10)(react@19.2.6))(@types/react@19.2.10)(framer-motion@12.38.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.6))(@types/react@19.2.10)(react@19.2.6))(react@19.2.6))(react@19.2.6)
@@ -9478,6 +9475,7 @@ snapshots:
   '@ecies/ciphers@0.2.6(@noble/ciphers@1.3.0)':
     dependencies:
       '@noble/ciphers': 1.3.0
+    optional: true
 
   '@emnapi/runtime@1.9.1':
     dependencies:
@@ -9903,8 +9901,10 @@ snapshots:
     dependencies:
       '@ethereumjs/util': 8.1.0
       crc-32: 1.2.2
+    optional: true
 
-  '@ethereumjs/rlp@4.0.1': {}
+  '@ethereumjs/rlp@4.0.1':
+    optional: true
 
   '@ethereumjs/tx@4.2.0':
     dependencies:
@@ -9912,12 +9912,14 @@ snapshots:
       '@ethereumjs/rlp': 4.0.1
       '@ethereumjs/util': 8.1.0
       ethereum-cryptography: 2.2.1
+    optional: true
 
   '@ethereumjs/util@8.1.0':
     dependencies:
       '@ethereumjs/rlp': 4.0.1
       ethereum-cryptography: 2.2.1
       micro-ftch: 0.3.1
+    optional: true
 
   '@fastify/busboy@3.2.0': {}
 
@@ -10719,6 +10721,7 @@ snapshots:
   '@metamask/analytics@0.5.0':
     dependencies:
       openapi-fetch: 0.13.8
+    optional: true
 
   '@metamask/connect-evm@1.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
@@ -10731,6 +10734,7 @@ snapshots:
       - encoding
       - supports-color
       - utf-8-validate
+    optional: true
 
   '@metamask/connect-multichain@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
@@ -10756,6 +10760,7 @@ snapshots:
       - encoding
       - supports-color
       - utf-8-validate
+    optional: true
 
   '@metamask/mobile-wallet-protocol-core@0.4.0':
     dependencies:
@@ -10763,6 +10768,7 @@ snapshots:
       centrifuge: 5.6.0
       eventemitter3: 5.0.1
       uuid: 11.1.1
+    optional: true
 
   '@metamask/mobile-wallet-protocol-dapp-client@0.3.0':
     dependencies:
@@ -10771,17 +10777,21 @@ snapshots:
       uuid: 11.1.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
-  '@metamask/multichain-api-client@0.10.1': {}
+  '@metamask/multichain-api-client@0.10.1':
+    optional: true
 
   '@metamask/multichain-ui@0.4.1':
     dependencies:
       '@paulmillr/qr': 0.2.1
       qr-code-styling: 1.9.2
+    optional: true
 
   '@metamask/onboarding@1.0.1':
     dependencies:
       bowser: 2.14.1
+    optional: true
 
   '@metamask/rpc-errors@7.0.3':
     dependencies:
@@ -10789,8 +10799,10 @@ snapshots:
       fast-safe-stringify: 2.1.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
-  '@metamask/superstruct@3.2.1': {}
+  '@metamask/superstruct@3.2.1':
+    optional: true
 
   '@metamask/utils@11.11.0':
     dependencies:
@@ -10807,6 +10819,7 @@ snapshots:
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@metamask/utils@9.3.0':
     dependencies:
@@ -10821,6 +10834,7 @@ snapshots:
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@msgpack/msgpack@3.1.2': {}
 
@@ -10884,6 +10898,7 @@ snapshots:
   '@noble/curves@1.4.2':
     dependencies:
       '@noble/hashes': 1.4.0
+    optional: true
 
   '@noble/curves@1.8.0':
     dependencies:
@@ -10902,8 +10917,10 @@ snapshots:
   '@noble/curves@1.9.7':
     dependencies:
       '@noble/hashes': 1.8.0
+    optional: true
 
-  '@noble/hashes@1.4.0': {}
+  '@noble/hashes@1.4.0':
+    optional: true
 
   '@noble/hashes@1.7.0':
     optional: true
@@ -11257,7 +11274,8 @@ snapshots:
       '@parcel/watcher-win32-ia32': 2.5.6
       '@parcel/watcher-win32-x64': 2.5.6
 
-  '@paulmillr/qr@0.2.1': {}
+  '@paulmillr/qr@0.2.1':
+    optional: true
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -11287,27 +11305,37 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@protobufjs/aspromise@1.1.2': {}
+  '@protobufjs/aspromise@1.1.2':
+    optional: true
 
-  '@protobufjs/base64@1.1.2': {}
+  '@protobufjs/base64@1.1.2':
+    optional: true
 
-  '@protobufjs/codegen@2.0.5': {}
+  '@protobufjs/codegen@2.0.5':
+    optional: true
 
-  '@protobufjs/eventemitter@1.1.1': {}
+  '@protobufjs/eventemitter@1.1.1':
+    optional: true
 
   '@protobufjs/fetch@1.1.1':
     dependencies:
       '@protobufjs/aspromise': 1.1.2
+    optional: true
 
-  '@protobufjs/float@1.0.2': {}
+  '@protobufjs/float@1.0.2':
+    optional: true
 
-  '@protobufjs/inquire@1.1.2': {}
+  '@protobufjs/inquire@1.1.2':
+    optional: true
 
-  '@protobufjs/path@1.1.2': {}
+  '@protobufjs/path@1.1.2':
+    optional: true
 
-  '@protobufjs/pool@1.1.0': {}
+  '@protobufjs/pool@1.1.0':
+    optional: true
 
-  '@protobufjs/utf8@1.1.1': {}
+  '@protobufjs/utf8@1.1.1':
+    optional: true
 
   '@rainbow-me/rainbowkit@2.2.11(@tanstack/react-query@5.99.2(react@19.2.6))(@types/react@19.2.10)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.9.3)(viem@2.49.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@3.6.16)':
     dependencies:
@@ -11985,7 +12013,8 @@ snapshots:
 
   '@safe-global/safe-gateway-typescript-sdk@3.22.2': {}
 
-  '@scure/base@1.1.9': {}
+  '@scure/base@1.1.9':
+    optional: true
 
   '@scure/base@1.2.6': {}
 
@@ -11994,6 +12023,7 @@ snapshots:
       '@noble/curves': 1.4.2
       '@noble/hashes': 1.4.0
       '@scure/base': 1.1.9
+    optional: true
 
   '@scure/bip32@1.6.2':
     dependencies:
@@ -12012,6 +12042,7 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.4.0
       '@scure/base': 1.1.9
+    optional: true
 
   '@scure/bip39@1.5.4':
     dependencies:
@@ -12341,6 +12372,7 @@ snapshots:
   '@types/debug@4.1.13':
     dependencies:
       '@types/ms': 2.1.0
+    optional: true
 
   '@types/deep-eql@4.0.2': {}
 
@@ -12364,7 +12396,8 @@ snapshots:
 
   '@types/lodash@4.17.24': {}
 
-  '@types/ms@2.1.0': {}
+  '@types/ms@2.1.0':
+    optional: true
 
   '@types/mysql@2.15.27':
     dependencies:
@@ -14035,6 +14068,7 @@ snapshots:
   async-mutex@0.5.0:
     dependencies:
       tslib: 2.8.1
+    optional: true
 
   asynckit@0.4.0: {}
 
@@ -14117,7 +14151,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  bowser@2.14.1: {}
+  bowser@2.14.1:
+    optional: true
 
   boxen@7.1.1:
     dependencies:
@@ -14247,6 +14282,7 @@ snapshots:
     dependencies:
       events: 3.3.0
       protobufjs: 7.6.1
+    optional: true
 
   chai@5.2.1:
     dependencies:
@@ -14532,7 +14568,8 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  crc-32@1.2.2: {}
+  crc-32@1.2.2:
+    optional: true
 
   cross-fetch@3.2.0:
     dependencies:
@@ -14779,6 +14816,7 @@ snapshots:
       '@noble/ciphers': 1.3.0
       '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
+    optional: true
 
   ee-first@1.1.1: {}
 
@@ -15201,6 +15239,7 @@ snapshots:
       '@noble/hashes': 1.4.0
       '@scure/bip32': 1.4.0
       '@scure/bip39': 1.3.0
+    optional: true
 
   event-target-shim@5.0.1: {}
 
@@ -15304,7 +15343,8 @@ snapshots:
   fast-redact@3.5.0:
     optional: true
 
-  fast-safe-stringify@2.1.1: {}
+  fast-safe-stringify@2.1.1:
+    optional: true
 
   fast-string-truncated-width@3.0.3: {}
 
@@ -16307,7 +16347,8 @@ snapshots:
 
   lokijs@1.5.12: {}
 
-  long@5.3.2: {}
+  long@5.3.2:
+    optional: true
 
   loose-envify@1.4.0:
     dependencies:
@@ -16389,7 +16430,8 @@ snapshots:
 
   methods@1.1.2: {}
 
-  micro-ftch@0.3.1: {}
+  micro-ftch@0.3.1:
+    optional: true
 
   micromatch@4.0.8:
     dependencies:
@@ -16736,8 +16778,10 @@ snapshots:
   openapi-fetch@0.13.8:
     dependencies:
       openapi-typescript-helpers: 0.0.15
+    optional: true
 
-  openapi-typescript-helpers@0.0.15: {}
+  openapi-typescript-helpers@0.0.15:
+    optional: true
 
   optimism@0.18.1:
     dependencies:
@@ -16943,7 +16987,8 @@ snapshots:
       registry-url: 6.0.1
       semver: 7.8.0
 
-  pako@2.1.0: {}
+  pako@2.1.0:
+    optional: true
 
   param-case@3.0.4:
     dependencies:
@@ -17080,7 +17125,8 @@ snapshots:
   pngjs@5.0.0:
     optional: true
 
-  pony-cause@2.1.11: {}
+  pony-cause@2.1.11:
+    optional: true
 
   porto@0.2.35(@tanstack/react-query@5.99.2(react@19.2.6))(@types/react@19.2.10)(@wagmi/core@3.4.12(@tanstack/query-core@5.99.2)(@types/react@19.2.10)(react@19.2.6)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.6))(viem@2.49.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)))(react@19.2.6)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.6))(viem@2.49.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(wagmi@3.6.15):
     dependencies:
@@ -17230,6 +17276,7 @@ snapshots:
       '@protobufjs/utf8': 1.1.1
       '@types/node': 24.12.4
       long: 5.3.2
+    optional: true
 
   proxy-addr@2.0.7:
     dependencies:
@@ -17256,10 +17303,12 @@ snapshots:
   qr-code-styling@1.9.2:
     dependencies:
       qrcode-generator: 1.5.2
+    optional: true
 
   qr@0.5.2: {}
 
-  qrcode-generator@1.5.2: {}
+  qrcode-generator@1.5.2:
+    optional: true
 
   qrcode@1.5.3:
     dependencies:
@@ -18447,9 +18496,11 @@ snapshots:
 
   utils-merge@1.0.1: {}
 
-  uuid@11.1.1: {}
+  uuid@11.1.1:
+    optional: true
 
-  uuid@9.0.1: {}
+  uuid@9.0.1:
+    optional: true
 
   valtio@1.13.2(@types/react@19.2.10)(react@19.2.6):
     dependencies:
