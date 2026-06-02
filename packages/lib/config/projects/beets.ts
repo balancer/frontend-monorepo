@@ -1,6 +1,7 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 export const beetsSupportedNetworks = [GqlChain.Sonic]
 //  as const satisfies GqlChain[]
@@ -42,6 +43,7 @@ export const ProjectConfigBeets: ProjectConfig = {
         href: '/mabeets',
         label: 'maBEETS',
       },
+      ...(isDev || isStaging ? [{ href: '/lbp/create', label: 'LBP' }] : []),
     ],
     ecosystemLinks: [
       { label: 'Docs', href: 'https://docs.beets.fi/' },

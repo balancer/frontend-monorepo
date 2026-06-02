@@ -134,7 +134,9 @@ export function SaleStructureStep() {
                 control={control}
                 setFormValue={setValue}
               />
-              <NetworkSelectInput chains={supportedChains} control={control} />
+              {supportedChains.length > 1 && (
+                <NetworkSelectInput chains={supportedChains} control={control} />
+              )}
             </VStack>
             <Divider />
 
