@@ -111,13 +111,13 @@ export function SwapSummary({
   const inAmountWithSlippage =
     swapType === GqlSorSwapType.ExactIn
       ? tokenIn.amount
-      : bn(tokenIn.amount)
+      : bn(tokenIn.amount || '0')
           .times(1 + selectedSlippage)
           .toString()
   const outAmountWithSlippage =
     swapType === GqlSorSwapType.ExactOut
       ? tokenOut.amount
-      : bn(tokenOut.amount)
+      : bn(tokenOut.amount || '0')
           .times(1 - selectedSlippage)
           .toString()
 

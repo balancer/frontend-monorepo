@@ -1,6 +1,6 @@
 import { LbpPrice } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { addHours, isBefore } from 'date-fns'
+import { addHours, isBefore, isValid } from 'date-fns'
 import type BigNumber from 'bignumber.js'
 
 export function interpolatePrices(
@@ -12,6 +12,10 @@ export function interpolatePrices(
   collateralTokenSeed: number,
   collateralTokenPrice: number
 ): LbpPrice[] {
+  if (!isValid(startDate) || !isValid(endDate) || startDate.getTime() === endDate.getTime()) {
+    return []
+  }
+
   const startTimestamp = bn(startDate.getTime())
   const endTimestamp = bn(endDate.getTime())
   const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))

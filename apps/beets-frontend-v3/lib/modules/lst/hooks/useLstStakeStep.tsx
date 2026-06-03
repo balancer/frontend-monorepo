@@ -40,7 +40,7 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: b
     functionName: 'deposit',
     args: [],
     value: parseUnits(humanAmount, BPT_DECIMALS),
-    enabled: bn(humanAmount).gte(0.01) && isConnected && enabled,
+    enabled: humanAmount !== '' && bn(humanAmount).gte(0.01) && isConnected && enabled,
     onTransactionChange: setTransaction,
   }
 

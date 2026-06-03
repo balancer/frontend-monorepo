@@ -164,10 +164,10 @@ describe('bn', () => {
     expect(bn('0.0000000000000035').toFixed()).toBe('0.0000000000000035')
   })
 
-  test('returns NaN for invalid string inputs', () => {
-    expect(bn('').isNaN()).toBe(true)
-    expect(bn(' ').isNaN()).toBe(true)
-    expect(bn('abc').isNaN()).toBe(true)
+  test('throws for invalid string inputs', () => {
+    expect(() => bn('')).toThrow()
+    expect(() => bn(' ')).toThrow()
+    expect(() => bn('abc')).toThrow()
   })
 
   test('throws for nullish inputs passed at runtime', () => {

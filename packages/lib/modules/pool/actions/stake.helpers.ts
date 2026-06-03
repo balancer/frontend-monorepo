@@ -1,4 +1,4 @@
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../pool.types'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
@@ -106,6 +106,7 @@ function filterNonPreferentialStakingWithBalance(pool: Pool): GqlUserStakedBalan
     stakedBalance =>
       stakedBalance.stakingType === GqlPoolStakingType.Gauge &&
       stakedBalance.stakingId !== pool.staking?.gauge?.id &&
+      isValidNumber(stakedBalance.balance) &&
       bn(stakedBalance.balance).gt(0)
   )
   return found
