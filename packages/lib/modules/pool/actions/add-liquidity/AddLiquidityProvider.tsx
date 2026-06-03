@@ -30,7 +30,11 @@ import {
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
+import {
+  isUnhandledAddPriceImpactError,
+  cannotCalculatePriceImpactError,
+} from '@repo/lib/modules/price-impact/price-impact.utils'
+import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
 import { Pool } from '../../pool.types'

@@ -198,7 +198,6 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
                 action="add"
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
                 isDisabled={!wantsProportional && !priceImpactQuery.data}
-                setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}
           </VStack>

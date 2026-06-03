@@ -345,7 +345,6 @@ export function SwapForm({
                     action="swap"
                     cowLink={cowLink}
                     isDisabled={!simulationQuery.data}
-                    setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                   />
                 </>
               )}

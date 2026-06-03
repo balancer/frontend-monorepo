@@ -19,6 +19,8 @@ import { emptyTokenAmounts, toHumanAmountWithAddress } from '../LiquidityActionH
 import { isCowAmmPool } from '../../pool.helpers'
 import { getActionableTokenAddresses, getPoolActionableTokens } from '../../pool-tokens.utils'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
+import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { cannotCalculatePriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
 import { useRemoveLiquiditySteps as useRemoveLiquidityStepsBase } from './useRemoveLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'

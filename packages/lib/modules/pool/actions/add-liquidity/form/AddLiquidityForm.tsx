@@ -78,7 +78,6 @@ function AddLiquidityMainForm() {
     showAcceptPoolRisks,
     totalUSDValue,
     addLiquidityTxHash,
-    setNeedsToAcceptHighPI,
     refetchQuote,
     setWethIsEth,
     nativeAsset,

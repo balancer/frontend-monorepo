@@ -21,13 +21,12 @@ import {
 } from '@chakra-ui/react'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
 import { getPriceImpactLevel } from './price-impact.utils'
 import { CheckIcon } from '@chakra-ui/icons'
 
 interface PriceImpactAccordionProps {
-  setNeedsToAcceptPIRisk: (value: boolean) => void
   accordionButtonComponent: ReactNode
   accordionPanelComponent: ReactNode
   isDisabled?: boolean

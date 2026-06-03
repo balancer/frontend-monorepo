@@ -280,7 +280,6 @@ export function RemoveLiquidityForm() {
                   }
                   action="remove"
                   isDisabled={priceImpactQuery.isLoading && !priceImpactQuery.isSuccess}
-                  setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                 />
               )}
               {isV3LBP(pool) && (
