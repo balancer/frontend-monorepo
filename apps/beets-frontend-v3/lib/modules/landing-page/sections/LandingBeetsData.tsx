@@ -9,7 +9,7 @@ import {
   GetProtocolStatsQuery,
   GetStakedSonicDataQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 
 function GlobalStatsCard({ label, value }: { label: string; value: string }) {
   return (
@@ -35,10 +35,15 @@ export function LandingBeetsData({
 
   const protocolMetricsAggregated = protocolData.protocolMetricsAggregated
 
-  const totalFees = bn(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
-    .plus(protocolMetricsAggregated.swapFee24h)
-    .plus(protocolMetricsAggregated.yieldCapture24h)
-    .toString()
+  const totalFees =
+    isValidNumber(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h) &&
+    isValidNumber(protocolMetricsAggregated.swapFee24h) &&
+    isValidNumber(protocolMetricsAggregated.yieldCapture24h)
+      ? bn(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
+          .plus(protocolMetricsAggregated.swapFee24h)
+          .plus(protocolMetricsAggregated.yieldCapture24h)
+          .toString()
+      : '0'
 
   return (
     <DefaultPageContainer noVerticalPadding position="relative" py="3xl">
