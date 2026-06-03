@@ -78,23 +78,47 @@ jobs:
       - name: Run integration tests
         run: pnpm test:integration
 
-  E2E-Smoke-Test:
+  E2E-Smoke-Test-Balancer:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
     env:
+      NEXT_PUBLIC_PROJECT_ID: balancer
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Setup
         uses: ./.github/actions/setup
-      - name: Run Playwright smoke tests
-        run: pnpm test:e2e:build
+      - name: Run Playwright smoke tests (Balancer)
+        run: pnpm test:e2e:build:bal
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ !cancelled() }}
         with:
-          name: playwright-smoke-report
+          name: playwright-smoke-report-bal
+          path: |
+            ./packages/e2e-tests/playwright-report/
+          retention-days: 30
+
+  E2E-Smoke-Test-Beets:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+    env:
+      NEXT_PUBLIC_PROJECT_ID: beets
+      NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Run Playwright smoke tests (Beets)
+        run: pnpm test:e2e:build:beets
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-smoke-report-beets
           path: |
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
