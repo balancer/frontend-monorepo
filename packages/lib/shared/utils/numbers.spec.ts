@@ -6,6 +6,7 @@ import {
   sum,
   formatFalsyValueAsDash,
   ZERO_VALUE_DASH,
+  isValidNumber,
 } from './numbers'
 
 test('Stringifies bigints', () => {
@@ -239,5 +240,24 @@ describe('formatFalsyValueAsDash', () => {
     expect(formatFalsyValueAsDash('-100')).toBe('-100')
     expect(formatFalsyValueAsDash('0.123456')).toBe('0.123456')
     expect(formatFalsyValueAsDash('1000000000')).toBe('1000000000')
+  })
+})
+
+describe('isValidNumber', () => {
+  test('returns false for nullish and invalid values', () => {
+    expect(isValidNumber(null)).toBe(false)
+    expect(isValidNumber(undefined)).toBe(false)
+    expect(isValidNumber('')).toBe(false)
+    expect(isValidNumber('abc')).toBe(false)
+  })
+
+  test('returns true for valid numbers and numeric strings', () => {
+    expect(isValidNumber(0)).toBe(true)
+    expect(isValidNumber(1.5)).toBe(true)
+    expect(isValidNumber(-10)).toBe(true)
+    expect(isValidNumber('0')).toBe(true)
+    expect(isValidNumber('1.5')).toBe(true)
+    expect(isValidNumber('100')).toBe(true)
+    expect(isValidNumber('0.0000000000000035')).toBe(true)
   })
 })
