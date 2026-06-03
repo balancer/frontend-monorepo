@@ -49,7 +49,7 @@ export function hasNonPreferentialStakedBalance(pool: Pool): boolean {
 function hasActiveGaugeRewards(pool: Pool): boolean {
   const rewards = pool.staking?.gauge?.rewards
   if (!rewards || rewards.length === 0) return false
-  return rewards.some(r => r.rewardPerSecond !== '0')
+  return rewards.some(r => bn(r.rewardPerSecond).gt(0))
 }
 
 export function getCanStake(pool: Pool): boolean {
