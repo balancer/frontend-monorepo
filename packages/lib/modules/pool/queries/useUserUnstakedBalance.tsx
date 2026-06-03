@@ -9,6 +9,9 @@ import { BPT_DECIMALS } from '../pool.constants'
 import { useMemo } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 
+// All pool versions implement balanceOf, so the same ABI can be reused.
+const balanceOfAbi = parseAbi(['function balanceOf(address account) view returns (uint256)'])
+
 export type UnstakedBalanceByPoolId = ReturnType<
   typeof useUserUnstakedBalance
 >['unstakedBalanceByPoolId']
@@ -17,8 +20,20 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor } = useTokens()
 
-  // All pool version will implement balanceOf the same ABI function is shared
-  const balanceOfAbi = parseAbi(['function balanceOf(address account) view returns (uint256)'])
+  const contracts = useMemo(
+    () =>
+      pools.map(
+        pool =>
+          ({
+            abi: balanceOfAbi,
+            address: pool.address as Address,
+            functionName: 'balanceOf',
+            args: [userAddress as Address],
+            chainId: getChainId(pool.chain),
+          }) as const
+      ),
+    [pools, userAddress]
+  )
 
   const {
     data: unstakedPoolBalances = [],
@@ -31,16 +46,7 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
     query: {
       enabled: isConnected,
     },
-    contracts: pools.map(
-      pool =>
-        ({
-          abi: balanceOfAbi,
-          address: pool.address as Address,
-          functionName: 'balanceOf',
-          args: [userAddress as Address],
-          chainId: getChainId(pool.chain),
-        }) as const
-    ),
+    contracts,
   })
 
   // for each pool get the unstaked balance
@@ -63,9 +69,9 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
         }
       })
     )
-  }, [isLoading, unstakedPoolBalances, pools, userAddress, isFetching])
+  }, [unstakedPoolBalances, pools, isFetching, priceFor])
 
-  const unstakedBalanceByPoolId = keyBy(balances, 'poolId')
+  const unstakedBalanceByPoolId = useMemo(() => keyBy(balances, 'poolId'), [balances])
 
   return {
     unstakedBalanceByPoolId,

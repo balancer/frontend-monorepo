@@ -4,7 +4,6 @@ import { getCanStake } from '../../pool/actions/stake.helpers'
 import { getTotalApr } from '../../pool/pool.utils'
 import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
-import { usePortfolio } from '../PortfolioProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
@@ -65,8 +64,6 @@ function sortingReducer(state: SortingState, action: SortingAction): SortingStat
 export function usePortfolioSorting() {
   const { filteredExpandedPools, selectedNetworks, selectedPoolTypes, selectedStakingTypes } =
     usePortfolioFilters()
-
-  const { portfolioData } = usePortfolio()
 
   const [manualSortingObj, dispatch] = useReducer(sortingReducer, null)
 
@@ -159,7 +156,7 @@ export function usePortfolioSorting() {
 
       return 0
     })
-  }, [portfolioData?.pools, filteredExpandedPools, currentSortingObj.id, currentSortingObj.desc])
+  }, [filteredExpandedPools, currentSortingObj.id, currentSortingObj.desc])
 
   return { sortedPools, setSorting, currentSortingObj }
 }

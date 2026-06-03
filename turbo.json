@@ -28,7 +28,7 @@
     "TEST_ACCOUNT_MNEMONIC",
     "SLACK_BOT_TOKEN"
   ],
-  "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
+  "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN", "PLAYWRIGHT_BROWSERS_PATH"],
   "tasks": {
     "dev": {
       "cache": false,
