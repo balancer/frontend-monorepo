@@ -24,16 +24,12 @@ export function LiquidityManagement() {
 
   const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
 
-  useEffect(() => {
-    // if contract has this flag set to true, enforce `disableUnbalancedLiquidity: true` to avoid tx revert
-    if (hookFlags?.enableHookAdjustedAmounts) {
-      poolCreationForm.setValue('disableUnbalancedLiquidity', true)
-    }
-    // the stable surge pool factory only supports `disableUnbalancedLiquidity: false`
-    if (isStableSurgePool(poolType)) {
-      poolCreationForm.setValue('disableUnbalancedLiquidity', false)
-    }
-  }, [hookFlags, poolType])
+  // Compute effective value directly to avoid effect-based state mirroring
+  const effectiveDisableUnbalancedLiquidity = hookFlags?.enableHookAdjustedAmounts
+    ? true
+    : isStableSurgePool(poolType)
+      ? false
+      : disableUnbalancedLiquidity
 
   const isUnbalancedToggleDisabled =
     isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
