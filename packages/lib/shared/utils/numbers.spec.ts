@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js'
 import {
   bn,
   fNum,
-  safeTokenFormat,
   BN_LOWER_THRESHOLD,
   sum,
   formatFalsyValueAsDash,
@@ -139,20 +138,6 @@ describe('slippage', () => {
     expect(fNum('slippage', '0.0001')).toBe('<0.01%')
     expect(fNum('slippage', '0.00009')).toBe('<0.01%')
     expect(fNum('slippage', '0.000007595846919227514')).toBe('<0.01%')
-  })
-})
-
-describe('safeTokenFormat', () => {
-  test('for a bigint amount', () => {
-    expect(safeTokenFormat(251359380787607529n, 18)).toBe('0.2514')
-    expect(safeTokenFormat(null, 18)).toBe('-')
-  })
-})
-
-describe('safeTokenFormat', () => {
-  test('for a bigint amount', () => {
-    expect(safeTokenFormat(251359380787607529n, 18)).toBe('0.2514')
-    expect(safeTokenFormat(null, 18)).toBe('-')
   })
 })
 
