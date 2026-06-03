@@ -13,17 +13,17 @@
     "@eslint/js": "9.39.4",
     "@next/eslint-plugin-next": "16.2.6",
     "@repo/prettier-config": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "8.58.2",
-    "@typescript-eslint/parser": "8.58.2",
+    "@typescript-eslint/eslint-plugin": "8.60.0",
+    "@typescript-eslint/parser": "8.60.0",
     "eslint": "9.39.4",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-only-warn": "1.2.1",
     "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "7.1.0",
-    "eslint-plugin-turbo": "2.9.6",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-turbo": "2.9.16",
     "globals": "17.5.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.58.2"
+    "typescript-eslint": "8.60.0"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0 --cache",

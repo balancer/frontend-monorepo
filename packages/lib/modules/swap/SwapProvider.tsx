@@ -484,7 +484,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const wethIsEth =
     isSameAddress(swapState.tokenIn.address, networkConfig.tokens.nativeAsset.address) ||
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
-  const validAmountOut = bn(swapState.tokenOut.amount).gt(0)
+  const validAmountOut = swapState.tokenOut.amount !== '' && bn(swapState.tokenOut.amount).gt(0)
 
   const protocolVersion =
     ((simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion as ProtocolVersion) || 2

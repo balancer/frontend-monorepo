@@ -4,7 +4,7 @@ import {
   GqlUserStakedBalance,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { bn, safeSum } from '@repo/lib/shared/utils/numbers'
+import { bn, safeSum, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { captureNonFatalError } from '@repo/lib/shared/utils/query-errors'
 import { HumanAmount } from '@balancer/sdk'
 import type BigNumber from 'bignumber.js'
@@ -129,7 +129,10 @@ function overwriteOnchainPoolBalanceData(
     }
 
     const onchainUnstakedBalance = onchainUnstakedBalances.unstakedBalance as HumanAmount
-    const onchainUnstakedBalanceUsd = bn(onchainUnstakedBalance).times(bptPrice).toNumber()
+    const safeOnchainUnstakedBalance = isValidNumber(onchainUnstakedBalance)
+      ? onchainUnstakedBalance
+      : ('0' as HumanAmount)
+    const onchainUnstakedBalanceUsd = bn(safeOnchainUnstakedBalance).times(bptPrice).toNumber()
 
     // Staked balances
     const onchainStakedBalances = stakedBalancesByPoolId[pool.id]
@@ -138,14 +141,16 @@ function overwriteOnchainPoolBalanceData(
       return pool
     }
     const onchainTotalStakedBalance = safeSum(
-      onchainStakedBalances.map(stakedBalance => bn(stakedBalance.balance))
+      onchainStakedBalances.map(stakedBalance =>
+        isValidNumber(stakedBalance.balance) ? stakedBalance.balance : '0'
+      )
     )
 
     // Total balances
     const totalBalance = safeSum([
       calcNonOnChainFetchedStakedBalance(pool),
       onchainTotalStakedBalance,
-      onchainUnstakedBalance,
+      safeOnchainUnstakedBalance,
     ])
 
     const totalBalanceUsd = Number(bn(totalBalance).times(bptPrice))

@@ -47,6 +47,7 @@ export function TokenSelectInput({
     <SelectInput
       defaultValue={defaultTokenAddress}
       id="token-select"
+      isSearchable={false}
       onChange={onChange}
       options={tokenOptions}
       value={value}

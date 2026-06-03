@@ -161,8 +161,12 @@ export function SwapDetails({ hideOrderRoute }: { hideOrderRoute?: boolean }) {
   const limitLabel = isExactIn ? "You'll get at least" : "You'll pay at most"
   const limitToken = isExactIn ? tokenOutInfo : tokenInInfo
   const limitValue = isExactIn
-    ? bn(tokenOut.amount).minus(bn(tokenOut.amount).times(_slippageDecimal)).toString()
-    : bn(tokenIn.amount).plus(bn(tokenIn.amount).times(_slippageDecimal)).toString()
+    ? bn(tokenOut.amount || '0')
+        .minus(bn(tokenOut.amount || '0').times(_slippageDecimal))
+        .toString()
+    : bn(tokenIn.amount || '0')
+        .plus(bn(tokenIn.amount || '0').times(_slippageDecimal))
+        .toString()
   const limitTooltip = isExactIn
     ? 'You will get at least this amount, even if you suffer maximum slippage ' +
       'from unfavorable market price movements before your transaction executes on-chain.'

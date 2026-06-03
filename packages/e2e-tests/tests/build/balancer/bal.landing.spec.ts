@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test('Balancer landing page', async ({ page }) => {
   await page.goto('http://localhost:3000/')
