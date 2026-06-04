@@ -18,11 +18,16 @@ import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/Heade
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
 import { useHydratePoolCreationForm } from './useHydratePoolCreationForm'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
+import { useEffect } from 'react'
 
 export function PoolCreationForm() {
   const { isLoadingPool } = useHydratePoolCreationForm()
   const { steps, currentStepIndex, currentStep, goToStep, canRenderStep } = usePoolCreationForm()
   const { isMobile } = useBreakpoints()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentStepIndex])
 
   return (
     <VStack spacing="lg">
