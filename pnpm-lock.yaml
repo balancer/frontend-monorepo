@@ -474,8 +474,8 @@ importers:
         specifier: 11.14.1
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.6))(@types/react@19.2.10)(react@19.2.6)
       '@hookform/resolvers':
-        specifier: ^5.2.2
-        version: 5.2.2(react-hook-form@7.76.1(react@19.2.6))
+        specifier: 5.4.0
+        version: 5.4.0(react-hook-form@7.76.1(react@19.2.6))
       '@layerzerolabs/scan-client':
         specifier: ^0.0.8
         version: 0.0.8(axios@1.16.0)
@@ -2203,8 +2203,8 @@ packages:
   '@hapi/topo@6.0.2':
     resolution: {integrity: sha512-KR3rD5inZbGMrHmgPxsJ9dbi6zEK+C3ZwUwTa+eMwWLz7oijWUTWD2pMSNNYJAU6Qq+65NkxXjqHr/7LM2Xkqg==}
 
-  '@hookform/resolvers@5.2.2':
-    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
+  '@hookform/resolvers@5.4.0':
+    resolution: {integrity: sha512-EIsqr/t/qbinPIhGjMdtvutIN1Kk4uwbROE9/UQ93CAVGR7GkA7Y92+fX80OzXi/OB67jVFYwKGO1WzkxmkFZw==}
     peerDependencies:
       react-hook-form: ^7.55.0
 
@@ -10396,7 +10396,7 @@ snapshots:
     dependencies:
       '@hapi/hoek': 11.0.7
 
-  '@hookform/resolvers@5.2.2(react-hook-form@7.76.1(react@19.2.6))':
+  '@hookform/resolvers@5.4.0(react-hook-form@7.76.1(react@19.2.6))':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.76.1(react@19.2.6)
