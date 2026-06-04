@@ -26,7 +26,10 @@ export function PoolCreationForm() {
   const { isMobile } = useBreakpoints()
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    const raf = requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+    return () => cancelAnimationFrame(raf)
   }, [currentStepIndex])
 
   return (
