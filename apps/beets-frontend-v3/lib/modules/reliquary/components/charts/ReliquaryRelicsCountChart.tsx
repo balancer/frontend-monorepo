@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
 import { format } from 'date-fns'
-import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { bn, fNumCustom, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import ReactECharts from 'echarts-for-react'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { secondsToMilliseconds } from 'date-fns'
@@ -14,7 +14,11 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
   const theme = useChakraTheme()
 
   const chartData = useMemo(
-    () => data.map(item => [secondsToMilliseconds(item.timestamp), bn(item.relicCount).toNumber()]),
+    () =>
+      data.map(item => [
+        secondsToMilliseconds(item.timestamp),
+        isValidNumber(item.relicCount) ? bn(item.relicCount).toNumber() : 0,
+      ]),
     [data]
   )
 

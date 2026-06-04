@@ -2,7 +2,7 @@ import { Pool } from './pool.types'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { sumBy } from 'lodash'
 import { useTokens } from '../tokens/TokensProvider'
-import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
+import { bn, Numberish, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { calcPotentialYieldFor } from './pool.utils'
 import { oneWeekInSecs } from '@repo/lib/shared/utils/time'
 
@@ -14,13 +14,15 @@ export function useGetPoolRewards(pool: Pool) {
   const currentRewardsPerWeek = currentRewards.map(reward => {
     return {
       ...reward,
-      rewardPerWeek: bn(reward.rewardPerSecond).times(oneWeekInSecs),
+      rewardPerWeek: isValidNumber(reward.rewardPerSecond)
+        ? bn(reward.rewardPerSecond).times(oneWeekInSecs)
+        : bn(0),
     }
   })
 
   // In case a reward token is undefined, it's icon in TokenIconStack will be a random one
   const tokens = currentRewardsPerWeek
-    .filter(reward => bn(reward.rewardPerSecond).gt(0))
+    .filter(reward => reward.rewardPerWeek.gt(0))
     .map(reward => getToken(reward.tokenAddress, pool.chain)) as GqlToken[]
 
   const weeklyRewards = sumBy(currentRewardsPerWeek, reward =>
@@ -31,7 +33,9 @@ export function useGetPoolRewards(pool: Pool) {
   const weeklyRewardsByToken = Object.fromEntries(
     currentRewards.map(reward => [
       reward.tokenAddress,
-      reward.rewardPerSecond ? bn(reward.rewardPerSecond).times(oneWeekInSecs).toString() : '0',
+      isValidNumber(reward.rewardPerSecond)
+        ? bn(reward.rewardPerSecond).times(oneWeekInSecs).toString()
+        : '0',
     ])
   )
 

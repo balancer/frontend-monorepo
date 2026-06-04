@@ -16,7 +16,7 @@ import {
 } from 'date-fns'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 import { isFixedLBP } from '@repo/lib/modules/pool/pool.helpers'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type LbpPoolChartsContextType = ReturnType<typeof useLbpPoolChartsLogic>
@@ -62,7 +62,7 @@ export function useLbpPoolChartsLogic() {
     .toNumber()
 
   const fundsRaisedGoal =
-    projectToken?.balance && projectTokenRate
+    projectToken?.balance && isValidNumber(projectToken.balance) && projectTokenRate
       ? bn(projectToken.balance).times(projectTokenRate).toNumber()
       : null
 
