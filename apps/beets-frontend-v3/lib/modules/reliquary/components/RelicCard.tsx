@@ -296,7 +296,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         </Box>
         {!isMaxMaturity && (
           <Text color="white" fontSize="sm" fontWeight="bold">
-            {relic.level + 2}
+            {canUpgrade ? canUpgradeTo : relic.level + 2}
           </Text>
         )}
       </HStack>
@@ -355,7 +355,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
       <LevelUpModal
         chain={chain}
         isOpen={isLevelUpModalOpen}
-        nextLevel={relic.level + 2}
+        nextLevel={canUpgradeTo}
         onClose={() => setIsLevelUpModalOpen(false)}
         relicId={relic.relicId}
       />
