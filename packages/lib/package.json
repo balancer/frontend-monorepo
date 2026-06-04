@@ -56,7 +56,7 @@
     "graphql-tag": "^2.12.6",
     "lodash": "4.18.1",
     "mockdate": "3.0.5",
-    "motion": "12.38.0",
+    "motion": "12.40.0",
     "next": "16.2.6",
     "numeral": "^2.0.6",
     "nuqs": "2.8.9",
