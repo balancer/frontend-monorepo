@@ -29,7 +29,7 @@
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@repo/lib": "workspace:*",
     "@tanstack/react-query": "5.99.2",
-    "date-fns": "^4.1.0",
+    "date-fns": "4.3.0",
     "echarts": "6.0.0",
     "echarts-for-react": "3.0.6",
     "lodash": "4.18.1",
