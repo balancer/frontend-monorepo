@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { balWeth8020 } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
 
-test('Balancer: can add liquidity to random pool', async ({ page }) => {
+test('Balancer: add liquidity page renders', async ({ page }) => {
   await page.goto(`http://localhost:3000/pools/ethereum/v2/${balWeth8020.poolId}`)
 
   await page.getByRole('button', { name: 'Add liquidity' }).click()
