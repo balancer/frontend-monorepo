@@ -36,7 +36,7 @@
     "@dicebear/core": "9.4.2",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "@hookform/resolvers": "^5.2.2",
+    "@hookform/resolvers": "5.4.0",
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@nktkas/hyperliquid": "0.23.1",
