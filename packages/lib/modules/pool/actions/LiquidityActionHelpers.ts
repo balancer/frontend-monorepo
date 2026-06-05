@@ -146,7 +146,7 @@ export class LiquidityActionHelpers {
           const decimals = getNativeAsset(chain).decimals
           return {
             address: tokenAddress as Address,
-            rawAmount: parseUnits(humanAmount, decimals),
+            rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), decimals),
             decimals,
             symbol,
           }
@@ -163,7 +163,7 @@ export class LiquidityActionHelpers {
         }
         return {
           address: token.address as Address,
-          rawAmount: parseUnits(humanAmount, token.decimals),
+          rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), token.decimals),
           decimals: token.decimals,
           symbol: token.symbol,
         }

@@ -47,7 +47,7 @@ export function calcTotalStakedBalanceUsd(pool: Pool): number {
 }
 
 export function calcTotalStakedBalanceInt(pool: Pool): bigint {
-  return parseUnits(calcTotalStakedBalance(pool), BPT_DECIMALS)
+  return parseUnits(bn(calcTotalStakedBalance(pool)).toFixed(), BPT_DECIMALS)
 }
 
 export function getUserTotalBalance(pool: Pool | PoolListItem): HumanAmount {
@@ -74,7 +74,7 @@ export function getUserWalletBalanceUsd(pool: Pool): number {
 }
 
 export function getUserWalletBalanceInt(pool: Pool): bigint {
-  return parseUnits(getUserWalletBalance(pool), BPT_DECIMALS)
+  return parseUnits(bn(getUserWalletBalance(pool)).toFixed(), BPT_DECIMALS)
 }
 
 export function getUserTotalBalanceUsd(pool: Pool | PoolListItem): number {
@@ -144,7 +144,7 @@ export function getStakedBalance(pool: Pool, stakingType: GqlPoolStakingType): S
 }
 
 export function calcStakedBalanceInt(pool: Pool, stakingType: GqlPoolStakingType) {
-  return parseUnits(getStakedBalance(pool, stakingType).balance, BPT_DECIMALS)
+  return parseUnits(bn(getStakedBalance(pool, stakingType).balance).toFixed(), BPT_DECIMALS)
 }
 
 export function calcStakedBalanceUsd(pool: Pool, stakingType: GqlPoolStakingType): number {
