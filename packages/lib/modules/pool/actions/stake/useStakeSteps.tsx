@@ -1,4 +1,5 @@
 import { Address, parseUnits } from 'viem'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool.types'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { RawAmount } from '@repo/lib/modules/tokens/approvals/approval-rules'
@@ -8,7 +9,7 @@ import { useStakeStep } from './useStakeStep'
 import { getUserWalletBalance } from '../../user-balance.helpers'
 
 export function useStakeSteps(pool: Pool, stakeAmount = getUserWalletBalance(pool)) {
-  const rawAmount = parseUnits(stakeAmount || '0', BPT_DECIMALS)
+  const rawAmount = parseUnits(bn(stakeAmount || '0').toFixed(), BPT_DECIMALS)
 
   const amountToApprove: RawAmount = {
     rawAmount,

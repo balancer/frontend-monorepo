@@ -10,6 +10,7 @@ import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useMan
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useMemo, useState } from 'react'
 import { parseUnits } from 'viem'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool.types'
 import { BPT_DECIMALS } from '../../pool.constants'
 import { findFirstNonPreferentialStaking } from '../stake.helpers'
@@ -42,7 +43,7 @@ export function useUnstakeFromNonPreferentialGaugeStep(
     tooltip: 'Unstake LP tokens from deprecated gauge.',
   }
 
-  const amount = parseUnits(nonPreferentialStakedBalance, BPT_DECIMALS)
+  const amount = parseUnits(bn(nonPreferentialStakedBalance).toFixed(), BPT_DECIMALS)
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
     'Error in wagmi tx simulation (Unstake from non preferential gauge transaction)',

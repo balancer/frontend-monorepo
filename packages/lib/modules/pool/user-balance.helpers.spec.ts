@@ -137,4 +137,27 @@ describe('invalid balance fallbacks', () => {
     expect(calcTotalStakedBalance(pool)).toBe('52.123')
     expect(calcTotalStakedBalanceUsd(pool)).toBe(7.9)
   })
+
+  test('handles scientific notation from API balances', () => {
+    const pool = aWjAuraWethPoolElementMock()
+    pool.userBalance = {
+      __typename: 'GqlPoolUserBalance',
+      walletBalance: '6.1713167421e-8',
+      walletBalanceUsd: 0,
+      totalBalance: '6.1713167421e-8',
+      totalBalanceUsd: 0,
+      stakedBalances: [
+        {
+          balance: '6.1713167421e-8',
+          balanceUsd: 0,
+          stakingType: GqlPoolStakingType.Gauge,
+          stakingId: '0x1',
+          __typename: 'GqlUserStakedBalance',
+        },
+      ],
+    }
+    expect(getUserWalletBalanceInt(pool)).toBe(61713167421n)
+    expect(getUserTotalBalanceInt(pool)).toBe(61713167421n)
+    expect(calcTotalStakedBalanceInt(pool)).toBe(61713167421n)
+  })
 })

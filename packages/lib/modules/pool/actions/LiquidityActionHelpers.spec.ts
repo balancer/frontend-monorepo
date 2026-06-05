@@ -811,6 +811,21 @@ describe('toInputAmounts', () => {
     ]
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([])
   })
+
+  it('when the token input is in scientific notation', () => {
+    const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
+    const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
+      { tokenAddress: wjAuraAddress, humanAmount: '6.1713167421e-8', symbol: 'BAL' },
+    ]
+    expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([
+      {
+        address: wjAuraAddress,
+        decimals: 18,
+        rawAmount: 61713167421n,
+        symbol: 'BAL',
+      },
+    ])
+  })
 })
 
 describe('toSdkInputAmounts', () => {
