@@ -26,7 +26,7 @@ export function StakingOptions() {
   })
 
   const stakeTooltipLabel = !canStake
-    ? 'Staking is currently disabled because this pool has no active rewards.'
+    ? 'Staking is currently disabled because this pool has no extra staking incentives.'
     : ''
 
   return (
