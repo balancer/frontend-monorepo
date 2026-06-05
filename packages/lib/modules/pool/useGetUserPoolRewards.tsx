@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import { sumBy } from 'lodash'
 import { Pool } from './pool.types'
-import { safeTokenFormat } from '@repo/lib/shared/utils/numbers'
+import { formatUnits } from 'viem'
 import { useGetPoolRewards } from './useGetPoolRewards'
 import { BalTokenReward } from '../portfolio/PortfolioClaim/useBalRewards'
 import { ClaimableReward } from '../portfolio/PortfolioClaim/useClaimableBalances'
@@ -41,7 +41,7 @@ export function useGetUserPoolRewards({
         const token = tokens.find(t => t?.address === reward.tokenAddress)
         const decimals = token?.decimals || 18
 
-        balanceMap[reward.tokenAddress] = safeTokenFormat(reward.balance, decimals)
+        balanceMap[reward.tokenAddress] = formatUnits(reward.balance, decimals)
       }
     })
 

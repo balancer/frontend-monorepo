@@ -14,7 +14,7 @@ import {
 } from 'date-fns'
 import type BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, isValidNumber } from '@repo/lib/shared/utils/numbers'
 
 type ChartValueAcc = [string, number][]
 
@@ -39,6 +39,7 @@ function groupValuesByDates(chartValues: ChartValueAcc) {
 }
 
 function forecastBalance(snapshot: LockSnapshot, now: BigNumber) {
+  if (!isValidNumber(snapshot.bias) || !isValidNumber(snapshot.slope)) return 0
   const bias = bn(snapshot.bias)
   const slope = bn(snapshot.slope)
   const point2V = bias.minus(slope.times(now.minus(snapshot.timestamp)))
@@ -71,7 +72,7 @@ function processLockSnapshots(lockSnapshots: LockSnapshot[], currentTimestampMs:
   const currentDateSeconds = Math.floor(millisecondsToSeconds(currentTimestampMs))
 
   return lockSnapshots.reduce((acc: ChartValueAcc, snapshot, i) => {
-    const point1Balance = bn(snapshot.bias).toNumber()
+    const point1Balance = isValidNumber(snapshot.bias) ? bn(snapshot.bias).toNumber() : 0
     const point1Date = formatDate(snapshot.timestamp)
 
     const point2Timestamp = bn(lockSnapshots[i + 1]?.timestamp || currentDateSeconds)

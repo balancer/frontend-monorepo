@@ -69,7 +69,7 @@ export function LevelUpModal({
             )}
             <Card variant="modalSubSection">
               {isSuccess
-                ? `Successfully levelled up to ${nextLevel - 1}.`
+                ? `Successfully levelled up to ${nextLevel}.`
                 : `The next level is ${nextLevel}.`}
             </Card>
           </AnimateHeightChange>

@@ -23,7 +23,7 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../ReliquaryProvider'
 
 type Props = RemoveLiquidityReceiptResult & {
@@ -54,7 +54,9 @@ export function ReliquaryRemoveLiquiditySummary({
   const pendingRewardsAmount = relicId ? (pendingRewardsByRelicId[relicId] ?? '0') : '0'
   const networkConfig = getNetworkConfig(chain)
 
-  const _amountsOut = amountsOut.filter(amount => bn(amount.humanAmount).gt(0))
+  const _amountsOut = amountsOut.filter(
+    amount => isValidNumber(amount.humanAmount) && bn(amount.humanAmount).gt(0)
+  )
 
   const shouldShowErrors = hasQuoteContext ? removeLiquidityTxSuccess : removeLiquidityTxHash
   const shouldShowReceipt = removeLiquidityTxHash && !isLoadingReceipt && receivedTokens.length > 0

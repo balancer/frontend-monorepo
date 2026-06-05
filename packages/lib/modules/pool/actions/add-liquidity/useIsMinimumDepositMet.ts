@@ -100,7 +100,10 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
       isSameAddress((token.underlyingToken?.address || zeroAddress) as Address, amount.tokenAddress)
     ) {
       address = token.underlyingToken.address
-      balance = bn(token.balance).div(token.priceRate).toString()
+      balance =
+        isValidNumber(token.balance) && isValidNumber(token.priceRate)
+          ? bn(token.balance).div(token.priceRate).toString()
+          : '0'
       decimals = token.underlyingToken.decimals
     }
 

@@ -7,7 +7,7 @@ import {
   VStack,
   useBreakpointValue,
 } from '@chakra-ui/react'
-import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, fNumCustom, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
@@ -46,7 +46,10 @@ export function YourMaBeetsStats() {
   const avgMaturityLevel =
     relicPositions.length > 0 && userTotalBalance > 0
       ? relicPositions.reduce((sum, relic) => {
-          const weight = bn(relic.amount).div(userTotalBalance).toNumber()
+          const weight =
+            isValidNumber(relic.amount) && userTotalBalance > 0
+              ? bn(relic.amount).div(userTotalBalance).toNumber()
+              : 0
           return sum + (relic.level + 1) * weight // +1 because levels are 0-indexed
         }, 0)
       : 0

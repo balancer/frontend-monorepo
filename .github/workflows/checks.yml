@@ -31,7 +31,7 @@ jobs:
   Lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run lint
@@ -44,7 +44,7 @@ jobs:
   Unit-Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run typecheck
@@ -68,7 +68,7 @@ jobs:
       group: integration-test
       queue: max
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
@@ -87,7 +87,7 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: balancer
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run Playwright smoke tests (Balancer)
@@ -110,7 +110,7 @@ jobs:
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run Playwright smoke tests (Beets)
@@ -132,7 +132,7 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: balancer
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
@@ -159,7 +159,7 @@ jobs:
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)

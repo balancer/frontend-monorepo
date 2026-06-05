@@ -3,7 +3,7 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { getTotalApr } from '@repo/lib/modules/pool/pool.utils'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -111,7 +111,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
     relicGetMaturityProgress(relic, maturityThresholds)
 
   // Check if maBEETS position has balance
-  const hasBalance = bn(relic.amount).gt(0)
+  const hasBalance = isValidNumber(relic.amount) && bn(relic.amount).gt(0)
 
   // Calculate APR with boost
   const baseApr = pool.dynamicData.aprItems.find(
@@ -122,14 +122,18 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
       return {
         ...item,
         title: 'BEETS reward APR',
-        apr: bn(relicApr)
-          .minus(baseApr?.apr || 0)
-          .toNumber(),
+        apr:
+          isValidNumber(relicApr) && baseApr && isValidNumber(baseApr.apr)
+            ? bn(relicApr).minus(baseApr.apr).toNumber()
+            : 0,
       }
     } else if (item.title === 'Voting APR Boost' && item.type === 'STAKING_BOOST') {
       return {
         ...item,
-        apr: bn(item.apr).times(allocationPoints).div(100).toNumber(),
+        apr:
+          isValidNumber(item.apr) && isValidNumber(allocationPoints)
+            ? bn(item.apr).times(allocationPoints).div(100).toNumber()
+            : 0,
       }
     } else {
       return item
@@ -140,7 +144,10 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const formattedApr = fNum('apr', maxTotalApr.toString())
 
   // Calculate Share percentage
-  const weightedRelicAmount = bn(relic.amount).times(allocationPoints)
+  const weightedRelicAmount =
+    isValidNumber(relic.amount) && isValidNumber(allocationPoints)
+      ? bn(relic.amount).times(allocationPoints)
+      : bn(0)
   const relicShare =
     weightedTotalBalance > 0 ? weightedRelicAmount.div(weightedTotalBalance) : bn(0)
   const formattedShare = `${fNum('sharePercent', relicShare.toNumber())}`
@@ -289,7 +296,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         </Box>
         {!isMaxMaturity && (
           <Text color="white" fontSize="sm" fontWeight="bold">
-            {relic.level + 2}
+            {canUpgrade ? canUpgradeTo : relic.level + 2}
           </Text>
         )}
       </HStack>
@@ -348,7 +355,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
       <LevelUpModal
         chain={chain}
         isOpen={isLevelUpModalOpen}
-        nextLevel={relic.level + 2}
+        nextLevel={canUpgradeTo}
         onClose={() => setIsLevelUpModalOpen(false)}
         relicId={relic.relicId}
       />

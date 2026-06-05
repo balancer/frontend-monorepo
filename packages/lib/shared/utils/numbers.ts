@@ -4,7 +4,7 @@ import { MAX_UINT256 } from '@balancer/sdk'
 import BigNumber from 'bignumber.js'
 import numeral from 'numeral'
 import { KeyboardEvent } from 'react'
-import { formatUnits, parseUnits } from 'viem'
+import { parseUnits } from 'viem'
 import { isNumber, toNumber } from 'lodash'
 
 // Allows calling JSON.stringify with bigints
@@ -290,17 +290,6 @@ export function isSuperSmallAmount(value: Numberish): boolean {
   return bn(value).lte(BN_LOWER_THRESHOLD)
 }
 
-// Returns dash if token amount is null, otherwise returns humanized token amount in token display format.
-export function safeTokenFormat(
-  amount: bigint | null | undefined,
-  decimals: number,
-  opts?: FormatOpts
-): string {
-  if (!amount) return '-'
-
-  return fNum('token', formatUnits(amount, decimals), opts)
-}
-
 export function isZero(amount: Numberish): boolean {
   return bn(amount).isZero()
 }
@@ -323,7 +312,7 @@ export function isTooSmallToRemoveUsd(value: Numberish): boolean {
 }
 
 export const isValidNumber = (value: string | number | undefined | null): boolean =>
-  value !== '' && isNumber(toNumber(value)) && !isNaN(toNumber(value))
+  value != null && value !== '' && isNumber(toNumber(value)) && !isNaN(toNumber(value))
 
 // Parses a fixed-point decimal string into a bigint
 // If we do not have enough decimals to express the number, we truncate it

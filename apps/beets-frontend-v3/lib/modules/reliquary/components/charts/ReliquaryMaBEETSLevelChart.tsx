@@ -2,7 +2,7 @@ import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
-import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { bn, fNumCustom, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
 export function ReliquaryMaBEETSLevelChart() {
@@ -67,7 +67,9 @@ export function ReliquaryMaBEETSLevelChart() {
         {
           data: levels?.map(level => [
             level.level + 1,
-            bn(level.balance).times(level.allocationPoints).toNumber(),
+            isValidNumber(level.balance) && isValidNumber(level.allocationPoints)
+              ? bn(level.balance).times(level.allocationPoints).toNumber()
+              : 0,
           ]),
           type: 'bar',
           itemStyle: {
