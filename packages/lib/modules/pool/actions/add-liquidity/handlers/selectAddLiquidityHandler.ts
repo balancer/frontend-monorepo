@@ -9,7 +9,6 @@ import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.hand
 import { isBoosted, isV3Pool } from '../../../pool.helpers'
 import { ProportionalAddLiquidityHandlerV3 } from './ProportionalAddLiquidityV3.handler'
 import { UnbalancedAddLiquidityV3Handler } from './UnbalancedAddLiquidityV3.handler'
-import { UnbalancedAddLiquidityViaSwapV3Handler } from './UnbalancedAddLiquidityViaSwapV3.handler'
 import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
 import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
 import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiquidityV3.handler'
@@ -48,12 +47,7 @@ export function selectAddLiquidityHandler(
     return new ProportionalAddLiquidityHandler(pool)
   }
 
-  if (isV3Pool(pool)) {
-    if (pool.poolTokens.length === 2) {
-      return new UnbalancedAddLiquidityViaSwapV3Handler(pool)
-    }
-    return new UnbalancedAddLiquidityV3Handler(pool)
-  }
+  if (isV3Pool(pool)) return new UnbalancedAddLiquidityV3Handler(pool)
 
   return new UnbalancedAddLiquidityV2Handler(pool)
 }
