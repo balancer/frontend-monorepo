@@ -1,29 +1,27 @@
 'use client'
 
 import { useState } from 'react'
-import { VStack, useDisclosure, Button, Text } from '@chakra-ui/react'
+import { VStack, useDisclosure } from '@chakra-ui/react'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { usePool } from '../../../PoolProvider'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
-import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
+import { CompactTokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
-import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { Address, HumanAmount } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import BigNumber from 'bignumber.js'
 
 export function UnbalancedTokenInput() {
-  const { chain } = usePool()
-  const { setHumanAmountsIn, humanAmountsIn, slippage } = useAddLiquidity()
-  const { getTokensByChain } = useTokens()
+  const { pool, chain } = usePool()
+  const { setHumanAmountsIn, humanAmountsIn, slippage, validTokens } = useAddLiquidity()
   const { balanceFor } = useTokenBalances()
   const tokenSelectDisclosure = useDisclosure()
 
-  const allTokens = getTokensByChain(chain)
+  const poolTokens = pool.poolTokens as ApiToken[]
 
-  const [selectedToken, setSelectedToken] = useState<ApiOrCustomToken | undefined>()
+  const [selectedToken, setSelectedToken] = useState<ApiToken | undefined>(poolTokens[0])
 
   const currentAmountEntry = humanAmountsIn.find(
     amount => selectedToken && isSameAddress(amount.tokenAddress, selectedToken.address as Address)
@@ -31,22 +29,22 @@ export function UnbalancedTokenInput() {
 
   const currentAmount = currentAmountEntry?.humanAmount || ''
 
-  function handleTokenSelect(token: ApiOrCustomToken) {
+  function handleTokenSelect(token: ApiToken) {
     setSelectedToken(token)
-    // Clear existing amounts and set up the new token
-    setHumanAmountsIn([
-      ...humanAmountsIn.map(({ tokenAddress, symbol }) => ({
-        tokenAddress,
-        humanAmount: '' as HumanAmount | '',
-        symbol,
-      })),
-      {
-        tokenAddress: token.address as Address,
-        humanAmount: '',
-        symbol: token.symbol,
-        decimals: token.decimals,
-      },
-    ])
+    setHumanAmountsIn(prev => {
+      const filtered = prev.filter(
+        amount => !validTokens.some(t => isSameAddress(t.address as Address, amount.tokenAddress))
+      )
+      return [
+        ...filtered,
+        {
+          tokenAddress: token.address as Address,
+          humanAmount: '',
+          symbol: token.symbol,
+          decimals: token.decimals,
+        },
+      ]
+    })
   }
 
   function handleAmountChange(e: { currentTarget: { value: string } }) {
@@ -54,7 +52,6 @@ export function UnbalancedTokenInput() {
     const value = e.currentTarget.value
 
     setHumanAmountsIn(prev => {
-      // Remove any existing entry for this token
       const filtered = prev.filter(
         amount => !isSameAddress(amount.tokenAddress, selectedToken.address as Address)
       )
@@ -83,13 +80,7 @@ export function UnbalancedTokenInput() {
 
   return (
     <VStack spacing="md" w="full">
-      {!selectedToken ? (
-        <Button onClick={tokenSelectDisclosure.onOpen} variant="secondary" w="full">
-          <Text color="font.dark" fontWeight="bold">
-            Select token
-          </Text>
-        </Button>
-      ) : (
+      {selectedToken && (
         <TokenInput
           address={selectedToken.address as Address}
           apiToken={selectedToken}
@@ -101,14 +92,13 @@ export function UnbalancedTokenInput() {
         />
       )}
 
-      <TokenSelectModal
+      <CompactTokenSelectModal
         chain={chain}
-        enableUnlistedToken
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
         onTokenSelect={handleTokenSelect}
-        tokens={allTokens}
+        tokens={validTokens}
       />
     </VStack>
   )
