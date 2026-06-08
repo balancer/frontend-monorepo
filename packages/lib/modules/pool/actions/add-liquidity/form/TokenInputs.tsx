@@ -6,6 +6,10 @@ import { VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { hasNoLiquidity } from '../../LiquidityActionHelpers'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { UnbalancedAddLiquidityViaSwapV3Handler } from '../handlers/UnbalancedAddLiquidityViaSwapV3.handler'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import BigNumber from 'bignumber.js'
 
 type Props = {
   /*
@@ -20,9 +24,12 @@ type Props = {
 }
 export function TokenInputs({ getToggleTokenCallback, customSetAmountIn }: Props) {
   const { pool } = usePool()
-  const { tokens, humanAmountsIn, setHumanAmountIn } = useAddLiquidity()
+  const { tokens, humanAmountsIn, setHumanAmountIn, handler, slippage } = useAddLiquidity()
+  const { balanceFor } = useTokenBalances()
 
   const setAmountIn = customSetAmountIn || setHumanAmountIn
+
+  const isUnbalancedViaSwap = handler instanceof UnbalancedAddLiquidityViaSwapV3Handler
 
   function currentValueFor(tokenAddress: Address) {
     const amountIn = humanAmountsIn.find(amountIn =>
@@ -38,6 +45,15 @@ export function TokenInputs({ getToggleTokenCallback, customSetAmountIn }: Props
     )
   }
 
+  function getCustomMaxAmount(token: ApiToken): string | undefined {
+    if (!isUnbalancedViaSwap) return undefined
+    const balance = balanceFor(token.address)
+    if (!balance) return undefined
+    const slippageDecimal = Number(slippage) / 100
+    const maxAmount = bn(balance.formatted).times(1 - slippageDecimal)
+    return maxAmount.toFixed(token.decimals, BigNumber.ROUND_DOWN)
+  }
+
   return (
     <VStack spacing="md" w="full">
       {tokens.map(token => {
@@ -48,6 +64,7 @@ export function TokenInputs({ getToggleTokenCallback, customSetAmountIn }: Props
             address={token.address}
             apiToken={token}
             chain={token.chain}
+            customMaxAmount={getCustomMaxAmount(token)}
             isDisabled={hasNoLiquidity(pool)}
             key={token.address}
             onChange={e => setAmountIn(token, e.currentTarget.value as HumanAmount)}
