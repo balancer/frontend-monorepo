@@ -20,12 +20,12 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { HumanAmount } from '@balancer/sdk'
 import { AddableTokensSummary } from './AddableTokensSummary'
-import { AnyTokenInput } from './AnyTokenInput'
+import { UnbalancedTokenInput } from './UnbalancedTokenInput'
 
 type Props = {
   isProportional: boolean
   totalUSDValue: string
-  wantsAnyToken?: boolean
+  wantsUnbalanced?: boolean
 }
 
 function calcProportionalAddableUsdBalance(
@@ -89,7 +89,7 @@ function calcIsProportionalMaxApplied(
 const addableLabel = (count: number, total?: number) =>
   `${total ? `${count}/${total}` : count} addable token${(total ?? count) === 1 ? '' : 's'}`
 
-export function TokenInputsMaybeProportional({ isProportional, wantsAnyToken }: Props) {
+export function TokenInputsMaybeProportional({ isProportional, wantsUnbalanced }: Props) {
   const {
     setHumanAmountIn,
     setHumanAmountsIn,
@@ -244,7 +244,7 @@ export function TokenInputsMaybeProportional({ isProportional, wantsAnyToken }: 
 
   return (
     <VStack spacing="md" w="full">
-      {(isConnected || isUserAccountLoading) && !wantsAnyToken && (
+      {(isConnected || isUserAccountLoading) && !wantsUnbalanced && (
         <AddableTokensSummary
           addableUsdBalance={addableUsdBalance}
           canApplyProportionalMax={canApplyProportionalMax}
@@ -266,8 +266,8 @@ export function TokenInputsMaybeProportional({ isProportional, wantsAnyToken }: 
         />
       )}
 
-      {wantsAnyToken ? (
-        <AnyTokenInput />
+      {wantsUnbalanced ? (
+        <UnbalancedTokenInput />
       ) : (
         <TokenInputs
           customSetAmountIn={setAmountIn}

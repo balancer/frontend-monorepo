@@ -40,7 +40,7 @@ export function AddLiquiditySummary({
     addLiquidityTxSuccess,
     slippage,
     wantsProportional,
-    wantsAnyToken,
+    wantsUnbalanced,
   } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
@@ -50,8 +50,8 @@ export function AddLiquiditySummary({
   const [selectedSlippage, setSelectedSlippage] = useState(0)
 
   const amountsIn = useMemo(() => {
-    if (wantsAnyToken) {
-      // For any token add, show the non-empty arbitrary token amounts directly
+    if (wantsUnbalanced) {
+      // For unbalanced add, show the non-empty arbitrary token amounts directly
       return humanAmountsIn
         .filter(amount => amount.humanAmount && !isZero(amount.humanAmount))
         .map(amount => ({
@@ -71,7 +71,7 @@ export function AddLiquiditySummary({
           .times(1 - selectedSlippage)
           .toString(),
       })) as HumanTokenAmountWithSymbol[]
-  }, [humanAmountsIn, tokens, wantsAnyToken, selectedSlippage])
+  }, [humanAmountsIn, tokens, wantsUnbalanced, selectedSlippage])
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0
@@ -97,7 +97,7 @@ export function AddLiquiditySummary({
   }
 
   const addingInputTokenLabel =
-    wantsProportional || wantsAnyToken ? "You're adding at most:" : "You're adding (exactly)"
+    wantsProportional || wantsUnbalanced ? "You're adding at most:" : "You're adding (exactly)"
 
   const calculateSlippage = (value: SlippageOptions) => {
     if (value === 'zero') setSelectedSlippage(Number(slippage) / 100)

@@ -14,7 +14,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import BigNumber from 'bignumber.js'
 
-export function AnyTokenInput() {
+export function UnbalancedTokenInput() {
   const { chain } = usePool()
   const { setHumanAmountsIn, humanAmountsIn, slippage } = useAddLiquidity()
   const { getTokensByChain } = useTokens()

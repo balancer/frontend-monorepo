@@ -44,7 +44,7 @@ import { useWrapUnderlying } from '../useWrapUnderlying'
 type AddLiquidityHandlerSelector = (
   pool: Pool,
   wantsProportional: boolean,
-  wantsAnyToken?: boolean
+  wantsUnbalanced?: boolean
 ) => AddLiquidityHandler
 
 type AddLiquidityStepsHook = (
@@ -90,15 +90,15 @@ export function useAddLiquidityLogic(
     - the user selected the proportional tab
   */
   const [wantsProportional, setWantsProportional] = useState(requiresProportionalInput(pool))
-  const [wantsAnyToken, setWantsAnyToken] = useState(false)
+  const [wantsUnbalanced, setWantsUnbalanced] = useState(false)
   const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage } = useUserSettings()
 
   const handler = useMemo(() => {
-    return addLiquidityHandlerSelector(pool, wantsProportional, wantsAnyToken)
-  }, [pool, wantsProportional, wantsAnyToken, addLiquidityHandlerSelector])
+    return addLiquidityHandlerSelector(pool, wantsProportional, wantsUnbalanced)
+  }, [pool, wantsProportional, wantsUnbalanced, addLiquidityHandlerSelector])
 
   /**
    * Helper functions & variables
@@ -263,10 +263,10 @@ export function useAddLiquidityLogic(
     addLiquidityTxSuccess,
     slippage,
     wantsProportional,
-    wantsAnyToken,
+    wantsUnbalanced,
     referenceAmountAddress,
     setWantsProportional,
-    setWantsAnyToken,
+    setWantsUnbalanced,
     refetchQuote,
     setHumanAmountIn,
     setHumanAmountsIn,

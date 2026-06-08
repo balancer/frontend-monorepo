@@ -17,7 +17,7 @@ import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiqui
 export function selectAddLiquidityHandler(
   pool: Pool,
   wantsProportional = false,
-  wantsAnyToken = false
+  wantsUnbalanced = false
 ): AddLiquidityHandler {
   // This is just an example to illustrate how edge-case handlers would receive different inputs but return a common contract
   if (pool.id === 'TWAMM-example') return new TwammAddLiquidityHandler(getChainId(pool.chain))
@@ -42,7 +42,7 @@ export function selectAddLiquidityHandler(
     return new BoostedUnbalancedAddLiquidityV3Handler(pool)
   }
 
-  if (wantsAnyToken && isV3Pool(pool) && pool.poolTokens.length === 2) {
+  if (wantsUnbalanced && isV3Pool(pool) && pool.poolTokens.length === 2) {
     return new UnbalancedAddLiquidityViaSwapV3Handler(pool)
   }
 
