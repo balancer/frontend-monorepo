@@ -68,7 +68,11 @@ export function isUnbalancedAddError(error: Error | null, pool: Pool): boolean {
 }
 
 export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
-  const errorStrings = ['BAL#304', 'queryAddLiquidityUnbalanced'] // [v2 error, v3 error]
+  const errorStrings = [
+    'BAL#304',
+    'queryAddLiquidityUnbalanced',
+    'Exact BPT out calculation failed',
+  ] // [v2 error, v3 error, unbalanced via swap error]
   const hasErrors = (errorString: string) => error?.message.includes(errorString)
 
   return errorStrings.some(hasErrors)
