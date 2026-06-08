@@ -48,6 +48,8 @@ export class UnbalancedAddLiquidityViaSwapV3Handler implements AddLiquidityHandl
     }
   }
 
+  // TODO: check this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async getPriceImpact(_humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number> {
     // PriceImpact.addLiquidityUnbalancedViaSwap is not yet available in the SDK
     // Returning 0 to allow the flow to continue; UI should handle this gracefully
