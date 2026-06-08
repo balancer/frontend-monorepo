@@ -87,6 +87,8 @@ function AddLiquidityMainForm() {
     slippage,
     setWantsProportional,
     wantsProportional,
+    wantsAnyToken,
+    setWantsAnyToken,
     humanAmountsIn,
     validTokens,
   } = useAddLiquidity()
@@ -103,10 +105,17 @@ function AddLiquidityMainForm() {
   const setFlexibleTab = () => {
     setTabIndex(0)
     setWantsProportional(false)
+    setWantsAnyToken(false)
   }
   const setProportionalTab = () => {
     setTabIndex(1)
     setWantsProportional(true)
+    setWantsAnyToken(false)
+  }
+  const setAnyTokenTab = () => {
+    setTabIndex(2)
+    setWantsProportional(false)
+    setWantsAnyToken(true)
   }
 
   useEffect(() => {
@@ -206,10 +215,12 @@ function AddLiquidityMainForm() {
 
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
+            setAnyTokenTab={setAnyTokenTab}
             setFlexibleTab={setFlexibleTab}
             setProportionalTab={setProportionalTab}
             tabIndex={tabIndex}
             totalUSDValue={totalUSDValue}
+            wantsAnyToken={wantsAnyToken}
           />
           {!wantsProportional && shouldShowUnbalancedError && (
             <UnbalancedAddError

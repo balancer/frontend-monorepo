@@ -118,12 +118,16 @@ export function AddLiquidityFormTabs({
   tabIndex,
   setFlexibleTab,
   setProportionalTab,
+  setAnyTokenTab,
+  wantsAnyToken,
 }: {
   totalUSDValue: string
   nestedAddLiquidityEnabled: boolean
   tabIndex: number
   setFlexibleTab: () => void
   setProportionalTab: () => void
+  setAnyTokenTab?: () => void
+  wantsAnyToken?: boolean
 }) {
   const { clearAmountsIn, isMinimumDepositMet, minimumDepositErrors } = useAddLiquidity()
   const { isLoading, pool } = usePool()
@@ -142,6 +146,10 @@ export function AddLiquidityFormTabs({
   const isOutOfRange = isGyroEPool(pool) && !poolIsInRange
 
   const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold || surging
+
+  const supportsAnyTokenAdd = isV3Pool(pool) && pool.poolTokens.length === 2
+
+  const isDisabledAnyTokenTab = !supportsAnyTokenAdd
 
   function getFlexibleTabTooltipLabel(): string | undefined {
     if (requiresProportionalInput(pool)) {
@@ -163,8 +171,10 @@ export function AddLiquidityFormTabs({
     clearAmountsIn()
     if (option.value === '0') {
       setFlexibleTab()
-    } else {
+    } else if (option.value === '1') {
       setProportionalTab()
+    } else if (option.value === '2' && setAnyTokenTab) {
+      setAnyTokenTab()
     }
   }
 
@@ -186,6 +196,15 @@ export function AddLiquidityFormTabs({
           'This pool does not support liquidity to be added proportionally'
         : undefined,
     },
+    {
+      value: '2',
+      label: 'Any token',
+      dataId: 'add-liquidity-tab-any-token',
+      disabled: isDisabledAnyTokenTab,
+      tabTooltipLabel: isDisabledAnyTokenTab
+        ? 'Any token add is only available for 2-token V3 pools'
+        : undefined,
+    },
   ]
 
   useEffect(() => {
@@ -193,6 +212,12 @@ export function AddLiquidityFormTabs({
       setProportionalTab()
     }
   }, [isDisabledFlexibleTab, isLoading])
+
+  useEffect(() => {
+    if (!isLoading && tabIndex === 2 && isDisabledAnyTokenTab) {
+      setFlexibleTab()
+    }
+  }, [isDisabledAnyTokenTab, isLoading, tabIndex, setFlexibleTab])
 
   const isProportional = tabIndex === 1
 
@@ -238,6 +263,13 @@ export function AddLiquidityFormTabs({
                   When you enter an amount for one token, the others are automatically adjusted to
                   maintain the pool's proportional balance.
                 </Text>
+                <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                  Any Token Adds
+                </Text>
+                <Text fontSize="sm" variant="secondary">
+                  Select any token and enter an amount. The router will calculate the optimal BPT
+                  output for your provided token amount.
+                </Text>
               </Box>
             </VStack>
           </PopoverContent>
@@ -246,7 +278,11 @@ export function AddLiquidityFormTabs({
       </HStack>
       {!isMinimumDepositMet && <MinimumDepositErrorsAlert errors={minimumDepositErrors} />}
       {isOutOfRange && <OutOfRangeWarning />}
-      <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
+      <TokenInputsMaybeProportional
+        isProportional={isProportional}
+        totalUSDValue={totalUSDValue}
+        wantsAnyToken={wantsAnyToken}
+      />
     </VStack>
   )
 }

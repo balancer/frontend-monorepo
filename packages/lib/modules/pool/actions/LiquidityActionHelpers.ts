@@ -140,7 +140,7 @@ export class LiquidityActionHelpers {
 
     return humanAmountsIn
       .filter(({ humanAmount }) => humanAmount && bn(humanAmount).gt(0))
-      .map(({ tokenAddress, humanAmount, symbol }) => {
+      .map(({ tokenAddress, humanAmount, symbol, decimals: humanAmountDecimals }) => {
         const chain = this.pool.chain
         if (isNativeAsset(tokenAddress, chain)) {
           const decimals = getNativeAsset(chain).decimals
@@ -154,19 +154,30 @@ export class LiquidityActionHelpers {
 
         const allTokens = allPoolTokens(this.pool)
         const token = allTokens.find(token => isSameAddress(token.address, tokenAddress))
-        if (!token) {
-          throw new Error(
-            `Provided token address ${tokenAddress} not found in pool tokens [${allTokens
-              .map(t => t.address)
-              .join(' , \n')}]`
-          )
+        if (token) {
+          return {
+            address: token.address as Address,
+            rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), token.decimals),
+            decimals: token.decimals,
+            symbol: token.symbol,
+          }
         }
-        return {
-          address: token.address as Address,
-          rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), token.decimals),
-          decimals: token.decimals,
-          symbol: token.symbol,
+
+        // For arbitrary tokens not in the pool (e.g. unbalanced add via swap)
+        if (humanAmountDecimals !== undefined) {
+          return {
+            address: tokenAddress as Address,
+            rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), humanAmountDecimals),
+            decimals: humanAmountDecimals,
+            symbol,
+          }
         }
+
+        throw new Error(
+          `Provided token address ${tokenAddress} not found in pool tokens [${allTokens
+            .map(t => t.address)
+            .join(' , \n')}] and no decimals were provided`
+        )
       })
   }
 
