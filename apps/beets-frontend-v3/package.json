@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@apollo/client": "catalog:",
-    "@balancer/sdk": "5.2.9",
+    "@balancer/sdk": "6.0.0",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/react": "2.10.10",
     "@chakra-ui/theme-tools": "2.2.6",
@@ -44,7 +44,7 @@
     "real-require": "0.1.0",
     "thread-stream": "0.15.2",
     "tinycolor2": "^1.6.0",
-    "viem": "2.49.3"
+    "viem": "2.51.3"
   },
   "devDependencies": {
     "@chakra-ui/cli": "2.5.8",
