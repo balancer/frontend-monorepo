@@ -145,9 +145,12 @@ export function AddLiquidityFormTabs({
 
   const isOutOfRange = isGyroEPool(pool) && !poolIsInRange
 
-  const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold || surging
+  const isReclamm = isAutoRange(pool.type)
 
-  const supportsUnbalancedAdd = isV3Pool(pool) && (isAutoRange(pool.type) || isGyroEPool(pool))
+  const isDisabledFlexibleTab =
+    requiresProportionalInput(pool) || isBelowMinTvlThreshold || surging || isReclamm
+
+  const supportsUnbalancedAdd = isV3Pool(pool) && isReclamm
 
   const isDisabledUnbalancedTab = !supportsUnbalancedAdd
 
@@ -163,6 +166,10 @@ export function AddLiquidityFormTabs({
       return 'Flexible adds are disabled when a pool with stable surge hook is surging'
     }
 
+    if (isReclamm) {
+      return 'Flexible adds are not available for RECLAMM pools. Use Unbalanced instead.'
+    }
+
     return
   }
 
@@ -170,22 +177,34 @@ export function AddLiquidityFormTabs({
     if (tabIndex.toString() === option.value) return // Avoids handling click in the current tab
     clearAmountsIn()
     if (option.value === '0') {
-      setFlexibleTab()
+      if (isReclamm && setUnbalancedTab) {
+        setUnbalancedTab()
+      } else {
+        setFlexibleTab()
+      }
     } else if (option.value === '1') {
       setProportionalTab()
-    } else if (option.value === '2' && setUnbalancedTab) {
-      setUnbalancedTab()
     }
   }
 
+  const firstTab: ButtonGroupOption = isReclamm
+    ? {
+        value: '0',
+        label: 'Unbalanced',
+        dataId: 'add-liquidity-tab-unbalanced',
+        disabled: false,
+        tabTooltipLabel: undefined,
+      }
+    : {
+        value: '0',
+        label: 'Flexible',
+        dataId: 'add-liquidity-tab-flexible',
+        disabled: isDisabledFlexibleTab,
+        tabTooltipLabel: getFlexibleTabTooltipLabel(),
+      }
+
   const options: ButtonGroupOption[] = [
-    {
-      value: '0',
-      label: 'Flexible',
-      dataId: 'add-liquidity-tab-flexible',
-      disabled: isDisabledFlexibleTab,
-      tabTooltipLabel: getFlexibleTabTooltipLabel(),
-    },
+    firstTab,
     {
       value: '1',
       label: 'Proportional',
@@ -196,28 +215,23 @@ export function AddLiquidityFormTabs({
           'This pool does not support liquidity to be added proportionally'
         : undefined,
     },
-    {
-      value: '2',
-      label: 'Unbalanced',
-      dataId: 'add-liquidity-tab-unbalanced',
-      disabled: isDisabledUnbalancedTab,
-      tabTooltipLabel: isDisabledUnbalancedTab
-        ? 'Unbalanced add is only available for 2-token V3 RECLAMM and ECLP pools'
-        : undefined,
-    },
   ]
 
   useEffect(() => {
     if (!isLoading && isDisabledFlexibleTab) {
-      setProportionalTab()
+      if (isReclamm && setUnbalancedTab) {
+        setUnbalancedTab()
+      } else {
+        setProportionalTab()
+      }
     }
-  }, [isDisabledFlexibleTab, isLoading])
+  }, [isDisabledFlexibleTab, isLoading, isReclamm, setUnbalancedTab, setProportionalTab])
 
   useEffect(() => {
-    if (!isLoading && tabIndex === 2 && isDisabledUnbalancedTab) {
+    if (!isLoading && !isReclamm && tabIndex === 2 && isDisabledUnbalancedTab) {
       setFlexibleTab()
     }
-  }, [isDisabledUnbalancedTab, isLoading, tabIndex, setFlexibleTab])
+  }, [isDisabledUnbalancedTab, isLoading, isReclamm, tabIndex, setFlexibleTab])
 
   const isProportional = tabIndex === 1
 
@@ -246,15 +260,27 @@ export function AddLiquidityFormTabs({
           </PopoverTrigger>
           <PopoverContent maxW="300px" p="sm" w="auto">
             <VStack align="start" spacing="sm">
-              <Box>
-                <Text fontSize="sm" fontWeight="bold" mb="xxs">
-                  Flexible Adds
-                </Text>
-                <Text fontSize="sm" variant="secondary">
-                  Enter any amount for each token manually. Balances are independent, and no
-                  automatic adjustments will be made.
-                </Text>
-              </Box>
+              {isReclamm ? (
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                    Unbalanced Adds
+                  </Text>
+                  <Text fontSize="sm" variant="secondary">
+                    Select any token pool token and enter an amount. The router will calculate the
+                    optimal BPT output for your provided pool token amount.
+                  </Text>
+                </Box>
+              ) : (
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                    Flexible Adds
+                  </Text>
+                  <Text fontSize="sm" variant="secondary">
+                    Enter any amount for each token manually. Balances are independent, and no
+                    automatic adjustments will be made.
+                  </Text>
+                </Box>
+              )}
               <Box>
                 <Text fontSize="sm" fontWeight="bold" mb="xxs">
                   Proportional Adds (No price impact)
@@ -262,13 +288,6 @@ export function AddLiquidityFormTabs({
                 <Text fontSize="sm" variant="secondary">
                   When you enter an amount for one token, the others are automatically adjusted to
                   maintain the pool's proportional balance.
-                </Text>
-                <Text fontSize="sm" fontWeight="bold" mb="xxs">
-                  Unbalanced Adds
-                </Text>
-                <Text fontSize="sm" variant="secondary">
-                  Select any token and enter an amount. The router will calculate the optimal BPT
-                  output for your provided token amount.
                 </Text>
               </Box>
             </VStack>
