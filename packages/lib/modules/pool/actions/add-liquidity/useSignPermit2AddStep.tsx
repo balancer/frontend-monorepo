@@ -49,7 +49,7 @@ export function useSignPermit2AddStep({ wethIsEth, humanAmountsIn, simulationQue
     wethIsEth,
     tokenAmountsIn: toTokenAmountsIn(queryOutput?.sdkQueryOutput, pool),
     isPermit2,
-    isSimulationReady: !!queryOutput?.sdkQueryOutput.bptOut.amount,
+    isSimulationReady: !!queryOutput?.sdkQueryOutput?.bptOut?.amount,
     spender: queryOutput?.sdkQueryOutput?.to || ('' as Address),
   })
 
