@@ -16,6 +16,7 @@ import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/tr
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { UnbalancedAddLiquidityViaSwapV3Handler } from './handlers/UnbalancedAddLiquidityViaSwapV3.handler'
 
 export type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
@@ -68,15 +69,25 @@ export function useAddLiquiditySteps({
   // If the user has selected to not use signatures, we allow them to do permit2
   // approvals with transactions.
   const networkConfig = getNetworkConfig(chain)
+  const defaultRouter = isBoosted(pool)
+    ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted
+    : networkConfig.contracts.balancer.router
+
+  const isUnbalancedViaSwapHandler = handler instanceof UnbalancedAddLiquidityViaSwapV3Handler
+  const unbalancedViaSwapRouter = networkConfig.contracts.balancer.unbalancedAddViaSwapRouter
+
+  const router =
+    isUnbalancedViaSwapHandler && unbalancedViaSwapRouter
+      ? unbalancedViaSwapRouter
+      : simulationQuery.data?.to || defaultRouter
+
   const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
     usePermit2ApprovalSteps({
       chain: pool.chain,
       approvalAmounts: inputAmounts,
       actionType: 'AddLiquidity',
       enabled: isPermit2 && !shouldUseSignatures,
-      router: isBoosted(pool)
-        ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted
-        : networkConfig.contracts.balancer.router,
+      router,
     })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step

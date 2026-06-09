@@ -58,6 +58,7 @@ export interface ContractsConfig {
     minter: Address
     WeightedPool2TokensFactory?: Address
     bCoWFactory?: Address
+    unbalancedAddViaSwapRouter?: Address
   }
   beets?: {
     lstStaking: Address

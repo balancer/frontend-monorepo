@@ -5,6 +5,7 @@ import {
   Slippage,
 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { BuildAddLiquidityInput, QueryAddLiquidityOutput } from '../add-liquidity.types'
@@ -81,9 +82,17 @@ export class UnbalancedAddLiquidityViaSwapV3Handler implements AddLiquidityHandl
       deadline: BigInt(Number.MAX_SAFE_INTEGER),
     }
 
-    const { callData, to, value } = permit2
+    const {
+      callData,
+      to: sdkTo,
+      value,
+    } = permit2
       ? addLiquidity.buildCallWithPermit2(buildCallParams, permit2)
       : addLiquidity.buildCall(buildCallParams)
+
+    const networkConfig = getNetworkConfig(this.helpers.pool.chain)
+    const unbalancedViaSwapRouter = networkConfig.contracts.balancer.unbalancedAddViaSwapRouter
+    const to = (unbalancedViaSwapRouter || sdkTo) as Address
 
     return {
       account,

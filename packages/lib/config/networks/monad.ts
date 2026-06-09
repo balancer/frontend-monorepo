@@ -57,6 +57,7 @@ const networkConfig: NetworkConfig = {
       batchRouter: AddressProvider.BatchRouter(chainId),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(chainId),
       vaultAdminV3: AddressProvider.VaultAdmin(chainId),
+      unbalancedAddViaSwapRouter: AddressProvider.UnbalancedAddViaSwapRouter(chainId),
     },
     permit2: PERMIT2[chainId],
   },
