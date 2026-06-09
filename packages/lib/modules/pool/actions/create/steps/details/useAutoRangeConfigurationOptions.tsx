@@ -143,17 +143,17 @@ export function useAutoRangeConfigurationOptions(): ConfigOptionsGroupProps<Auto
     label: `Daily price re-adjustment rate, when out-of-range`,
     customInputLabel: 'Custom rate',
     options: [
-      { label: 'Slow', displayValue: '25%', rawValue: '25', svg: PriceAdjustmentRateSlowSVG },
+      { label: 'Slow', displayValue: '0.5%', rawValue: '0.5', svg: PriceAdjustmentRateSlowSVG },
       {
         label: 'Standard',
-        displayValue: '50%',
-        rawValue: '50',
+        displayValue: '1%',
+        rawValue: '1',
         svg: PriceAdjustmentRateStandardSVG,
       },
       {
         label: 'Fast (higher MEV)',
-        displayValue: '75%',
-        rawValue: '75',
+        displayValue: '5%',
+        rawValue: '5',
         svg: PriceAdjustmentRateFastSVG,
       },
     ],
