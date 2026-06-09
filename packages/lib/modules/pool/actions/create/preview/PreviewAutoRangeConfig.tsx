@@ -120,7 +120,7 @@ export function PreviewAutoRangeConfig({
                         color: 'transparent',
                       }}
                     >
-                      Concentration density: {priceShiftDailyRate}%
+                      Price re-adjustment rate: {priceShiftDailyRate}%
                     </Text>
                   </Box>
                 )}

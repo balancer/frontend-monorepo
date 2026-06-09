@@ -49,6 +49,7 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
     functionName: 'withdrawWithFlashLoan',
     args: [parseUnits(amountShares, BPT_DECIMALS), minWethAmountOut, convertLstToWethData || '0x'],
     enabled:
+      amountShares !== '' &&
       bn(amountShares).gt(0) &&
       isConnected &&
       !!flyTransaction?.data &&

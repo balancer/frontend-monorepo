@@ -38,7 +38,7 @@ export function useLoopsDepositStep(humanAmount: string, chain: GqlChain, enable
     functionName: 'deposit',
     args: [],
     value: parseUnits(humanAmount, BPT_DECIMALS),
-    enabled: bn(humanAmount).gte(0) && isConnected && enabled,
+    enabled: humanAmount !== '' && bn(humanAmount).gte(0) && isConnected && enabled,
     onTransactionChange: setTransaction,
   }
 

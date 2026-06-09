@@ -3,7 +3,7 @@ import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconP
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { bn, fNumCustom, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { zeroAddress } from 'viem'
 import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
@@ -33,8 +33,11 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
 
   const totalBalance = bn(globalStats?.totalBalance || '0')
   const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
-    level: bn(balance.level).plus(1),
-    percentageOfTotal: totalBalance.isZero() ? bn(0) : bn(balance.balance).div(totalBalance),
+    level: isValidNumber(balance.level) ? bn(balance.level).plus(1) : bn(0),
+    percentageOfTotal:
+      totalBalance.isZero() || !isValidNumber(balance.balance)
+        ? bn(0)
+        : bn(balance.balance).div(totalBalance),
   }))
 
   const avgRelicMaturity = fNumCustom(

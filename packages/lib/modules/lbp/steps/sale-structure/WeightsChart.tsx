@@ -302,6 +302,14 @@ function interpolateData(
   endDateTime: Date,
   cutTime?: Date
 ) {
+  if (
+    !isValid(startDateTime) ||
+    !isValid(endDateTime) ||
+    startDateTime.getTime() === endDateTime.getTime()
+  ) {
+    return { data: [], dataAfterCutTime: [] }
+  }
+
   const startTimestamp = bn(startDateTime.getTime())
   const endTimestamp = bn(endDateTime.getTime())
   const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))

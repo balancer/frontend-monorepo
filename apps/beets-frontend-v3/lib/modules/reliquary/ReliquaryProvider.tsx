@@ -7,7 +7,7 @@ import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisable
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { sumBy } from 'lodash'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useGetRelicPositionsOfOwner } from './hooks/useGetRelicPositionsOfOwner'
@@ -76,18 +76,23 @@ export function useReliquaryLogic() {
     refetch: refetchMaturityThresholds,
   } = levelInfoQuery
 
-  const relicIds = relicPositions.map(relic => bn(relic.relicId).toNumber())
+  const relicIds = relicPositions
+    .filter(relic => isValidNumber(relic.relicId))
+    .map(relic => bn(relic.relicId).toNumber())
   const beetsPerSecond = pool?.staking?.reliquary?.beetsPerSecond || '0'
   const reliquaryLevels = pool?.staking?.reliquary?.levels || []
 
   const weightedTotalBalance = sumBy(reliquaryLevels, level =>
-    bn(level.balance).times(level.allocationPoints).toNumber()
+    isValidNumber(level.balance) && isValidNumber(level.allocationPoints)
+      ? bn(level.balance).times(level.allocationPoints).toNumber()
+      : 0
   )
 
   const relicPositionsForFarmId = relicPositions.filter(
     position => position.farmId.toString() === farmId
   )
   const totalMaBeetsVP = sumBy(relicPositionsForFarmId, position => {
+    if (!isValidNumber(position.amount)) return 0
     const boost = reliquaryLevels.find(level => level.level === position.level)
 
     return bn(position.amount)

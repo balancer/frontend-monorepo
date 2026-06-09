@@ -1,4 +1,4 @@
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../pool.types'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
@@ -46,8 +46,14 @@ export function hasNonPreferentialStakedBalance(pool: Pool): boolean {
   return filterNonPreferentialStakingWithBalance(pool).length > 0
 }
 
+function hasActiveGaugeRewards(pool: Pool): boolean {
+  const rewards = pool.staking?.gauge?.rewards
+  if (!rewards || rewards.length === 0) return false
+  return rewards.some(r => bn(r.rewardPerSecond).gt(0))
+}
+
 export function getCanStake(pool: Pool): boolean {
-  return !!pool.staking && !hasNonPreferentialStakedBalance(pool)
+  return !!pool.staking && !hasNonPreferentialStakedBalance(pool) && hasActiveGaugeRewards(pool)
 }
 
 export function findFirstNonPreferentialStakedWithBalance(
@@ -106,6 +112,7 @@ function filterNonPreferentialStakingWithBalance(pool: Pool): GqlUserStakedBalan
     stakedBalance =>
       stakedBalance.stakingType === GqlPoolStakingType.Gauge &&
       stakedBalance.stakingId !== pool.staking?.gauge?.id &&
+      isValidNumber(stakedBalance.balance) &&
       bn(stakedBalance.balance).gt(0)
   )
   return found

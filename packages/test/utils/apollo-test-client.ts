@@ -1,5 +1,5 @@
 import '@repo/lib/test/utils/silence-devtools'
-import { ApolloClient, DefaultOptions, HttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 
 // Adds apollo debug error messages only in test environment
@@ -19,7 +19,7 @@ const link = new HttpLink({
 })
 
 // Disable cache in unit tests
-const defaultOptions: DefaultOptions = {
+const defaultOptions = {
   watchQuery: {
     fetchPolicy: 'no-cache',
     errorPolicy: 'all',
@@ -28,7 +28,7 @@ const defaultOptions: DefaultOptions = {
     fetchPolicy: 'no-cache',
     errorPolicy: 'all',
   },
-}
+} as unknown as ApolloClient.DefaultOptions
 
 export const apolloTestClient = new ApolloClient({
   cache,

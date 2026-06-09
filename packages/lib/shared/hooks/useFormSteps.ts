@@ -3,10 +3,6 @@ import { useLocalStorage } from 'usehooks-ts'
 import { ComponentType, useEffect, useRef } from 'react'
 import { isAddress } from 'viem'
 
-const scrollToTop = () => {
-  window.scrollTo(0, 0)
-}
-
 export interface FormStep {
   id: string
   title: string
@@ -80,7 +76,6 @@ export function useFormSteps(config: UseFormStepsConfig) {
     const step = steps[stepIndex]
     if (step) {
       router.push(`${basePath}/${step.id}`)
-      scrollToTop()
     }
   }
 

@@ -192,6 +192,26 @@
       "description": "Block @nktkas/hyperliquid updates. The library introduces frequent breaking changes (client redesigns, schema refactors, renamed parameters) between minor versions. Updating past 0.23.1 would require significant refactoring of packages/lib/modules/chains/hyperevm/useHyperEvm.ts.",
       "matchPackageNames": ["@nktkas/hyperliquid"],
       "enabled": false
+    },
+    {
+      "description": "Block pnpm major upgrades — v11 requires workspace-level changes (e.g. lockfile, CI images, engine checks) that need a dedicated migration.",
+      "matchPackageNames": ["pnpm"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block GraphQL / Apollo major upgrades until the migration is handled separately.",
+      "matchPackageNames": [
+        "graphql",
+        "graphql-request",
+        "graphql-tag",
+        "@apollo/client",
+        "@apollo/client-integration-nextjs",
+        "@graphql-typed-document-node/core",
+        "@graphql-codegen/**"
+      ],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }

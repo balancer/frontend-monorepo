@@ -18,11 +18,28 @@ import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/Heade
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
 import { useHydratePoolCreationForm } from './useHydratePoolCreationForm'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
+import { useEffect, useRef } from 'react'
 
 export function PoolCreationForm() {
   const { isLoadingPool } = useHydratePoolCreationForm()
   const { steps, currentStepIndex, currentStep, goToStep, canRenderStep } = usePoolCreationForm()
   const { isMobile } = useBreakpoints()
+  const stepperRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      if (!stepperRef.current) return
+      const rect = stepperRef.current.getBoundingClientRect()
+      const navbarHeight =
+        parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) ||
+        72
+      window.scrollTo({
+        top: window.scrollY + rect.top - navbarHeight - 16,
+        behavior: 'smooth',
+      })
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [currentStepIndex])
 
   return (
     <VStack spacing="lg">
@@ -44,7 +61,7 @@ export function PoolCreationForm() {
               spacing="lg"
               w="full"
             >
-              <VStack align="start" spacing="md" w="full">
+              <VStack align="start" ref={stepperRef} spacing="md" w="full">
                 <Divider />
                 <Stepper
                   gap={{ base: 1, sm: 4 }}

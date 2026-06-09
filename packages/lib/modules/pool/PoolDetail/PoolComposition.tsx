@@ -18,7 +18,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { useLayoutEffect, useRef, useState, Fragment } from 'react'
 import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
@@ -50,7 +50,10 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
   if (isSeedlessLBP) {
     const virtualToken = pool.poolTokens[pool.reserveTokenIndex].address
     const price = priceFor(virtualToken, chain)
-    virtualAmount = bn(pool.reserveTokenVirtualBalance).times(price).toString()
+    virtualAmount =
+      isValidNumber(pool.reserveTokenVirtualBalance) && isValidNumber(price)
+        ? bn(pool.reserveTokenVirtualBalance).times(price).toString()
+        : '0'
   }
 
   return (
@@ -83,7 +86,9 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
 
           const tokenValue =
             isSeedlessLBP && isVirtualPairedToken
-              ? bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance)
+              ? isValidNumber(poolToken.balance) && isValidNumber(pool.reserveTokenVirtualBalance)
+                ? bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance)
+                : poolToken.balance
               : poolToken.balance
 
           return (
@@ -103,9 +108,11 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
               {poolToken.hasNestedPool && poolToken.nestedPool && (
                 <VStack pl="8" w="full">
                   {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
-                    const calculatedWeight = bn(nestedPoolToken.balanceUSD).div(
-                      bn(poolToken.balanceUSD)
-                    )
+                    const calculatedWeight =
+                      isValidNumber(nestedPoolToken.balanceUSD) &&
+                      isValidNumber(poolToken.balanceUSD)
+                        ? bn(nestedPoolToken.balanceUSD).div(bn(poolToken.balanceUSD))
+                        : bn(0)
                     return (
                       <TokenRow
                         actualWeight={bn(actualWeight).times(calculatedWeight).toString()}
@@ -115,7 +122,10 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                         isNestedToken
                         key={`nested-pool-${nestedPoolToken.address}`}
                         targetWeight={
-                          nestedPoolToken.weight && poolToken.weight
+                          nestedPoolToken.weight &&
+                          poolToken.weight &&
+                          isValidNumber(nestedPoolToken.weight) &&
+                          isValidNumber(poolToken.weight)
                             ? bn(nestedPoolToken.weight).times(poolToken.weight).toString()
                             : undefined
                         }
@@ -129,10 +139,15 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
               {isVirtualPairedToken && (
                 <VStack pl="8" w="full">
                   <TokenRow
-                    actualWeight={bn(actualWeight)
-                      .times(pool.reserveTokenVirtualBalance)
-                      .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
-                      .toString()}
+                    actualWeight={
+                      isValidNumber(poolToken.balance) &&
+                      isValidNumber(pool.reserveTokenVirtualBalance)
+                        ? bn(actualWeight)
+                            .times(pool.reserveTokenVirtualBalance)
+                            .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
+                            .toString()
+                        : '0'
+                    }
                     address={poolToken.address as Address}
                     chain={chain}
                     iconSize={28}
@@ -143,10 +158,15 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                     value={pool.reserveTokenVirtualBalance}
                   />
                   <TokenRow
-                    actualWeight={bn(actualWeight)
-                      .times(poolToken.balance)
-                      .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
-                      .toString()}
+                    actualWeight={
+                      isValidNumber(poolToken.balance) &&
+                      isValidNumber(pool.reserveTokenVirtualBalance)
+                        ? bn(actualWeight)
+                            .times(poolToken.balance)
+                            .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
+                            .toString()
+                        : '0'
+                    }
                     address={poolToken.address as Address}
                     chain={chain}
                     iconSize={28}

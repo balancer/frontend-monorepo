@@ -139,14 +139,14 @@ export class LiquidityActionHelpers {
     if (!humanAmountsIn.length) return []
 
     return humanAmountsIn
-      .filter(({ humanAmount }) => bn(humanAmount).gt(0))
+      .filter(({ humanAmount }) => humanAmount && bn(humanAmount).gt(0))
       .map(({ tokenAddress, humanAmount, symbol }) => {
         const chain = this.pool.chain
         if (isNativeAsset(tokenAddress, chain)) {
           const decimals = getNativeAsset(chain).decimals
           return {
             address: tokenAddress as Address,
-            rawAmount: parseUnits(humanAmount, decimals),
+            rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), decimals),
             decimals,
             symbol,
           }
@@ -163,7 +163,7 @@ export class LiquidityActionHelpers {
         }
         return {
           address: token.address as Address,
-          rawAmount: parseUnits(humanAmount, token.decimals),
+          rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), token.decimals),
           decimals: token.decimals,
           symbol: token.symbol,
         }

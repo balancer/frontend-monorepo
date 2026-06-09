@@ -4,6 +4,7 @@ import {
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { Address, parseUnits } from 'viem'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { BPT_DECIMALS } from '../../pool.constants'
 import { Pool } from '../../pool.types'
 import { selectStakingService } from '@repo/lib/modules/staking/selectStakingService'
@@ -68,7 +69,7 @@ export function useClaimAndUnstakeStep({
   const hasUnclaimedBalRewards = balRewards.length > 0
 
   const data = useBuildUnstakeCallData({
-    amount: parseUnits(amountOut, BPT_DECIMALS),
+    amount: parseUnits(bn(amountOut).toFixed(), BPT_DECIMALS),
     gaugeService: stakingService,
     gauges: [gaugeAddress],
     hasUnclaimedNonBalRewards: nonBalrewards.length > 0,

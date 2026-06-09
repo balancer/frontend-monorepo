@@ -2,11 +2,11 @@ import BigNumber from 'bignumber.js'
 import {
   bn,
   fNum,
-  safeTokenFormat,
   BN_LOWER_THRESHOLD,
   sum,
   formatFalsyValueAsDash,
   ZERO_VALUE_DASH,
+  isValidNumber,
 } from './numbers'
 
 test('Stringifies bigints', () => {
@@ -142,20 +142,6 @@ describe('slippage', () => {
   })
 })
 
-describe('safeTokenFormat', () => {
-  test('for a bigint amount', () => {
-    expect(safeTokenFormat(251359380787607529n, 18)).toBe('0.2514')
-    expect(safeTokenFormat(null, 18)).toBe('-')
-  })
-})
-
-describe('safeTokenFormat', () => {
-  test('for a bigint amount', () => {
-    expect(safeTokenFormat(251359380787607529n, 18)).toBe('0.2514')
-    expect(safeTokenFormat(null, 18)).toBe('-')
-  })
-})
-
 describe('bn', () => {
   test('creates a BigNumber instance from different formats', () => {
     expect(bn(1234567).toFixed()).toBe('1234567')
@@ -164,10 +150,10 @@ describe('bn', () => {
     expect(bn('0.0000000000000035').toFixed()).toBe('0.0000000000000035')
   })
 
-  test('returns NaN for invalid string inputs', () => {
-    expect(bn('').isNaN()).toBe(true)
-    expect(bn(' ').isNaN()).toBe(true)
-    expect(bn('abc').isNaN()).toBe(true)
+  test('throws for invalid string inputs', () => {
+    expect(() => bn('')).toThrow()
+    expect(() => bn(' ')).toThrow()
+    expect(() => bn('abc')).toThrow()
   })
 
   test('throws for nullish inputs passed at runtime', () => {
@@ -254,5 +240,24 @@ describe('formatFalsyValueAsDash', () => {
     expect(formatFalsyValueAsDash('-100')).toBe('-100')
     expect(formatFalsyValueAsDash('0.123456')).toBe('0.123456')
     expect(formatFalsyValueAsDash('1000000000')).toBe('1000000000')
+  })
+})
+
+describe('isValidNumber', () => {
+  test('returns false for nullish and invalid values', () => {
+    expect(isValidNumber(null)).toBe(false)
+    expect(isValidNumber(undefined)).toBe(false)
+    expect(isValidNumber('')).toBe(false)
+    expect(isValidNumber('abc')).toBe(false)
+  })
+
+  test('returns true for valid numbers and numeric strings', () => {
+    expect(isValidNumber(0)).toBe(true)
+    expect(isValidNumber(1.5)).toBe(true)
+    expect(isValidNumber(-10)).toBe(true)
+    expect(isValidNumber('0')).toBe(true)
+    expect(isValidNumber('1.5')).toBe(true)
+    expect(isValidNumber('100')).toBe(true)
+    expect(isValidNumber('0.0000000000000035')).toBe(true)
   })
 })
