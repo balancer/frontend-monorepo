@@ -15,9 +15,9 @@ describe('When adding unbalanced liquidity via swap for a V3 2-token pool', asyn
     { humanAmount: '0.1', tokenAddress: waEthWETHAddress, symbol: 'waEthWETH' },
   ]
 
-  it('returns zero price impact (not yet supported by SDK)', async () => {
+  it('calculates price impact', async () => {
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
-    expect(priceImpact).toBe(0)
+    expect(priceImpact).toBeGreaterThan(0)
   })
 
   it('queries bptOut', async () => {

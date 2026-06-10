@@ -2,7 +2,10 @@ import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
 import {
+  AddLiquidityKind,
   AddLiquidityQueryOutput,
+  AddLiquidityUnbalancedViaSwapBuildCallInput,
+  AddLiquidityUnbalancedViaSwapQueryOutput,
   Address,
   Permit2,
   Permit2Helper,
@@ -68,6 +71,26 @@ async function sign({
     chain: pool.chain,
     amountsIn: sdkQueryOutput.amountsIn,
   })
+
+  if (sdkQueryOutput.addLiquidityKind === AddLiquidityKind.UnbalancedViaSwap) {
+    const unbalancedOutput = sdkQueryOutput as AddLiquidityUnbalancedViaSwapQueryOutput
+    const inputToken = unbalancedOutput.expectedAdjustableAmountIn.token
+
+    const buildCallInput: AddLiquidityUnbalancedViaSwapBuildCallInput = {
+      ...unbalancedOutput,
+      slippage: baseInput.slippage,
+      wethIsEth: baseInput.wethIsEth,
+      deadline: BigInt(Number.MAX_SAFE_INTEGER),
+    }
+
+    return Permit2Helper.signAddLiquidityUnbalancedViaSwapApproval({
+      ...buildCallInput,
+      client: sdkClient,
+      owner: account,
+      nonce: nonces[inputToken.address],
+      expiration: get24HoursFromNowInSecs(),
+    })
+  }
 
   function getSignFn() {
     if (isV3WithNestedActionsPool(pool)) {

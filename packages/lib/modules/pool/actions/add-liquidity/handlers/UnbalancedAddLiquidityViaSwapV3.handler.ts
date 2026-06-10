@@ -2,16 +2,18 @@ import {
   AddLiquidityUnbalancedViaSwapBuildCallInput,
   AddLiquidityUnbalancedViaSwapQueryOutput,
   AddLiquidityUnbalancedViaSwapV3,
+  PriceImpact,
+  PriceImpactAmount,
   Slippage,
 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
-import { BuildAddLiquidityInput, QueryAddLiquidityOutput } from '../add-liquidity.types'
+import { BuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { Pool } from '../../../pool.types'
-import { LiquidityActionHelpers, getSender } from '../../LiquidityActionHelpers'
+import { LiquidityActionHelpers, areEmptyAmounts, getSender } from '../../LiquidityActionHelpers'
 import { Address } from 'viem'
 import { isZero } from '@repo/lib/shared/utils/numbers'
 
@@ -26,7 +28,7 @@ export class UnbalancedAddLiquidityViaSwapV3Handler implements AddLiquidityHandl
   public async simulate(
     humanAmountsIn: HumanTokenAmountWithSymbol[],
     userAddress: Address
-  ): Promise<QueryAddLiquidityOutput> {
+  ): Promise<SdkQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidityUnbalancedViaSwapV3()
 
     const expectedAdjustableAmountIn = this.getExpectedAdjustableAmountIn(humanAmountsIn)
@@ -46,15 +48,27 @@ export class UnbalancedAddLiquidityViaSwapV3Handler implements AddLiquidityHandl
     return {
       bptOut: sdkQueryOutput.bptOut,
       to: sdkQueryOutput.to,
+      sdkQueryOutput,
     }
   }
 
-  // TODO: check this
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async getPriceImpact(_humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number> {
-    // PriceImpact.addLiquidityUnbalancedViaSwap is not yet available in the SDK
-    // Returning 0 to allow the flow to continue; UI should handle this gracefully
-    return 0
+  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number> {
+    if (areEmptyAmounts(humanAmountsIn)) {
+      return 0
+    }
+
+    const expectedAdjustableAmountIn = this.getExpectedAdjustableAmountIn(humanAmountsIn)
+
+    const priceImpactAmount: PriceImpactAmount = await PriceImpact.addLiquidityUnbalancedViaSwap(
+      {
+        chainId: this.helpers.chainId,
+        rpcUrl: getRpcUrl(this.helpers.chainId),
+        expectedAdjustableAmountIn,
+      },
+      this.helpers.poolState
+    )
+
+    return priceImpactAmount.decimal
   }
 
   public async buildCallData({
