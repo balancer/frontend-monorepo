@@ -65,7 +65,7 @@ jobs:
   Integration-Test:
     runs-on: ubuntu-latest
     concurrency:
-      group: integration-test
+      group: anvil-tests
       queue: max
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -127,7 +127,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     concurrency:
-      group: e2e-dev-test
+      group: anvil-tests
       queue: max
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
@@ -156,7 +156,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     concurrency:
-      group: e2e-dev-test
+      group: anvil-tests
       queue: max
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
