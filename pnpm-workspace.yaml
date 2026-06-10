@@ -3,4 +3,4 @@ packages:
   - "packages/*"
 
 catalog:
-  "@apollo/client": "4.2.0"
+  "@apollo/client": "4.2.2"
