@@ -10,7 +10,7 @@ import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
-import { BuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
+import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { Pool } from '../../../pool.types'
 import { LiquidityActionHelpers, areEmptyAmounts, getSender } from '../../LiquidityActionHelpers'
@@ -19,7 +19,6 @@ import { isZero } from '@repo/lib/shared/utils/numbers'
 
 export class UnbalancedAddLiquidityViaSwapV3Handler implements AddLiquidityHandler {
   protected helpers: LiquidityActionHelpers
-  private lastQueryOutput?: AddLiquidityUnbalancedViaSwapQueryOutput
 
   constructor(pool: Pool) {
     this.helpers = new LiquidityActionHelpers(pool)
@@ -42,8 +41,6 @@ export class UnbalancedAddLiquidityViaSwapV3Handler implements AddLiquidityHandl
       },
       this.helpers.poolState
     )
-
-    this.lastQueryOutput = sdkQueryOutput
 
     return {
       bptOut: sdkQueryOutput.bptOut,
@@ -77,17 +74,10 @@ export class UnbalancedAddLiquidityViaSwapV3Handler implements AddLiquidityHandl
     queryOutput,
     account,
     permit2,
-  }: BuildAddLiquidityInput): Promise<TransactionConfig> {
-    // queryOutput is passed by interface contract but we use the instance-stored output
-    void queryOutput
-
+  }: SdkBuildAddLiquidityInput): Promise<TransactionConfig> {
     const addLiquidity = new AddLiquidityUnbalancedViaSwapV3()
 
-    if (!this.lastQueryOutput) {
-      throw new Error('Missing query output. Please simulate before building call data.')
-    }
-
-    const sdkQueryOutput = this.lastQueryOutput
+    const sdkQueryOutput = queryOutput.sdkQueryOutput as AddLiquidityUnbalancedViaSwapQueryOutput
 
     const buildCallParams: AddLiquidityUnbalancedViaSwapBuildCallInput = {
       ...sdkQueryOutput,
