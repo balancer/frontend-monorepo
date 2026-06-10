@@ -88,8 +88,8 @@ importers:
         specifier: 5.100.14
         version: 5.100.14(react@19.2.7)
       date-fns:
-        specifier: 4.3.0
-        version: 4.3.0
+        specifier: 4.4.0
+        version: 4.4.0
       echarts:
         specifier: 6.0.0
         version: 6.0.0
@@ -239,8 +239,8 @@ importers:
         specifier: 11.1.1
         version: 11.1.1
       date-fns:
-        specifier: 4.3.0
-        version: 4.3.0
+        specifier: 4.4.0
+        version: 4.4.0
       echarts:
         specifier: 6.0.0
         version: 6.0.0
@@ -507,8 +507,8 @@ importers:
         specifier: 5.1.1
         version: 5.1.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.7))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.7))(@types/react@19.2.10)(react@19.2.7))(@types/react@19.2.10)(framer-motion@12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.7))(@types/react@19.2.10)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       date-fns:
-        specifier: 4.3.0
-        version: 4.3.0
+        specifier: 4.4.0
+        version: 4.4.0
       deepmerge:
         specifier: ^4.3.1
         version: 4.3.1
@@ -4736,8 +4736,8 @@ packages:
   dataloader@2.2.3:
     resolution: {integrity: sha512-y2krtASINtPFS1rSDjacrFgn1dcUuoREVabwlOGOe4SdxenREqwjwjElAdwvbGM7kgZz9a3KVicWR7vcz8rnzA==}
 
-  date-fns@4.3.0:
-    resolution: {integrity: sha512-OYcL+3N/jyWbYdFGqoMAhytDgxP9pbYPUUiRCOgn4Fewaadk9l/Wam4Avciiyp2BgkpfQyBV9B+ehnVJych+eQ==}
+  date-fns@4.4.0:
+    resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
 
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
@@ -14396,7 +14396,7 @@ snapshots:
 
   dataloader@2.2.3: {}
 
-  date-fns@4.3.0: {}
+  date-fns@4.4.0: {}
 
   dayjs@1.11.13:
     optional: true
