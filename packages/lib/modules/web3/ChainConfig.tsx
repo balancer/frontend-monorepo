@@ -92,7 +92,7 @@ const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
   [GqlChain.Mode]: { iconUrl: '/images/chains/MODE.svg', ...mode },
   [GqlChain.Fraxtal]: { iconUrl: '/images/chains/FRAXTAL.svg', ...fraxtal },
   [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
-  [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...hyperEVM },
+  [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...(hyperEVM as Chain) }, // TODO: fix type when rainbowkit is updated
   [GqlChain.Plasma]: { iconUrl: '/images/chains/PLASMA.svg', ...plasma },
   [GqlChain.Monad]: { iconUrl: '/images/chains/MONAD.svg', ...monad },
   [GqlChain.Xlayer]: { iconUrl: '/images/chains/XLAYER.svg', ...xLayer },
