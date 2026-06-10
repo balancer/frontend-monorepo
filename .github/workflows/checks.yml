@@ -126,6 +126,9 @@ jobs:
   E2E-Dev-Test-Balancer:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    concurrency:
+      group: e2e-dev-test
+      queue: max
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
     env:
@@ -152,6 +155,9 @@ jobs:
   E2E-Dev-Test-Beets:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    concurrency:
+      group: e2e-dev-test
+      queue: max
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
     env:
