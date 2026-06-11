@@ -22,37 +22,7 @@
       "description": "Group remaining npm devDependencies that are not already covered by more specific package groups. This rule should be early so specific rules can override it.",
       "groupName": "Other devDependencies",
       "matchManagers": ["npm"],
-      "matchDepTypes": ["devDependencies"],
-      "matchPackageNames": [
-        "*",
-        "!@emotion/react",
-        "!@emotion/styled",
-        "!@chakra-ui/**",
-        "!graphql",
-        "!graphql-request",
-        "!graphql-tag",
-        "!@apollo/client",
-        "!@apollo/client-integration-nextjs",
-        "!@graphql-typed-document-node/core",
-        "!@graphql-codegen/**",
-        "!eslint",
-        "!@eslint/**",
-        "!@typescript-eslint/**",
-        "!typescript-eslint",
-        "!eslint-config-**",
-        "!eslint-plugin-**",
-        "!@types/**",
-        "!framer-motion",
-        "!chakra-react-select",
-        "!vitest",
-        "!@vitest/**",
-        "!stylelint",
-        "!stylelint-**",
-        "!zod",
-        "!@sentry/**",
-        "!next",
-        "!@next/**"
-      ]
+      "matchDepTypes": ["devDependencies"]
     },
     {
       "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
@@ -109,7 +79,8 @@
     {
       "description": "Low-risk, high-frequency — consolidate to reduce noise.",
       "groupName": "@types packages",
-      "matchPackageNames": ["@types/**", "!@types/react", "!@types/react-dom"]
+      "matchPackageNames": ["@types/**"],
+      "excludePackageNames": ["@types/react", "@types/react-dom"]
     },
     {
       "description": "Consolidate workflow action bumps",
