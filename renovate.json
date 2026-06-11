@@ -79,8 +79,7 @@
     {
       "description": "Low-risk, high-frequency — consolidate to reduce noise.",
       "groupName": "@types packages",
-      "matchPackageNames": ["@types/**"],
-      "excludePackageNames": ["@types/react", "@types/react-dom"]
+      "matchPackageNames": ["@types/**", "!@types/react", "!@types/react-dom"]
     },
     {
       "description": "Consolidate workflow action bumps",
