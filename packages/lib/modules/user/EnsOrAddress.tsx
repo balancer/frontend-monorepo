@@ -1,11 +1,10 @@
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useEnsAvatar, useEnsName } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
-import { createAvatar } from '@dicebear/core'
-import { identicon } from '@dicebear/collection'
+import { Style, Avatar } from '@dicebear/core'
+import identicon from '@dicebear/styles/identicon.json' with { type: 'json' }
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { HStack, Image, Link, Text } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
@@ -25,7 +24,9 @@ export function EnsOrAddress({
     chainId,
   })
 
-  const fallbackSVG = createAvatar(identicon, {
+  const style = new Style(identicon)
+
+  const avatar = new Avatar(style, {
     seed: userAddress || 'unknown',
   })
 
@@ -37,7 +38,7 @@ export function EnsOrAddress({
           backgroundColor="background.level4"
           borderRadius="100%"
           height="24px"
-          src={ensAvatar || fallbackSVG.toDataUri()}
+          src={ensAvatar || avatar.toDataUri()}
           width="24px"
         />
         <HStack gap="0.5">

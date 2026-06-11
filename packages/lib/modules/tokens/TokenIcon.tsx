@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { createAvatar } from '@dicebear/core'
-import { identicon } from '@dicebear/collection'
+import { Style, Avatar } from '@dicebear/core'
+import identicon from '@dicebear/styles/identicon.json' with { type: 'json' }
 import { Address } from 'viem'
 import { useTokens } from './TokensProvider'
 import { Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
@@ -44,12 +44,11 @@ export function TokenIcon({
       ? { rowColor: [getTokenColor(chain, address as Address).from.replace('#', '')] }
       : {}
 
-  const fallbackSVG = createAvatar(identicon, {
+  const style = new Style(identicon)
+
+  const avatar = new Avatar(style, {
     seed: address || 'unknown',
-    backgroundColor: ['transparent'],
-    radius: 50,
-    backgroundType: ['solid'],
-    scale: 80,
+    borderRadius: 50,
     ...tokenColor,
   })
 
@@ -73,7 +72,7 @@ export function TokenIcon({
       border={border}
       onError={() => !hasError && setHasError(true)}
       size={size}
-      src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
+      src={hasError || !iconSrc ? avatar.toDataUri() : iconSrc}
       {...rest}
     />
   )
