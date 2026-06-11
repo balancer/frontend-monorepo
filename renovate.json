@@ -170,6 +170,12 @@
       "enabled": false
     },
     {
+      "description": "Block dicebear major upgrades. v10 switched from @dicebear/collection to @dicebear/styles with JSON subpath exports that don't resolve with TypeScript moduleResolution: 'node'. Changing to 'bundler' breaks @sentry/nextjs deep imports.",
+      "matchPackageNames": ["@dicebear/**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
       "description": "Block GraphQL / Apollo major upgrades until the migration is handled separately.",
       "matchPackageNames": [
         "graphql",
