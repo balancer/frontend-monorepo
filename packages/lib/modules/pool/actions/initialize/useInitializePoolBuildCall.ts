@@ -65,7 +65,14 @@ export function useInitializePoolBuildCall({
   }
 
   return useQuery({
-    queryKey: ['initialize-pool-build-call'],
+    queryKey: [
+      'initialize-pool-build-call',
+      poolAddress,
+      poolType,
+      initPoolInput.chainId,
+      initPoolInput.amountsIn,
+      permit2Signature,
+    ],
     queryFn,
     enabled: enabled && isConnected,
     gcTime: 0,

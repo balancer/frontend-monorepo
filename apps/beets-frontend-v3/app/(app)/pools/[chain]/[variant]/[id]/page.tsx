@@ -1,10 +1,10 @@
-import { PoolDetail } from '@repo/lib/modules/pool/PoolDetail/PoolDetail'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { PoolContainer } from '@repo/lib/modules/pool/PoolContainer'
 
 export default function PoolPage() {
   return (
     <TransactionStateProvider>
-      <PoolDetail />
+      <PoolContainer />
     </TransactionStateProvider>
   )
 }
