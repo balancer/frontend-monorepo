@@ -13,6 +13,7 @@ env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
   SLACK_BOT_TOKEN: ${{secrets.SLACK_BOT_TOKEN}}
+  NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID }}
 
 jobs:
   # Skip this job as it is already part of the E2E-Smoke-Test job
@@ -49,7 +50,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run typecheck
         env:
-          NODE_OPTIONS: "--max_old_space_size=6144"
+          NODE_OPTIONS: '--max_old_space_size=6144'
         run: pnpm typecheck
       - name: Run unit tests
         run: pnpm test:unit
