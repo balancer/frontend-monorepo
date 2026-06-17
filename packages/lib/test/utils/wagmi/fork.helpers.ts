@@ -5,6 +5,7 @@ import { createConfig } from 'wagmi'
 import { mainnet, sonic } from 'viem/chains'
 import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 import { isBeets } from '@repo/lib/config/getProjectConfig'
+import { getGqlChain } from '@repo/lib/config/app.config'
 
 /*
   E2E dev tests use an anvil fork to impersonate and test with default anvil accounts
@@ -72,6 +73,14 @@ export async function setTokenBalances({
 }
 
 export function resetFork(chainId: number = mainnet.id) {
+  const directDevProjectId = process.env['NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID']
+
+  if (directDevProjectId) {
+    const gqlChain = getGqlChain(chainId)
+    const jsonRpcUrl = `https://prod.rpc.direct.dev/v1/${directDevProjectId}/${gqlChain.toLowerCase()}`
+    return forkClient.reset({ jsonRpcUrl })
+  }
+
   const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
   if (!privateKey) {
     throw new Error('NEXT_PRIVATE_DRPC_KEY is missing')
