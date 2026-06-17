@@ -21,7 +21,7 @@ const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Xlayer]: 'xlayer',
 }
 
-const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
+export const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
   [ChainId.MAINNET]: 'ethereum',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.OPTIMISM]: 'optimism',
