@@ -52,9 +52,16 @@ export const rpcFallbacks: Partial<Record<GqlChainValues, string | undefined>> =
 }
 
 const baseUrl = getBaseUrl()
+const directDevProjectId = process.env.NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID
+
+console.log({ directDevProjectId })
+
 const getPrivateRpcUrl = (chain: GqlChain) => {
   // Use anvil fork for E2E dev tests
   if (shouldUseAnvilFork) return defaultAnvilForkRpcUrl
+  if (directDevProjectId) {
+    return `https://prod.rpc.direct.dev/v1/${directDevProjectId}/${chain.toLowerCase()}`
+  }
   return `${baseUrl}/api/rpc/${chain}`
 }
 

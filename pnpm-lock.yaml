@@ -78,6 +78,9 @@ importers:
       '@chakra-ui/theme-tools':
         specifier: 2.2.6
         version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.7))(react@19.2.7)
+      '@direct.dev/sdk':
+        specifier: 1.0.6
+        version: 1.0.6
       '@nikolovlazar/chakra-ui-prose':
         specifier: ^1.2.1
         version: 1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.7))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.7))(@types/react@19.2.10)(react@19.2.7))(@types/react@19.2.10)(framer-motion@12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.7))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.7))(@types/react@19.2.10)(react@19.2.7))(react@19.2.7))(react@19.2.7)
@@ -1310,6 +1313,9 @@ packages:
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@dicebear/core': ^9.0.0
+
+  '@direct.dev/sdk@1.0.6':
+    resolution: {integrity: sha512-tdxhk1PEQJh3+cK5Ug5OcfzVaczCtnQ0hwFQqZRXA+It72YOV3k5uL643EboIiIN5dXjFM5fXvSvUxTKKieOxA==}
 
   '@ecies/ciphers@0.2.6':
     resolution: {integrity: sha512-patgsRPKGkhhoBjETV4XxD0En4ui5fbX0hzayqI3M8tvNMGUoUvmyYAIWwlxBc1KX5cturfqByYdj5bYGRpN9g==}
@@ -9157,6 +9163,8 @@ snapshots:
   '@dicebear/toon-head@9.4.2(@dicebear/core@9.4.2)':
     dependencies:
       '@dicebear/core': 9.4.2
+
+  '@direct.dev/sdk@1.0.6': {}
 
   '@ecies/ciphers@0.2.6(@noble/ciphers@1.3.0)':
     dependencies:

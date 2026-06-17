@@ -3,6 +3,9 @@ import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
 import { Footer } from '@repo/lib/shared/components/navs/Footer'
 import NextTopLoader from 'nextjs-toploader'
 import { PropsWithChildren } from 'react'
+import { install } from '@direct.dev/sdk'
+
+install()
 
 export function BaseLayout({ children }: PropsWithChildren) {
   return (
