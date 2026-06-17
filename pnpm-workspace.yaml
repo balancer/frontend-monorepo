@@ -2,5 +2,15 @@ packages:
   - "apps/*"
   - "packages/*"
 
+allowBuilds:
+  '@parcel/watcher': true
+  '@sentry/cli': true
+  bufferutil: true
+  esbuild: true
+  msw: true
+  protobufjs: true
+  sharp: true
+  utf-8-validate: true
+
 catalog:
   "@apollo/client": "4.2.3"
