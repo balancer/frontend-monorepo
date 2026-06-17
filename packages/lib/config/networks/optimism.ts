@@ -59,6 +59,7 @@ const networkConfig: NetworkConfig = {
       batchRouter: AddressProvider.BatchRouter(optimism.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(optimism.id),
       vaultAdminV3: AddressProvider.VaultAdmin(optimism.id),
+      unbalancedAddViaSwapRouter: AddressProvider.UnbalancedAddViaSwapRouter(optimism.id),
     },
     veDelegationProxy: '0x9dA18982a33FD0c7051B19F0d7C76F2d5E7e017c',
     permit2: PERMIT2[optimism.id],

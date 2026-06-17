@@ -44,7 +44,11 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
-import { poolHasRateProviderExternalOracle, supportsWethIsEth } from '../../../pool.helpers'
+import {
+  isAutoRange,
+  poolHasRateProviderExternalOracle,
+  supportsWethIsEth,
+} from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
 import { usePoolMetadata } from '../../../metadata/usePoolMetadata'
 import { useGetPoolRewards } from '../../../useGetPoolRewards'
@@ -87,6 +91,8 @@ function AddLiquidityMainForm() {
     slippage,
     setWantsProportional,
     wantsProportional,
+    wantsUnbalanced,
+    setWantsUnbalanced,
     humanAmountsIn,
     validTokens,
   } = useAddLiquidity()
@@ -103,10 +109,17 @@ function AddLiquidityMainForm() {
   const setFlexibleTab = () => {
     setTabIndex(0)
     setWantsProportional(false)
+    setWantsUnbalanced(false)
   }
   const setProportionalTab = () => {
     setTabIndex(1)
     setWantsProportional(true)
+    setWantsUnbalanced(false)
+  }
+  const setUnbalancedTab = () => {
+    setTabIndex(isAutoRange(pool.type) ? 0 : 2)
+    setWantsProportional(false)
+    setWantsUnbalanced(true)
   }
 
   useEffect(() => {
@@ -208,8 +221,10 @@ function AddLiquidityMainForm() {
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
             setFlexibleTab={setFlexibleTab}
             setProportionalTab={setProportionalTab}
+            setUnbalancedTab={setUnbalancedTab}
             tabIndex={tabIndex}
             totalUSDValue={totalUSDValue}
+            wantsUnbalanced={wantsUnbalanced}
           />
           {!wantsProportional && shouldShowUnbalancedError && (
             <UnbalancedAddError

@@ -67,6 +67,7 @@ const networkConfig: NetworkConfig = {
       batchRouter: AddressProvider.BatchRouter(sonic.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(sonic.id),
       vaultAdminV3: AddressProvider.VaultAdmin(sonic.id),
+      unbalancedAddViaSwapRouter: AddressProvider.UnbalancedAddViaSwapRouter(sonic.id),
     },
     veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
     beets: {

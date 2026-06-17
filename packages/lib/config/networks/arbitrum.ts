@@ -57,6 +57,7 @@ const networkConfig: NetworkConfig = {
       minter: '0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68',
       WeightedPool2TokensFactory: '0xCF0a32Bbef8F064969F21f7e02328FB577382018',
       vaultAdminV3: AddressProvider.VaultAdmin(arbitrum.id),
+      unbalancedAddViaSwapRouter: AddressProvider.UnbalancedAddViaSwapRouter(arbitrum.id),
       router: AddressProvider.Router(arbitrum.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(arbitrum.id),
       bCoWFactory: '0xE0e2Ba143EE5268DA87D529949a2521115987302',

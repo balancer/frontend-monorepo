@@ -30,6 +30,7 @@ export type HumanTokenAmountWithSymbol = {
   humanAmount: HumanAmount | ''
   tokenAddress: Address
   symbol: string
+  decimals?: number
 }
 
 export interface TokenAmountScaled {
