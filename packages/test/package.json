@@ -16,7 +16,7 @@
     "eslint": "9.27.0",
     "prool": "0.2.4",
     "viem": "2.51.3",
-    "wagmi": "3.6.15"
+    "wagmi": "3.6.16"
   },
   "publishConfig": {
     "access": "public"

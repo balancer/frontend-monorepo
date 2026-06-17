@@ -134,7 +134,9 @@ export function SaleStructureStep() {
                 control={control}
                 setFormValue={setValue}
               />
-              <NetworkSelectInput chains={supportedChains} control={control} />
+              {supportedChains.length > 1 && (
+                <NetworkSelectInput chains={supportedChains} control={control} />
+              )}
             </VStack>
             <Divider />
 
@@ -540,7 +542,7 @@ function FeeSelection({
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">{`LBP swap fees (50% share with ${PROJECT_CONFIG.projectName} DAO)`}</Text>
+      <Text color="font.primary">LBP swap fees</Text>
       <RadioGroup
         onChange={(value: string) => {
           setValue(value)
