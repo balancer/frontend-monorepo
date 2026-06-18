@@ -14,7 +14,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
-import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import {
   EXACT_IN_SWAP_DESCRIPTION,
   EXACT_OUT_SWAP_DESCRIPTION,
@@ -51,7 +51,7 @@ export function SwapSummary({
 
   const { slippage } = useUserSettings()
   const [selectedSlippage, setSelectedSlippage] = useState(
-    swapType === GqlSorSwapType.ExactIn ? 0 : Number(slippage) / 100
+    swapType === GqlSorSwapTypeValues.ExactIn ? 0 : Number(slippage) / 100
   )
   const calculateSlippage = (value: SlippageOptions) => {
     if (value === 'zero') setSelectedSlippage(0)
@@ -68,14 +68,14 @@ export function SwapSummary({
   const tokenInLabel =
     shouldShowReceipt || isWrapComplete
       ? 'You paid'
-      : swapType === GqlSorSwapType.ExactIn
+      : swapType === GqlSorSwapTypeValues.ExactIn
         ? 'You pay (exactly)'
         : 'You pay'
 
   function tokenOutLabel() {
     if (shouldShowReceipt || isWrapComplete) return 'You got'
     if (isWrap) return "You'll get"
-    if (swapType === GqlSorSwapType.ExactOut) return "You'll get (exactly)"
+    if (swapType === GqlSorSwapTypeValues.ExactOut) return "You'll get (exactly)"
 
     return "You'll get"
   }
@@ -98,7 +98,7 @@ export function SwapSummary({
   const outTokenRightElement = () => {
     return shouldShowReceipt ? (
       slippageDiffLabel(receivedToken.humanAmount || '0', expectedTokenOut)
-    ) : swapType === GqlSorSwapType.ExactIn ? (
+    ) : swapType === GqlSorSwapTypeValues.ExactIn ? (
       <SlippageSelector
         description={EXACT_IN_SWAP_DESCRIPTION}
         onChange={calculateSlippage}
@@ -109,13 +109,13 @@ export function SwapSummary({
   }
 
   const inAmountWithSlippage =
-    swapType === GqlSorSwapType.ExactIn
+    swapType === GqlSorSwapTypeValues.ExactIn
       ? tokenIn.amount
       : bn(tokenIn.amount || '0')
           .times(1 + selectedSlippage)
           .toString()
   const outAmountWithSlippage =
-    swapType === GqlSorSwapType.ExactOut
+    swapType === GqlSorSwapTypeValues.ExactOut
       ? tokenOut.amount
       : bn(tokenOut.amount || '0')
           .times(1 - selectedSlippage)
@@ -130,7 +130,7 @@ export function SwapSummary({
           chain={selectedChain}
           label={tokenInLabel}
           rightElement={
-            swapType === GqlSorSwapType.ExactOut && (
+            swapType === GqlSorSwapTypeValues.ExactOut && (
               <SlippageSelector
                 description={EXACT_OUT_SWAP_DESCRIPTION}
                 onChange={calculateSlippage}

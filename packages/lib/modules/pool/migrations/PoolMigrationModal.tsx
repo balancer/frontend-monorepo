@@ -11,7 +11,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { MigrateLiquiditySummary } from './MigrateLiquiditySummary'
 import { useMigrateLiquidity } from './MigrateLiquidityProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
 
 export function PoolMigrationModal() {
@@ -21,7 +21,7 @@ export function PoolMigrationModal() {
   const { addLiquidityTxHash, urlTxHash, lastTransaction: addLiquidityTx } = useAddLiquidity()
 
   const addLiquidityReceipt = useAddLiquidityReceipt({
-    chain: oldPool?.chain || GqlChain.Mainnet,
+    chain: oldPool?.chain || GqlChainValues.Mainnet,
     txHash: addLiquidityTxHash,
     userAddress,
     protocolVersion: oldPool?.protocolVersion as ProtocolVersion,
@@ -42,14 +42,14 @@ export function PoolMigrationModal() {
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
         {isDesktop && hasQuoteContext && (
           <DesktopStepTracker
-            chain={oldPool?.chain || GqlChain.Mainnet}
+            chain={oldPool?.chain || GqlChainValues.Mainnet}
             isTxBatch={false}
             transactionSteps={migrationSteps}
           />
         )}
 
         <TransactionModalHeader
-          chain={oldPool?.chain || GqlChain.Mainnet}
+          chain={oldPool?.chain || GqlChainValues.Mainnet}
           isReceiptLoading={addLiquidityReceipt.isLoading}
           label="Migrate liquidity"
           txHash={addLiquidityTxHash}

@@ -4,7 +4,8 @@ import { PoolListItem } from './pool.types'
 import { parseUnits } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'
 import { HumanAmount } from '@balancer/sdk'
-import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { hasNonPreferentialStakedBalance, hasPreferentialGauge } from './actions/stake.helpers'
 
 export function calcStakedBalance(
@@ -30,7 +31,7 @@ export function calcTotalStakedBalance(pool: Pool | PoolListItem): HumanAmount {
 }
 
 export function calcGaugeStakedBalance(pool: Pool | PoolListItem): HumanAmount {
-  return calcStakedBalance(pool, GqlPoolStakingType.Gauge)
+  return calcStakedBalance(pool, GqlPoolStakingTypeValues.Gauge)
 }
 
 export function calcTotalStakedBalanceUsd(pool: Pool): number {
@@ -105,7 +106,7 @@ export function calcNonOnChainFetchedStakedBalance(pool: Pool): string {
   if (!userBalance) return '0'
 
   const nonOnChainFetchedStakedBalances = userBalance.stakedBalances
-    .filter(balance => balance.stakingType !== GqlPoolStakingType.Gauge)
+    .filter(balance => balance.stakingType !== GqlPoolStakingTypeValues.Gauge)
     .map(stakedBalance => stakedBalance.balance)
 
   return safeSum(nonOnChainFetchedStakedBalances)
@@ -126,11 +127,11 @@ export function getStakedBalance(pool: Pool, stakingType: GqlPoolStakingType): S
   if (!userBalance) return zeroStakedBalance
 
   const stakingAddress =
-    stakingType === GqlPoolStakingType.Gauge ? pool.staking?.gauge?.id : undefined
+    stakingType === GqlPoolStakingTypeValues.Gauge ? pool.staking?.gauge?.id : undefined
   const stakedBalance = userBalance.stakedBalances.find(
     balance =>
       balance.stakingType === stakingType &&
-      (balance.stakingId === stakingAddress || stakingType === GqlPoolStakingType.Vebal)
+      (balance.stakingId === stakingAddress || stakingType === GqlPoolStakingTypeValues.VeBal)
   )
 
   if (!stakedBalance) {
@@ -153,7 +154,7 @@ export function calcStakedBalanceUsd(pool: Pool, stakingType: GqlPoolStakingType
 }
 
 export function calcGaugeStakedBalanceUsd(pool: Pool): number {
-  return calcStakedBalanceUsd(pool, GqlPoolStakingType.Gauge)
+  return calcStakedBalanceUsd(pool, GqlPoolStakingTypeValues.Gauge)
 }
 
 export function hasTotalBalance(pool: Pool) {
@@ -162,11 +163,11 @@ export function hasTotalBalance(pool: Pool) {
 }
 
 export function hasBalancerStakedBalance(pool: Pool | PoolListItem): boolean {
-  return hasStakedBalanceFor(pool, GqlPoolStakingType.Gauge)
+  return hasStakedBalanceFor(pool, GqlPoolStakingTypeValues.Gauge)
 }
 
 export function hasVeBalStaking(pool: Pool | PoolListItem): boolean {
-  return hasStakingType(pool, GqlPoolStakingType.Vebal)
+  return hasStakingType(pool, GqlPoolStakingTypeValues.VeBal)
 }
 
 export function hasStakedBalanceFor(

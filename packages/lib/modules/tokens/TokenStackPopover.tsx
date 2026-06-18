@@ -10,7 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { ApiToken } from './token.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import TokenRow from './TokenRow/TokenRow'
 import { Address } from 'viem'
 import { Numberish } from '@repo/lib/shared/utils/numbers'

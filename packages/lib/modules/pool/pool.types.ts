@@ -1,15 +1,7 @@
-import {
-  GetPoolsQuery,
-  GetPoolsQueryVariables,
-  GqlChain,
-  GqlPoolType,
-  GqlPoolOrderBy,
-  GqlNestedPool,
-  GetPoolQuery,
-  QuantAmmWeightSnapshot,
-  GqlPoolLiquidityBootstrappingV3,
-  GqlPoolFixedPriceLbp,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlNestedPool, QuantAmmWeightSnapshot, GqlPoolLiquidityBootstrappingV3, GqlPoolFixedPriceLbp } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { GetPoolsQuery, GetPoolsQueryVariables, GetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlPoolType, GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
 
@@ -84,28 +76,32 @@ export interface PoolsQueryVariables extends GetPoolsQueryVariables {
 }
 
 export const poolTypeFilters = [
-  GqlPoolType.Weighted,
-  GqlPoolType.Stable,
-  GqlPoolType.LiquidityBootstrapping,
-  GqlPoolType.Gyro,
-  GqlPoolType.CowAmm,
-  GqlPoolType.Fx,
-  GqlPoolType.QuantAmmWeighted,
-  'AUTORANGE', // will be mapped to GqlPoolType.Reclamm
+  GqlPoolTypeValues.Weighted,
+  GqlPoolTypeValues.Stable,
+  GqlPoolTypeValues.LiquidityBootstrapping,
+  GqlPoolTypeValues.Gyro,
+  GqlPoolTypeValues.CowAmm,
+  GqlPoolTypeValues.Fx,
+  GqlPoolTypeValues.QuantAmmWeighted,
+  'AUTORANGE', // will be mapped to GqlPoolTypeValues.Reclamm
 ] as const
 
 export type PoolFilterType = (typeof poolTypeFilters)[number]
 
 // We need to map toggalable pool types to their corresponding set of GqlPoolTypes.
 export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
-  [GqlPoolType.Weighted]: [GqlPoolType.Weighted],
-  [GqlPoolType.Stable]: [GqlPoolType.Stable, GqlPoolType.ComposableStable, GqlPoolType.MetaStable],
-  [GqlPoolType.LiquidityBootstrapping]: [GqlPoolType.LiquidityBootstrapping],
-  [GqlPoolType.Gyro]: [GqlPoolType.Gyro, GqlPoolType.Gyro3, GqlPoolType.Gyroe],
-  [GqlPoolType.CowAmm]: [GqlPoolType.CowAmm],
-  [GqlPoolType.Fx]: [GqlPoolType.Fx],
-  [GqlPoolType.QuantAmmWeighted]: [GqlPoolType.QuantAmmWeighted],
-  AUTORANGE: [GqlPoolType.Reclamm],
+  [GqlPoolTypeValues.Weighted]: [GqlPoolTypeValues.Weighted],
+  [GqlPoolTypeValues.Stable]: [
+    GqlPoolTypeValues.Stable,
+    GqlPoolTypeValues.ComposableStable,
+    GqlPoolTypeValues.MetaStable,
+  ],
+  [GqlPoolTypeValues.LiquidityBootstrapping]: [GqlPoolTypeValues.LiquidityBootstrapping],
+  [GqlPoolTypeValues.Gyro]: [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.Gyroe],
+  [GqlPoolTypeValues.CowAmm]: [GqlPoolTypeValues.CowAmm],
+  [GqlPoolTypeValues.Fx]: [GqlPoolTypeValues.Fx],
+  [GqlPoolTypeValues.QuantAmmWeighted]: [GqlPoolTypeValues.QuantAmmWeighted],
+  AUTORANGE: [GqlPoolTypeValues.Reclamm],
 }
 
 export const poolTagFilters = [

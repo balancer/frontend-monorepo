@@ -1,5 +1,5 @@
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { GqlPriceRateProviderData } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPriceRateProviderData } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import {
   Popover,
   PopoverTrigger,

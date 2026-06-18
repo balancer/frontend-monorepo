@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { Trash2 } from 'react-feather'
 import { getChainName } from '@repo/lib/config/app.config'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { Address } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'

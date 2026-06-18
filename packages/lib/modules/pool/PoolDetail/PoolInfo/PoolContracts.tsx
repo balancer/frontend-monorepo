@@ -21,12 +21,8 @@ import {
 import { usePool } from '../../PoolProvider'
 import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
-import {
-  GqlPriceRateProviderData,
-  GqlHookReviewData,
-  Erc4626ReviewData,
-  HookFragment,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPriceRateProviderData, GqlHookReviewData, Erc4626ReviewData } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { HookFragment } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'

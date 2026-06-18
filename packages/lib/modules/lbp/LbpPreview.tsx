@@ -12,7 +12,7 @@ import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
 import { Address } from 'viem'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { LbpLearnMoreModal } from './modal/LbpLearnMoreModal'
 import { useWatch } from 'react-hook-form'
 
@@ -83,7 +83,7 @@ export function LbpPreview() {
           <RestartPoolCreationModal
             handleRestart={resetLbpCreation}
             network={selectedChain}
-            poolType={GqlPoolType.LiquidityBootstrapping}
+            poolType={GqlPoolTypeValues.LiquidityBootstrapping}
           />
           <LbpLearnMoreModal buttonLabel="Get help" />
         </Flex>

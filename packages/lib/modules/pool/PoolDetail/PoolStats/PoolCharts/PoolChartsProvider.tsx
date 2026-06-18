@@ -5,6 +5,7 @@ import {
   GqlPoolSnapshotDataRange,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolSnapshotDataRangeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useQuery } from '@apollo/client/react'
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
@@ -25,19 +26,19 @@ export type PoolChartPeriod = {
 
 export const poolChartPeriods: PoolChartPeriod[] = [
   {
-    value: GqlPoolSnapshotDataRange.ThirtyDays,
+    value: GqlPoolSnapshotDataRangeValues.ThirtyDays,
     label: '30d',
   },
   {
-    value: GqlPoolSnapshotDataRange.NinetyDays,
+    value: GqlPoolSnapshotDataRangeValues.NinetyDays,
     label: '90d',
   },
   {
-    value: GqlPoolSnapshotDataRange.OneHundredEightyDays,
+    value: GqlPoolSnapshotDataRangeValues.OneHundredEightyDays,
     label: '180d',
   },
   {
-    value: GqlPoolSnapshotDataRange.AllTime,
+    value: GqlPoolSnapshotDataRangeValues.AllTime,
     label: 'All time',
   },
 ]
@@ -69,9 +70,9 @@ export interface PoolChartTypeOptions {
 }
 
 const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
-  [GqlPoolSnapshotDataRange.ThirtyDays]: 30,
-  [GqlPoolSnapshotDataRange.NinetyDays]: 90,
-  [GqlPoolSnapshotDataRange.OneHundredEightyDays]: 180,
+  [GqlPoolSnapshotDataRangeValues.ThirtyDays]: 30,
+  [GqlPoolSnapshotDataRangeValues.NinetyDays]: 90,
+  [GqlPoolSnapshotDataRangeValues.OneHundredEightyDays]: 180,
 }
 
 export const getDefaultPoolChartOptions = (
@@ -184,7 +185,7 @@ export const getDefaultPoolChartOptions = (
 export function usePoolSnapshots(
   poolId: string,
   chainId: GqlChain,
-  range: GqlPoolSnapshotDataRange = GqlPoolSnapshotDataRange.ThirtyDays
+  range: GqlPoolSnapshotDataRange = GqlPoolSnapshotDataRangeValues.ThirtyDays
 ) {
   return useQuery(GetPoolSnapshotsDocument, {
     variables: {

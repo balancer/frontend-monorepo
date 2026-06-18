@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { ApolloClient } from '@apollo/client'
 import type { Permit2 } from '@balancer/sdk'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { DefaultSwapHandler } from './DefaultSwap.handler'
 import { BaseDefaultSwapHandler } from './BaseDefaultSwap.handler'
 import type { SdkSimulateSwapResponse } from '../swap.types'
@@ -14,7 +14,7 @@ import {
 vi.mock('@repo/lib/config/app.config', () => {
   const mockNetworkConfig = {
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     tokens: {
       addresses: {
         wNativeAsset: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',

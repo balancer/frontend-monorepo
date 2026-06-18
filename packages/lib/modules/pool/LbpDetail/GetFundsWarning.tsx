@@ -2,7 +2,7 @@ import { Alert, AlertDescription, AlertIcon, AlertTitle, HStack, Spacer } from '
 import { BalAlertButtonLink } from '@repo/lib/shared/components/alerts/BalAlertButtonLink'
 import { AlertTriangle } from 'react-feather'
 import { getPoolPath } from '../pool.utils'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { usePool } from '../PoolProvider'
 
 export function GetFundsWarning() {
@@ -11,7 +11,7 @@ export function GetFundsWarning() {
   const path = getPoolPath({
     id: pool.address,
     chain: pool.chain,
-    type: GqlPoolType.LiquidityBootstrapping,
+    type: GqlPoolTypeValues.LiquidityBootstrapping,
     protocolVersion: 3 as const,
   })
 

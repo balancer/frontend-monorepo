@@ -22,7 +22,7 @@ import {
   usdcUsdtAaveBoosted,
   v3SepoliaNestedBoosted,
 } from './__mocks__/pool-examples/boosted'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { zeroAddress } from 'viem'
 
 describe('getPoolActionableTokens', () => {
@@ -119,7 +119,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should block INVESTMENT / MANAGED pools', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-      pool.type = GqlPoolType.Investment
+      pool.type = GqlPoolTypeValues.Investment
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -127,7 +127,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should block exploited V2 composable stable pools with rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-      pool.type = GqlPoolType.ComposableStable
+      pool.type = GqlPoolTypeValues.ComposableStable
       pool.poolTokens[0].priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
       pool.poolTokens[0].priceRateProviderData = {
         __typename: 'GqlPriceRateProviderData',
@@ -142,7 +142,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should not block exploited V2 composable stable pools without rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-      pool.type = GqlPoolType.ComposableStable
+      pool.type = GqlPoolTypeValues.ComposableStable
       pool.poolTokens[0].priceRateProvider = zeroAddress
 
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
@@ -150,7 +150,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should block exploited V2 metastable pools with rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-      pool.type = GqlPoolType.MetaStable
+      pool.type = GqlPoolTypeValues.MetaStable
       pool.poolTokens[0].priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
       pool.poolTokens[0].priceRateProviderData = {
         __typename: 'GqlPriceRateProviderData',
@@ -165,7 +165,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should not block exploited V2 metastable pools without rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-      pool.type = GqlPoolType.MetaStable
+      pool.type = GqlPoolTypeValues.MetaStable
       pool.poolTokens[0].priceRateProvider = zeroAddress
 
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
@@ -203,7 +203,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should block if pool is LBP', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.type = GqlPoolType.LiquidityBootstrapping
+      pool.type = GqlPoolTypeValues.LiquidityBootstrapping
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -282,7 +282,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should not block if reviewer is the nested pool', () => {
       const pool = getApiPoolMock(v3SepoliaNestedBoosted)
-      pool.chain = GqlChain.Mainnet // Sepolia pools are never blocked
+      pool.chain = GqlChainValues.Mainnet // Sepolia pools are never blocked
       pool.poolTokens[0].priceRateProvider = pool.poolTokens[0].nestedPool!.address
       pool.poolTokens[0].priceRateProviderData = null
 
@@ -305,7 +305,7 @@ describe('shouldBlockAddLiquidity', () => {
   it('should not block for Sepolia pools', () => {
     const pool = getApiPoolMock(usdcUsdtAaveBoosted)
     pool.dynamicData.isPaused = true
-    pool.chain = GqlChain.Sepolia
+    pool.chain = GqlChainValues.Sepolia
 
     expect(shouldBlockAddLiquidity(pool)).toBe(false)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(0)
@@ -313,7 +313,7 @@ describe('shouldBlockAddLiquidity', () => {
 
   it('should block for Mode pools', () => {
     const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-    pool.chain = GqlChain.Mode
+    pool.chain = GqlChainValues.Mode
 
     expect(shouldBlockAddLiquidity(pool)).toBe(true)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -321,7 +321,7 @@ describe('shouldBlockAddLiquidity', () => {
 
   it('should block for Fraxtal pools', () => {
     const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-    pool.chain = GqlChain.Fraxtal
+    pool.chain = GqlChainValues.Fraxtal
 
     expect(shouldBlockAddLiquidity(pool)).toBe(true)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -329,7 +329,7 @@ describe('shouldBlockAddLiquidity', () => {
 
   it('should block for zkEvm pools', () => {
     const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-    pool.chain = GqlChain.Zkevm
+    pool.chain = GqlChainValues.Zkevm
 
     expect(shouldBlockAddLiquidity(pool)).toBe(true)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(1)

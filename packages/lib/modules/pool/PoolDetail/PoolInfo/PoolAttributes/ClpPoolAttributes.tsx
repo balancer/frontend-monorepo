@@ -9,7 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { Pool } from '../../../pool.types'
-import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 

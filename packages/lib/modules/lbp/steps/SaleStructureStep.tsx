@@ -14,7 +14,7 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
 import { SaleStructureForm, SeedType, UserActions, WeightAdjustmentType } from '../lbp.types'
 import { Control, Controller, SubmitHandler, UseFormSetValue } from 'react-hook-form'

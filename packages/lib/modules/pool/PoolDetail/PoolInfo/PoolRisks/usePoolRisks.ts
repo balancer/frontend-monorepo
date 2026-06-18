@@ -1,8 +1,5 @@
-import {
-  GqlChain,
-  GqlHookType,
-  GqlPoolElement,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { GqlChainValues, GqlHookTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import {
   isMetaStable,
   isStable,
@@ -181,63 +178,63 @@ const RISK_CONDITIONS: RiskDefinition[] = [
     title: RISK_TITLES[RiskKey.Arbitrum],
     path: `/risks#${RiskKey.Arbitrum}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Arbitrum,
+    condition: pool => pool.chain === GqlChainValues.Arbitrum,
   },
   {
     key: RiskKey.Optimism,
     title: RISK_TITLES[RiskKey.Optimism],
     path: `/risks#${RiskKey.Optimism}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Optimism,
+    condition: pool => pool.chain === GqlChainValues.Optimism,
   },
   {
     key: RiskKey.Polygon,
     title: RISK_TITLES[RiskKey.Polygon],
     path: `/risks#${RiskKey.Polygon}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Polygon,
+    condition: pool => pool.chain === GqlChainValues.Polygon,
   },
   {
     key: RiskKey.Zkevm,
     title: RISK_TITLES[RiskKey.Zkevm],
     path: `/risks#${RiskKey.Zkevm}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Zkevm,
+    condition: pool => pool.chain === GqlChainValues.Zkevm,
   },
   {
     key: RiskKey.Gnosis,
     title: RISK_TITLES[RiskKey.Gnosis],
     path: `/risks#${RiskKey.Gnosis}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Gnosis,
+    condition: pool => pool.chain === GqlChainValues.Gnosis,
   },
   {
     key: RiskKey.Base,
     title: RISK_TITLES[RiskKey.Base],
     path: `/risks#${RiskKey.Base}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Base,
+    condition: pool => pool.chain === GqlChainValues.Base,
   },
   {
     key: RiskKey.Avalanche,
     title: RISK_TITLES[RiskKey.Avalanche],
     path: `/risks#${RiskKey.Avalanche}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Avalanche,
+    condition: pool => pool.chain === GqlChainValues.Avalanche,
   },
   {
     key: RiskKey.HyperEVM,
     title: RISK_TITLES[RiskKey.HyperEVM],
     path: `/risks#${RiskKey.HyperEVM}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Hyperevm,
+    condition: pool => pool.chain === GqlChainValues.Hyperevm,
   },
   {
     key: RiskKey.Plasma,
     title: RISK_TITLES[RiskKey.Plasma],
     path: `/risks#${RiskKey.Plasma}`,
     category: RiskCategory.General,
-    condition: pool => pool.chain === GqlChain.Plasma,
+    condition: pool => pool.chain === GqlChainValues.Plasma,
   },
 
   // Hook risks
@@ -253,14 +250,14 @@ const RISK_CONDITIONS: RiskDefinition[] = [
     title: RISK_TITLES[RiskKey.StableSurgeHook],
     path: `/risks#${RiskKey.StableSurgeHook}`,
     category: RiskCategory.PoolSpecific,
-    condition: pool => hasHookType(pool, GqlHookType.StableSurge),
+    condition: pool => hasHookType(pool, GqlHookTypeValues.StableSurge),
   },
   {
     key: RiskKey.MEVCaptureHook,
     title: RISK_TITLES[RiskKey.MEVCaptureHook],
     path: `/risks#${RiskKey.MEVCaptureHook}`,
     category: RiskCategory.PoolSpecific,
-    condition: pool => hasHookType(pool, GqlHookType.MevTax),
+    condition: pool => hasHookType(pool, GqlHookTypeValues.MevTax),
   },
 
   // Pool specific feature risks

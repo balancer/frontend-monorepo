@@ -1,6 +1,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren, useEffect } from 'react'
-import { GetPoolDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GetPoolDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useQuery } from '@apollo/client/react'
 import { usePoolMigrations } from './PoolMigrationsProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'
@@ -47,7 +48,7 @@ function useMigrateLiquidityLogic(protocol: number, chainId: number, poolId: str
   const newPool = newPoolData?.pool as Pool | undefined
 
   const removeLiquidityReceipt = useRemoveLiquidityReceipt({
-    chain: oldPool?.chain || GqlChain.Mainnet,
+    chain: oldPool?.chain || GqlChainValues.Mainnet,
     txHash: removeLiquidityTxHash,
     userAddress,
     protocolVersion: oldPool?.protocolVersion as ProtocolVersion,

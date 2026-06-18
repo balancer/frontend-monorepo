@@ -1,8 +1,6 @@
 import { getChainId } from '@repo/lib/config/app.config'
-import {
-  GqlPoolStakingType,
-  GqlUserStakedBalance,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlUserStakedBalance } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { compact, groupBy } from 'lodash'
 import { Address, formatUnits } from 'viem'
@@ -53,7 +51,7 @@ export function useUserStakedBalance(pools: Pool[] = []) {
         const bptPrice = priceFor(pool.address, pool.chain)
         const humanStakedBalance = formatUnits(rawBalance || 0n, BPT_DECIMALS)
 
-        const stakingType = GqlPoolStakingType.Gauge
+        const stakingType = GqlPoolStakingTypeValues.Gauge
 
         const stakedBalance: GqlUserStakedBalance = {
           __typename: 'GqlUserStakedBalance',

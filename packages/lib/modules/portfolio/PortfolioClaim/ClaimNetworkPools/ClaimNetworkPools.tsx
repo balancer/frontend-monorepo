@@ -16,7 +16,8 @@ import {
 } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useMemo, useState, type ReactNode } from 'react'
@@ -50,21 +51,21 @@ interface NetworkConfig {
 }
 
 const balancerNetworksConfig: NetworkConfig[] = [
-  { chain: GqlChain.Mainnet, name: 'Ethereum', displayProps: {} },
+  { chain: GqlChainValues.Mainnet, name: 'Ethereum', displayProps: {} },
   {
-    chain: GqlChain.Arbitrum,
+    chain: GqlChainValues.Arbitrum,
     name: 'Arbitrum',
     displayProps: { display: { base: 'none', md: 'block' } },
   },
   {
-    chain: GqlChain.Base,
+    chain: GqlChainValues.Base,
     name: 'Base',
     displayProps: { display: { base: 'none', md: 'none', lg: 'block' } },
   },
 ]
 
 const beetsNetworksConfig: NetworkConfig[] = [
-  { chain: GqlChain.Sonic, name: 'Sonic', displayProps: {} },
+  { chain: GqlChainValues.Sonic, name: 'Sonic', displayProps: {} },
 ]
 
 const SLOT_COUNT = 3
@@ -148,7 +149,7 @@ export function ClaimNetworkPools() {
     if (hasProtocolRewards) {
       items.push({
         type: 'protocol',
-        chain: GqlChain.Mainnet,
+        chain: GqlChainValues.Mainnet,
         amount: protocolRewardsBalance.toNumber(),
       })
     }

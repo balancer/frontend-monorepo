@@ -44,7 +44,7 @@ import {
 } from '../pool.helpers'
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
-import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import {
   PartnerRedirectModal,
   RedirectPartner,
@@ -108,10 +108,10 @@ export default function PoolMyLiquidity() {
   function getStakingType(tabsValue: string) {
     switch (tabsValue) {
       case 'gauge':
-        if (isVeBal) return GqlPoolStakingType.Vebal
-        return GqlPoolStakingType.Gauge
+        if (isVeBal) return GqlPoolStakingTypeValues.VeBal
+        return GqlPoolStakingTypeValues.Gauge
       default:
-        return GqlPoolStakingType.Gauge
+        return GqlPoolStakingTypeValues.Gauge
     }
   }
 

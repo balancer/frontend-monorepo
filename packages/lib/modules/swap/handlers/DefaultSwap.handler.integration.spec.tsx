@@ -1,7 +1,7 @@
 import { ExactInQueryOutput, ExactOutQueryOutput } from '@balancer/sdk'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress, wETHAddress } from '@repo/lib/debug-helpers'
-import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { apolloTestClient } from '@repo/test/utils/apollo-test-client'
 import { fetchPoolMock } from '../../pool/__mocks__/fetchPoolMock'
@@ -12,7 +12,7 @@ const SWAP_SIMULATION_TEST_TIMEOUT_MS = 120_000
 
 describe('Pool Swap handler with v2 nested pool', async () => {
   const mainnetNestedPoolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0' // Balancer 50WETH-50-3pool
-  const pool = await fetchPoolMock({ poolId: mainnetNestedPoolId, chain: GqlChain.Mainnet })
+  const pool = await fetchPoolMock({ poolId: mainnetNestedPoolId, chain: GqlChainValues.Mainnet })
 
   const handler = new DefaultSwapHandler(apolloTestClient)
 
@@ -21,7 +21,7 @@ describe('Pool Swap handler with v2 nested pool', async () => {
     async () => {
       const result = await handler.simulate({
         chain: pool.chain,
-        swapType: GqlSorSwapType.ExactIn,
+        swapType: GqlSorSwapTypeValues.ExactIn,
         swapAmount: '0.1',
         tokenIn: wETHAddress,
         tokenOut: daiAddress,
@@ -44,7 +44,7 @@ describe('Pool Swap handler with v2 nested pool', async () => {
     async () => {
       const result = await handler.simulate({
         chain: pool.chain,
-        swapType: GqlSorSwapType.ExactIn,
+        swapType: GqlSorSwapTypeValues.ExactIn,
         swapAmount: '0.1',
         tokenIn: wETHAddress,
         tokenOut: daiAddress,
@@ -64,11 +64,11 @@ describe('Pool Swap handler with v2 nested pool', async () => {
 
       const txConfig = handler.build({
         simulateResponse: result,
-        swapType: GqlSorSwapType.ExactIn,
+        swapType: GqlSorSwapTypeValues.ExactIn,
         tokenIn,
         tokenOut,
         account: defaultTestUserAccount,
-        selectedChain: GqlChain.Mainnet,
+        selectedChain: GqlChainValues.Mainnet,
         slippagePercent: '0.2',
         wethIsEth: false,
       })
@@ -82,7 +82,7 @@ describe('Pool Swap handler with v2 nested pool', async () => {
   it('simulates exact out swap', async () => {
     const result = await handler.simulate({
       chain: pool.chain,
-      swapType: GqlSorSwapType.ExactOut,
+      swapType: GqlSorSwapTypeValues.ExactOut,
       swapAmount: '0.1',
       tokenIn: wETHAddress,
       tokenOut: daiAddress,

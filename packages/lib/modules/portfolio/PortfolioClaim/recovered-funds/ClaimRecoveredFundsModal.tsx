@@ -13,7 +13,7 @@ import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-s
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { ClaimsSummary } from './ClaimsSummary'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
@@ -71,11 +71,11 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
-          <DesktopStepTracker chain={GqlChain.Mainnet} isTxBatch={false} transactionSteps={steps} />
+          <DesktopStepTracker chain={GqlChainValues.Mainnet} isTxBatch={false} transactionSteps={steps} />
         )}
 
         <TransactionModalHeader
-          chain={GqlChain.Mainnet}
+          chain={GqlChainValues.Mainnet}
           isReceiptLoading={false}
           label="Claim recovered funds from v2 incident"
           txHash={txHash}

@@ -2,7 +2,7 @@
 
 import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-ui/react'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { Address } from 'viem'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
@@ -48,10 +48,10 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
-          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+          <DesktopStepTracker chain={GqlChainValues.Mainnet} transactionSteps={transactionSteps} />
         )}
         <TransactionModalHeader
-          chain={GqlChain.Mainnet}
+          chain={GqlChainValues.Mainnet}
           label="Claim protocol revenue share"
           txHash={claimTxHash}
         />
@@ -59,13 +59,13 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
         <ModalBody>
           <AnimateHeightChange spacing="sm" w="full">
             {isMobile && (
-              <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+              <MobileStepTracker chain={GqlChainValues.Mainnet} transactionSteps={transactionSteps} />
             )}
 
             <Card variant="modalSubSection">
               <TokenRowGroup
                 amounts={rewards}
-                chain={GqlChain.Mainnet}
+                chain={GqlChainValues.Mainnet}
                 label={claimTxHash ? 'You got' : "You'll get"}
                 totalUSDValue={protocolRewardsBalance.toString()}
               />

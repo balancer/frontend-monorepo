@@ -1,6 +1,6 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import { Pool } from '../pool/pool.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function buildCowSwapUrlFromPool(pool: Pool): string {
   // All CoW AMM pools have 2 tokens

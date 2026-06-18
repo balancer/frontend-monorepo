@@ -1,4 +1,4 @@
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { Pool } from '../pool.types'
 
 export const notAllowedPoolMock: Pool = {
@@ -11,8 +11,8 @@ export const notAllowedPoolMock: Pool = {
   factory: '0x8e9aa87e45e92bad84d5f8dd1bff34fb92637de9',
   symbol: 'EGX-MTLSTR',
   createTime: 1647948468,
-  type: GqlPoolType.Weighted,
-  chain: GqlChain.Polygon,
+  type: GqlPoolTypeValues.Weighted,
+  chain: GqlChainValues.Polygon,
   protocolVersion: 2,
   hasErc4626: false,
   hasNestedErc4626: false,

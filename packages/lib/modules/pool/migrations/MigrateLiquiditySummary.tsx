@@ -8,7 +8,7 @@ import { useMigrateLiquidity } from './MigrateLiquidityProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { ApiToken, HumanTokenAmount } from '../../tokens/token.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useTotalUsdValue } from '../../tokens/useTotalUsdValue'
 import { PoolActionsPriceImpactDetails } from '../actions/PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
@@ -25,7 +25,7 @@ export function MigrateLiquiditySummary() {
     <AnimateHeightChange spacing="sm">
       {isMobile && hasQuoteContext && (
         <MobileStepTracker
-          chain={oldPool?.chain || GqlChain.Mainnet}
+          chain={oldPool?.chain || GqlChainValues.Mainnet}
           transactionSteps={migrationSteps}
         />
       )}

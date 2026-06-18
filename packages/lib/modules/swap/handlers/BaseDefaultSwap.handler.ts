@@ -1,6 +1,7 @@
 import { Path, Slippage, Swap, SwapKind, TokenAmount } from '@balancer/sdk'
 import { getChainId } from '@repo/lib/config/app.config'
-import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import { SdkBuildSwapInputs, SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
 import { SwapHandler } from './Swap.handler'
@@ -104,9 +105,9 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
 
   protected swapTypeToKind(swapType: GqlSorSwapType): SwapKind {
     switch (swapType) {
-      case GqlSorSwapType.ExactIn:
+      case GqlSorSwapTypeValues.ExactIn:
         return SwapKind.GivenIn
-      case GqlSorSwapType.ExactOut:
+      case GqlSorSwapTypeValues.ExactOut:
         return SwapKind.GivenOut
       default:
         throw new Error('Invalid swap type')

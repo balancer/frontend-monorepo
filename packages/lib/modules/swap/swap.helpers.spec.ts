@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { parseSwapError, isAuraBalSwap } from './swap.helpers'
-import { GqlChain, GqlSorSwapType } from '../../shared/services/api/generated/graphql'
+import { GqlChainValues, GqlSorSwapTypeValues } from '../../shared/services/api/generated/graphql-enums'
 import { isMainnet } from '../chains/chain.utils'
 import { TEST_ADDRESSES } from '@repo/lib/test/utils/swap-test-utils'
 
@@ -70,8 +70,8 @@ describe('swap.helpers', () => {
         isAuraBalSwap(
           TEST_ADDRESSES.eth,
           TEST_ADDRESSES.auraBal,
-          GqlChain.Mainnet,
-          GqlSorSwapType.ExactIn
+          GqlChainValues.Mainnet,
+          GqlSorSwapTypeValues.ExactIn
         )
       ).toBe(true)
     })
@@ -81,8 +81,8 @@ describe('swap.helpers', () => {
         isAuraBalSwap(
           TEST_ADDRESSES.weth,
           TEST_ADDRESSES.auraBal,
-          GqlChain.Mainnet,
-          GqlSorSwapType.ExactIn
+          GqlChainValues.Mainnet,
+          GqlSorSwapTypeValues.ExactIn
         )
       ).toBe(true)
     })
@@ -92,8 +92,8 @@ describe('swap.helpers', () => {
         isAuraBalSwap(
           TEST_ADDRESSES.auraBal,
           TEST_ADDRESSES.bal,
-          GqlChain.Mainnet,
-          GqlSorSwapType.ExactIn
+          GqlChainValues.Mainnet,
+          GqlSorSwapTypeValues.ExactIn
         )
       ).toBe(true)
     })
@@ -103,8 +103,8 @@ describe('swap.helpers', () => {
         isAuraBalSwap(
           TEST_ADDRESSES.eth,
           TEST_ADDRESSES.auraBal,
-          GqlChain.Mainnet,
-          GqlSorSwapType.ExactOut
+          GqlChainValues.Mainnet,
+          GqlSorSwapTypeValues.ExactOut
         )
       ).toBe(false)
     })
@@ -115,8 +115,8 @@ describe('swap.helpers', () => {
         isAuraBalSwap(
           TEST_ADDRESSES.eth,
           TEST_ADDRESSES.auraBal,
-          GqlChain.Polygon,
-          GqlSorSwapType.ExactIn
+          GqlChainValues.Polygon,
+          GqlSorSwapTypeValues.ExactIn
         )
       ).toBe(false)
     })
@@ -127,8 +127,8 @@ describe('swap.helpers', () => {
         isAuraBalSwap(
           TEST_ADDRESSES.auraBal,
           randomAddress,
-          GqlChain.Mainnet,
-          GqlSorSwapType.ExactIn
+          GqlChainValues.Mainnet,
+          GqlSorSwapTypeValues.ExactIn
         )
       ).toBe(false)
     })

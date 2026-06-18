@@ -1,6 +1,7 @@
 import { Address } from 'viem'
 import { OSwapAction, SdkSimulateSwapResponse, SwapAction } from './swap.types'
-import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import {
   getNativeAssetAddress,
   getNetworkConfig,
@@ -63,7 +64,7 @@ export function isAuraBalSwap(
   const tokenInOrOutIsRelevantToken = relevantTokens.some(
     token => isSameAddress(tokenIn, token) || isSameAddress(tokenOut, token)
   )
-  const isExactInSwap = swapType === GqlSorSwapType.ExactIn
+  const isExactInSwap = swapType === GqlSorSwapTypeValues.ExactIn
 
   return tokenInOrOutIsAuraBal && tokenInOrOutIsRelevantToken && isExactInSwap && isMainnet(chain)
 }

@@ -7,7 +7,8 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { GqlChain, GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useMemo, useState } from 'react'
 import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
@@ -45,7 +46,7 @@ export function useClaimAllRewardsStep({
   }
 
   const chain = pool.chain as GqlChain
-  const stakingType = pool.staking?.type || GqlPoolStakingType.Gauge
+  const stakingType = pool.staking?.type || GqlPoolStakingTypeValues.Gauge
 
   const claimRewardGauges = nonBalRewards.map(r => r.gaugeAddress)
   const mintBalRewardGauges = balRewards.map(r => r.gaugeAddress as Address)

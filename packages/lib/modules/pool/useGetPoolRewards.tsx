@@ -1,5 +1,5 @@
 import { Pool } from './pool.types'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlToken } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import { sumBy } from 'lodash'
 import { useTokens } from '../tokens/TokensProvider'
 import { bn, Numberish, isValidNumber } from '@repo/lib/shared/utils/numbers'

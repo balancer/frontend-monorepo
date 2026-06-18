@@ -9,7 +9,7 @@ import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTx
 import { useWalletConnectMetadata } from './wallet-connect/useWalletConnectMetadata'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 // Returns true when using a Safe Smart account:
@@ -90,7 +90,7 @@ export function useTxHash({ wagmiTxHash }: Props) {
 export function useSafeAppLink() {
   const { chain } = useNetworkConfig()
 
-  if (chain === GqlChain.Hyperevm) {
+  if (chain === GqlChainValues.Hyperevm) {
     return `https://safe.onchainden.com/share/safe-app?appUrl=https%3A%2F%2F${PROJECT_CONFIG.projectId}.fi%2Fpools&chain=hyperevm`
   }
 

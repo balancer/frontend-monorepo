@@ -1,6 +1,7 @@
 import { getChainId, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { SwapHandler } from './Swap.handler'
-import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { AuraBalSwap, HumanAmount, Slippage, SwapKind, Token, TokenAmount } from '@balancer/sdk'
 import { formatUnits } from 'viem'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
@@ -39,7 +40,7 @@ export class AuraBalSwapHandler implements SwapHandler {
 
     const tokenIn = new Token(_tokenIn.chainId, tokenInAddress, _tokenIn.decimals)
     const tokenOut = new Token(_tokenOut.chainId, tokenOutAddress, _tokenOut.decimals)
-    const swapAmountToken = swapType === GqlSorSwapType.ExactIn ? tokenIn : tokenOut
+    const swapAmountToken = swapType === GqlSorSwapTypeValues.ExactIn ? tokenIn : tokenOut
     const swapAmount = TokenAmount.fromHumanAmount(
       swapAmountToken,
       variables.swapAmount as HumanAmount
@@ -114,9 +115,9 @@ export class AuraBalSwapHandler implements SwapHandler {
 
   private swapTypeToKind(swapType: GqlSorSwapType): SwapKind {
     switch (swapType) {
-      case GqlSorSwapType.ExactIn:
+      case GqlSorSwapTypeValues.ExactIn:
         return SwapKind.GivenIn
-      case GqlSorSwapType.ExactOut:
+      case GqlSorSwapTypeValues.ExactOut:
         return SwapKind.GivenOut
       default:
         throw new Error('Invalid swap type')

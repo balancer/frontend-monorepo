@@ -13,7 +13,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
-import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import { getPoolRisks, risksTitle } from './usePoolRisks'
 import NextLink from 'next/link'
 

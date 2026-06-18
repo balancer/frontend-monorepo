@@ -1,4 +1,5 @@
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { BaseVariant, PoolVariant } from '../../pool.types'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
@@ -48,7 +49,7 @@ export function getPoolActivityTabsList({
       label: 'Removes',
     },
   ]
-  if (poolType === GqlPoolType.LiquidityBootstrapping && variant === BaseVariant.v2) {
+  if (poolType === GqlPoolTypeValues.LiquidityBootstrapping && variant === BaseVariant.v2) {
     return defaultTabs
   }
 

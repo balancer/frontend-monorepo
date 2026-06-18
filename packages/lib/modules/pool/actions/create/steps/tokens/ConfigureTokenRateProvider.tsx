@@ -14,7 +14,7 @@ import { InfoIconPopover } from '../../InfoIconPopover'
 import { usePublicClient } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ArrowUpRight } from 'react-feather'
 import { isMarketRateProvider } from '@repo/lib/modules/tokens/token.helpers'
 

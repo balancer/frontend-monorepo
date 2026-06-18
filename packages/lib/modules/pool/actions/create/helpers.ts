@@ -1,6 +1,7 @@
 import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import {
   WeightedPoolStructure,
@@ -12,12 +13,12 @@ import {
 } from './constants'
 
 const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
-  [PoolType.Weighted]: GqlPoolType.Weighted,
-  [PoolType.Stable]: GqlPoolType.Stable,
-  [PoolType.StableSurge]: GqlPoolType.Stable,
-  [PoolType.GyroE]: GqlPoolType.Gyroe,
-  [PoolType.ReClamm]: GqlPoolType.Reclamm,
-  [PoolType.CowAmm]: GqlPoolType.CowAmm,
+  [PoolType.Weighted]: GqlPoolTypeValues.Weighted,
+  [PoolType.Stable]: GqlPoolTypeValues.Stable,
+  [PoolType.StableSurge]: GqlPoolTypeValues.Stable,
+  [PoolType.GyroE]: GqlPoolTypeValues.Gyroe,
+  [PoolType.ReClamm]: GqlPoolTypeValues.Reclamm,
+  [PoolType.CowAmm]: GqlPoolTypeValues.CowAmm,
 }
 
 export function getGqlPoolType(poolType: PoolType): GqlPoolType {

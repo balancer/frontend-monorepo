@@ -2,12 +2,9 @@ import { Grid, GridItem, Text, Box, HStack, Link, Divider } from '@chakra-ui/rea
 import { usePool } from '../../PoolProvider'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import {
-  GetPoolEventsQuery,
-  GqlChain,
-  GqlPoolAddRemoveEventV3,
-  GqlPoolSwapEventV3,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolAddRemoveEventV3, GqlPoolSwapEventV3 } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { GetPoolEventsQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { secondsToMilliseconds } from 'date-fns'
 import { ArrowUpRight } from 'react-feather'

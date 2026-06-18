@@ -1,12 +1,7 @@
 import { wETHAddress, wjAuraAddress } from '@repo/lib/debug-helpers'
-import {
-  GetTokenPricesQuery,
-  GetTokensQuery,
-  GetTokensQueryVariables,
-  GqlChain,
-  GqlPoolTokenDetail,
-  GqlTokenPrice,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolTokenDetail, GqlTokenPrice } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { GetTokenPricesQuery, GetTokensQuery, GetTokensQueryVariables } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import {
   FakeTokenSymbol,
   allFakeGqlTokens,
@@ -99,7 +94,7 @@ export function aTokenPriceMock(...options: Partial<GqlTokenPrice>[]): GqlTokenP
   const defaultPrice: GqlTokenPrice = {
     __typename: 'GqlTokenPrice',
     address: emptyAddress,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     price: 2,
     updatedAt: 1,
   }

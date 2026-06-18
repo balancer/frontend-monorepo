@@ -1,6 +1,7 @@
 import { getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { Address, Log, erc20Abi, formatUnits, parseAbiItem, parseAbi, parseEventLogs } from 'viem'
@@ -307,8 +308,8 @@ function getIncomingLogsLoopsWithdraw(logs: Log[], userAddress?: Address) {
 function filterEdgeCases(tokens: HumanTokenAmount[], chain: GqlChain) {
   // ERC-20: Monerium EURe (EURe)
   const getERC20EUReAddress = () => {
-    if (chain === GqlChain.Gnosis) return '0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430'
-    if (chain === GqlChain.Polygon) return '0xE0aEa583266584DafBB3f9C3211d5588c73fEa8d'
+    if (chain === GqlChainValues.Gnosis) return '0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430'
+    if (chain === GqlChainValues.Polygon) return '0xE0aEa583266584DafBB3f9C3211d5588c73fEa8d'
     return '0x39b8B6385416f4cA36a20319F70D28621895279D' // mainnet
   }
   /*

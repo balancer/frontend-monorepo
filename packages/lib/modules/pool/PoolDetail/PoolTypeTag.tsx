@@ -1,6 +1,6 @@
 import { Box, HStack, Text, ChakraProps } from '@chakra-ui/react'
 import { Pool } from '../pool.types'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { isBoosted } from '../pool.helpers'
@@ -52,7 +52,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
   }
 
   switch (type) {
-    case GqlPoolType.CowAmm:
+    case GqlPoolTypeValues.CowAmm:
       return (
         <TagWrapper pl="6px">
           <ProtocolIcon protocol={Protocol.CowAmm} />
@@ -60,24 +60,24 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
         </TagWrapper>
       )
 
-    case GqlPoolType.Weighted:
+    case GqlPoolTypeValues.Weighted:
       return (
         <TagWrapper pl="6px">
           <Text {...TEXT_PROPS}>Weighted</Text>
         </TagWrapper>
       )
 
-    case GqlPoolType.Stable:
-    case GqlPoolType.PhantomStable:
-    case GqlPoolType.ComposableStable:
-    case GqlPoolType.MetaStable:
+    case GqlPoolTypeValues.Stable:
+    case GqlPoolTypeValues.PhantomStable:
+    case GqlPoolTypeValues.ComposableStable:
+    case GqlPoolTypeValues.MetaStable:
       return (
         <TagWrapper pl="8px">
           <Text {...TEXT_PROPS}>Stable</Text>
         </TagWrapper>
       )
 
-    case GqlPoolType.Fx:
+    case GqlPoolTypeValues.Fx:
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Xave} />
@@ -85,14 +85,14 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
         </TagWrapper>
       )
 
-    case GqlPoolType.LiquidityBootstrapping:
+    case GqlPoolTypeValues.LiquidityBootstrapping:
       return (
         <TagWrapper pl="6px">
           <Text {...TEXT_PROPS}>LBP</Text>
         </TagWrapper>
       )
 
-    case GqlPoolType.Gyro:
+    case GqlPoolTypeValues.Gyro:
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Gyro} />
@@ -100,7 +100,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
         </TagWrapper>
       )
 
-    case GqlPoolType.Gyro3:
+    case GqlPoolTypeValues.Gyro3:
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Gyro} />
@@ -108,7 +108,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
         </TagWrapper>
       )
 
-    case GqlPoolType.Gyroe:
+    case GqlPoolTypeValues.Gyroe:
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Gyro} />
@@ -116,7 +116,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
         </TagWrapper>
       )
 
-    case GqlPoolType.QuantAmmWeighted:
+    case GqlPoolTypeValues.QuantAmmWeighted:
       return (
         <CustomPopover
           bodyText="BTFs by QuantAMM dynamically adjust pool weights to capitalize on price movements. For example, a BTF pool can automatically increase its WBTC allocation when the BTF strategy thinks the value will rise faster than ETH. This allows LPs to earn both trading fees and profits from underlying asset appreciation through continuous, responsive, fully on-chain TradFi-style strategies."
@@ -131,7 +131,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
         </CustomPopover>
       )
 
-    case GqlPoolType.Reclamm:
+    case GqlPoolTypeValues.Reclamm:
       return (
         <TagWrapper pl="8px">
           <Text {...TEXT_PROPS}>AutoRange</Text>

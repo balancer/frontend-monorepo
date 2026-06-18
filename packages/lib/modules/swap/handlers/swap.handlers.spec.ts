@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import type { ApolloClient } from '@apollo/client'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { NativeWrapHandler } from './NativeWrap.handler'
 import { AuraBalSwapHandler } from './AuraBalSwap.handler'
 import {
@@ -15,7 +15,7 @@ vi.mock('@repo/lib/config/app.config', async importOriginal => {
     ...actual,
     getNetworkConfig: vi.fn(() => ({
       chainId: 1,
-      chain: GqlChain.Mainnet,
+      chain: GqlChainValues.Mainnet,
       tokens: {
         addresses: {
           wNativeAsset: TEST_ADDRESSES.weth,

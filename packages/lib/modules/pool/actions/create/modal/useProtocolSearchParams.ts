@@ -2,7 +2,8 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { isCowProtocol, isBalancerProtocol } from '../helpers'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { PoolType } from '@balancer/sdk'
 
 interface UseProtocolSearchParams {
@@ -17,7 +18,7 @@ export function useProtocolSearchParams({ poolType }: UseProtocolSearchParams) {
 
   const isProtocolParamCow = !!protocolSearchParam && isCowProtocol(protocolSearchParam)
   const isProtocolParamBalancer = !!protocolSearchParam && isBalancerProtocol(protocolSearchParam)
-  const isCowAmm = poolType === GqlPoolType.CowAmm
+  const isCowAmm = poolType === GqlPoolTypeValues.CowAmm
 
   const showCowAmmWarning = isProtocolParamCow && !isCowAmm && !isFirstStep
   const showBalancerWarning = isProtocolParamBalancer && isCowAmm && !isFirstStep

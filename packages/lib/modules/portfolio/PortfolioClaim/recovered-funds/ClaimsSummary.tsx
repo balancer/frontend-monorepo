@@ -1,7 +1,7 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useRecoveredFundsClaims } from './RecoveredFundsClaimsProvider'
 import { Badge, Card, Checkbox, Divider, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import {
@@ -30,7 +30,7 @@ export function ClaimsSummary({
 
   return (
     <AnimateHeightChange spacing="md">
-      {isMobile && <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={steps} />}
+      {isMobile && <MobileStepTracker chain={GqlChainValues.Mainnet} transactionSteps={steps} />}
 
       <Text fontSize="sm" variant="secondary">
         Some of your funds from affected v2 Composable Stable liquidity pools have been recovered.

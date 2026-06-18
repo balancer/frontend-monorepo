@@ -1,4 +1,4 @@
-import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import { buildDefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'

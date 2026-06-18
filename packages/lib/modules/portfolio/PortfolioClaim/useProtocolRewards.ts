@@ -7,7 +7,7 @@ import { useTokens } from '../../tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 
 export const claimableVeBalRewardsTokens: string[] = [
   '0xba100000625a3754423978a60c9317c58a424e3D', // BAL
@@ -18,7 +18,7 @@ export function useProtocolRewards() {
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor, getToken, isLoadingTokens } = useTokens()
 
-  const networkConfig = getNetworkConfig(GqlChain.Mainnet)
+  const networkConfig = getNetworkConfig(GqlChainValues.Mainnet)
 
   const {
     data: protocolRewardsData = [],

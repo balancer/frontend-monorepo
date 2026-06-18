@@ -2,7 +2,8 @@ import { Control } from 'react-hook-form'
 import { PoolCreationForm } from '../../types'
 import { VStack, Text, HStack } from '@chakra-ui/react'
 import { Controller } from 'react-hook-form'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { getChainShortName } from '@repo/lib/config/app.config'
@@ -30,7 +31,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
     .filter(
       network =>
         // balancer v3 pool creation not yet supported on these networks
-        ![GqlChain.Zkevm, GqlChain.Mode, GqlChain.Fraxtal, GqlChain.Polygon].includes(network)
+        ![GqlChainValues.Zkevm, GqlChainValues.Mode, GqlChainValues.Fraxtal, GqlChainValues.Polygon].includes(network)
     )
     .map(network => ({
       value: network,
