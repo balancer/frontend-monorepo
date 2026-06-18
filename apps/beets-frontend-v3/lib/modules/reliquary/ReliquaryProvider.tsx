@@ -1,9 +1,10 @@
 import { useState, PropsWithChildren, createContext } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import type {
-  GqlChain,
-  GqlPoolSnapshotDataRange,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChainValues,
+  GqlPoolSnapshotDataRangeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
@@ -37,13 +38,15 @@ export type ReliquaryAddLiquidityMaturityImpact = {
   staysMax: boolean
 }
 
-const CHAIN = GqlChain.Sonic
+const CHAIN = GqlChainValues.Sonic
 
 export function useReliquaryLogic() {
   const { pool } = usePool()
   const { isConnected } = useUserAccount()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
-  const [range, setRange] = useState<GqlPoolSnapshotDataRange>(GqlPoolSnapshotDataRange.ThirtyDays)
+  const [range, setRange] = useState<GqlPoolSnapshotDataRange>(
+    GqlPoolSnapshotDataRangeValues.ThirtyDays
+  )
   const { priceFor } = useTokens()
 
   const networkConfig = getNetworkConfig(CHAIN)

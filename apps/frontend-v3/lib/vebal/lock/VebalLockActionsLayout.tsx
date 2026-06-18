@@ -2,7 +2,7 @@
 
 import { HStack, Text } from '@chakra-ui/react'
 import { FocussedActionLayout } from '@repo/lib/shared/components/layout/FocussedActionLayout'
-import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { PropsWithChildren } from 'react'
 import { VebalLockProvider } from './VebalLockProvider'
 import { useVeBalRedirectPath } from '../vebal-navigation'
@@ -15,7 +15,7 @@ export function VebalLockActionsLayout({ children }: Props) {
 
   return (
     <FocussedActionLayout
-      chain={GqlChain.Mainnet}
+      chain={GqlChainValues.Mainnet}
       leftSlot={
         <HStack px="sm">
           <Text color="font.light" lineHeight="1">

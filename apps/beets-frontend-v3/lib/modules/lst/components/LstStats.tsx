@@ -8,11 +8,11 @@ import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { useGetStakedSonicData } from '../hooks/useGetStakedSonicData'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { Address } from 'viem'
 
-const CHAIN = GqlChain.Sonic
+const CHAIN = GqlChainValues.Sonic
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {

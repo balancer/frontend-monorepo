@@ -15,7 +15,7 @@ import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-s
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { Address } from 'viem'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
@@ -93,10 +93,10 @@ export function VebalLockModal({
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop ? (
-          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+          <DesktopStepTracker chain={GqlChainValues.Mainnet} transactionSteps={transactionSteps} />
         ) : null}
         <TransactionModalHeader
-          chain={GqlChain.Mainnet}
+          chain={GqlChainValues.Mainnet}
           label={`${getPreviewLabel(lockMode)} preview`}
           txHash={lockTxHash}
         />
@@ -104,7 +104,10 @@ export function VebalLockModal({
         <ModalBody>
           <AnimateHeightChange spacing="md">
             {isMobile ? (
-              <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+              <MobileStepTracker
+                chain={GqlChainValues.Mainnet}
+                transactionSteps={transactionSteps}
+              />
             ) : null}
             {isLoading ? (
               <Text>Loading data...</Text>
@@ -115,7 +118,7 @@ export function VebalLockModal({
                   <Card variant="modalSubSection">
                     <TokenRowWithDetails
                       address={vebalBptToken.address as Address}
-                      chain={GqlChain.Mainnet}
+                      chain={GqlChainValues.Mainnet}
                       details={
                         lockDuration.lockedUntilDateFormatted
                           ? [

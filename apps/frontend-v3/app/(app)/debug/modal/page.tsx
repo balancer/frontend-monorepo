@@ -2,7 +2,7 @@
 
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
-import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useDisclosure } from '@chakra-ui/hooks'
 import {
   Button,
@@ -32,7 +32,11 @@ export default function ModalPage() {
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <SuccessOverlay startAnimation={!!txHash} />
         <ModalContent>
-          <TransactionModalHeader chain={GqlChain.Mainnet} label="Add liquidity" txHash={txHash} />
+          <TransactionModalHeader
+            chain={GqlChainValues.Mainnet}
+            label="Add liquidity"
+            txHash={txHash}
+          />
           <ModalCloseButton />
           <motion.div animate={{ height: 'auto' }}>
             <AnimatePresence initial={false}>

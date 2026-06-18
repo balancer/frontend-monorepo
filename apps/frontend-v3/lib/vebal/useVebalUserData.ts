@@ -1,8 +1,6 @@
-import {
-  GetVeBalUserDocument,
-  GqlChain,
-  GqlVeBalLockSnapshot,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GetVeBalUserDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type { GqlVeBalLockSnapshot } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import { useQuery } from '@apollo/client/react'
 import { useVeBALBalance } from './useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -14,7 +12,7 @@ export function useVebalUserData() {
   const apiResponse = useQuery(GetVeBalUserDocument, {
     variables: {
       address: userAddress.toLowerCase(),
-      chain: GqlChain.Mainnet,
+      chain: GqlChainValues.Mainnet,
     },
   })
 

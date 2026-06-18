@@ -5,7 +5,7 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { useRef, useState } from 'react'
 
 export default function TokenSelectPage() {
@@ -26,7 +26,7 @@ export default function TokenSelectPage() {
         Open modal
       </Button>
       <TokenSelectModal
-        chain={GqlChain.Mainnet}
+        chain={GqlChainValues.Mainnet}
         finalFocusRef={tokenSelectBtn}
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
