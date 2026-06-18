@@ -1,6 +1,31 @@
 packages:
-  - "apps/*"
-  - "packages/*"
+  - 'apps/*'
+  - 'packages/*'
+
+allowBuilds:
+  '@parcel/watcher': true
+  '@sentry/cli': true
+  bufferutil: true
+  esbuild: true
+  msw: true
+  protobufjs: true
+  sharp: true
+  utf-8-validate: true
 
 catalog:
-  "@apollo/client": "4.2.3"
+  '@apollo/client': '4.2.3'
+
+peerDependencyRules:
+  allowedVersions:
+    '@types/react': ^19.0.0
+    '@types/react-dom': ^19.0.0
+    react: ^19.0.0
+    react-dom: ^19.0.0
+
+overrides:
+  '@types/react': '19.2'
+  '@types/react-dom': '19.2'
+
+publicHoistPattern:
+  - '*graphql*' # https://github.com/vercel/next.js/issues/68805
+  - '@reown/*' # Fix for @reown/appkit resolution in Next + pnpm
