@@ -75,10 +75,11 @@ describe('fetches onchain and overrides user balances', async () => {
       "__typename": "GqlPoolStakingGauge",
       "gaugeAddress": "",
       "id": "0x2d42910d826e5500579d121596e98a6eb33c0a1b",
+      "otherGauges": [],
       "rewards": [],
       "status": "ACTIVE",
       "version": 2,
-      "workingSupply": "",
+        "workingSupply": "",
     }
   `)
 
