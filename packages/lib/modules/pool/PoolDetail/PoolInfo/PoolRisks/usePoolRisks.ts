@@ -1,5 +1,8 @@
 import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GqlChainValues, GqlHookTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlChainValues,
+  GqlHookTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import {
   isMetaStable,
   isStable,

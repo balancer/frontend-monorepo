@@ -1,8 +1,9 @@
 import { useQuery } from '@apollo/client/react'
+import { GetPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import {
-  GetPoolsDocument,
-  } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolOrderByValues, GqlPoolOrderDirectionValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+  GqlPoolOrderByValues,
+  GqlPoolOrderDirectionValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getGqlPoolType, isWeightedPool } from '../helpers'
 import { useWatch } from 'react-hook-form'

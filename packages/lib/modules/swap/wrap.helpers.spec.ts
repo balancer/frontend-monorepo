@@ -103,25 +103,29 @@ describe('wrap.helpers', () => {
 
   describe('isSupportedWrap', () => {
     it('returns true for configured wrap pair in either direction', () => {
-      expect(isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)).toBe(
-        true
-      )
-      expect(isSupportedWrap(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChainValues.Mainnet)).toBe(
-        true
-      )
+      expect(
+        isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)
+      ).toBe(true)
+      expect(
+        isSupportedWrap(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChainValues.Mainnet)
+      ).toBe(true)
     })
 
     it('returns false when no wrappers configured', () => {
       mockNetworkConfig = emptyWrappersConfig
-      expect(isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)).toBe(
-        false
-      )
+      expect(
+        isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)
+      ).toBe(false)
     })
   })
 
   describe('getWrapConfig', () => {
     it('returns correct wrapper config for valid pair', () => {
-      const config = getWrapConfig(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)
+      const config = getWrapConfig(
+        TEST_ADDRESSES.steth,
+        TEST_ADDRESSES.wsteth,
+        GqlChainValues.Mainnet
+      )
       expect(config.baseToken).toBe(TEST_ADDRESSES.steth)
       expect(config.wrappedToken).toBe(TEST_ADDRESSES.wsteth)
       expect(config.swapHandler).toBe(SupportedWrapHandler.LIDO)

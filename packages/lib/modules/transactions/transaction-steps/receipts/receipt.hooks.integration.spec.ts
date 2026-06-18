@@ -271,7 +271,12 @@ describe('queries swap transaction in non polygon networks', () => {
     const txHash = '0x2ecd5a98edb0fb58160a85d913ab1623d7f48cc72b14567059f831bf3d1686d5'
 
     const protocolVersion = 3
-    const result = await testSwapReceipt(userAddress, txHash, GqlChainValues.Sepolia, protocolVersion)
+    const result = await testSwapReceipt(
+      userAddress,
+      txHash,
+      GqlChainValues.Sepolia,
+      protocolVersion
+    )
 
     const stataEthDai = '0xde46e43f46ff74a23a65ebb0580cbe3dfe684a17'
 

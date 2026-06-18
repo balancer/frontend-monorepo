@@ -45,7 +45,10 @@ const POOL_SPECIFIC_TABS: PoolTabsMap = {
     { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity profile' },
     ...TABS_WITH_FEES,
   ],
-  [GqlPoolTypeValues.Reclamm]: [{ value: PoolChartTab.AUTORANGE, label: 'AutoRange' }, ...TABS_WITH_FEES],
+  [GqlPoolTypeValues.Reclamm]: [
+    { value: PoolChartTab.AUTORANGE, label: 'AutoRange' },
+    ...TABS_WITH_FEES,
+  ],
   [GqlPoolTypeValues.LiquidityBootstrapping]: [
     { value: PoolChartTab.PRICE, label: 'Price' },
     ...TABS_WITH_FEES,

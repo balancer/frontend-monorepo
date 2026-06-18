@@ -22,7 +22,10 @@ import {
   usdcUsdtAaveBoosted,
   v3SepoliaNestedBoosted,
 } from './__mocks__/pool-examples/boosted'
-import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlChainValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { zeroAddress } from 'viem'
 
 describe('getPoolActionableTokens', () => {

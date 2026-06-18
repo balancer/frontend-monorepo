@@ -1,6 +1,9 @@
 import type { GqlPoolAprItem } from '../services/api/generated/graphql-derived-types'
 import type { GqlChain, GqlHookType, GqlPoolAprItemType } from '../services/api/generated/graphql'
-import { GqlHookTypeValues, GqlPoolAprItemTypeValues } from '../services/api/generated/graphql-enums'
+import {
+  GqlHookTypeValues,
+  GqlPoolAprItemTypeValues,
+} from '../services/api/generated/graphql-enums'
 import { bn } from '../utils/numbers'
 import type BigNumber from 'bignumber.js'
 
@@ -79,7 +82,9 @@ export function useAprTooltip({
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
 
   // Dynamic swap fees (MEV Capture, StableSurge)
-  const dynamicSwapFee = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.DynamicSwapFee24h)
+  const dynamicSwapFee = aprItems.find(
+    item => item.type === GqlPoolAprItemTypeValues.DynamicSwapFee24h
+  )
   const dynamicSwapFeesDisplayed = numberFormatter(
     dynamicSwapFee ? dynamicSwapFee.apr.toString() : '0'
   )
@@ -145,7 +150,9 @@ export function useAprTooltip({
   const surplusIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(surplusIncentives)
 
   // maBEETS Rewards (Beets)
-  const maBeetsReward = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.MaBeetsEmissions)
+  const maBeetsReward = aprItems.find(
+    item => item.type === GqlPoolAprItemTypeValues.MaBeetsEmissions
+  )
 
   const maBeetsRewardsDisplayed = numberFormatter(
     maBeetsReward ? maBeetsReward.apr.toString() : '0'

@@ -1,8 +1,14 @@
 import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
-import type { GqlPoolAprItem, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type {
+  GqlPoolAprItem,
+  GqlPoolTokenDetail,
+} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import { GetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import type { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolAprItemTypeValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlPoolAprItemTypeValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { Numberish, bn, fNum, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import type BigNumber from 'bignumber.js'
 import { cloneDeep, invert } from 'lodash'

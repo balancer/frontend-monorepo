@@ -1,10 +1,16 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { PartnerVariant, PoolDisplayType, PoolFilterType } from '@repo/lib/modules/pool/pool.types'
-import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlChainValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { isProd, isDev, isStaging } from '@repo/lib/config/app.config'
 
 const prodHiddenPoolTypes = [GqlPoolTypeValues.LiquidityBootstrapping] satisfies PoolFilterType[]
-const hiddenPoolTypes: PoolFilterType[] = [GqlPoolTypeValues.Fx, ...(isProd ? prodHiddenPoolTypes : [])]
+const hiddenPoolTypes: PoolFilterType[] = [
+  GqlPoolTypeValues.Fx,
+  ...(isProd ? prodHiddenPoolTypes : []),
+]
 
 export const ProjectConfigBalancer: ProjectConfig = {
   projectId: 'balancer',
@@ -41,7 +47,12 @@ export const ProjectConfigBalancer: ProjectConfig = {
   defaultNetwork: GqlChainValues.Mainnet,
   ensNetwork: GqlChainValues.Mainnet,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
-  merklRewardsChains: [GqlChainValues.Mainnet, GqlChainValues.Arbitrum, GqlChainValues.Base, GqlChainValues.Mode],
+  merklRewardsChains: [
+    GqlChainValues.Mainnet,
+    GqlChainValues.Arbitrum,
+    GqlChainValues.Base,
+    GqlChainValues.Mode,
+  ],
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: ['DYNAMIC_ECLP'],

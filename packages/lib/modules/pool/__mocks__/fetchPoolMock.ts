@@ -3,7 +3,11 @@ import fetch from 'cross-fetch'
 import { visit } from 'graphql/language/visitor'
 import { print } from 'graphql'
 import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GetPoolDocument, GetPoolQueryVariables, GetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetPoolDocument,
+  GetPoolQueryVariables,
+  GetPoolQuery,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { nested50WETH_50_3poolId } from '@repo/lib/debug-helpers'
 import { Address } from 'viem'

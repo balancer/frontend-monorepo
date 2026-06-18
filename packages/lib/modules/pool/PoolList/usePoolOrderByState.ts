@@ -4,7 +4,11 @@ import { GqlPoolOrderByValues } from '@repo/lib/shared/services/api/generated/gr
 import { useEffect, useRef } from 'react'
 import { usePoolList } from './PoolListProvider'
 
-const defaultOrderBy = [GqlPoolOrderByValues.TotalLiquidity, GqlPoolOrderByValues.Volume24h, GqlPoolOrderByValues.Apr]
+const defaultOrderBy = [
+  GqlPoolOrderByValues.TotalLiquidity,
+  GqlPoolOrderByValues.Volume24h,
+  GqlPoolOrderByValues.Apr,
+]
 
 export function usePoolOrderByState() {
   const {

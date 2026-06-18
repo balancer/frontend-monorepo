@@ -1,6 +1,19 @@
-import type { GqlNestedPool, QuantAmmWeightSnapshot, GqlPoolLiquidityBootstrappingV3, GqlPoolFixedPriceLbp } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GetPoolsQuery, GetPoolsQueryVariables, GetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
-import type { GqlChain, GqlPoolType, GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
+import type {
+  GqlNestedPool,
+  QuantAmmWeightSnapshot,
+  GqlPoolLiquidityBootstrappingV3,
+  GqlPoolFixedPriceLbp,
+} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import {
+  GetPoolsQuery,
+  GetPoolsQueryVariables,
+  GetPoolQuery,
+} from '@repo/lib/shared/services/api/generated/graphql'
+import type {
+  GqlChain,
+  GqlPoolType,
+  GqlPoolOrderBy,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
@@ -97,7 +110,11 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
     GqlPoolTypeValues.MetaStable,
   ],
   [GqlPoolTypeValues.LiquidityBootstrapping]: [GqlPoolTypeValues.LiquidityBootstrapping],
-  [GqlPoolTypeValues.Gyro]: [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.Gyroe],
+  [GqlPoolTypeValues.Gyro]: [
+    GqlPoolTypeValues.Gyro,
+    GqlPoolTypeValues.Gyro3,
+    GqlPoolTypeValues.Gyroe,
+  ],
   [GqlPoolTypeValues.CowAmm]: [GqlPoolTypeValues.CowAmm],
   [GqlPoolTypeValues.Fx]: [GqlPoolTypeValues.Fx],
   [GqlPoolTypeValues.QuantAmmWeighted]: [GqlPoolTypeValues.QuantAmmWeighted],

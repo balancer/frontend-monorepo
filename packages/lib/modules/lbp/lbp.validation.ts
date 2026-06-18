@@ -2,7 +2,10 @@ import { z } from 'zod'
 import { UseFormReturn } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { addDays, isAfter, parseISO } from 'date-fns'
-import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlChainValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { ProjectInfoForm, SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
 import { isSaleStartValid } from './steps/sale-structure/helpers'
 import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'

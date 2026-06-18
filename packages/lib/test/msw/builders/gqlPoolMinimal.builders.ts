@@ -1,5 +1,8 @@
 import type { GqlPoolMinimal } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlChainValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock } from 'vitest-mock-extended'
 

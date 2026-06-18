@@ -5,7 +5,11 @@ import {
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolOrderByValues, GqlPoolOrderDirectionValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlPoolOrderByValues,
+  GqlPoolOrderDirectionValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { uniq } from 'lodash'
 import {
   parseAsArrayOf,
@@ -64,7 +68,9 @@ const poolListQueryStateParsers = {
   poolTypes: parseAsArrayOf(
     parseAsStringEnum<PoolFilterType>(poolTypeFilters as unknown as PoolFilterType[])
   ).withDefault([]),
-  networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChainValues))).withDefault([]),
+  networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChainValues))).withDefault(
+    []
+  ),
   protocolVersion: parseAsInteger,
   textSearch: parseAsString,
   userAddress: parseAsString,

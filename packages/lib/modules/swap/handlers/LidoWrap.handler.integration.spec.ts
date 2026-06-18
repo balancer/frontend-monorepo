@@ -1,4 +1,7 @@
-import { GqlChainValues, GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlChainValues,
+  GqlSorSwapTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { wstEthAddress } from '@repo/lib/debug-helpers'
 

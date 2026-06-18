@@ -1,6 +1,9 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
-import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlChainValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 export const beetsSupportedNetworks = [GqlChainValues.Sonic]
@@ -21,7 +24,11 @@ export const ProjectConfigBeets: ProjectConfig = {
   options: {
     poolDisplayType: PoolDisplayType.Name,
     hidePoolTags: ['RWA', 'VE8020'],
-    hidePoolTypes: [GqlPoolTypeValues.LiquidityBootstrapping, GqlPoolTypeValues.CowAmm, GqlPoolTypeValues.Fx],
+    hidePoolTypes: [
+      GqlPoolTypeValues.LiquidityBootstrapping,
+      GqlPoolTypeValues.CowAmm,
+      GqlPoolTypeValues.Fx,
+    ],
     hideProtocolVersion: ['cow'],
     showPoolName: true,
     showMaBeets: true,

@@ -3,7 +3,10 @@ import * as echarts from 'echarts/core'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { format, millisecondsToSeconds, secondsToMinutes } from 'date-fns'
 import type { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues, GqlPoolEventTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import {
+  GqlChainValues,
+  GqlPoolEventTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'

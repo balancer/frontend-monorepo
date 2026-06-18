@@ -71,7 +71,11 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
-          <DesktopStepTracker chain={GqlChainValues.Mainnet} isTxBatch={false} transactionSteps={steps} />
+          <DesktopStepTracker
+            chain={GqlChainValues.Mainnet}
+            isTxBatch={false}
+            transactionSteps={steps}
+          />
         )}
 
         <TransactionModalHeader

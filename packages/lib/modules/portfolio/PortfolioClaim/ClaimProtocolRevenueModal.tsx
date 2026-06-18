@@ -59,7 +59,10 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
         <ModalBody>
           <AnimateHeightChange spacing="sm" w="full">
             {isMobile && (
-              <MobileStepTracker chain={GqlChainValues.Mainnet} transactionSteps={transactionSteps} />
+              <MobileStepTracker
+                chain={GqlChainValues.Mainnet}
+                transactionSteps={transactionSteps}
+              />
             )}
 
             <Card variant="modalSubSection">

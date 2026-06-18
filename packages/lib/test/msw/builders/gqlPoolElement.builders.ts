@@ -10,8 +10,15 @@ import {
   aTokenExpandedMock,
   someGqlTokenMocks,
 } from '@repo/lib/modules/tokens/__mocks__/token.builders'
-import type { GqlPoolElement, GqlPoolTokenDetail, GqlPoolWeighted } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type {
+  GqlPoolElement,
+  GqlPoolTokenDetail,
+  GqlPoolWeighted,
+} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import {
+  GqlChainValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock } from 'vitest-mock-extended'
 import { aGqlStakingMock } from './gqlStaking.builders'

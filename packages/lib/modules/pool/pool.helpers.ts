@@ -1,8 +1,24 @@
 import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import type { GqlPoolBase, GqlPoolFixedPriceLbp, GqlPoolGyro, GqlPoolLiquidityBootstrappingV3, GqlPoolStakingGauge, GqlPoolStakingOtherGauge, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type {
+  GqlPoolBase,
+  GqlPoolFixedPriceLbp,
+  GqlPoolGyro,
+  GqlPoolLiquidityBootstrappingV3,
+  GqlPoolStakingGauge,
+  GqlPoolStakingOtherGauge,
+  GqlPoolTokenDetail,
+} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import { HookFragment } from '@repo/lib/shared/services/api/generated/graphql'
-import type { GqlChain, GqlHookType, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues, GqlHookTypeValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type {
+  GqlChain,
+  GqlHookType,
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChainValues,
+  GqlHookTypeValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { bn, isTooSmallToRemoveUsd } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
@@ -69,7 +85,9 @@ export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'tags'>) {
 }
 
 export function isGyro(poolType: GqlPoolType) {
-  return [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.Gyroe].includes(poolType)
+  return [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.Gyroe].includes(
+    poolType
+  )
 }
 
 export function isClp(poolType: GqlPoolType) {
@@ -89,7 +107,9 @@ export function isUnknownType(poolType: any): boolean {
 }
 
 export function isLiquidityBootstrapping(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolTypeValues.LiquidityBootstrapping || poolType === GqlPoolTypeValues.FixedLbp
+  return (
+    poolType === GqlPoolTypeValues.LiquidityBootstrapping || poolType === GqlPoolTypeValues.FixedLbp
+  )
 }
 
 export function isLBP(poolType: GqlPoolType): boolean {

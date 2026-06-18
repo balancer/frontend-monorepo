@@ -1,4 +1,7 @@
-import type { GqlPoolUserBalance, GqlUserStakedBalance } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type {
+  GqlPoolUserBalance,
+  GqlUserStakedBalance,
+} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { bn, safeSum, isValidNumber } from '@repo/lib/shared/utils/numbers'
