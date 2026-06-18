@@ -293,6 +293,7 @@ export function supportsProportionalAddLiquidityReasons(pool: Pool): string | un
     if (pool.type === GqlPoolTypeValues.Stable) return supportsProportionalTemplate('v2 stable')
     if (pool.type === GqlPoolTypeValues.MetaStable) {
       return supportsProportionalTemplate('v2 metastable')
+    }
   }
 
   // WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK
