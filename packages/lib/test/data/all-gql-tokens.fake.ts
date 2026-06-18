@@ -36,6 +36,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -51,6 +53,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -66,6 +70,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -81,6 +87,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -96,6 +104,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -111,6 +121,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: true,
     isBufferAllowed: true,
     coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -126,6 +137,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: false,
     isBufferAllowed: true,
     coingeckoId: 'usd-coin',
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -141,6 +153,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: true,
     isBufferAllowed: true,
     coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -156,6 +169,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: false,
     isBufferAllowed: true,
     coingeckoId: 'tether',
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -171,6 +185,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: false,
     isBufferAllowed: true,
     coingeckoId: 'dai',
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -186,6 +201,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: true,
     isBufferAllowed: true,
     coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -200,6 +216,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
     isErc4626: false,
   },
   {
@@ -215,6 +233,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
     isErc4626: false,
   },
   {
@@ -231,6 +251,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: false,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -246,6 +268,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: false,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -260,6 +284,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: false,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -274,6 +300,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -289,6 +317,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     // Used in 50WETH-50-3pool nested pool tests
@@ -305,6 +335,8 @@ export const allFakeGqlTokens: GqlToken[] = [
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
 ]
 

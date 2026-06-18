@@ -84,7 +84,9 @@ function usePoolActivityLogic() {
           item.tokens.forEach(token => {
             const tokenInfo =
               getToken(token.address, _chain) ||
-              (pool.poolTokens.find(poolToken => poolToken.address === token.address) as ApiToken)
+              (pool.poolTokens.find(
+                poolToken => poolToken.address === token.address
+              ) as unknown as ApiToken)
 
             tokens.push({
               token: tokenInfo,
@@ -99,11 +101,15 @@ function usePoolActivityLogic() {
         ) {
           const tokenIn =
             getToken(item.tokenIn.address, _chain) ||
-            (pool.poolTokens.find(token => token.address === item.tokenIn.address) as ApiToken)
+            (pool.poolTokens.find(
+              token => token.address === item.tokenIn.address
+            ) as unknown as ApiToken)
 
           const tokenOut =
             getToken(item.tokenOut.address, _chain) ||
-            (pool.poolTokens.find(token => token.address === item.tokenOut.address) as ApiToken)
+            (pool.poolTokens.find(
+              token => token.address === item.tokenOut.address
+            ) as unknown as ApiToken)
 
           tokens.push({
             token: tokenIn,

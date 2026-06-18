@@ -199,7 +199,7 @@ export function usePoolAlerts(pool: Pool) {
           }
         }
 
-        nestedPool.tokens.forEach(nestedToken => {
+        nestedPool.tokens.forEach((nestedToken: any) => {
           if (!hasRateProvider(nestedToken)) {
             return
           }

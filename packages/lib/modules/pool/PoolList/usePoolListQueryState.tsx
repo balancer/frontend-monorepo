@@ -6,6 +6,7 @@ import {
   GqlPoolOrderDirection,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
+  GqlChainValues,
   GqlPoolOrderByValues,
   GqlPoolOrderDirectionValues,
   GqlPoolTypeValues,

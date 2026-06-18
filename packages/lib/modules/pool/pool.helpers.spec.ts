@@ -137,7 +137,7 @@ describe('shouldBlockAddLiquidity', () => {
         address: '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f',
         reviewed: true,
         summary: 'safe',
-      }
+      } as any
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -160,7 +160,7 @@ describe('shouldBlockAddLiquidity', () => {
         address: '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f',
         reviewed: true,
         summary: 'safe',
-      }
+      } as any
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)

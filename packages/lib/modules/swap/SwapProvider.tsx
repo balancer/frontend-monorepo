@@ -150,7 +150,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       selectedChain,
       swapState.swapType,
       client,
-      tokens as ApiToken[] // for swaps page the token select modal only allows listed tokens
+      tokens as unknown as ApiToken[] // for swaps page the token select modal only allows listed tokens
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
@@ -305,7 +305,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
           amount: amount,
           scaledAmount: scaleTokenAmount(
             amount,
-            lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
+            lbpPool.poolTokens[lbpPool.projectTokenIndex] as unknown as ApiToken
           ),
         }
       : /*
@@ -356,7 +356,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
           amount: amount,
           scaledAmount: scaleTokenAmount(
             amount,
-            lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
+            lbpPool.poolTokens[lbpPool.projectTokenIndex] as unknown as ApiToken
           ),
         }
       : /*
@@ -514,7 +514,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     wethIsEth,
     swapAction,
     tokenInInfo:
-      isLbpSwap && !isLbpProjectTokenBuy && lbpToken ? (lbpToken as ApiToken) : tokenInInfo,
+      isLbpSwap && !isLbpProjectTokenBuy && lbpToken
+        ? (lbpToken as unknown as ApiToken)
+        : tokenInInfo,
     tokenOutInfo,
     isLbpSwap: !!isLbpSwap,
     isLbpProjectTokenBuy: !!isLbpProjectTokenBuy,

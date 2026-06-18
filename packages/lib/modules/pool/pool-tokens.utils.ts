@@ -23,7 +23,7 @@ export function getCompositionTokens(pool: PoolCore | GqlNestedPool | FeaturedPo
    Used in the pool header and in the pools list.
 */
 export function getUserReferenceTokens(pool: PoolCore | FeaturedPool): PoolToken[] {
-  if (isBoosted(pool)) {
+  if (isBoosted(pool as Pick<PoolCore, 'protocolVersion' | 'tags'>)) {
     return sortByIndex(
       pool.poolTokens.map(token =>
         token.isErc4626 && token.useUnderlyingForAddRemove
@@ -123,7 +123,7 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
             nestedToken,
             { ...nestedToken.underlyingToken, index: nestedToken.index },
           ] as TokenCore[])
-        : [nestedToken as TokenCore]
+        : [nestedToken as unknown as TokenCore]
     )
   }
 
@@ -210,9 +210,9 @@ export function getBoostedActionableTokens(pool: Pool): ApiToken[] {
               wrappedToken: token,
               underlyingToken: undefined,
               isErc4626: false, // TODO: delete this when we migrate to useWrappedForAddRemove/useUnderlyingForAddRemove
-            } as ApiToken,
+            } as unknown as ApiToken,
           ]
-        : [token as ApiToken]
+        : [token as unknown as ApiToken]
     )
     .filter((token): token is ApiToken => token !== undefined)
 }
@@ -220,8 +220,8 @@ export function getBoostedActionableTokens(pool: Pool): ApiToken[] {
 // Returns wrapped boosted tokens
 export function getWrappedBoostedTokens(pool: Pool | GqlPoolBase): ApiToken[] {
   return pool.poolTokens.filter(token =>
-    shouldUseUnderlyingToken(token as ApiToken, pool)
-  ) as ApiToken[]
+    shouldUseUnderlyingToken(token as unknown as ApiToken, pool)
+  ) as unknown as ApiToken[]
 }
 
 // Returns the child tokens (children of a parent nestedBpt)
@@ -278,7 +278,7 @@ function getPoolActionableTokensWithoutWrapUnderlying(pool: Pool): ApiToken[] {
     return excludeNestedBptTokens(getBoostedActionableTokens(pool))
   }
 
-  return excludeNestedBptTokens(pool.poolTokens as ApiToken[])
+  return excludeNestedBptTokens(pool.poolTokens as unknown as ApiToken[])
 }
 
 export function getDefaultWrapUnderlying(pool: Pool): boolean[] {

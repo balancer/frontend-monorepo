@@ -1,5 +1,4 @@
 import { Badge, BadgeProps, Box, Heading, HStack, Text, Wrap } from '@chakra-ui/react'
-import type { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import type { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../../tokens/TokenIcon'
@@ -55,7 +54,7 @@ function NestedTokenPill({
   chain,
   iconSize = 24,
 }: {
-  nestedTokens: GqlPoolTokenDetail[]
+  nestedTokens: any[]
   chain: GqlChain
   iconSize?: number
 }) {

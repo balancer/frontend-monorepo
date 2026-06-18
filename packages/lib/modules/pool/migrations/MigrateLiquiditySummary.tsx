@@ -18,7 +18,7 @@ export function MigrateLiquiditySummary() {
 
   const { oldPool, newPool, migrationSteps, amounts, hasQuoteContext } = useMigrateLiquidity()
 
-  const { usdValueFor } = useTotalUsdValue((oldPool?.poolTokens || []) as ApiToken[])
+  const { usdValueFor } = useTotalUsdValue((oldPool?.poolTokens || []) as unknown as ApiToken[])
   const totalUSDValue = usdValueFor(amounts)
 
   return (

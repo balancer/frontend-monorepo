@@ -60,11 +60,13 @@ export function useExpandedPools(pools: Pool[]) {
       const stakedBalancesBalUsd =
         pool.userBalance?.stakedBalances
           ?.filter(balance =>
-            [
-              GqlPoolStakingTypeValues.Gauge,
-              GqlPoolStakingTypeValues.VeBal,
-              GqlPoolStakingTypeValues.FreshBeets,
-            ].includes(balance.stakingType)
+            (
+              [
+                GqlPoolStakingTypeValues.Gauge,
+                GqlPoolStakingTypeValues.VeBal,
+                GqlPoolStakingTypeValues.FreshBeets,
+              ] as string[]
+            ).includes(balance.stakingType)
           )
           .reduce((acc, balance) => acc + Number(balance.balanceUsd), 0) || 0
 

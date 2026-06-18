@@ -9,6 +9,7 @@ import {
   GetPoolQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { nested50WETH_50_3poolId } from '@repo/lib/debug-helpers'
 import { Address } from 'viem'
 

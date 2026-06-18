@@ -27,7 +27,7 @@ import {
 } from './pool.types'
 import { Pool } from './pool.types'
 import { isSameAddress } from '@balancer/sdk'
-import { GqlChainValues } from '@repo/lib/config/networks'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -317,7 +317,7 @@ export function removeHookDataFromPoolIfNecessary(pool: Pool | PoolListItem) {
   const clone = cloneDeep(pool)
 
   if (clone.hook && isSameAddress(clone.hook.address as Address, clone.address as Address)) {
-    delete clone.hook
+    ;(clone as Record<string, unknown>).hook = undefined
   }
 
   return clone

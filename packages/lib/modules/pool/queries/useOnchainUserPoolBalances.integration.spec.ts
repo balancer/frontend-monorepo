@@ -47,7 +47,7 @@ describe('fetches onchain and overrides user balances', async () => {
 
   test('when the pool does not have staking info', async () => {
     const poolMockWithUndefinedStaking = aBalWethPoolElementMock() // Provides 80BAL-20WETH pool by default
-    poolMockWithUndefinedStaking.staking = undefined
+    poolMockWithUndefinedStaking.staking = undefined as any
 
     expect(poolMockWithUndefinedStaking.staking).toBeUndefined()
 

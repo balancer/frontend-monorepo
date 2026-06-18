@@ -85,9 +85,9 @@ export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'tags'>) {
 }
 
 export function isGyro(poolType: GqlPoolType) {
-  return [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.Gyroe].includes(
-    poolType
-  )
+  return (
+    [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.Gyroe] as GqlPoolType[]
+  ).includes(poolType)
 }
 
 export function isClp(poolType: GqlPoolType) {
@@ -324,11 +324,11 @@ export function allClaimableGaugeAddressesFor(pool: ClaimablePool) {
   return addresses
 }
 
-export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
+export function hasReviewedRateProvider(token: GqlPoolTokenDetail | any): boolean {
   return !!token.priceRateProvider && !!token.priceRateProviderData
 }
 
-export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
+export function hasRateProvider(token: GqlPoolTokenDetail | any): boolean {
   const hasNoPriceRateProvider =
     isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
     token.priceRateProvider === zeroAddress ||

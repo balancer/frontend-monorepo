@@ -4,7 +4,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { Pool } from '../pool.types'
 
-export const notAllowedPoolMock: Pool = {
+export const notAllowedPoolMock = {
   id: '0x241df159b03a90455edee61625655fc0ea5fa3dd0002000000000000000003fc',
   address: '0x241df159b03a90455edee61625655fc0ea5fa3dd',
   name: 'EGX-MTLSTR Pool',
@@ -88,4 +88,10 @@ export const notAllowedPoolMock: Pool = {
     },
   ],
   __typename: 'GqlPoolWeighted',
-}
+  hook: null,
+  tags: null,
+  pauseManager: null,
+  swapFeeManager: null,
+  poolCreator: null,
+  lbpParams: null,
+} as unknown as Pool

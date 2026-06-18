@@ -19,7 +19,7 @@ export function UnbalancedTokenInput() {
   const { balanceFor } = useTokenBalances()
   const tokenSelectDisclosure = useDisclosure()
 
-  const poolTokens = pool.poolTokens as ApiToken[]
+  const poolTokens = pool.poolTokens as unknown as ApiToken[]
 
   const [selectedToken, setSelectedToken] = useState<ApiToken | undefined>(poolTokens[0])
 
