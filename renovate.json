@@ -164,12 +164,6 @@
       "enabled": false
     },
     {
-      "description": "Block pnpm major upgrades — v11 requires workspace-level changes (e.g. lockfile, CI images, engine checks) that need a dedicated migration.",
-      "matchPackageNames": ["pnpm"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    },
-    {
       "description": "Block dicebear major upgrades. v10 switched from @dicebear/collection to @dicebear/styles with JSON subpath exports that don't resolve with TypeScript moduleResolution: 'node'. Changing to 'bundler' breaks @sentry/nextjs deep imports.",
       "matchPackageNames": ["@dicebear/**"],
       "matchUpdateTypes": ["major"],
