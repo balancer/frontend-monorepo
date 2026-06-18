@@ -39,7 +39,7 @@ import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { LstStats } from './components/LstStats'
 import { getNetworkConfig } from '@repo/lib/config/networks'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
 import { StatRow } from '@/lib/components/shared/StatRow'

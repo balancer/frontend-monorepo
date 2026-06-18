@@ -1,8 +1,5 @@
-import {
-  GqlChain,
-  GqlPoolMinimal,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolMinimal } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock } from 'vitest-mock-extended'
 
@@ -11,7 +8,7 @@ export function aGqlPoolMinimalMock(...options: Partial<GqlPoolMinimal>[]): GqlP
 
   const defaultPool1: DeepPartial<GqlPoolMinimal> = {
     address: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     createTime: 1620153071,
     decimals: 18,
     dynamicData: {
@@ -29,7 +26,7 @@ export function aGqlPoolMinimalMock(...options: Partial<GqlPoolMinimal>[]): GqlP
     name: 'Balancer 80 BAL 20 WETH',
     owner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
     symbol: 'B-80BAL-20WETH',
-    type: GqlPoolType.Weighted,
+    type: GqlPoolTypeValues.Weighted,
   }
   return Object.assign({}, defaultPool, defaultPool1, ...options)
 }

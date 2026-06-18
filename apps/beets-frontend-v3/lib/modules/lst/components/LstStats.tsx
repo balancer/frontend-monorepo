@@ -8,7 +8,7 @@ import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { useGetStakedSonicData } from '../hooks/useGetStakedSonicData'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { Address } from 'viem'
 

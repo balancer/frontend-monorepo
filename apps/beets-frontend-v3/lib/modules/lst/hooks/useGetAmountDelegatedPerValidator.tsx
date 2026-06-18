@@ -3,7 +3,7 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlChain, GqlStakedSonicData } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlStakedSonicData } from '@repo/lib/shared/services/api/generated/graphql'
 import { useGetRate } from './useGetRate'
 import { useGetStakedSonicData } from './useGetStakedSonicData'
 import { useMemo } from 'react'

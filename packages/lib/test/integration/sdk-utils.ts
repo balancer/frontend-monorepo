@@ -1,4 +1,4 @@
-import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import {
   VAULT_V2,

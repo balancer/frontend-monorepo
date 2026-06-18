@@ -3,7 +3,8 @@ import { bn, fNum } from '../utils/numbers'
 import { useAprTooltip } from './useAprTooltip'
 import { aprTooltipDataMock } from './_mocks_/aprTooltipDataMock'
 import BigNumber from 'bignumber.js'
-import { GqlPoolAprItem, GqlChain } from '../services/api/generated/graphql'
+import type { GqlPoolAprItem } from '../services/api/generated/graphql-derived-types'
+import { GqlChainValues } from '../services/api/generated/graphql-enums'
 import { getApiPoolMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/api-mocks'
 import { boostedCoinshiftUsdcUsdl } from '@repo/lib/modules/pool/__mocks__/pool-examples/boosted'
 
@@ -11,7 +12,7 @@ const defaultNumberFormatter = (value: string) => bn(bn(value).toFixed(4, BigNum
 
 function testUseAprTooltip({ aprItems }: { aprItems: GqlPoolAprItem[] }) {
   const { result } = testHook(() =>
-    useAprTooltip({ aprItems, numberFormatter: defaultNumberFormatter, chain: GqlChain.Mainnet })
+    useAprTooltip({ aprItems, numberFormatter: defaultNumberFormatter, chain: GqlChainValues.Mainnet })
   )
   return result
 }

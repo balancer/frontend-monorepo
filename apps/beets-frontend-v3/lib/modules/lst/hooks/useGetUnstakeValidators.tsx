@@ -1,5 +1,5 @@
 import { useGetAmountDelegatedPerValidator } from '@/lib/modules/lst/hooks/useGetAmountDelegatedPerValidator'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@tanstack/react-query'
 import { minutesToMilliseconds } from 'date-fns'
 import { parseUnits } from 'viem'

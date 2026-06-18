@@ -4,7 +4,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { formatUnits } from 'viem'
 import { ReliquaryPosition } from '../reliquary.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useGetRelicPositionsOfOwner(chain: GqlChain) {
   const chainId = getChainId(chain)

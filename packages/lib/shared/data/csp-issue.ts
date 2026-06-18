@@ -1,8 +1,9 @@
 import { PoolId } from '@repo/lib/modules/pool/pool.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 
-export const NO_RECOVERY_EXIT_POOL_IDS: Record<GqlChain.Mainnet, PoolId[]> = {
-  [GqlChain.Mainnet]: [
+export const NO_RECOVERY_EXIT_POOL_IDS: Record<string, PoolId[]> = {
+  [GqlChainValues.Mainnet]: [
     // bb-a-USD v1 and linear's doesn't support recovery exits.
     '0x7b50775383d3d6f0215a8f290f2c9e2eebbeceb20000000000000000000000fe',
     '0x2bbf681cc4eb09218bee85ea2a5d3d13fa40fc0c0000000000000000000000fd',
@@ -20,7 +21,7 @@ export const NO_RECOVERY_EXIT_POOL_IDS: Record<GqlChain.Mainnet, PoolId[]> = {
 }
 
 export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
-  [GqlChain.Mainnet]: [
+  [GqlChainValues.Mainnet]: [
     '0x00c2a4be503869fa751c2dbcb7156cc970b5a8da000000000000000000000477',
     '0x02d928e68d8f10c0358566152677db51e1e2dc8c00000000000000000000051e',
     '0x04248aabca09e9a1a3d5129a7ba05b7f17de768400000000000000000000050e',
@@ -149,7 +150,7 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
     '0xfebb0bbf162e64fb9d0dfe186e517d84c395f016000000000000000000000502',
     '0xfef969638c52899f91781f1be594af6f40b99bad00000000000000000000047b',
   ],
-  [GqlChain.Polygon]: [
+  [GqlChainValues.Polygon]: [
     '0x02e139d53ebf4033bf78ab66c6a1e7f1f204487f0002000000000000000009f9',
     '0x03090a9811181a2afe830a3a0b467698ccf3a8b1000000000000000000000bf5',
     '0x0320c1c5b6df19a194d48882aaec1c72940081d9000000000000000000000a7d',
@@ -261,7 +262,7 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
     '0xfa2c0bd8327c99db5bde4c9e9e5cbf30946351bb000000000000000000000948',
     '0xff4ce5aaab5a627bf82f4a571ab1ce94aa365ea600000000000000000000075a',
   ],
-  [GqlChain.Arbitrum]: [
+  [GqlChainValues.Arbitrum]: [
     '0x00fcd3d55085e998e291a0005cedecf58ac14c4000020000000000000000047f',
     '0x077794c30afeccdf5ad2abc0588e8cee7197b71a000000000000000000000352',
     '0x117a3d474976274b37b7b94af5dcade5c90c6e85000000000000000000000381',
@@ -319,7 +320,7 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
     '0xf984eb2b8a7ef780245a797a2fccd82f346409ca00000000000000000000034d',
     '0xff8f84e8c87532af96aef5582ee451572233678b000200000000000000000478',
   ],
-  [GqlChain.Gnosis]: [
+  [GqlChainValues.Gnosis]: [
     '0x1ac55c31dac78ca943cb8ebfca5945ce09e036e2000000000000000000000024',
     '0x225e0047671939a8d78e08ebd692788abe63f15c000000000000000000000009',
     '0x41211bba6d37f5a74b22e667533f080c7c7f3f1300000000000000000000000b',
@@ -340,7 +341,7 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
     '0xfedb19ec000d38d92af4b21436870f115db22725000000000000000000000010',
     '0xffff76a3280e95dc855696111c2562da09db2ac000000000000000000000000c',
   ],
-  [GqlChain.Zkevm]: [
+  [GqlChainValues.Zkevm]: [
     '0x02c9dcb975262719a61f9b40bdf0987ead9add3a000000000000000000000006',
     '0x16c9a4d841e88e52b51936106010f27085a529ec00000000000000000000000c',
     '0x32be2d0ddeaf3333501b24a28668ce373ba8e763000200000000000000000014',
@@ -353,7 +354,7 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
     '0xbfd65c6160cfd638a85c645e6e6d8acac5dac935000000000000000000000004',
     '0xe274c9deb6ed34cfe4130f8d0a8a948dea5bb28600000000000000000000000d',
   ],
-  [GqlChain.Avalanche]: [
+  [GqlChainValues.Avalanche]: [
     '0x054e7b0c73e1ee5aed6864fa511658fc2b54bcaa000000000000000000000015',
     '0x3f1a2c4a3a751f6626bd90ef16e104f0772d4d6b00020000000000000000001b',
     '0x7275c131b1f67e8b53b4691f92b0e35a4c1c6e22000000000000000000000010',
@@ -365,10 +366,10 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
     '0xece571847897fd61e764d455dc15cf1cd9de8d6f000000000000000000000014',
     '0xed3e2f496cbcd8e212192fb8d1499842f04a0d19000000000000000000000009',
   ],
-  [GqlChain.Base]: [],
-  [GqlChain.Sepolia]: ['0x027a946ac5a861b66a50cca0e8fb8766718b485100000000000000000000002c'],
-  [GqlChain.Fantom]: [],
-  [GqlChain.Optimism]: [
+  [GqlChainValues.Base]: [],
+  [GqlChainValues.Sepolia]: ['0x027a946ac5a861b66a50cca0e8fb8766718b485100000000000000000000002c'],
+  [GqlChainValues.Fantom]: [],
+  [GqlChainValues.Optimism]: [
     '0x1f131ec1175f023ee1534b16fa8ab237c00e238100000000000000000000004a',
     '0x479a7d1fcdd71ce0c2ed3184bfbe9d23b92e8337000000000000000000000049',
     '0x23ca0306b21ea71552b148cf3c4db4fc85ae19290000000000000000000000ac',
@@ -405,13 +406,13 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
     '0x593acbfb1eaf3b6ec86fa60325d816996fdcbc0d000000000000000000000038',
     '0xd1af4974fcc995cf36ba40b189caa92964a9126d0000000000000000000000f1',
   ],
-  [GqlChain.Mode]: [],
-  [GqlChain.Fraxtal]: [],
-  [GqlChain.Sonic]: [],
-  [GqlChain.Hyperevm]: [],
-  [GqlChain.Plasma]: [],
-  [GqlChain.Monad]: [],
-  [GqlChain.Xlayer]: [],
+  [GqlChainValues.Mode]: [],
+  [GqlChainValues.Fraxtal]: [],
+  [GqlChainValues.Sonic]: [],
+  [GqlChainValues.Hyperevm]: [],
+  [GqlChainValues.Plasma]: [],
+  [GqlChainValues.Monad]: [],
+  [GqlChainValues.Xlayer]: [],
 }
 
 export const HIGH_RISK_POOL_IDS: string[] = [

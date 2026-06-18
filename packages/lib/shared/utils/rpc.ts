@@ -1,24 +1,25 @@
-import { GqlChain } from '../services/api/generated/graphql'
+import type { GqlChain } from '../services/api/generated/graphql'
+import { GqlChainValues } from '../services/api/generated/graphql-enums'
 import { ChainId } from '@balancer/sdk'
 
 const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
-  [GqlChain.Mainnet]: 'ethereum',
-  [GqlChain.Arbitrum]: 'arbitrum',
-  [GqlChain.Optimism]: 'optimism',
-  [GqlChain.Base]: 'base',
-  [GqlChain.Polygon]: 'polygon',
-  [GqlChain.Avalanche]: 'avalanche',
-  [GqlChain.Fantom]: 'fantom',
-  [GqlChain.Sepolia]: 'sepolia',
-  [GqlChain.Fraxtal]: 'fraxtal',
-  [GqlChain.Gnosis]: 'gnosis',
-  [GqlChain.Mode]: 'mode',
-  [GqlChain.Zkevm]: 'polygon-zkevm',
-  [GqlChain.Sonic]: 'sonic',
-  [GqlChain.Hyperevm]: 'hyperliquid',
-  [GqlChain.Plasma]: 'plasma',
-  [GqlChain.Monad]: 'monad',
-  [GqlChain.Xlayer]: 'xlayer',
+  [GqlChainValues.Mainnet]: 'ethereum',
+  [GqlChainValues.Arbitrum]: 'arbitrum',
+  [GqlChainValues.Optimism]: 'optimism',
+  [GqlChainValues.Base]: 'base',
+  [GqlChainValues.Polygon]: 'polygon',
+  [GqlChainValues.Avalanche]: 'avalanche',
+  [GqlChainValues.Fantom]: 'fantom',
+  [GqlChainValues.Sepolia]: 'sepolia',
+  [GqlChainValues.Fraxtal]: 'fraxtal',
+  [GqlChainValues.Gnosis]: 'gnosis',
+  [GqlChainValues.Mode]: 'mode',
+  [GqlChainValues.Zkevm]: 'polygon-zkevm',
+  [GqlChainValues.Sonic]: 'sonic',
+  [GqlChainValues.Hyperevm]: 'hyperliquid',
+  [GqlChainValues.Plasma]: 'plasma',
+  [GqlChainValues.Monad]: 'monad',
+  [GqlChainValues.Xlayer]: 'xlayer',
 }
 
 const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {

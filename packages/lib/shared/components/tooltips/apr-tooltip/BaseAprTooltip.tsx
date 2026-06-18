@@ -1,9 +1,6 @@
-import {
-  GqlChain,
-  GqlHookType,
-  GqlPoolAprItem,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolAprItem } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlChain, GqlHookType, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlHookTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import {
   PlacementWithLogical,
   Popover,
@@ -64,9 +61,9 @@ export const defaultDisplayValueFormatterWithCanBeNegative = (value: BigNumber) 
 
 function getDynamicSwapFeesLabel(hookType: GqlHookType) {
   switch (hookType) {
-    case GqlHookType.MevTax:
+    case GqlHookTypeValues.MevTax:
       return 'MEV Capture hook'
-    case GqlHookType.StableSurge:
+    case GqlHookTypeValues.StableSurge:
       return 'Stable Surge hook'
     default:
       return 'Dynamic Swap Fees '

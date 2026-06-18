@@ -2,7 +2,7 @@
 
 import { HStack, Text } from '@chakra-ui/react'
 import { FocussedActionLayout } from '@repo/lib/shared/components/layout/FocussedActionLayout'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PropsWithChildren } from 'react'
 import { VebalLockProvider } from './VebalLockProvider'
 import { useVeBalRedirectPath } from '../vebal-navigation'

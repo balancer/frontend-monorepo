@@ -1,11 +1,12 @@
 import { useQuery } from '@apollo/client/react'
-import { GetVeBalTotalSupplyDocument, GqlChain } from '../services/api/generated/graphql'
+import { GetVeBalTotalSupplyDocument } from '../services/api/generated/graphql'
+import { GqlChainValues } from '../services/api/generated/graphql-enums'
 import { secondsToMilliseconds } from 'date-fns'
 
 export function useApiHealth() {
   const { error } = useQuery(GetVeBalTotalSupplyDocument, {
     variables: {
-      chain: GqlChain.Mainnet,
+      chain: GqlChainValues.Mainnet,
     },
     pollInterval: secondsToMilliseconds(15),
   })

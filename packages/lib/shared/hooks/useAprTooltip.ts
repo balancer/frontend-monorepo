@@ -1,9 +1,6 @@
-import {
-  GqlChain,
-  GqlHookType,
-  GqlPoolAprItem,
-  GqlPoolAprItemType,
-} from '../services/api/generated/graphql'
+import type { GqlPoolAprItem } from '../services/api/generated/graphql-derived-types'
+import type { GqlChain, GqlHookType, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import { GqlHookTypeValues, GqlPoolAprItemTypeValues } from '../services/api/generated/graphql-enums'
 import { bn } from '../utils/numbers'
 import type BigNumber from 'bignumber.js'
 
@@ -37,33 +34,36 @@ const fuulTooltipText =
   'Fuul is a platform that powers 3rd party incentive campaigns that stack on top of regular Balancer LP yield. Claim your incentives on Hypurr.fi'
 
 // Only include the hook types we currently support irt dynamic swap fees
-export type SupportedHookType = Extract<GqlHookType, GqlHookType.MevTax | GqlHookType.StableSurge>
+export type SupportedHookType = Extract<
+  GqlHookType,
+  typeof GqlHookTypeValues.MevTax | typeof GqlHookTypeValues.StableSurge
+>
 
 export const dynamicSwapFeesTooltipText: Record<SupportedHookType, string> = {
-  [GqlHookType.MevTax]:
+  [GqlHookTypeValues.MevTax]:
     'The MEV captured and shared to all LPs proportionately by the ‘MEV Capture’ hook used in this pool.',
-  [GqlHookType.StableSurge]:
+  [GqlHookTypeValues.StableSurge]:
     'Additional swap fees from the directional fee StableSurge hook that dynamically adjusts to protect stable-asset pegs during volatility. These fees auto-compound and are shared with LPs proportionately.',
 }
 
 // Types that must be added to the total base
-const TOTAL_BASE_APR_TYPES = [
-  GqlPoolAprItemType.SwapFee_24H,
-  GqlPoolAprItemType.IbYield,
-  GqlPoolAprItemType.Staking,
-  GqlPoolAprItemType.Merkl,
-  GqlPoolAprItemType.Surplus_24H,
-  GqlPoolAprItemType.MabeetsEmissions,
-  GqlPoolAprItemType.QuantAmmUplift,
-  GqlPoolAprItemType.Fuul,
+const TOTAL_BASE_APR_TYPES: GqlPoolAprItemType[] = [
+  GqlPoolAprItemTypeValues.SwapFee24h,
+  GqlPoolAprItemTypeValues.IbYield,
+  GqlPoolAprItemTypeValues.Staking,
+  GqlPoolAprItemTypeValues.Merkl,
+  GqlPoolAprItemTypeValues.Surplus24h,
+  GqlPoolAprItemTypeValues.MaBeetsEmissions,
+  GqlPoolAprItemTypeValues.QuantAmmUplift,
+  GqlPoolAprItemTypeValues.Fuul,
 ]
 
 // Types that must be added to the total APR
-export const TOTAL_APR_TYPES = [
+export const TOTAL_APR_TYPES: GqlPoolAprItemType[] = [
   ...TOTAL_BASE_APR_TYPES,
-  GqlPoolAprItemType.Voting,
-  GqlPoolAprItemType.Locking,
-  GqlPoolAprItemType.StakingBoost,
+  GqlPoolAprItemTypeValues.Voting,
+  GqlPoolAprItemTypeValues.Locking,
+  GqlPoolAprItemTypeValues.StakingBoost,
 ]
 
 export function useAprTooltip({
@@ -75,22 +75,22 @@ export function useAprTooltip({
   chain: GqlChain
 }) {
   // Swap fees
-  const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
+  const swapFee = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.SwapFee24h)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
 
   // Dynamic swap fees (MEV Capture, StableSurge)
-  const dynamicSwapFee = aprItems.find(item => item.type === GqlPoolAprItemType.DynamicSwapFee_24H)
+  const dynamicSwapFee = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.DynamicSwapFee24h)
   const dynamicSwapFeesDisplayed = numberFormatter(
     dynamicSwapFee ? dynamicSwapFee.apr.toString() : '0'
   )
 
   // QuantAMM fees
-  const quantAMMFee = aprItems.find(item => item.type === GqlPoolAprItemType.QuantAmmUplift)
+  const quantAMMFee = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.QuantAmmUplift)
   const quantAMMFeesDisplayed = numberFormatter(quantAMMFee ? quantAMMFee.apr.toString() : '0')
 
   // Yield bearing tokens
   const yieldBearingTokens = aprItems.filter(item => {
-    return item.type === GqlPoolAprItemType.IbYield
+    return item.type === GqlPoolAprItemTypeValues.IbYield
   })
 
   const yieldBearingTokensDisplayed = yieldBearingTokens.map(item => ({
@@ -105,7 +105,7 @@ export function useAprTooltip({
 
   // Staking incentives
   const stakingIncentives = aprItems.filter(item => {
-    return item.type === GqlPoolAprItemType.Staking
+    return item.type === GqlPoolAprItemTypeValues.Staking
   })
 
   const stakingIncentivesDisplayed = stakingIncentives.map(item => ({
@@ -114,19 +114,19 @@ export function useAprTooltip({
     tooltipText: `3rd party incentives for LPs who stake. These token incentives are outside the gauge bounty system.`,
   }))
 
-  const votingApr = aprItems.find(item => item.type === GqlPoolAprItemType.Voting)
+  const votingApr = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.Voting)
   const votingAprDisplayed = numberFormatter(votingApr ? votingApr.apr.toString() : '0')
 
-  const lockingApr = aprItems.find(item => item.type === GqlPoolAprItemType.Locking)
+  const lockingApr = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.Locking)
   const lockingAprDisplayed = numberFormatter(lockingApr ? lockingApr.apr.toString() : '0')
 
   // Merkl incentives
-  const merklIncentives = filterByType(aprItems, GqlPoolAprItemType.Merkl)
+  const merklIncentives = filterByType(aprItems, GqlPoolAprItemTypeValues.Merkl)
   const hasMerklIncentives = merklIncentives.length > 0
   const merklIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(merklIncentives)
 
   const merklTokens = aprItems.filter(item => {
-    return item.type === GqlPoolAprItemType.Merkl
+    return item.type === GqlPoolAprItemTypeValues.Merkl
   })
 
   const merklTokensDisplayed = merklTokens.map(item => ({
@@ -135,24 +135,24 @@ export function useAprTooltip({
   }))
 
   // Fuul incentives
-  const fuulIncentives = aprItems.find(item => item.type === GqlPoolAprItemType.Fuul)
+  const fuulIncentives = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.Fuul)
   const fuulIncentivesDisplayed = numberFormatter(
     fuulIncentives ? fuulIncentives.apr.toString() : '0'
   )
 
   // Surplus incentives
-  const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
+  const surplusIncentives = filterByType(aprItems, GqlPoolAprItemTypeValues.Surplus24h)
   const surplusIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(surplusIncentives)
 
   // maBEETS Rewards (Beets)
-  const maBeetsReward = aprItems.find(item => item.type === GqlPoolAprItemType.MabeetsEmissions)
+  const maBeetsReward = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.MaBeetsEmissions)
 
   const maBeetsRewardsDisplayed = numberFormatter(
     maBeetsReward ? maBeetsReward.apr.toString() : '0'
   )
 
   const maxMaBeetsReward = aprItems.find(
-    item => item.type === GqlPoolAprItemType.StakingBoost && item.id.match(/beets-apr-boost/) // TODO: or add prop in api to distinguish?
+    item => item.type === GqlPoolAprItemTypeValues.StakingBoost && item.id.match(/beets-apr-boost/) // TODO: or add prop in api to distinguish?
   )
 
   const maxMaBeetsRewardDisplayed = numberFormatter(
@@ -160,7 +160,7 @@ export function useAprTooltip({
   )
 
   const maxMaBeetsVotingReward = aprItems.find(
-    item => item.type === GqlPoolAprItemType.StakingBoost && item.id.match(/voting-apr-boost/) // TODO: or add prop in api to distinguish?
+    item => item.type === GqlPoolAprItemTypeValues.StakingBoost && item.id.match(/voting-apr-boost/) // TODO: or add prop in api to distinguish?
   )
 
   const maxMaBeetsVotingRewardDisplayed = numberFormatter(
