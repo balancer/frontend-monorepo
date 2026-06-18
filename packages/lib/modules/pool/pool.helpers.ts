@@ -1,17 +1,8 @@
 import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import {
-  GqlChain,
-  GqlHookType,
-  GqlPoolBase,
-  GqlPoolFixedPriceLbp,
-  GqlPoolGyro,
-  GqlPoolLiquidityBootstrappingV3,
-  GqlPoolStakingGauge,
-  GqlPoolStakingOtherGauge,
-  GqlPoolTokenDetail,
-  GqlPoolType,
-  HookFragment,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolBase, GqlPoolFixedPriceLbp, GqlPoolGyro, GqlPoolLiquidityBootstrappingV3, GqlPoolStakingGauge, GqlPoolStakingOtherGauge, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { HookFragment } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlHookType, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlHookTypeValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { bn, isTooSmallToRemoveUsd } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
@@ -47,22 +38,22 @@ export function addressFor(poolId: string): string {
 
 export function isStable(poolType: GqlPoolType): boolean {
   return (
-    poolType === GqlPoolType.Stable ||
-    poolType === GqlPoolType.MetaStable ||
-    poolType === GqlPoolType.ComposableStable
+    poolType === GqlPoolTypeValues.Stable ||
+    poolType === GqlPoolTypeValues.MetaStable ||
+    poolType === GqlPoolTypeValues.ComposableStable
   )
 }
 
 export function isNonComposableStable(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.Stable || poolType === GqlPoolType.MetaStable
+  return poolType === GqlPoolTypeValues.Stable || poolType === GqlPoolTypeValues.MetaStable
 }
 
 export function isMetaStable(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.MetaStable
+  return poolType === GqlPoolTypeValues.MetaStable
 }
 
 export function isComposableStable(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.ComposableStable
+  return poolType === GqlPoolTypeValues.ComposableStable
 }
 
 export function isComposableStableV1(pool: Pool): boolean {
@@ -70,7 +61,7 @@ export function isComposableStableV1(pool: Pool): boolean {
 }
 
 export function isFx(poolType: GqlPoolType | string): boolean {
-  return poolType === GqlPoolType.Fx
+  return poolType === GqlPoolTypeValues.Fx
 }
 
 export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'tags'>) {
@@ -78,7 +69,7 @@ export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'tags'>) {
 }
 
 export function isGyro(poolType: GqlPoolType) {
-  return [GqlPoolType.Gyro, GqlPoolType.Gyro3, GqlPoolType.Gyroe].includes(poolType)
+  return [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.Gyroe].includes(poolType)
 }
 
 export function isClp(poolType: GqlPoolType) {
@@ -86,19 +77,19 @@ export function isClp(poolType: GqlPoolType) {
 }
 
 export function isGyroEPool(pool: Pool): pool is GqlPoolGyro {
-  return pool.type === GqlPoolType.Gyroe
+  return pool.type === GqlPoolTypeValues.Gyroe
 }
 
 export function isAutoRange(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.Reclamm
+  return poolType === GqlPoolTypeValues.Reclamm
 }
 
 export function isUnknownType(poolType: any): boolean {
-  return !Object.values(GqlPoolType).includes(poolType)
+  return !Object.values(GqlPoolTypeValues).includes(poolType)
 }
 
 export function isLiquidityBootstrapping(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.LiquidityBootstrapping || poolType === GqlPoolType.FixedLbp
+  return poolType === GqlPoolTypeValues.LiquidityBootstrapping || poolType === GqlPoolTypeValues.FixedLbp
 }
 
 export function isLBP(poolType: GqlPoolType): boolean {
@@ -121,7 +112,7 @@ export function isDynamicLBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV
 }
 
 export function isWeighted(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.Weighted
+  return poolType === GqlPoolTypeValues.Weighted
 }
 
 export function isWeightedV1(pool: Pool): boolean {
@@ -130,7 +121,7 @@ export function isWeightedV1(pool: Pool): boolean {
 
 export function isManaged(poolType: GqlPoolType): boolean {
   // Correct terminology is managed pools but subgraph still returns poolType = "Investment"
-  return poolType === GqlPoolType.Investment
+  return poolType === GqlPoolTypeValues.Investment
 }
 
 export function isWeightedLike(poolType: GqlPoolType): boolean {
@@ -165,11 +156,11 @@ export function isMaBeetsPool(poolId: string): boolean {
 }
 
 export function isCowAmmPool(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.CowAmm
+  return poolType === GqlPoolTypeValues.CowAmm
 }
 
 export function isQuantAmmPool(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.QuantAmmWeighted
+  return poolType === GqlPoolTypeValues.QuantAmmWeighted
 }
 
 export function getPoolActivityTitle(activeTab: string | undefined, count: number) {
@@ -339,7 +330,7 @@ export function hasHooks(pool: Pool): boolean {
 }
 
 export function hasSurgeHook(pool: Pool): boolean {
-  return hasHookType(pool, GqlHookType.StableSurge)
+  return hasHookType(pool, GqlHookTypeValues.StableSurge)
   // TODO: add more surge hook types
 }
 
@@ -371,7 +362,7 @@ export function shouldBlockAddLiquidity(pool: Pool, metadata?: PoolMetadata) {
 export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): string[] {
   // we allow the metadata to override the default behavior
   if (metadata?.allowAddLiquidity === true) return []
-  if (pool.chain === GqlChain.Sepolia) return []
+  if (pool.chain === GqlChainValues.Sepolia) return []
 
   const reasons: string[] = []
 
@@ -452,7 +443,7 @@ export function shouldBlockRemoveLiquidity(pool: Pool) {
 }
 
 export function getPoolRemoveBlockedReason(pool: Pool): string[] {
-  if (pool.chain === GqlChain.Sepolia) return []
+  if (pool.chain === GqlChainValues.Sepolia) return []
 
   const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
   const hasTooSmallBalance = isTooSmallToRemoveUsd(getUserWalletBalanceUsd(pool))
@@ -546,19 +537,19 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
 
 export function poolTypeLabel(poolType: PoolFilterType) {
   switch (poolType) {
-    case GqlPoolType.Weighted:
+    case GqlPoolTypeValues.Weighted:
       return 'Weighted'
-    case GqlPoolType.Stable:
+    case GqlPoolTypeValues.Stable:
       return 'Stable'
-    case GqlPoolType.LiquidityBootstrapping:
+    case GqlPoolTypeValues.LiquidityBootstrapping:
       return 'Liquidity Bootstrapping (LBP)'
-    case GqlPoolType.Gyro:
+    case GqlPoolTypeValues.Gyro:
       return 'Gyro CLP'
-    case GqlPoolType.CowAmm:
+    case GqlPoolTypeValues.CowAmm:
       return 'CoW AMM'
-    case GqlPoolType.Fx:
+    case GqlPoolTypeValues.Fx:
       return 'FX'
-    case GqlPoolType.QuantAmmWeighted:
+    case GqlPoolTypeValues.QuantAmmWeighted:
       return 'QuantAMM BTF'
     case 'AUTORANGE':
       return 'AutoRange'

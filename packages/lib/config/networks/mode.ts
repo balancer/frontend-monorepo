@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 34443,
   name: 'Mode',
   shortName: 'Mode',
-  chain: GqlChain.Mode,
+  chain: GqlChainValues.Mode,
   iconPath: '/images/chains/MODE.svg',
   blockExplorer: {
     baseUrl: 'https://modescan.io',
@@ -44,7 +44,7 @@ const networkConfig: NetworkConfig = {
   },
   pools: convertHexToLowerCase({
     issues: {
-      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Mode],
+      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Mode],
     },
   }),
   layerZeroChainId: 260,

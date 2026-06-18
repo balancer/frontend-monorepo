@@ -1,4 +1,5 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import arbitrum from './arbitrum'
 import avalanche from './avalanche'
@@ -22,23 +23,23 @@ export type GqlChainValues = `${GqlChain}`
 export type NetworkConfigs = Partial<Record<GqlChainValues, NetworkConfig>>
 
 const networkConfigs: NetworkConfigs = {
-  [GqlChain.Arbitrum]: arbitrum,
-  [GqlChain.Avalanche]: avalanche,
-  [GqlChain.Base]: base,
-  [GqlChain.Gnosis]: gnosis,
-  [GqlChain.Mainnet]: mainnet,
-  [GqlChain.Polygon]: polygon,
-  [GqlChain.Zkevm]: zkevm,
-  [GqlChain.Optimism]: optimism,
-  [GqlChain.Sepolia]: sepolia,
-  [GqlChain.Mode]: mode,
-  [GqlChain.Fraxtal]: fraxtal,
-  [GqlChain.Fantom]: fantom,
-  [GqlChain.Sonic]: sonic,
-  [GqlChain.Hyperevm]: hyperevm,
-  [GqlChain.Plasma]: plasma,
-  [GqlChain.Monad]: monad,
-  [GqlChain.Xlayer]: xlayer,
+  [GqlChainValues.Arbitrum]: arbitrum,
+  [GqlChainValues.Avalanche]: avalanche,
+  [GqlChainValues.Base]: base,
+  [GqlChainValues.Gnosis]: gnosis,
+  [GqlChainValues.Mainnet]: mainnet,
+  [GqlChainValues.Polygon]: polygon,
+  [GqlChainValues.Zkevm]: zkevm,
+  [GqlChainValues.Optimism]: optimism,
+  [GqlChainValues.Sepolia]: sepolia,
+  [GqlChainValues.Mode]: mode,
+  [GqlChainValues.Fraxtal]: fraxtal,
+  [GqlChainValues.Fantom]: fantom,
+  [GqlChainValues.Sonic]: sonic,
+  [GqlChainValues.Hyperevm]: hyperevm,
+  [GqlChainValues.Plasma]: plasma,
+  [GqlChainValues.Monad]: monad,
+  [GqlChainValues.Xlayer]: xlayer,
 }
 
 export function getNetworkConfig(chain: GqlChain) {

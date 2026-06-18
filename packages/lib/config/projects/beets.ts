@@ -1,9 +1,9 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
 
-export const beetsSupportedNetworks = [GqlChain.Sonic]
+export const beetsSupportedNetworks = [GqlChainValues.Sonic]
 //  as const satisfies GqlChain[]
 
 export const ProjectConfigBeets: ProjectConfig = {
@@ -12,16 +12,16 @@ export const ProjectConfigBeets: ProjectConfig = {
   projectUrl: 'https://beets.fi',
   projectLogo: 'https://beets.fi/images/icons/beets.svg',
   supportedNetworks: beetsSupportedNetworks,
-  networksForProtocolStats: [...beetsSupportedNetworks, GqlChain.Fantom],
+  networksForProtocolStats: [...beetsSupportedNetworks, GqlChainValues.Fantom],
   corePoolId: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005', // maBEETS BEETS8020 (Fresh BEETS) pool on Sonic
-  defaultNetwork: GqlChain.Sonic,
-  ensNetwork: GqlChain.Sonic,
+  defaultNetwork: GqlChainValues.Sonic,
+  ensNetwork: GqlChainValues.Sonic,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic,
-  merklRewardsChains: [GqlChain.Sonic],
+  merklRewardsChains: [GqlChainValues.Sonic],
   options: {
     poolDisplayType: PoolDisplayType.Name,
     hidePoolTags: ['RWA', 'VE8020'],
-    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
+    hidePoolTypes: [GqlPoolTypeValues.LiquidityBootstrapping, GqlPoolTypeValues.CowAmm, GqlPoolTypeValues.Fx],
     hideProtocolVersion: ['cow'],
     showPoolName: true,
     showMaBeets: true,

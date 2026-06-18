@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { zeroAddress } from 'viem'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
@@ -14,7 +14,7 @@ const networkConfig: NetworkConfig = {
   chainId: 146,
   name: 'Sonic',
   shortName: 'Sonic',
-  chain: GqlChain.Sonic,
+  chain: GqlChainValues.Sonic,
   iconPath: '/images/chains/SONIC.svg',
   blockExplorer: {
     baseUrl: 'https://sonicscan.org',

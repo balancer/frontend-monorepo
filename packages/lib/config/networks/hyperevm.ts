@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
@@ -10,7 +10,7 @@ const networkConfig: NetworkConfig = {
   chainId: hyperEVM.id,
   name: hyperEVM.name,
   shortName: hyperEVM.name,
-  chain: GqlChain.Hyperevm,
+  chain: GqlChainValues.Hyperevm,
   iconPath: '/images/chains/HYPEREVM.svg',
   blockExplorer: {
     baseUrl: 'https://hyperevmscan.io/',
@@ -53,7 +53,7 @@ const networkConfig: NetworkConfig = {
   },
   pools: convertHexToLowerCase({
     issues: {
-      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Hyperevm],
+      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Hyperevm],
       [PoolIssue.FxPoolVulnWarning]: [],
     },
   }),

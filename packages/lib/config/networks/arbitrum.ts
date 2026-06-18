@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
@@ -10,7 +10,7 @@ const networkConfig: NetworkConfig = {
   chainId: 42161,
   name: 'Arbitrum One',
   shortName: 'Arbitrum',
-  chain: GqlChain.Arbitrum,
+  chain: GqlChainValues.Arbitrum,
   iconPath: '/images/chains/ARBITRUM.svg',
   blockExplorer: {
     baseUrl: 'https://arbiscan.io',
@@ -77,7 +77,7 @@ const networkConfig: NetworkConfig = {
       [PoolIssue.PoolOwnerVulnWarningEcosystem]: [
         '0x0510ccf9eb3ab03c1508d3b9769e8ee2cfd6fdcf00000000000000000000005d',
       ],
-      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Arbitrum],
+      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Arbitrum],
     },
   }),
   layerZeroChainId: 110,
