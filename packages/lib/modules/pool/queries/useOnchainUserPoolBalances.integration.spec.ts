@@ -79,7 +79,7 @@ describe('fetches onchain and overrides user balances', async () => {
       "rewards": [],
       "status": "ACTIVE",
       "version": 2,
-        "workingSupply": "",
+      "workingSupply": "",
     }
   `)
 
