@@ -1,6 +1,6 @@
 import { GetVeBalUserDocument } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
-import type { GqlVeBalLockSnapshot } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
+import type { GqlVeBalLockSnapshot } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { useQuery } from '@apollo/client/react'
 import { useVeBALBalance } from './useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

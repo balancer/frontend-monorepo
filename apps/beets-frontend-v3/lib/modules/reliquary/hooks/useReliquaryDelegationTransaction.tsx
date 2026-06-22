@@ -9,7 +9,7 @@ import {
   useManagedTransaction,
 } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isUserRejectedError } from '@repo/lib/shared/utils/error-filters'
 import { useEffect } from 'react'
 import { useDelegation } from './useDelegation'

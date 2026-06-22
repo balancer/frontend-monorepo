@@ -15,7 +15,7 @@ import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-s
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { Address } from 'viem'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'

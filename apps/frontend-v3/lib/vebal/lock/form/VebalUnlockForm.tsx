@@ -18,7 +18,7 @@ import {
 import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { VebalLockModal } from '@bal/lib/vebal/lock/modal/VebalLockModal'
 import { Address } from 'viem'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useRouter } from 'next/navigation'
 import { useClickable } from '@chakra-ui/clickable'
 import { getModalLabel } from '@bal/lib/vebal/lock/steps/lock-steps.utils'

@@ -5,7 +5,7 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useRef, useState } from 'react'
 
 export default function TokenSelectPage() {

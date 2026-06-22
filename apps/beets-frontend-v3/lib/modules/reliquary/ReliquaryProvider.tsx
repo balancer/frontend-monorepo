@@ -4,7 +4,7 @@ import type { GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/gen
 import {
   GqlChainValues,
   GqlPoolSnapshotDataRangeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'

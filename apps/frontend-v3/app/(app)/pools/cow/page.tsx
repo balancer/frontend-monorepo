@@ -1,6 +1,6 @@
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 import { Metadata } from 'next'
