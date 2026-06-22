@@ -1,4 +1,4 @@
-import type { GqlPoolUserBalance } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlPoolUserBalance } from '@repo/lib/shared/services/api/graphql-derived-types'
 
 export function aUserPoolBalance(...options: Partial<GqlPoolUserBalance>[]): GqlPoolUserBalance {
   const defaultBalance: GqlPoolUserBalance = {

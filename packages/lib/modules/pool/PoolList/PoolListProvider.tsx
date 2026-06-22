@@ -6,7 +6,7 @@ import {
   GqlChain,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'

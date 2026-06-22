@@ -7,7 +7,7 @@ import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 function selectNestedHandler(pool: Pool) {
   return selectAddLiquidityHandler(pool) as NestedAddLiquidityV2Handler

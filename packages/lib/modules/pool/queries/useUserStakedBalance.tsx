@@ -1,6 +1,6 @@
 import { getChainId } from '@repo/lib/config/app.config'
-import type { GqlUserStakedBalance } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type { GqlUserStakedBalance } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { compact, groupBy } from 'lodash'
 import { Address, formatUnits } from 'viem'

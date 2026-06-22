@@ -12,12 +12,10 @@ import type {
   PoolTokensFragment,
   HookFragment,
   LbpV3CommonMetadataFieldsFragment,
-  FixedPriceLbpCommonMetadataFieldsFragment,
-  GqlTokenDynamicDataFragment,
   Erc4626ReviewDataFragment,
   GetVeBalUserQuery,
   GetStakedSonicDataQuery,
-} from './graphql.js'
+} from './generated/graphql.ts'
 
 // ── Token types ──
 
@@ -111,11 +109,13 @@ export type GqlPoolSwapEventCowAmm = Extract<
 // ── APR item types ──
 
 export type GqlPoolAprItem = NonNullable<
-  NonNullable<GetPoolQuery['pool'] extends infer P
-    ? P extends { dynamicData?: { aprItems?: Array<infer T> } }
-      ? T
+  NonNullable<
+    GetPoolQuery['pool'] extends infer P
+      ? P extends { dynamicData?: { aprItems?: Array<infer T> } }
+        ? T
+        : never
       : never
-    : never>
+  >
 >
 
 // ── Price rate provider / review data types (inline objects) ──
@@ -129,7 +129,11 @@ export type GqlPriceRateProviderData = {
   summary?: string | null
   reviewFile?: string | null
   factory?: string | null
-  upgradeableComponents?: Array<{ __typename?: 'GqlPriceRateProviderUpgradeableComponent'; entryPoint: string; implementationReviewed: string } | null> | null
+  upgradeableComponents?: Array<{
+    __typename?: 'GqlPriceRateProviderUpgradeableComponent'
+    entryPoint: string
+    implementationReviewed: string
+  } | null> | null
 }
 export type GqlPriceRateProviderUpgradeableComponent = NonNullable<
   NonNullable<GqlPriceRateProviderData['upgradeableComponents']>
@@ -142,10 +146,27 @@ export type Erc4626ReviewData = Erc4626ReviewDataFragment
 
 // ── Hook param types ──
 
-export type StableSurgeHookParams = { __typename: 'StableSurgeHookParams'; maxSurgeFeePercentage: string | null; surgeThresholdPercentage: string | null }
-export type ExitFeeHookParams = { __typename: 'ExitFeeHookParams'; exitFeePercentage: string | null }
-export type FeeTakingHookParams = { __typename: 'FeeTakingHookParams'; addLiquidityFeePercentage: string | null; removeLiquidityFeePercentage: string | null; swapFeePercentage: string | null }
-export type MevTaxHookParams = { __typename: 'MevTaxHookParams'; mevTaxThreshold: string | null; mevTaxMultiplier: string | null; maxMevSwapFeePercentage: string | null }
+export type StableSurgeHookParams = {
+  __typename: 'StableSurgeHookParams'
+  maxSurgeFeePercentage: string | null
+  surgeThresholdPercentage: string | null
+}
+export type ExitFeeHookParams = {
+  __typename: 'ExitFeeHookParams'
+  exitFeePercentage: string | null
+}
+export type FeeTakingHookParams = {
+  __typename: 'FeeTakingHookParams'
+  addLiquidityFeePercentage: string | null
+  removeLiquidityFeePercentage: string | null
+  swapFeePercentage: string | null
+}
+export type MevTaxHookParams = {
+  __typename: 'MevTaxHookParams'
+  mevTaxThreshold: string | null
+  mevTaxMultiplier: string | null
+  maxMevSwapFeePercentage: string | null
+}
 
 // ── LBP-specific additional types ──
 

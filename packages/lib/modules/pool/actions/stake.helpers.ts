@@ -3,8 +3,8 @@ import { Pool } from '../pool.types'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
 import { isClaimableGauge } from '../pool.helpers'
-import type { GqlUserStakedBalance } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type { GqlUserStakedBalance } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { getStakedBalance } from '../user-balance.helpers'
 
 export const migrateStakeTooltipLabel = `veBAL gauges are the mechanism to distribute BAL liquidity incentives following community voting.

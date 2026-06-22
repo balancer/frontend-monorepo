@@ -1,7 +1,4 @@
-import {
-  GqlChainValues,
-  GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { Pool } from '../pool.types'
 
 export const composableStablePoolMock: Pool = {

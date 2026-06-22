@@ -5,7 +5,7 @@ import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER_NESTED } from '@balancer/sdk'
 import { getChainId } from '@repo/lib/config/app.config'
 

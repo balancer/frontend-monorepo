@@ -9,7 +9,7 @@ import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTx
 import { useWalletConnectMetadata } from './wallet-connect/useWalletConnectMetadata'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 // Returns true when using a Safe Smart account:

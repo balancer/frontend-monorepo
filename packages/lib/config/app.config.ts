@@ -1,5 +1,5 @@
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { keyBy } from 'lodash'
 import { Config, NetworkConfig, SupportedChainId } from './config.types'
 import networks from './networks'

@@ -25,7 +25,7 @@ import { getBaseUrl } from '@repo/lib/shared/utils/urls'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { hyperEVM } from '@balancer/sdk'
 
 /* If a request with the default rpc fails, it will fall back to the next one in the list.

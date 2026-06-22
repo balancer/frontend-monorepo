@@ -1,4 +1,4 @@
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { PoolExample } from './pool-examples.types'
 
 export const v3SepoliaNestedBoosted: PoolExample = {

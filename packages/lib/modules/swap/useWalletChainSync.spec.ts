@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { getWalletChainSyncAction } from './useWalletChainSync'
 
 describe('getWalletChainSyncAction', () => {

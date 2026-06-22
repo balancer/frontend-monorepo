@@ -1,5 +1,5 @@
 import { GetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultPoolMock, defaultPoolResponseMock } from '@repo/lib/test/msw/handlers/Pool.handlers'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'

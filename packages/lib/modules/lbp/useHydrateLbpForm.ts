@@ -17,9 +17,9 @@ import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { toJsTimestamp, toISOString } from '@repo/lib/shared/utils/time'
 import { FixedPriceLBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/FixedPriceLBPoolAbi'
 import { LBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/LBPoolAbi'
-import type { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { GetPoolDocument, GetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 type ReadContractResponse<T> = { result: T | undefined; status: 'success' | 'failure' }
 

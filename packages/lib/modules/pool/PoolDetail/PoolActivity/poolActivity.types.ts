@@ -1,5 +1,5 @@
 import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { BaseVariant, PoolVariant } from '../../pool.types'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 

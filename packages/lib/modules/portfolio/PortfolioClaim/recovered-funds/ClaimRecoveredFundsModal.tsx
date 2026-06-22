@@ -13,7 +13,7 @@ import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-s
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { ClaimsSummary } from './ClaimsSummary'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'

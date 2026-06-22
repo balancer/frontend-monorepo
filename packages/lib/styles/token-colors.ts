@@ -1,6 +1,6 @@
 import { Address } from 'viem'
 import type { GqlChain } from '../shared/services/api/generated/graphql'
-import { GqlChainValues } from '../shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '../shared/services/api/graphql-enums'
 import { getGqlChain } from '../config/app.config'
 import { getRandomInt } from '../shared/utils/numbers'
 

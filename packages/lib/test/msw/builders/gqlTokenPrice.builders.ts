@@ -1,4 +1,4 @@
-import type { GqlTokenPrice } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlTokenPrice } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { DeepPartial } from '@apollo/client/utilities'
 
 export function aGqlTokenPriceMock(...options: Partial<GqlTokenPrice>[]): GqlTokenPrice {

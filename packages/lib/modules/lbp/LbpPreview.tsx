@@ -12,7 +12,7 @@ import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
 import { Address } from 'viem'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { LbpLearnMoreModal } from './modal/LbpLearnMoreModal'
 import { useWatch } from 'react-hook-form'
 

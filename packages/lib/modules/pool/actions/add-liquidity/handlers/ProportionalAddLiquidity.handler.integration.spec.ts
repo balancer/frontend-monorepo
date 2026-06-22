@@ -7,7 +7,7 @@ import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.hand
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { usdcAddress, wETHAddress } from '@repo/lib/debug-helpers'
 
 function selectProportionalHandler(pool: Pool) {

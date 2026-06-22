@@ -4,7 +4,7 @@ import { Control, Controller } from 'react-hook-form'
 import { SaleStructureForm, SaleTypeOptionValue } from '../../lbp.types'
 import { Minus, TrendingUp } from 'react-feather'
 import { ReactNode } from 'react'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 const saleTypeOptions: RadioCardOption<SaleTypeOptionValue>[] = [
   {

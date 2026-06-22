@@ -1,7 +1,7 @@
 import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import {
   WeightedPoolStructure,

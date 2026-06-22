@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type { GqlChain } from '../services/api/generated/graphql'
-import { GqlChainValues } from '../services/api/generated/graphql-enums'
+import { GqlChainValues } from '../services/api/graphql-enums'
 import { getViemClient } from '../services/viem/viem.client'
 import { formatUnits } from 'viem'
 import { bn, fNum } from '../utils/numbers'

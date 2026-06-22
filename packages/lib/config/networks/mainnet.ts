@@ -1,5 +1,5 @@
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'

@@ -12,7 +12,7 @@ import {
 import { getSwapFeePercentageOptions } from './helpers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { parseUnits } from 'viem'
 import { FormStep } from '@repo/lib/shared/hooks/useFormSteps'
 import { PoolTokensStep } from './steps/tokens/PoolTokensStep'

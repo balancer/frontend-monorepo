@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { isCowProtocol, isBalancerProtocol } from '../helpers'
 import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { PoolType } from '@balancer/sdk'
 
 interface UseProtocolSearchParams {

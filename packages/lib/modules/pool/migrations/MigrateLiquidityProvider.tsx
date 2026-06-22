@@ -1,7 +1,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren, useEffect } from 'react'
 import { GetPoolDocument } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useQuery } from '@apollo/client/react'
 import { usePoolMigrations } from './PoolMigrationsProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'

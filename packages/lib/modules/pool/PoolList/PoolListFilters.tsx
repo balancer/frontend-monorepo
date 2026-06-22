@@ -43,7 +43,7 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import { usePoolList } from './PoolListProvider'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import Image from 'next/image'
 import ButtonGroup, {
   ButtonGroupOption,

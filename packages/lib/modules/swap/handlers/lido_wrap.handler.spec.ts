@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { LidoWrapHandler } from './LidoWrap.handler'
 import { TEST_ADDRESSES } from '@repo/lib/test/utils/swap-test-utils'
 

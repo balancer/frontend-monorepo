@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { Pool } from '../../pool/pool.types'
 import { isVebalPool } from '../../pool/pool.helpers'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export enum ExpandedPoolType {
   StakedBal = 'staked-bal',

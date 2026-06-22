@@ -8,7 +8,7 @@ import {
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useMemo, useState } from 'react'
 import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'

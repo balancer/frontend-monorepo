@@ -6,7 +6,7 @@ import { SeedType, UserActions, WeightAdjustmentType } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export const LBP_FORM_STEPS: FormStep[] = [
   { id: 'step-1-sale-structure', title: 'Sale structure', Component: SaleStructureStep },

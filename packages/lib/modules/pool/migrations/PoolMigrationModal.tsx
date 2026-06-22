@@ -11,7 +11,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { MigrateLiquiditySummary } from './MigrateLiquiditySummary'
 import { useMigrateLiquidity } from './MigrateLiquidityProvider'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
 
 export function PoolMigrationModal() {

@@ -1,4 +1,4 @@
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'

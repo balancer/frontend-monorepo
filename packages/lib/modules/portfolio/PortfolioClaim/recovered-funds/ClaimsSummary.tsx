@@ -1,7 +1,7 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useRecoveredFundsClaims } from './RecoveredFundsClaimsProvider'
 import { Badge, Card, Checkbox, Divider, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import {

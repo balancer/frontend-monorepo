@@ -1,7 +1,7 @@
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import type { GqlToken } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlToken } from '@repo/lib/shared/services/api/graphql-derived-types'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 

@@ -2,7 +2,7 @@ import { Alert, AlertDescription, AlertIcon, AlertTitle, HStack, Spacer } from '
 import { BalAlertButtonLink } from '@repo/lib/shared/components/alerts/BalAlertButtonLink'
 import { AlertTriangle } from 'react-feather'
 import { getPoolPath } from '../pool.utils'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { usePool } from '../PoolProvider'
 
 export function GetFundsWarning() {

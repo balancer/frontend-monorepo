@@ -1,5 +1,5 @@
-import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 // TODO: remove linear (nested) pools
 export const recoveryPoolMock: GqlPoolElement = {

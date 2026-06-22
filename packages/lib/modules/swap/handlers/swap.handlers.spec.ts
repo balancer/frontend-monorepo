@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import type { ApolloClient } from '@apollo/client'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NativeWrapHandler } from './NativeWrap.handler'
 import { AuraBalSwapHandler } from './AuraBalSwap.handler'
 import {

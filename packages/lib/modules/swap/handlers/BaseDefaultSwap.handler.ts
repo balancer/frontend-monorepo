@@ -1,7 +1,7 @@
 import { Path, Slippage, Swap, SwapKind, TokenAmount } from '@balancer/sdk'
 import { getChainId } from '@repo/lib/config/app.config'
 import type { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import { SdkBuildSwapInputs, SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
 import { SwapHandler } from './Swap.handler'

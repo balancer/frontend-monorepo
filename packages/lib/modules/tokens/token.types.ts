@@ -1,7 +1,7 @@
 import type {
   GqlToken,
   GqlPriceRateProviderData,
-} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
 import { GetTokensQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, HumanAmount } from '@balancer/sdk'

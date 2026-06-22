@@ -1,5 +1,5 @@
 import type { GqlChain } from '../services/api/generated/graphql'
-import { GqlChainValues } from '../services/api/generated/graphql-enums'
+import { GqlChainValues } from '../services/api/graphql-enums'
 import { ChainId } from '@balancer/sdk'
 
 const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {

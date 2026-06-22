@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vitest'
 import { SwapDetails } from './SwapDetails'
-import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 vi.mock('@repo/lib/shared/hooks/useCurrency', () => ({
   useCurrency: () => ({ toCurrency: (val: string) => val }),

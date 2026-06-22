@@ -7,7 +7,7 @@ import type {
   GqlPoolStakingGauge,
   GqlPoolStakingOtherGauge,
   GqlPoolTokenDetail,
-} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
 import { HookFragment } from '@repo/lib/shared/services/api/generated/graphql'
 import type {
   GqlChain,
@@ -18,7 +18,7 @@ import {
   GqlChainValues,
   GqlHookTypeValues,
   GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { bn, isTooSmallToRemoveUsd } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'

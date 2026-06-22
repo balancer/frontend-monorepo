@@ -1,4 +1,4 @@
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   getLeafTokens,
   isWrappedNativeAsset,

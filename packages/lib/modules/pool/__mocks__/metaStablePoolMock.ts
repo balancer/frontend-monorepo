@@ -1,8 +1,5 @@
-import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import {
-  GqlChainValues,
-  GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export const metaStablePoolMock: GqlPoolElement = {
   id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080',

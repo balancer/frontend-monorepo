@@ -1,7 +1,7 @@
 import { getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { Address, Log, erc20Abi, formatUnits, parseAbiItem, parseAbi, parseEventLogs } from 'viem'

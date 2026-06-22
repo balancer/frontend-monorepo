@@ -1,6 +1,6 @@
 import { getApiPoolMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/api-mocks'
 import { boostedCoinshiftUsdcUsdl } from '@repo/lib/modules/pool/__mocks__/pool-examples/boosted'
-import type { GqlPoolStakingGaugeReward } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlPoolStakingGaugeReward } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { GetUserPoolRewardsParams, useGetUserPoolRewards } from './useGetUserPoolRewards'
 import { BalTokenReward } from '../portfolio/PortfolioClaim/useBalRewards'

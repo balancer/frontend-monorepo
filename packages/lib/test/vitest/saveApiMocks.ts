@@ -10,7 +10,7 @@ import {
   saveAllPoolApiMocksFile,
   savePoolMock,
 } from '@repo/lib/modules/pool/__mocks__/savePoolMock'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 const allPoolExamples = [...flatPoolExamples, ...boostedPoolExamples, ...nestedPoolExamples]

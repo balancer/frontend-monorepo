@@ -1,5 +1,5 @@
 import { polygon } from 'viem/chains'
-import { GqlChainValues } from '../services/api/generated/graphql-enums'
+import { GqlChainValues } from '../services/api/graphql-enums'
 import { drpcUrl, drpcUrlByChainId } from './rpc'
 
 test('drpcUrl', () => {

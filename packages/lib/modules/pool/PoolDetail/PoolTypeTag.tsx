@@ -1,6 +1,6 @@
 import { Box, HStack, Text, ChakraProps } from '@chakra-ui/react'
 import { Pool } from '../pool.types'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { isBoosted } from '../pool.helpers'

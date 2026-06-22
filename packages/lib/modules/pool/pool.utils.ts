@@ -2,13 +2,13 @@ import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
 import type {
   GqlPoolAprItem,
   GqlPoolTokenDetail,
-} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
 import { GetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import type { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   GqlPoolAprItemTypeValues,
   GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { Numberish, bn, fNum, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import type BigNumber from 'bignumber.js'
 import { cloneDeep, invert } from 'lodash'
@@ -27,7 +27,7 @@ import {
 } from './pool.types'
 import { Pool } from './pool.types'
 import { isSameAddress } from '@balancer/sdk'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 // URL slug for each chain
 export enum ChainSlug {

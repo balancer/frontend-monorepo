@@ -1,9 +1,6 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
-import {
-  GqlChainValues,
-  GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 export const beetsSupportedNetworks = [GqlChainValues.Sonic]

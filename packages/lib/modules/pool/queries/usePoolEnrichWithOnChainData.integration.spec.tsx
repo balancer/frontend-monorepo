@@ -1,4 +1,4 @@
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { Pool } from '../pool.types'

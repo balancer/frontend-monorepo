@@ -1,5 +1,5 @@
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import type { Erc4626ReviewData } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { Erc4626ReviewData } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   Popover,
   PopoverTrigger,

@@ -5,7 +5,7 @@ import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquid
 import { SingleTokenRemoveLiquidityV3Handler } from './SingleTokenRemoveLiquidityV3.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityV3Handler {
   return selectRemoveLiquidityHandler(

@@ -1,4 +1,4 @@
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'

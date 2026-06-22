@@ -2,7 +2,7 @@ import { getCompositionTokens, getFlatCompositionTokens } from '../pool-tokens.u
 import { usePool } from '../PoolProvider'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import type { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/graphql-derived-types'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
 import { VStack, Skeleton, Box, Divider, HStack, Text, Flex, Link } from '@chakra-ui/react'

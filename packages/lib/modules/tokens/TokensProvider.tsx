@@ -1,6 +1,6 @@
 'use client'
 
-import type { GqlToken } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlToken } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   GetTokenPricesDocument,
   GetTokensDocument,

@@ -25,7 +25,7 @@ import type {
   GqlPriceRateProviderData,
   GqlHookReviewData,
   Erc4626ReviewData,
-} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
 import { HookFragment } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'

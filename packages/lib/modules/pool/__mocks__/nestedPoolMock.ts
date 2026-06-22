@@ -1,4 +1,4 @@
-import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
 
 export const nestedPoolMock: GqlPoolElement = {
   id: '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0',

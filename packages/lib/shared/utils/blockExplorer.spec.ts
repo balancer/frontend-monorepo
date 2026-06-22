@@ -1,5 +1,5 @@
 import { balAddress } from '@repo/lib/debug-helpers'
-import { GqlChainValues } from '../services/api/generated/graphql-enums'
+import { GqlChainValues } from '../services/api/graphql-enums'
 import {
   getBlockExplorerName,
   getBlockExplorerAddressUrl,

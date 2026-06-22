@@ -1,6 +1,6 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { UnbalancedAddLiquidityV3Handler } from './UnbalancedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'

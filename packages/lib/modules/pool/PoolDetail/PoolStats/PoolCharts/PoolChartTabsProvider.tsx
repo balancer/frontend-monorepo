@@ -1,5 +1,5 @@
 import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useParams } from 'next/navigation'
 import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 import { PoolVariant, BaseVariant } from '../../../pool.types'

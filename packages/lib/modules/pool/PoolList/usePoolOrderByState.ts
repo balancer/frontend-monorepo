@@ -1,6 +1,6 @@
 'use client'
 
-import { GqlPoolOrderByValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolOrderByValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useEffect, useRef } from 'react'
 import { usePoolList } from './PoolListProvider'
 

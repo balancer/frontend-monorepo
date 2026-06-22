@@ -1,10 +1,7 @@
 import { ExactInQueryOutput, ExactOutQueryOutput } from '@balancer/sdk'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress, wETHAddress } from '@repo/lib/debug-helpers'
-import {
-  GqlChainValues,
-  GqlSorSwapTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues, GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { apolloTestClient } from '@repo/test/utils/apollo-test-client'
 import { fetchPoolMock } from '../../pool/__mocks__/fetchPoolMock'

@@ -26,7 +26,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTokens } from '../tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)

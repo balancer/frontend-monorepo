@@ -1,8 +1,5 @@
 import { addDays, format } from 'date-fns'
-import {
-  GqlChainValues,
-  GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { saleStructureStepSchema } from './lbp.validation'
 import { UserActions, WeightAdjustmentType } from './lbp.types'
 

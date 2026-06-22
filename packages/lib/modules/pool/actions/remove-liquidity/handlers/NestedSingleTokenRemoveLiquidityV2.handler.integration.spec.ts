@@ -7,7 +7,7 @@ import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { NestedSingleTokenRemoveLiquidityV2Handler } from './NestedSingleTokenRemoveLiquidityV2.handler'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 function selectNestedSingleTokenHandler(pool: Pool): NestedSingleTokenRemoveLiquidityV2Handler {
   return selectRemoveLiquidityHandler(

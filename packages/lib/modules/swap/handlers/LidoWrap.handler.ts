@@ -14,7 +14,7 @@ import { Hex } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { getViemClient } from '@repo/lib/shared/services/viem/viem.client'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 const lidoRateProviderMap: Partial<Record<GqlChain, Address>> = {
   [GqlChainValues.Mainnet]: '0x72d07d7dca67b8a406ad1ec34ce969c90bfee768',

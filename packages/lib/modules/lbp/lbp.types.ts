@@ -1,6 +1,6 @@
 import { HumanAmount } from '@balancer/sdk'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export enum UserActions {
   BUY_AND_SELL = 'buy_and_sell',

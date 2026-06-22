@@ -4,7 +4,7 @@ import { useSwap } from './SwapProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTokens } from '../tokens/TokensProvider'
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
-import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export function SwapRate({
   customTokenUsdPrice,

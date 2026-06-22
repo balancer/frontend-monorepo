@@ -1,9 +1,6 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { PartnerVariant, PoolDisplayType, PoolFilterType } from '@repo/lib/modules/pool/pool.types'
-import {
-  GqlChainValues,
-  GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isProd, isDev, isStaging } from '@repo/lib/config/app.config'
 
 const prodHiddenPoolTypes = [GqlPoolTypeValues.LiquidityBootstrapping] satisfies PoolFilterType[]

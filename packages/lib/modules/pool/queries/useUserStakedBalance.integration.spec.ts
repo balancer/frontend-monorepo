@@ -1,5 +1,5 @@
-import type { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { userStakedInNonPreferentialGauge } from '@repo/test/anvil/anvil-setup'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { connectWith, disconnectWith } from '@repo/test/utils/wagmi/wagmi-connections'

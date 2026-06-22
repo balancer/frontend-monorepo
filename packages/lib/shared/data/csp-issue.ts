@@ -1,6 +1,6 @@
 import { PoolId } from '@repo/lib/modules/pool/pool.types'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export const NO_RECOVERY_EXIT_POOL_IDS: Record<string, PoolId[]> = {
   [GqlChainValues.Mainnet]: [

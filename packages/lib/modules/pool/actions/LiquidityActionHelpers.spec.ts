@@ -50,7 +50,7 @@ import {
   supportsProportionalAddLiquidityReasons,
   toPoolState,
 } from './LiquidityActionHelpers'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 
 describe('Calculates toInputAmounts from allPoolTokens', () => {

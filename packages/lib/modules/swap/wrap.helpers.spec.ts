@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { isSupportedWrap, getWrapConfig, getWrapType } from './wrap.helpers'
 import { SupportedWrapHandler, OWrapType } from './swap.types'
-import { GqlChainValues } from '../../shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '../../shared/services/api/graphql-enums'
 import { TEST_ADDRESSES } from '@repo/lib/test/utils/swap-test-utils'
 
 const defaultConfig = {

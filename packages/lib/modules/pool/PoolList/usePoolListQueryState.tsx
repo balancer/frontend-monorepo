@@ -10,7 +10,7 @@ import {
   GqlPoolOrderByValues,
   GqlPoolOrderDirectionValues,
   GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { uniq } from 'lodash'
 import {
   parseAsArrayOf,

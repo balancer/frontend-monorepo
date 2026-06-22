@@ -1,7 +1,7 @@
 import type {
   GqlNestedPool,
   GqlPoolBase,
-} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
 import { Pool, TokenCore } from './pool.types'
 import { PoolToken, PoolCore } from './pool.types'
 import { isBoosted, isV3Pool } from './pool.helpers'

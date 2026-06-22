@@ -5,7 +5,7 @@ import { parseUnits } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'
 import { HumanAmount } from '@balancer/sdk'
 import type { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { hasNonPreferentialStakedBalance, hasPreferentialGauge } from './actions/stake.helpers'
 
 export function calcStakedBalance(

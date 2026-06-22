@@ -1,6 +1,6 @@
 import { Card, Center, HStack, Spacer, Text, VStack } from '@chakra-ui/react'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import type { GqlLBPTopTrade } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlLBPTopTrade } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { Address } from 'viem'
 import { EnsOrAddress } from '../../user/EnsOrAddress'
 import { fNum } from '@repo/lib/shared/utils/numbers'

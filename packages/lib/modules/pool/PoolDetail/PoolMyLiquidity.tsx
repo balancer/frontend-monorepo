@@ -44,7 +44,7 @@ import {
 } from '../pool.helpers'
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
-import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   PartnerRedirectModal,
   RedirectPartner,

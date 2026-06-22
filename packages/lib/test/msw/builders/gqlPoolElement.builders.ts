@@ -14,11 +14,8 @@ import type {
   GqlPoolElement,
   GqlPoolTokenDetail,
   GqlPoolWeighted,
-} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import {
-  GqlChainValues,
-  GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock } from 'vitest-mock-extended'
 import { aGqlStakingMock } from './gqlStaking.builders'

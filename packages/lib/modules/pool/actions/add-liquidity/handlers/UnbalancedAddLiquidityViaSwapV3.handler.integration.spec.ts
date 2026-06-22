@@ -1,5 +1,5 @@
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { UnbalancedAddLiquidityViaSwapV3Handler } from './UnbalancedAddLiquidityViaSwapV3.handler'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'

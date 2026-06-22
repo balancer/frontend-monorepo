@@ -17,7 +17,7 @@ import {
   getUserWalletBalance,
   getUserWalletBalanceUsd,
 } from '../../user-balance.helpers'
-import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export type UseStakeResponse = ReturnType<typeof useStakeLogic>
 export const StakeContext = createContext<UseStakeResponse | null>(null)

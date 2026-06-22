@@ -1,6 +1,6 @@
 import { EChartsOption } from 'echarts'
 import { useMemo } from 'react'
-import type { QuantAmmWeightSnapshot } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { QuantAmmWeightSnapshot } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { secondsToMilliseconds } from 'date-fns'
 import { usePool } from '../../../PoolProvider'

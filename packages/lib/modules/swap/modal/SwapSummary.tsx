@@ -14,7 +14,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
-import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   EXACT_IN_SWAP_DESCRIPTION,
   EXACT_OUT_SWAP_DESCRIPTION,

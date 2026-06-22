@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { ApolloClient } from '@apollo/client'
 import type { Permit2 } from '@balancer/sdk'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { DefaultSwapHandler } from './DefaultSwap.handler'
 import { BaseDefaultSwapHandler } from './BaseDefaultSwap.handler'
 import type { SdkSimulateSwapResponse } from '../swap.types'

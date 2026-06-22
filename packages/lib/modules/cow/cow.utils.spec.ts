@@ -1,4 +1,4 @@
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { getApiPoolMock } from '../pool/__mocks__/api-mocks/api-mocks'
 import { cowAmmPoolWethGno } from '../pool/__mocks__/pool-examples/flat'
 import { buildCowSwapUrl, buildCowSwapUrlFromPool } from './cow.utils'

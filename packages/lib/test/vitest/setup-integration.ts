@@ -1,7 +1,7 @@
 import { chainsByKey } from '@repo/lib/modules/web3/ChainConfig'
 import * as transportsModule from '@repo/lib/modules/web3/transports'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { ChainIdWithFork, getTestRpcSetup } from '@repo/test/anvil/anvil-setup'
 import { mainnetTest, polygonTest } from '@repo/test/anvil/testWagmiConfig'
 import {

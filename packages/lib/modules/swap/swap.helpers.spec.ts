@@ -1,9 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { parseSwapError, isAuraBalSwap } from './swap.helpers'
-import {
-  GqlChainValues,
-  GqlSorSwapTypeValues,
-} from '../../shared/services/api/generated/graphql-enums'
+import { GqlChainValues, GqlSorSwapTypeValues } from '../../shared/services/api/graphql-enums'
 import { isMainnet } from '../chains/chain.utils'
 import { TEST_ADDRESSES } from '@repo/lib/test/utils/swap-test-utils'
 

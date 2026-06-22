@@ -1,10 +1,10 @@
-import type { GqlPoolAprItem } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlPoolAprItem } from '@repo/lib/shared/services/api/graphql-derived-types'
 import type {
   GqlChain,
   GqlHookType,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlHookTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlHookTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   PlacementWithLogical,
   Popover,

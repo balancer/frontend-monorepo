@@ -3,7 +3,7 @@ import type {
   QuantAmmWeightSnapshot,
   GqlPoolLiquidityBootstrappingV3,
   GqlPoolFixedPriceLbp,
-} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   GetPoolsQuery,
   GetPoolsQueryVariables,
@@ -14,7 +14,7 @@ import type {
   GqlPoolType,
   GqlPoolOrderBy,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
 

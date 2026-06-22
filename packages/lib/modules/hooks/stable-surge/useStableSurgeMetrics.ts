@@ -1,6 +1,6 @@
 import { Pool } from '../../pool/pool.types'
-import type { StableSurgeHookParams } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
-import { GqlHookTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import type { StableSurgeHookParams } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlHookTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useGetPoolTokensWithActualWeights } from '../../pool/useGetPoolTokensWithActualWeights'
 
 export function useStableSurgeMetrics(pool: Pool) {

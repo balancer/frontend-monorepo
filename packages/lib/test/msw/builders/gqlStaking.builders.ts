@@ -1,9 +1,9 @@
-import type { GqlPoolStaking } from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+import type { GqlPoolStaking } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   GqlChainValues,
   GqlPoolStakingGaugeStatusValues,
   GqlPoolStakingTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+} from '@repo/lib/shared/services/api/graphql-enums'
 
 export const defaultTestGaugeAddress = '0x2d42910d826e5500579d121596e98a6eb33c0a1b'
 

@@ -14,7 +14,7 @@ import type {
   GqlPoolStakingType,
   GqlPoolType,
   GqlSorSwapType,
-} from './graphql.js'
+} from './generated/graphql.ts'
 
 export const GqlChainValues = {
   Arbitrum: 'ARBITRUM',

@@ -11,7 +11,7 @@ import {
   PopoverContent,
 } from '@chakra-ui/react'
 import { useSwap } from './SwapProvider'
-import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { SdkSimulateSwapResponse } from './swap.types'

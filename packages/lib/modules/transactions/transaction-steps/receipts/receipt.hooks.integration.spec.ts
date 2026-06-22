@@ -3,7 +3,7 @@ import { waitFor } from '@testing-library/react'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { ethAddress, polAddress } from '@repo/lib/debug-helpers'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { Address, Hash } from 'viem'
 import { gnosis, polygon } from 'viem/chains'
 import {

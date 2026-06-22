@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { parseSwapReceipt } from './receipt-parsers'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 describe('parseSwapReceipt', () => {
   test('does not crash when userAddress is undefined', () => {

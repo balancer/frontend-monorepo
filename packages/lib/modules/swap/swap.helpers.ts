@@ -1,7 +1,7 @@
 import { Address } from 'viem'
 import { OSwapAction, SdkSimulateSwapResponse, SwapAction } from './swap.types'
 import type { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   getNativeAssetAddress,
   getNetworkConfig,

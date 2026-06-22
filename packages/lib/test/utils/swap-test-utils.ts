@@ -1,9 +1,6 @@
 import { vi } from 'vitest'
 import type { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
-import {
-  GqlChainValues,
-  GqlSorSwapTypeValues,
-} from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues, GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import type {
   BuildSwapInputs,
   SdkBuildSwapInputs,

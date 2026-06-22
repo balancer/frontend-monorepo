@@ -1,5 +1,5 @@
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import arbitrum from './arbitrum'
 import avalanche from './avalanche'

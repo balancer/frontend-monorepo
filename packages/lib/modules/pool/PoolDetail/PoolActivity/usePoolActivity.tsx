@@ -5,7 +5,7 @@ import { PropsWithChildren, createContext, useCallback, useMemo, useState } from
 import { useParams } from 'next/navigation'
 import { PoolVariant } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
-import { GqlPoolEventTypeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolEventTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { usePoolEvents } from '../../usePoolEvents'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
 import { getPoolActivityDateCaption, getPoolActivityTitle } from '../../pool.helpers'

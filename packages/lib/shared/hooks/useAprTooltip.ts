@@ -1,9 +1,6 @@
-import type { GqlPoolAprItem } from '../services/api/generated/graphql-derived-types'
+import type { GqlPoolAprItem } from '../services/api/graphql-derived-types'
 import type { GqlChain, GqlHookType, GqlPoolAprItemType } from '../services/api/generated/graphql'
-import {
-  GqlHookTypeValues,
-  GqlPoolAprItemTypeValues,
-} from '../services/api/generated/graphql-enums'
+import { GqlHookTypeValues, GqlPoolAprItemTypeValues } from '../services/api/graphql-enums'
 import { bn } from '../utils/numbers'
 import type BigNumber from 'bignumber.js'
 

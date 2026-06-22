@@ -1,6 +1,6 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export function isMainnet(chain: GqlChain | number): boolean {
   return chain === GqlChainValues.Mainnet || chain === getChainId(GqlChainValues.Mainnet)

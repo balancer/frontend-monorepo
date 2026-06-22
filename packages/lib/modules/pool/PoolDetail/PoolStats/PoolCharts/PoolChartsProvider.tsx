@@ -5,7 +5,7 @@ import {
   GqlPoolSnapshotDataRange,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolSnapshotDataRangeValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlPoolSnapshotDataRangeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useQuery } from '@apollo/client/react'
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'

@@ -2,13 +2,13 @@ import { wETHAddress, wjAuraAddress } from '@repo/lib/debug-helpers'
 import type {
   GqlPoolTokenDetail,
   GqlTokenPrice,
-} from '@repo/lib/shared/services/api/generated/graphql-derived-types'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   GetTokenPricesQuery,
   GetTokensQuery,
   GetTokensQueryVariables,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   FakeTokenSymbol,
   allFakeGqlTokens,

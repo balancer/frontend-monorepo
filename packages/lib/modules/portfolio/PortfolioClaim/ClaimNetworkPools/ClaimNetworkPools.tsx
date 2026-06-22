@@ -17,7 +17,7 @@ import {
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/generated/graphql-enums'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useMemo, useState, type ReactNode } from 'react'
