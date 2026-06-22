@@ -88,7 +88,7 @@ export function destructureRequiredPoolParams(
 export function calculateSpotPrice(poolType: GqlPoolType, params: GyroPoolParams): bigint {
   let price = ZERO
 
-  if (poolType === GqlPoolTypeValues.Gyroe) {
+  if (poolType === GqlPoolTypeValues.GyroE) {
     price = calculateGyroESpotPrice(params as GyroEParams)
   }
 

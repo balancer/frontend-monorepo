@@ -60,7 +60,7 @@ export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
   const originalPoolSpotPrice = params
     ? bn(
         formatUnits(
-          calculateSpotPrice(pool.type as (typeof GqlPoolTypeValues)['Gyroe'], params),
+          calculateSpotPrice(pool.type as (typeof GqlPoolTypeValues)['GyroE'], params),
           18
         )
       )

@@ -41,7 +41,7 @@ const TABS_WITH_FEES: PoolChartTypeTab[] = [
 
 const POOL_SPECIFIC_TABS: PoolTabsMap = {
   [GqlPoolTypeValues.CowAmm]: [...BASE_TABS, { value: PoolChartTab.SURPLUS, label: 'Surplus' }],
-  [GqlPoolTypeValues.Gyroe]: [
+  [GqlPoolTypeValues.GyroE]: [
     { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity profile' },
     ...TABS_WITH_FEES,
   ],

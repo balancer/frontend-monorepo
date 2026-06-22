@@ -86,7 +86,7 @@ export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'tags'>) {
 
 export function isGyro(poolType: GqlPoolType) {
   return (
-    [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.Gyroe] as GqlPoolType[]
+    [GqlPoolTypeValues.Gyro, GqlPoolTypeValues.Gyro3, GqlPoolTypeValues.GyroE] as GqlPoolType[]
   ).includes(poolType)
 }
 
@@ -95,7 +95,7 @@ export function isClp(poolType: GqlPoolType) {
 }
 
 export function isGyroEPool(pool: Pool): pool is GqlPoolGyro {
-  return pool.type === GqlPoolTypeValues.Gyroe
+  return pool.type === GqlPoolTypeValues.GyroE
 }
 
 export function isAutoRange(poolType: GqlPoolType): boolean {

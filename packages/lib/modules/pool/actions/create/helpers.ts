@@ -16,7 +16,7 @@ const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
   [PoolType.Weighted]: GqlPoolTypeValues.Weighted,
   [PoolType.Stable]: GqlPoolTypeValues.Stable,
   [PoolType.StableSurge]: GqlPoolTypeValues.Stable,
-  [PoolType.GyroE]: GqlPoolTypeValues.Gyroe,
+  [PoolType.GyroE]: GqlPoolTypeValues.GyroE,
   [PoolType.ReClamm]: GqlPoolTypeValues.Reclamm,
   [PoolType.CowAmm]: GqlPoolTypeValues.CowAmm,
 }

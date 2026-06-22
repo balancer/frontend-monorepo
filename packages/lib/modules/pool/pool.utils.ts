@@ -193,7 +193,7 @@ const poolTypeLabelMap: Partial<Record<GqlPoolType, string>> = {
   [GqlPoolTypeValues.Element]: 'Element',
   [GqlPoolTypeValues.Gyro]: '2-CLP',
   [GqlPoolTypeValues.Gyro3]: '3-CLP',
-  [GqlPoolTypeValues.Gyroe]: 'E-CLP',
+  [GqlPoolTypeValues.GyroE]: 'E-CLP',
   [GqlPoolTypeValues.Investment]: 'Managed',
   [GqlPoolTypeValues.LiquidityBootstrapping]: 'Dynamic LBP',
   [GqlPoolTypeValues.MetaStable]: 'Stable',

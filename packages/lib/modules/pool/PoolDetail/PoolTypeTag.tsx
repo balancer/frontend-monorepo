@@ -108,7 +108,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
         </TagWrapper>
       )
 
-    case GqlPoolTypeValues.Gyroe:
+    case GqlPoolTypeValues.GyroE:
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Gyro} />

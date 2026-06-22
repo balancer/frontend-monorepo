@@ -19,7 +19,7 @@ export function useGetTokenRates(pool: Pool) {
     abi: isV3 ? vaultExtensionAbi_V3 : gyroEclpPoolAbi,
     functionName: isV3 ? 'getPoolTokenRates' : 'getTokenRates',
     address: contractAddress,
-    query: { enabled: pool.type === GqlPoolTypeValues.Gyroe },
+    query: { enabled: pool.type === GqlPoolTypeValues.GyroE },
     args: isV3 ? [pool.address as Address] : [],
   })
 

@@ -128,7 +128,6 @@ export const GqlPoolTypeValues = {
   Gyro: 'GYRO',
   Gyro3: 'GYRO3',
   GyroE: 'GYROE',
-  Gyroe: 'GYROE',
   Investment: 'INVESTMENT',
   LiquidityBootstrapping: 'LIQUIDITY_BOOTSTRAPPING',
   MetaStable: 'META_STABLE',

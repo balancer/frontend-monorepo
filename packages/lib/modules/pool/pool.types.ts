@@ -113,7 +113,7 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolTypeValues.Gyro]: [
     GqlPoolTypeValues.Gyro,
     GqlPoolTypeValues.Gyro3,
-    GqlPoolTypeValues.Gyroe,
+    GqlPoolTypeValues.GyroE,
   ],
   [GqlPoolTypeValues.CowAmm]: [GqlPoolTypeValues.CowAmm],
   [GqlPoolTypeValues.Fx]: [GqlPoolTypeValues.Fx],
