@@ -4,7 +4,11 @@ import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { aUserPoolBalance } from '@repo/lib/test/msw/builders/gqlUserBalance.builders'
 import { mockTokenPricesList } from '@repo/lib/test/msw/handlers/Tokens.handlers'
-import { buildDefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
+import {
+  buildDefaultPoolTestProvider,
+  testHook,
+  DefaultRemoveLiquidityTestProvider,
+} from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { act } from 'react'
 import { mock } from 'vitest-mock-extended'
@@ -47,8 +51,9 @@ poolMock.dynamicData.totalShares = '100'
 
 async function testUseRemoveLiquidity(pool: GqlPoolElement = poolMock) {
   const { result } = testHook(() => useRemoveLiquidityLogic(), {
-    wrapper: buildDefaultPoolTestProvider(pool),
+    wrapper: buildDefaultPoolTestProvider(pool, DefaultRemoveLiquidityTestProvider),
   })
+
   return result
 }
 
@@ -121,7 +126,7 @@ test('uses custom remove liquidity handler selector and forwards handler to cust
         useRemoveLiquiditySteps
       ),
     {
-      wrapper: buildDefaultPoolTestProvider(poolMock),
+      wrapper: buildDefaultPoolTestProvider(poolMock, DefaultRemoveLiquidityTestProvider),
     }
   )
 
