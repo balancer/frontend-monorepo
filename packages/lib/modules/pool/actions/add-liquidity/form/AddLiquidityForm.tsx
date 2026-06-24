@@ -249,7 +249,6 @@ function AddLiquidityMainForm() {
                 avoidPriceImpactAlert={shouldShowUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
                 isDisabled={!wantsProportional && !priceImpactQuery.data}
-                setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}
           </VStack>

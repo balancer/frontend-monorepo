@@ -94,7 +94,6 @@ export function SwapForm({
     setTokenIn,
     setTokenOut,
     switchTokens,
-    setNeedsToAcceptHighPI,
     resetSwapAmounts,
     replaceUrlPath,
   } = useSwap()

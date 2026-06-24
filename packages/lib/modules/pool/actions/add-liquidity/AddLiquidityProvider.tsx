@@ -30,10 +30,7 @@ import {
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import {
-  isUnhandledAddPriceImpactError,
-  cannotCalculatePriceImpactError,
-} from '@repo/lib/modules/price-impact/price-impact.utils'
+import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
@@ -81,7 +78,6 @@ export function useAddLiquidityLogic(
   )
   // only used by Proportional handlers that require a referenceAmount
   const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
-  const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
 
@@ -171,6 +167,9 @@ export function useAddLiquidityLogic(
     humanAmountsIn,
     enabled,
   })
+
+  const { acceptPriceImpactRisk, hasToAcceptHighPriceImpact } = usePriceImpact()
+  const needsToAcceptHighPI = hasToAcceptHighPriceImpact && !acceptPriceImpactRisk
 
   const { steps, isLoadingSteps } = useAddLiquiditySteps({
     helpers,
@@ -269,7 +268,6 @@ export function useAddLiquidityLogic(
     setHumanAmountsIn,
     clearAmountsIn,
     setReferenceAmountAddress,
-    setNeedsToAcceptHighPI,
     setAcceptPoolRisks,
     setWethIsEth,
     setWrapUnderlyingByIndex,

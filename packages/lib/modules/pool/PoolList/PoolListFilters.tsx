@@ -33,7 +33,7 @@ import {
   poolTypeFilters,
 } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Filter, Info, Plus } from 'react-feather'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -126,15 +126,8 @@ function UserLiquidityFilters() {
 
 function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   const {
-    queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
+    queryState: { togglePoolTag, poolTags, poolTagLabel },
   } = usePoolList()
-
-  // remove query param when empty
-  useEffect(() => {
-    if (!poolTags.length) {
-      setPoolTags(null)
-    }
-  }, [poolTags])
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
@@ -156,20 +149,13 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
 
 function PoolHookFilters() {
   const {
-    queryState: { togglePoolHookTag, poolHookTags, setPoolHookTags, poolHookTagLabel },
+    queryState: { togglePoolHookTag, poolHookTags, poolHookTagLabel },
   } = usePoolList()
 
   // Exclude hooks that are not live
   const livePoolHookTagFilters = poolHookTagFilters.filter(
     tag => tag !== 'HOOKS_FEETAKING' && tag !== 'HOOKS_EXITFEE'
   )
-
-  // remove query param when empty
-  useEffect(() => {
-    if (!poolHookTags.length) {
-      setPoolHookTags(null)
-    }
-  }, [poolHookTags])
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
@@ -190,7 +176,6 @@ function PoolHookFilters() {
 export interface PoolTypeFiltersArgs {
   poolTypes: PoolFilterType[]
   poolTypeLabel: (poolType: PoolFilterType) => string
-  setPoolTypes: (value: PoolFilterType[] | null) => void
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
   hidePoolTypes?: PoolFilterType[]
 }
@@ -199,16 +184,8 @@ export function PoolTypeFilters({
   togglePoolType,
   poolTypes,
   poolTypeLabel,
-  setPoolTypes,
   hidePoolTypes,
 }: PoolTypeFiltersArgs) {
-  // remove query param when empty
-  useEffect(() => {
-    if (!poolTypes.length) {
-      setPoolTypes(null)
-    }
-  }, [poolTypes])
-
   const _poolTypeFilters = poolTypeFilters.filter(
     poolType => !(hidePoolTypes ?? []).includes(poolType)
   )
@@ -459,8 +436,6 @@ export interface ProtocolVersionFilterProps {
   setProtocolVersion: (version: number | null) => any
   protocolVersion: number | null
   poolTypes: PoolFilterType[]
-  activeProtocolVersionTab: ButtonGroupOption
-  setActiveProtocolVersionTab: React.Dispatch<React.SetStateAction<ButtonGroupOption>>
   hideProtocolVersion?: string[]
 }
 
@@ -468,39 +443,30 @@ export function ProtocolVersionFilter({
   setProtocolVersion,
   protocolVersion,
   poolTypes,
-  activeProtocolVersionTab,
-  setActiveProtocolVersionTab,
   hideProtocolVersion,
 }: ProtocolVersionFilterProps) {
   const tabs = PROTOCOL_VERSION_TABS
 
-  function toggleTab(option: ButtonGroupOption) {
-    setActiveProtocolVersionTab(option)
-  }
-
-  useEffect(() => {
-    if (protocolVersion === 3) {
-      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[2])
-    } else if (protocolVersion === 2) {
-      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[1])
-    } else if (poolTypes.includes(GqlPoolType.CowAmm) || protocolVersion === 1) {
-      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[3])
-    } else {
-      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
+  const activeProtocolVersionTab = useMemo(() => {
+    if (protocolVersion === 3) return PROTOCOL_VERSION_TABS[2]
+    if (protocolVersion === 2) return PROTOCOL_VERSION_TABS[1]
+    if (poolTypes.includes(GqlPoolType.CowAmm) || protocolVersion === 1) {
+      return PROTOCOL_VERSION_TABS[3]
     }
-  }, [])
+    return PROTOCOL_VERSION_TABS[0]
+  }, [protocolVersion, poolTypes])
 
-  useEffect(() => {
-    if (activeProtocolVersionTab.value === 'v3') {
+  function toggleTab(option: ButtonGroupOption) {
+    if (option.value === 'v3') {
       setProtocolVersion(3)
-    } else if (activeProtocolVersionTab.value === 'v2') {
+    } else if (option.value === 'v2') {
       setProtocolVersion(2)
-    } else if (activeProtocolVersionTab.value === 'cow') {
+    } else if (option.value === 'cow') {
       setProtocolVersion(1)
     } else {
       setProtocolVersion(null)
     }
-  }, [activeProtocolVersionTab])
+  }
 
   return (
     <ButtonGroup
@@ -521,16 +487,13 @@ export function PoolListFilters() {
     queryState: {
       resetFilters,
       totalFilterCount,
-      setActiveProtocolVersionTab,
       networks: toggledNetworks,
       toggleNetwork,
       setNetworks,
       togglePoolType,
       poolTypes,
-      setPoolTypes,
       setProtocolVersion,
       protocolVersion,
-      activeProtocolVersionTab,
     },
   } = usePoolList()
   const { isCowPath } = useCow()
@@ -538,7 +501,6 @@ export function PoolListFilters() {
 
   function _resetFilters() {
     resetFilters()
-    setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
   const { options, supportedNetworks } = PROJECT_CONFIG
@@ -625,11 +587,9 @@ export function PoolListFilters() {
                             Protocol version
                           </Heading>
                           <ProtocolVersionFilter
-                            activeProtocolVersionTab={activeProtocolVersionTab}
                             hideProtocolVersion={PROJECT_CONFIG.options.hideProtocolVersion}
                             poolTypes={poolTypes}
                             protocolVersion={protocolVersion}
-                            setActiveProtocolVersionTab={setActiveProtocolVersionTab}
                             setProtocolVersion={setProtocolVersion}
                           />
                         </Box>
@@ -643,7 +603,6 @@ export function PoolListFilters() {
                             hidePoolTypes={PROJECT_CONFIG.options.hidePoolTypes}
                             poolTypeLabel={poolTypeLabel}
                             poolTypes={poolTypes}
-                            setPoolTypes={setPoolTypes}
                             togglePoolType={togglePoolType}
                           />
                         </Box>

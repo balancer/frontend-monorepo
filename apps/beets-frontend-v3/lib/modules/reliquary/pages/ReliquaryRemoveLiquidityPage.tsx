@@ -77,7 +77,6 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
     removeLiquidityTxHash,
     setProportionalType,
     setSingleTokenType,
-    setNeedsToAcceptHighPI,
     tokens,
     humanBptInPercent,
     setHumanBptInPercent,

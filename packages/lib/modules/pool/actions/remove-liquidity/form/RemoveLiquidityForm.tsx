@@ -94,7 +94,6 @@ export function RemoveLiquidityForm() {
     setProportionalType,
     setSingleTokenType,
     setHumanBptInPercent,
-    setNeedsToAcceptHighPI,
     amountsOut,
   } = useRemoveLiquidity()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()

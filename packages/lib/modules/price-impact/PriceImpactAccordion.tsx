@@ -38,7 +38,6 @@ interface PriceImpactAccordionProps {
 }
 
 export function PriceImpactAccordion({
-  setNeedsToAcceptPIRisk,
   accordionButtonComponent,
   accordionPanelComponent,
   isDisabled,
@@ -52,7 +51,6 @@ export function PriceImpactAccordion({
     priceImpactLevel,
     priceImpactColor,
     acceptPriceImpactRisk,
-    hasToAcceptHighPriceImpact,
     setAcceptPriceImpactRisk,
     PriceImpactIcon,
     priceImpact,
@@ -66,14 +64,6 @@ export function PriceImpactAccordion({
     const extremely = level === 'max' ? 'extremely ' : ''
     return `Potential ‘${label}’ loss is ${extremely}high: ${priceImpact && fNum('priceImpact', priceImpact)}`
   }
-
-  useEffect(() => {
-    if ((hasToAcceptHighPriceImpact || isUnknownPriceImpact) && !acceptPriceImpactRisk) {
-      setNeedsToAcceptPIRisk(true)
-    } else {
-      setNeedsToAcceptPIRisk(false)
-    }
-  }, [acceptPriceImpactRisk, hasToAcceptHighPriceImpact, isUnknownPriceImpact])
 
   const handleClick = () => {
     if (priceImpactLevel === 'high') {

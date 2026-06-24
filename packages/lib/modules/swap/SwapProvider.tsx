@@ -126,7 +126,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   )
 
   const swapState = useReactiveVar(swapStateVar)
-  const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [tokenSelectKey, setTokenSelectKey] = useState<'tokenIn' | 'tokenOut'>('tokenIn')
   const hasInitializedUserChain = useRef(false)
 
@@ -135,7 +134,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { getToken, getTokensByChain, usdValueForToken } = useTokens()
   const { tokens, setTokens } = useTokenBalances()
   const { hasValidationErrors, resetValidationErrors } = useTokenInputsValidation()
-  const { setPriceImpact, resetPriceImpact, acceptPriceImpactRisk, hasToAcceptHighPriceImpact } = usePriceImpact()
+  const { setPriceImpact, resetPriceImpact, acceptPriceImpactRisk, hasToAcceptHighPriceImpact } =
+    usePriceImpact()
   const needsToAcceptHighPI = hasToAcceptHighPriceImpact && !acceptPriceImpactRisk
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
@@ -737,7 +737,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     setTokenIn,
     setTokenOut,
     switchTokens,
-    setNeedsToAcceptHighPI,
   }
 }
 

@@ -72,7 +72,6 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
     showAcceptPoolRisks,
     totalUSDValue,
     addLiquidityTxHash,
-    setNeedsToAcceptHighPI,
     refetchQuote,
     previewModalDisclosure,
     slippage,
