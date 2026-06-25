@@ -3,8 +3,8 @@ import { TokenType, CreatePoolV3BaseInput, PoolType } from '@balancer/sdk'
 import { parseUnits, zeroAddress } from 'viem'
 import { PERCENTAGE_DECIMALS, DEFAULT_DECIMALS } from '../constants'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
-import { CreatePoolInput } from '../types'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
+import { CreatePoolInput } from '../types'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
   const { poolCreationForm, autoRangeConfigForm, eclpConfigForm } = usePoolCreationForm()
