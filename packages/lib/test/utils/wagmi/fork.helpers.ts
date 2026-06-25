@@ -3,7 +3,7 @@ import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
 import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
 import { mainnet, sonic } from 'viem/chains'
-import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
+import { getRpcUrl, getDrpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 import { isBeets } from '@repo/lib/config/getProjectConfig'
 import { getGqlChain } from '@repo/lib/config/app.config'
 
@@ -77,8 +77,7 @@ export function resetFork(chainId: number = mainnet.id) {
 
   if (directDevProjectId) {
     const gqlChain = getGqlChain(chainId)
-    const jsonRpcUrl = `https://prod.rpc.direct.dev/v1/${directDevProjectId}/${gqlChain.toLowerCase()}`
-    return forkClient.reset({ jsonRpcUrl })
+    return forkClient.reset({ jsonRpcUrl: getRpcUrl(gqlChain, directDevProjectId) })
   }
 
   const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
@@ -86,7 +85,7 @@ export function resetFork(chainId: number = mainnet.id) {
     throw new Error('NEXT_PRIVATE_DRPC_KEY is missing')
   }
   return forkClient.reset({
-    jsonRpcUrl: drpcUrlByChainId(chainId, privateKey),
+    jsonRpcUrl: getDrpcUrlByChainId(chainId, privateKey),
   })
 }
 

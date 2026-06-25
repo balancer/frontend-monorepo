@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { GqlChain } from '../../services/api/generated/graphql'
-import { drpcUrl } from '../rpc'
+import { getRpcUrl } from '../rpc'
 
 const DRPC_KEY = process.env.NEXT_PRIVATE_DRPC_KEY || ''
 
@@ -11,7 +11,7 @@ export async function postRpcCall(request: NextRequest, chain: GqlChain) {
     })
   }
 
-  const rpcUrl = drpcUrl(chain, DRPC_KEY)
+  const rpcUrl = getRpcUrl(chain, DRPC_KEY)
   const rpcBody = await request.json()
 
   const rpcResponse = await fetch(rpcUrl, {

@@ -26,6 +26,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { GqlChainValues } from '@repo/lib/config/networks'
+import { getRpcUrl } from '@repo/lib/shared/utils/rpc'
 import { hyperEVM } from '@balancer/sdk'
 
 /* If a request with the default rpc fails, it will fall back to the next one in the list.
@@ -58,7 +59,7 @@ const getPrivateRpcUrl = (chain: GqlChain) => {
   // Use anvil fork for E2E dev tests
   if (shouldUseAnvilFork) return defaultAnvilForkRpcUrl
   if (directDevProjectId) {
-    return `https://prod.rpc.direct.dev/v1/${directDevProjectId}/${chain.toLowerCase()}`
+    return getRpcUrl(chain, directDevProjectId)
   }
   return `${baseUrl}/api/rpc/${chain}`
 }

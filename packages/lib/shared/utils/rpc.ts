@@ -1,7 +1,10 @@
 import { GqlChain } from '../services/api/generated/graphql'
 import { ChainId } from '@balancer/sdk'
 
-const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
+const DRPC_BASE_URL = 'https://lb.drpc.live'
+const DIRECT_DEV_BASE_URL = 'https://prod.rpc.direct.dev/v1'
+
+export const chainToRpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Mainnet]: 'ethereum',
   [GqlChain.Arbitrum]: 'arbitrum',
   [GqlChain.Optimism]: 'optimism',
@@ -21,7 +24,7 @@ const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Xlayer]: 'xlayer',
 }
 
-export const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
+export const chainIdToRpcName: Partial<Record<number, string | undefined>> = {
   [ChainId.MAINNET]: 'ethereum',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.OPTIMISM]: 'optimism',
@@ -41,14 +44,31 @@ export const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
   [ChainId.X_LAYER]: 'xlayer',
 }
 
-export function drpcUrl(chain: GqlChain, privateKey: string) {
-  const chainSlug = chainToDrpcName[chain]
-  if (!chainSlug) throw new Error(`Invalid chain: ${chain}`)
-  return `https://lb.drpc.live/${chainSlug}/${privateKey}`
+function toDirectDevSlug(slug: string) {
+  if (slug === 'sepolia') return 'ethereum-sepolia'
+  return slug
 }
 
-export function drpcUrlByChainId(chainId: number, privateKey: string) {
-  const chainSlug = chainIdToDrpcName[chainId]
-  if (!chainSlug) throw new Error(`Invalid chain id: ${chainId}`)
-  return `https://lb.drpc.live/${chainSlug}/${privateKey}`
+export function getRpcUrl(chain: GqlChain, key: string) {
+  const slug = chainToRpcName[chain]
+  if (!slug) throw new Error(`Invalid chain: ${chain}`)
+  return `${DIRECT_DEV_BASE_URL}/${key}/${toDirectDevSlug(slug)}`
+}
+
+export function getRpcUrlByChainId(chainId: number, key: string) {
+  const slug = chainIdToRpcName[chainId]
+  if (!slug) throw new Error(`Invalid chain id: ${chainId}`)
+  return `${DIRECT_DEV_BASE_URL}/${key}/${toDirectDevSlug(slug)}`
+}
+
+export function getDrpcUrl(chain: GqlChain, key: string) {
+  const slug = chainToRpcName[chain]
+  if (!slug) throw new Error(`Invalid chain: ${chain}`)
+  return `${DRPC_BASE_URL}/${slug}/${key}`
+}
+
+export function getDrpcUrlByChainId(chainId: number, key: string) {
+  const slug = chainIdToRpcName[chainId]
+  if (!slug) throw new Error(`Invalid chain id: ${chainId}`)
+  return `${DRPC_BASE_URL}/${slug}/${key}`
 }
