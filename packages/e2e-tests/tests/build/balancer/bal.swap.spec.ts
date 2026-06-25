@@ -4,6 +4,7 @@ import { test, expect } from '@playwright/test'
 test('Balancer: swap page renders', async ({ page }) => {
   await page.goto('http://localhost:3000/')
   await clickLink(page, 'Swap')
+  await page.waitForURL('**/swap**')
 
   await expect(button(page, 'ETH')).toBeVisible()
 

@@ -6,10 +6,13 @@ test('Balancer: add liquidity page renders', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Add liquidity' }).click()
 
+  // Wait for the add-liquidity form to render
+  await page.locator('#button-group-0').waitFor({ state: 'visible' })
+
   // Proportional tab is disabled
   await page.locator('#button-group-1').hover() //TODO: add id to the button to improve locator
   await expect(
-    page.getByText('does not support liquidity to be added proportionally'),
+    page.getByText(/does not support liquidity to be added proportionally/),
   ).toBeVisible()
   await page.locator('#button-group-0').hover() //TODO: add id to the button to improve locator
 
