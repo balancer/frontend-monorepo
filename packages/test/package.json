@@ -5,7 +5,7 @@
   "type": "module",
   "devDependencies": {
     "@apollo/client": "catalog:",
-    "@balancer/sdk": "6.1.0",
+    "@balancer/sdk": "6.1.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
