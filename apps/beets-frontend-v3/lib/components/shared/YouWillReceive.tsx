@@ -1,7 +1,7 @@
 import { Box, Flex, Text, Popover, PopoverContent, PopoverTrigger, HStack } from '@chakra-ui/react'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 

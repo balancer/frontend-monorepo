@@ -7,7 +7,7 @@ import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 function selectNestedHandler(pool: Pool) {
   return selectAddLiquidityHandler(pool) as NestedAddLiquidityV2Handler
@@ -15,7 +15,7 @@ function selectNestedHandler(pool: Pool) {
 
 // Balancer 50WETH-50-3pool
 const poolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0'
-const nestedPool = await fetchPoolMock({ poolId, chain: GqlChain.Mainnet })
+const nestedPool = await fetchPoolMock({ poolId, chain: GqlChainValues.Mainnet })
 
 describe('When adding nested liquidity for a weighted pool', () => {
   test('has zero price impact', async () => {

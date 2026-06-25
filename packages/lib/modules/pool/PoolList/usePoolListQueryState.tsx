@@ -4,8 +4,13 @@ import {
   GqlChain,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
-  GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChainValues,
+  GqlPoolOrderByValues,
+  GqlPoolOrderDirectionValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { uniq } from 'lodash'
 import {
   parseAsArrayOf,
@@ -55,16 +60,18 @@ const JOINABLE_POOLS_FIRST = 100
 const poolListQueryStateParsers = {
   first: parseAsInteger.withDefault(20),
   skip: parseAsInteger.withDefault(0),
-  orderBy: parseAsStringEnum<GqlPoolOrderBy>(Object.values(GqlPoolOrderBy)).withDefault(
-    GqlPoolOrderBy.TotalLiquidity
+  orderBy: parseAsStringEnum<GqlPoolOrderBy>(Object.values(GqlPoolOrderByValues)).withDefault(
+    GqlPoolOrderByValues.TotalLiquidity
   ),
   orderDirection: parseAsStringEnum<GqlPoolOrderDirection>(
-    Object.values(GqlPoolOrderDirection)
-  ).withDefault(GqlPoolOrderDirection.Desc),
+    Object.values(GqlPoolOrderDirectionValues)
+  ).withDefault(GqlPoolOrderDirectionValues.Desc),
   poolTypes: parseAsArrayOf(
     parseAsStringEnum<PoolFilterType>(poolTypeFilters as unknown as PoolFilterType[])
   ).withDefault([]),
-  networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChain))).withDefault([]),
+  networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChainValues))).withDefault(
+    []
+  ),
   protocolVersion: parseAsInteger,
   textSearch: parseAsString,
   userAddress: parseAsString,
@@ -190,11 +197,11 @@ export function usePoolListQueryState() {
       setSkip(0)
       setOrderBy(sortingState[0].id)
       setOrderDirection(
-        sortingState[0].desc ? GqlPoolOrderDirection.Desc : GqlPoolOrderDirection.Asc
+        sortingState[0].desc ? GqlPoolOrderDirectionValues.Desc : GqlPoolOrderDirectionValues.Asc
       )
     } else {
-      setOrderBy(GqlPoolOrderBy.TotalLiquidity)
-      setOrderDirection(GqlPoolOrderDirection.Desc)
+      setOrderBy(GqlPoolOrderByValues.TotalLiquidity)
+      setOrderDirection(GqlPoolOrderDirectionValues.Desc)
     }
   }
 
@@ -272,7 +279,7 @@ export function usePoolListQueryState() {
     (joinablePools ? 1 : 0)
 
   const sorting: SortingState = orderBy
-    ? [{ id: orderBy, desc: orderDirection === GqlPoolOrderDirection.Desc }]
+    ? [{ id: orderBy, desc: orderDirection === GqlPoolOrderDirectionValues.Desc }]
     : []
 
   const pagination: PaginationState = {
@@ -295,9 +302,9 @@ export function usePoolListQueryState() {
     orderDirection,
     where: {
       poolTypeIn: mappedPoolTypes.filter(
-        poolType => poolType !== GqlPoolType.LiquidityBootstrapping
+        poolType => poolType !== GqlPoolTypeValues.LiquidityBootstrapping
       ),
-      poolTypeNotIn: [GqlPoolType.LiquidityBootstrapping],
+      poolTypeNotIn: [GqlPoolTypeValues.LiquidityBootstrapping],
       chainIn: networks.length > 0 ? networks : PROJECT_CONFIG.supportedNetworks,
       userAddress,
       minTvl,

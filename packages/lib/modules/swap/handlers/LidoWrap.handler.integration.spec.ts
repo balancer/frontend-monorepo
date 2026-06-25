@@ -1,4 +1,4 @@
-import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { wstEthAddress } from '@repo/lib/debug-helpers'
 
@@ -13,14 +13,14 @@ describe('LidoWrapHandler', () => {
         const handler = new LidoWrapHandler()
 
         const result = await handler.simulate({
-          chain: GqlChain.Mainnet,
-          swapType: GqlSorSwapType.ExactIn,
+          chain: GqlChainValues.Mainnet,
+          swapType: GqlSorSwapTypeValues.ExactIn,
           swapAmount: '1.0',
           tokenIn: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
           tokenOut: wstEthAddress,
         })
 
-        expect(result.swapType).toBe(GqlSorSwapType.ExactIn)
+        expect(result.swapType).toBe(GqlSorSwapTypeValues.ExactIn)
         expect(result.returnAmount).toBeDefined()
         expect(Number(result.returnAmount)).toBeGreaterThan(0)
         expect(result.effectivePrice).toBeDefined()
@@ -35,14 +35,14 @@ describe('LidoWrapHandler', () => {
         const handler = new LidoWrapHandler()
 
         const result = await handler.simulate({
-          chain: GqlChain.Mainnet,
-          swapType: GqlSorSwapType.ExactIn,
+          chain: GqlChainValues.Mainnet,
+          swapType: GqlSorSwapTypeValues.ExactIn,
           swapAmount: '1.0',
           tokenIn: wstEthAddress,
           tokenOut: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
         })
 
-        expect(result.swapType).toBe(GqlSorSwapType.ExactIn)
+        expect(result.swapType).toBe(GqlSorSwapTypeValues.ExactIn)
         expect(result.returnAmount).toBeDefined()
         expect(Number(result.returnAmount)).toBeGreaterThan(0)
       },
@@ -66,8 +66,8 @@ describe('LidoWrapHandler', () => {
           amount: '1.0',
           scaledAmount: BigInt(1e18),
         },
-        swapType: GqlSorSwapType.ExactIn,
-        selectedChain: GqlChain.Mainnet,
+        swapType: GqlSorSwapTypeValues.ExactIn,
+        selectedChain: GqlChainValues.Mainnet,
         account: defaultTestUserAccount,
         slippagePercent: '0.5',
         simulateResponse: {} as any,
@@ -96,8 +96,8 @@ describe('LidoWrapHandler', () => {
           amount: '1.0',
           scaledAmount: BigInt(1e18),
         },
-        swapType: GqlSorSwapType.ExactIn,
-        selectedChain: GqlChain.Mainnet,
+        swapType: GqlSorSwapTypeValues.ExactIn,
+        selectedChain: GqlChainValues.Mainnet,
         account: defaultTestUserAccount,
         slippagePercent: '0.5',
         simulateResponse: {} as any,

@@ -10,7 +10,7 @@ import {
   CreatePoolLiquidityBootstrappingInput,
   CreatePoolLiquidityBootstrappingFixedPriceInput,
 } from '@balancer/sdk'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { WeightedPoolStructure } from './constants'

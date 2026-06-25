@@ -5,7 +5,7 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useLstStakeStep } from './hooks/useLstStakeStep'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { useLstUnstakeStep } from './hooks/useLstUnstakeStep'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -19,7 +19,7 @@ import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsVa
 import { formatUnits, parseUnits } from 'viem'
 import { useGetRate } from './hooks/useGetRate'
 
-const CHAIN = GqlChain.Sonic
+const CHAIN = GqlChainValues.Sonic
 const WITHDRAW_DELAY = 1209600 // 14 days in seconds
 
 const TABS: ButtonGroupOption[] = [

@@ -6,6 +6,7 @@ import {
   GqlChain,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -58,7 +59,7 @@ export function usePoolListLogic({
   const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
 
   const selectedChains = variables.where.chainIn || []
-  const joinableChains = selectedChains.filter(chain => chain !== GqlChain.Sepolia)
+  const joinableChains = selectedChains.filter(chain => chain !== GqlChainValues.Sepolia)
 
   const {
     tokenBalancesByChain: walletTokenAddressesByChain,

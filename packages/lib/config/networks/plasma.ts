@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
@@ -18,7 +18,7 @@ const networkConfig: NetworkConfig = {
   chainId,
   name: chain.name,
   shortName: chain.name,
-  chain: GqlChain.Plasma,
+  chain: GqlChainValues.Plasma,
   iconPath: '/images/chains/PLASMA.svg',
   blockExplorer: {
     baseUrl: chain.blockExplorers!.default.url,
@@ -62,7 +62,7 @@ const networkConfig: NetworkConfig = {
     permit2: PERMIT2[chainId],
   },
   pools: convertHexToLowerCase({
-    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Plasma] },
+    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Plasma] },
   }),
   supportsVeBalSync: false,
 }

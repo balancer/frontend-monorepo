@@ -1,5 +1,5 @@
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
@@ -11,7 +11,7 @@ const networkConfig: NetworkConfig = {
   chainId: 1,
   name: 'Ethereum Mainnet',
   shortName: 'Ethereum',
-  chain: GqlChain.Mainnet,
+  chain: GqlChainValues.Mainnet,
   iconPath: '/images/chains/MAINNET.svg',
   blockExplorer: {
     baseUrl: 'https://etherscan.io',
@@ -134,7 +134,7 @@ const networkConfig: NetworkConfig = {
         '0xa718042e5622099e5f0ace4e7122058ab39e1bbe000200000000000000000475',
         '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473',
       ],
-      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Mainnet],
+      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Mainnet],
       [PoolIssue.FxPoolVulnWarning]: [
         '0x55bec22f8f6c69137ceaf284d9b441db1b9bfedc0002000000000000000003cd',
         '0x66bb9d104c55861feb3ec3559433f01f6373c9660002000000000000000003cf',

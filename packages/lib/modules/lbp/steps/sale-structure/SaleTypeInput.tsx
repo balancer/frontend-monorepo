@@ -4,11 +4,11 @@ import { Control, Controller } from 'react-hook-form'
 import { SaleStructureForm, SaleTypeOptionValue } from '../../lbp.types'
 import { Minus, TrendingUp } from 'react-feather'
 import { ReactNode } from 'react'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 const saleTypeOptions: RadioCardOption<SaleTypeOptionValue>[] = [
   {
-    value: GqlPoolType.LiquidityBootstrapping,
+    value: GqlPoolTypeValues.LiquidityBootstrapping,
     label: (
       <HStack align="start" spacing="md" w="full">
         <IconBadge icon={<TrendingUp size={20} />} />
@@ -23,7 +23,7 @@ const saleTypeOptions: RadioCardOption<SaleTypeOptionValue>[] = [
     ),
   },
   {
-    value: GqlPoolType.FixedLbp,
+    value: GqlPoolTypeValues.FixedLbp,
     label: (
       <HStack align="start" spacing="md" w="full">
         <IconBadge icon={<Minus size={20} />} />

@@ -1,6 +1,6 @@
 import { getApiPoolMock } from '../__mocks__/api-mocks/api-mocks'
 import { boostedCoinshiftUsdcUsdl } from '../__mocks__/pool-examples/boosted'
-import { GqlPoolStakingGaugeReward } from '../../../shared/services/api/generated/graphql'
+import type { GqlPoolStakingGaugeReward } from '../../../shared/services/api/graphql-derived-types'
 import { getCanStake } from './stake.helpers'
 
 describe('stake.helpers', () => {

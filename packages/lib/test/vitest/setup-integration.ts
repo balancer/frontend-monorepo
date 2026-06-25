@@ -1,6 +1,7 @@
 import { chainsByKey } from '@repo/lib/modules/web3/ChainConfig'
 import * as transportsModule from '@repo/lib/modules/web3/transports'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { ChainIdWithFork, getTestRpcSetup } from '@repo/test/anvil/anvil-setup'
 import { mainnetTest, polygonTest } from '@repo/test/anvil/testWagmiConfig'
 import {
@@ -45,7 +46,7 @@ vi.mock('@repo/lib/shared/services/viem/viem.client', () => {
   return {
     getViemClient: (chain: GqlChain) => {
       return createPublicClient({
-        chain: chain === GqlChain.Mainnet ? mainnetTest : polygonTest,
+        chain: chain === GqlChainValues.Mainnet ? mainnetTest : polygonTest,
         transport: http(),
       })
     },

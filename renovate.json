@@ -1,31 +1,46 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:best-practices"],
-  "schedule": ["before 6am on Monday"],
+  "extends": [
+    "config:best-practices"
+  ],
+  "schedule": [
+    "before 6am on Monday"
+  ],
   "timezone": "UTC",
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "prConcurrentLimit": 5,
   "automerge": false,
-
-  "ignoreDeps": ["viem", "@balancer/sdk"],
-
+  "ignoreDeps": [
+    "viem",
+    "@balancer/sdk"
+  ],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor"],
+      "matchUpdateTypes": [
+        "minor"
+      ],
       "minimumReleaseAge": "7 days"
     },
     {
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "minimumReleaseAge": "14 days"
     },
     {
       "description": "Group remaining npm devDependencies that are not already covered by more specific package groups. This rule should be early so specific rules can override it.",
       "groupName": "Other devDependencies",
-      "matchManagers": ["npm"],
-      "matchDepTypes": ["devDependencies"]
+      "matchManagers": [
+        "npm"
+      ],
+      "matchDepTypes": [
+        "devDependencies"
+      ]
     },
     {
-      "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
+      "description": "Chakra v2 requires @emotion as a peer dep \u2014 a version split may cause style failures.",
       "groupName": "Chakra UI",
       "matchPackageNames": [
         "@emotion/react",
@@ -45,7 +60,10 @@
         "@graphql-typed-document-node/core",
         "@graphql-codegen/**"
       ],
-      "matchDepTypes": ["dependencies", "devDependencies"]
+      "matchDepTypes": [
+        "dependencies",
+        "devDependencies"
+      ]
     },
     {
       "description": "Keep ESLint plugins compatible with core.",
@@ -62,7 +80,9 @@
     {
       "description": "Keep Sentry packages in sync.",
       "groupName": "Sentry",
-      "matchPackageNames": ["@sentry/**"]
+      "matchPackageNames": [
+        "@sentry/**"
+      ]
     },
     {
       "description": "Keep Next.js packages aligned.",
@@ -77,36 +97,58 @@
       ]
     },
     {
-      "description": "Low-risk, high-frequency — consolidate to reduce noise.",
+      "description": "Low-risk, high-frequency \u2014 consolidate to reduce noise.",
       "groupName": "@types packages",
-      "matchPackageNames": ["@types/**", "!@types/react", "!@types/react-dom"]
+      "matchPackageNames": [
+        "@types/**",
+        "!@types/react",
+        "!@types/react-dom"
+      ]
     },
     {
       "description": "Consolidate workflow action bumps",
       "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"]
+      "matchManagers": [
+        "github-actions"
+      ]
     },
     {
       "description": "Keep Next server external workaround packages pinned to the transitive versions required by the current WalletConnect/pino stack.",
       "groupName": "Pinned Next server externals",
-      "matchPackageNames": ["thread-stream", "real-require"],
+      "matchPackageNames": [
+        "thread-stream",
+        "real-require"
+      ],
       "enabled": false
     },
     {
       "description": "Flag major bumps for manual review.",
-      "matchUpdateTypes": ["major"],
-      "addLabels": ["major-update"]
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "addLabels": [
+        "major-update"
+      ]
     },
     {
       "description": "Block Chakra UI major upgrades while the repo is still on Chakra v2.",
-      "matchPackageNames": ["@chakra-ui/**"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "@chakra-ui/**"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
       "description": "Block Emotion major upgrades while Chakra v2 is still in place.",
-      "matchPackageNames": ["@emotion/react", "@emotion/styled"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "@emotion/react",
+        "@emotion/styled"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
@@ -119,68 +161,102 @@
         "eslint-config-**",
         "eslint-plugin-**"
       ],
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
       "description": "Block chakra-react-select v6 until we are ready for that migration.",
-      "matchPackageNames": ["chakra-react-select"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "chakra-react-select"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
       "description": "Block Vitest v4 until we are ready to migrate the test tooling.",
-      "matchPackageNames": ["vitest", "@vitest/**"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "vitest",
+        "@vitest/**"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
       "description": "Block zod v4 until we are ready for that migration.",
-      "matchPackageNames": ["zod"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "zod"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
       "description": "Block TypeScript major upgrades until moduleResolution and deep import issues are resolved.",
-      "matchPackageNames": ["typescript"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "typescript"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
-      "description": "Block @vitejs/plugin-react major upgrades — v5 is not compatible with 'moduleResolution': 'node'",
-      "matchPackageNames": ["@vitejs/plugin-react"],
-      "matchUpdateTypes": ["major"],
+      "description": "Block @vitejs/plugin-react major upgrades \u2014 v5 is not compatible with 'moduleResolution': 'node'",
+      "matchPackageNames": [
+        "@vitejs/plugin-react"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
-      "description": "Block vitest-mock-extended major upgrades — v4 requires vitest 4 which is not yet in the project.",
-      "matchPackageNames": ["vitest-mock-extended"],
-      "matchUpdateTypes": ["major"],
+      "description": "Block vitest-mock-extended major upgrades \u2014 v4 requires vitest 4 which is not yet in the project.",
+      "matchPackageNames": [
+        "vitest-mock-extended"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
       "description": "Block @nktkas/hyperliquid updates. The library introduces frequent breaking changes (client redesigns, schema refactors, renamed parameters) between minor versions. Updating past 0.23.1 would require significant refactoring of packages/lib/modules/chains/hyperevm/useHyperEvm.ts.",
-      "matchPackageNames": ["@nktkas/hyperliquid"],
+      "matchPackageNames": [
+        "@nktkas/hyperliquid"
+      ],
       "enabled": false
     },
     {
       "description": "Block dicebear major upgrades. v10 switched from @dicebear/collection to @dicebear/styles with JSON subpath exports that don't resolve with TypeScript moduleResolution: 'node'. Changing to 'bundler' breaks @sentry/nextjs deep imports.",
-      "matchPackageNames": ["@dicebear/**"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "@dicebear/**"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
-      "description": "Block GraphQL / Apollo major upgrades until the migration is handled separately.",
+      "description": "Block GraphQL / Apollo major upgrades except the four codegen packages we just migrated (they follow their own cadence).",
       "matchPackageNames": [
         "graphql",
         "graphql-request",
         "graphql-tag",
         "@apollo/client",
         "@apollo/client-integration-nextjs",
-        "@graphql-typed-document-node/core",
-        "@graphql-codegen/**"
+        "@graphql-typed-document-node/core"
       ],
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     }
   ]

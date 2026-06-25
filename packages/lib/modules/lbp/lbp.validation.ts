@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { UseFormReturn } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { addDays, isAfter, parseISO } from 'date-fns'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { ProjectInfoForm, SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
 import { isSaleStartValid } from './steps/sale-structure/helpers'
 import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
@@ -73,12 +73,12 @@ const optionalHandleSchema = (validateFn: (value: string) => string | true) =>
     })
 
 const saleStructureStepBaseSchema = z.object({
-  selectedChain: z.nativeEnum(GqlChain),
+  selectedChain: z.nativeEnum(GqlChainValues),
   launchTokenAddress: z
     .string()
     .min(1, 'Token address is required')
     .refine(value => isAddress(value), { message: 'This is an invalid token address format' }),
-  saleType: z.enum([GqlPoolType.LiquidityBootstrapping, GqlPoolType.FixedLbp]),
+  saleType: z.enum([GqlPoolTypeValues.LiquidityBootstrapping, GqlPoolTypeValues.FixedLbp]),
   startDateTime: z
     .string()
     .min(1, 'Start date and time is required')
@@ -116,7 +116,7 @@ export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
       }
     }
 
-    if (values.saleType === GqlPoolType.FixedLbp) {
+    if (values.saleType === GqlPoolTypeValues.FixedLbp) {
       const launchTokenRateValidation = numberStringSchema('Token sale price is required')
       const launchTokenRateResult = launchTokenRateValidation.safeParse(values.launchTokenRate)
       if (!launchTokenRateResult.success) {

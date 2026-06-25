@@ -9,7 +9,8 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
 import { useVault } from '@repo/lib/shared/hooks/useVault'
 import { LABELS } from '@repo/lib/shared/labels'
-import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
@@ -118,7 +119,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         amount: '',
         scaledAmount: BigInt(0),
       },
-      swapType: GqlSorSwapType.ExactIn,
+      swapType: GqlSorSwapTypeValues.ExactIn,
       selectedChain: isPoolSwap ? pool.chain : PROJECT_CONFIG.defaultNetwork,
     },
     isLbpSwap ? 'lbpSwapState' : 'swapState',
@@ -149,7 +150,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       selectedChain,
       swapState.swapType,
       client,
-      tokens as ApiToken[] // for swaps page the token select modal only allows listed tokens
+      tokens as unknown as ApiToken[] // for swaps page the token select modal only allows listed tokens
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
@@ -181,7 +182,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const getSwapAmount = () => {
     const swapState = swapStateVar()
     return (
-      (swapState.swapType === GqlSorSwapType.ExactIn
+      (swapState.swapType === GqlSorSwapTypeValues.ExactIn
         ? swapState.tokenIn.amount
         : swapState.tokenOut.amount) || '0'
     )
@@ -228,7 +229,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       swapType,
     })
 
-    if (swapType === GqlSorSwapType.ExactIn) {
+    if (swapType === GqlSorSwapTypeValues.ExactIn) {
       setTokenOutAmount(returnAmount, { userTriggered: false })
     } else {
       setTokenInAmount(returnAmount, { userTriggered: false })
@@ -285,7 +286,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       ...swapState,
       tokenIn: swapState.tokenOut,
       tokenOut: swapState.tokenIn,
-      swapType: GqlSorSwapType.ExactIn,
+      swapType: GqlSorSwapTypeValues.ExactIn,
     })
     setTokenInAmount('', { userTriggered: false })
     setTokenOutAmount('', { userTriggered: false })
@@ -304,7 +305,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
           amount: amount,
           scaledAmount: scaleTokenAmount(
             amount,
-            lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
+            lbpPool.poolTokens[lbpPool.projectTokenIndex] as unknown as ApiToken
           ),
         }
       : /*
@@ -332,7 +333,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (userTriggered) {
       swapStateVar({
         ...newState,
-        swapType: GqlSorSwapType.ExactIn,
+        swapType: GqlSorSwapTypeValues.ExactIn,
       })
       if (state.tokenIn.amount !== newState.tokenIn.amount) {
         setTokenOutAmount('', { userTriggered: false })
@@ -355,7 +356,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
           amount: amount,
           scaledAmount: scaleTokenAmount(
             amount,
-            lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
+            lbpPool.poolTokens[lbpPool.projectTokenIndex] as unknown as ApiToken
           ),
         }
       : /*
@@ -384,7 +385,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (userTriggered) {
       swapStateVar({
         ...newState,
-        swapType: GqlSorSwapType.ExactOut,
+        swapType: GqlSorSwapTypeValues.ExactOut,
       })
       if (state.tokenOut.amount !== newState.tokenOut.amount) {
         setTokenInAmount('', { userTriggered: false })
@@ -407,7 +408,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     const { tokenIn, tokenOut } = defaultSwapTokens || {}
 
     return {
-      swapType: GqlSorSwapType.ExactIn,
+      swapType: GqlSorSwapTypeValues.ExactIn,
       selectedChain: chain,
       tokenIn: {
         ...swapState.tokenIn,
@@ -456,10 +457,10 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (chainSlug) newPath.push(`/${chainSlug}`)
     if (_tokenIn) newPath.push(`/${_tokenIn}`)
     if (_tokenIn && _tokenOut) newPath.push(`/${_tokenOut}`)
-    if (_tokenIn && _tokenOut && tokenIn.amount && swapType === GqlSorSwapType.ExactIn) {
+    if (_tokenIn && _tokenOut && tokenIn.amount && swapType === GqlSorSwapTypeValues.ExactIn) {
       newPath.push(`/${tokenIn.amount}`)
     }
-    if (_tokenIn && _tokenOut && tokenOut.amount && swapType === GqlSorSwapType.ExactOut) {
+    if (_tokenIn && _tokenOut && tokenOut.amount && swapType === GqlSorSwapTypeValues.ExactOut) {
       newPath.push(`/0/${tokenOut.amount}`)
     }
 
@@ -513,7 +514,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     wethIsEth,
     swapAction,
     tokenInInfo:
-      isLbpSwap && !isLbpProjectTokenBuy && lbpToken ? (lbpToken as ApiToken) : tokenInInfo,
+      isLbpSwap && !isLbpProjectTokenBuy && lbpToken
+        ? (lbpToken as unknown as ApiToken)
+        : tokenInInfo,
     tokenOutInfo,
     isLbpSwap: !!isLbpSwap,
     isLbpProjectTokenBuy: !!isLbpProjectTokenBuy,
@@ -678,14 +681,14 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   // If token out value changes when swapping exact in, recalculate price impact.
   useEffect(() => {
-    if (!isLbpSwap && swapState.swapType === GqlSorSwapType.ExactIn) {
+    if (!isLbpSwap && swapState.swapType === GqlSorSwapTypeValues.ExactIn) {
       calcPriceImpact()
     }
   }, [tokenOutUsd])
 
   // If token in value changes when swapping exact out, recalculate price impact.
   useEffect(() => {
-    if (swapState.swapType === GqlSorSwapType.ExactOut) {
+    if (swapState.swapType === GqlSorSwapTypeValues.ExactOut) {
       calcPriceImpact()
     }
   }, [tokenInUsd])

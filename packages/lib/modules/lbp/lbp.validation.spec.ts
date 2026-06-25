@@ -1,5 +1,5 @@
 import { addDays, format } from 'date-fns'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { saleStructureStepSchema } from './lbp.validation'
 import { UserActions, WeightAdjustmentType } from './lbp.types'
 
@@ -11,9 +11,9 @@ function futureDateTime(daysFromNow: number) {
 
 function validSaleStructure(overrides = {}) {
   return {
-    selectedChain: GqlChain.Mainnet,
+    selectedChain: GqlChainValues.Mainnet,
     launchTokenAddress: VALID_ADDRESS,
-    saleType: GqlPoolType.LiquidityBootstrapping,
+    saleType: GqlPoolTypeValues.LiquidityBootstrapping,
     startDateTime: futureDateTime(2),
     endDateTime: futureDateTime(4),
     collateralTokenAddress: VALID_ADDRESS,
@@ -66,7 +66,7 @@ describe('saleStructureStepSchema', () => {
     expect(
       issuesByPath(
         validSaleStructure({
-          saleType: GqlPoolType.FixedLbp,
+          saleType: GqlPoolTypeValues.FixedLbp,
           collateralTokenAmount: '',
           launchTokenRate: '',
         })

@@ -1,5 +1,6 @@
 import { Card, Center, HStack, Spacer, Text, VStack } from '@chakra-ui/react'
-import { GqlChain, GqlLbpTopTrade } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlLBPTopTrade } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { Address } from 'viem'
 import { EnsOrAddress } from '../../user/EnsOrAddress'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -33,7 +34,7 @@ export function Top10Trades({ chain, pool }: { chain: GqlChain; pool: LbpV3 }) {
   )
 }
 
-export function Row({ trade, chain }: { trade: GqlLbpTopTrade; chain: GqlChain }) {
+export function Row({ trade, chain }: { trade: GqlLBPTopTrade; chain: GqlChain }) {
   return (
     <HStack w="full">
       <EnsOrAddress chain={chain} userAddress={trade.address as Address} />

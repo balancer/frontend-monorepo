@@ -7,7 +7,7 @@ import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-s
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useLst } from '../LstProvider'
 import { LstWithdrawSummary } from '../components/LstWithdrawSummary'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

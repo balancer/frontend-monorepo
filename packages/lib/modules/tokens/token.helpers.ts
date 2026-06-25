@@ -4,7 +4,7 @@ import {
   getWrappedNativeAssetAddress,
 } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { includesAddress, isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 import { HumanTokenAmountWithSymbol, TokenBase } from './token.types'

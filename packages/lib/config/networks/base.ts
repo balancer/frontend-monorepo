@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { AddressProvider, PERMIT2 } from '@balancer/sdk'
@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 8453,
   name: 'Base Mainnet',
   shortName: 'Base',
-  chain: GqlChain.Base,
+  chain: GqlChainValues.Base,
   iconPath: '/images/chains/BASE.svg',
   blockExplorer: {
     baseUrl: 'https://basescan.org',

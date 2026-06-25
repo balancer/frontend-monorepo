@@ -50,7 +50,7 @@ import {
   supportsProportionalAddLiquidityReasons,
   toPoolState,
 } from './LiquidityActionHelpers'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 
 describe('Calculates toInputAmounts from allPoolTokens', () => {
@@ -867,16 +867,16 @@ test('toPoolState keeps pool type when pool is V3 (it does not call mapPoolType)
   // We don't need a real QuantAMM mock as changing the type is enough
   const quantAMMPool = {
     ...getApiPoolMock(usdcUsdtAaveBoosted),
-    type: GqlPoolType.QuantAmmWeighted,
+    type: GqlPoolTypeValues.QuantAmmWeighted,
   }
 
-  expect(toPoolState(quantAMMPool).type).toEqual(GqlPoolType.QuantAmmWeighted)
+  expect(toPoolState(quantAMMPool).type).toEqual(GqlPoolTypeValues.QuantAmmWeighted)
 })
 
 describe('supportsProportionalAddLiquidityKind', () => {
   it('should not allow proportional add for v2 stable pools', () => {
     const pool = getApiPoolMock(v2SepoliaStableWithERC4626)
-    pool.type = GqlPoolType.Stable
+    pool.type = GqlPoolTypeValues.Stable
 
     expect(supportsProportionalAddLiquidityKind(pool)).toBe(false)
     expect(supportsProportionalAddLiquidityReasons(pool)).not.toBeUndefined()
@@ -884,7 +884,7 @@ describe('supportsProportionalAddLiquidityKind', () => {
 
   it('should not allow proportional add for v2 metastable pools', () => {
     const pool = getApiPoolMock(v2SepoliaStableWithERC4626)
-    pool.type = GqlPoolType.MetaStable
+    pool.type = GqlPoolTypeValues.MetaStable
 
     expect(supportsProportionalAddLiquidityKind(pool)).toBe(false)
     expect(supportsProportionalAddLiquidityReasons(pool)).not.toBeUndefined()
@@ -892,8 +892,9 @@ describe('supportsProportionalAddLiquidityKind', () => {
 
   it('should not allow proportional add for v2 weighted 2 tokens', () => {
     const pool = getApiPoolMock(balWeth8020)
-    pool.type = GqlPoolType.Weighted
-    pool.factory = getNetworkConfig(pool.chain).contracts.balancer?.WeightedPool2TokensFactory
+    pool.type = GqlPoolTypeValues.Weighted
+    pool.factory =
+      getNetworkConfig(pool.chain).contracts.balancer?.WeightedPool2TokensFactory ?? null
 
     expect(supportsProportionalAddLiquidityKind(pool)).toBe(false)
     expect(supportsProportionalAddLiquidityReasons(pool)).not.toBeUndefined()
@@ -902,7 +903,7 @@ describe('supportsProportionalAddLiquidityKind', () => {
   it('should not allow proportional add for weightedV1 pools (non v3)', () => {
     const pool = getApiPoolMock(sDAIWeighted)
     pool.version = 1
-    pool.type = GqlPoolType.Weighted
+    pool.type = GqlPoolTypeValues.Weighted
     pool.protocolVersion = 2
 
     expect(supportsProportionalAddLiquidityKind(pool)).toBe(false)
@@ -912,7 +913,7 @@ describe('supportsProportionalAddLiquidityKind', () => {
   it('should allow proportional add for weightedV1 pools (v3)', () => {
     const pool = getApiPoolMock(sDAIWeighted)
     pool.version = 1
-    pool.type = GqlPoolType.Weighted
+    pool.type = GqlPoolTypeValues.Weighted
     pool.protocolVersion = 3
 
     expect(supportsProportionalAddLiquidityKind(pool)).toBe(true)
@@ -921,7 +922,7 @@ describe('supportsProportionalAddLiquidityKind', () => {
 
   it('should allow proportional add for other pools (e.g. autoRange)', () => {
     const pool = getApiPoolMock(sDAIWeighted)
-    pool.type = GqlPoolType.Reclamm
+    pool.type = GqlPoolTypeValues.Reclamm
     pool.protocolVersion = 3
 
     expect(supportsProportionalAddLiquidityKind(pool)).toBe(true)

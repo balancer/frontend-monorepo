@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useMemo, useState } from 'react'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { uniq } from 'lodash'
 import { POOL_TYPE_MAP, PoolFilterType } from '../../pool/pool.types'

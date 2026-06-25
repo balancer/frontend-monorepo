@@ -1,3 +1,3 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
-export const UNSUPPORTED_CHAINS = [GqlChain.Fantom, GqlChain.Optimism]
+export const UNSUPPORTED_CHAINS = [GqlChainValues.Fantom, GqlChainValues.Optimism]

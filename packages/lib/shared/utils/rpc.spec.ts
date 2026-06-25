@@ -1,10 +1,10 @@
 import { polygon } from 'viem/chains'
-import { GqlChain } from '../services/api/generated/graphql'
+import { GqlChainValues } from '../services/api/graphql-enums'
 import { drpcUrl, drpcUrlByChainId } from './rpc'
 
 test('drpcUrl', () => {
   const privateKey = '1234'
-  expect(drpcUrl(GqlChain.Arbitrum, privateKey)).toBe('https://lb.drpc.live/arbitrum/1234')
+  expect(drpcUrl(GqlChainValues.Arbitrum, privateKey)).toBe('https://lb.drpc.live/arbitrum/1234')
 })
 
 test('drpcUrlByChainId', () => {

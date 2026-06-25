@@ -1,6 +1,6 @@
 'use client'
 
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { HStack, Text } from '@chakra-ui/react'
 import { TokenIcon } from './TokenIcon'
 import { useTokens } from './TokensProvider'

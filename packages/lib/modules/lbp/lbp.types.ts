@@ -1,5 +1,6 @@
 import { HumanAmount } from '@balancer/sdk'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export enum UserActions {
   BUY_AND_SELL = 'buy_and_sell',
@@ -17,7 +18,9 @@ export enum SeedType {
   SEEDLESS = 'seedless',
 }
 
-export type SaleTypeOptionValue = GqlPoolType.LiquidityBootstrapping | GqlPoolType.FixedLbp
+export type SaleTypeOptionValue =
+  | typeof GqlPoolTypeValues.LiquidityBootstrapping
+  | typeof GqlPoolTypeValues.FixedLbp
 
 export type SaleStructureForm = {
   selectedChain: GqlChain

@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 252,
   name: 'Fraxtal',
   shortName: 'Fraxtal',
-  chain: GqlChain.Fraxtal,
+  chain: GqlChainValues.Fraxtal,
   iconPath: '/images/chains/FRAXTAL.svg',
   blockExplorer: {
     baseUrl: 'https://fraxscan.com',
@@ -44,7 +44,7 @@ const networkConfig: NetworkConfig = {
   },
   pools: convertHexToLowerCase({
     issues: {
-      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Fraxtal],
+      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Fraxtal],
     },
   }),
   layerZeroChainId: 255,

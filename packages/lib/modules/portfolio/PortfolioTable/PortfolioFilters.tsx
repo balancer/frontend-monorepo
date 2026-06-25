@@ -23,7 +23,7 @@ import {
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
 import { AnimatePresence, motion } from 'motion/react'
 import Image from 'next/image'

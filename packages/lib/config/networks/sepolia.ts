@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { AddressProvider, PERMIT2 } from '@balancer/sdk'
@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 11155111,
   name: 'Ethereum Testnet Sepolia',
   shortName: 'Sepolia',
-  chain: GqlChain.Sepolia,
+  chain: GqlChainValues.Sepolia,
   iconPath: '/images/chains/SEPOLIA.svg',
   blockExplorer: {
     baseUrl: 'https://sepolia.etherscan.io',

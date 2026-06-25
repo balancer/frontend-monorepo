@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
@@ -10,7 +10,7 @@ const networkConfig: NetworkConfig = {
   chainId: 100,
   name: 'Gnosis Chain',
   shortName: 'Gnosis',
-  chain: GqlChain.Gnosis,
+  chain: GqlChainValues.Gnosis,
   iconPath: '/images/chains/GNOSIS.svg',
   blockExplorer: {
     baseUrl: 'https://gnosisscan.io',
@@ -67,7 +67,7 @@ const networkConfig: NetworkConfig = {
     permit2: PERMIT2[gnosis.id],
   },
   pools: convertHexToLowerCase({
-    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Gnosis] },
+    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Gnosis] },
   }),
   layerZeroChainId: 145,
   supportsVeBalSync: true,

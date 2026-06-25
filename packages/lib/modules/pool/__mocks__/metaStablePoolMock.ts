@@ -1,8 +1,5 @@
-import {
-  GqlChain,
-  GqlPoolElement,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export const metaStablePoolMock: GqlPoolElement = {
   id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080',
@@ -14,8 +11,8 @@ export const metaStablePoolMock: GqlPoolElement = {
   factory: '0x67d27634e44793fe63c467035e31ea8635117cd4',
   symbol: 'B-stETH-STABLE',
   createTime: 1628875520,
-  type: GqlPoolType.MetaStable,
-  chain: GqlChain.Mainnet,
+  type: GqlPoolTypeValues.MetaStable,
+  chain: GqlChainValues.Mainnet,
   protocolVersion: 2,
   dynamicData: {
     poolId: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080',

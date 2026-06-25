@@ -1,4 +1,5 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { keyBy } from 'lodash'
 import { Config, NetworkConfig, SupportedChainId } from './config.types'
 import networks from './networks'
@@ -37,7 +38,7 @@ export function getNetworkConfig(
   defaultNetwork?: GqlChain
 ): NetworkConfig {
   // cannot get default network directly from config here
-  if (!chain) return config.networks[defaultNetwork || GqlChain.Mainnet] as NetworkConfig
+  if (!chain) return config.networks[defaultNetwork || GqlChainValues.Mainnet] as NetworkConfig
 
   if (typeof chain === 'number') {
     return networksByChainId[chain] || (config.networks.MAINNET as NetworkConfig)

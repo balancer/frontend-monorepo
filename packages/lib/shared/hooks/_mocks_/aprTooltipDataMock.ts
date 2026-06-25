@@ -1,4 +1,4 @@
-import { GqlPoolAprItem } from '../../services/api/generated/graphql'
+import type { GqlPoolAprItem } from '../../services/api/graphql-derived-types'
 import { useAprTooltip } from '../useAprTooltip'
 
 const aprItems = [

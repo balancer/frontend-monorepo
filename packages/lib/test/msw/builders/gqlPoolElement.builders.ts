@@ -10,13 +10,12 @@ import {
   aTokenExpandedMock,
   someGqlTokenMocks,
 } from '@repo/lib/modules/tokens/__mocks__/token.builders'
-import {
-  GqlChain,
+import type {
   GqlPoolElement,
   GqlPoolTokenDetail,
-  GqlPoolType,
   GqlPoolWeighted,
-} from '@repo/lib/shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock } from 'vitest-mock-extended'
 import { aGqlStakingMock } from './gqlStaking.builders'
@@ -88,19 +87,18 @@ export function aGqlPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlP
     protocolVersion: 2,
     address: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
     poolTokens: someGqlTokenMocks(['BAL', 'WETH']),
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     createTime: 1620153071,
     decimals: 18,
     dynamicData: {
       totalLiquidity: '176725796.079429',
       totalShares: '13131700.67391808961378162',
-      lifetimeVolume: '1221246014.434743',
-      lifetimeSwapFees: '5171589.170118799',
+      // lifetimeVolume and lifetimeSwapFees removed - these fields are from GetPoolsQuery not GetPoolQuery dynamicData
       volume24h: '545061.9941007149',
       fees24h: '5450.619941007149',
       holdersCount: '1917',
+      // swapsCount field removed - not in GetPoolQuery dynamicData for GqlPoolElement
       swapFee: '0.01',
-      swapsCount: '58991',
     },
     factory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
     id: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014',
@@ -108,7 +106,7 @@ export function aGqlPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlP
     owner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
     symbol: 'B-80BAL-20WETH',
     staking: aGqlStakingMock(),
-    type: GqlPoolType.Weighted,
+    type: GqlPoolTypeValues.Weighted,
   }
   return Object.assign({}, defaultPool, defaultPool1, ...options)
 }
@@ -148,7 +146,7 @@ export function aPhantomStablePoolMock(): GqlPoolElement {
     id: poolId,
     address: poolAddress,
     poolTokens: tokens as unknown as GqlPoolTokenDetail[],
-    type: GqlPoolType.ComposableStable,
+    type: GqlPoolTypeValues.ComposableStable,
     protocolVersion: 2,
   })
 }

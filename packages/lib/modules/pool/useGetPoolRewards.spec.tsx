@@ -3,7 +3,7 @@ import { boostedCoinshiftUsdcUsdl } from '@repo/lib/modules/pool/__mocks__/pool-
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { Pool } from './pool.types'
 import { useGetPoolRewards } from './useGetPoolRewards'
-import { GqlPoolStakingGaugeReward } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolStakingGaugeReward } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { waitFor } from '@testing-library/react'
 
 function getPoolWithStakingGaugeRewards() {

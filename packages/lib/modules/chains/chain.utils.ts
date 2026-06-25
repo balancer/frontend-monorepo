@@ -1,8 +1,9 @@
 import { getChainId } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export function isMainnet(chain: GqlChain | number): boolean {
-  return chain === GqlChain.Mainnet || chain === getChainId(GqlChain.Mainnet)
+  return chain === GqlChainValues.Mainnet || chain === getChainId(GqlChainValues.Mainnet)
 }
 
 export function isNotMainnet(chain: GqlChain | number): boolean {
@@ -10,5 +11,7 @@ export function isNotMainnet(chain: GqlChain | number): boolean {
 }
 
 export function isChainDeprecated(chain: GqlChain) {
-  return [GqlChain.Mode, GqlChain.Fraxtal, GqlChain.Zkevm].includes(chain)
+  return (
+    [GqlChainValues.Mode, GqlChainValues.Fraxtal, GqlChainValues.Zkevm] as GqlChain[]
+  ).includes(chain)
 }

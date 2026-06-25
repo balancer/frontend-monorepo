@@ -2,13 +2,14 @@ import fetch from 'cross-fetch'
 
 import { visit } from 'graphql/language/visitor'
 import { print } from 'graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   GetPoolDocument,
   GetPoolQueryVariables,
-  GqlChain,
   GetPoolQuery,
-  GqlPoolElement,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { nested50WETH_50_3poolId } from '@repo/lib/debug-helpers'
 import { Address } from 'viem'
 
@@ -34,7 +35,7 @@ type FetchPoolMockParams = {
 }
 export async function fetchPoolMock({
   poolId = nested50WETH_50_3poolId,
-  chain = GqlChain.Mainnet,
+  chain = GqlChainValues.Mainnet,
   apiUrl = process.env.NEXT_PUBLIC_BALANCER_API_URL as string,
   userAddress,
 }: FetchPoolMockParams): Promise<GqlPoolElement> {

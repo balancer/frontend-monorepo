@@ -1,4 +1,5 @@
-import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 // TODO: remove linear (nested) pools
 export const recoveryPoolMock: GqlPoolElement = {
@@ -12,7 +13,7 @@ export const recoveryPoolMock: GqlPoolElement = {
   symbol: '50wstETH-50bb-euler-USD',
   createTime: 1675958987,
   type: 'WEIGHTED',
-  chain: GqlChain.Mainnet,
+  chain: GqlChainValues.Mainnet,
   protocolVersion: 2,
   poolTokens: [],
   dynamicData: {

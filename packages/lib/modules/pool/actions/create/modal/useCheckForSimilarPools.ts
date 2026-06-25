@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client/react'
+import { GetPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import {
-  GetPoolsDocument,
-  GqlPoolOrderBy,
-  GqlPoolOrderDirection,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolOrderByValues,
+  GqlPoolOrderDirectionValues,
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getGqlPoolType, isWeightedPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
@@ -22,8 +22,8 @@ export function useCheckForSimilarPools() {
 
   const { data, loading, error } = useQuery(GetPoolsDocument, {
     variables: {
-      orderBy: GqlPoolOrderBy.TotalLiquidity,
-      orderDirection: GqlPoolOrderDirection.Desc,
+      orderBy: GqlPoolOrderByValues.TotalLiquidity,
+      orderDirection: GqlPoolOrderDirectionValues.Desc,
       where: {
         chainIn: [network],
         poolTypeIn: [getGqlPoolType(poolType)],

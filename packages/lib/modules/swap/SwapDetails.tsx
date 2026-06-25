@@ -11,7 +11,7 @@ import {
   PopoverContent,
 } from '@chakra-ui/react'
 import { useSwap } from './SwapProvider'
-import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { SdkSimulateSwapResponse } from './swap.types'
@@ -140,7 +140,7 @@ export function SwapDetails({ hideOrderRoute }: { hideOrderRoute?: boolean }) {
   const _slippageDecimal = isNativeWrapOrUnwrap ? 0 : slippageDecimal
 
   const returnAmountUsd =
-    swapType === GqlSorSwapType.ExactIn
+    swapType === GqlSorSwapTypeValues.ExactIn
       ? usdValueForToken(tokenOutInfo, tokenOut.amount)
       : usdValueForToken(tokenInInfo, tokenIn.amount)
 
@@ -156,7 +156,7 @@ export function SwapDetails({ hideOrderRoute }: { hideOrderRoute?: boolean }) {
     toCurrency(maxSlippageUsd, { abbreviated: false })
   )
 
-  const isExactIn = swapType === GqlSorSwapType.ExactIn
+  const isExactIn = swapType === GqlSorSwapTypeValues.ExactIn
 
   const limitLabel = isExactIn ? "You'll get at least" : "You'll pay at most"
   const limitToken = isExactIn ? tokenOutInfo : tokenInInfo

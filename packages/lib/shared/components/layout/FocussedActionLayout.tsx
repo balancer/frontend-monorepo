@@ -4,7 +4,7 @@ import { Box, VStack, Card, useColorModeValue } from '@chakra-ui/react'
 import { PropsWithChildren, ReactNode } from 'react'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { FocussedActionNav } from '@repo/lib/shared/components/layout/FocussedActionNav'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NavBar } from '@repo/lib/shared/components/navs/NavBar'
 import { useRouter } from 'next/navigation'
 

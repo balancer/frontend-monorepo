@@ -2,7 +2,8 @@ import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { ethAddress, polAddress } from '@repo/lib/debug-helpers'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { Address, Hash } from 'viem'
 import { gnosis, polygon } from 'viem/chains'
 import {
@@ -208,7 +209,7 @@ describe('queries swap transaction in polygon', () => {
     // https://polygonscan.com/tx/0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244
     const txHash = '0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244'
 
-    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
+    const result = await testSwapReceipt(userAddress, txHash, GqlChainValues.Polygon)
 
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
@@ -228,7 +229,7 @@ describe('queries swap transaction in polygon', () => {
     // https://polygonscan.com/tx/0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c
     const txHash = '0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c'
 
-    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
+    const result = await testSwapReceipt(userAddress, txHash, GqlChainValues.Polygon)
 
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
@@ -248,7 +249,7 @@ describe('queries swap transaction in polygon', () => {
     // https://polygonscan.com/tx/0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288
     const txHash = '0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288'
 
-    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
+    const result = await testSwapReceipt(userAddress, txHash, GqlChainValues.Polygon)
 
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
@@ -270,7 +271,12 @@ describe('queries swap transaction in non polygon networks', () => {
     const txHash = '0x2ecd5a98edb0fb58160a85d913ab1623d7f48cc72b14567059f831bf3d1686d5'
 
     const protocolVersion = 3
-    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Sepolia, protocolVersion)
+    const result = await testSwapReceipt(
+      userAddress,
+      txHash,
+      GqlChainValues.Sepolia,
+      protocolVersion
+    )
 
     const stataEthDai = '0xde46e43f46ff74a23a65ebb0580cbe3dfe684a17'
 
@@ -304,7 +310,7 @@ describe('queries swap transaction in non polygon networks', () => {
       // https://sonicscan.org/tx/0x75f34af99a5afc39412bc5305aee1d77da5bd4a963c11a2ac5d7ae9f564d2c77
       const txHash = '0x75f34af99a5afc39412bc5305aee1d77da5bd4a963c11a2ac5d7ae9f564d2c77'
 
-      const result = await testLstStakeReceipt(userAddress, txHash, GqlChain.Sonic)
+      const result = await testLstStakeReceipt(userAddress, txHash, GqlChainValues.Sonic)
 
       await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
@@ -323,7 +329,7 @@ describe('queries swap transaction in non polygon networks', () => {
       // https://sonicscan.org/tx/0x70ffae9f3ed4eb134dbd60b550f4da01b808bc5e5538832a30bf2cd61fcc4a46
       const txHash = '0x70ffae9f3ed4eb134dbd60b550f4da01b808bc5e5538832a30bf2cd61fcc4a46'
 
-      const result = await testLstWithdrawReceipt(userAddress, txHash, GqlChain.Sonic)
+      const result = await testLstWithdrawReceipt(userAddress, txHash, GqlChainValues.Sonic)
 
       await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 

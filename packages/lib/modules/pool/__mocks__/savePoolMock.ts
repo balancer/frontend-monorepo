@@ -1,6 +1,6 @@
 import { Address } from 'viem'
 import { fetchPoolMock } from './fetchPoolMock'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
 import { execFileSync } from 'child_process'
 import fs from 'fs'

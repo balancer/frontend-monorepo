@@ -1,4 +1,4 @@
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { Pool } from '../pool.types'
 
 export const composableStablePoolMock: Pool = {
@@ -11,8 +11,8 @@ export const composableStablePoolMock: Pool = {
   factory: '0xfada0f4547ab2de89d1304a668c39b3e09aa7c76',
   symbol: 'vETH/WETH BPT',
   createTime: 1686959963,
-  type: GqlPoolType.ComposableStable,
-  chain: GqlChain.Mainnet,
+  type: GqlPoolTypeValues.ComposableStable,
+  chain: GqlChainValues.Mainnet,
   protocolVersion: 2,
   dynamicData: {
     poolId: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76000000000000000000000570',

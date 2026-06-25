@@ -1,7 +1,7 @@
 import { getNativeAssetAddress, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { Address, checksumAddress, isAddress } from 'viem'
-import { GqlChain } from '../services/api/generated/graphql'
+import type { GqlChain } from '../services/api/generated/graphql'
 
 export function isSameAddress(address1: string | undefined, address2: string | undefined): boolean {
   if (!address1 || !address2) return false

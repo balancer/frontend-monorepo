@@ -5,7 +5,7 @@ import {
   usdtAddress,
   wETHAddress,
 } from '@repo/lib/debug-helpers'
-import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   DefaultAddLiquidityTestProvider,
   buildDefaultPoolTestProvider,

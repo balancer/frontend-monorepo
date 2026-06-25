@@ -3,7 +3,7 @@ import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { loopedSonicVaultAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useLoopsGetConvertToAssets(assetAmount: bigint, chain: GqlChain) {
   const { isConnected } = useUserAccount()
