@@ -1,7 +1,7 @@
 'use client'
 
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
-import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { orderByHash, PoolsColumnSort } from '../../pool.types'
 import { usePoolOrderByState } from '../usePoolOrderByState'
 import { Globe } from 'react-feather'

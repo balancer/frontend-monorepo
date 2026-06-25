@@ -1,5 +1,5 @@
 import { Box, BoxProps, useColorModeValue } from '@chakra-ui/react'
-import { GqlPoolType } from '../../services/api/generated/graphql'
+import type { GqlPoolType } from '../../services/api/generated/graphql'
 import { isClp, isStable, isWeighted, isCowAmmPool } from '@repo/lib/modules/pool/pool.helpers'
 import { CowSandPattern } from '../imgs/CowSandPattern'
 

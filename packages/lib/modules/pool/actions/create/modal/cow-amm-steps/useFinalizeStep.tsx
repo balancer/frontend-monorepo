@@ -16,7 +16,7 @@ import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolIn
 import { isCowPool } from '../../helpers'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
 import { Address } from 'viem'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolType } from '@balancer/sdk'
 import { getChainId } from '@repo/lib/config/app.config'
 

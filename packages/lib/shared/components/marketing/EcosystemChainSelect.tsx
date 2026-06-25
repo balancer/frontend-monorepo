@@ -8,7 +8,7 @@ import { ReactNode } from 'react'
 import { ChevronDown } from 'react-feather'
 import { motion } from 'motion/react'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { gradientMap } from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 

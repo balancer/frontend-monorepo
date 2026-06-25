@@ -3,7 +3,7 @@ import { SaleStructureForm, WeightAdjustmentType } from '../lbp.types'
 import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { ArrowRight } from 'react-feather'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { SliderWithSteps } from '@repo/lib/shared/components/inputs/SliderWithSteps'
 
 export function WeightAdjustmentTypeInput({

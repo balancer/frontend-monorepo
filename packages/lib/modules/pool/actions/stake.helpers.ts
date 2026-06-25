@@ -3,10 +3,8 @@ import { Pool } from '../pool.types'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
 import { isClaimableGauge } from '../pool.helpers'
-import {
-  GqlPoolStakingType,
-  GqlUserStakedBalance,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlUserStakedBalance } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { getStakedBalance } from '../user-balance.helpers'
 
 export const migrateStakeTooltipLabel = `veBAL gauges are the mechanism to distribute BAL liquidity incentives following community voting.
@@ -34,7 +32,7 @@ export function getUnstakeQuote(pool: Pool): UnstakeQuote {
 
   return {
     gaugeAddress: pool.staking?.gauge?.id as Address,
-    amountOut: getStakedBalance(pool, GqlPoolStakingType.Gauge).balance,
+    amountOut: getStakedBalance(pool, GqlPoolStakingTypeValues.Gauge).balance,
   }
 }
 
@@ -110,7 +108,7 @@ function filterNonPreferentialStakingWithBalance(pool: Pool): GqlUserStakedBalan
 
   const found = pool.userBalance.stakedBalances.filter(
     stakedBalance =>
-      stakedBalance.stakingType === GqlPoolStakingType.Gauge &&
+      stakedBalance.stakingType === GqlPoolStakingTypeValues.Gauge &&
       stakedBalance.stakingId !== pool.staking?.gauge?.id &&
       isValidNumber(stakedBalance.balance) &&
       bn(stakedBalance.balance).gt(0)

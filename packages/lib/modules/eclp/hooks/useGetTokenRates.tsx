@@ -3,7 +3,7 @@ import { useReadContract } from 'wagmi'
 import { gyroEclpPoolAbi } from '../../web3/contracts/abi/generated'
 import { Pool } from '../../pool/pool.types'
 import { Address } from 'viem'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isV3Pool } from '../../pool/pool.helpers'
 import { useMemo } from 'react'
 import { AddressProvider, vaultExtensionAbi_V3 } from '@balancer/sdk'
@@ -19,7 +19,7 @@ export function useGetTokenRates(pool: Pool) {
     abi: isV3 ? vaultExtensionAbi_V3 : gyroEclpPoolAbi,
     functionName: isV3 ? 'getPoolTokenRates' : 'getTokenRates',
     address: contractAddress,
-    query: { enabled: pool.type === GqlPoolType.Gyroe },
+    query: { enabled: pool.type === GqlPoolTypeValues.GyroE },
     args: isV3 ? [pool.address as Address] : [],
   })
 

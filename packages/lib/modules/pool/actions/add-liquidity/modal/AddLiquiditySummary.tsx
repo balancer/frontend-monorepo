@@ -21,7 +21,7 @@ import {
   SlippageOptions,
   SlippageSelector,
 } from '../../SlippageSelector'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isZero } from '@repo/lib/shared/utils/numbers'
 
 export function AddLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -40,6 +40,7 @@ export function AddLiquiditySummary({
     addLiquidityTxSuccess,
     slippage,
     wantsProportional,
+    wantsUnbalanced,
   } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
@@ -47,15 +48,30 @@ export function AddLiquiditySummary({
 
   // Order amountsIn like the form inputs which uses the tokens array.
   const [selectedSlippage, setSelectedSlippage] = useState(0)
-  const amountsIn = tokens
-    .map(token => humanAmountsIn.find(amount => amount.tokenAddress === token?.address))
-    .filter(Boolean)
-    .map(amount => ({
-      ...amount,
-      humanAmount: bn(amount?.humanAmount || 0)
-        .times(1 - selectedSlippage)
-        .toString(),
-    })) as HumanTokenAmountWithSymbol[]
+
+  const amountsIn = useMemo(() => {
+    if (wantsUnbalanced) {
+      // For unbalanced add, show the non-empty arbitrary token amounts directly
+      return humanAmountsIn
+        .filter(amount => amount.humanAmount && !isZero(amount.humanAmount))
+        .map(amount => ({
+          ...amount,
+          humanAmount: bn(amount.humanAmount || 0)
+            .times(1 - selectedSlippage)
+            .toString(),
+        })) as HumanTokenAmountWithSymbol[]
+    }
+
+    return tokens
+      .map(token => humanAmountsIn.find(amount => amount.tokenAddress === token?.address))
+      .filter(Boolean)
+      .map(amount => ({
+        ...amount,
+        humanAmount: bn(amount?.humanAmount || 0)
+          .times(1 - selectedSlippage)
+          .toString(),
+      })) as HumanTokenAmountWithSymbol[]
+  }, [humanAmountsIn, tokens, wantsUnbalanced, selectedSlippage])
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0
@@ -80,9 +96,8 @@ export function AddLiquiditySummary({
     )
   }
 
-  const addingInputTokenLabel = wantsProportional
-    ? "You're adding at most:"
-    : "You're adding (exactly)"
+  const addingInputTokenLabel =
+    wantsProportional || wantsUnbalanced ? "You're adding at most:" : "You're adding (exactly)"
 
   const calculateSlippage = (value: SlippageOptions) => {
     if (value === 'zero') setSelectedSlippage(Number(slippage) / 100)

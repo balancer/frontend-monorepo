@@ -14,27 +14,27 @@ import { mainnet, polygon, base } from 'viem/chains'
 
 describe('Performs multicall in multiple chains', () => {
   beforeAll(async () => {
-    await setUserTokenBalance({
-      client: mainnetTestPublicClient,
-      account: defaultTestUserAccount,
-      tokenAddress: daiAddress,
-      slot: 2,
-      balance: 1n,
-    })
-
-    await setUserTokenBalance({
-      client: baseTestPublicClient,
-      account: defaultTestUserAccount,
-      tokenAddress: '0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee',
-      slot: 4,
-      balance: 7702n,
-    })
-
-    await polygonTestPublicClient.setBalance({
-      address: alternativeTestUserAccount,
-      value: 721n,
-    })
-  })
+    await Promise.all([
+      setUserTokenBalance({
+        client: mainnetTestPublicClient,
+        account: defaultTestUserAccount,
+        tokenAddress: daiAddress,
+        slot: 2,
+        balance: 1n,
+      }),
+      setUserTokenBalance({
+        client: baseTestPublicClient,
+        account: defaultTestUserAccount,
+        tokenAddress: '0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee',
+        slot: 4,
+        balance: 7702n,
+      }),
+      polygonTestPublicClient.setBalance({
+        address: alternativeTestUserAccount,
+        value: 721n,
+      }),
+    ])
+  }, 20_000)
   const mainnetRequest: ChainContractConfig = {
     id: 'daiBalanceOnMainnet',
     chainId: mainnet.id,

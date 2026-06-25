@@ -20,10 +20,12 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { HumanAmount } from '@balancer/sdk'
 import { AddableTokensSummary } from './AddableTokensSummary'
+import { UnbalancedTokenInput } from './UnbalancedTokenInput'
 
 type Props = {
   isProportional: boolean
   totalUSDValue: string
+  wantsUnbalanced?: boolean
 }
 
 function calcProportionalAddableUsdBalance(
@@ -87,7 +89,7 @@ function calcIsProportionalMaxApplied(
 const addableLabel = (count: number, total?: number) =>
   `${total ? `${count}/${total}` : count} addable token${(total ?? count) === 1 ? '' : 's'}`
 
-export function TokenInputsMaybeProportional({ isProportional }: Props) {
+export function TokenInputsMaybeProportional({ isProportional, wantsUnbalanced }: Props) {
   const {
     setHumanAmountIn,
     setHumanAmountsIn,
@@ -242,7 +244,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
   return (
     <VStack spacing="md" w="full">
-      {(isConnected || isUserAccountLoading) && (
+      {(isConnected || isUserAccountLoading) && !wantsUnbalanced && (
         <AddableTokensSummary
           addableUsdBalance={addableUsdBalance}
           canApplyProportionalMax={canApplyProportionalMax}
@@ -264,10 +266,14 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
         />
       )}
 
-      <TokenInputs
-        customSetAmountIn={setAmountIn}
-        getToggleTokenCallback={getToggleTokenCallback}
-      />
+      {wantsUnbalanced ? (
+        <UnbalancedTokenInput />
+      ) : (
+        <TokenInputs
+          customSetAmountIn={setAmountIn}
+          getToggleTokenCallback={getToggleTokenCallback}
+        />
+      )}
 
       {!!validTokens.length && (
         <NativeAssetSelectModal

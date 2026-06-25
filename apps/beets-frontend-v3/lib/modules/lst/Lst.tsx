@@ -36,15 +36,15 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LstFaq } from './components/LstFaq'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { LstStats } from './components/LstStats'
 import { getNetworkConfig } from '@repo/lib/config/networks'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
 import { StatRow } from '@/lib/components/shared/StatRow'
 
-const CHAIN = GqlChain.Sonic
+const CHAIN = GqlChainValues.Sonic
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {

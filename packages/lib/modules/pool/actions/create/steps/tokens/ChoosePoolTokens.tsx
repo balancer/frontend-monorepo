@@ -34,7 +34,7 @@ import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
 import { ArrowUpRight } from 'react-feather'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   isWeightedPool,
   isCustomWeightedPool,

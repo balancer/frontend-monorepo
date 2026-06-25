@@ -1,9 +1,9 @@
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
-import {
-  GqlPoolStakingType,
+import type {
   GqlPoolUserBalance,
   GqlUserStakedBalance,
-} from '@repo/lib/shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   calcNonOnChainFetchedStakedBalance,
   calcTotalStakedBalanceInt,
@@ -24,14 +24,14 @@ const apiStakedBalances: GqlUserStakedBalance[] = [
   {
     balance: '0',
     balanceUsd: 0,
-    stakingType: GqlPoolStakingType.Gauge,
+    stakingType: GqlPoolStakingTypeValues.Gauge,
     stakingId: '0xe99a452a65e5bb316febac5de83a1ca59f6a3a94', //Preferential gauge
     __typename: 'GqlUserStakedBalance',
   },
   {
     balance: '52.123',
     balanceUsd: 7.9,
-    stakingType: GqlPoolStakingType.Gauge,
+    stakingType: GqlPoolStakingTypeValues.Gauge,
     stakingId: '0x55ec14e951b1c25ab09132dae12363bea0d20105', //Non preferential gauge
     __typename: 'GqlUserStakedBalance',
   },
@@ -64,7 +64,7 @@ test('User balance helpers', () => {
   expect(calcNonOnChainFetchedStakedBalance(pool)).toBe('0')
 
   expect(hasBalancerStakedBalance(pool)).toBeTruthy()
-  expect(hasStakedBalanceFor(pool, GqlPoolStakingType.FreshBeets)).toBeFalsy()
+  expect(hasStakedBalanceFor(pool, GqlPoolStakingTypeValues.FreshBeets)).toBeFalsy()
   expect(hasTinyBalance(pool)).toBeFalsy()
 })
 
@@ -121,14 +121,14 @@ describe('invalid balance fallbacks', () => {
         {
           balance: '',
           balanceUsd: 0,
-          stakingType: GqlPoolStakingType.Gauge,
+          stakingType: GqlPoolStakingTypeValues.Gauge,
           stakingId: '0x1',
           __typename: 'GqlUserStakedBalance',
         },
         {
           balance: '52.123',
           balanceUsd: 7.9,
-          stakingType: GqlPoolStakingType.Gauge,
+          stakingType: GqlPoolStakingTypeValues.Gauge,
           stakingId: '0x2',
           __typename: 'GqlUserStakedBalance',
         },
@@ -150,7 +150,7 @@ describe('invalid balance fallbacks', () => {
         {
           balance: '6.1713167421e-8',
           balanceUsd: 0,
-          stakingType: GqlPoolStakingType.Gauge,
+          stakingType: GqlPoolStakingTypeValues.Gauge,
           stakingId: '0x1',
           __typename: 'GqlUserStakedBalance',
         },

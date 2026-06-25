@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 1101,
   name: 'Polygon zkEVM Mainnet',
   shortName: 'Polygon zkEVM',
-  chain: GqlChain.Zkevm,
+  chain: GqlChainValues.Zkevm,
   iconPath: '/images/chains/ZKEVM.svg',
   blockExplorer: {
     baseUrl: 'https://zkevm.polygonscan.com',
@@ -52,7 +52,7 @@ const networkConfig: NetworkConfig = {
     veDelegationProxy: '0xc7E5ED1054A24Ef31D827E6F86caA58B3Bc168d7',
   },
   pools: convertHexToLowerCase({
-    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Zkevm] },
+    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Zkevm] },
   }),
   layerZeroChainId: 158,
   supportsVeBalSync: true,

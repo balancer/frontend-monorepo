@@ -1,11 +1,11 @@
 'use client'
 
+import type { GqlToken } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   GetTokenPricesDocument,
   GetTokensDocument,
-  GqlChain,
-  GqlToken,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { bn, Numberish, isValidNumber } from '@repo/lib/shared/utils/numbers'

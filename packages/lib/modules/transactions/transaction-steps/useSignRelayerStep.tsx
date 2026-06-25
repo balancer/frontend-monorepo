@@ -8,7 +8,7 @@ import { TransactionStep } from './lib'
 import { useMemo } from 'react'
 import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { getChainId } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 

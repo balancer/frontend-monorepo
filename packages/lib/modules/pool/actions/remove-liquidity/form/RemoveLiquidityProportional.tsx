@@ -37,7 +37,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
 
   // can only withdraw top level tokens in recovery mode
   const poolTokens = isInRecoveryMode
-    ? (pool.poolTokens as ApiToken[]).filter(
+    ? (pool.poolTokens as unknown as ApiToken[]).filter(
         token => !isSameAddress(token.address as Address, pool.address as Address)
       )
     : tokens
@@ -127,7 +127,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
           onClose={boostedTokenSelectDisclosure.onClose}
           onOpen={boostedTokenSelectDisclosure.onOpen}
           onTokenSelect={onBoostedTokenSelect}
-          tokens={wrappedAndUnderlying as ApiToken[]}
+          tokens={wrappedAndUnderlying as unknown as ApiToken[]}
         />
       )}
     </>

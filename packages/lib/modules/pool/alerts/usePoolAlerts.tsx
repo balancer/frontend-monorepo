@@ -1,7 +1,8 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
-import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { usePathname, useRouter } from 'next/navigation'
 import { useMemo, useState, useCallback } from 'react'
 import { Pool } from '../pool.types'
@@ -65,7 +66,7 @@ export function usePoolAlerts(pool: Pool) {
 
   const getTokenPoolAlerts = (pool: Pool): PoolAlert[] => {
     // Disable alerts for Sepolia pools
-    if (pool.chain === GqlChain.Sepolia) return []
+    if (pool.chain === GqlChainValues.Sepolia) return []
 
     const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
     const hook = pool.hook
@@ -198,7 +199,7 @@ export function usePoolAlerts(pool: Pool) {
           }
         }
 
-        nestedPool.tokens.forEach(nestedToken => {
+        nestedPool.tokens.forEach((nestedToken: any) => {
           if (!hasRateProvider(nestedToken)) {
             return
           }

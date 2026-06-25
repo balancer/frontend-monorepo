@@ -1,9 +1,9 @@
-import {
-  GetTokensQuery,
-  GqlChain,
+import type {
   GqlToken,
   GqlPriceRateProviderData,
-} from '@repo/lib/shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GetTokensQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, HumanAmount } from '@balancer/sdk'
 
 export type TokenBase = Pick<GqlToken, 'address' | 'name' | 'symbol' | 'decimals' | 'chainId'>
@@ -30,6 +30,7 @@ export type HumanTokenAmountWithSymbol = {
   humanAmount: HumanAmount | ''
   tokenAddress: Address
   symbol: string
+  decimals?: number
 }
 
 export interface TokenAmountScaled {

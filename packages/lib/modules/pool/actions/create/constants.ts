@@ -11,7 +11,8 @@ import {
 } from './types'
 import { getSwapFeePercentageOptions } from './helpers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { parseUnits } from 'viem'
 import { FormStep } from '@repo/lib/shared/hooks/useFormSteps'
 import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
@@ -33,7 +34,7 @@ const GNOSIS_BLACKLIST: Address[] = [
 ]
 
 export const TOKEN_BLACKLIST: Partial<Record<GqlChain, Set<string>>> = {
-  [GqlChain.Gnosis]: new Set(GNOSIS_BLACKLIST.map(addr => addr.toLowerCase())),
+  [GqlChainValues.Gnosis]: new Set(GNOSIS_BLACKLIST.map(addr => addr.toLowerCase())),
 }
 
 export const NUM_FORMAT = '0.00000000' // up to 8 decimals?

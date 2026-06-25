@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { isNativeAsset, isWrappedNativeAsset } from '../tokens/token.helpers'
 import { getNetworkConfig } from '@repo/lib/config/app.config'

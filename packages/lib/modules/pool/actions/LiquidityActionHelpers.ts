@@ -1,7 +1,8 @@
 import { getChainId, getNativeAsset, getNetworkConfig } from '@repo/lib/config/app.config'
 import { TokenAmountToApprove } from '@repo/lib/modules/tokens/approvals/approval-rules'
 import { nullAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { SentryError } from '@repo/lib/shared/utils/errors'
 import { bn, isZero } from '@repo/lib/shared/utils/numbers'
@@ -140,7 +141,7 @@ export class LiquidityActionHelpers {
 
     return humanAmountsIn
       .filter(({ humanAmount }) => humanAmount && bn(humanAmount).gt(0))
-      .map(({ tokenAddress, humanAmount, symbol }) => {
+      .map(({ tokenAddress, humanAmount, symbol, decimals: humanAmountDecimals }) => {
         const chain = this.pool.chain
         if (isNativeAsset(tokenAddress, chain)) {
           const decimals = getNativeAsset(chain).decimals
@@ -154,19 +155,30 @@ export class LiquidityActionHelpers {
 
         const allTokens = allPoolTokens(this.pool)
         const token = allTokens.find(token => isSameAddress(token.address, tokenAddress))
-        if (!token) {
-          throw new Error(
-            `Provided token address ${tokenAddress} not found in pool tokens [${allTokens
-              .map(t => t.address)
-              .join(' , \n')}]`
-          )
+        if (token) {
+          return {
+            address: token.address as Address,
+            rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), token.decimals),
+            decimals: token.decimals,
+            symbol: token.symbol,
+          }
         }
-        return {
-          address: token.address as Address,
-          rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), token.decimals),
-          decimals: token.decimals,
-          symbol: token.symbol,
+
+        // For arbitrary tokens not in the pool (e.g. unbalanced add via swap)
+        if (humanAmountDecimals !== undefined) {
+          return {
+            address: tokenAddress as Address,
+            rawAmount: parseUnits(BigNumber(humanAmount).toFixed(), humanAmountDecimals),
+            decimals: humanAmountDecimals,
+            symbol,
+          }
         }
+
+        throw new Error(
+          `Provided token address ${tokenAddress} not found in pool tokens [${allTokens
+            .map(t => t.address)
+            .join(' , \n')}] and no decimals were provided`
+        )
       })
   }
 
@@ -278,8 +290,10 @@ export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
 
 export function supportsProportionalAddLiquidityReasons(pool: Pool): string | undefined {
   if (isV2Pool(pool)) {
-    if (pool.type === GqlPoolType.Stable) return supportsProportionalTemplate('v2 stable')
-    if (pool.type === GqlPoolType.MetaStable) return supportsProportionalTemplate('v2 metastable')
+    if (pool.type === GqlPoolTypeValues.Stable) return supportsProportionalTemplate('v2 stable')
+    if (pool.type === GqlPoolTypeValues.MetaStable) {
+      return supportsProportionalTemplate('v2 metastable')
+    }
   }
 
   // WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK

@@ -13,7 +13,7 @@ import {
 import { StepIndicator } from './Step'
 import { Steps } from './Steps'
 import { GasPriceCard } from '@repo/lib/shared/hooks/useGasPrice'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TransactionStepsResponse } from '../useTransactionSteps'
 
 type Props = {

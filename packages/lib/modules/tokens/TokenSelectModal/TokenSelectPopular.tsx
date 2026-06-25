@@ -1,5 +1,6 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlToken } from '@repo/lib/shared/services/api/graphql-derived-types'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTokens } from '../TokensProvider'
 import { useMemo } from 'react'

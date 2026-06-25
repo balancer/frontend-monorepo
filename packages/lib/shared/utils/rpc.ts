@@ -1,27 +1,28 @@
-import { GqlChain } from '../services/api/generated/graphql'
+import type { GqlChain } from '../services/api/generated/graphql'
+import { GqlChainValues } from '../services/api/graphql-enums'
 import { ChainId } from '@balancer/sdk'
 
 const DRPC_BASE_URL = 'https://lb.drpc.live'
 const DIRECT_DEV_BASE_URL = 'https://prod.rpc.direct.dev/v1'
 
 export const chainToRpcName: Partial<Record<GqlChain, string | undefined>> = {
-  [GqlChain.Mainnet]: 'ethereum',
-  [GqlChain.Arbitrum]: 'arbitrum',
-  [GqlChain.Optimism]: 'optimism',
-  [GqlChain.Base]: 'base',
-  [GqlChain.Polygon]: 'polygon',
-  [GqlChain.Avalanche]: 'avalanche',
-  [GqlChain.Fantom]: 'fantom',
-  [GqlChain.Sepolia]: 'sepolia',
-  [GqlChain.Fraxtal]: 'fraxtal',
-  [GqlChain.Gnosis]: 'gnosis',
-  [GqlChain.Mode]: 'mode',
-  [GqlChain.Zkevm]: 'polygon-zkevm',
-  [GqlChain.Sonic]: 'sonic',
-  [GqlChain.Hyperevm]: 'hyperliquid',
-  [GqlChain.Plasma]: 'plasma',
-  [GqlChain.Monad]: 'monad',
-  [GqlChain.Xlayer]: 'xlayer',
+  [GqlChainValues.Mainnet]: 'ethereum',
+  [GqlChainValues.Arbitrum]: 'arbitrum',
+  [GqlChainValues.Optimism]: 'optimism',
+  [GqlChainValues.Base]: 'base',
+  [GqlChainValues.Polygon]: 'polygon',
+  [GqlChainValues.Avalanche]: 'avalanche',
+  [GqlChainValues.Fantom]: 'fantom',
+  [GqlChainValues.Sepolia]: 'sepolia',
+  [GqlChainValues.Fraxtal]: 'fraxtal',
+  [GqlChainValues.Gnosis]: 'gnosis',
+  [GqlChainValues.Mode]: 'mode',
+  [GqlChainValues.Zkevm]: 'polygon-zkevm',
+  [GqlChainValues.Sonic]: 'sonic',
+  [GqlChainValues.Hyperevm]: 'hyperliquid',
+  [GqlChainValues.Plasma]: 'plasma',
+  [GqlChainValues.Monad]: 'monad',
+  [GqlChainValues.Xlayer]: 'xlayer',
 }
 
 export const chainIdToRpcName: Partial<Record<number, string | undefined>> = {
@@ -49,8 +50,8 @@ function toDirectDevSlug(slug: string) {
   return slug
 }
 
-export function getRpcUrl(chain: GqlChain, key: string) {
-  const slug = chainToRpcName[chain]
+export function getRpcUrl(chain: GqlChain | string, key: string) {
+  const slug = chainToRpcName[chain as GqlChain]
   if (!slug) throw new Error(`Invalid chain: ${chain}`)
   return `${DIRECT_DEV_BASE_URL}/${key}/${toDirectDevSlug(slug)}`
 }

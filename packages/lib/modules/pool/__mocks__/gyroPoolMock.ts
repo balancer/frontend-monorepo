@@ -1,4 +1,4 @@
-import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
 
 export const gyroPoolMock: GqlPoolElement = {
   id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b',

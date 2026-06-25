@@ -10,7 +10,7 @@ import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { ChainId } from '@balancer/sdk'
 import { waitFor } from '@testing-library/react'
 import { useOnchainUserPoolBalances } from './useOnchainUserPoolBalances'
-import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {
   const weightedPoolMock = toGqlWeighedPoolMock(pool)
@@ -47,7 +47,7 @@ describe('fetches onchain and overrides user balances', async () => {
 
   test('when the pool does not have staking info', async () => {
     const poolMockWithUndefinedStaking = aBalWethPoolElementMock() // Provides 80BAL-20WETH pool by default
-    poolMockWithUndefinedStaking.staking = undefined
+    poolMockWithUndefinedStaking.staking = undefined as any
 
     expect(poolMockWithUndefinedStaking.staking).toBeUndefined()
 
@@ -75,6 +75,7 @@ describe('fetches onchain and overrides user balances', async () => {
       "__typename": "GqlPoolStakingGauge",
       "gaugeAddress": "",
       "id": "0x2d42910d826e5500579d121596e98a6eb33c0a1b",
+      "otherGauges": [],
       "rewards": [],
       "status": "ACTIVE",
       "version": 2,
@@ -98,7 +99,7 @@ describe('fetches onchain and overrides user balances', async () => {
   //   const holder = '0xE0Dd0C6a3F0A34c5175b65Bbd227710d9A5E09c8'
   //   await connectWith(holder)
   //   const poolId = '0xeab6455f8a99390b941a33bbdaf615abdf93455e000200000000000000000a66' // Pool with user staked in non preferential gauge
-  //   const pool = await getPoolMock(poolId, GqlChain.Polygon, holder)
+  //   const pool = await getPoolMock(poolId, GqlChainValues.Polygon, holder)
 
   //   const result = await testUseChainPoolBalances(pool)
 

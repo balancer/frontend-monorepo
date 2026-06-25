@@ -16,7 +16,7 @@ import { useReadContract } from 'wagmi'
 import { isCowPool } from '../../helpers'
 import { getChainId } from '@repo/lib/config/app.config'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolType } from '@balancer/sdk'
 import { Address } from 'viem'
 

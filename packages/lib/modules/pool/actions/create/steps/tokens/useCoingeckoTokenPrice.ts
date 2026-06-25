@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@tanstack/react-query'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { Address } from 'viem'

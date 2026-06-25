@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { parseSwapReceipt } from './receipt-parsers'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 describe('parseSwapReceipt', () => {
   test('does not crash when userAddress is undefined', () => {
@@ -10,7 +10,7 @@ describe('parseSwapReceipt', () => {
     const result = parseSwapReceipt({
       receiptLogs: [],
       userAddress: undefined,
-      chain: GqlChain.Mainnet,
+      chain: GqlChainValues.Mainnet,
       getToken: () => undefined,
       txValue: 0n,
       protocolVersion: 2,

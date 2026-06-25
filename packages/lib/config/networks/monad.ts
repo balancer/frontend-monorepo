@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
@@ -15,7 +15,7 @@ const networkConfig: NetworkConfig = {
   chainId,
   name: monad.name,
   shortName: monad.name,
-  chain: GqlChain.Monad,
+  chain: GqlChainValues.Monad,
   iconPath: '/images/chains/MONAD.svg',
   blockExplorer: {
     baseUrl: monad.blockExplorers.monadscan.url,
@@ -57,11 +57,12 @@ const networkConfig: NetworkConfig = {
       batchRouter: AddressProvider.BatchRouter(chainId),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(chainId),
       vaultAdminV3: AddressProvider.VaultAdmin(chainId),
+      unbalancedAddViaSwapRouter: AddressProvider.UnbalancedAddViaSwapRouter(chainId),
     },
     permit2: PERMIT2[chainId],
   },
   pools: convertHexToLowerCase({
-    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Monad] },
+    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Monad] },
   }),
   supportsVeBalSync: false,
 }

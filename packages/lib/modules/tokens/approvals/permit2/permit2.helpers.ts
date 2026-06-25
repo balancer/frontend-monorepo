@@ -4,7 +4,7 @@ import { Address } from 'viem'
 import { GetTokenFn } from '../../TokensProvider'
 import { AllowedAmountsByTokenAddress, ExpirationByTokenAddress } from './usePermit2Allowance'
 import { TokenAmountIn } from './useSignPermit2'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isNativeAsset, isWrappedNativeAsset } from '../../token.helpers'
 import { TokenAmount } from '@balancer/sdk'
 

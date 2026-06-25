@@ -3,7 +3,7 @@ import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 import { MAX_BIGINT } from '@repo/lib/shared/utils/numbers'
 import { InputAmount } from '@balancer/sdk'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { requiresDoubleApproval } from '../token.helpers'
 
 export type TokenAmountToApprove = {

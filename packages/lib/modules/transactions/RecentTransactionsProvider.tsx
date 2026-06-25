@@ -2,7 +2,7 @@
 
 import { getChainId } from '@repo/lib/config/app.config'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { captureFatalError } from '@repo/lib/shared/utils/query-errors'

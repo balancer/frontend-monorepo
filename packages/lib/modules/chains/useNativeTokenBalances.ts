@@ -1,5 +1,5 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useBalance, useConfig } from 'wagmi'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

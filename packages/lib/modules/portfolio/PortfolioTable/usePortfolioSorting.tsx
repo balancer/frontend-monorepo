@@ -1,4 +1,4 @@
-import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMemo, useCallback, useReducer, useEffect } from 'react'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import { getTotalApr } from '../../pool/pool.utils'

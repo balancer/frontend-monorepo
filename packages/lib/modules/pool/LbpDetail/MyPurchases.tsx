@@ -4,10 +4,8 @@ import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import type BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import {
-  GetPoolEventsQuery,
-  GqlPoolSwapEventV3,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolSwapEventV3 } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GetPoolEventsQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useState, useEffect } from 'react'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'

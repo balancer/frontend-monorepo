@@ -1,12 +1,12 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { isSupportedWrap, getWrapConfig, getWrapType } from './wrap.helpers'
 import { SupportedWrapHandler, OWrapType } from './swap.types'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChainValues } from '../../shared/services/api/graphql-enums'
 import { TEST_ADDRESSES } from '@repo/lib/test/utils/swap-test-utils'
 
 const defaultConfig = {
   chainId: 1,
-  chain: GqlChain.Mainnet,
+  chain: GqlChainValues.Mainnet,
   tokens: {
     addresses: {
       wNativeAsset: TEST_ADDRESSES.weth,
@@ -103,25 +103,29 @@ describe('wrap.helpers', () => {
 
   describe('isSupportedWrap', () => {
     it('returns true for configured wrap pair in either direction', () => {
-      expect(isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChain.Mainnet)).toBe(
-        true
-      )
-      expect(isSupportedWrap(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChain.Mainnet)).toBe(
-        true
-      )
+      expect(
+        isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)
+      ).toBe(true)
+      expect(
+        isSupportedWrap(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChainValues.Mainnet)
+      ).toBe(true)
     })
 
     it('returns false when no wrappers configured', () => {
       mockNetworkConfig = emptyWrappersConfig
-      expect(isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChain.Mainnet)).toBe(
-        false
-      )
+      expect(
+        isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)
+      ).toBe(false)
     })
   })
 
   describe('getWrapConfig', () => {
     it('returns correct wrapper config for valid pair', () => {
-      const config = getWrapConfig(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChain.Mainnet)
+      const config = getWrapConfig(
+        TEST_ADDRESSES.steth,
+        TEST_ADDRESSES.wsteth,
+        GqlChainValues.Mainnet
+      )
       expect(config.baseToken).toBe(TEST_ADDRESSES.steth)
       expect(config.wrappedToken).toBe(TEST_ADDRESSES.wsteth)
       expect(config.swapHandler).toBe(SupportedWrapHandler.LIDO)
@@ -129,26 +133,26 @@ describe('wrap.helpers', () => {
 
     it('throws for unsupported pair', () => {
       expect(() =>
-        getWrapConfig(TEST_ADDRESSES.bal, TEST_ADDRESSES.weth, GqlChain.Mainnet)
+        getWrapConfig(TEST_ADDRESSES.bal, TEST_ADDRESSES.weth, GqlChainValues.Mainnet)
       ).toThrow('Unsupported wrap')
     })
   })
 
   describe('getWrapType', () => {
     it('returns WRAP when base token is input', () => {
-      expect(getWrapType(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChain.Mainnet)).toBe(
+      expect(getWrapType(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)).toBe(
         OWrapType.WRAP
       )
     })
 
     it('returns UNWRAP when wrapped token is input', () => {
-      expect(getWrapType(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChain.Mainnet)).toBe(
+      expect(getWrapType(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChainValues.Mainnet)).toBe(
         OWrapType.UNWRAP
       )
     })
 
     it('returns null for non-wrap pair', () => {
-      expect(getWrapType(TEST_ADDRESSES.eth, TEST_ADDRESSES.bal, GqlChain.Mainnet)).toBeNull()
+      expect(getWrapType(TEST_ADDRESSES.eth, TEST_ADDRESSES.bal, GqlChainValues.Mainnet)).toBeNull()
     })
   })
 })

@@ -2,7 +2,8 @@
 import * as echarts from 'echarts/core'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { format, millisecondsToSeconds, secondsToMinutes } from 'date-fns'
-import { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlPoolEventTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
@@ -39,59 +40,59 @@ type ChartEl = [number, string, ChartInfoMetaData]
 export type ChartInfo = Partial<Record<GqlChain, ChartEl[]>>
 
 export const gradientMap: Partial<Record<GqlChain, { from: string; to: string }>> = {
-  [GqlChain.Arbitrum]: {
+  [GqlChainValues.Arbitrum]: {
     from: '#6C80A7',
     to: '#2D374B',
   },
-  [GqlChain.Mainnet]: {
+  [GqlChainValues.Mainnet]: {
     from: '#F7F7F7',
     to: '#A4C6EE',
   },
-  [GqlChain.Base]: {
+  [GqlChainValues.Base]: {
     from: '#99B9FF',
     to: '#0252FF',
   },
-  [GqlChain.Optimism]: {
+  [GqlChainValues.Optimism]: {
     from: '#FF9EA9',
     to: '#FF0420',
   },
-  [GqlChain.Polygon]: {
+  [GqlChainValues.Polygon]: {
     from: '#DECEF8',
     to: '#8247E5',
   },
-  [GqlChain.Zkevm]: {
+  [GqlChainValues.Zkevm]: {
     from: '#CD6BE1',
     to: '#7C40E4',
   },
-  [GqlChain.Gnosis]: {
+  [GqlChainValues.Gnosis]: {
     from: '#07DEA7',
     to: '#04795B',
   },
-  [GqlChain.Avalanche]: {
+  [GqlChainValues.Avalanche]: {
     from: '#F39B9B',
     to: '#DA1A1C',
   },
-  [GqlChain.Fantom]: {
+  [GqlChainValues.Fantom]: {
     from: '#7D84FF',
     to: '#5468FF',
   },
-  [GqlChain.Fraxtal]: {
+  [GqlChainValues.Fraxtal]: {
     from: '#E0E7FF',
     to: '#8C9EFF',
   },
-  [GqlChain.Mode]: {
+  [GqlChainValues.Mode]: {
     from: '#FFD77D',
     to: '#FFB74D',
   },
-  [GqlChain.Sepolia]: {
+  [GqlChainValues.Sepolia]: {
     from: '#D1B3FF',
     to: '#A384FF',
   },
-  [GqlChain.Sonic]: {
+  [GqlChainValues.Sonic]: {
     from: '#D1B3FF',
     to: '#A384FF',
   },
-  [GqlChain.Hyperevm]: {
+  [GqlChainValues.Hyperevm]: {
     from: '#50D2C1',
     to: '#072723',
   },
@@ -99,20 +100,20 @@ export const gradientMap: Partial<Record<GqlChain, { from: string; to: string }>
 
 function getDefaultChainMeta(): Partial<Record<GqlChain, []>> {
   return {
-    [GqlChain.Mainnet]: [],
-    [GqlChain.Arbitrum]: [],
-    [GqlChain.Polygon]: [],
-    [GqlChain.Base]: [],
-    [GqlChain.Optimism]: [],
-    [GqlChain.Zkevm]: [],
-    [GqlChain.Gnosis]: [],
-    [GqlChain.Avalanche]: [],
-    [GqlChain.Fantom]: [],
-    [GqlChain.Fraxtal]: [],
-    [GqlChain.Mode]: [],
-    [GqlChain.Sepolia]: [],
-    [GqlChain.Sonic]: [],
-    [GqlChain.Hyperevm]: [],
+    [GqlChainValues.Mainnet]: [],
+    [GqlChainValues.Arbitrum]: [],
+    [GqlChainValues.Polygon]: [],
+    [GqlChainValues.Base]: [],
+    [GqlChainValues.Optimism]: [],
+    [GqlChainValues.Zkevm]: [],
+    [GqlChainValues.Gnosis]: [],
+    [GqlChainValues.Avalanche]: [],
+    [GqlChainValues.Fantom]: [],
+    [GqlChainValues.Fraxtal]: [],
+    [GqlChainValues.Mode]: [],
+    [GqlChainValues.Sepolia]: [],
+    [GqlChainValues.Sonic]: [],
+    [GqlChainValues.Hyperevm]: [],
   }
 }
 
@@ -198,9 +199,9 @@ const getDefaultPoolActivityChartOptions = (
         const txLink = getBlockExplorerTxUrl(tx, metaData.chain)
         const addressLink = getBlockExplorerAddressUrl(userAddress, metaData.chain)
         const typeStr =
-          metaData.type === GqlPoolEventType.Add
+          metaData.type === GqlPoolEventTypeValues.Add
             ? 'Add'
-            : metaData.type === GqlPoolEventType.Remove
+            : metaData.type === GqlPoolEventTypeValues.Remove
               ? 'Remove'
               : 'Swap'
 
@@ -294,15 +295,15 @@ const tabsList: PoolActivityChartTypeTab[] = [
   },
   {
     label: 'Adds',
-    value: GqlPoolEventType.Add,
+    value: GqlPoolEventTypeValues.Add,
   },
   {
     label: 'Removes',
-    value: GqlPoolEventType.Remove,
+    value: GqlPoolEventTypeValues.Remove,
   },
   {
     label: 'Swaps',
-    value: GqlPoolEventType.Swap,
+    value: GqlPoolEventTypeValues.Swap,
   },
 ]
 

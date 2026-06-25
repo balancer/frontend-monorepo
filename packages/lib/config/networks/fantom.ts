@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { zeroAddress } from 'viem'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 250,
   name: 'Fantom Opera',
   shortName: 'Fantom',
-  chain: GqlChain.Fantom,
+  chain: GqlChainValues.Fantom,
   iconPath: '/images/chains/FANTOM.svg',
   blockExplorer: {
     baseUrl: 'https://ftmscan.com',

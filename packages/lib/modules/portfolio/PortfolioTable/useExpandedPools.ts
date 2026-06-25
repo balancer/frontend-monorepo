@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { Pool } from '../../pool/pool.types'
 import { isVebalPool } from '../../pool/pool.helpers'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export enum ExpandedPoolType {
   StakedBal = 'staked-bal',
@@ -60,11 +60,13 @@ export function useExpandedPools(pools: Pool[]) {
       const stakedBalancesBalUsd =
         pool.userBalance?.stakedBalances
           ?.filter(balance =>
-            [
-              GqlPoolStakingType.Gauge,
-              GqlPoolStakingType.Vebal,
-              GqlPoolStakingType.FreshBeets,
-            ].includes(balance.stakingType)
+            (
+              [
+                GqlPoolStakingTypeValues.Gauge,
+                GqlPoolStakingTypeValues.VeBal,
+                GqlPoolStakingTypeValues.FreshBeets,
+              ] as string[]
+            ).includes(balance.stakingType)
           )
           .reduce((acc, balance) => acc + Number(balance.balanceUsd), 0) || 0
 

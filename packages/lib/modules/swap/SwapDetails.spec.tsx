@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vitest'
 import { SwapDetails } from './SwapDetails'
-import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 vi.mock('@repo/lib/shared/hooks/useCurrency', () => ({
   useCurrency: () => ({ toCurrency: (val: string) => val }),
@@ -28,7 +28,7 @@ vi.mock('./SwapProvider', () => ({
   useSwap: () => ({
     tokenIn: { amount: '', address: '0x0' },
     tokenOut: { amount: '', address: '0x0' },
-    swapType: GqlSorSwapType.ExactIn,
+    swapType: GqlSorSwapTypeValues.ExactIn,
     tokenInInfo: undefined,
     tokenOutInfo: undefined,
     handler: { constructor: { name: 'BaseDefaultSwapHandler' } },

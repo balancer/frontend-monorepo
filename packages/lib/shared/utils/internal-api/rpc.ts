@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { GqlChain } from '../../services/api/generated/graphql'
+import type { GqlChain } from '../../services/api/generated/graphql'
 import { getRpcUrl } from '../rpc'
 
 const DRPC_KEY = process.env.NEXT_PRIVATE_DRPC_KEY || ''

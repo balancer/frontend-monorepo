@@ -26,7 +26,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTokens } from '../tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -157,8 +157,8 @@ export function useLbpFormLogic() {
     decimals: launchTokenMetadata.decimals || 0,
   }
 
-  const isDynamicSale = saleType === GqlPoolType.LiquidityBootstrapping
-  const isFixedSale = saleType === GqlPoolType.FixedLbp
+  const isDynamicSale = saleType === GqlPoolTypeValues.LiquidityBootstrapping
+  const isFixedSale = saleType === GqlPoolTypeValues.FixedLbp
   const isSeeded = seedType === SeedType.SEEDED
 
   return {

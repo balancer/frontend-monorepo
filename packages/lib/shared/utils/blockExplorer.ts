@@ -1,5 +1,5 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlChain } from '../services/api/generated/graphql'
+import type { GqlChain } from '../services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 const defaultChain = PROJECT_CONFIG.defaultNetwork

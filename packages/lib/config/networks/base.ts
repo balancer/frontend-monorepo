@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { AddressProvider, PERMIT2 } from '@balancer/sdk'
@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 8453,
   name: 'Base Mainnet',
   shortName: 'Base',
-  chain: GqlChain.Base,
+  chain: GqlChainValues.Base,
   iconPath: '/images/chains/BASE.svg',
   blockExplorer: {
     baseUrl: 'https://basescan.org',
@@ -49,6 +49,7 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0x7C3C773C878d2238a9b64d8CEE02377BF07ED06a',
       minter: '0x0c5538098EBe88175078972F514C9e101D325D4F',
       vaultAdminV3: AddressProvider.VaultAdmin(base.id),
+      unbalancedAddViaSwapRouter: AddressProvider.UnbalancedAddViaSwapRouter(base.id),
       router: AddressProvider.Router(base.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(base.id),
       bCoWFactory: '0x03362f847B4fAbC12e1Ce98b6b59F94401E4588e',

@@ -1,11 +1,12 @@
 import { Pool } from '../../pool/pool.types'
-import { GqlHookType, StableSurgeHookParams } from '@repo/lib/shared/services/api/generated/graphql'
+import type { StableSurgeHookParams } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlHookTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useGetPoolTokensWithActualWeights } from '../../pool/useGetPoolTokensWithActualWeights'
 
 export function useStableSurgeMetrics(pool: Pool) {
   const { poolTokensWithActualWeights } = useGetPoolTokensWithActualWeights(pool)
 
-  if (!pool.hook || pool.hook.type !== GqlHookType.StableSurge) return { surging: false }
+  if (!pool.hook || pool.hook.type !== GqlHookTypeValues.StableSurge) return { surging: false }
 
   const percentages = Object.values(poolTokensWithActualWeights).map(p => parseFloat(p))
   const totalImbalance = calculateTotalImbalance(percentages)

@@ -1,6 +1,6 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
@@ -39,7 +39,7 @@ describe('When adding unbalanced liquidity for a V3 BOOSTED pool', async () => {
       slippagePercent: '0.2',
       queryOutput,
     })
-    const router = getNetworkConfig(GqlChain.Mainnet).contracts.balancer
+    const router = getNetworkConfig(GqlChainValues.Mainnet).contracts.balancer
       .compositeLiquidityRouterBoosted
     expect(result.to).toBe(router)
     expect(result.data).toBeDefined()

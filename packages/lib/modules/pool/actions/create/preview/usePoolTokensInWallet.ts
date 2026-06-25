@@ -3,7 +3,7 @@ import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { formatUnits } from 'viem'
 import { useWatch } from 'react-hook-form'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type SelectedPoolToken = {
   address: string

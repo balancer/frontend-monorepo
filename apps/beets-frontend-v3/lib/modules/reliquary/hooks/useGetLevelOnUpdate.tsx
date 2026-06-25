@@ -2,7 +2,7 @@ import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useGetLevelOnUpdate(relicId: string, chain: GqlChain) {
   const chainId = getChainId(chain)

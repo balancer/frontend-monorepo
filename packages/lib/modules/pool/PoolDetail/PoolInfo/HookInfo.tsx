@@ -1,4 +1,4 @@
-import { GqlHookReviewData } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlHookReviewData } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   Popover,
   PopoverTrigger,

@@ -9,7 +9,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { GetPoolDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GetPoolDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../tokens/TokensProvider'
 import { getTokenColor } from '@repo/lib/styles/token-colors'
 import { Address } from 'viem'
