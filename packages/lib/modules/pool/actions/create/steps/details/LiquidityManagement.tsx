@@ -2,21 +2,46 @@ import { VStack, HStack, Text } from '@chakra-ui/react'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { useEffect } from 'react'
+import { usePoolHooksContract } from './usePoolHooksContract'
+import { isStableSurgePool, isAutoRangePool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function LiquidityManagement() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [enableDonation, disableUnbalancedLiquidity] = useWatch({
-    control: poolCreationForm.control,
-    name: ['enableDonation', 'disableUnbalancedLiquidity'],
-  })
+  const [poolType, enableDonation, disableUnbalancedLiquidity, poolHooksContract, network] =
+    useWatch({
+      control: poolCreationForm.control,
+      name: [
+        'poolType',
+        'enableDonation',
+        'disableUnbalancedLiquidity',
+        'poolHooksContract',
+        'network',
+      ],
+    })
 
-  const isUnbalancedToggleDisabled = false
-  const isDonationToggleDisabled = false
+  const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
 
-  const donationsToolTip =
-    'Option to add liquidity to a pool without minting additional LP tokens. Most pools should NOT allow donations. Only recommended for advanced users.'
+  useEffect(() => {
+    // if contract has this flag set to true, enforce `disableUnbalancedLiquidity: true` to avoid tx revert
+    if (hookFlags?.enableHookAdjustedAmounts) {
+      poolCreationForm.setValue('disableUnbalancedLiquidity', true)
+    }
+    // the stable surge pool factory only supports `disableUnbalancedLiquidity: false`
+    if (isStableSurgePool(poolType)) {
+      poolCreationForm.setValue('disableUnbalancedLiquidity', false)
+    }
+  }, [hookFlags, poolType])
+
+  const isUnbalancedToggleDisabled =
+    isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
+  const isDonationToggleDisabled = isAutoRangePool(poolType)
+
+  const donationsToolTip = isDonationToggleDisabled
+    ? 'The selected pool type does not allow donations to be enabled'
+    : 'Option to add liquidity to a pool without minting additional LP tokens. Most pools should NOT allow donations. Only recommended for advanced users.'
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -27,7 +52,7 @@ export function LiquidityManagement() {
         <InfoIconPopover message="Flags related to adding/removing liquidity" />
       </HStack>
       <TooltipWithTouch
-        isHidden
+        isHidden={!isStableSurgePool(poolType)}
         label="The stable surge pool factory requires unbalanced joins and removes to be enabled"
         placement="right"
       >
