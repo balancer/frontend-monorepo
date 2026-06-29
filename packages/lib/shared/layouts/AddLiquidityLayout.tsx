@@ -37,9 +37,9 @@ export function AddLiquidityLayout({ txHash, children }: Props) {
         <RelayerSignatureProvider>
           <Permit2SignatureProvider>
             <TokenInputsValidationProvider>
-              <AddLiquidityProvider urlTxHash={urlTxHash}>
-                <PriceImpactProvider>{children}</PriceImpactProvider>
-              </AddLiquidityProvider>
+              <PriceImpactProvider>
+                <AddLiquidityProvider urlTxHash={urlTxHash}>{children}</AddLiquidityProvider>
+              </PriceImpactProvider>
             </TokenInputsValidationProvider>
           </Permit2SignatureProvider>
         </RelayerSignatureProvider>
