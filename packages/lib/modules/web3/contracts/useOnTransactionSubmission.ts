@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Address } from 'viem'
 import { useRecentTransactions } from '../../transactions/RecentTransactionsProvider'
 import { TransactionLabels } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 type NewTrackedTransactionRequest = {
   labels: TransactionLabels

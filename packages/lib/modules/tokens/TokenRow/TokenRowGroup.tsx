@@ -1,6 +1,6 @@
 import { HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '../token.types'
 import { HumanTokenAmount } from '../token.types'
 import { useTotalUsdValue } from '../useTotalUsdValue'
@@ -8,7 +8,7 @@ import TokenRow from './TokenRow'
 import { ReactNode, useMemo } from 'react'
 import { HumanAmount } from '@balancer/sdk'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
-import { bn, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
+import { bn, formatFalsyValueAsDash, isValidNumber } from '@repo/lib/shared/utils/numbers'
 
 type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 
@@ -49,11 +49,13 @@ export function TokenRowGroup({
       const key = amount.tokenAddress
 
       if (amountMap[key]) {
+        const existingAmount = isValidNumber(amountMap[key].humanAmount)
+          ? bn(amountMap[key].humanAmount)
+          : bn(0)
+        const newAmount = isValidNumber(amount.humanAmount) ? bn(amount.humanAmount) : bn(0)
         amountMap[key] = {
           ...amountMap[key],
-          humanAmount: bn(amountMap[key].humanAmount)
-            .plus(bn(amount.humanAmount))
-            .toString() as HumanAmount,
+          humanAmount: existingAmount.plus(newAmount).toString() as HumanAmount,
           symbol: symbol || amount.symbol,
         }
       } else {

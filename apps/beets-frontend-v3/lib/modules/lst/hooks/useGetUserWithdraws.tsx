@@ -5,7 +5,7 @@ import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { sonicStakingWithdrawRequestHelperAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type UserWithdraw = {
   id: bigint

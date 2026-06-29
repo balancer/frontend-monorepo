@@ -3,7 +3,7 @@ import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generat
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { formatUnits } from 'viem'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useGetPositionForId(relicId: string, chain: GqlChain) {
   const chainId = getChainId(chain)

@@ -1,7 +1,7 @@
 import { Text } from '@chakra-ui/react'
 import React from 'react'
 import { getNativeAsset } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useBalance } from 'wagmi'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

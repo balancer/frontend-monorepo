@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { Pool } from '../pool.types'
@@ -45,7 +45,7 @@ test('enriches V2 pool with on-chain data', async () => {
 test('enriches V1 Cow AMM pool with on-chain data', async () => {
   const cowPoolId = '0xf08d4dea369c456d26a3168ff0024b904f2d8b91'
 
-  const pool = await fetchPoolMock({ poolId: cowPoolId, chain: GqlChain.Mainnet })
+  const pool = await fetchPoolMock({ poolId: cowPoolId, chain: GqlChainValues.Mainnet })
 
   // delete values to ensure that onchain data is used
   pool.dynamicData.totalLiquidity = '0'

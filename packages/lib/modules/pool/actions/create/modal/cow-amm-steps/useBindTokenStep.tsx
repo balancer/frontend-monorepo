@@ -19,7 +19,7 @@ import { Address } from 'viem'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
 import { getCowRawWeight } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface UseBindTokenStepParams {
   token: {

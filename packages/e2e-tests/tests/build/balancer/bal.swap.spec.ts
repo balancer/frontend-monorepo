@@ -1,7 +1,7 @@
 import { button, clickButton, clickLink } from '@/helpers/user.helpers'
 import { test, expect } from '@playwright/test'
 
-test('Open swap page and try eth wrap', async ({ page }) => {
+test('Balancer: swap page renders', async ({ page }) => {
   await page.goto('http://localhost:3000/')
   await clickLink(page, 'Swap')
 

@@ -1,5 +1,5 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlChain } from '../services/api/generated/graphql'
+import type { GqlChain } from '../services/api/generated/graphql'
 import { useReadContract } from 'wagmi'
 import { vaultAdminAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 

@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   getLeafTokens,
   isWrappedNativeAsset,
@@ -12,7 +12,7 @@ import { v3SepoliaNestedBoostedMock } from '../pool/__mocks__/api-mocks/v3Sepoli
 import { PoolToken } from '../pool/pool.types'
 
 test('isWrappedNativeAsset', () => {
-  expect(isWrappedNativeAsset(wETHAddress, GqlChain.Mainnet)).toBeTruthy()
+  expect(isWrappedNativeAsset(wETHAddress, GqlChainValues.Mainnet)).toBeTruthy()
 })
 
 test('swapWrappedWithNative', () => {
@@ -23,7 +23,7 @@ test('swapWrappedWithNative', () => {
       symbol: 'WETH',
     },
   ]
-  const result = swapWrappedWithNative(inputAmounts, GqlChain.Mainnet)
+  const result = swapWrappedWithNative(inputAmounts, GqlChainValues.Mainnet)
   expect(result).toEqual([{ humanAmount: '1', tokenAddress: ethAddress, symbol: 'WETH' }])
 })
 
@@ -36,7 +36,7 @@ test('swapNativeWithWrapped', () => {
       decimals: 18,
     },
   ]
-  const result = swapNativeWithWrapped(inputAmounts, GqlChain.Mainnet)
+  const result = swapNativeWithWrapped(inputAmounts, GqlChainValues.Mainnet)
   expect(result).toEqual([
     {
       address: wethAddress,

@@ -4,7 +4,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { FlyQuoteApiRequest, FlyQuoteApiResponse } from '@/app/api/fly/quote/route'
 import { useLoopsGetCollateralAndDebtForShares } from '@/lib/modules/loops/hooks/useLoopsGetCollateralAndDebtForShares'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 const AAVE_FLASH_LOAN_FEE = '0.0005'
 

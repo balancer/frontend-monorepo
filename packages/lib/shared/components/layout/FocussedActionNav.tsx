@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { CloseIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export interface ModalActionsNavProps {
   chain: GqlChain

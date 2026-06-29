@@ -17,7 +17,8 @@ import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
 import { FeaturedPool } from '@repo/lib/modules/pool/PoolProvider'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { isLBP } from '@repo/lib/modules/pool/pool.helpers'
-import { GqlPoolAprItemType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolAprItemType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolAprItemTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import StarIcon from '../../icons/StarIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isPool } from '@repo/lib/modules/pool/pool-tokens.utils'
@@ -48,15 +49,17 @@ export function SparklesIcon({
 }) {
   const hasRewardApr =
     pool.dynamicData.aprItems.filter(item =>
-      [
-        GqlPoolAprItemType.Staking,
-        GqlPoolAprItemType.VebalEmissions,
-        GqlPoolAprItemType.Merkl,
-      ].includes(item.type)
+      (
+        [
+          GqlPoolAprItemTypeValues.Staking,
+          GqlPoolAprItemTypeValues.VeBalEmissions,
+          GqlPoolAprItemTypeValues.Merkl,
+        ] as GqlPoolAprItemType[]
+      ).includes(item.type)
     ).length > 0
 
   const hasOnlySwapApr =
-    pool.dynamicData.aprItems.filter(item => item.type === GqlPoolAprItemType.SwapFee_24H)
+    pool.dynamicData.aprItems.filter(item => item.type === GqlPoolAprItemTypeValues.SwapFee24h)
       .length === pool.dynamicData.aprItems.length
 
   const defaultGradFrom = useColorModeValue(

@@ -17,7 +17,7 @@ import {
   getUserWalletBalance,
   getUserWalletBalanceUsd,
 } from '../../user-balance.helpers'
-import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 export type UseStakeResponse = ReturnType<typeof useStakeLogic>
 export const StakeContext = createContext<UseStakeResponse | null>(null)
@@ -48,7 +48,7 @@ export function useStakeLogic() {
   /**
    * Side-effects
    */
-  const stakedBalance = getStakedBalance(pool, GqlPoolStakingType.Gauge)
+  const stakedBalance = getStakedBalance(pool, GqlPoolStakingTypeValues.Gauge)
   const { quoteAmountIn, quoteAmountInUsd } = useMemo(() => {
     const stakableBalance: HumanAmount = getUserWalletBalance(pool)
     const stakableBalanceUsd: HumanAmount = getUserWalletBalanceUsd(pool).toFixed() as HumanAmount

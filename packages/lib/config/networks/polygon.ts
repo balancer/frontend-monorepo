@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 137,
   name: 'Polygon Mainnet',
   shortName: 'Polygon',
-  chain: GqlChain.Polygon,
+  chain: GqlChainValues.Polygon,
   iconPath: '/images/chains/POLYGON.svg',
   minConfirmations: 13,
   blockExplorer: {
@@ -82,7 +82,7 @@ const networkConfig: NetworkConfig = {
       [PoolIssue.PoolOwnerVulnWarningEcosystem]: [
         '0xb4670d1389c758e4380c4211bcbc85342688b9c50002000000000000000003d8',
       ],
-      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Polygon],
+      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Polygon],
       [PoolIssue.FxPoolVulnWarning]: [
         '0x216b176513c500dbe1d677939103e350a9373a390002000000000000000008da',
         '0x726e324c29a1e49309672b244bdc4ff62a270407000200000000000000000702',

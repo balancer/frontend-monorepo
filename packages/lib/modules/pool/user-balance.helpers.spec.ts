@@ -1,9 +1,9 @@
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
-import {
-  GqlPoolStakingType,
+import type {
   GqlPoolUserBalance,
   GqlUserStakedBalance,
-} from '@repo/lib/shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GqlPoolStakingTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
   calcNonOnChainFetchedStakedBalance,
   calcTotalStakedBalanceInt,
@@ -24,14 +24,14 @@ const apiStakedBalances: GqlUserStakedBalance[] = [
   {
     balance: '0',
     balanceUsd: 0,
-    stakingType: GqlPoolStakingType.Gauge,
+    stakingType: GqlPoolStakingTypeValues.Gauge,
     stakingId: '0xe99a452a65e5bb316febac5de83a1ca59f6a3a94', //Preferential gauge
     __typename: 'GqlUserStakedBalance',
   },
   {
     balance: '52.123',
     balanceUsd: 7.9,
-    stakingType: GqlPoolStakingType.Gauge,
+    stakingType: GqlPoolStakingTypeValues.Gauge,
     stakingId: '0x55ec14e951b1c25ab09132dae12363bea0d20105', //Non preferential gauge
     __typename: 'GqlUserStakedBalance',
   },
@@ -64,7 +64,7 @@ test('User balance helpers', () => {
   expect(calcNonOnChainFetchedStakedBalance(pool)).toBe('0')
 
   expect(hasBalancerStakedBalance(pool)).toBeTruthy()
-  expect(hasStakedBalanceFor(pool, GqlPoolStakingType.FreshBeets)).toBeFalsy()
+  expect(hasStakedBalanceFor(pool, GqlPoolStakingTypeValues.FreshBeets)).toBeFalsy()
   expect(hasTinyBalance(pool)).toBeFalsy()
 })
 
@@ -80,4 +80,84 @@ test('has tiny balance', () => {
   }
   pool.userBalance = userBalanceMock
   expect(hasTinyBalance(pool)).toBeTruthy()
+})
+
+describe('invalid balance fallbacks', () => {
+  test('getUserTotalBalance returns 0 when totalBalance is invalid', () => {
+    const pool = aWjAuraWethPoolElementMock()
+    pool.userBalance = {
+      __typename: 'GqlPoolUserBalance',
+      walletBalance: '100',
+      walletBalanceUsd: 200,
+      totalBalance: '',
+      totalBalanceUsd: 300,
+      stakedBalances: [],
+    }
+    expect(getUserTotalBalance(pool)).toBe('0')
+  })
+
+  test('getUserTotalBalanceInt returns 0n when totalBalance is invalid', () => {
+    const pool = aWjAuraWethPoolElementMock()
+    pool.userBalance = {
+      __typename: 'GqlPoolUserBalance',
+      walletBalance: '100',
+      walletBalanceUsd: 200,
+      totalBalance: null as any,
+      totalBalanceUsd: 300,
+      stakedBalances: [],
+    }
+    expect(getUserTotalBalanceInt(pool)).toBe(0n)
+  })
+
+  test('calcStakedBalance handles invalid staked balances', () => {
+    const pool = aWjAuraWethPoolElementMock()
+    pool.userBalance = {
+      __typename: 'GqlPoolUserBalance',
+      walletBalance: '100',
+      walletBalanceUsd: 200,
+      totalBalance: '175',
+      totalBalanceUsd: 300,
+      stakedBalances: [
+        {
+          balance: '',
+          balanceUsd: 0,
+          stakingType: GqlPoolStakingTypeValues.Gauge,
+          stakingId: '0x1',
+          __typename: 'GqlUserStakedBalance',
+        },
+        {
+          balance: '52.123',
+          balanceUsd: 7.9,
+          stakingType: GqlPoolStakingTypeValues.Gauge,
+          stakingId: '0x2',
+          __typename: 'GqlUserStakedBalance',
+        },
+      ],
+    }
+    expect(calcTotalStakedBalance(pool)).toBe('52.123')
+    expect(calcTotalStakedBalanceUsd(pool)).toBe(7.9)
+  })
+
+  test('handles scientific notation from API balances', () => {
+    const pool = aWjAuraWethPoolElementMock()
+    pool.userBalance = {
+      __typename: 'GqlPoolUserBalance',
+      walletBalance: '6.1713167421e-8',
+      walletBalanceUsd: 0,
+      totalBalance: '6.1713167421e-8',
+      totalBalanceUsd: 0,
+      stakedBalances: [
+        {
+          balance: '6.1713167421e-8',
+          balanceUsd: 0,
+          stakingType: GqlPoolStakingTypeValues.Gauge,
+          stakingId: '0x1',
+          __typename: 'GqlUserStakedBalance',
+        },
+      ],
+    }
+    expect(getUserWalletBalanceInt(pool)).toBe(61713167421n)
+    expect(getUserTotalBalanceInt(pool)).toBe(61713167421n)
+    expect(calcTotalStakedBalanceInt(pool)).toBe(61713167421n)
+  })
 })

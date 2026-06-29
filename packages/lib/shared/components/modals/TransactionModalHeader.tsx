@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Center, HStack, ModalHeader, VStack, Text, Link } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ReactNode } from 'react'

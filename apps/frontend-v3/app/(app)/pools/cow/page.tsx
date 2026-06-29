@@ -1,6 +1,6 @@
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 import { Metadata } from 'next'
@@ -37,7 +37,7 @@ export default function PoolsPage() {
       <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList fixedPoolTypes={[GqlPoolType.CowAmm]} />
+            <PoolList fixedPoolTypes={[GqlPoolTypeValues.CowAmm]} />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>

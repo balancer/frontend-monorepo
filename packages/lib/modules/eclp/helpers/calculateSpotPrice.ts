@@ -2,7 +2,8 @@ import { calculateInvariantWithError } from './gyroEMath'
 import { calcSpotPrice0in1 } from './gyroECLPMath'
 import { divDownMagU, mulDownMagU } from './gyroSignedFixedPoint'
 import { _normalizeBalances } from './helpers'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { safeParseFixedBigInt } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/pool.types'
 import { isGyroEPool } from '../../pool/pool.helpers'
@@ -87,7 +88,7 @@ export function destructureRequiredPoolParams(
 export function calculateSpotPrice(poolType: GqlPoolType, params: GyroPoolParams): bigint {
   let price = ZERO
 
-  if (poolType === GqlPoolType.Gyroe) {
+  if (poolType === GqlPoolTypeValues.GyroE) {
     price = calculateGyroESpotPrice(params as GyroEParams)
   }
 

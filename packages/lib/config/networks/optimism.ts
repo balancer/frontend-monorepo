@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
@@ -10,7 +10,7 @@ const networkConfig: NetworkConfig = {
   chainId: 10,
   name: 'Optimism Mainnet',
   shortName: 'Optimism',
-  chain: GqlChain.Optimism,
+  chain: GqlChainValues.Optimism,
   iconPath: '/images/chains/OPTIMISM.svg',
   blockExplorer: {
     baseUrl: 'https://optimistic.etherscan.io',
@@ -59,6 +59,7 @@ const networkConfig: NetworkConfig = {
       batchRouter: AddressProvider.BatchRouter(optimism.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(optimism.id),
       vaultAdminV3: AddressProvider.VaultAdmin(optimism.id),
+      unbalancedAddViaSwapRouter: AddressProvider.UnbalancedAddViaSwapRouter(optimism.id),
     },
     veDelegationProxy: '0x9dA18982a33FD0c7051B19F0d7C76F2d5E7e017c',
     permit2: PERMIT2[optimism.id],
@@ -69,7 +70,7 @@ const networkConfig: NetworkConfig = {
   },
   pools: convertHexToLowerCase({
     issues: {
-      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Optimism],
+      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Optimism],
     },
   }),
   layerZeroChainId: 111,

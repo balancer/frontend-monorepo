@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   getNativeAssetAddress,
   getNetworkConfig,

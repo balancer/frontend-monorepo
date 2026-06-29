@@ -21,12 +21,12 @@ import {
 import { usePool } from '../../PoolProvider'
 import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
-import {
+import type {
   GqlPriceRateProviderData,
   GqlHookReviewData,
   Erc4626ReviewData,
-  HookFragment,
-} from '@repo/lib/shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
+import { HookFragment } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'

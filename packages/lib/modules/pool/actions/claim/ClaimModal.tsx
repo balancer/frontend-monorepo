@@ -20,7 +20,7 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useMemo } from 'react'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'

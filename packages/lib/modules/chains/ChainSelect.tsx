@@ -1,6 +1,6 @@
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Box, HStack, Text, Center, VStack, Divider } from '@chakra-ui/react'
 import {
   GroupBase,

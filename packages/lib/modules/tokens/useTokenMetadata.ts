@@ -1,5 +1,5 @@
 import { getChainId } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMemo } from 'react'
 import { Address, erc20Abi, isAddress } from 'viem'
 import { useReadContracts } from 'wagmi'

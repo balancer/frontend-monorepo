@@ -1,5 +1,5 @@
 import { Box, HStack, SkeletonCircle, StackProps } from '@chakra-ui/react'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from './token.types'
 import { TokenIcon } from './TokenIcon'
 import { Numberish } from '@repo/lib/shared/utils/numbers'

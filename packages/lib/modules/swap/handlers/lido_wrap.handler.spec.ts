@@ -1,11 +1,11 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { LidoWrapHandler } from './LidoWrap.handler'
 import { TEST_ADDRESSES } from '@repo/lib/test/utils/swap-test-utils'
 
 const defaultConfig = {
   chainId: 1,
-  chain: GqlChain.Mainnet,
+  chain: GqlChainValues.Mainnet,
   tokens: {
     addresses: {
       wNativeAsset: TEST_ADDRESSES.weth,
@@ -112,8 +112,8 @@ describe('LidoWrapHandler.build', () => {
           amount: '1.0',
           scaledAmount: BigInt(1e18),
         },
-        swapType: GqlChain.Mainnet as any,
-        selectedChain: GqlChain.Mainnet,
+        swapType: GqlChainValues.Mainnet as any,
+        selectedChain: GqlChainValues.Mainnet,
         account: TEST_ADDRESSES.eth,
         slippagePercent: '0.5',
         simulateResponse: {} as any,

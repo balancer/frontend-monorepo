@@ -1,14 +1,14 @@
 'use client'
 
+import type { GqlToken } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   GetTokenPricesDocument,
   GetTokensDocument,
-  GqlChain,
-  GqlToken,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
+import { bn, Numberish, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { useQuery } from '@apollo/client/react'
 import { createContext, PropsWithChildren, useCallback } from 'react'
 import { Address } from 'viem'
@@ -87,6 +87,7 @@ export function useTokensLogic() {
   function usdValueForToken(token: ApiOrCustomToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
+    if (typeof amount === 'string' && !isValidNumber(amount)) return '0'
     return bn(amount)
       .times(priceFor(token.address as Address, token.chain))
       .toFixed()
@@ -99,6 +100,7 @@ export function useTokensLogic() {
     customUsdPrice?: string
   ) {
     if (amount === '') return '0'
+    if (typeof amount === 'string' && !isValidNumber(amount)) return '0'
     return bn(amount)
       .times(customUsdPrice || priceFor(address, chain))
       .toFixed()
@@ -121,7 +123,7 @@ export function useTokensLogic() {
     const tokenPrice = priceFor(tokenAddress, chain)
     const totalLiquidityBn = bn(totalLiquidity || 0)
 
-    if (totalLiquidityBn.isZero()) return '0'
+    if (totalLiquidityBn.isZero() || !isValidNumber(tokenBalance)) return '0'
 
     return bn(tokenPrice).times(tokenBalance).div(totalLiquidityBn).toString()
   }
@@ -130,6 +132,7 @@ export function useTokensLogic() {
     (poolTokens: PoolToken[], chain: GqlChain) => {
       return poolTokens
         .reduce((total, token) => {
+          if (!isValidNumber(token.balance)) return total
           return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
         }, bn(0))
         .toString()

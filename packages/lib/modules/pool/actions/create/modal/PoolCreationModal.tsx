@@ -13,7 +13,7 @@ import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { PoolSummary } from './PoolSummary'
 import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { getChainId } from '@repo/lib/config/app.config'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { getGqlPoolType } from '../helpers'
@@ -86,7 +86,7 @@ export function PoolCreationModal({
     setUsingBigBlocksError,
   } = useHyperEvm({
     isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
-    isHyperEvmTx: network === GqlChain.Hyperevm,
+    isHyperEvmTx: network === GqlChainValues.Hyperevm,
   })
 
   return (

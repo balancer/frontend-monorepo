@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
@@ -78,11 +78,15 @@ export function useGetHiddenHandRewards() {
     staleTime: 60000,
     refetchInterval: 300000,
     select: data => {
-      const filteredRewards = data.data.filter(reward => bn(reward.claimable).gt(0))
+      const filteredRewards = data.data.filter(
+        reward => isValidNumber(reward.claimable) && bn(reward.claimable).gt(0)
+      )
 
       const aggregatedRewards = filteredRewards.reduce(
         (acc, reward) => {
           const tokenAddress = reward.token
+          if (!isValidNumber(reward.claimable)) return acc
+
           const rewardTokenUsdValue = usdValueForTokenAddress(
             tokenAddress,
             PROJECT_CONFIG.defaultNetwork,

@@ -9,7 +9,7 @@ import {
   HStack,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { TokenInfoPopover } from '@repo/lib/modules/tokens/TokenInfoPopover'
 

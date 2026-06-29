@@ -10,7 +10,7 @@ import {
   saveAllPoolApiMocksFile,
   savePoolMock,
 } from '@repo/lib/modules/pool/__mocks__/savePoolMock'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 const allPoolExamples = [...flatPoolExamples, ...boostedPoolExamples, ...nestedPoolExamples]
@@ -53,7 +53,7 @@ function shouldSkipMock(apiUrl: string, example: PoolExample) {
   if (process.env.CI) return true
 
   // Skip Sepolia mock for non test-api
-  if (!apiUrl?.includes('test-api') && example.poolChain === GqlChain.Sepolia) {
+  if (!apiUrl?.includes('test-api') && example.poolChain === GqlChainValues.Sepolia) {
     return true
   }
   return false

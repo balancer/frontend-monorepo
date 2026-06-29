@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { Address, formatUnits } from 'viem'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { GasIcon } from '@repo/lib/shared/components/icons/GasIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { getChainId, getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { getRequiredTokenApprovals, areEmptyRawAmounts, RawAmount } from '../approval-rules'
@@ -15,6 +15,7 @@ import { getMaxAmountForPermit2 } from './permit2.helpers'
 import { Address, encodeFunctionData } from 'viem'
 import { permit2Abi } from '@balancer/sdk'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { milliseconds, millisecondsToSeconds } from 'date-fns'
 
 const PERMIT2_APPROVAL_EXPIRY_DURATION_MS = milliseconds({ days: 3 })
@@ -143,7 +144,11 @@ export function usePermit2ApprovalSteps({
       // the expiration shouldn't be more than 3 days from now
       const hasValidExpiry = !!expirations && expirations[tokenAddress] < permitExpiry
 
-      return requiredRawAmount > 0n && isAllowed && isNotExpired && hasValidExpiry
+      const tx = getTransaction(id)
+      const txSuccess = isTransactionSuccess(tx)
+      const complete = requiredRawAmount > 0n && isAllowed && isNotExpired && hasValidExpiry
+
+      return complete || txSuccess
     }
 
     const isTxEnabled = !isLoadingPermit2Allowances && !!permit2Address

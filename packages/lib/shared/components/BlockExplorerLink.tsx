@@ -3,7 +3,7 @@
 import { HStack, Link, Text } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { Address } from 'viem'
-import { GqlChain } from '../services/api/generated/graphql'
+import type { GqlChain } from '../services/api/generated/graphql'
 import { getBlockExplorerName, getBlockExplorerTxUrl } from '../utils/blockExplorer'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'

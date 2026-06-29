@@ -42,7 +42,11 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
 
-type AddLiquidityHandlerSelector = (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
+type AddLiquidityHandlerSelector = (
+  pool: Pool,
+  wantsProportional: boolean,
+  wantsUnbalanced?: boolean
+) => AddLiquidityHandler
 
 type AddLiquidityStepsHook = (
   params: AddLiquidityStepsParams
@@ -86,14 +90,15 @@ export function useAddLiquidityLogic(
     - the user selected the proportional tab
   */
   const [wantsProportional, setWantsProportional] = useState(requiresProportionalInput(pool))
+  const [wantsUnbalanced, setWantsUnbalanced] = useState(false)
   const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage } = useUserSettings()
 
   const handler = useMemo(() => {
-    return addLiquidityHandlerSelector(pool, wantsProportional)
-  }, [pool, wantsProportional, addLiquidityHandlerSelector])
+    return addLiquidityHandlerSelector(pool, wantsProportional, wantsUnbalanced)
+  }, [pool, wantsProportional, wantsUnbalanced, addLiquidityHandlerSelector])
 
   /**
    * Helper functions & variables
@@ -132,13 +137,13 @@ export function useAddLiquidityLogic(
 
   function clearAmountsIn(changedAmount?: HumanTokenAmountWithSymbol) {
     setHumanAmountsIn(
-      humanAmountsIn.map(({ tokenAddress, symbol }) => {
+      humanAmountsIn.map(amountIn => {
         // Keeps user inputs like '0' or '0.' instead of replacing them with ''
-        if (changedAmount && isSameAddress(changedAmount.tokenAddress, tokenAddress)) {
+        if (changedAmount && isSameAddress(changedAmount.tokenAddress, amountIn.tokenAddress)) {
           return changedAmount
         }
 
-        return { tokenAddress, humanAmount: '', symbol }
+        return { ...amountIn, humanAmount: '' }
       })
     )
   }
@@ -261,8 +266,10 @@ export function useAddLiquidityLogic(
     addLiquidityTxSuccess,
     slippage,
     wantsProportional,
+    wantsUnbalanced,
     referenceAmountAddress,
     setWantsProportional,
+    setWantsUnbalanced,
     refetchQuote,
     setHumanAmountIn,
     setHumanAmountsIn,

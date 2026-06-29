@@ -1,5 +1,6 @@
 import { vi } from 'vitest'
-import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import type {
   BuildSwapInputs,
   SdkBuildSwapInputs,
@@ -62,7 +63,7 @@ export function createMockSdkSimulateSwapResponse(overrides?: {
     hopCount: 1,
     router,
     paths: [],
-    swapType: GqlSorSwapType.ExactIn,
+    swapType: GqlSorSwapTypeValues.ExactIn,
     effectivePrice: '1',
     effectivePriceReversed: '1',
     returnAmount: '1.0',
@@ -101,8 +102,8 @@ export function createSdkBuildSwapInputs(overrides?: {
       amount: overrides?.tokenOutAmount ?? '100.0',
       scaledAmount: BigInt(1e20),
     },
-    swapType: overrides?.swapType ?? GqlSorSwapType.ExactIn,
-    selectedChain: overrides?.selectedChain ?? GqlChain.Mainnet,
+    swapType: overrides?.swapType ?? GqlSorSwapTypeValues.ExactIn,
+    selectedChain: overrides?.selectedChain ?? GqlChainValues.Mainnet,
     account: overrides?.account ?? TEST_ACCOUNT,
     slippagePercent: overrides?.slippagePercent ?? '0.5',
     simulateResponse,
@@ -119,10 +120,10 @@ export function createMockSimulateSwapInputs(overrides?: {
   swapAmount?: string
 }): SimulateSwapInputs {
   return {
-    chain: overrides?.chain ?? GqlChain.Mainnet,
+    chain: overrides?.chain ?? GqlChainValues.Mainnet,
     tokenIn: overrides?.tokenIn ?? TEST_ADDRESSES.eth,
     tokenOut: overrides?.tokenOut ?? TEST_ADDRESSES.weth,
-    swapType: overrides?.swapType ?? GqlSorSwapType.ExactIn,
+    swapType: overrides?.swapType ?? GqlSorSwapTypeValues.ExactIn,
     swapAmount: overrides?.swapAmount ?? '1.0',
   }
 }
@@ -137,7 +138,7 @@ export function createMockAuraBalSimulateResponse(): AuraBalSimulateSwapResponse
       },
       to: TEST_ADDRESSES.vaultV2,
     } as unknown as AuraBalSimulateSwapResponse['queryOutput'],
-    swapType: GqlSorSwapType.ExactIn,
+    swapType: GqlSorSwapTypeValues.ExactIn,
     effectivePrice: '1',
     effectivePriceReversed: '1',
     returnAmount: '1.0',
@@ -161,8 +162,8 @@ export function createAuraBalBuildSwapInputs(overrides?: {
       amount: '1.0',
       scaledAmount: BigInt(1e18),
     },
-    swapType: GqlSorSwapType.ExactIn,
-    selectedChain: GqlChain.Mainnet,
+    swapType: GqlSorSwapTypeValues.ExactIn,
+    selectedChain: GqlChainValues.Mainnet,
     account: TEST_ACCOUNT,
     slippagePercent: overrides?.slippagePercent ?? '1.0',
     simulateResponse: createMockAuraBalSimulateResponse(),
@@ -178,7 +179,7 @@ export function createMockNetworkConfig(overrides?: {
   }>
 }): {
   chainId: number
-  chain: GqlChain.Mainnet
+  chain: GqlChain
   tokens: {
     addresses: { wNativeAsset: string; auraBal: string; bal: string }
     nativeAsset: { address: string }
@@ -188,7 +189,7 @@ export function createMockNetworkConfig(overrides?: {
 } {
   return {
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet as GqlChain,
     tokens: {
       addresses: {
         wNativeAsset: TEST_ADDRESSES.weth,

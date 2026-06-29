@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Address } from 'viem'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useMemo } from 'react'
 

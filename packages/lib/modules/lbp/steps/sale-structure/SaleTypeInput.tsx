@@ -1,14 +1,14 @@
-import { Badge, Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { RadioCardGroup, RadioCardOption } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 import { Control, Controller } from 'react-hook-form'
 import { SaleStructureForm, SaleTypeOptionValue } from '../../lbp.types'
 import { Minus, TrendingUp } from 'react-feather'
 import { ReactNode } from 'react'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 const saleTypeOptions: RadioCardOption<SaleTypeOptionValue>[] = [
   {
-    value: GqlPoolType.LiquidityBootstrapping,
+    value: GqlPoolTypeValues.LiquidityBootstrapping,
     label: (
       <HStack align="start" spacing="md" w="full">
         <IconBadge icon={<TrendingUp size={20} />} />
@@ -23,17 +23,12 @@ const saleTypeOptions: RadioCardOption<SaleTypeOptionValue>[] = [
     ),
   },
   {
-    value: GqlPoolType.FixedLbp,
+    value: GqlPoolTypeValues.FixedLbp,
     label: (
       <HStack align="start" spacing="md" w="full">
         <IconBadge icon={<Minus size={20} />} />
         <VStack align="start" spacing="xs" w="full">
-          <HStack spacing="sm">
-            <Text fontWeight="bold">Fixed price LBP</Text>
-            <Badge colorScheme="yellow" variant="solid">
-              New
-            </Badge>
-          </HStack>
+          <Text fontWeight="bold">Fixed price LBP</Text>
           <Text color="font.secondary" fontSize="sm">
             A token sale where all participants purchase tokens at a set price, ensuring consistency
             throughout the sale. Ideal for projects seeking predictable fundraising.

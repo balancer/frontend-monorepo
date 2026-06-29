@@ -18,7 +18,7 @@ import {
 import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { VebalLockModal } from '@bal/lib/vebal/lock/modal/VebalLockModal'
 import { Address } from 'viem'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useRouter } from 'next/navigation'
 import { useClickable } from '@chakra-ui/clickable'
 import { getModalLabel } from '@bal/lib/vebal/lock/steps/lock-steps.utils'
@@ -87,7 +87,7 @@ export function VebalUnlockForm() {
               <Card variant="subSection">
                 <TokenRowWithDetails
                   address={vebalBptToken.address as Address}
-                  chain={GqlChain.Mainnet}
+                  chain={GqlChainValues.Mainnet}
                   details={
                     lockDuration.lockedUntilDateFormatted
                       ? [

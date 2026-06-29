@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
@@ -10,7 +10,7 @@ const networkConfig: NetworkConfig = {
   chainId: 43114,
   name: 'Avalanche Mainnet',
   shortName: 'Avalanche',
-  chain: GqlChain.Avalanche,
+  chain: GqlChainValues.Avalanche,
   iconPath: '/images/chains/AVALANCHE.svg',
   blockExplorer: {
     baseUrl: 'https://snowscan.xyz',
@@ -54,7 +54,7 @@ const networkConfig: NetworkConfig = {
   },
   pools: convertHexToLowerCase({
     issues: {
-      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Avalanche],
+      [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChainValues.Avalanche],
       [PoolIssue.FxPoolVulnWarning]: [
         '0x55bec22f8f6c69137ceaf284d9b441db1b9bfedc000200000000000000000011',
         '0x66bb9d104c55861feb3ec3559433f01f6373c96600020000000000000000002a',

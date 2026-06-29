@@ -1,13 +1,17 @@
 import { useState, PropsWithChildren, createContext } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { GqlChain, GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChainValues,
+  GqlPoolSnapshotDataRangeValues,
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { sumBy } from 'lodash'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useGetRelicPositionsOfOwner } from './hooks/useGetRelicPositionsOfOwner'
@@ -34,13 +38,15 @@ export type ReliquaryAddLiquidityMaturityImpact = {
   staysMax: boolean
 }
 
-const CHAIN = GqlChain.Sonic
+const CHAIN = GqlChainValues.Sonic
 
 export function useReliquaryLogic() {
   const { pool } = usePool()
   const { isConnected } = useUserAccount()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
-  const [range, setRange] = useState<GqlPoolSnapshotDataRange>(GqlPoolSnapshotDataRange.ThirtyDays)
+  const [range, setRange] = useState<GqlPoolSnapshotDataRange>(
+    GqlPoolSnapshotDataRangeValues.ThirtyDays
+  )
   const { priceFor } = useTokens()
 
   const networkConfig = getNetworkConfig(CHAIN)
@@ -76,18 +82,23 @@ export function useReliquaryLogic() {
     refetch: refetchMaturityThresholds,
   } = levelInfoQuery
 
-  const relicIds = relicPositions.map(relic => bn(relic.relicId).toNumber())
+  const relicIds = relicPositions
+    .filter(relic => isValidNumber(relic.relicId))
+    .map(relic => bn(relic.relicId).toNumber())
   const beetsPerSecond = pool?.staking?.reliquary?.beetsPerSecond || '0'
   const reliquaryLevels = pool?.staking?.reliquary?.levels || []
 
   const weightedTotalBalance = sumBy(reliquaryLevels, level =>
-    bn(level.balance).times(level.allocationPoints).toNumber()
+    isValidNumber(level.balance) && isValidNumber(level.allocationPoints)
+      ? bn(level.balance).times(level.allocationPoints).toNumber()
+      : 0
   )
 
   const relicPositionsForFarmId = relicPositions.filter(
     position => position.farmId.toString() === farmId
   )
   const totalMaBeetsVP = sumBy(relicPositionsForFarmId, position => {
+    if (!isValidNumber(position.amount)) return 0
     const boost = reliquaryLevels.find(level => level.level === position.level)
 
     return bn(position.amount)

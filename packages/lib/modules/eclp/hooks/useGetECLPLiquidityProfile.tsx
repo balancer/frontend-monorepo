@@ -3,12 +3,12 @@ import { useMemo, useState } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { drawLiquidityECLP } from '../helpers/drawLiquidityECLP'
 import { calculateSpotPrice, destructureRequiredPoolParams } from '../helpers/calculateSpotPrice'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { formatUnits } from 'viem'
 import { getPriceRateRatio } from '../../pool/pool-tokens.utils'
 import { getPoolActionableTokens } from '../../pool/pool-tokens.utils'
 import { usePool } from '../../pool/PoolProvider'
-import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolGyro } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { isGyroEPool } from '../../pool/pool.helpers'
 
 export type ECLPLiquidityProfile = {
@@ -58,7 +58,12 @@ export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
   const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
 
   const originalPoolSpotPrice = params
-    ? bn(formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18))
+    ? bn(
+        formatUnits(
+          calculateSpotPrice(pool.type as (typeof GqlPoolTypeValues)['GyroE'], params),
+          18
+        )
+      )
         .div(priceRateRatio)
         .toNumber()
     : null

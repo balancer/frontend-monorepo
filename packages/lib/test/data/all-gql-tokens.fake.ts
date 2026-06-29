@@ -1,5 +1,7 @@
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlToken } from '@repo/lib/shared/services/api/graphql-derived-types'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 
@@ -27,13 +29,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'ETH',
     decimals: 18,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI:
       'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png',
     priority: 0,
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -42,13 +46,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'WETH',
     decimals: 18,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI:
       'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png',
     priority: 0,
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -57,13 +63,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'WETH',
     decimals: 18,
     chainId: 1,
-    chain: GqlChain.Sepolia,
+    chain: GqlChainValues.Sepolia,
     logoURI:
       'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png',
     priority: 0,
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -72,13 +80,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'BAL',
     decimals: 18,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI:
       'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xba100000625a3754423978a60c9317c58a424e3d.png',
     priority: 0,
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -87,13 +97,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'BAL',
     decimals: 18,
     chainId: 11155111,
-    chain: GqlChain.Sepolia,
+    chain: GqlChainValues.Sepolia,
     logoURI:
       'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xba100000625a3754423978a60c9317c58a424e3d.png',
     priority: 0,
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -101,7 +113,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     name: 'Static Aave Ethereum USDC',
     symbol: 'stataEthUSDC',
     decimals: 6,
-    chain: GqlChain.Sepolia,
+    chain: GqlChainValues.Sepolia,
     chainId: 11155111,
     logoURI: null,
     priority: 0,
@@ -109,6 +121,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: true,
     isBufferAllowed: true,
     coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -116,7 +129,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     name: 'USDC (AAVE Faucet)',
     symbol: 'usdc-aave',
     decimals: 6,
-    chain: GqlChain.Sepolia,
+    chain: GqlChainValues.Sepolia,
     chainId: 11155111,
     logoURI: null,
     priority: 0,
@@ -124,6 +137,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: false,
     isBufferAllowed: true,
     coingeckoId: 'usd-coin',
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -131,7 +145,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     name: 'Static Aave Ethereum USDT',
     symbol: 'stataEthUSDT',
     decimals: 6,
-    chain: GqlChain.Sepolia,
+    chain: GqlChainValues.Sepolia,
     chainId: 11155111,
     logoURI: null,
     priority: 0,
@@ -139,6 +153,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: true,
     isBufferAllowed: true,
     coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -146,7 +161,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     name: 'USDT (AAVE Faucet)',
     symbol: 'usdt-aave',
     decimals: 6,
-    chain: GqlChain.Sepolia,
+    chain: GqlChainValues.Sepolia,
     chainId: 11155111,
     logoURI: null,
     priority: 0,
@@ -154,6 +169,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: false,
     isBufferAllowed: true,
     coingeckoId: 'tether',
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -161,7 +177,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     name: 'DAI (AAVE Faucet)',
     symbol: 'dai-aave',
     decimals: 18,
-    chain: GqlChain.Sepolia,
+    chain: GqlChainValues.Sepolia,
     chainId: 11155111,
     logoURI: null,
     priority: 0,
@@ -169,6 +185,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: false,
     isBufferAllowed: true,
     coingeckoId: 'dai',
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -176,7 +193,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     name: 'Static Aave Ethereum DAI',
     symbol: 'stataEthDAI',
     decimals: 18,
-    chain: GqlChain.Sepolia,
+    chain: GqlChainValues.Sepolia,
     chainId: 11155111,
     logoURI: null,
     priority: 0,
@@ -184,6 +201,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     isErc4626: true,
     isBufferAllowed: true,
     coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -192,12 +210,14 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'RPL',
     decimals: 18,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI:
       'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xd33526068d116ce69f19a9ee46f0bd304f21a51f.png',
     priority: 0,
     tradable: true,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
     isErc4626: false,
   },
   {
@@ -207,12 +227,14 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'USDT',
     decimals: 6,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI:
       'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
     priority: 0,
     tradable: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
     isErc4626: false,
   },
   {
@@ -222,13 +244,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'DAI',
     decimals: 18,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI:
       'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png',
     priority: 0,
     tradable: false,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -237,13 +261,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'DAI Polygon',
     decimals: 18,
     chainId: 137,
-    chain: GqlChain.Polygon,
+    chain: GqlChainValues.Polygon,
     logoURI:
       'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png',
     priority: 0,
     tradable: false,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -252,12 +278,14 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'WPOL',
     decimals: 18,
     chainId: 137,
-    chain: GqlChain.Polygon,
+    chain: GqlChainValues.Polygon,
     logoURI: '',
     priority: 0,
     tradable: false,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -266,12 +294,14 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'aUSDC',
     decimals: 6,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI: 'https://assets.coingecko.com/coins/images/11674/large/aUSDC.png?1592546449',
     priority: 0,
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     __typename: 'GqlToken',
@@ -280,13 +310,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'USDC',
     decimals: 6,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI:
       'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
     priority: 0,
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
   {
     // Used in 50WETH-50-3pool nested pool tests
@@ -296,13 +328,15 @@ export const allFakeGqlTokens: GqlToken[] = [
     symbol: 'USDC-DAI-USDT',
     decimals: 18,
     chainId: 1,
-    chain: GqlChain.Mainnet,
+    chain: GqlChainValues.Mainnet,
     logoURI:
       'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
     priority: 0,
     tradable: true,
     isErc4626: false,
     isBufferAllowed: true,
+    coingeckoId: null,
+    priceRateProviderData: null,
   },
 ]
 

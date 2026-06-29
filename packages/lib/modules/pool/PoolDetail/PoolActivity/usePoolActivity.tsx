@@ -5,7 +5,7 @@ import { PropsWithChildren, createContext, useCallback, useMemo, useState } from
 import { useParams } from 'next/navigation'
 import { PoolVariant } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
-import { GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolEventTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { usePoolEvents } from '../../usePoolEvents'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
 import { getPoolActivityDateCaption, getPoolActivityTitle } from '../../pool.helpers'
@@ -84,7 +84,9 @@ function usePoolActivityLogic() {
           item.tokens.forEach(token => {
             const tokenInfo =
               getToken(token.address, _chain) ||
-              (pool.poolTokens.find(poolToken => poolToken.address === token.address) as ApiToken)
+              (pool.poolTokens.find(
+                poolToken => poolToken.address === token.address
+              ) as unknown as ApiToken)
 
             tokens.push({
               token: tokenInfo,
@@ -99,11 +101,15 @@ function usePoolActivityLogic() {
         ) {
           const tokenIn =
             getToken(item.tokenIn.address, _chain) ||
-            (pool.poolTokens.find(token => token.address === item.tokenIn.address) as ApiToken)
+            (pool.poolTokens.find(
+              token => token.address === item.tokenIn.address
+            ) as unknown as ApiToken)
 
           const tokenOut =
             getToken(item.tokenOut.address, _chain) ||
-            (pool.poolTokens.find(token => token.address === item.tokenOut.address) as ApiToken)
+            (pool.poolTokens.find(
+              token => token.address === item.tokenOut.address
+            ) as unknown as ApiToken)
 
           tokens.push({
             token: tokenIn,
@@ -122,13 +128,13 @@ function usePoolActivityLogic() {
         ] as PoolActivityEl
 
         switch (type) {
-          case GqlPoolEventType.Add:
+          case GqlPoolEventTypeValues.Add:
             acc.adds.push([elToPush[0], elToPush[1], { ...elToPush[2], action: 'add' }])
             break
-          case GqlPoolEventType.Remove:
+          case GqlPoolEventTypeValues.Remove:
             acc.removes.push([elToPush[0], elToPush[1], { ...elToPush[2], action: 'remove' }])
             break
-          case GqlPoolEventType.Swap:
+          case GqlPoolEventTypeValues.Swap:
             acc.swaps.push([elToPush[0], elToPush[1], { ...elToPush[2], action: 'swap' }])
             break
         }
@@ -274,9 +280,9 @@ export const usePoolActivity = (): PoolActivityResponse =>
   useMandatoryContext(PoolActivityContext, 'PoolActivity')
 
 function toEventType(activeTab: string | undefined) {
-  if (activeTab === 'swaps') return GqlPoolEventType.Swap
-  if (activeTab === 'adds') return GqlPoolEventType.Add
-  if (activeTab === 'removes') return GqlPoolEventType.Remove
+  if (activeTab === 'swaps') return GqlPoolEventTypeValues.Swap
+  if (activeTab === 'adds') return GqlPoolEventTypeValues.Add
+  if (activeTab === 'removes') return GqlPoolEventTypeValues.Remove
 
   return undefined
 }

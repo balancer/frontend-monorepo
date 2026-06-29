@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { Address } from 'viem'
-import { GqlChain } from '../../services/api/generated/graphql'
+import type { GqlChain } from '../../services/api/generated/graphql'
 import { getTokenColor } from '../../../styles/token-colors'
 
 type NetworkPreviewSVGProps = SVGProps<SVGSVGElement> & {

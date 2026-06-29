@@ -3,7 +3,7 @@ import { boostedCoinshiftUsdcUsdl } from '@repo/lib/modules/pool/__mocks__/pool-
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { Pool } from './pool.types'
 import { useGetPoolRewards } from './useGetPoolRewards'
-import { GqlPoolStakingGaugeReward } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolStakingGaugeReward } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { waitFor } from '@testing-library/react'
 
 function getPoolWithStakingGaugeRewards() {
@@ -41,6 +41,25 @@ function getPoolWithMultipleStakingGaugeRewards() {
       id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0x0000000000000000000000000000000000000000-zerogauge',
       rewardPerSecond: '0',
       tokenAddress: '0x0000000000000000000000000000000000000000', // Zero rewards
+    } as GqlPoolStakingGaugeReward,
+  ]
+  return pool
+}
+
+function getPoolWithInvalidStakingGaugeRewards() {
+  const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
+  if (!pool.staking?.gauge?.rewards) throw new Error('Pool should have staking gauge rewards')
+
+  pool.staking.gauge.rewards = [
+    {
+      id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0xba100000625a3754423978a60c9317c58a424e3d-balgauge',
+      rewardPerSecond: null as any,
+      tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+    } as GqlPoolStakingGaugeReward,
+    {
+      id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0x6b175474e89094c44da98b954eedeac495271d0f-daigauge',
+      rewardPerSecond: '0.001',
+      tokenAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
     } as GqlPoolStakingGaugeReward,
   ]
   return pool
@@ -118,6 +137,22 @@ describe('useGetPoolRewards', () => {
     // Zero rewards token should have '0'
     expect(result.current.weeklyRewardsByToken['0x0000000000000000000000000000000000000000']).toBe(
       '0'
+    )
+  })
+
+  test('handles invalid rewardPerSecond gracefully', async () => {
+    const pool = getPoolWithInvalidStakingGaugeRewards()
+    const result = testUseGetPoolRewards(pool)
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false))
+
+    // Invalid rewardPerSecond should fallback to '0'
+    expect(result.current.weeklyRewardsByToken['0xba100000625a3754423978a60c9317c58a424e3d']).toBe(
+      '0'
+    )
+    // Valid rewardPerSecond should still calculate correctly
+    expect(result.current.weeklyRewardsByToken['0x6b175474e89094c44da98b954eedeac495271d0f']).toBe(
+      '604.8'
     )
   })
 })

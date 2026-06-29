@@ -5,7 +5,7 @@ import {
   usdtAddress,
   wETHAddress,
 } from '@repo/lib/debug-helpers'
-import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
 import {
   DefaultAddLiquidityTestProvider,
   buildDefaultPoolTestProvider,
@@ -75,7 +75,7 @@ test('uses custom add liquidity handler selector and forwards handler to custom 
   )
 
   expect(result.current.handler).toBe(customHandler)
-  expect(addLiquidityHandlerSelector).toHaveBeenCalledWith(pool, expect.any(Boolean))
+  expect(addLiquidityHandlerSelector).toHaveBeenCalledWith(pool, false, false)
   expect(useAddLiquiditySteps).toHaveBeenCalledWith(
     expect.objectContaining({
       handler: customHandler,

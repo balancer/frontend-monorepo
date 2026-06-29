@@ -1,5 +1,5 @@
 import { Address } from 'viem'
-import { GqlChain } from '../shared/services/api/generated/graphql'
+import type { GqlChain } from '../shared/services/api/generated/graphql'
 import { chains } from '@repo/lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'
@@ -58,6 +58,7 @@ export interface ContractsConfig {
     minter: Address
     WeightedPool2TokensFactory?: Address
     bCoWFactory?: Address
+    unbalancedAddViaSwapRouter?: Address
   }
   beets?: {
     lstStaking: Address

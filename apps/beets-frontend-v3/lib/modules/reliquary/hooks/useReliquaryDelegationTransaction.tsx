@@ -9,7 +9,7 @@ import {
   useManagedTransaction,
 } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isUserRejectedError } from '@repo/lib/shared/utils/error-filters'
 import { useEffect } from 'react'
 import { useDelegation } from './useDelegation'
@@ -17,7 +17,7 @@ import { useDelegation } from './useDelegation'
 export function useReliquaryDelegationTransaction() {
   const { isConnected } = useUserAccount()
   const { data: isDelegatedToMDs, delegationAddress, refetch } = useDelegation()
-  const networkConfig = getNetworkConfig(GqlChain.Sonic)
+  const networkConfig = getNetworkConfig(GqlChainValues.Sonic)
 
   const transactionInput: ManagedTransactionInput = isDelegatedToMDs
     ? {

@@ -3,7 +3,7 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useLoopsDepositStep } from './hooks/useLoopsDepositStep'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
@@ -15,7 +15,7 @@ import { formatUnits, parseUnits } from 'viem'
 import { useLoopsGetRate } from './hooks/useLoopsGetRate'
 import { useLoopsWithdrawSteps } from './hooks/useLoopsWithdrawSteps'
 
-const CHAIN = GqlChain.Sonic
+const CHAIN = GqlChainValues.Sonic
 const DEFAULT_ACTIVE_TAB: ButtonGroupOption = {
   value: '0',
   label: 'Deposit',

@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { getCanStake } from '../actions/stake.helpers'
 import { Pool } from '../pool.types'
 import { calcGaugeStakedBalance, getUserWalletBalance } from '../user-balance.helpers'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 type StakeUnstakeButtonProps = {
   pool: Pool
@@ -31,15 +32,22 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
 
   const handleClick = () => router.push(`${pathname}/${isStakeAction ? 'stake' : 'unstake'}`)
 
+  const stakeTooltipLabel =
+    isStakeAction && !canStake
+      ? 'Staking is currently disabled because this pool has no extra staking incentives.'
+      : ''
+
   return (
-    <Button
-      flex="1"
-      isDisabled={isDisabled}
-      maxW="120px"
-      onClick={handleClick}
-      variant={buttonVariant}
-    >
-      {isStakeAction ? 'Stake' : 'Unstake'}
-    </Button>
+    <TooltipWithTouch label={stakeTooltipLabel}>
+      <Button
+        flex="1"
+        isDisabled={isDisabled}
+        maxW="120px"
+        onClick={handleClick}
+        variant={buttonVariant}
+      >
+        {isStakeAction ? 'Stake' : 'Unstake'}
+      </Button>
+    </TooltipWithTouch>
   )
 }

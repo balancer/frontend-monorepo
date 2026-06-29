@@ -17,7 +17,7 @@ export function LbpSwap() {
   const lbpPool = pool as LbpV3
   const poolActionableTokens = getPoolActionableTokens(lbpPool)
 
-  const launchToken = lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
+  const launchToken = lbpPool.poolTokens[lbpPool.projectTokenIndex] as unknown as ApiToken
 
   // keep pathParams here to pass chain
   const pathParams: PathParams = {

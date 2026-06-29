@@ -1,5 +1,6 @@
 import { Address } from 'viem'
-import { GqlChain } from '../shared/services/api/generated/graphql'
+import type { GqlChain } from '../shared/services/api/generated/graphql'
+import { GqlChainValues } from '../shared/services/api/graphql-enums'
 import { getGqlChain } from '../config/app.config'
 import { getRandomInt } from '../shared/utils/numbers'
 
@@ -9,7 +10,7 @@ export type TokenColorDef = {
 }
 
 const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
-  [GqlChain.Mainnet]: {
+  [GqlChainValues.Mainnet]: {
     '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { from: '#627EEA', to: '#627EEA' }, // ETH
     '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': { from: '#F2F3F7', to: '#CECDFE' }, // WETH
     '0x0bfc9d54fc184518a81162f8fb99c2eaca081202': { from: '#F2F3F7', to: '#CECDFE' }, // waETHWETH
@@ -49,7 +50,7 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x48f9e38f3070ad8945dfeae3fa70987722e3d89c': { from: '#19553E', to: '#2B926A' }, // iUSD
     '0xab5eb14c09d416f0ac63661e57edb7aecdb9befa': { from: '#5885E9', to: '#6DCAEA' }, // msUSD
   },
-  [GqlChain.Arbitrum]: {
+  [GqlChainValues.Arbitrum]: {
     '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': { from: '#F2F3F7', to: '#CECDFE' }, // WETH
     '0x4ce13a79f45c1be00bdabd38b764ac28c082704e': { from: '#F2F3F7', to: '#CECDFE' }, // waArbWETH
     '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8': { from: '#1075E2', to: '#62A8F4' }, // USDC
@@ -63,7 +64,7 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x0c06ccf38114ddfc35e07427b9424adcca9f44f8': { from: '#0070AD', to: '#05A6FF' }, // EURe
     '0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8': { from: '#FE856C', to: '#FFC5A8' }, // rETH
   },
-  [GqlChain.Base]: {
+  [GqlChainValues.Base]: {
     '0x4200000000000000000000000000000000000006': { from: '#F2F3F7', to: '#CECDFE' }, // WETH
     '0xe298b938631f750dd409fb18227c4a23dcdaab9b': { from: '#F2F3F7', to: '#CECDFE' }, // waBasWETH
     '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { from: '#1075E2', to: '#62A8F4' }, // USDC
@@ -77,7 +78,7 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf': { from: '#045CE3', to: '#3784FB' }, // cbBTC
     '0xb6fe221fe9eef5aba221c348ba20a1bf5e73624c': { from: '#FE856C', to: '#FFC5A8' }, // rETH
   },
-  [GqlChain.Avalanche]: {
+  [GqlChainValues.Avalanche]: {
     '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7': { from: '#FF5733', to: '#FF5733' }, // WAVAX
     '0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664': { from: '#1075E2', to: '#62A8F4' }, // USDC.e
     '0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e': { from: '#1075E2', to: '#62A8F4' }, // USDC
@@ -92,12 +93,12 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0xbc78d84ba0c46dfe32cf2895a19939c86b81a777': { from: '#FDDB6F', to: '#D88B2C' }, // SolvBTC
     '0x9ee1963f05553ef838604dd39403be21cef26aa4': { from: '#AC96FF', to: '#7E00FF' }, // USDp
   },
-  [GqlChain.Fantom]: {
+  [GqlChainValues.Fantom]: {
     '0x04068da6c83afcfa0e13ba15a6696662335d5b75': { from: '#FF5733', to: '#FF5733' }, // USDC
     '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e': { from: '#33FF57', to: '#33FF57' }, // DAI
     '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83': { from: '#3357FF', to: '#3357FF' }, // WFTM
   },
-  [GqlChain.Gnosis]: {
+  [GqlChainValues.Gnosis]: {
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#FF5733', to: '#FF5733' }, // DAI
     '0x4e15361fd6b4bb609fa63c81a2be19d873717870': { from: '#33FF57', to: '#33FF57' }, // FTM
     '0x9c58bacc331c9aa871afd802db6379a98e80cedb': { from: '#00132A', to: '#002A5C' }, // GNO
@@ -111,14 +112,14 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0xf0e7ec247b918311afa054e0aedb99d74c31b809': { from: '#1075E2', to: '#62A8F4' }, // waUSDCn
     '0x58d9acac48a4077e4909181c48decd00e5ba5de4': { from: '#28D358', to: '#9AF9B5' }, // waGnoGHO
   },
-  [GqlChain.Optimism]: {
+  [GqlChainValues.Optimism]: {
     '0x4200000000000000000000000000000000000042': { from: '#FF5733', to: '#FF5733' }, // OP
     '0x7f5c764cbc14f9669b88837ca1490cca17c31607': { from: '#33FF57', to: '#33FF57' }, // USDC
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#3357FF', to: '#3357FF' }, // DAI
     '0x464b808c2c7e04b07e860fdf7a91870620246148': { from: '#F2F3F7', to: '#CECDFE' }, // waOptWETH
     '0x9bcef72be871e61ed4fbbc7630889bee758eb81d': { from: '#FE856C', to: '#FFC5A8' }, // rETH
   },
-  [GqlChain.Polygon]: {
+  [GqlChainValues.Polygon]: {
     '0x0000000000000000000000000000000000001010': { from: '#FF5733', to: '#FF5733' }, // MATIC
     '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619': { from: '#F2F3F7', to: '#CECDFE' }, // WETH
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#3357FF', to: '#3357FF' }, // DAI
@@ -127,19 +128,19 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x2791bca1f2de4661ed88a30c99a7a9449aa84174': { from: '#1075E2', to: '#62A8F4' }, // USDC
     '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359': { from: '#1075E2', to: '#62A8F4' }, // USDC
   },
-  [GqlChain.Zkevm]: {
+  [GqlChainValues.Zkevm]: {
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#FF5733', to: '#FF5733' }, // DAI
   },
-  [GqlChain.Sepolia]: {
+  [GqlChainValues.Sepolia]: {
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#FF5733', to: '#FF5733' }, // DAI
   },
-  [GqlChain.Mode]: {
+  [GqlChainValues.Mode]: {
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#FF5733', to: '#FF5733' }, // DAI
   },
-  [GqlChain.Fraxtal]: {
+  [GqlChainValues.Fraxtal]: {
     '0x853d955acef822db058eb8505911ed77f175b99e': { from: '#FF5733', to: '#FF5733' }, // FRAX
   },
-  [GqlChain.Hyperevm]: {
+  [GqlChainValues.Hyperevm]: {
     '0x5555555555555555555555555555555555555555': { from: '#DBFCF5', to: '#89F5DE' }, // WHYPE
     '0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb': { from: '#27A17C', to: '#42EBB8' }, // USDT0
     '0x3bcc0a5a66bb5bdceef5dd8a659a4ec75f3834d8': { from: '#27A17C', to: '#42EBB8' }, // MC_USDT0
@@ -148,7 +149,7 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0xca79db4b49f608ef54a5cb813fbed3a6387bc645': { from: '#000000', to: '#262626' }, // USDXL
     '0xdc6f4239c1d8d3b955c06cb8f1a6cf18effc5bfe': { from: '#95F4DD', to: '#16D0A3' }, // stathyUSD₮0
   },
-  [GqlChain.Sonic]: {
+  [GqlChainValues.Sonic]: {
     '0x2d0e0814e62d80056181f5cd932274405966e4f0': { from: '#FE0103', to: '#FF6667' }, // BEETS
     '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38': { from: '#000000', to: '#222222' }, // wS
     '0xe5da20f15420ad15de0fa650600afc998bbe3955': { from: '#FE0103', to: '#840D11' }, // stS
@@ -157,7 +158,7 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x50c42deacd8fc9773493ed674b675be577f2634b': { from: '#F2F3F7', to: '#CECDFE' }, // WETH
     '0x3bce5cb273f0f148010bbea2470e7b5df84c7812': { from: '#A765DE', to: '#808FC7' }, // scETH
   },
-  [GqlChain.Plasma]: {
+  [GqlChainValues.Plasma]: {
     '0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb': { from: '#27A17C', to: '#42EBB8' }, // USDT0
     '0xe0126f0c4451b2b917064a93040fd4770d6774b5': { from: '#27A17C', to: '#42EBB8' }, // waPlaUSDT0
     '0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2': { from: '#F5F5F5', to: '#BABABA' }, // sUSDe
@@ -169,7 +170,7 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x6100e367285b01f48d07953803a2d8dca5d19873': { from: '#163029', to: '#367766' }, // WXPL
     '0x6eaf19b2fc24552925db245f9ff613157a7dbb4c': { from: '#00AEEC', to: '#61D5FF' }, // xUSD
   },
-  [GqlChain.Monad]: {
+  [GqlChainValues.Monad]: {
     '0x3bd359c1119da7da1d913d1c4d2b7c461115433a': { from: '#6E54FF', to: '#DDD7FE' }, //  WMON
     '0x754704bc059f8c67012fed69bc8a327a5aafb603': { from: '#1075E2', to: '#62A8F4' }, //  USDC
     '0x8d5c2df3eef09088fcccf3376d8ecd0dd505f642': { from: '#1075E2', to: '#62A8F4' }, //  wnUSDC
@@ -191,7 +192,7 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x4917a5ec9fcb5e10f47cbb197abe6ab63be81fe8': { from: '#001E5E', to: '#003EC2' }, //  AZND
     '0xd786f7569c39a9f64e6a54eb77db21364e90f279': { from: '#FEFFFF', to: '#8FB4FF' }, //  wnLOAZND
   },
-  [GqlChain.Xlayer]: {
+  [GqlChainValues.Xlayer]: {
     '0x1e4a5963abfd975d8c9021ce480b42188849d41d': { from: '#27A17C', to: '#42EBB8' }, // USDT,
     '0x779ded0c9e1022225f8e0630b35a9b54be713736': { from: '#27A17C', to: '#42EBB8' }, // USDT0,
     '0x74b7f16337b8972027f6196a17a631ac6de26d22': { from: '#1075E2', to: '#62A8F4' }, // USDC,

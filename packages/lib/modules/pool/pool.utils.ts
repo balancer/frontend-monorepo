@@ -1,13 +1,15 @@
 import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
-import {
-  GetPoolQuery,
-  GqlChain,
+import type {
   GqlPoolAprItem,
-  GqlPoolAprItemType,
   GqlPoolTokenDetail,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
-import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
+} from '@repo/lib/shared/services/api/graphql-derived-types'
+import { GetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlPoolAprItemTypeValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/graphql-enums'
+import { Numberish, bn, fNum, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import type BigNumber from 'bignumber.js'
 import { cloneDeep, invert } from 'lodash'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
@@ -25,7 +27,7 @@ import {
 } from './pool.types'
 import { Pool } from './pool.types'
 import { isSameAddress } from '@balancer/sdk'
-import { GqlChainValues } from '@repo/lib/config/networks'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -49,24 +51,24 @@ export enum ChainSlug {
 }
 
 // Maps GraphQL chain enum to URL slug
-export const chainToSlugMap: Partial<Record<GqlChainValues, ChainSlug>> = {
-  [GqlChain.Mainnet]: ChainSlug.Ethereum,
-  [GqlChain.Arbitrum]: ChainSlug.Arbitrum,
-  [GqlChain.Polygon]: ChainSlug.Polygon,
-  [GqlChain.Avalanche]: ChainSlug.Avalanche,
-  [GqlChain.Fantom]: ChainSlug.Fantom,
-  [GqlChain.Base]: ChainSlug.Base,
-  [GqlChain.Optimism]: ChainSlug.Optimisim,
-  [GqlChain.Zkevm]: ChainSlug.Zkevm,
-  [GqlChain.Gnosis]: ChainSlug.Gnosis,
-  [GqlChain.Sepolia]: ChainSlug.Sepolia,
-  [GqlChain.Mode]: ChainSlug.Mode,
-  [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
-  [GqlChain.Sonic]: ChainSlug.Sonic,
-  [GqlChain.Hyperevm]: ChainSlug.HyperEVM,
-  [GqlChain.Plasma]: ChainSlug.Plasma,
-  [GqlChain.Monad]: ChainSlug.Monad,
-  [GqlChain.Xlayer]: ChainSlug.Xlayer,
+export const chainToSlugMap: Partial<Record<GqlChain, ChainSlug>> = {
+  [GqlChainValues.Mainnet]: ChainSlug.Ethereum,
+  [GqlChainValues.Arbitrum]: ChainSlug.Arbitrum,
+  [GqlChainValues.Polygon]: ChainSlug.Polygon,
+  [GqlChainValues.Avalanche]: ChainSlug.Avalanche,
+  [GqlChainValues.Fantom]: ChainSlug.Fantom,
+  [GqlChainValues.Base]: ChainSlug.Base,
+  [GqlChainValues.Optimism]: ChainSlug.Optimisim,
+  [GqlChainValues.Zkevm]: ChainSlug.Zkevm,
+  [GqlChainValues.Gnosis]: ChainSlug.Gnosis,
+  [GqlChainValues.Sepolia]: ChainSlug.Sepolia,
+  [GqlChainValues.Mode]: ChainSlug.Mode,
+  [GqlChainValues.Fraxtal]: ChainSlug.Fraxtal,
+  [GqlChainValues.Sonic]: ChainSlug.Sonic,
+  [GqlChainValues.Hyperevm]: ChainSlug.HyperEVM,
+  [GqlChainValues.Plasma]: ChainSlug.Plasma,
+  [GqlChainValues.Monad]: ChainSlug.Monad,
+  [GqlChainValues.Xlayer]: ChainSlug.Xlayer,
 }
 
 export function getChainSlug(chainSlug: ChainSlug): GqlChain {
@@ -78,7 +80,7 @@ export function getChainSlug(chainSlug: ChainSlug): GqlChain {
 
 function getVariant(type: GqlPoolType, protocolVersion: number | undefined): PoolVariant {
   // if a pool has certain properties return a custom variant
-  if (type === GqlPoolType.CowAmm) return PartnerVariant.cow
+  if (type === GqlPoolTypeValues.CowAmm) return PartnerVariant.cow
   if (protocolVersion === 3) return BaseVariant.v3
 
   // default variant
@@ -138,18 +140,20 @@ export function getTotalApr(aprItems: GqlPoolAprItem[]): [BigNumber, BigNumber] 
     // Filter known APR types to avoid including new unknown API types that are not yet displayed in the APR tooltip
     .filter(item => TOTAL_APR_TYPES.includes(item.type))
     .forEach(item => {
-      if (item.type === GqlPoolAprItemType.StakingBoost) {
+      if (!isValidNumber(item.apr)) return
+
+      if (item.type === GqlPoolAprItemTypeValues.StakingBoost) {
         maxTotal = bn(item.apr).plus(maxTotal)
         return
       }
 
-      if (item.type === GqlPoolAprItemType.VebalEmissions) {
+      if (item.type === GqlPoolAprItemTypeValues.VeBalEmissions) {
         // We don't add this to maxTotal as is already included on the staking boost
         minTotal = bn(item.apr).plus(minTotal)
         return // Deprecated, should be 0 once emissions stop
       }
 
-      if (item.type === GqlPoolAprItemType.MabeetsEmissions) {
+      if (item.type === GqlPoolAprItemTypeValues.MaBeetsEmissions) {
         minTotal = bn(item.apr).plus(minTotal)
         maxTotal = bn(item.apr).plus(maxTotal)
         return
@@ -185,23 +189,23 @@ export function getTotalAprRaw(aprItems: GqlPoolAprItem[]): string {
 
 // Maps GraphQL pool type enum to human readable label for UI.
 const poolTypeLabelMap: Partial<Record<GqlPoolType, string>> = {
-  [GqlPoolType.Weighted]: 'Weighted',
-  [GqlPoolType.Element]: 'Element',
-  [GqlPoolType.Gyro]: '2-CLP',
-  [GqlPoolType.Gyro3]: '3-CLP',
-  [GqlPoolType.Gyroe]: 'E-CLP',
-  [GqlPoolType.Investment]: 'Managed',
-  [GqlPoolType.LiquidityBootstrapping]: 'Dynamic LBP',
-  [GqlPoolType.MetaStable]: 'Stable',
-  [GqlPoolType.PhantomStable]: 'Stable',
-  [GqlPoolType.Stable]: 'Stable',
-  [GqlPoolType.Unknown]: 'Unknown',
-  [GqlPoolType.Fx]: 'FX',
-  [GqlPoolType.ComposableStable]: 'Stable',
-  [GqlPoolType.CowAmm]: 'CoW AMM',
-  [GqlPoolType.QuantAmmWeighted]: 'BTF',
-  [GqlPoolType.Reclamm]: 'AutoRange',
-  [GqlPoolType.FixedLbp]: 'Fixed LBP',
+  [GqlPoolTypeValues.Weighted]: 'Weighted',
+  [GqlPoolTypeValues.Element]: 'Element',
+  [GqlPoolTypeValues.Gyro]: '2-CLP',
+  [GqlPoolTypeValues.Gyro3]: '3-CLP',
+  [GqlPoolTypeValues.GyroE]: 'E-CLP',
+  [GqlPoolTypeValues.Investment]: 'Managed',
+  [GqlPoolTypeValues.LiquidityBootstrapping]: 'Dynamic LBP',
+  [GqlPoolTypeValues.MetaStable]: 'Stable',
+  [GqlPoolTypeValues.PhantomStable]: 'Stable',
+  [GqlPoolTypeValues.Stable]: 'Stable',
+  [GqlPoolTypeValues.Unknown]: 'Unknown',
+  [GqlPoolTypeValues.Fx]: 'FX',
+  [GqlPoolTypeValues.ComposableStable]: 'Stable',
+  [GqlPoolTypeValues.CowAmm]: 'CoW AMM',
+  [GqlPoolTypeValues.QuantAmmWeighted]: 'BTF',
+  [GqlPoolTypeValues.Reclamm]: 'AutoRange',
+  [GqlPoolTypeValues.FixedLbp]: 'Fixed LBP',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {
@@ -298,7 +302,7 @@ export function getXavePoolLink(chain: string, poolAddress: string) {
 }
 
 export function shouldHideSwapFee(poolType: GqlPoolType) {
-  return poolType === GqlPoolType.CowAmm
+  return poolType === GqlPoolTypeValues.CowAmm
 }
 
 export function shouldCallComputeDynamicSwapFee(pool: Pool) {
@@ -313,7 +317,7 @@ export function removeHookDataFromPoolIfNecessary(pool: Pool | PoolListItem) {
   const clone = cloneDeep(pool)
 
   if (clone.hook && isSameAddress(clone.hook.address as Address, clone.address as Address)) {
-    delete clone.hook
+    ;(clone as Record<string, unknown>).hook = undefined
   }
 
   return clone

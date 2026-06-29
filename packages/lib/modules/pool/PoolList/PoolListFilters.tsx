@@ -42,7 +42,8 @@ import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { usePoolList } from './PoolListProvider'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
-import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import Image from 'next/image'
 import ButtonGroup, {
   ButtonGroupOption,
@@ -450,7 +451,7 @@ export function ProtocolVersionFilter({
   const activeProtocolVersionTab = useMemo(() => {
     if (protocolVersion === 3) return PROTOCOL_VERSION_TABS[2]
     if (protocolVersion === 2) return PROTOCOL_VERSION_TABS[1]
-    if (poolTypes.includes(GqlPoolType.CowAmm) || protocolVersion === 1) {
+    if (poolTypes.includes(GqlPoolTypeValues.CowAmm) || protocolVersion === 1) {
       return PROTOCOL_VERSION_TABS[3]
     }
     return PROTOCOL_VERSION_TABS[0]

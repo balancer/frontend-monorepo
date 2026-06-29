@@ -15,7 +15,7 @@ import {
   forwardRef,
   useTheme,
 } from '@chakra-ui/react'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInput } from './useTokenInput'
@@ -116,6 +116,7 @@ type TokenInputFooterProps = {
   isLoadingPriceImpact?: boolean
   priceMessage?: string
   customUserBalance?: BigNumber
+  customMaxAmount?: string
   isDisabled?: boolean
   customUsdPrice?: number
   priceImpactProps: PriceImpactProps | undefined
@@ -130,6 +131,7 @@ function TokenInputFooter({
   isLoadingPriceImpact,
   priceMessage,
   customUserBalance,
+  customMaxAmount,
   isDisabled,
   customUsdPrice,
   priceImpactProps,
@@ -164,10 +166,12 @@ function TokenInputFooter({
     // balance, you need to save some for a swap.
     if (hasDisabledInteraction) return
 
-    if (value && bn(value).eq(userBalance)) {
+    const maxAmount = customMaxAmount || userBalance.toString()
+
+    if (value && bn(value).eq(maxAmount)) {
       updateValue('')
     } else {
-      updateValue(userBalance.toString())
+      updateValue(maxAmount)
     }
   }
 
@@ -239,6 +243,7 @@ type Props = {
   priceMessage?: string
   disableBalanceValidation?: boolean
   customUserBalance?: BigNumber
+  customMaxAmount?: string
   customUsdPrice?: number
   priceImpactProps?: PriceImpactProps
   hideBalance?: boolean
@@ -260,6 +265,7 @@ export const TokenInput = forwardRef(
       priceMessage,
       disableBalanceValidation = false,
       customUserBalance,
+      customMaxAmount,
       customUsdPrice,
       priceImpactProps,
       hideBalance = false,
@@ -386,6 +392,7 @@ export const TokenInput = forwardRef(
           </InputGroup>
 
           <TokenInputFooter
+            customMaxAmount={customMaxAmount}
             customUsdPrice={customUsdPrice}
             customUserBalance={customUserBalance}
             hasPriceImpact={hasPriceImpact}

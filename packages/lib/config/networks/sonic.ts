@@ -1,4 +1,4 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkConfig } from '../config.types'
 import { zeroAddress } from 'viem'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
@@ -6,11 +6,15 @@ import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import { AddressProvider, PERMIT2 } from '@balancer/sdk'
 import { sonic } from 'viem/chains'
 
+const STS_TOKEN_ADDRESS = '0xe5da20f15420ad15de0fa650600afc998bbe3955'
+const WS_TOKEN_ADDRESS = '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38'
+const USSD_TOKEN_ADDRESS = '0x000000000eccff26b795f73fb0a70d48da657fef'
+
 const networkConfig: NetworkConfig = {
   chainId: 146,
   name: 'Sonic',
   shortName: 'Sonic',
-  chain: GqlChain.Sonic,
+  chain: GqlChainValues.Sonic,
   iconPath: '/images/chains/SONIC.svg',
   blockExplorer: {
     baseUrl: 'https://sonicscan.org',
@@ -30,7 +34,7 @@ const networkConfig: NetworkConfig = {
     },
     stakedAsset: {
       name: 'Beets Staked Sonic',
-      address: '0xe5da20f15420ad15de0fa650600afc998bbe3955',
+      address: STS_TOKEN_ADDRESS,
       symbol: 'stS',
       decimals: 18,
     },
@@ -44,11 +48,11 @@ const networkConfig: NetworkConfig = {
       tokenIn: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     },
     popularTokens: {
-      '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38': 'wS',
-      '0xe5da20f15420ad15de0fa650600afc998bbe3955': 'stS',
+      [WS_TOKEN_ADDRESS]: 'wS',
+      [STS_TOKEN_ADDRESS]: 'stS',
       '0x2d0e0814e62d80056181f5cd932274405966e4f0': 'BEETS',
-      '0x29219dd400f2bf60e5a23d13be72b486d4038894': 'USDC.e',
-      '0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae': 'scUSD',
+      '0x29219dd400f2bf60e5a23d13be72b486d4038894': 'USDC',
+      [USSD_TOKEN_ADDRESS]: 'USSD',
     },
   },
   contracts: {
@@ -63,6 +67,7 @@ const networkConfig: NetworkConfig = {
       batchRouter: AddressProvider.BatchRouter(sonic.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(sonic.id),
       vaultAdminV3: AddressProvider.VaultAdmin(sonic.id),
+      unbalancedAddViaSwapRouter: AddressProvider.UnbalancedAddViaSwapRouter(sonic.id),
     },
     veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
     beets: {
@@ -92,6 +97,9 @@ const networkConfig: NetworkConfig = {
       farmId: 0,
       maxLevel: 10,
     },
+  },
+  lbps: {
+    collateralTokens: [USSD_TOKEN_ADDRESS, WS_TOKEN_ADDRESS, STS_TOKEN_ADDRESS],
   },
 }
 
