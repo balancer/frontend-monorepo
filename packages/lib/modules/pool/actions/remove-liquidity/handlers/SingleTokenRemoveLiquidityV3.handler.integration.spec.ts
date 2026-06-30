@@ -4,7 +4,7 @@ import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { SingleTokenRemoveLiquidityV3Handler } from './SingleTokenRemoveLiquidityV3.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
-import { fetchPoolMock, trimGetPoolQuery } from '../../../__mocks__/fetchPoolMock'
+import { fetchPoolMock, minimalPoolQuery } from '../../../__mocks__/fetchPoolMock'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityV3Handler {
@@ -23,7 +23,7 @@ describe('When removing unbalanced liquidity for a weighted V3 pool', async () =
   const v3Pool = await fetchPoolMock({
     poolId,
     chain: GqlChainValues.Sepolia,
-    query: trimGetPoolQuery(),
+    query: minimalPoolQuery,
   })
 
   const defaultQueryInput: QueryRemoveLiquidityInput = {

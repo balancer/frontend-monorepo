@@ -6,7 +6,7 @@ import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import { fetchPoolMock, trimGetPoolQuery } from '../../../__mocks__/fetchPoolMock'
+import { fetchPoolMock, minimalPoolQuery } from '../../../__mocks__/fetchPoolMock'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 function selectNestedHandler(pool: Pool) {
@@ -18,7 +18,7 @@ const poolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004
 const nestedPool = await fetchPoolMock({
   poolId,
   chain: GqlChainValues.Mainnet,
-  query: trimGetPoolQuery(),
+  query: minimalPoolQuery,
 })
 
 describe('When adding nested liquidity for a weighted pool', () => {

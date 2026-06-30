@@ -6,7 +6,7 @@ import { Pool } from '../../../pool.types'
 import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import { fetchPoolMock, trimGetPoolQuery } from '../../../__mocks__/fetchPoolMock'
+import { fetchPoolMock, minimalPoolQuery } from '../../../__mocks__/fetchPoolMock'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { usdcAddress, wETHAddress } from '@repo/lib/debug-helpers'
 
@@ -20,7 +20,7 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
   const cowAmmPool = await fetchPoolMock({
     poolId: cowAMMPoolId,
     chain: GqlChainValues.Mainnet,
-    query: trimGetPoolQuery(),
+    query: minimalPoolQuery,
   }) // USDC-WETH
 
   test('has zero price impact', async () => {

@@ -6,7 +6,7 @@ import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquid
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { NestedSingleTokenRemoveLiquidityV2Handler } from './NestedSingleTokenRemoveLiquidityV2.handler'
-import { fetchPoolMock, trimGetPoolQuery } from '../../../__mocks__/fetchPoolMock'
+import { fetchPoolMock, minimalPoolQuery } from '../../../__mocks__/fetchPoolMock'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
 function selectNestedSingleTokenHandler(pool: Pool): NestedSingleTokenRemoveLiquidityV2Handler {
@@ -27,7 +27,7 @@ const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0
 const nestedPool = await fetchPoolMock({
   poolId: '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0',
   chain: GqlChainValues.Mainnet,
-  query: trimGetPoolQuery(),
+  query: minimalPoolQuery,
 })
 
 describe('When removing liquidity with single token in a nested pool', () => {

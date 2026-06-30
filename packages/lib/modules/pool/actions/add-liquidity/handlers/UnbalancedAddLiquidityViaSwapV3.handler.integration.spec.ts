@@ -2,7 +2,7 @@ import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { UnbalancedAddLiquidityViaSwapV3Handler } from './UnbalancedAddLiquidityViaSwapV3.handler'
-import { fetchPoolMock, trimGetPoolQuery } from '../../../__mocks__/fetchPoolMock'
+import { fetchPoolMock, minimalPoolQuery } from '../../../__mocks__/fetchPoolMock'
 
 describe('When adding unbalanced liquidity via swap for a V3 2-token pool', async () => {
   const waEthWETHAddress = '0x0bfc9d54fc184518a81162f8fb99c2eaca081202'
@@ -10,7 +10,7 @@ describe('When adding unbalanced liquidity via swap for a V3 2-token pool', asyn
   const v3Pool = await fetchPoolMock({
     poolId,
     chain: GqlChainValues.Mainnet,
-    query: trimGetPoolQuery(),
+    query: minimalPoolQuery,
   })
 
   const handler = new UnbalancedAddLiquidityViaSwapV3Handler(v3Pool)

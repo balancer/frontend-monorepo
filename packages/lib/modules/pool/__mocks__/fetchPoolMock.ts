@@ -130,26 +130,66 @@ export const swapPoolQuery = `
   }
 `
 
-const trimmedGetPoolFields = [
-  'aprItems',
-  'rewards',
-  'reliquary',
-  'erc4626ReviewData',
-  'priceRateProviderData',
-  'reviewData',
-]
-
-export function trimGetPoolQuery(): string {
-  return astToQueryString(
-    visit(GetPoolDocument, {
-      Field(node) {
-        if (trimmedGetPoolFields.includes(node.name.value)) {
-          return null
+export const minimalPoolQuery = `
+  query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
+    pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
+      id
+      address
+      chain
+      type
+      protocolVersion
+      tags
+      dynamicData {
+        totalShares
+      }
+      poolTokens {
+        address
+        decimals
+        balance
+        weight
+        index
+        symbol
+        name
+        isErc4626
+        useUnderlyingForAddRemove
+        hasNestedPool
+        underlyingToken {
+          address
+          decimals
+          name
+          symbol
         }
-      },
-    })
-  )
-}
+        nestedPool {
+          id
+          address
+          type
+          bptPriceRate
+          totalShares
+          totalLiquidity
+          nestedPercentage
+          nestedShares
+          tokens {
+            address
+            decimals
+            balance
+            weight
+            index
+            symbol
+            name
+            isErc4626
+            useUnderlyingForAddRemove
+            underlyingToken {
+              address
+              decimals
+              name
+              symbol
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 type FetchPoolMockParams = {
   poolId?: Address
