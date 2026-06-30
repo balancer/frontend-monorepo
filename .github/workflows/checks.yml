@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize]
 
 env:
-  NEXT_PUBLIC_BALANCER_API_URL: https://test-api-v3.balancer.fi/graphql
+  NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
   NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
   NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.PRIVATE_ALCHEMY_KEY }}
   NEXT_PRIVATE_DRPC_KEY: ${{ secrets.PRIVATE_DRPC_KEY }}
@@ -49,7 +49,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run typecheck
         env:
-          NODE_OPTIONS: "--max_old_space_size=6144"
+          NODE_OPTIONS: '--max_old_space_size=6144'
         run: pnpm typecheck
       - name: Run unit tests
         run: pnpm test:unit
