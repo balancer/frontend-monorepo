@@ -16,6 +16,7 @@ import { Address } from 'viem'
 const FETCH_POOL_MOCK_MAX_ATTEMPTS = 3
 const FETCH_POOL_MOCK_RETRY_DELAY_MS = 1_000
 const FETCH_POOL_MOCK_RESPONSE_SNIPPET_LENGTH = 500
+const FETCH_POOL_MOCK_DEBUG = true
 
 function astToQueryString(ast: any): string {
   return print(ast)
@@ -25,6 +26,49 @@ async function sleep(time: number) {
   return new Promise(resolve => {
     setTimeout(resolve, time)
   })
+}
+
+function logFetchAttempt({
+  attempt,
+  maxAttempts,
+  apiUrl,
+  poolId,
+  chain,
+  userAddress,
+  queryString,
+  error,
+  response,
+  responseBody,
+}: {
+  attempt: number
+  maxAttempts: number
+  apiUrl: string
+  poolId: Address
+  chain: GqlChain
+  userAddress?: Address
+  queryString: string
+  error?: unknown
+  response?: Response
+  responseBody?: string
+}) {
+  const baseMessage = `[fetchPoolMock] attempt ${attempt}/${maxAttempts} failed for ${apiUrl} (pool ${poolId} on ${chain})`
+  const context = {
+    queryLength: queryString.length,
+    userAddress,
+    responseStatus: response?.status,
+    responseStatusText: response?.statusText,
+    responseBodyLength: responseBody?.length,
+    responseBodySnippet: responseBody?.slice(0, FETCH_POOL_MOCK_RESPONSE_SNIPPET_LENGTH),
+    errorName: error instanceof Error ? error.name : undefined,
+    errorMessage: error instanceof Error ? error.message : String(error),
+    errorCause: error instanceof Error && error.cause ? String(error.cause) : undefined,
+  }
+
+  console.error(baseMessage, context)
+
+  if (FETCH_POOL_MOCK_DEBUG) {
+    console.error(`[fetchPoolMock] DEBUG query:\n${queryString}`)
+  }
 }
 
 export const stakedBalanceQuery = `
@@ -133,15 +177,18 @@ export async function fetchPoolMock({
   let getPoolQuery: GetPoolQuery | undefined
 
   for (let attempt = 1; attempt <= FETCH_POOL_MOCK_MAX_ATTEMPTS; attempt++) {
+    let response: Response | undefined
+    let responseBody: string | undefined
+
     try {
-      const response = await fetch(apiUrl, {
+      response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ query: queryString, variables }),
       })
-      const responseBody = await response.text()
+      responseBody = await response.text()
 
       if (!response.ok) {
         throw new Error(
@@ -160,6 +207,18 @@ export async function fetchPoolMock({
       }
     } catch (error) {
       lastError = error
+      logFetchAttempt({
+        attempt,
+        maxAttempts: FETCH_POOL_MOCK_MAX_ATTEMPTS,
+        apiUrl,
+        poolId,
+        chain,
+        userAddress,
+        queryString,
+        error,
+        response,
+        responseBody,
+      })
       if (attempt < FETCH_POOL_MOCK_MAX_ATTEMPTS) await sleep(FETCH_POOL_MOCK_RETRY_DELAY_MS)
     }
   }
