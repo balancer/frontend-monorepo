@@ -27,19 +27,101 @@ async function sleep(time: number) {
   })
 }
 
+export const stakedBalanceQuery = `
+  query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
+    pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
+      id
+      address
+      chain
+      staking {
+        gauge {
+          gaugeAddress
+          otherGauges {
+            gaugeAddress
+          }
+        }
+      }
+    }
+  }
+`
+
+export const poolEnrichQuery = `
+  query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
+    pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
+      id
+      address
+      chain
+      type
+      protocolVersion
+      dynamicData {
+        totalLiquidity
+        totalShares
+      }
+      poolTokens {
+        address
+        decimals
+        balance
+        hasNestedPool
+        nestedPool {
+          totalShares
+          totalLiquidity
+          nestedPercentage
+          nestedShares
+          tokens {
+            address
+            decimals
+            balance
+          }
+        }
+      }
+    }
+  }
+`
+
+export const swapPoolQuery = `
+  query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
+    pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
+      chain
+    }
+  }
+`
+
+const trimmedGetPoolFields = [
+  'aprItems',
+  'rewards',
+  'reliquary',
+  'erc4626ReviewData',
+  'priceRateProviderData',
+  'reviewData',
+]
+
+export function trimGetPoolQuery(): string {
+  return astToQueryString(
+    visit(GetPoolDocument, {
+      Field(node) {
+        if (trimmedGetPoolFields.includes(node.name.value)) {
+          return null
+        }
+      },
+    })
+  )
+}
+
 type FetchPoolMockParams = {
   poolId?: Address
   chain?: GqlChain
   apiUrl?: string
   userAddress?: Address
+  query?: string
 }
 export async function fetchPoolMock({
   poolId = nested50WETH_50_3poolId,
   chain = GqlChainValues.Mainnet,
   apiUrl = process.env.NEXT_PUBLIC_BALANCER_API_URL as string,
   userAddress,
+  query,
 }: FetchPoolMockParams): Promise<GqlPoolElement> {
-  const queryString = astToQueryString(visit(GetPoolDocument, {}))
+  const queryString = query ?? astToQueryString(visit(GetPoolDocument, {}))
 
   const variables: GetPoolQueryVariables = {
     id: poolId,

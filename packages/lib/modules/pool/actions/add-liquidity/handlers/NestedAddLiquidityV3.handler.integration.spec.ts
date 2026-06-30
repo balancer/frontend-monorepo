@@ -4,7 +4,7 @@ import { sepoliaTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clien
 import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
+import { fetchPoolMock, trimGetPoolQuery } from '../../../__mocks__/fetchPoolMock'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER_NESTED } from '@balancer/sdk'
 import { getChainId } from '@repo/lib/config/app.config'
@@ -18,7 +18,7 @@ const usdcAaveAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // Sepolia 
 const usdtAaveAddress = '0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0' // Sepolia underlying usdcAave faucet address
 const poolId = '0x693cc6a39bbf35464f53d6a5dbf7d6c2fa93741c' // Boosted Aave USDC-USDT / WETH
 const chain = GqlChainValues.Sepolia
-const nestedPool = await fetchPoolMock({ poolId, chain })
+const nestedPool = await fetchPoolMock({ poolId, chain, query: trimGetPoolQuery() })
 
 // Unskip when sepolia V3 pools are available in production api
 describe('When adding nested liquidity for a weighted pool', () => {
