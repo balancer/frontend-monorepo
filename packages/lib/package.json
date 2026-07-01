@@ -75,7 +75,7 @@
     "use-sound": "5.0.0",
     "usehooks-ts": "3.1.1",
     "viem": "2.51.3",
-    "wagmi": "3.6.17",
+    "wagmi": "3.6.21",
     "zod": "3.25.76"
   },
   "devDependencies": {
