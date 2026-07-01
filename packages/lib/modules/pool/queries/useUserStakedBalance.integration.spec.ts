@@ -4,7 +4,7 @@ import { userStakedInNonPreferentialGauge } from '@repo/test/anvil/anvil-setup'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { connectWith, disconnectWith } from '@repo/test/utils/wagmi/wagmi-connections'
 import { waitFor } from '@testing-library/react'
-import { fetchPoolMock } from '../__mocks__/fetchPoolMock'
+import { fetchPoolMock, stakedBalanceQuery } from '../__mocks__/fetchPoolMock'
 import { useUserStakedBalance } from './useUserStakedBalance'
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {
@@ -28,6 +28,7 @@ describe('fetches onchain user balances', async () => {
       poolId,
       chain: GqlChainValues.Mainnet,
       userAddress: userStakedInNonPreferentialGauge,
+      query: stakedBalanceQuery,
     })
 
     const result = await testUseChainPoolBalances(pool)
@@ -57,7 +58,12 @@ describe('fetches onchain user balances', async () => {
   test('when the pool does not have staking info', async () => {
     const poolId = '0x05f21bacc4fd8590d1eaca9830a64b66a733316c00000000000000000000087e' // Pool with only preferential gauge
     const holder = userStakedInNonPreferentialGauge
-    const pool = await fetchPoolMock({ poolId, chain: GqlChainValues.Polygon, userAddress: holder })
+    const pool = await fetchPoolMock({
+      poolId,
+      chain: GqlChainValues.Polygon,
+      userAddress: holder,
+      query: stakedBalanceQuery,
+    })
     pool.staking = null
 
     const result = await testUseChainPoolBalances(pool)
