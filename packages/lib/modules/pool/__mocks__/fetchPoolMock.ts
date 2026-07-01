@@ -179,7 +179,8 @@ export async function fetchPoolMock({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ query: queryString, variables }),
-      })
+        compress: false,
+      } as RequestInit & { compress?: boolean })
       const responseBody = await response.text()
 
       if (!response.ok) {
