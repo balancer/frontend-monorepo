@@ -4,7 +4,7 @@ import { daiAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { GqlChainValues, GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { apolloTestClient } from '@repo/test/utils/apollo-test-client'
-import { fetchPoolMock } from '../../pool/__mocks__/fetchPoolMock'
+import { fetchPoolMock, swapPoolQuery } from '../../pool/__mocks__/fetchPoolMock'
 import { SwapTokenInput } from '../swap.types'
 import { DefaultSwapHandler } from './DefaultSwap.handler'
 
@@ -12,7 +12,11 @@ const SWAP_SIMULATION_TEST_TIMEOUT_MS = 120_000
 
 describe('Pool Swap handler with v2 nested pool', async () => {
   const mainnetNestedPoolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0' // Balancer 50WETH-50-3pool
-  const pool = await fetchPoolMock({ poolId: mainnetNestedPoolId, chain: GqlChainValues.Mainnet })
+  const pool = await fetchPoolMock({
+    poolId: mainnetNestedPoolId,
+    chain: GqlChainValues.Mainnet,
+    query: swapPoolQuery,
+  })
 
   const handler = new DefaultSwapHandler(apolloTestClient)
 
