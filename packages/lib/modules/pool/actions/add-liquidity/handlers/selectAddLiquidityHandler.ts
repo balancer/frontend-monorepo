@@ -17,7 +17,7 @@ import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiqui
 export function selectAddLiquidityHandler(
   pool: Pool,
   wantsProportional = false,
-  wantsUnbalanced = false
+  wrapUnderlying?: boolean[]
 ): AddLiquidityHandler {
   // This is just an example to illustrate how edge-case handlers would receive different inputs but return a common contract
   if (pool.id === 'TWAMM-example') return new TwammAddLiquidityHandler(getChainId(pool.chain))
@@ -35,15 +35,29 @@ export function selectAddLiquidityHandler(
       : new NestedAddLiquidityV2Handler(pool)
   }
 
+  // AutoRange pools: use via-swap handler for unbalanced adds.
+  // For boosted AutoRange pools, only use via-swap when providing pool tokens
+  // (not underlying tokens) — the via-swap handler does not support ERC4626 wrapping.
+  // Note: not gated on wantsUnbalanced because AutoRange pools default to unbalanced
+  // and wantsUnbalanced is set by a useEffect after first render.
+  if (
+    !wantsProportional &&
+    isV3Pool(pool) &&
+    isAutoRange(pool.type) &&
+    pool.poolTokens.length === 2
+  ) {
+    const usingUnderlyingTokens = wrapUnderlying?.some(w => w)
+    if (!usingUnderlyingTokens) {
+      return new UnbalancedAddLiquidityViaSwapV3Handler(pool)
+    }
+    // Fall through to boosted handler for underlying tokens
+  }
+
   if (isBoosted(pool)) {
     if (wantsProportional) {
       return new ProportionalBoostedAddLiquidityV3(pool)
     }
     return new BoostedUnbalancedAddLiquidityV3Handler(pool)
-  }
-
-  if (wantsUnbalanced && isV3Pool(pool) && isAutoRange(pool.type) && pool.poolTokens.length === 2) {
-    return new UnbalancedAddLiquidityViaSwapV3Handler(pool)
   }
 
   if (wantsProportional) {
