@@ -131,8 +131,8 @@ export default function Privacy() {
                 We may derive limited information or draw inferences about you based on the
                 information we have access to or receive, most importantly, from our service
                 providers. Your wallet address and IP address are accessible to Beets and its
-                vendor(s). We may make inferences about you based on your wallet address or IP
-                address.
+                service providers. We may make inferences about you based on your wallet address or
+                IP address.
               </p>
             </div>
           </FadeInOnView>

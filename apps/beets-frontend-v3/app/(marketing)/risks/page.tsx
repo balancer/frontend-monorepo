@@ -172,7 +172,7 @@ export default function Risks() {
               <h5>How does Balancer work to mitigate this risk?</h5>
               <ul>
                 <li>
-                  Development teams have engaged with top tier smart contract auditing firms to
+                  Development teams have engaged with top-tier smart contract auditing firms to
                   identify and fix bugs before deployment.
                 </li>
                 <li>
@@ -225,7 +225,7 @@ export default function Risks() {
               <ul>
                 <li>
                   Balancer strives to deliver careful economic modeling, rigorous mechanism design,
-                  testing and audits by top tier auditing firms.
+                  testing and audits by top-tier auditing firms.
                 </li>
               </ul>
               <h5>How can LPs mitigate this risk?</h5>
@@ -405,7 +405,7 @@ export default function Risks() {
                 <li>The Balancer Vault is non-reentrant, which blocks most Flash Loan attacks.</li>
                 <li>
                   Balancer strives to deliver careful economic modeling, rigorous mechanism design,
-                  testing and audits by top tier auditing firms.
+                  testing and audits by top-tier auditing firms.
                 </li>
               </ul>
             </div>
@@ -833,11 +833,12 @@ export default function Risks() {
                   <ul>
                     <li>
                       Pegged Tokens: Tokens that trade near 1:1, such as two stablecoins of the same
-                      currency (eg: DAI, USDC, USDT), or synthetic assets (eg: renBTC, sBTC, WBTC)
+                      currency (e.g., DAI, USDC, USDT), or synthetic assets (e.g., renBTC, sBTC,
+                      WBTC)
                     </li>
                     <li>
                       Correlated Tokens: Tokens that trade near each other with some slowly changing
-                      exchange rate, like derivatives (eg: wstETH, wETH)
+                      exchange rate, like derivatives (e.g., wstETH, wETH)
                     </li>
                   </ul>
                   <p>

@@ -113,8 +113,8 @@ export default function Terms() {
                 You acknowledge and agree that BeethovenX DAO has no control over any transactions
                 conducted through the Beets Protocol, the method of payment of any transactions or
                 any actual payments of transactions including use of any third-party services such
-                as MetaMask or other wallet services.{''}
-              </span>
+                as MetaMask or other wallet services.
+              </span>{' '}
               Likewise, you must ensure that you have a sufficient balance of the applicable
               cryptocurrency tokens stored at your Beets Protocol-compatible wallet address
               (“Cryptocurrency Wallet”) to complete any transaction on the Beets Protocol or the
