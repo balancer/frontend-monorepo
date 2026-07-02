@@ -41,13 +41,13 @@ export default function Cookies() {
               </p>
 
               <p>
-                We do not generally use cookies; however our third party vendors do. We do not
+                We do not generally use cookies; however our third-party vendors do. We do not
                 intentionally collect information to customize your experience on the website or the
-                beets.fi user interface (UI) to the Beets Protocol. (“Sites” or “Site”).
+                beets.fi user interface (UI) for the Beets Protocol. (“Sites” or “Site”).
               </p>
               <p>
                 Industry standards are currently evolving, and we may not separately respond to or
-                take any action with respect to a “do not track” configuration set in your internet
+                take any action with respect to a “do not track” configuration set in your Internet
                 browser.
               </p>
               <p>
@@ -57,12 +57,12 @@ export default function Cookies() {
                 any other party. Note, however, that we also provide certain widgets or tools on our
                 sites that allow you to interact with third parties who provide these features, such
                 as tools that allow web surfers to easily share information on another platform. At
-                other times, information from a third party may be embedded on our Site, such as a
+                other times, information from a third-party may be embedded on our Site, such as a
                 map. These widgets, tools, and informational items often function through the use of
-                third-party cookies utilized by the third party site. As a result, these third
+                third-party cookies utilized by the third-party site. As a result, these third
                 parties may have access to information about your web browsing on the pages of our
                 Site where these widgets, tools, or information are placed. You may wish to review
-                information at third party sites, where you have an account, to determine how these
+                information at third-party sites, where you have an account, to determine how these
                 third parties treat data that they obtain through the use of cookies.
               </p>
             </div>
@@ -74,7 +74,7 @@ export default function Cookies() {
               <p>
                 You may be able to set your browser to reject cookies. If you set your browser
                 options to disallow cookies, you may limit the functionality we can provide when you
-                visit our Site. The latest versions of internet browsers provide cookie management
+                visit our Site. The latest versions of Internet browsers provide cookie management
                 tools, such as the ability to delete or reject cookies. We recommend that you refer
                 to information supplied by browser providers for more specific information,
                 including how to use these tools.

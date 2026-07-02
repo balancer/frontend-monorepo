@@ -8,7 +8,7 @@ export default function ThirdPartyServices() {
   const services = [
     {
       name: 'dRPC',
-      description: 'Used to fech on-chain data and to construct contract calls.',
+      description: 'Used to fetch on-chain data and to construct contract calls.',
       iconUrl: '/images/services/drpc.svg',
     },
     {
@@ -70,7 +70,7 @@ export default function ThirdPartyServices() {
                   Beets is an open source, permissionless, decentralized protocol. The smart
                   contracts that power the ecosystem may be used by anyone. This website is the
                   BeethovenX DAO&apos;s front-end to the ecosystem and it is also open-source. You
-                  are free to fork it on Github and modify it as you wish.
+                  are free to fork it on GitHub and modify it as you wish.
                 </p>
               </Box>
               <p>This website uses the following 3rd party services:</p>

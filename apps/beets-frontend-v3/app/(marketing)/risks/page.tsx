@@ -177,7 +177,7 @@ export default function Privacy() {
                 </li>
                 <li>
                   The core of Balancer smart contracts are immutable and do not use proxies or other
-                  upgrade mechanisms. Note: Within DeFI, upgradable contracts are a major way
+                  upgrade mechanisms. Note: Within DeFi, upgradable contracts are a major way
                   exploits have been introduced.
                 </li>
                 <li>
@@ -205,7 +205,7 @@ export default function Privacy() {
             <div className="subsection anchor" id="economic-risk">
               <h4>Mechanism / Economic risk</h4>
               <p>
-                An mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
+                A mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
                 to manipulate the economic incentives of the protocol to their advantage, resulting
                 in a loss of funds for other participants. This can happen even when there are no
                 smart contract bugs or other unintended logic errors.
@@ -217,7 +217,7 @@ export default function Privacy() {
               </p>
               <p>
                 In addition, the composable nature of DeFi means that a pool on Balancer may contain
-                tokens that may be manipulated by an attacker on a third party protocol, which
+                tokens that may be manipulated by an attacker on a third-party protocol, which
                 further increases risk.
               </p>
               <p>These types of economic exploits are difficult to detect and prevent.</p>
@@ -342,7 +342,7 @@ export default function Privacy() {
                   risks.
                 </li>
                 <li>
-                  LP&rsquo;s should review all pool tokens before providing liquidity to ensure no
+                  LPs should review all pool tokens before providing liquidity to ensure no
                   constituent pool tokens are unsupported by the Balancer Protocol (e.g. rebasing
                   tokens).
                 </li>
@@ -395,7 +395,7 @@ export default function Privacy() {
               </p>
               <p>Flash Loans may be used on Balancer and interact with the Balancer Vault.</p>
               <p>
-                While Flash Loans offer many benefits, they also comes with certain risks. Flash
+                While Flash Loans offer many benefits, they also come with certain risks. Flash
                 Loans have also been used for multiple DeFi exploits resulting in losses worth
                 millions of dollars. Flash Loan exploits are relatively new with the full range of
                 attack surfaces still being discovered.
@@ -466,7 +466,7 @@ export default function Privacy() {
               <h5>How can LPs mitigate this risk?</h5>
               <ul>
                 <li>
-                  LPs should check to see the edibility of pool attributes and understand who can
+                  LPs should check to see the editability of pool attributes and understand who can
                   authorize any changes.
                 </li>
               </ul>
@@ -518,14 +518,14 @@ export default function Privacy() {
                   The Balancer Smart Order router is used to route liquidity efficiently via pools
                   to minimize price impact.
                 </li>
-                <li>The Balancer App UI gives LP&rsquo;s control over their slippage settings.</li>
+                <li>The Balancer App UI gives LPs control over their slippage settings.</li>
                 <li>
-                  LP&rsquo;s are warned via the Balancer App UI when the price impact is excessive.
-                  Once price impact exceeds a certain threshold, the Balancer App UI prevents
-                  user&rsquo;s from executing a transaction where they would otherwise get rekt.
+                  LPs are warned via the Balancer App UI when the price impact is excessive. Once
+                  price impact exceeds a certain threshold, the Balancer App UI prevents users from
+                  executing a transaction where they would otherwise get rekt.
                 </li>
               </ul>
-              <h5>How LP&rsquo;s can mitigate this risk:</h5>
+              <h5>How LPs can mitigate this risk:</h5>
               <ul>
                 <li>
                   Users should review their slippage settings and potential price impact before
@@ -643,21 +643,21 @@ export default function Privacy() {
               <p>
                 DeFi users, including liquidity providers and swappers, typically interact with
                 front-end user interfaces to interact with a protocol&rsquo;s smart contracts. An
-                example is the app.balancer.fi front-end UI instance which interacts with Balancer
-                Protocol smart contracts.
+                example is the beets.fi front-end UI instance which interacts with Balancer Protocol
+                smart contracts.
               </p>
 
               <p>A few risks of using front-ends to manage liquidity positions in DeFi:</p>
               <ul>
                 <li>
                   UIs may not always display timely, accurate data. This may be due to the use of
-                  third party data services experiencing periods of downtime or network congestion.
+                  third-party data services experiencing periods of downtime or network congestion.
                 </li>
                 <li>UIs could be maliciously updated or exploited by rogue developers.</li>
                 <li>UIs may be updated and remove certain feature sets.</li>
                 <li>
-                  UIs may block certain wallet addresses or user&rsquo;s in certain jurisdictions to
-                  comply with their regulations.
+                  UIs may block certain wallet addresses or users in certain jurisdictions to comply
+                  with their regulations.
                 </li>
                 <li>
                   UIs may experience periods of downtime or potentially be discontinued. UIs may
@@ -670,12 +670,12 @@ export default function Privacy() {
                 <li>
                   Since the Balancer smart contracts can be interacted with by any front-end UI,
                   there is less reliance on any one single UI. The Balancer App UI code is open
-                  source with an MIT License which allow other third party developers to fork the
+                  source with an MIT License which allows other third-party developers to fork the
                   code, make improvements and compete for users.
                 </li>
                 <li>
-                  Users or third party developers can keep track of changes and review the open
-                  source repository on the Balancer Github for potential malicious code.
+                  Users or third-party developers can keep track of changes and review the open
+                  source repository on GitHub for potential malicious code.
                 </li>
                 <li>
                   The developers of the Balancer App UI have provided instructions on how to clone
@@ -686,7 +686,7 @@ export default function Privacy() {
               <h5>How can LPs mitigate this risk?</h5>
               <ul>
                 <li>
-                  LP&rsquo;s can learn how to interact with Balancer smart contracts on third party
+                  LPs can learn how to interact with Balancer smart contracts on third-party
                   websites, like <a href="https://etherscan.io/">Etherscan</a>.
                 </li>
                 <li>
@@ -712,12 +712,11 @@ export default function Privacy() {
                 DeFi ecosystem.
               </p>
               <p>
-                It&apos;s also possible that the Balancer App UI may be wholly or partially
-                suspended or terminated for any or no reason, which may limit your access to your
-                tokens via this website. In this scenario, you may be able to recover funds by
-                forking the open-source code on{' '}
-                <a href="https://github.com/balancer/frontend-v2/">Github</a> and running your own
-                local instance, or by using a third party website, like{' '}
+                It&apos;s also possible that the Beets App UI may be wholly or partially suspended
+                or terminated for any or no reason, which may limit your access to your tokens via
+                this website. In this scenario, you may be able to recover funds by forking the
+                open-source code on <a href="https://github.com/balancer/frontend-v2/">GitHub</a>{' '}
+                and running your own local instance, or by using a third-party website, like{' '}
                 <a href="https://etherscan.io/">Etherscan</a>.
               </p>
             </div>
@@ -951,7 +950,7 @@ export default function Privacy() {
                       variety of yield increases from multiple yield protocols.
                     </li>
                   </ul>
-                  <h5>Third party platform risk exposure (DeFi composability risk)</h5>
+                  <h5>Third-party platform risk exposure (DeFi composability risk)</h5>
                   <p>
                     Since boosted pools deposit excess liquidity into third-party protocols, like
                     Aave, to generate yield, LPs must fully understand the risks of the underlying
@@ -968,7 +967,7 @@ export default function Privacy() {
                     Also note, some boosted pools may use strategies that utilize multiple yield
                     protocols in order to maximize yield. Since these strategies may change exposure
                     to the underlying yield protocols at any time, LPs must accept the risk that the
-                    protocol utilizing these strategies carefully vets all third party protocols to
+                    protocol utilizing these strategies carefully vets all third-party protocols to
                     reduce composability risks.
                   </p>
                   <p>
@@ -1298,7 +1297,7 @@ export default function Privacy() {
                 out with any questions, suggestions or propose changes for this page directly via
                 the{' '}
                 <a href="https://github.com/balancer/frontend-monorepo/blob/main/apps/beets-frontend-v3/app/(marketing)/risks/page.tsx">
-                  Balancer Github
+                  GitHub
                 </a>
                 .
               </p>

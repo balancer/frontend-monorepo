@@ -301,7 +301,7 @@ export default function Terms() {
                 market.
               </li>
               <li>
-                Risks associated with accessing the Beets Protocol through third party web or mobile
+                Risks associated with accessing the Beets Protocol through third-party web or mobile
                 interfaces. You are responsible for doing your own diligence on those interfaces to
                 understand and accept the risks that use entails. You are also responsible for doing
                 your own diligence on those interfaces to understand and accept any fees that those
@@ -311,7 +311,7 @@ export default function Terms() {
               <li>
                 Although BeethovenX DAO does not have access to your assets, you are reminded and
                 acknowledge that at any time, your access to your Cryptocurrency Assets through
-                third party wallet services, unrelated to BeethovenX DAO or the beets.fi website,
+                third-party wallet services, unrelated to BeethovenX DAO or the beets.fi website,
                 may be suspended or terminated or there may be a delay in your access or use of your
                 Cryptocurrency Assets, which may result in the Cryptocurrency Assets diminishing in
                 value or you being unable to complete a Smart Contract.
@@ -400,9 +400,9 @@ export default function Terms() {
           <div className="subsection">
             <h2>5. Third-Party Content</h2>
             <p>
-              The Site may contain hyperlinks or references to third party websites or content. Any
+              The Site may contain hyperlinks or references to third-party websites or content. Any
               such hyperlinks or references are provided for your information and convenience only.
-              We have no control over third party websites and accept no legal responsibility for
+              We have no control over third-party websites and accept no legal responsibility for
               any content, material or information contained in them. The display of any hyperlink
               and reference to any third-party website does not mean that we endorse that third
               party&apos;s website, products or services or opine on the accuracy or reliability of

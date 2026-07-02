@@ -22,7 +22,7 @@ export default function Privacy() {
                 <em className="font-medium">
                   This Privacy Policy explains how BeethovenX DAO LLC (“BeethovenX,” “Beets,” “we,”
                   “our,” or “us”) collects, uses, and discloses information about you. This Privacy
-                  Policy applies when you use our website, Beets Protocol user-interface or
+                  Policy applies when you use our website, Beets Protocol user-interface and
                   application and other online products (collectively, our “UI”), engage with us on
                   social media, or otherwise interact with us.
                 </em>
@@ -51,13 +51,13 @@ export default function Privacy() {
                 </li>
                 <li>
                   Beets does not and has not stored personal information from users of the UI.
-                  However, Beets uses third party services including, without limitation,
+                  However, Beets uses third-party services including, without limitation,
                   Cloudflare, Hypernative, RainbowKit, OpenZeppelin, Amazon Web Services, Vercel,
                   Coingecko, and others who collect and store certain user information only for use
                   in the provision of their services.
                 </li>
                 <li>
-                  Beets does not set any cookies. However, we use third party service providers that
+                  Beets does not set any cookies. However, we use third-party service providers that
                   set cookies.
                 </li>
               </ul>
@@ -93,7 +93,7 @@ export default function Privacy() {
               </p>
               <ul>
                 <li>
-                  <em className="font-semibold"> Device and Usage Information:</em> We (and our
+                  <em className="font-semibold">Device and Usage Information:</em> We (and our
                   service providers) collect information about how you access the UI, including data
                   about the device and network you use, such as your hardware model, operating
                   system version, mobile network, browser type, IP address and app version. We do
@@ -130,7 +130,7 @@ export default function Privacy() {
               <p>
                 We may derive limited information or draw inferences about you based on the
                 information we have access to or receive, most importantly, from our service
-                providers. Your wallet and IP address is accessible to Beets and its vendor(s). We
+                providers. Your wallet and IP address are accessible to Beets and its vendor(s). We
                 may make inferences about you based on your wallet or IP address.
               </p>
             </div>
@@ -272,7 +272,7 @@ export default function Privacy() {
               <h2>Your Choices</h2>
               <h3>Cookies</h3>
               <p>
-                Beets and its third party vendors may use any cookies to affect the availability and
+                Beets and its third-party vendors may use any cookies to affect the availability and
                 functionality of the UI. For more information about cookies and how to disable them,
                 see our <Link href="cookies-policy">Cookies policy</Link>.
               </p>
@@ -284,7 +284,7 @@ export default function Privacy() {
 
               <p>
                 In the preceding 12 months, we or our vendors may have collected the following
-                categories of personal information: identifiers, internet or other electronic
+                categories of personal information: identifiers, Internet or other electronic
                 network activity information and inferences. For details about the data points we
                 collect and the categories of sources of such collection, please see the Collection
                 of Information section above. We collect personal information for the purposes
@@ -302,7 +302,7 @@ export default function Privacy() {
                   <td>Identifiers</td>
                   <td>
                     <p>
-                      We share with vendors, such CloudFlare: certain IP addresses, device
+                      We share with vendors, such as Cloudflare: certain IP addresses, device
                       identifiers or other similar identifiers.
                     </p>
 
@@ -317,7 +317,7 @@ export default function Privacy() {
                 <tr>
                   <td>Internet or other electronic network activity information</td>
                   <td>
-                    We share with vendors: information regarding an interaction with an UI/website
+                    We share with vendors: information regarding an interaction with a UI/website
                   </td>
                 </tr>
               </table>
@@ -386,7 +386,7 @@ export default function Privacy() {
                 </li>
                 <li>
                   When we have a legitimate interest in processing your personal data to operate the
-                  UI or protect our interests (e.g., to adhere with applicable laws, rules and
+                  UI or protect our interests (e.g., to adhere to applicable laws, rules and
                   regulations, provide, maintain, and improve our products and UI, conduct data
                   analytics, and communicate with you).
                 </li>
