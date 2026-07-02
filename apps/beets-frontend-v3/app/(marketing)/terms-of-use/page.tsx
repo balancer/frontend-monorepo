@@ -570,19 +570,6 @@ export default function Terms() {
             </p>
             <p>
               <em className="font-semibold">
-                Any dispute, controversy, or claim arising out of or in relation to these Terms,
-                including the validity, invalidity, breach or termination thereof, shall be settled
-                by arbitration in accordance with the Cayman Islands Arbitration Law, 2012. There
-                shall be one arbitrator; the appointing authority may be based on mutual agreement,
-                be chosen by the parties or in the absence of such agreement, the court may
-                designate an appointing authority. The seat of the arbitration shall be the Cayman
-                Islands and the language of the arbitration shall be English. The applicable law
-                shall be Cayman Islands law or another choice of law determined in BeethovenX DAO’s
-                sole discretion.
-              </em>
-            </p>
-            <p>
-              <em className="font-semibold">
                 With respect to all persons and entities, regardless of whether they have obtained
                 or used the site for personal, commercial or other purposes, all disputes,
                 controversies or claims must be brought in the parties’ individual capacity, and not
