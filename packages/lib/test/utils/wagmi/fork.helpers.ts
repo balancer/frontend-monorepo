@@ -3,8 +3,9 @@ import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
 import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
 import { mainnet, sonic } from 'viem/chains'
-import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
+import { getRpcUrl, getDrpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 import { isBeets } from '@repo/lib/config/getProjectConfig'
+import { getGqlChain } from '@repo/lib/config/app.config'
 
 /*
   E2E dev tests use an anvil fork to impersonate and test with default anvil accounts
@@ -72,12 +73,19 @@ export async function setTokenBalances({
 }
 
 export function resetFork(chainId: number = mainnet.id) {
+  const directDevProjectId = process.env['NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID']
+
+  if (directDevProjectId) {
+    const gqlChain = getGqlChain(chainId)
+    return forkClient.reset({ jsonRpcUrl: getRpcUrl(gqlChain, directDevProjectId) })
+  }
+
   const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
   if (!privateKey) {
     throw new Error('NEXT_PRIVATE_DRPC_KEY is missing')
   }
   return forkClient.reset({
-    jsonRpcUrl: drpcUrlByChainId(chainId, privateKey),
+    jsonRpcUrl: getDrpcUrlByChainId(chainId, privateKey),
   })
 }
 
