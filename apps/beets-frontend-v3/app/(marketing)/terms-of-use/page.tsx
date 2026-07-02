@@ -581,12 +581,6 @@ export default function Terms() {
                 collective action, or other representative proceeding of any kind.
               </em>
             </p>
-            <p>
-              <em className="font-semibold">
-                There is a Cayman Island International Arbitration Centre expected in the near term,
-                but in the meantime there is the modern Arbitration Act, 2012.
-              </em>
-            </p>
           </div>
         </FadeInOnView>
         <FadeInOnView>
