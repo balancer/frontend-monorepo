@@ -94,15 +94,15 @@ export default function Terms() {
             <h2>2. Site</h2>
             <p>
               As part of the Site, BeethovenX DAO provides access to a decentralized finance
-              application (“Application” or “Beets Protocol app”) on the Ethereum blockchain, that
-              allows swappers or liquidity providers of Ethereum assets (“Cryptocurrency Assets”) to
-              transact using smart contracts (“Smart Contracts”). Use of the Beets Protocol may
-              require that you pay a fee, such as gas charges on the Ethereum network to perform a
-              transaction. You acknowledge and agree that BeethovenX DAO has no control over any
-              activities, transactions, the method of payment of any transactions, or any actual
-              processing of payments of transactions. You must ensure that you have a sufficient
-              balance to complete any transaction on the Beets Protocol before initiating such
-              transaction. You should not take or refrain from taking any action based on any
+              application (“Application” or “Beets Protocol app”) on the Sonic blockchain. The
+              Application allows swappers or liquidity providers of Sonic assets (“Cryptocurrency
+              Assets”) to transact using smart contracts (“Smart Contracts”). Use of the Beets
+              Protocol may require that you pay a fee, such as gas charges on the Sonic network to
+              perform a transaction. You acknowledge and agree that BeethovenX DAO has no control
+              over any activities, transactions, the method of payment of any transactions, or any
+              actual processing of payments of transactions. You must ensure that you have a
+              sufficient balance to complete any transaction on the Beets Protocol before initiating
+              such transaction. You should not take or refrain from taking any action based on any
               information contained on the Site or any other available information at any time.
               Before you make any legal, technical, or financial decisions involving the Services,
               you should seek independent professional advice from a licensed and qualified
@@ -118,7 +118,7 @@ export default function Terms() {
               Likewise, you must ensure that you have a sufficient balance of the applicable
               cryptocurrency tokens stored at your Beets Protocol-compatible wallet address
               (“Cryptocurrency Wallet”) to complete any transaction on the Beets Protocol or the
-              Ethereum network before initiating such transaction.
+              Sonic network before initiating such transaction.
             </p>
             <p>
               You acknowledge and accept the material potential risks associated with using the

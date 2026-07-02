@@ -8,13 +8,9 @@ export default function ThirdPartyServices() {
   const services = [
     {
       name: 'dRPC',
-      description: 'Used to fetch on-chain data and to construct contract calls.',
+      description:
+        'Used to retrieve blockchain data and construct or simulate contract calls. RPC requests may include wallet addresses and transaction-related data, which are processed by dRPC and its infrastructure providers.',
       iconUrl: '/images/services/drpc.svg',
-    },
-    {
-      name: 'The Graph',
-      description: 'Used to fetch blockchain data from The Graph’s hosted service.',
-      iconUrl: '/images/services/the-graph.svg',
     },
     {
       name: 'Hypernative',

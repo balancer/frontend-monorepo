@@ -52,9 +52,9 @@ export default function Privacy() {
                 <li>
                   Beets does not and has not stored personal information from users of the UI.
                   However, Beets uses third-party services including, without limitation,
-                  Cloudflare, Hypernative, RainbowKit, OpenZeppelin, Amazon Web Services, Vercel,
-                  CoinGecko, and others that collect and store certain user information only for use
-                  in the provision of their services.
+                  Cloudflare, Hypernative, Amazon Web Services, Vercel, CoinGecko, and others that
+                  collect and store certain user information only for use in the provision of their
+                  services.
                 </li>
                 <li>
                   Beets does not set any cookies. However, we use third-party service providers that

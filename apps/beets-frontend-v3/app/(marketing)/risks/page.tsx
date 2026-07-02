@@ -144,8 +144,8 @@ export default function Risks() {
               <p>
                 Smart contract risk is a general risk when using DeFi protocols, including Balancer.
                 Smart contracts are self-executing pieces of code that run on certain blockchains,
-                like Ethereum. Although they are designed to be secure, they can be vulnerable to
-                bugs and exploits.
+                like Sonic. Although they are designed to be secure, they can be vulnerable to bugs
+                and exploits.
               </p>
               <p>
                 If there is a flaw in the smart contract code, it can be exploited by attackers to
@@ -489,8 +489,8 @@ export default function Risks() {
               <p>
                 LPs should also consider the effect of slippage when adding liquidity to a pool.
                 Slippage occurs when market conditions change between the time your order is
-                submitted and the time it gets executed on Ethereum. Slippage tolerance is the
-                maximum change in price you are willing to accept.
+                submitted and the time it gets executed on Sonic. Slippage tolerance is the maximum
+                change in price you are willing to accept.
               </p>
               <p>
                 Slippage tolerance is a setting in both the Add/Remove liquidity flows on the
@@ -499,11 +499,11 @@ export default function Risks() {
               </p>
               <h5>Due to high gas fees</h5>
               <p>
-                Gas on the Ethereum network refers to the unit that measures the amount of
-                computational effort required to execute specific operations. Gas fees in Ethereum
-                are the transaction costs users pay to have their transactions processed and
-                validated by the network&apos;s miners. Gas fees vary depending on network
-                congestion, transaction complexity, and the amount of gas a user is willing to pay.
+                Gas on the Sonic network refers to the unit that measures the amount of
+                computational effort required to execute specific operations. Gas fees on Sonic are
+                the transaction costs users pay to have their transactions processed and validated
+                by the network&apos;s validators. Gas fees vary depending on network congestion,
+                transaction complexity, and the amount of gas a user is willing to pay.
               </p>
               <p>
                 Gas fees can be particularly high during periods of network congestion. As a result,
@@ -687,7 +687,7 @@ export default function Risks() {
               <ul>
                 <li>
                   LPs can learn how to interact with Balancer smart contracts on third-party
-                  websites, like <a href="https://etherscan.io/">Etherscan</a>.
+                  websites, like <a href="https://sonicscan.org/">SonicScan</a>.
                 </li>
                 <li>
                   To mitigate the risks of downtime or lack of access, users can fork the open
@@ -714,10 +714,9 @@ export default function Risks() {
               <p>
                 It&apos;s also possible that the Beets App UI may be wholly or partially suspended
                 or terminated for any or no reason, which may limit your access to your tokens via
-                this website. In this scenario, you may be able to recover funds by forking the
-                open-source code on <a href="https://github.com/balancer/frontend-v2/">GitHub</a>{' '}
-                and running your own local instance, or by using a third-party website, like{' '}
-                <a href="https://etherscan.io/">Etherscan</a>.
+                this website. In this scenario, you may be able to recover funds by running your own
+                local instance or by using a third-party website, like{' '}
+                <a href="https://sonicscan.org/">SonicScan</a>.
               </p>
             </div>
             <FadeInOnView>
@@ -843,8 +842,8 @@ export default function Risks() {
                   </ul>
                   <p>
                     Note: Composable Stable Pools are a superset of all previous Stable-type pools
-                    (Stable Pools, MetaStable Pools, StablePhantom Pools, and StablePool v2) and
-                    therefore obsolete all previous pools.
+                    (Stable Pools, MetaStable Pools, and StablePool v2) and therefore render all
+                    previous pools obsolete.
                   </p>
                   <p>
                     Composable Stable Pools (including MetaStable Pools) carry all the same risks as
@@ -917,12 +916,6 @@ export default function Risks() {
                     <h6>Rate provider cross-chain bridge risk</h6>
                     <p>
                       Pools may use rate providers that are bridged between blockchain networks.
-                    </p>
-                    <p>
-                      For example, some pools on Polygon zkEVM use a rate provider that is bridged
-                      from Ethereum Mainnet via the Layer Zero (an omnichain messaging service). In
-                      these pools, LPs are exposed to risk of significant losses if an incorrect
-                      rate is received via the omnichain messaging service.
                     </p>
                   </div>
                 </div>
