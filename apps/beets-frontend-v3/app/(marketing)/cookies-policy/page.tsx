@@ -13,16 +13,16 @@ export default function Cookies() {
           <FadeInOnView>
             <div className="subsection">
               <Box mt="3xl">
-                <h1>Beets Cookies&nbsp;Policy</h1>
+                <h1>Beets cookies&nbsp;policy</h1>
                 <p>
-                  <em>Last Updated: October 2023</em>
+                  <em>Last updated: October 2023</em>
                 </p>
               </Box>
             </div>
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>I. Introduction and Scope of Policy</h2>
+              <h2>I. Introduction and scope of policy</h2>
               <p>
                 This Cookies Policy (“Policy”) applies to your interaction with BeethovenX DAO LLC
                 and material service providers operating under a legal agreement (“BeethovenX,”
@@ -32,7 +32,7 @@ export default function Cookies() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>II. About Cookies</h2>
+              <h2>II. About cookies</h2>
               <p>
                 Cookies are pieces of data stored on your device. Browser cookies are assigned by a
                 web server to the browser on your device. When you return to a site you have visited
@@ -41,9 +41,9 @@ export default function Cookies() {
               </p>
 
               <p>
-                We do not generally use cookies; however our third-party vendors do. We do not
+                We do not generally use cookies; however, our third-party vendors do. We do not
                 intentionally collect information to customize your experience on the website or the
-                beets.fi user interface (UI) for the Beets Protocol. (“Sites” or “Site”).
+                beets.fi user interface (UI) for the Beets Protocol (“Sites” or “Site”).
               </p>
               <p>
                 Industry standards are currently evolving, and we may not separately respond to or
@@ -52,12 +52,12 @@ export default function Cookies() {
               </p>
               <p>
                 Other parties that collect information about your web browsing behavior when you use
-                our Site are generally limited to service providers who only use any information
+                our Site are generally limited to service providers that only use any information
                 collected to provide services for us and not to provide services or advertising for
                 any other party. Note, however, that we also provide certain widgets or tools on our
-                sites that allow you to interact with third parties who provide these features, such
-                as tools that allow web surfers to easily share information on another platform. At
-                other times, information from a third-party may be embedded on our Site, such as a
+                Sites that allow you to interact with third parties that provide these features,
+                such as tools that allow users to easily share information on another platform. At
+                other times, information from a third party may be embedded on our Site, such as a
                 map. These widgets, tools, and informational items often function through the use of
                 third-party cookies utilized by the third-party site. As a result, these third
                 parties may have access to information about your web browsing on the pages of our
@@ -69,7 +69,7 @@ export default function Cookies() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>III. Do You Have to Accept Cookies?</h2>
+              <h2>III. Do you have to accept cookies?</h2>
 
               <p>
                 You may be able to set your browser to reject cookies. If you set your browser
@@ -83,7 +83,7 @@ export default function Cookies() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>IV. Additional Technologies</h2>
+              <h2>IV. Additional technologies</h2>
               <p>
                 We do not typically use additional technologies such as pixel tags, web beacons, and
                 clear GIFs. We permit third-party service providers to use these technologies. They
@@ -93,7 +93,7 @@ export default function Cookies() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>V. Using Information</h2>
+              <h2>V. Using information</h2>
               <p>
                 In addition to the uses described above, we may use information for purposes as
                 allowed by law such as: servicing; communicating with you; improving our Site,
@@ -107,12 +107,11 @@ export default function Cookies() {
             <div>
               <h2>VI. Sharing</h2>
               <p>
-                We share information with service providers with whom we work, such as service
-                providers and companies that help us service you better. When permitted or required
-                by law, we may share information with additional third parties for purposes
-                including response to legal process. As applicable, please see our{' '}
-                <Link href="privacy-policy">Privacy policy</Link> for more information on how we may
-                share information with affiliates and third parties.
+                We share information with service providers and companies that help us serve you
+                better. When permitted or required by law, we may share information with additional
+                third parties for purposes including responding to legal process. As applicable,
+                please see our <Link href="privacy-policy">Privacy policy</Link> for more
+                information on how we may share information with affiliates and third parties.
               </p>
             </div>
           </FadeInOnView>

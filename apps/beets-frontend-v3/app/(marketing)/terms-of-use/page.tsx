@@ -11,7 +11,7 @@ export default function Terms() {
       <Prose>
         <FadeInOnView>
           <div className="subsection">
-            <h1>Beets Terms of Use</h1>
+            <h1>Beets terms of use</h1>
             <p>
               <em>Last updated: February 2023</em>
             </p>
@@ -21,7 +21,7 @@ export default function Terms() {
         <FadeInOnView>
           <div className="subsection">
             <Box mt="3xl">
-              <h1>BeethovenX DAO Terms of Use</h1>
+              <h2>BeethovenX DAO terms of use</h2>
               <p>
                 <em className="font-semibold">
                   Do not access this site, as defined below, where such access is prohibited by
@@ -44,7 +44,7 @@ export default function Terms() {
             <p>
               This BeethovenX DAO Terms of Use document (“Terms” or “agreement”) (“BeethovenX DAO”,
               “we” and “us” refers to the BeethovenX DAO and its subsidiaries including without
-              limitation BeethovenX DAO LLC) covers the website, Beets Protocol user-interface and
+              limitation BeethovenX DAO LLC) covers the website, Beets Protocol user interface and
               free application (collectively “the Site”) we own and administer, at times in
               conjunction with others, which provides the ability to access the decentralized Beets
               Protocol. Additionally, you can access the Beets Protocol through third-party web or
@@ -56,7 +56,7 @@ export default function Terms() {
               To avoid any confusion, you agree a) you retain full control, at all times, over your
               cryptocurrency assets, b) there are no intermediaries involved when you interact with
               the Beets Protocol and c) the online interface (UI) is a mere graphical interface for
-              you to interact with the Beets protocol, which can be accessed through other means,
+              you to interact with the Beets Protocol, which can be accessed through other means,
               including other interfaces.
             </p>
             <p>
@@ -76,7 +76,7 @@ export default function Terms() {
               modifications to our Terms and your continued use of the Site shall constitute
               acceptance of any such changes, revisions, variations, or modifications. When we make
               changes, we will make the updated Terms available on the interface and update the
-              “Last Updated” date at the beginning of the Terms accordingly.
+              “Last updated” date at the beginning of the Terms accordingly.
             </p>
             <p>
               You accept such changes, by continuing to use the Site and by doing so you agree that
@@ -113,7 +113,7 @@ export default function Terms() {
                 You acknowledge and agree that BeethovenX DAO has no control over any transactions
                 conducted through the Beets Protocol, the method of payment of any transactions or
                 any actual payments of transactions including use of any third-party services such
-                as Metamask, or other wallet services.{''}
+                as MetaMask or other wallet services.{''}
               </span>
               Likewise, you must ensure that you have a sufficient balance of the applicable
               cryptocurrency tokens stored at your Beets Protocol-compatible wallet address
@@ -130,7 +130,7 @@ export default function Terms() {
         </FadeInOnView>
         <FadeInOnView>
           <div className="subsection">
-            <h2>3. Protocol & Entity Participation.</h2>
+            <h2>3. Protocol and entity participation</h2>
             <p>
               Unless otherwise indicated, the defined and capitalized terms used in this section
               incorporate the same meaning as the terms used in the BeethovenX DAO LLC operating
@@ -145,12 +145,12 @@ export default function Terms() {
               . The NFT is referred to as the “Token” in the Agreement.
             </p>
             <p>
-              By using this NFT to participate in the governance and operations of BeethovenX , the
+              By using this NFT to participate in the governance and operations of BeethovenX, the
               holder of this NFT agrees to be subject to the terms of the Agreement, including as a
               Member of its entity structure. Participation in the governance and operations of
               BeethovenX includes, but is not limited to, utilizing the NFT to: (1) vote on
               Proposals to become Governance Resolutions, (2) attend events and otherwise
-              communicate with the BeethovenX community, and (3) interact with the Beets protocol.
+              communicate with the BeethovenX community, and (3) interact with the Beets Protocol.
             </p>
             <p>
               Except as otherwise provided in the Agreement, a Token Holder’s Membership Interest or
@@ -163,7 +163,7 @@ export default function Terms() {
         </FadeInOnView>
         <FadeInOnView>
           <div className="subsection">
-            <h2>4. Access / Disclaimer of Warranties</h2>
+            <h2>4. Access/disclaimer of warranties</h2>
             <p>
               ACCESS TO THIS SITE AND THE PRODUCTS HEREIN ARE PROVIDED ON AN &apos;AS IS&apos; AND
               &apos;AS AVAILABLE&apos; BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
@@ -202,7 +202,7 @@ export default function Terms() {
               with all applicable domestic and international laws, statutes, ordinances, rules and
               regulations applicable to your use of the site (“Applicable Laws”). Likewise, we are
               not liable for any third-party services and are not responsible for the content or
-              services of these party’s.
+              services of these parties.
             </p>
             <p>
               As a condition to accessing or using the Site, you agree and represent that you will:
@@ -284,7 +284,7 @@ export default function Terms() {
         <FadeInOnView>
           <div className="subsection">
             <h4>
-              3(a). You acknowledge that the Site and your use of the Site present certain risks,
+              4(a). You acknowledge that the Site and your use of the Site present certain risks,
               including without limitation the following risks:
             </h4>
             <ul>
@@ -373,7 +373,7 @@ export default function Terms() {
             <p>Accordingly, you expressly agree that:</p>
             <ol>
               <li>
-                you assume all risk in connection with the specific risks identified above in 3(a);
+                you assume all risk in connection with the specific risks identified above in 4(a);
               </li>
               <li>
                 you assume all risk in connection with your access to and use of the Site, the
@@ -398,7 +398,7 @@ export default function Terms() {
         </FadeInOnView>
         <FadeInOnView>
           <div className="subsection">
-            <h2>5. Third-Party Content</h2>
+            <h2>5. Third-party content</h2>
             <p>
               The Site may contain hyperlinks or references to third-party websites or content. Any
               such hyperlinks or references are provided for your information and convenience only.
@@ -413,7 +413,7 @@ export default function Terms() {
         </FadeInOnView>
         <FadeInOnView>
           <div className="subsection">
-            <h2>6. Our Privacy Policy and Cookies Policy</h2>
+            <h2>6. Our privacy policy and cookies policy</h2>
             <p>
               Certain areas of our website may record and collect information about you. You can
               find more information about how we will process your personal information in our{' '}
@@ -428,7 +428,7 @@ export default function Terms() {
         </FadeInOnView>
         <FadeInOnView>
           <div className="subsection">
-            <h2>7. Intellectual Property Rights</h2>
+            <h2>7. Intellectual property rights</h2>
             <p>
               BeethovenX DAO is the owner of all intellectual property rights in the Site and the
               material published on them. To the extent practical, these works are protected by
@@ -444,7 +444,7 @@ export default function Terms() {
         </FadeInOnView>
         <FadeInOnView>
           <div className="subsection">
-            <h2>8. Limitation of Liability</h2>
+            <h2>8. Limitation of liability</h2>
             <p>
               <em className="font-semibold">
                 Under no circumstances shall we or any of our officers, directors, employees,
@@ -452,21 +452,21 @@ export default function Terms() {
                 punitive, incidental, special, consequential, or exemplary damages, including (but
                 not limited to) damages for loss of profits, goodwill, use, data, or other
                 intangible property, arising out of or relating to any access or use of the Site
-                including the user-interface, nor will we be responsible for any damage, loss, or
+                including the user interface, nor will we be responsible for any damage, loss, or
                 injury resulting from hacking, tampering, or other unauthorized access or use of the
-                Site including the user-interface or the information contained within it.
+                Site including the user interface or the information contained within it.
               </em>
             </p>
             <p>
               <em className="font-semibold">
                 We assume no liability or responsibility for any: (a) errors, mistakes, or
                 inaccuracies of content; (b) personal injury or property damage, of any nature
-                whatsoever, resulting from any access or use of the Site including the
-                user-interface; (c) unauthorized access or use of any secure server or database in
-                our control, or the use of any information or data stored therein; (d) interruption
-                or cessation of function related to the Site; (e) bugs, viruses, trojan horses, or
-                the like that may be transmitted to or through the Site; (f) errors or omissions in,
-                or loss or damage incurred as a result of the use of, any content made available
+                whatsoever, resulting from any access or use of the Site including the user
+                interface; (c) unauthorized access or use of any secure server or database in our
+                control, or the use of any information or data stored therein; (d) interruption or
+                cessation of function related to the Site; (e) bugs, viruses, trojan horses, or the
+                like that may be transmitted to or through the Site; (f) errors or omissions in, or
+                loss or damage incurred as a result of the use of, any content made available
                 through the Site; and (g) the defamatory, offensive, or illegal conduct of any third
                 party.
               </em>
@@ -518,8 +518,8 @@ export default function Terms() {
             </p>
             <p>
               From time to time, reference may be made to data we have gathered. These references
-              may be selective or, may be partial. As markets change continuously, previously
-              published information and data may not be current and should not be relied upon.
+              may be selective or partial. As markets change continuously, previously published
+              information and data may not be current and should not be relied upon.
             </p>
           </div>
         </FadeInOnView>
@@ -529,7 +529,7 @@ export default function Terms() {
             <p>
               You agree to indemnify and hold BeethovenX DAO and our officers, directors, employees,
               contractors, agents, affiliates, or subsidiaries harmless from any claim or demand,
-              including attorneys’ fees and costs, made by any third-party due to or arising out of
+              including attorneys’ fees and costs, made by any third party due to or arising out of
               1) your use of the site or 2) this agreement.
             </p>
           </div>
@@ -539,8 +539,8 @@ export default function Terms() {
             <h2>11. General</h2>
             <p>
               We may perform any of our obligations, and exercise any of the rights granted to us
-              under these Terms, through an affiliated or unaffiliated third-party. We may assign
-              any or all our rights and obligations under these Terms to any third-party.
+              under these Terms, through an affiliated or unaffiliated third party. We may assign
+              any or all of our rights and obligations under these Terms to any third party.
             </p>
             <p>
               If any clause or part of any clause of these Terms is found to be void, unenforceable
@@ -604,12 +604,12 @@ export default function Terms() {
         </FadeInOnView>
         <FadeInOnView>
           <div className="subsection">
-            <h2>12. Force Majeure</h2>
+            <h2>12. Force majeure</h2>
             <p>
               There is a risk that transactions effected through the Site may be affected by system
               failures resulting from adverse events, natural disasters, pandemics and other
               emergencies, as well as unforeseen significant changes in the external environment.
-              With regards to opportunity loss (e.g., loss of opportunity to place a payment
+              With regard to opportunity loss (e.g., loss of opportunity to place a payment
               instruction, resulting in loss of profits which could have been obtained) due to
               occurrences such as emergency situations and force majeure events, BeethovenX DAO is
               under no obligation to take any corrective action or measure and shall not under
@@ -619,10 +619,10 @@ export default function Terms() {
         </FadeInOnView>
         <FadeInOnView>
           <div>
-            <h2>13. Contact Us</h2>
+            <h2>13. Contact us</h2>
             <p>
               BeethovenX formed a nonprofit DAO under the laws of the Republic of the Marshall
-              Islands on April 5th, 2023. Please contact us if you have any questions about these
+              Islands on April 5, 2023. Please contact us if you have any questions about these
               Terms or other topics, by sending an email to{' '}
               <a className="link" href="mailto:contact@beets.fi">
                 contact@beets.fi

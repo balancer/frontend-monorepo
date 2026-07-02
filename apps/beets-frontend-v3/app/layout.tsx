@@ -7,7 +7,7 @@ import { Providers } from '@repo/lib/shared/components/site/providers'
 
 export const metadata: Metadata = {
   title: 'Beets',
-  description: `The Flagship LST Hub on Sonic. From seamless staking to earning real yield on LST-focused liquidity pools, beets is the ultimate destination for your liquid-staked tokens.`,
+  description: `The flagship LST hub on Sonic. From seamless staking to earning real yield on LST-focused liquidity pools, Beets is the ultimate destination for your liquid staking tokens.`,
   icons: [{ rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' }],
   metadataBase: new URL('https://beets.fi'),
 }

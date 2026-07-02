@@ -17,20 +17,10 @@ export default function ThirdPartyServices() {
       iconUrl: '/images/services/the-graph.svg',
     },
     {
-      name: 'Appzi',
-      description: 'Used to capture and store user feedback from optional surveys.',
-      iconUrl: '/images/services/appzi.svg',
-    },
-    {
       name: 'Hypernative',
       description:
-        'Used to securely check wallet addresses and shares it with Hypernative Inc. for risk and compliance reasons.',
+        'Used to screen wallet addresses for risk and compliance purposes. Wallet addresses are shared with Hypernative Inc. to perform these checks.',
       iconUrl: '/images/services/hypernative.svg',
-    },
-    {
-      name: 'Sentry',
-      description: 'Used for error tracking and performance monitoring.',
-      iconUrl: '/images/services/sentry.svg',
     },
     {
       name: 'Amazon Web Services',
@@ -39,17 +29,12 @@ export default function ThirdPartyServices() {
       iconUrl: '/images/services/aws.svg',
     },
     {
-      name: 'OpenZeppelin',
-      description: 'Used for security and compliance monitoring.',
-      iconUrl: '/images/services/open-zeppelin.svg',
-    },
-    {
       name: 'Vercel',
       description: 'Used for deployment and hosting.',
       iconUrl: '/images/services/vercel.svg',
     },
     {
-      name: 'Coingecko',
+      name: 'CoinGecko',
       description: 'Used to fetch and display token information.',
       iconUrl: '/images/services/coingecko.svg',
     },
@@ -64,16 +49,16 @@ export default function ThirdPartyServices() {
               <Box mt="3xl" pb="sm">
                 <h1>Use of third-party services</h1>
                 <p>
-                  <em>Last Updated: April 2025</em>
+                  <em>Last updated: April 2025</em>
                 </p>
                 <p>
-                  Beets is an open source, permissionless, decentralized protocol. The smart
+                  Beets is an open-source, permissionless, decentralized protocol. The smart
                   contracts that power the ecosystem may be used by anyone. This website is the
-                  BeethovenX DAO&apos;s front-end to the ecosystem and it is also open-source. You
+                  BeethovenX DAO&apos;s web interface to the ecosystem and is also open source. You
                   are free to fork it on GitHub and modify it as you wish.
                 </p>
               </Box>
-              <p>This website uses the following 3rd party services:</p>
+              <p>This website uses the following third-party services:</p>
               <VStack align="start" spacing="xl" w="full">
                 {services.map(service => (
                   <HStack align="start" key={service.name} spacing="md">

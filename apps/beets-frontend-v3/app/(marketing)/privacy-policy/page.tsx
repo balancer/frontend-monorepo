@@ -13,16 +13,16 @@ export default function Privacy() {
           <FadeInOnView>
             <div className="subsection">
               <Box mt="3xl">
-                <h1>Beets Privacy&nbsp;Policy</h1>
+                <h1>Beets privacy&nbsp;policy</h1>
                 <p>
-                  <em>Last Updated: April 2025</em>
+                  <em>Last updated: April 2025</em>
                 </p>
               </Box>
               <p>
                 <em className="font-medium">
                   This Privacy Policy explains how BeethovenX DAO LLC (“BeethovenX,” “Beets,” “we,”
                   “our,” or “us”) collects, uses, and discloses information about you. This Privacy
-                  Policy applies when you use our website, Beets Protocol user-interface and
+                  Policy applies when you use our website, Beets Protocol user interface and
                   application and other online products (collectively, our “UI”), engage with us on
                   social media, or otherwise interact with us.
                 </em>
@@ -53,7 +53,7 @@ export default function Privacy() {
                   Beets does not and has not stored personal information from users of the UI.
                   However, Beets uses third-party services including, without limitation,
                   Cloudflare, Hypernative, RainbowKit, OpenZeppelin, Amazon Web Services, Vercel,
-                  Coingecko, and others who collect and store certain user information only for use
+                  CoinGecko, and others that collect and store certain user information only for use
                   in the provision of their services.
                 </li>
                 <li>
@@ -65,8 +65,8 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Collection of Information</h2>
-              <h3>Information You Provide to Us</h3>
+              <h2>Collection of information</h2>
+              <h3>Information you provide to us</h3>
 
               <p>
                 We do not typically request, collect or use personal information from you except
@@ -77,8 +77,8 @@ export default function Privacy() {
               </p>
               <p>
                 Beets is not directed to children under the age of 16. If a parent or guardian
-                becomes aware that his or her child has provided us with personal information
-                without your consent, please contact us at&nbsp;
+                becomes aware that their child has provided us with personal information without the
+                parent&apos;s or guardian&apos;s consent, please contact us at&nbsp;
                 <a className="link" href="mailto:contact@beets.fi">
                   contact@beets.fi
                 </a>
@@ -86,7 +86,7 @@ export default function Privacy() {
                 information, we will take reasonable efforts to delete such personal information.
               </p>
 
-              <h3>Information We Collect Automatically When You Interact With&nbsp;Us</h3>
+              <h3>Information we collect automatically when you interact with&nbsp;us</h3>
               <p>
                 When you access or use our UI, we may automatically collect certain information,
                 including:
@@ -103,7 +103,7 @@ export default function Privacy() {
                 </li>
                 <li>
                   <em className="font-semibold">
-                    Information Collected by Cookies and Similar Tracking Technologies:
+                    Information collected by cookies and similar tracking technologies:
                   </em>
                   We do not typically use tracking technologies, such as cookies and web beacons, to
                   collect information about you; however, third parties we rely on may do so.
@@ -118,26 +118,27 @@ export default function Privacy() {
                 </li>
               </ul>
 
-              <h3>Information We Collect from Other&nbsp;Sources</h3>
+              <h3>Information we collect from other&nbsp;sources</h3>
 
               <p>
                 We do not typically obtain information from third-party sources in order to provide
                 business services. We do not sell information we collect.
               </p>
 
-              <h3>Information We Derive</h3>
+              <h3>Information we derive</h3>
 
               <p>
                 We may derive limited information or draw inferences about you based on the
                 information we have access to or receive, most importantly, from our service
-                providers. Your wallet and IP address are accessible to Beets and its vendor(s). We
-                may make inferences about you based on your wallet or IP address.
+                providers. Your wallet address and IP address are accessible to Beets and its
+                vendor(s). We may make inferences about you based on your wallet address or IP
+                address.
               </p>
             </div>
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Use of Information</h2>
+              <h2>Use of information</h2>
 
               <p>
                 We do not collect your personal information, other than wallet address, to customize
@@ -178,7 +179,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Sharing of Information</h2>
+              <h2>Sharing of information</h2>
 
               <p>
                 We do not have access to or share personally identifiable information, other than as
@@ -245,7 +246,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Advertising and Analytics</h2>
+              <h2>Advertising and analytics</h2>
 
               <p>
                 We do not work with third parties to serve ads to you as part of customized
@@ -255,7 +256,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Transfer of information to the United States and Other&nbsp;Countries</h2>
+              <h2>Transfer of information to the United States and other&nbsp;countries</h2>
 
               <p>
                 BeethovenX DAO LLC is headquartered in the Republic of the Marshall Islands.
@@ -269,7 +270,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Your Choices</h2>
+              <h2>Your choices</h2>
               <h3>Cookies</h3>
               <p>
                 Beets and its third-party vendors may use any cookies to affect the availability and
@@ -280,7 +281,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Additional Considerations</h2>
+              <h2>Additional considerations</h2>
 
               <p>
                 In the preceding 12 months, we or our vendors may have collected the following
@@ -343,14 +344,14 @@ export default function Privacy() {
                 you are an authorized agent seeking to make a request, please contact us.
               </p>
 
-              <h3>Shine the Light</h3>
+              <h3>Shine the light</h3>
 
               <p>
                 Beets does not share such information with third parties for direct marketing
                 purposes.
               </p>
 
-              <h3>Do Not Track Signals</h3>
+              <h3>Do Not Track signals</h3>
 
               <p>
                 Our Services do not respond to “Do Not Track” signals communicated by your browser.
@@ -365,14 +366,14 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Additional Disclosures for Individuals in Europe</h2>
+              <h2>Additional disclosures for individuals in Europe</h2>
 
               <p>
                 If you are located in the European Economic Area (EEA), the United Kingdom, or
                 Switzerland, you have certain rights and protections under the law regarding the
                 processing of your personal data, and this section applies to you.
               </p>
-              <h3>Legal Basis for Processing</h3>
+              <h3>Legal basis for processing</h3>
 
               <p>
                 Beets does not typically process user personal data. If Beets processes data, such
@@ -392,13 +393,13 @@ export default function Privacy() {
                 </li>
                 <li>To comply with our legal obligations.</li>
               </ul>
-              <h3>Data Retention</h3>
+              <h3>Data retention</h3>
 
               <p>
                 We do not maintain customer accounts or store personal data. Our vendor will store
                 your wallet address in order to provide requested services.
               </p>
-              <h3>Data Subject Requests</h3>
+              <h3>Data subject requests</h3>
               <p>
                 Subject to certain limitations, you have the right to request access to the personal
                 data we hold about you and to receive your data in a portable format, the right to
@@ -410,7 +411,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div>
-              <h2>Contact Us</h2>
+              <h2>Contact us</h2>
 
               <p>
                 If you have any questions about this Privacy Policy, please contact us at{' '}

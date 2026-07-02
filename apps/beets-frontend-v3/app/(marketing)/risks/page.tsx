@@ -6,7 +6,7 @@ import { Prose } from '@nikolovlazar/chakra-ui-prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useEffect } from 'react'
 
-export default function Privacy() {
+export default function Risks() {
   useEffect(() => {
     const handleHashChange = () => {
       const { hash } = window.location
@@ -29,7 +29,7 @@ export default function Privacy() {
             <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Beets</h1>
               <p>
-                <em>Last Updated: July 2025</em>
+                <em>Last updated: July 2025</em>
               </p>
               <p>
                 <em>
@@ -48,7 +48,7 @@ export default function Privacy() {
               <nav className="nav">
                 <h2>Contents</h2>
 
-                <h3>Liquidity Provider risks</h3>
+                <h3>Liquidity provider risks</h3>
 
                 <ul>
                   <li>
@@ -69,7 +69,7 @@ export default function Privacy() {
                         <Link href="risks#composability-risk">DeFi composability risk</Link>
                       </li>
                       <li>
-                        <Link href="risks#flash-loans-risk">Flash Loans risk</Link>
+                        <Link href="risks#flash-loans-risk">Flash loan risk</Link>
                       </li>
                       <li>
                         <Link href="risks#mutable-attributes-risk">
@@ -86,7 +86,7 @@ export default function Privacy() {
                         <Link href="risks#hooks-risk">Hooks risk</Link>
                       </li>
                       <li>
-                        <Link href="risks#ui-risk">User Interface risk</Link>
+                        <Link href="risks#ui-risk">User interface risk</Link>
                       </li>
                       <li>
                         <Link href="risks#regulatory-risk">Regulatory risk</Link>
@@ -120,7 +120,7 @@ export default function Privacy() {
                       </li>
                       <li>
                         <Link href="risks#autorange">
-                          AutoRange - Readjusting Concentrated Liquidity AMM
+                          AutoRange—Readjusting Concentrated Liquidity AMM
                         </Link>
                       </li>
                       <li>
@@ -134,7 +134,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Risks for Liquidity Providers (LPs)</h2>
+              <h2>Risks for liquidity providers (LPs)</h2>
               <h3 className="anchor" id="general">
                 General risks
               </h3>
@@ -203,7 +203,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection anchor" id="economic-risk">
-              <h4>Mechanism / Economic risk</h4>
+              <h4>Mechanism/economic risk</h4>
               <p>
                 A mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
                 to manipulate the economic incentives of the protocol to their advantage, resulting
@@ -497,7 +497,7 @@ export default function Privacy() {
                 Balancer App UI. Setting a low slippage tolerance protects you from front-running
                 bots and miner extractable value (MEV).
               </p>
-              <h5>Due to high Gas fees</h5>
+              <h5>Due to high gas fees</h5>
               <p>
                 Gas on the Ethereum network refers to the unit that measures the amount of
                 computational effort required to execute specific operations. Gas fees in Ethereum
@@ -560,7 +560,7 @@ export default function Privacy() {
               </p>
               <p>
                 This risk is particularly relevant for pools with volatile assets where token prices
-                are likely diverge over time.
+                are likely to diverge over time.
               </p>
               <h5>How does Balancer work to mitigate this risk?</h5>
               <ul>
@@ -584,7 +584,7 @@ export default function Privacy() {
               <h5>How can LPs mitigate this risk?</h5>
               <ul>
                 <li>
-                  LPs should consider the risk of impermanent risk carefully before providing
+                  LPs should consider the risk of impermanent loss carefully before providing
                   liquidity to a Balancer pool.
                 </li>
                 <li>
@@ -597,9 +597,9 @@ export default function Privacy() {
                   price divergence. For example, stable pools or boosted pools.
                 </li>
                 <li>
-                  LP&rsquo;s should consider providing liquidity in unbalanced pools, like 80/20
-                  pools which result in less impermanent loss versus a 50/50 pool with the same
-                  underlying tokens.
+                  LPs should consider providing liquidity in unbalanced pools, like 80/20 pools
+                  which result in less impermanent loss versus a 50/50 pool with the same underlying
+                  tokens.
                 </li>
               </ul>
             </div>
@@ -610,10 +610,10 @@ export default function Privacy() {
                 Hooks
               </h4>
               <p>
-                Hooks introduces complex logic into Balancer pools and changes in its parameters can
-                significantly impact the risk profile of a pool. This complexity increases the
-                potential for unforeseen errors or vulnerabilities in the hook&apos;s code, that may
-                i.e. amplify impermanent loss, introduce new sources of volatility or impose
+                Hooks introduce complex logic into Balancer pools, and changes in their parameters
+                can significantly impact the risk profile of a pool. This complexity increases the
+                potential for unforeseen errors or vulnerabilities in hook code that may, for
+                example, amplify impermanent loss, introduce new sources of volatility, or impose
                 restrictions on pool interactions like joins and exits.
               </p>
               <ul>
@@ -638,7 +638,7 @@ export default function Privacy() {
           <FadeInOnView>
             <div className="subsection">
               <h4 className="anchor" id="ui-risk">
-                User Interface (UI) risk
+                User interface (UI) risk
               </h4>
               <p>
                 DeFi users, including liquidity providers and swappers, typically interact with
@@ -674,8 +674,8 @@ export default function Privacy() {
                   code, make improvements and compete for users.
                 </li>
                 <li>
-                  Users or third-party developers can keep track of changes and review the open
-                  source repository on GitHub for potential malicious code.
+                  Users or third-party developers can keep track of changes and review the
+                  open-source repository on GitHub for potential malicious code.
                 </li>
                 <li>
                   The developers of the Balancer App UI have provided instructions on how to clone
@@ -846,10 +846,10 @@ export default function Privacy() {
                     therefore obsolete all previous pools.
                   </p>
                   <p>
-                    Composable Stable Pools (including MetaStable Pools) carry the all of the same
-                    risks as stable pools, including the potential depegging of constituent
-                    stablecoin tokens. In addition, there are risks associated with the involvement
-                    of rate providers.
+                    Composable Stable Pools (including MetaStable Pools) carry all the same risks as
+                    stable pools, including the potential depegging of constituent stablecoin
+                    tokens. In addition, there are risks associated with the involvement of rate
+                    providers.
                   </p>
                   <div>
                     <h5 className="anchor" id="rate-provider-risk">
@@ -867,7 +867,9 @@ export default function Privacy() {
                   </div>
 
                   <div>
-                    <h6>Oracle risk</h6>
+                    <h6 className="anchor" id="oracles">
+                      Oracle risk
+                    </h6>
                     <p>
                       Oracles are data providers which supply external information to smart
                       contracts. Oracles, like Chainlink, may be used to source exchange rates
@@ -1006,8 +1008,8 @@ export default function Privacy() {
                     which inherently wants its token to stay as close to the peg as possible.
                   </p>
                   <p>
-                    Stable Surge hooks introduces dynamic swap fees designed to protect peg, but may
-                    also impact the risk profile of a pool. Please also refer to the{' '}
+                    StableSurge hooks introduce dynamic swap fees designed to protect the peg, but
+                    may also impact the risk profile of a pool. Please also refer to the{' '}
                     <Link href="risks#hooks-risk">
                       <span>Hooks</span>
                     </Link>{' '}
@@ -1059,7 +1061,7 @@ export default function Privacy() {
                     Liquidity Pools&rsquo; (CLPs) are a class of AMMs that price the exchange of
                     assets within a defined range. As such, any CLP only provides liquidity for
                     trading activity restricted to this specific region. The goal is to use the
-                    pool&rsquo;s capital efficiently. There&rsquo;s a few different types of CLPs:
+                    pool&rsquo;s capital efficiently. There are a few different types of CLPs:
                   </p>
                   <ul>
                     <li>
@@ -1069,7 +1071,7 @@ export default function Privacy() {
                       &lsquo;single tick&rsquo;, where liquidity is distributed evenly across a
                       single active trading range. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/2-clps">
-                        2-CLP&rsquo;s and their risks
+                        2-CLPs and their risks
                       </a>
                       .
                     </li>
@@ -1079,7 +1081,7 @@ export default function Privacy() {
                       2-CLPs. As a high-level summary, they amplify the benefits of 2-CLPs. Learn
                       more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/3-clps">
-                        3-CLP&rsquo;s and their risks
+                        3-CLPs and their risks
                       </a>
                       .
                     </li>
@@ -1089,7 +1091,7 @@ export default function Privacy() {
                       liquidity that allows highly flexible and asymmetric liquidity profiles in a
                       single pool position. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/e-clps">
-                        E-CLP&rsquo;s and their risks
+                        E-CLPs and their risks
                       </a>
                       .
                     </li>
@@ -1098,7 +1100,7 @@ export default function Privacy() {
                       E-CLPs combine asymmetric concentrated liquidity with auto-rehypothecation to
                       lending markets. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/rehype-e-clps">
-                        Rehype E-CLP&rsquo;s and their risks
+                        Rehype E-CLPs and their risks
                       </a>
                       .
                     </li>
@@ -1294,8 +1296,8 @@ export default function Privacy() {
                 Navigating these challenges calls for active engagement and open communication
                 within the community. Sharing insights, feedback, or concerns can contribute to
                 building a safer and more inclusive environment for all. Please feel free to reach
-                out with any questions, suggestions or propose changes for this page directly via
-                the{' '}
+                out with any questions or suggestions, or to propose changes for this page directly
+                via the{' '}
                 <a href="https://github.com/balancer/frontend-monorepo/blob/main/apps/beets-frontend-v3/app/(marketing)/risks/page.tsx">
                   GitHub
                 </a>
