@@ -71,7 +71,13 @@ export const ProjectConfigBeets: ProjectConfig = {
         href: 'https://github.com/beethovenxfi/',
       },
     ],
-    legalLinks: [{ label: 'Terms of service', href: '/terms-of-service' }],
+    legalLinks: [
+      { label: 'Terms of Use', href: '/terms-of-use' },
+      { label: 'Privacy policy', href: '/privacy-policy' },
+      { label: 'Cookies policy', href: '/cookies-policy' },
+      { label: 'Risks', href: '/risks' },
+      { label: 'Third-party services', href: '/3rd-party-services' },
+    ],
   },
   footer: {
     linkSections: [

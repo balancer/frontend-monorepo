@@ -71,7 +71,7 @@ async function createPositionAndReturnToMabeets(page: Page) {
   await page.getByRole('button', { name: 'stS', exact: true }).waitFor({ state: 'visible' })
   await page.getByPlaceholder('0.00').nth(1).fill('1')
 
-  const termsCheckbox = await checkbox(page, 'I agree to the terms of service as stated here')
+  const termsCheckbox = await checkbox(page, 'I agree to the Terms of Use as stated here')
   await termsCheckbox.click()
 
   const risksCheckbox = await checkbox(page, 'I accept the risks of interacting with this pool')

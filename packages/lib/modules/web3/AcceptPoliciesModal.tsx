@@ -31,6 +31,7 @@ export function AcceptPoliciesModal() {
   const disconnect = useDisconnect()
 
   const { projectName } = PROJECT_CONFIG
+  const entityName = isBalancer ? 'Balancer Foundation' : 'BeethovenX DAO'
 
   const isAddressInAcceptedPolicies =
     acceptedPolicies.includes(userAddress.toLowerCase()) ||
@@ -75,39 +76,29 @@ export function AcceptPoliciesModal() {
               onChange={e => setIsChecked(e.target.checked)}
               size="lg"
             >
-              {isBalancer ? (
-                <Box aria-label="Accept policies" color="font.primary" fontSize="md" mt="-3px">
-                  By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
-                  <Link as={NextLink} href="/terms-of-use">
-                    Terms of Use
-                  </Link>
-                  ,{' '}
-                  <Link as={NextLink} href="/risks">
-                    Risks
-                  </Link>
-                  ,{' '}
-                  <Link as={NextLink} href="/cookies-policy">
-                    Cookies Policy
-                  </Link>
-                  , use of{' '}
-                  <Link as={NextLink} href="/3rd-party-services">
-                    Third-party services
-                  </Link>{' '}
-                  and{' '}
-                  <Link as={NextLink} href="/privacy-policy">
-                    Privacy Policy
-                  </Link>
-                  .
-                </Box>
-              ) : (
-                <Box color="font.primary" fontSize="md" mt="-3px">
-                  By connecting my wallet, I agree to Beets&apos;{' '}
-                  <Link as={NextLink} href="/terms-of-service">
-                    Terms of Service
-                  </Link>
-                  .
-                </Box>
-              )}
+              <Box aria-label="Accept policies" color="font.primary" fontSize="md" mt="-3px">
+                By connecting my wallet, I agree to {entityName}&apos;s{' '}
+                <Link as={NextLink} href="/terms-of-use">
+                  Terms of Use
+                </Link>
+                ,{' '}
+                <Link as={NextLink} href="/risks">
+                  Risks
+                </Link>
+                ,{' '}
+                <Link as={NextLink} href="/cookies-policy">
+                  Cookies Policy
+                </Link>
+                , use of{' '}
+                <Link as={NextLink} href="/3rd-party-services">
+                  Third-party services
+                </Link>{' '}
+                and{' '}
+                <Link as={NextLink} href="/privacy-policy">
+                  Privacy Policy
+                </Link>
+                .
+              </Box>
             </Checkbox>
           </VStack>
         </ModalBody>
