@@ -19,6 +19,7 @@ import { emptyTokenAmounts, toHumanAmountWithAddress } from '../LiquidityActionH
 import { isCowAmmPool } from '../../pool.helpers'
 import { getActionableTokenAddresses, getPoolActionableTokens } from '../../pool-tokens.utils'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
+import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
 import { useRemoveLiquiditySteps as useRemoveLiquidityStepsBase } from './useRemoveLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
@@ -51,7 +52,6 @@ export function useRemoveLiquidityLogic(
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
   const [wethIsEth, setWethIsEth] = useState(false)
-  const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [removalType, setRemovalType] = useState<RemoveLiquidityType>(
     RemoveLiquidityType.Proportional
   )
@@ -60,6 +60,8 @@ export function useRemoveLiquidityLogic(
   const { getNativeAssetToken, getWrappedNativeAssetToken, usdValueForTokenAddress } = useTokens()
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
+  const { acceptPriceImpactRisk, hasToAcceptHighPriceImpact } = usePriceImpact()
+  const needsToAcceptHighPI = hasToAcceptHighPriceImpact && !acceptPriceImpactRisk
 
   const humanBptIn: HumanAmount = bn(maxHumanBptIn ?? getUserWalletBalance(pool))
     .times(humanBptInPercent / 100)
@@ -296,7 +298,6 @@ export function useRemoveLiquidityLogic(
     setSingleTokenAddress,
     amountOutForToken,
     usdOutForToken,
-    setNeedsToAcceptHighPI,
     setWethIsEth,
     setWrapUnderlyingByIndex,
   }

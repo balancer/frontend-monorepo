@@ -94,7 +94,6 @@ export function SwapForm({
     setTokenIn,
     setTokenOut,
     switchTokens,
-    setNeedsToAcceptHighPI,
     resetSwapAmounts,
     replaceUrlPath,
   } = useSwap()
@@ -345,7 +344,6 @@ export function SwapForm({
                     action="swap"
                     cowLink={cowLink}
                     isDisabled={!simulationQuery.data}
-                    setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                   />
                 </>
               )}
