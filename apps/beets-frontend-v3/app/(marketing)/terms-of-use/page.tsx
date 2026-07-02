@@ -625,7 +625,7 @@ export default function Terms() {
               Islands on April 5th, 2023. Please contact us if you have any questions about these
               Terms or other topics, by sending an email to{' '}
               <a className="link" href="mailto:contact@beets.fi">
-                admin@beets.fi
+                contact@beets.fi
               </a>
               .
             </p>
