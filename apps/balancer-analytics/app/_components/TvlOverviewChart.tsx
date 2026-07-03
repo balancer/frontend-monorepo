@@ -115,13 +115,62 @@ type MetricDef = {
 }
 
 const METRICS: MetricDef[] = [
-  { key: 'TVL', label: 'TVL', group: 'Liquidity', unit: 'USD', headline: 'Total value locked', color: '#E6C6A0' },
-  { key: 'VOLUME', label: 'Volume', group: 'Activity', unit: 'USD', headline: 'Swap volume · 24h', color: '#EA9A43' },
-  { key: 'FEES', label: 'Swap fees', group: 'Revenue', unit: 'USD', headline: 'Swap fees · 24h', color: '#56c596' },
-  { key: 'YIELD', label: 'Yield', group: 'Revenue', unit: 'USD', headline: 'Yield captured · 24h', color: '#b3aef5' },
-  { key: 'SURPLUS', label: 'CoW surplus', group: 'Revenue', unit: 'USD', headline: 'CoW AMM surplus · 24h', color: '#9f95f0' },
-  { key: 'LPS', label: 'LPs', group: 'Participation', unit: 'COUNT', headline: 'Liquidity providers', color: '#25e2a4' },
-  { key: 'POOLS', label: 'Pools', group: 'Participation', unit: 'COUNT', headline: 'Active pools', color: '#E6C6A0' },
+  {
+    key: 'TVL',
+    label: 'TVL',
+    group: 'Liquidity',
+    unit: 'USD',
+    headline: 'Total value locked',
+    color: '#E6C6A0',
+  },
+  {
+    key: 'VOLUME',
+    label: 'Volume',
+    group: 'Activity',
+    unit: 'USD',
+    headline: 'Swap volume · 24h',
+    color: '#EA9A43',
+  },
+  {
+    key: 'FEES',
+    label: 'Swap fees',
+    group: 'Revenue',
+    unit: 'USD',
+    headline: 'Swap fees · 24h',
+    color: '#56c596',
+  },
+  {
+    key: 'YIELD',
+    label: 'Yield',
+    group: 'Revenue',
+    unit: 'USD',
+    headline: 'Yield captured · 24h',
+    color: '#b3aef5',
+  },
+  {
+    key: 'SURPLUS',
+    label: 'CoW surplus',
+    group: 'Revenue',
+    unit: 'USD',
+    headline: 'CoW AMM surplus · 24h',
+    color: '#9f95f0',
+  },
+  {
+    key: 'LPS',
+    label: 'LPs',
+    group: 'Participation',
+    unit: 'COUNT',
+    headline: 'Liquidity providers',
+    color: '#25e2a4',
+  },
+  {
+    key: 'POOLS',
+    label: 'Pools',
+    group: 'Participation',
+    unit: 'COUNT',
+    headline: 'Active pools',
+    color: '#E6C6A0',
+  },
 ]
 
 function fmt(value: number, unit: 'USD' | 'COUNT', { full = false }: { full?: boolean } = {}) {
@@ -171,9 +220,7 @@ export function TvlOverviewChart() {
         ? hourLabelFmt.format(new Date(val))
         : (showYearInAxis ? dateLabelLongFmt : dateLabelFmt).format(new Date(val))
     const fmtTooltipDate = (val: number) =>
-      isIntraday
-        ? tooltipHourFmt.format(new Date(val))
-        : tooltipDateFmt.format(new Date(val))
+      isIntraday ? tooltipHourFmt.format(new Date(val)) : tooltipDateFmt.format(new Date(val))
 
     // Chart shape per metric:
     //  - TVL          → stacked area (a stock — v2/v3/cow composition matters)
@@ -224,10 +271,7 @@ export function TvlOverviewChart() {
         lineStyle: { width: 1.5, color: SERIES_COLORS[key] },
         itemStyle: { color: SERIES_COLORS[key] },
         areaStyle: {
-          color: verticalGradient(
-            rgba(SERIES_COLORS[key], 0.55),
-            rgba(SERIES_COLORS[key], 0.05)
-          ),
+          color: verticalGradient(rgba(SERIES_COLORS[key], 0.55), rgba(SERIES_COLORS[key], 0.05)),
         },
         emphasis: { focus: 'series' as const },
         data: pts.map(p => [p.t, p[key]]),
@@ -276,7 +320,7 @@ export function TvlOverviewChart() {
                 const v = Array.isArray(p.value) ? Number(p.value[1]) : Number(p.value)
                 return `
                   <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
-                    <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${SERIES_COLORS[(p.seriesName === SERIES_LABEL.v2 ? 'v2' : p.seriesName === SERIES_LABEL.v3 ? 'v3' : 'cow')]}"></span>
+                    <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${SERIES_COLORS[p.seriesName === SERIES_LABEL.v2 ? 'v2' : p.seriesName === SERIES_LABEL.v3 ? 'v3' : 'cow']}"></span>
                     <span style="flex:1;color:#A0AEC0">${p.seriesName}</span>
                     <span style="font-weight:600">${fmt(v, active.unit)}</span>
                   </div>`
@@ -395,17 +439,9 @@ export function TvlOverviewChart() {
 
         <MetricTabs metric={metric} onChange={setMetric} />
 
-        <Stack
-          align="stretch"
-          direction={{ base: 'column', lg: 'row' }}
-          spacing="md"
-        >
+        <Stack align="stretch" direction={{ base: 'column', lg: 'row' }} spacing="md">
           {/* Bento sidebar – stats */}
-          <Card
-            flexShrink={0}
-            variant="subSection"
-            w={{ base: 'full', lg: '280px' }}
-          >
+          <Card flexShrink={0} variant="subSection" w={{ base: 'full', lg: '280px' }}>
             <VStack align="stretch" h="full" p="md" spacing="md">
               <Box>
                 <Text
@@ -418,11 +454,7 @@ export function TvlOverviewChart() {
                   {active.headline}
                 </Text>
                 <HStack align="baseline" mt="xs" spacing="sm">
-                  <Heading
-                    color="font.maxContrast"
-                    letterSpacing="-0.8px"
-                    size="h2"
-                  >
+                  <Heading color="font.maxContrast" letterSpacing="-0.8px" size="h2">
                     {headlineValue}
                   </Heading>
                 </HStack>
@@ -671,15 +703,7 @@ function SparseDataPlaceholder({
   )
 }
 
-function RangeRow({
-  label,
-  value,
-  unit,
-}: {
-  label: string
-  value: number
-  unit: 'USD' | 'COUNT'
-}) {
+function RangeRow({ label, value, unit }: { label: string; value: number; unit: 'USD' | 'COUNT' }) {
   return (
     <Flex align="baseline" justify="space-between">
       <Text color="font.secondary" fontSize="xs">
@@ -695,7 +719,13 @@ function RangeRow({
 function MetricTabs({ metric, onChange }: { metric: MetricKey; onChange: (m: MetricKey) => void }) {
   return (
     <VStack align="flex-start" spacing="xs">
-      <Text color="font.secondary" fontSize="2xs" fontWeight="medium" letterSpacing="0.4px" textTransform="uppercase">
+      <Text
+        color="font.secondary"
+        fontSize="2xs"
+        fontWeight="medium"
+        letterSpacing="0.4px"
+        textTransform="uppercase"
+      >
         Switch metric
       </Text>
       <HStack

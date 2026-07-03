@@ -23,14 +23,8 @@ import {
   parseAsStringLiteral,
   useQueryState,
 } from 'nuqs'
-import {
-  GqlChain,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
-import {
-  GqlChainValues,
-  GqlPoolTypeValues,
-} from '@repo/lib/shared/services/api/graphql-enums'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
@@ -54,8 +48,7 @@ const SORT_KEYS = ['TVL', 'VOLUME', 'FEES', 'APR', 'YIELD_DAY', 'USAGE', 'HOLDER
 // viewport. On `2xl+` (≥1536) all columns appear without scroll.
 const GRID_COLS_BASE =
   '36px minmax(260px, 1.4fr) minmax(190px, 0.9fr) 110px 110px 110px 90px 90px 80px'
-const GRID_COLS_LG =
-  '32px minmax(220px, 1.5fr) minmax(160px, 0.8fr) 100px 100px 100px 80px'
+const GRID_COLS_LG = '32px minmax(220px, 1.5fr) minmax(160px, 0.8fr) 100px 100px 100px 80px'
 const GRID_COLS_2XL =
   '36px minmax(260px, 1.6fr) minmax(190px, 0.9fr) 110px 110px 110px 90px 90px 80px'
 
@@ -93,10 +86,7 @@ export function PoolExplorer() {
     'type',
     parseAsArrayOf(parseAsStringEnum<GqlPoolType>(Object.values(GqlPoolTypeValues))).withDefault([])
   )
-  const [protocolVersion, setProtocolVersion] = useQueryState(
-    'v',
-    parseAsInteger
-  )
+  const [protocolVersion, setProtocolVersion] = useQueryState('v', parseAsInteger)
   const [hookTypes, setHookTypes] = useQueryState(
     'hook',
     parseAsArrayOf(parseAsString).withDefault([])
@@ -200,14 +190,10 @@ export function PoolExplorer() {
     [sortKey, sortDir, setSortDir, setSortKey, resetPage]
   )
 
-  const paginationProps = getPaginationProps(
-    filteredCount,
-    { pageIndex, pageSize },
-    state => {
-      setPageIndex(state.pageIndex)
-      setPageSize(state.pageSize)
-    }
-  )
+  const paginationProps = getPaginationProps(filteredCount, { pageIndex, pageSize }, state => {
+    setPageIndex(state.pageIndex)
+    setPageSize(state.pageSize)
+  })
 
   return (
     <Card overflow="hidden" variant="level1">
@@ -357,10 +343,7 @@ function TableHeader({
           sorting={sorting}
         />
       </GridItem>
-      <GridItem
-        display={{ base: 'block', lg: 'none', '2xl': 'block' }}
-        justifySelf="end"
-      >
+      <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} justifySelf="end">
         <SortableHeader
           align="right"
           isSorted={sorted('USAGE')}
@@ -369,10 +352,7 @@ function TableHeader({
           sorting={sorting}
         />
       </GridItem>
-      <GridItem
-        display={{ base: 'block', lg: 'none', '2xl': 'block' }}
-        justifySelf="end"
-      >
+      <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} justifySelf="end">
         <SortableHeader
           align="right"
           isSorted={sorted('HOLDERS')}
@@ -413,7 +393,12 @@ function TableRow({ pool, index }: { pool: EnrichedPool; index: number }) {
       w="full"
     >
       <Link
-        aria-label={`View pool details for ${pool.poolTokens?.map(t => t.symbol).filter(Boolean).join(' / ') || pool.id}`}
+        aria-label={`View pool details for ${
+          pool.poolTokens
+            ?.map(t => t.symbol)
+            .filter(Boolean)
+            .join(' / ') || pool.id
+        }`}
         href={getPoolHref(pool)}
         prefetch={false}
         role="group"
@@ -433,7 +418,11 @@ function TableRow({ pool, index }: { pool: EnrichedPool; index: number }) {
           </GridItem>
 
           <GridItem minW={0}>
-            <Box display={{ base: 'block', lg: 'flex', '2xl': 'block' }} flexDirection="column" gap="xxs">
+            <Box
+              display={{ base: 'block', lg: 'flex', '2xl': 'block' }}
+              flexDirection="column"
+              gap="xxs"
+            >
               <PoolTokenPillsLite tokens={pool.poolTokens ?? []} type={pool.type} />
               {/* On lg only, fold the details under the pool tokens. */}
               <Box display={{ base: 'none', lg: 'block', '2xl': 'none' }}>
@@ -480,18 +469,12 @@ function TableRow({ pool, index }: { pool: EnrichedPool; index: number }) {
               />
             </Flex>
           </GridItem>
-          <GridItem
-            display={{ base: 'block', lg: 'none', '2xl': 'block' }}
-            justifySelf="end"
-          >
+          <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} justifySelf="end">
             <Text color={usageColor} fontWeight="medium" textAlign="right">
               {pct(pool._usage, 1)}
             </Text>
           </GridItem>
-          <GridItem
-            display={{ base: 'block', lg: 'none', '2xl': 'block' }}
-            justifySelf="end"
-          >
+          <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} justifySelf="end">
             <Text color="font.secondary" fontSize="sm" textAlign="right">
               {num(pool._holders)}
             </Text>

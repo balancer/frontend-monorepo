@@ -41,16 +41,13 @@ import type {
   LabeledSwap,
   SourceLabel,
 } from '@analytics/app/pool/[chain]/[id]/_components/PoolOrderFlow/types'
-import type {
-  OrderFlowResponse,
-} from '@analytics/app/pool/[chain]/[id]/_components/PoolOrderFlow/api-types'
+import type { OrderFlowResponse } from '@analytics/app/pool/[chain]/[id]/_components/PoolOrderFlow/api-types'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 
 /** api-v3 page size. PoolActivityChart on frontend-v3 uses 500 — confirmed
  *  safe under the upstream's per-request cap. Larger pages mean fewer
@@ -115,13 +112,27 @@ const SWAPS_QUERY = /* GraphQL */ `
       __typename
       ... on GqlPoolSwapEventV3 {
         sender
-        tokenIn { address amount }
-        tokenOut { address amount }
+        tokenIn {
+          address
+          amount
+        }
+        tokenOut {
+          address
+          amount
+        }
       }
       ... on GqlPoolSwapEventCowAmm {
         sender
-        tokenIn { address amount valueUSD }
-        tokenOut { address amount valueUSD }
+        tokenIn {
+          address
+          amount
+          valueUSD
+        }
+        tokenOut {
+          address
+          amount
+          valueUSD
+        }
       }
     }
   }
@@ -210,15 +221,9 @@ async function fetchSwaps(
         const kind: UpstreamErrorKind = isRateLimitStatus(res.status)
           ? 'rate_limit'
           : 'upstream_5xx'
-        throw new UpstreamError(
-          kind,
-          `api-v3 HTTP ${res.status} (skip=${skip})`,
-          res.status
-        )
+        throw new UpstreamError(kind, `api-v3 HTTP ${res.status} (skip=${skip})`, res.status)
       }
-      console.warn(
-        `[order-flow] api-v3 HTTP ${res.status} at skip=${skip} — returning partial`
-      )
+      console.warn(`[order-flow] api-v3 HTTP ${res.status} at skip=${skip} — returning partial`)
       truncated = true
       break
     }
@@ -285,9 +290,7 @@ type RouteContext = { params: Promise<{ chain: string; id: string }> }
 export async function GET(_request: Request, ctx: RouteContext): Promise<Response> {
   const raw = await ctx.params
 
-  const parsed = z
-    .object({ chain: ChainSchema, id: PoolIdSchema })
-    .safeParse(raw)
+  const parsed = z.object({ chain: ChainSchema, id: PoolIdSchema }).safeParse(raw)
   if (!parsed.success) {
     return Response.json(
       { error: 'invalid input', details: parsed.error.flatten() },
@@ -404,9 +407,8 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
     // may be more recent if pagination capped (capped=true) or if the pool
     // simply has no older swaps. The client uses both to render an honest
     // "showing last N swaps from the last X days" subtitle.
-    const oldestSwapTs = swaps.length > 0
-      ? swaps.reduce((min, s) => Math.min(min, s.timestamp), Infinity)
-      : now
+    const oldestSwapTs =
+      swaps.length > 0 ? swaps.reduce((min, s) => Math.min(min, s.timestamp), Infinity) : now
 
     const payload: OrderFlowResponse = {
       pool: poolId,
@@ -459,8 +461,7 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
     if (isRateLimit) {
       // Reading the upstream's Retry-After would be ideal; api-v3 doesn't
       // expose it in dev tests but the structure is here for future use.
-      body.message =
-        'Balancer API rate limit reached. Please wait a minute and try again.'
+      body.message = 'Balancer API rate limit reached. Please wait a minute and try again.'
     }
     if (process.env.NODE_ENV !== 'production') body.detail = message
 

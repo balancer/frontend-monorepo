@@ -35,8 +35,7 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 const HOUR_S = 60 * 60
 
 // chainId → GqlChain enum name. Sourced from the canonical network configs
@@ -74,10 +73,7 @@ const QUERY = /* GraphQL */ `
         numLiquidityProviders
       }
     }
-    cowAmm: poolGetPools(
-      where: { chainIn: $chains, poolTypeIn: [COW_AMM] }
-      first: 1000
-    ) {
+    cowAmm: poolGetPools(where: { chainIn: $chains, poolTypeIn: [COW_AMM] }, first: 1000) {
       chain
       dynamicData {
         totalLiquidity

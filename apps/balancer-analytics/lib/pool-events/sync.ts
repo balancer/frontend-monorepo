@@ -61,8 +61,7 @@ const POOL_METADATA_TTL_MS = 5 * 60 * 1000
 // only need recent signal; the rest is historic noise.
 const V2_EVENT_HARD_CAP = 100
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 
 /** In-flight dedupe so N concurrent requests for the same pool collapse to
  *  one RPC fan-out. */
@@ -280,7 +279,10 @@ async function runSync(
   // watermark only advances when BOTH succeed — partial failures get a
   // retry on the next visit (and ON CONFLICT keeps re-inserts idempotent).
   const filterBEvents = pickFilterBEvents(metadata)
-  const filterAPromise: Promise<{ logs: Awaited<ReturnType<typeof chunkedGetLogs>>; err: unknown }> =
+  const filterAPromise: Promise<{
+    logs: Awaited<ReturnType<typeof chunkedGetLogs>>
+    err: unknown
+  }> =
     metadata.protocolVersion === 3
       ? (() => {
           const helpers = getV3HelperAddresses(chain)
@@ -303,7 +305,10 @@ async function runSync(
         })()
       : Promise.resolve({ logs: [], err: null })
 
-  const filterBPromise: Promise<{ logs: Awaited<ReturnType<typeof chunkedGetLogs>>; err: unknown }> =
+  const filterBPromise: Promise<{
+    logs: Awaited<ReturnType<typeof chunkedGetLogs>>
+    err: unknown
+  }> =
     filterBEvents.length > 0
       ? chunkedGetLogs(client, {
           address: pool as Address,
@@ -387,15 +392,11 @@ async function runSync(
   let v2Capped = 0
   if (metadata.protocolVersion === 2 && cleanedRows.length > V2_EVENT_HARD_CAP) {
     const sorted = [...cleanedRows].sort((a, b) =>
-      a.blockNumber === b.blockNumber
-        ? b.logIndex - a.logIndex
-        : b.blockNumber - a.blockNumber
+      a.blockNumber === b.blockNumber ? b.logIndex - a.logIndex : b.blockNumber - a.blockNumber
     )
     const kept = sorted.slice(0, V2_EVENT_HARD_CAP)
     kept.sort((a, b) =>
-      a.blockNumber === b.blockNumber
-        ? a.logIndex - b.logIndex
-        : a.blockNumber - b.blockNumber
+      a.blockNumber === b.blockNumber ? a.logIndex - b.logIndex : a.blockNumber - b.blockNumber
     )
     v2Capped = cleanedRows.length - kept.length
     newRows = kept
@@ -453,11 +454,7 @@ function pickFilterBEvents(metadata: PoolMetadata): readonly unknown[] {
   return []
 }
 
-
-async function fetchPoolMetadata(
-  chain: GqlChain,
-  apiV3Id: string
-): Promise<PoolMetadata | null> {
+async function fetchPoolMetadata(chain: GqlChain, apiV3Id: string): Promise<PoolMetadata | null> {
   // The id is what api-v3 keys on — 42-char for V3, 66-char for V2 — so
   // the cache key MUST use the same value the query uses. Earlier this
   // was hard-coded to the 20-byte contract address, which would have

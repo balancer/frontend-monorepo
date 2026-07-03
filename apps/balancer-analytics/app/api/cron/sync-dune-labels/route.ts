@@ -79,7 +79,12 @@ async function run(): Promise<Response> {
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
-    console.error('[cron/sync-dune-labels] failed', { pages, raw, normalizedCount: normalized.length, message })
+    console.error('[cron/sync-dune-labels] failed', {
+      pages,
+      raw,
+      normalizedCount: normalized.length,
+      message,
+    })
     return Response.json(
       {
         ok: false,

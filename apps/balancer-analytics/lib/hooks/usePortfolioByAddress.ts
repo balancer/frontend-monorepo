@@ -167,8 +167,7 @@ function readPosition(pool: PortfolioPool): {
   const stakingType =
     (ub?.stakedBalances ?? [])
       .filter(b => Number(b.balanceUsd ?? 0) > 0)
-      .sort((a, b) => Number(b.balanceUsd ?? 0) - Number(a.balanceUsd ?? 0))[0]?.stakingType ??
-    null
+      .sort((a, b) => Number(b.balanceUsd ?? 0) - Number(a.balanceUsd ?? 0))[0]?.stakingType ?? null
   return { positionUsd, walletUsd, stakedUsd, shareOfPool, stakingType }
 }
 
@@ -229,7 +228,10 @@ function buildPosition(pool: PortfolioPool): PortfolioPosition | null {
  * shows. Keeps every loop O(positions) so the entire derived tree is one
  * useMemo pass over the raw query result.
  */
-function aggregate(positions: PortfolioPosition[], protocolTvl: number): {
+function aggregate(
+  positions: PortfolioPosition[],
+  protocolTvl: number
+): {
   tokens: TokenAggregate[]
   chains: ChainAggregate[]
   summary: PortfolioSummary

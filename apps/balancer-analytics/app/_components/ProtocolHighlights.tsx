@@ -48,9 +48,7 @@ export function ProtocolHighlights() {
     <SimpleGrid columns={{ base: 1, md: 3 }} spacing="md">
       <HighlightCard
         accent="orange.300"
-        caption={
-          topVolumeChain ? getChainShortName(topVolumeChain.chain) : undefined
-        }
+        caption={topVolumeChain ? getChainShortName(topVolumeChain.chain) : undefined}
         icon={topVolumeChain && <NetworkIcon chain={topVolumeChain.chain} size={9} />}
         isLoading={loading}
         label="Top chain · 24h volume"
@@ -260,13 +258,7 @@ function isValidImgSrc(src: string | null | undefined): src is string {
   }
 }
 
-function TokenCircle({
-  logoURI,
-  symbol,
-}: {
-  logoURI?: string | null
-  symbol?: string | null
-}) {
+function TokenCircle({ logoURI, symbol }: { logoURI?: string | null; symbol?: string | null }) {
   const [errored, setErrored] = useState(false)
   const showImage = isValidImgSrc(logoURI) && !errored
   const fallback = (symbol || '?').slice(0, 1).toUpperCase()

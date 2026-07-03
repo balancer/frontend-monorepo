@@ -32,10 +32,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import Image from 'next/image'
 import { Filter } from 'react-feather'
 import { useState } from 'react'
-import {
-  GqlChain,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { SearchInput } from '@repo/lib/shared/components/inputs/SearchInput'
 import ButtonGroup, {
@@ -272,12 +269,7 @@ function FilterPopover({
                   Filters
                 </Text>
                 {totalFilterCount > 0 && (
-                  <Button
-                    h="fit-content"
-                    onClick={setters.resetAll}
-                    size="xs"
-                    variant="link"
-                  >
+                  <Button h="fit-content" onClick={setters.resetAll} size="xs" variant="link">
                     Reset all
                   </Button>
                 )}
@@ -448,11 +440,7 @@ function CheckboxList<T extends string>({
   return (
     <VStack align="start" spacing="xs">
       {items.map(item => (
-        <Checkbox
-          isChecked={selected.includes(item)}
-          key={item}
-          onChange={() => onToggle(item)}
-        >
+        <Checkbox isChecked={selected.includes(item)} key={item} onChange={() => onToggle(item)}>
           <Text fontSize="sm">{labelFn(item)}</Text>
         </Checkbox>
       ))}
@@ -509,13 +497,7 @@ function snapStep(value: number): number {
   return Math.max(base, Math.min(snapped, last.until))
 }
 
-function MinTvlSlider({
-  minTvl,
-  setMinTvl,
-}: {
-  minTvl: number
-  setMinTvl: (v: number) => void
-}) {
+function MinTvlSlider({ minTvl, setMinTvl }: { minTvl: number; setMinTvl: (v: number) => void }) {
   const [sliderValue, setSliderValue] = useState(() => tvlToSlider(minTvl))
   const tvlValue = sliderToTvl(sliderValue)
 

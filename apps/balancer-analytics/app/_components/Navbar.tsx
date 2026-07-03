@@ -210,10 +210,8 @@ export function Navbar() {
 
               <HStack display={{ base: 'none', md: 'flex' }} spacing="lg">
                 {NAV_LINKS.map(link => {
-                  const isActiveBySection =
-                    link.section !== null && activeSection === link.section
-                  const isActiveByPath =
-                    link.matchPaths?.some(p => pathname.startsWith(p)) ?? false
+                  const isActiveBySection = link.section !== null && activeSection === link.section
+                  const isActiveByPath = link.matchPaths?.some(p => pathname.startsWith(p)) ?? false
                   const isActive = isActiveBySection || isActiveByPath
                   return (
                     <Link
@@ -235,7 +233,6 @@ export function Navbar() {
                 })}
               </HStack>
             </HStack>
-
           </HStack>
         </Container>
       </Box>

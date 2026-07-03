@@ -16,12 +16,7 @@
  */
 
 import 'server-only'
-import {
-  type Abi,
-  type Address,
-  type ContractFunctionParameters,
-  parseAbi,
-} from 'viem'
+import { type Abi, type Address, type ContractFunctionParameters, parseAbi } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPublicClient } from '@analytics/lib/drpc/client'
 import { getV3HelperAddresses } from '@analytics/lib/contracts/v3-addresses'
@@ -510,9 +505,10 @@ export async function readV2BasePoolState(
   if (results[0].status !== 'success') return null
 
   const swapFee = results[0].result as bigint
-  const pausedTuple = results[1].status === 'success'
-    ? (results[1].result as readonly [boolean, bigint, bigint])
-    : null
+  const pausedTuple =
+    results[1].status === 'success'
+      ? (results[1].result as readonly [boolean, bigint, bigint])
+      : null
   const recoveryRaw = results[2].status === 'success' ? (results[2].result as boolean) : null
   const protocolSwap =
     results[3].status === 'success' ? (results[3].result as bigint).toString() : null
@@ -615,10 +611,7 @@ export async function readGyroEclpTypeState(
       address: poolAddress,
       abi: V3_GYRO_ECLP_ABI,
       functionName: 'getECLPParams',
-    })) as readonly [
-      { alpha: bigint; beta: bigint; c: bigint; s: bigint; lambda: bigint },
-      unknown,
-    ]
+    })) as readonly [{ alpha: bigint; beta: bigint; c: bigint; s: bigint; lambda: bigint }, unknown]
     const p = res[0]
     return {
       alpha: p.alpha.toString(),
@@ -659,23 +652,22 @@ export async function readReclammTypeState(
     allowFailure: true,
   })
   if (results[0].status !== 'success') return null
-  const range = results[1].status === 'success'
-    ? (results[1].result as readonly [bigint, bigint])
-    : null
-  const vb = results[2].status === 'success'
-    ? (results[2].result as readonly [bigint, bigint, boolean])
-    : null
-  const lb = results[3].status === 'success'
-    ? (results[3].result as readonly bigint[])
-    : null
-  const prs = results[8].status === 'success'
-    ? (results[8].result as {
-        startFourthRootPriceRatio: bigint
-        endFourthRootPriceRatio: bigint
-        priceRatioUpdateStartTime: number
-        priceRatioUpdateEndTime: number
-      })
-    : null
+  const range =
+    results[1].status === 'success' ? (results[1].result as readonly [bigint, bigint]) : null
+  const vb =
+    results[2].status === 'success'
+      ? (results[2].result as readonly [bigint, bigint, boolean])
+      : null
+  const lb = results[3].status === 'success' ? (results[3].result as readonly bigint[]) : null
+  const prs =
+    results[8].status === 'success'
+      ? (results[8].result as {
+          startFourthRootPriceRatio: bigint
+          endFourthRootPriceRatio: bigint
+          priceRatioUpdateStartTime: number
+          priceRatioUpdateEndTime: number
+        })
+      : null
   return {
     currentPriceRatio: (results[0].result as bigint).toString(),
     minPrice: range ? range[0].toString() : '0',
@@ -688,10 +680,8 @@ export async function readReclammTypeState(
       results[4].status === 'success' ? (results[4].result as bigint).toString() : '0',
     dailyPriceShiftExponent:
       results[5].status === 'success' ? (results[5].result as bigint).toString() : '0',
-    isWithinTargetRange:
-      results[6].status === 'success' ? (results[6].result as boolean) : false,
-    lastTimestamp:
-      results[7].status === 'success' ? Number(results[7].result as bigint) : 0,
+    isWithinTargetRange: results[6].status === 'success' ? (results[6].result as boolean) : false,
+    lastTimestamp: results[7].status === 'success' ? Number(results[7].result as bigint) : 0,
     priceRatio: prs
       ? {
           start: prs.startFourthRootPriceRatio.toString(),
@@ -718,9 +708,10 @@ export async function readLbpTypeState(
     allowFailure: true,
   })
   if (results[0].status !== 'success') return null
-  const upd = results[2].status === 'success'
-    ? (results[2].result as readonly [bigint, bigint, readonly bigint[], readonly bigint[]])
-    : null
+  const upd =
+    results[2].status === 'success'
+      ? (results[2].result as readonly [bigint, bigint, readonly bigint[], readonly bigint[]])
+      : null
   return {
     normalizedWeights: toStrs(results[0].result as readonly bigint[]),
     swapEnabled: results[1].status === 'success' ? (results[1].result as boolean) : false,
@@ -890,12 +881,9 @@ export async function readBufferStates(
       underlyingBalanceRaw = u.toString()
       wrappedBalanceRaw = w.toString()
     }
-    const isInitialized =
-      initResult?.status === 'success' ? (initResult.result as boolean) : null
+    const isInitialized = initResult?.status === 'success' ? (initResult.result as boolean) : null
     const totalSharesRaw =
-      sharesResult?.status === 'success'
-        ? (sharesResult.result as bigint).toString()
-        : null
+      sharesResult?.status === 'success' ? (sharesResult.result as bigint).toString() : null
 
     return {
       wrappedToken: addr.toLowerCase(),

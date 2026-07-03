@@ -4,10 +4,7 @@ import { useEffect, useState } from 'react'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import type { GqlChainValues } from '@repo/lib/config/networks'
 import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
-import type {
-  PoolEventsResponse,
-  PoolParamEvent,
-} from '@analytics/lib/pool-events/types'
+import type { PoolEventsResponse, PoolParamEvent } from '@analytics/lib/pool-events/types'
 import { fetchWithRetry } from '@analytics/lib/upstream/fetch-retry'
 
 type State = {

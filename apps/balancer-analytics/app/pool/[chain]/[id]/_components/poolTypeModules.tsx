@@ -47,8 +47,7 @@ export const POOL_TYPE_MODULES: readonly PoolTypeModule[] = [
     // card hides itself when the pool came back with no `weightSnapshots`
     // (newly-created pool that hasn't published a snapshot yet).
     shouldRender: ({ poolDetail, quantAmm }) =>
-      poolDetail.type === 'QUANT_AMM_WEIGHTED' &&
-      (quantAmm?.weightSnapshots.length ?? 0) > 0,
+      poolDetail.type === 'QUANT_AMM_WEIGHTED' && (quantAmm?.weightSnapshots.length ?? 0) > 0,
     render: ({ poolDetail, range, quantAmm }) => (
       <PoolQuantAmmHistory
         params={quantAmm?.params ?? null}
@@ -72,8 +71,7 @@ export const POOL_TYPE_MODULES: readonly PoolTypeModule[] = [
     render: ({ poolDetail, range, state }) => {
       const symbolA = poolDetail.tokens[0]?.symbol ?? 'A'
       const symbolB = poolDetail.tokens[1]?.symbol ?? 'B'
-      const marginFraction =
-        state.reclamm ? Number(state.reclamm.centerednessMargin) / 1e18 : 0
+      const marginFraction = state.reclamm ? Number(state.reclamm.centerednessMargin) / 1e18 : 0
       return (
         <PoolAutoRangeHistory
           centerednessMarginFraction={marginFraction}

@@ -281,7 +281,10 @@ export async function GET(req: Request) {
   const days = snapDays(url.searchParams.get('days'))
   // Cap cadence by range so the cached payload stays under 2MB (see
   // `effectiveGranularity`), regardless of the requested granularity.
-  const granularity = effectiveGranularity(days, parseGranularity(url.searchParams.get('granularity')))
+  const granularity = effectiveGranularity(
+    days,
+    parseGranularity(url.searchParams.get('granularity'))
+  )
   // Daily/weekly payloads are small and bounded, so cache them. Hourly is only
   // ever the 24H/7D window, which over-fetches 30d (≈2.9MB serialized) — over
   // Next's 2MB `unstable_cache` entry limit, where a set would throw "failed
@@ -301,8 +304,7 @@ export async function GET(req: Request) {
   // out of band so navigations never wait on Postgres.
   return Response.json(series, {
     headers: {
-      'Cache-Control':
-        'public, max-age=60, s-maxage=3600, stale-while-revalidate=86400',
+      'Cache-Control': 'public, max-age=60, s-maxage=3600, stale-while-revalidate=86400',
     },
   })
 }

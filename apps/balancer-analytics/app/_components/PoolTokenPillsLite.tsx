@@ -22,13 +22,7 @@ const ICON = 22
 // Accepts `tokens` + `type` directly so both the explorer's `EnrichedPool`
 // row and the pool detail page's `PoolDetail` shape can pass through
 // without adapters.
-export function PoolTokenPillsLite({
-  tokens,
-  type,
-}: {
-  tokens: PillToken[]
-  type: string
-}) {
+export function PoolTokenPillsLite({ tokens, type }: { tokens: PillToken[]; type: string }) {
   if (isStableLike(type as GqlPoolType)) {
     return <StablePills tokens={tokens} />
   }

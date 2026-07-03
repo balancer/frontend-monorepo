@@ -185,7 +185,9 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
       // `?fullHistory` alias when we set `?range=`.
       const params = new URLSearchParams(searchParams.toString())
       params.delete('fullHistory')
-      if (next === '90d') params.delete('range') // 90d is default — keep URL clean
+      if (next === '90d') {
+        params.delete('range')
+      } // 90d is default — keep URL clean
       else params.set('range', next)
       const qs = params.toString()
       const href = qs ? `${pathname}?${qs}` : pathname
@@ -228,20 +230,12 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
             spacing="sm"
           >
             <BreadcrumbItem>
-              <BreadcrumbLink
-                _hover={{ color: 'font.linkHover' }}
-                as={Link}
-                href="/"
-              >
+              <BreadcrumbLink _hover={{ color: 'font.linkHover' }} as={Link} href="/">
                 <Home size={14} />
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <BreadcrumbLink
-                _hover={{ color: 'font.linkHover' }}
-                as={Link}
-                href="/#pools"
-              >
+              <BreadcrumbLink _hover={{ color: 'font.linkHover' }} as={Link} href="/#pools">
                 Pools
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -284,11 +278,7 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
                   {formatPoolTypeLabel(poolDetail.type)}
                 </Badge>
               </Flex>
-              <Heading
-                size="h3"
-                sx={{ textWrap: 'balance' }}
-                variant="special"
-              >
+              <Heading size="h3" sx={{ textWrap: 'balance' }} variant="special">
                 {poolDetail.name}
               </Heading>
               <Text fontSize="sm" sx={{ textWrap: 'balance' }} variant="secondary">
@@ -347,13 +337,7 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
                 cardProps={{ height: 'full', overflow: 'hidden' }}
                 contentProps={{ display: 'flex' }}
               >
-                <VStack
-                  align="stretch"
-                  h="full"
-                  p={{ base: 'sm', md: 'md' }}
-                  spacing="md"
-                  w="full"
-                >
+                <VStack align="stretch" h="full" p={{ base: 'sm', md: 'md' }} spacing="md" w="full">
                   <Flex
                     align={{ base: 'flex-start', md: 'center' }}
                     direction={{ base: 'column', md: 'row' }}

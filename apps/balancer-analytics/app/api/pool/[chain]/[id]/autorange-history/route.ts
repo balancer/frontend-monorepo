@@ -29,8 +29,7 @@ import {
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 
 // Same range vocabulary the page uses; centralized here so the route's
 // validator and downstream snapshot enum stay in lockstep.
@@ -103,9 +102,7 @@ type RouteContext = { params: Promise<{ chain: string; id: string }> }
 
 export async function GET(request: Request, ctx: RouteContext): Promise<Response> {
   const raw = await ctx.params
-  const parsed = z
-    .object({ chain: ChainSchema, id: PoolIdSchema })
-    .safeParse(raw)
+  const parsed = z.object({ chain: ChainSchema, id: PoolIdSchema }).safeParse(raw)
   if (!parsed.success) {
     return Response.json(
       { error: 'invalid input', details: parsed.error.flatten() },

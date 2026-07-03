@@ -31,17 +31,9 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import type { GqlChainValues } from '@repo/lib/config/networks'
 import type { OrderFlowRange, OrderFlowResponse } from './api-types'
 import { buildSankeyGraph } from './buildSankeyGraph'
-import {
-  CATEGORY_COLORS,
-  formatCategory,
-  formatPct,
-  formatUsdCompact,
-} from './format'
+import { CATEGORY_COLORS, formatCategory, formatPct, formatUsdCompact } from './format'
 import { PoolOrderFlowSankey, type TokenMap } from './PoolOrderFlowSankey'
-import {
-  PoolOrderFlowDetailsModal,
-  type SankeySelection,
-} from './PoolOrderFlowDetailsModal'
+import { PoolOrderFlowDetailsModal, type SankeySelection } from './PoolOrderFlowDetailsModal'
 import type { LabeledSwap, SourceCategory } from './types'
 import { OrderFlowError, usePoolOrderFlowData } from './usePoolOrderFlowData'
 
@@ -116,16 +108,11 @@ type RangeView = {
   labeledPct: number
 }
 
-function sliceByRange(
-  data: OrderFlowResponse,
-  range: OrderFlowRange,
-  now: number
-): RangeView {
+function sliceByRange(data: OrderFlowResponse, range: OrderFlowRange, now: number): RangeView {
   const cutoff = now - RANGE_DAYS[range] * 86400
   // The 30d view is special: don't re-filter, since `data.swaps` already
   // is the 30d set (and possibly capped narrower). Just return as-is.
-  const swaps =
-    range === '30d' ? data.swaps : data.swaps.filter(s => s.timestamp >= cutoff)
+  const swaps = range === '30d' ? data.swaps : data.swaps.filter(s => s.timestamp >= cutoff)
   let volumeUsd = 0
   let labeledUsd = 0
   for (const s of swaps) {
@@ -206,13 +193,7 @@ export function PoolOrderFlow({ chain, poolId, poolTokens, poolTvlUsd }: Props) 
           cardProps={{ height: 'full', overflow: 'hidden' }}
           contentProps={{ display: 'flex' }}
         >
-          <VStack
-            align="stretch"
-            h="full"
-            p={{ base: 'sm', md: 'md' }}
-            spacing="md"
-            w="full"
-          >
+          <VStack align="stretch" h="full" p={{ base: 'sm', md: 'md' }} spacing="md" w="full">
             <Header
               data={data}
               filtersDirty={filtersDirty}
@@ -311,15 +292,9 @@ function Header({
     // user knows the "30d" view is actually e.g. the last 7 days.
     const days =
       data.totals.capped && range === '30d'
-        ? Math.max(
-            1,
-            Math.round((data.fetchedWindow.to - data.fetchedWindow.oldestSwapTs) / 86400)
-          )
+        ? Math.max(1, Math.round((data.fetchedWindow.to - data.fetchedWindow.oldestSwapTs) / 86400))
         : RANGE_DAYS[range]
-    const cappedNote =
-      data.totals.capped && range === '30d'
-        ? ` · last ${days}d (cap reached)`
-        : ''
+    const cappedNote = data.totals.capped && range === '30d' ? ` · last ${days}d (cap reached)` : ''
     return `${swapCount} swaps · ${volume} volume · ${labeled} labeled${cappedNote}`
   })()
 
@@ -407,12 +382,7 @@ function FilterPopover({
                 so the "Filters" eyebrow + Reset link don't sit underneath
                 the X glyph. */}
             <HStack align="center" pr="lg" spacing="sm">
-              <Text
-                background="font.special"
-                backgroundClip="text"
-                fontSize="xs"
-                variant="eyebrow"
-              >
+              <Text background="font.special" backgroundClip="text" fontSize="xs" variant="eyebrow">
                 Filters
               </Text>
               {dirty && (
@@ -535,11 +505,7 @@ function FilterSlider({
 
 // ── Legend (category share stacked above the Sankey) ───────────────────────
 
-function CategoryLegend({
-  graph,
-}: {
-  graph: NonNullable<ReturnType<typeof buildSankeyGraph>>
-}) {
+function CategoryLegend({ graph }: { graph: NonNullable<ReturnType<typeof buildSankeyGraph>> }) {
   return (
     <HStack flexWrap="wrap" spacing={4}>
       {LEGEND_ORDER.flatMap(cat => {
@@ -639,11 +605,10 @@ function ErrorMessage({ error }: { error: OrderFlowError }) {
   // user toward the next step. Other errors fall back to a generic message
   // — those are bugs/outages and we don't want to imply "retry will fix it".
   const isRateLimit = error.code === 'rate_limited'
-  const isUpstreamDown =
-    error.code === 'upstream_unreachable' || error.code === 'upstream_error'
+  const isUpstreamDown = error.code === 'upstream_unreachable' || error.code === 'upstream_error'
 
   const headline = isRateLimit
-    ? error.userMessage ?? 'Balancer API rate limit reached.'
+    ? (error.userMessage ?? 'Balancer API rate limit reached.')
     : isUpstreamDown
       ? 'The Balancer API is temporarily unavailable.'
       : 'Unable to load order flow.'
@@ -668,14 +633,7 @@ function ErrorMessage({ error }: { error: OrderFlowError }) {
 
 function CenteredMessage({ children }: { children: React.ReactNode }) {
   return (
-    <Flex
-      align="center"
-      direction="column"
-      gap="sm"
-      h="full"
-      justify="center"
-      textAlign="center"
-    >
+    <Flex align="center" direction="column" gap="sm" h="full" justify="center" textAlign="center">
       {children}
     </Flex>
   )

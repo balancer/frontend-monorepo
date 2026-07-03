@@ -111,8 +111,7 @@ function deriveSubBandCounts(marginFraction: number): {
   greenCount: number
 } {
   const marginPct = Math.max(0, Math.min(100, marginFraction * 100))
-  const orangeCount =
-    marginPct < 4 ? 1 : Math.floor((TOTAL_INRANGE_TICKS * marginPct) / 100 / 2)
+  const orangeCount = marginPct < 4 ? 1 : Math.floor((TOTAL_INRANGE_TICKS * marginPct) / 100 / 2)
   const greenCount = TOTAL_INRANGE_TICKS - 2 * orangeCount
   return { orangeCount, greenCount }
 }
@@ -223,12 +222,8 @@ function buildChartOption(
   const x = samples.map(s => s.timestamp * 1000)
   const min = samples.map(s => (Number.isFinite(s.minPrice) ? s.minPrice : null))
   const max = samples.map(s => (Number.isFinite(s.maxPrice) ? s.maxPrice : null))
-  const lowT = samples.map(s =>
-    Number.isFinite(s.lowTargetPrice) ? s.lowTargetPrice : null
-  )
-  const highT = samples.map(s =>
-    Number.isFinite(s.highTargetPrice) ? s.highTargetPrice : null
-  )
+  const lowT = samples.map(s => (Number.isFinite(s.lowTargetPrice) ? s.lowTargetPrice : null))
+  const highT = samples.map(s => (Number.isFinite(s.highTargetPrice) ? s.highTargetPrice : null))
   const spot = samples.map(s => (Number.isFinite(s.spotPrice) ? s.spotPrice : null))
   const centerednessPct = samples.map(s =>
     Number.isFinite(s.centeredness) ? s.centeredness * 100 : null
@@ -238,10 +233,7 @@ function buildChartOption(
   // Stacked-band deltas. Each delta is `next - prev`; if either is null
   // the whole stack column drops out (intentional — partial bounds are
   // worse than no bounds at that x position).
-  const deltaOrNull = (
-    series: (number | null)[],
-    floor: (number | null)[]
-  ): (number | null)[] =>
+  const deltaOrNull = (series: (number | null)[], floor: (number | null)[]): (number | null)[] =>
     series.map((v, i) => {
       const f = floor[i]
       if (v === null || f === null) return null
@@ -615,15 +607,7 @@ export function PoolAutoRangeHistory({
 /** Compact swatch + label combo for the header legend strip. `variant='line'`
  *  draws a thin pill (suits "line series" entries like spot / centeredness);
  *  default draws a small square (suits filled band entries). */
-function LegendChip({
-  color,
-  label,
-  variant,
-}: {
-  color: string
-  label: string
-  variant?: 'line'
-}) {
+function LegendChip({ color, label, variant }: { color: string; label: string; variant?: 'line' }) {
   return (
     <HStack spacing="2xs">
       <Box
@@ -687,11 +671,5 @@ function Body({
       </Flex>
     )
   }
-  return (
-    <ReactECharts
-      notMerge
-      option={option}
-      style={{ width: '100%', height: '100%' }}
-    />
-  )
+  return <ReactECharts notMerge option={option} style={{ width: '100%', height: '100%' }} />
 }

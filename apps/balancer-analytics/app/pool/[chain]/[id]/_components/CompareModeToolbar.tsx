@@ -43,9 +43,11 @@ import {
 } from '@analytics/lib/pool-events/snapshot-at'
 
 const usdFull = (n: number) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(
-    n || 0
-  )
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(n || 0)
 
 const usdCompact = (n: number) =>
   new Intl.NumberFormat('en-US', {
@@ -284,7 +286,13 @@ export function CompareModeToolbar({
         </Card>
 
         <Card p={{ base: 'sm', md: 'md' }} variant="subSection">
-          <Text color="font.secondary" fontSize="xs" fontWeight="600" mb="sm" textTransform="uppercase">
+          <Text
+            color="font.secondary"
+            fontSize="xs"
+            fontWeight="600"
+            mb="sm"
+            textTransform="uppercase"
+          >
             Parameter changes
           </Text>
           {diff.length === 0 ? (

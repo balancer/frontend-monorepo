@@ -157,12 +157,7 @@ function CategoryFilterMenu({
   return (
     <HStack spacing="xs">
       <Menu closeOnSelect={false}>
-        <MenuButton
-          as={Button}
-          rightIcon={<ChevronDownIcon />}
-          size="sm"
-          variant="tertiary"
-        >
+        <MenuButton as={Button} rightIcon={<ChevronDownIcon />} size="sm" variant="tertiary">
           {allActive
             ? `All categories (${present.length})`
             : `${activeCount} of ${present.length} categories`}
@@ -372,17 +367,9 @@ function EventRow({
           <MobileLabel>Arguments</MobileLabel>
           <ArgList args={event.args} />
         </GridItem>
-        <GridItem
-          fontFamily="mono"
-          fontSize="sm"
-          justifySelf={{ base: 'start', md: 'end' }}
-        >
+        <GridItem fontFamily="mono" fontSize="sm" justifySelf={{ base: 'start', md: 'end' }}>
           <MobileLabel>Tx</MobileLabel>
-          <Link
-            href={getBlockExplorerTxUrl(event.txHash, chain)}
-            rel="noreferrer"
-            target="_blank"
-          >
+          <Link href={getBlockExplorerTxUrl(event.txHash, chain)} rel="noreferrer" target="_blank">
             {shortHash(event.txHash)}
           </Link>
         </GridItem>
@@ -405,9 +392,10 @@ export function PoolEventLog({
   loading?: boolean
 }): React.JSX.Element {
   // Newest-first canonical order; filtering and pagination derive from this.
-  const sorted = useMemo(() => [...events].sort((a, b) => b.blockTimestamp - a.blockTimestamp), [
-    events,
-  ])
+  const sorted = useMemo(
+    () => [...events].sort((a, b) => b.blockTimestamp - a.blockTimestamp),
+    [events]
+  )
 
   // Filter chips only render for categories actually present so the strip
   // stays small and meaningful.
@@ -461,14 +449,10 @@ export function PoolEventLog({
     return filtered.slice(start, start + pageSize)
   }, [filtered, pageIndex, pageSize])
 
-  const paginationProps = getPaginationProps(
-    filtered.length,
-    { pageIndex, pageSize },
-    state => {
-      setPageIndex(state.pageIndex)
-      setPageSize(state.pageSize)
-    }
-  )
+  const paginationProps = getPaginationProps(filtered.length, { pageIndex, pageSize }, state => {
+    setPageIndex(state.pageIndex)
+    setPageSize(state.pageSize)
+  })
 
   return (
     <Card overflow="hidden" p={{ base: 'sm', md: 'md' }} variant="level1">

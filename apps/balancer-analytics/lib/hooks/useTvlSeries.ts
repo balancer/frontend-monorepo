@@ -8,14 +8,7 @@ import {
 import type { ProtocolSnapshotPoint } from '@analytics/lib/snapshots/types'
 
 export type Range = '24H' | '7D' | '30D' | '90D' | '1Y' | 'ALL'
-export type MetricKey =
-  | 'TVL'
-  | 'VOLUME'
-  | 'FEES'
-  | 'YIELD'
-  | 'SURPLUS'
-  | 'LPS'
-  | 'POOLS'
+export type MetricKey = 'TVL' | 'VOLUME' | 'FEES' | 'YIELD' | 'SURPLUS' | 'LPS' | 'POOLS'
 
 // Maps the visible range to the number of days the snapshot endpoint should
 // return. Short ranges (24H, 7D) deliberately over-fetch so the v2/v3 ratio
@@ -109,7 +102,9 @@ const pickMetric = (p: ProtocolSnapshotPoint, metric: MetricKey): number => {
 }
 
 const pickBreakdownMetric = (
-  bd: NonNullable<ProtocolSnapshotPoint['breakdowns']>[keyof NonNullable<ProtocolSnapshotPoint['breakdowns']>],
+  bd: NonNullable<ProtocolSnapshotPoint['breakdowns']>[keyof NonNullable<
+    ProtocolSnapshotPoint['breakdowns']
+  >],
   metric: MetricKey
 ): number | undefined => {
   if (!bd) return undefined
@@ -140,8 +135,7 @@ function buildSeries(
       break
     }
   }
-  const firstDataAt =
-    firstDataIdx >= 0 ? snapshots[firstDataIdx].timestamp * 1000 : null
+  const firstDataAt = firstDataIdx >= 0 ? snapshots[firstDataIdx].timestamp * 1000 : null
 
   const anchor = snapshots.at(-1)!.timestamp
   const days = RANGE_DAYS[range]
@@ -261,13 +255,10 @@ function buildSeries(
  * real value, so the chart doesn't render dozens of zero-filled days from the
  * DefiLlama backfill.
  */
-export function useTvlSeries({
-  range,
-  mode,
-}: {
-  range: Range
-  mode: MetricKey
-}): { data: TvlSeries | null; loading: boolean } {
+export function useTvlSeries({ range, mode }: { range: Range; mode: MetricKey }): {
+  data: TvlSeries | null
+  loading: boolean
+} {
   const days = RANGE_DAYS[range]
   const granularity = RANGE_GRANULARITY[range]
   const { data: snapshots, loading } = useProtocolSnapshots({ days, granularity })

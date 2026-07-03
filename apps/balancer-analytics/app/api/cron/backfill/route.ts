@@ -160,15 +160,11 @@ async function fetchProtocol(slug: Slug): Promise<ProtocolTvl | null> {
 }
 
 async function fetchDex(slug: Slug): Promise<DexSummary | null> {
-  return fetchJson<DexSummary>(
-    `https://api.llama.fi/summary/dexs/${slug}?dataType=dailyVolume`
-  )
+  return fetchJson<DexSummary>(`https://api.llama.fi/summary/dexs/${slug}?dataType=dailyVolume`)
 }
 
 async function fetchFees(slug: Slug): Promise<DexSummary | null> {
-  return fetchJson<DexSummary>(
-    `https://api.llama.fi/summary/fees/${slug}?dataType=dailyFees`
-  )
+  return fetchJson<DexSummary>(`https://api.llama.fi/summary/fees/${slug}?dataType=dailyFees`)
 }
 
 // --- folding into a (day, chain) pivot -------------------------------------

@@ -19,10 +19,7 @@
 import { useEffect, useState } from 'react'
 import { GqlPoolSnapshotDataRangeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { useQuery } from '@apollo/client/react'
-import {
-  GetPoolSnapshotsDocument,
-  GqlChain,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GetPoolSnapshotsDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
 import type { GqlChainValues } from '@repo/lib/config/networks'
 import type { PoolStateResponse } from '@analytics/lib/pool-events/types'
@@ -92,18 +89,19 @@ export function useComparisonPool(
   const skipSnapshots = !chain || !poolId
   const skipState = !slug || !poolId
 
-  const { data, loading: snapshotsLoading, error: snapshotsError } = useQuery(
-    GetPoolSnapshotsDocument,
-    {
-      variables: {
-        poolId: (poolId ?? '').toLowerCase(),
-        chainId: (chain ?? 'MAINNET') as GqlChain,
-        range: GqlPoolSnapshotDataRangeValues.ThirtyDays,
-      },
-      skip: skipSnapshots,
-      fetchPolicy: 'cache-first',
-    }
-  )
+  const {
+    data,
+    loading: snapshotsLoading,
+    error: snapshotsError,
+  } = useQuery(GetPoolSnapshotsDocument, {
+    variables: {
+      poolId: (poolId ?? '').toLowerCase(),
+      chainId: (chain ?? 'MAINNET') as GqlChain,
+      range: GqlPoolSnapshotDataRangeValues.ThirtyDays,
+    },
+    skip: skipSnapshots,
+    fetchPolicy: 'cache-first',
+  })
 
   const [stateRes, setStateRes] = useState<{
     state: ComparisonState

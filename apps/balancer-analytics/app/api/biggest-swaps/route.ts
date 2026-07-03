@@ -23,18 +23,13 @@ import 'server-only'
 import { unstable_cache } from 'next/cache'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import {
-  UpstreamError,
-  gqlFetch,
-  upstreamErrorToResponse,
-} from '@analytics/lib/upstream/gql'
+import { UpstreamError, gqlFetch, upstreamErrorToResponse } from '@analytics/lib/upstream/gql'
 import type { BiggestSwap, BiggestSwapsPayload } from '@analytics/lib/biggest-swaps/types'
 
 export const runtime = 'nodejs'
 export const revalidate = 3600
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 
 const SWAP_FIELDS = /* GraphQL */ `
   id
@@ -216,11 +211,10 @@ async function buildPayload(): Promise<BiggestSwapsPayload> {
 // Fixed cache key — the route takes no params, so an attacker varying the
 // query string can't shape a new cache entry. The api-v3 call runs at most
 // once per `revalidate` window across all visitors.
-const getBiggestSwapsPayload = unstable_cache(
-  buildPayload,
-  ['biggest-swaps'],
-  { revalidate: 3600, tags: ['biggest-swaps'] }
-)
+const getBiggestSwapsPayload = unstable_cache(buildPayload, ['biggest-swaps'], {
+  revalidate: 3600,
+  tags: ['biggest-swaps'],
+})
 
 export async function GET() {
   try {

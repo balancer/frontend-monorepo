@@ -109,14 +109,7 @@ export function PoolDetailsCellLite({ pool }: { pool: PoolDetailsInput }) {
             •
           </Text>
           <TooltipWithTouch label={`${hookLabel} hook`}>
-            <BalBadge
-              color="font.secondary"
-              fontSize="xs"
-              gap="xs"
-              h="20px"
-              px="xs"
-              py="0"
-            >
+            <BalBadge color="font.secondary" fontSize="xs" gap="xs" h="20px" px="xs" py="0">
               <HookIcon size={12} />
               <Text color="font.secondary" fontSize="xs">
                 {hookLabel}

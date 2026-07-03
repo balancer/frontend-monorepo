@@ -74,8 +74,7 @@ export function PortfolioMerklCard({ address }: { address: string }) {
     return b.unclaimed - a.unclaimed
   })
 
-  const totalUsd =
-    (merkl.payload?.totalUnclaimedUsd ?? 0) + (gauge.payload?.totalUnclaimedUsd ?? 0)
+  const totalUsd = (merkl.payload?.totalUnclaimedUsd ?? 0) + (gauge.payload?.totalUnclaimedUsd ?? 0)
   const hasAny = allRows.length > 0
   const loading = merkl.loading || gauge.loading
   const hasMerkl = merklRows.length > 0
@@ -150,13 +149,7 @@ export function PortfolioMerklCard({ address }: { address: string }) {
   )
 }
 
-function ClaimMerklButton({
-  href,
-  variant,
-}: {
-  href: string
-  variant: 'primary' | 'tertiary'
-}) {
+function ClaimMerklButton({ href, variant }: { href: string; variant: 'primary' | 'tertiary' }) {
   return (
     <Button
       as={NextLink}
@@ -193,13 +186,7 @@ function OpenBalancerButton({ variant }: { variant: 'primary' | 'tertiary' }) {
   )
 }
 
-function TotalUnclaimedHeadline({
-  totalUsd,
-  rowCount,
-}: {
-  totalUsd: number
-  rowCount: number
-}) {
+function TotalUnclaimedHeadline({ totalUsd, rowCount }: { totalUsd: number; rowCount: number }) {
   // Rewards exist but none of them carry a USD price (api-v3 / Merkl
   // hasn't priced them yet, or freshly-launched tokens). Showing "—" here
   // would contradict the row list below — instead surface the count so

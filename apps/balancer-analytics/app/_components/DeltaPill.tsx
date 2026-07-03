@@ -33,9 +33,7 @@ export function DeltaPill({ value, currency = false }: Props) {
   const fg = pos ? 'green.300' : neg ? 'red.300' : 'font.tertiary'
   const ArrowIcon = pos ? ArrowUp : neg ? ArrowDown : null
 
-  const text = currency
-    ? usdAbs(Math.abs(value))
-    : `${(Math.abs(value) * 100).toFixed(2)}%`
+  const text = currency ? usdAbs(Math.abs(value)) : `${(Math.abs(value) * 100).toFixed(2)}%`
 
   return (
     <HStack

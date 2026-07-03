@@ -301,7 +301,7 @@ export function PoolHistoryChart({
           const swatchFor = (p: { seriesName: string; color: unknown }): string =>
             typeof p.color === 'string'
               ? p.color
-              : TOOLTIP_SWATCH[p.seriesName] ?? CHART_COLORS.tvlLine
+              : (TOOLTIP_SWATCH[p.seriesName] ?? CHART_COLORS.tvlLine)
           const lines = params
             .filter(p => p.seriesType !== undefined)
             .map(
@@ -529,13 +529,7 @@ export function PoolHistoryChart({
         // chips dim and the dot becomes a hollow ring so the off state
         // reads unambiguously. A "Reset" link appears when anything is
         // disabled so users can recover all visibility in one click.
-        <Flex
-          color="font.secondary"
-          columnGap="md"
-          flexWrap="wrap"
-          mb="md"
-          rowGap="2xs"
-        >
+        <Flex color="font.secondary" columnGap="md" flexWrap="wrap" mb="md" rowGap="2xs">
           {legendGroups.map(name => {
             const style = EVENT_STYLES[name] ?? getEventStyle(name)
             const count = eventCounts[name]
@@ -597,9 +591,10 @@ export function PoolHistoryChart({
           ref={instance => {
             // ReactECharts' ref is typed loosely upstream — cast through
             // `unknown` to the narrow shape the cursor effect expects.
-            chartRef.current = (instance as unknown as {
-              getEchartsInstance: () => ECharts
-            }) ?? null
+            chartRef.current =
+              (instance as unknown as {
+                getEchartsInstance: () => ECharts
+              }) ?? null
           }}
           style={{ height: '100%', width: '100%', cursor: onCursorClick ? 'crosshair' : 'default' }}
         />

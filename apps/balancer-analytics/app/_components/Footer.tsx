@@ -26,12 +26,7 @@ export function Footer() {
           >
             <VStack align="flex-start" maxW="420px" spacing="sm">
               <HStack spacing="sm">
-                <Image
-                  alt="Balancer"
-                  height={28}
-                  src="/images/protocols/balancer.svg"
-                  width={28}
-                />
+                <Image alt="Balancer" height={28} src="/images/protocols/balancer.svg" width={28} />
                 <Heading fontSize="md" fontWeight="bold" letterSpacing="-0.2px" size="h6">
                   Balancer Analytics
                 </Heading>

@@ -1,7 +1,11 @@
 'use client'
 
 import { useMemo } from 'react'
-import { GqlPoolOrderByValues, GqlPoolOrderDirectionValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
+import {
+  GqlPoolOrderByValues,
+  GqlPoolOrderDirectionValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { useQuery } from '@apollo/client/react'
 import {
   GetPoolsDocument,

@@ -40,10 +40,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
-import {
-  GqlChain,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { EnrichedPool, usePoolExplorer } from '@analytics/lib/hooks/usePoolExplorer'
 import { PoolTokenPillsLite } from '@analytics/app/_components/PoolTokenPillsLite'
 
@@ -137,10 +134,7 @@ export function PoolPickerModal({ isOpen, onClose, currentPool, onSelect }: Prop
       pageItems
         .filter(
           p =>
-            !(
-              p.id.toLowerCase() === currentPool.id.toLowerCase() &&
-              p.chain === currentPool.chain
-            )
+            !(p.id.toLowerCase() === currentPool.id.toLowerCase() && p.chain === currentPool.chain)
         )
         .slice(0, PAGE_SIZE),
     [pageItems, currentPool.id, currentPool.chain]

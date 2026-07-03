@@ -30,7 +30,7 @@ type Props = {
   onSelect: (selection: SankeySelection) => void
 }
 
-const NODE_NEUTRAL = '#cbd5e1'   // slate-300, for token columns
+const NODE_NEUTRAL = '#cbd5e1' // slate-300, for token columns
 const LINK_OPACITY = 0.5
 const LINK_OPACITY_FOCUS = 0.85
 const ICON_SIZE = 16
@@ -65,13 +65,9 @@ function decodeNodeName(name: string, tokenMap: TokenMap, truncate = false): str
 }
 
 function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, c => (
-    c === '&' ? '&amp;' :
-    c === '<' ? '&lt;' :
-    c === '>' ? '&gt;' :
-    c === '"' ? '&quot;' :
-                '&#39;'
-  ))
+  return s.replace(/[&<>"']/g, c =>
+    c === '&' ? '&amp;' : c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : '&#39;'
+  )
 }
 
 /**
@@ -103,10 +99,7 @@ export function PoolOrderFlowSankey({ graph, tokenMap, periodVolumeUsd, onSelect
       if (n.kind === 'tokenIn' || n.kind === 'tokenOut') {
         const addr = n.tokenAddress ?? ''
         const info = tokenMap[addr]
-        const symText = truncateLabel(
-          info?.symbol ?? shortenAddress(addr),
-          MAX_LABEL_CHARS
-        )
+        const symText = truncateLabel(info?.symbol ?? shortenAddress(addr), MAX_LABEL_CHARS)
         if (info?.logoURI) {
           label = {
             ...baseLabel,

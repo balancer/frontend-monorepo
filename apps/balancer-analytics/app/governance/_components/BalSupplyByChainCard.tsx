@@ -49,10 +49,7 @@ const intFmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 })
 export function BalSupplyByChainCard() {
   const { data, loading, error } = useBalSupplyByChain()
 
-  const chartOption = useMemo(
-    () => (data ? buildDonutOption(data.points) : null),
-    [data]
-  )
+  const chartOption = useMemo(() => (data ? buildDonutOption(data.points) : null), [data])
 
   return (
     <Card display="flex" flexDirection="column" h="full" variant="level1">
@@ -87,12 +84,7 @@ export function BalSupplyByChainCard() {
           No chains with BAL configured.
         </Text>
       ) : (
-        <Stack
-          align="stretch"
-          direction="column"
-          flex={1}
-          spacing="md"
-        >
+        <Stack align="stretch" direction="column" flex={1} spacing="md">
           {/* Donut on top — centred, capped width so the centre label stays
               legible and the chart doesn't sprawl on wide cards. The
               per-chain list lives below for the address links and
@@ -162,9 +154,7 @@ export function BalSupplyByChainCard() {
                     <Tooltip
                       hasArrow
                       label={
-                        human !== null
-                          ? `${intFmt.format(human)} BAL`
-                          : 'Read failed on this chain'
+                        human !== null ? `${intFmt.format(human)} BAL` : 'Read failed on this chain'
                       }
                       openDelay={250}
                     >

@@ -22,12 +22,7 @@
  */
 
 import 'server-only'
-import {
-  type Abi,
-  type Address,
-  type ContractFunctionParameters,
-  parseAbi,
-} from 'viem'
+import { type Abi, type Address, type ContractFunctionParameters, parseAbi } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getChainLimit, getPublicClient } from '@analytics/lib/drpc/client'
 import { secondsPerBlock } from '@analytics/lib/networks/chain-info'
@@ -202,14 +197,12 @@ export async function readAutoRangeHistory(
           .catch(() => null)
         if (!results || results[0].status !== 'success') return empty
         const [minRaw, maxRaw] = results[0].result as readonly [bigint, bigint]
-        const vb = results[1].status === 'success'
-          ? (results[1].result as readonly [bigint, bigint, boolean])
-          : null
-        const lb = results[2].status === 'success'
-          ? (results[2].result as readonly bigint[])
-          : null
-        const marginRaw =
-          results[3].status === 'success' ? (results[3].result as bigint) : null
+        const vb =
+          results[1].status === 'success'
+            ? (results[1].result as readonly [bigint, bigint, boolean])
+            : null
+        const lb = results[2].status === 'success' ? (results[2].result as readonly bigint[]) : null
+        const marginRaw = results[3].status === 'success' ? (results[3].result as bigint) : null
 
         if (!vb || !lb || lb.length < 2 || marginRaw === null) {
           // Insufficient supporting data to compute derived values — surface
@@ -234,12 +227,8 @@ export async function readAutoRangeHistory(
         const invariant = totalA * totalB
         const lowerBal = lowerMarginBalance(marginPct, invariant, vA, vBval)
         const upperBal = upperMarginBalance(marginPct, invariant, vA, vBval)
-        const highTargetPrice = Number.isFinite(lowerBal)
-          ? invariant / (lowerBal * lowerBal)
-          : NaN
-        const lowTargetPrice = Number.isFinite(upperBal)
-          ? invariant / (upperBal * upperBal)
-          : NaN
+        const highTargetPrice = Number.isFinite(lowerBal) ? invariant / (lowerBal * lowerBal) : NaN
+        const lowTargetPrice = Number.isFinite(upperBal) ? invariant / (upperBal * upperBal) : NaN
 
         const centeredness = computeCenteredness(liveA, liveB, vA, vBval)
         const inTargetRange =

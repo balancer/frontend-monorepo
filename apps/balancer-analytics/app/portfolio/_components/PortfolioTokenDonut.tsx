@@ -57,9 +57,7 @@ export function PortfolioTokenDonut({ tokens }: { tokens: TokenAggregate[] }) {
     const out: Slice[] = head.map(t => ({
       key: `${t.chain}:${t.address.toLowerCase()}`,
       name:
-        (symbolCounts.get(t.symbol) ?? 0) > 1
-          ? `${t.symbol} (${shortChain(t.chain)})`
-          : t.symbol,
+        (symbolCounts.get(t.symbol) ?? 0) > 1 ? `${t.symbol} (${shortChain(t.chain)})` : t.symbol,
       value: t.valueUsd,
     }))
 

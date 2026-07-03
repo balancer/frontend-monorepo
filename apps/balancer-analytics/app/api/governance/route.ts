@@ -7,11 +7,7 @@
 
 import 'server-only'
 import { unstable_cache } from 'next/cache'
-import {
-  UpstreamError,
-  gqlFetch,
-  upstreamErrorToResponse,
-} from '@analytics/lib/upstream/gql'
+import { UpstreamError, gqlFetch, upstreamErrorToResponse } from '@analytics/lib/upstream/gql'
 import type { GovernancePayload, ProposalState } from '@analytics/lib/governance/types'
 
 export const runtime = 'nodejs'
@@ -138,11 +134,10 @@ async function buildPayload(): Promise<GovernancePayload> {
 // Old cached payloads carried only 5 rows; bumping the key forces the
 // next hit to refetch and serve the wider set immediately instead of
 // waiting for the 10-min revalidate window to expire.
-const getGovernancePayload = unstable_cache(
-  buildPayload,
-  ['governance-v2'],
-  { revalidate: 600, tags: ['governance-v2'] }
-)
+const getGovernancePayload = unstable_cache(buildPayload, ['governance-v2'], {
+  revalidate: 600,
+  tags: ['governance-v2'],
+})
 
 export async function GET() {
   try {

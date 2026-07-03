@@ -71,7 +71,8 @@ export async function fetchAllDuneLabels(): Promise<{
   if (!apiKey) throw new Error('NEXT_PRIVATE_DUNE_API_KEY is not set')
 
   const rows: DuneLabelRowRaw[] = []
-  let nextUrl: string | null = `https://api.dune.com/api/v1/query/${DUNE_QUERY_ID}/results?limit=${PAGE_LIMIT}`
+  let nextUrl: string | null =
+    `https://api.dune.com/api/v1/query/${DUNE_QUERY_ID}/results?limit=${PAGE_LIMIT}`
   let pages = 0
   while (nextUrl && pages < HARD_PAGE_CAP) {
     pages += 1

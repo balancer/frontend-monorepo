@@ -65,9 +65,7 @@ async function handle(
   options: { force: boolean }
 ): Promise<Response> {
   const raw = await ctx.params
-  const parsed = z
-    .object({ chain: ChainSchema, id: PoolIdSchema })
-    .safeParse(raw)
+  const parsed = z.object({ chain: ChainSchema, id: PoolIdSchema }).safeParse(raw)
   if (!parsed.success) {
     return Response.json(
       { error: 'invalid input', details: parsed.error.flatten() },
@@ -102,9 +100,7 @@ async function handle(
     }
     return Response.json(payload, {
       headers: {
-        'Cache-Control': options.force
-          ? 'no-store'
-          : 's-maxage=30, stale-while-revalidate=300',
+        'Cache-Control': options.force ? 'no-store' : 's-maxage=30, stale-while-revalidate=300',
       },
     })
   } catch (err) {

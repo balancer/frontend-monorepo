@@ -15,11 +15,7 @@ import {
 import Link from 'next/link'
 import { ChevronRight } from 'react-feather'
 import { useMemo, useState } from 'react'
-import {
-  parseAsStringEnum,
-  parseAsStringLiteral,
-  useQueryState,
-} from 'nuqs'
+import { parseAsStringEnum, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
@@ -57,10 +53,8 @@ const poolSharePct = (n: number): string => {
 
 // Mirror PoolExplorer's grid template so the two tables read consistently.
 // chain · pool · details · position USD · APR · est daily · staking
-const GRID_COLS_BASE =
-  '36px minmax(260px, 1.4fr) minmax(180px, 0.9fr) 110px 100px 110px 110px'
-const GRID_COLS_LG =
-  '32px minmax(220px, 1.5fr) minmax(160px, 0.8fr) 100px 80px 100px 100px'
+const GRID_COLS_BASE = '36px minmax(260px, 1.4fr) minmax(180px, 0.9fr) 110px 100px 110px 110px'
+const GRID_COLS_LG = '32px minmax(220px, 1.5fr) minmax(160px, 0.8fr) 100px 80px 100px 100px'
 
 const RESPONSIVE_COLS = { base: GRID_COLS_BASE, lg: GRID_COLS_LG }
 
@@ -107,7 +101,9 @@ export function PortfolioPositionsTable({ positions }: { positions: PortfolioPos
           return (a.totalApr - b.totalApr) * dir
         case 'DAILY':
           return (
-            (a.dailyFeesUsd + a.dailyYieldUsd + a.dailyRewardsUsd -
+            (a.dailyFeesUsd +
+              a.dailyYieldUsd +
+              a.dailyRewardsUsd -
               (b.dailyFeesUsd + b.dailyYieldUsd + b.dailyRewardsUsd)) *
             dir
           )
@@ -204,9 +200,7 @@ function ChainChip({
 }) {
   return (
     <Box
-      _hover={
-        isActive ? undefined : { color: 'font.maxContrast', bg: 'background.level2' }
-      }
+      _hover={isActive ? undefined : { color: 'font.maxContrast', bg: 'background.level2' }}
       as="button"
       bg={isActive ? 'background.level3' : 'background.level0'}
       border="1px solid"
@@ -306,7 +300,9 @@ function TableHeader({
 
 function TableRow({ position, index }: { position: PortfolioPosition; index: number }) {
   const dailyTotal = position.dailyFeesUsd + position.dailyYieldUsd + position.dailyRewardsUsd
-  const stakingLabel = position.stakingType ? STAKING_LABELS[position.stakingType] ?? position.stakingType : null
+  const stakingLabel = position.stakingType
+    ? (STAKING_LABELS[position.stakingType] ?? position.stakingType)
+    : null
   const stakedPct = position.positionUsd > 0 ? position.stakedUsd / position.positionUsd : 0
 
   const dailyTooltip = `Fees ${usd(position.dailyFeesUsd)}/d · Yield ${usd(position.dailyYieldUsd)}/d · Rewards ${usd(position.dailyRewardsUsd)}/d`
@@ -329,7 +325,12 @@ function TableRow({ position, index }: { position: PortfolioPosition; index: num
       w="full"
     >
       <Link
-        aria-label={`View pool details for ${position.pool.poolTokens?.map(t => t.symbol).filter(Boolean).join(' / ') || position.pool.id}`}
+        aria-label={`View pool details for ${
+          position.pool.poolTokens
+            ?.map(t => t.symbol)
+            .filter(Boolean)
+            .join(' / ') || position.pool.id
+        }`}
         href={getPoolHref(position)}
         prefetch={false}
         role="group"

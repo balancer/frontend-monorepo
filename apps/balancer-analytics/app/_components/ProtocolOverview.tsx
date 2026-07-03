@@ -41,10 +41,7 @@ export function ProtocolOverview() {
         </FadeInOnView>
 
         <FadeInOnView animateOnce={false}>
-          <Grid
-            gap="md"
-            templateColumns={{ base: '1fr', lg: '1fr 1fr 1.4fr' }}
-          >
+          <Grid gap="md" templateColumns={{ base: '1fr', lg: '1fr 1fr 1.4fr' }}>
             <GridItem minW={0}>
               <TvlByChainBars />
             </GridItem>

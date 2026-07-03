@@ -84,8 +84,7 @@ export function stripFeeRebates(rows: readonly PoolParamEventRow[]): RebateStrip
 
     const feeBefore = runningFee
     const finalVal = feeValue(group[group.length - 1])
-    const isRoundTrip =
-      group.length >= 2 && (feeBefore === undefined || finalVal === feeBefore)
+    const isRoundTrip = group.length >= 2 && (feeBefore === undefined || finalVal === feeBefore)
 
     if (isRoundTrip) {
       for (const e of group) dropped.add(e)

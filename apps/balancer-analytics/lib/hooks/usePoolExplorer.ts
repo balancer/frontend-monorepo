@@ -1,7 +1,11 @@
 'use client'
 
 import { useMemo } from 'react'
-import { GqlPoolOrderByValues, GqlPoolOrderDirectionValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
+import {
+  GqlPoolOrderByValues,
+  GqlPoolOrderDirectionValues,
+  GqlPoolTypeValues,
+} from '@repo/lib/shared/services/api/graphql-enums'
 import { useQuery } from '@apollo/client/react'
 import {
   GetPoolsDocument,
@@ -143,13 +147,7 @@ type Result = {
 // reference explorer's "fetch wide, filter local" pattern — the api-v3 paged
 // query can't express our composite filters (hook type, usage, yield/day) so
 // pushing it to the server doesn't help.
-export function usePoolExplorer({
-  filters,
-  sortKey,
-  sortDir,
-  pageIndex,
-  pageSize,
-}: Args): Result {
+export function usePoolExplorer({ filters, sortKey, sortDir, pageIndex, pageSize }: Args): Result {
   const { data, loading, error } = useQuery(GetPoolsDocument, {
     variables: {
       first: 500,
@@ -171,10 +169,7 @@ export function usePoolExplorer({
     fetchPolicy: 'cache-first',
   })
 
-  const enriched = useMemo<EnrichedPool[]>(
-    () => (data?.pools ?? []).map(enrich),
-    [data?.pools]
-  )
+  const enriched = useMemo<EnrichedPool[]>(() => (data?.pools ?? []).map(enrich), [data?.pools])
 
   const availableChains = useMemo<GqlChain[]>(() => {
     const set = new Set<GqlChain>()

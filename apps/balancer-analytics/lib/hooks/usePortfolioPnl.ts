@@ -78,10 +78,14 @@ export function usePortfolioPnl(
   address: string | null,
   positions: PortfolioPosition[]
 ): UsePortfolioPnlResult {
-  const [asyncState, setAsyncState] = useState<{
-    address: string
-    payload: PortfolioPnlPayload
-  } | { address: string; error: string } | null>(null)
+  const [asyncState, setAsyncState] = useState<
+    | {
+        address: string
+        payload: PortfolioPnlPayload
+      }
+    | { address: string; error: string }
+    | null
+  >(null)
 
   useEffect(() => {
     if (!address) return
@@ -122,12 +126,7 @@ export function usePortfolioPnl(
       // Mainnet / Arbitrum etc. Fall back to nulls (no cutoff) when the
       // chain isn't in the response.
       const cutoffs = cutoffsByChain[position.chain] ?? { add: null, remove: null }
-      const result = computePnl(
-        position,
-        payload.entries[key] ?? null,
-        cutoffs.add,
-        cutoffs.remove
-      )
+      const result = computePnl(position, payload.entries[key] ?? null, cutoffs.add, cutoffs.remove)
       byPoolKey[key] = result
     }
 

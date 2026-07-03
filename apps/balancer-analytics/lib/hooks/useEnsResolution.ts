@@ -43,8 +43,7 @@ export function useEnsResolution(input: string, debounceMs = 400): EnsResolution
   // Memoize the latest asyncResult slug separately so the effect's deps
   // stay shallow — we only want to refire when input changes, not on every
   // pending → resolved transition (which would loop).
-  const hasFreshResult =
-    asyncResult?.input === trimmed && asyncResult.kind !== 'pending'
+  const hasFreshResult = asyncResult?.input === trimmed && asyncResult.kind !== 'pending'
 
   useEffect(() => {
     if (!needsAsync) return

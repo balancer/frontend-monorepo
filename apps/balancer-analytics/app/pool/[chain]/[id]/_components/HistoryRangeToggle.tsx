@@ -71,11 +71,7 @@ export function HistoryRangeToggle({
         const isPendingThis = opt.value === pendingRange
         return (
           <Box
-            _hover={
-              isActive
-                ? undefined
-                : { color: 'font.primary', bg: 'background.level2' }
-            }
+            _hover={isActive ? undefined : { color: 'font.primary', bg: 'background.level2' }}
             aria-current={isActive ? 'true' : undefined}
             aria-disabled={busy ? 'true' : undefined}
             bg={isActive ? 'background.level3' : 'transparent'}

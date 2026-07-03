@@ -1,10 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type {
-  BiggestSwap,
-  BiggestSwapsPayload,
-} from '@analytics/lib/biggest-swaps/types'
+import type { BiggestSwap, BiggestSwapsPayload } from '@analytics/lib/biggest-swaps/types'
 import { fetchWithRetry } from '@analytics/lib/upstream/fetch-retry'
 
 export type { BiggestSwap }

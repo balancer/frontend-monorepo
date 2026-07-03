@@ -45,8 +45,8 @@ export function PortfolioView({ address }: { address: string }) {
           </Text>
           <Text color="font.secondary" fontSize="sm" maxW="560px">
             This wallet doesn’t currently hold BPT or staked positions on any of the supported
-            Balancer chains. The address might still have past activity — check pool events on
-            the pool detail pages.
+            Balancer chains. The address might still have past activity — check pool events on the
+            pool detail pages.
           </Text>
         </VStack>
       </Card>
@@ -64,15 +64,15 @@ export function PortfolioView({ address }: { address: string }) {
       </FadeInOnView>
 
       <FadeInOnView animateOnce={false}>
-        <Grid
-          gap="md"
-          templateColumns={{ base: '1fr', lg: '1.2fr 1fr 1fr' }}
-        >
+        <Grid gap="md" templateColumns={{ base: '1fr', lg: '1.2fr 1fr 1fr' }}>
           <GridItem minW={0}>
             <PortfolioTokenDonut tokens={portfolio.tokens} />
           </GridItem>
           <GridItem minW={0}>
-            <PortfolioTvlByChainBars chains={portfolio.chains} totalUsd={portfolio.summary.totalUsd} />
+            <PortfolioTvlByChainBars
+              chains={portfolio.chains}
+              totalUsd={portfolio.summary.totalUsd}
+            />
           </GridItem>
           <GridItem minW={0}>
             <PortfolioMerklCard address={address} />

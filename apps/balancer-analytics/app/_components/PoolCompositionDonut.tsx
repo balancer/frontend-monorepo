@@ -168,13 +168,7 @@ export function PoolCompositionDonut() {
   )
 }
 
-function ModeToggle({
-  mode,
-  onChange,
-}: {
-  mode: Mode
-  onChange: (m: Mode) => void
-}) {
+function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
   return (
     <HStack
       bg="background.level0"

@@ -130,12 +130,7 @@ function fmtWhen(unixSec: number): string {
 function LastChangeRow({ event }: { event: Ev | null }): React.JSX.Element {
   return (
     <VStack align="flex-start" spacing="2xs" w="full">
-      <Text
-        color="font.secondary"
-        fontSize="xs"
-        letterSpacing="0.02em"
-        textTransform="uppercase"
-      >
+      <Text color="font.secondary" fontSize="xs" letterSpacing="0.02em" textTransform="uppercase">
         Last parameter change
       </Text>
       {event ? (
@@ -185,8 +180,7 @@ export function PoolSnapshotTile({
   // Range-aware delta — compare latest snapshot's TVL to the oldest
   // snapshot in the active window. If there's only one snapshot we
   // surface no delta (no comparison point).
-  const tvlDelta =
-    first && latest && first !== latest ? deltaPct(tvl, first.totalLiquidity) : null
+  const tvlDelta = first && latest && first !== latest ? deltaPct(tvl, first.totalLiquidity) : null
 
   // Range totals — sum the flows across every snapshot we hold. The
   // 30d view trims to ~30 daily snapshots; "all" gives the full series.
@@ -231,17 +225,8 @@ export function PoolSnapshotTile({
           w="full"
         >
           <Heading size="h5">Metrics</Heading>
-          <MetricRow
-            delta={tvlDelta}
-            hint={deltaHint}
-            label="TVL"
-            value={usdCompact(tvl)}
-          />
-          <MetricRow
-            hint={`total ${rangeLabel}`}
-            label="Volume"
-            value={usdCompact(volumeTotal)}
-          />
+          <MetricRow delta={tvlDelta} hint={deltaHint} label="TVL" value={usdCompact(tvl)} />
+          <MetricRow hint={`total ${rangeLabel}`} label="Volume" value={usdCompact(volumeTotal)} />
           {isCowAmm ? (
             <MetricRow
               hint={`total ${rangeLabel}`}
@@ -249,11 +234,7 @@ export function PoolSnapshotTile({
               value={usdCompact(surplusTotal)}
             />
           ) : (
-            <MetricRow
-              hint={`total ${rangeLabel}`}
-              label="Fees"
-              value={usdCompact(feesTotal)}
-            />
+            <MetricRow hint={`total ${rangeLabel}`} label="Fees" value={usdCompact(feesTotal)} />
           )}
           <LastChangeRow event={lastEvent} />
         </Stack>

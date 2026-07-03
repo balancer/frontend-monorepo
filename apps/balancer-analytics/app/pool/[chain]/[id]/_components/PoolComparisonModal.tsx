@@ -57,14 +57,8 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 import { ExternalLink } from 'react-feather'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import {
-  GqlChain,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
-import {
-  chainToSlugMap,
-  getPoolTypeLabel,
-} from '@repo/lib/modules/pool/pool.utils'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { chainToSlugMap, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import type { EnrichedPool } from '@analytics/lib/hooks/usePoolExplorer'
 import { useComparisonPool } from '@analytics/lib/hooks/useComparisonPool'
 import { PoolTokenPillsLite } from '@analytics/app/_components/PoolTokenPillsLite'
@@ -174,14 +168,10 @@ function summarize7d(snapshots: readonly SnapshotLike[]): {
   const sevenDayCutoff = last.timestamp - 7 * 86400
   const fourteenDayCutoff = last.timestamp - 14 * 86400
   const last7 = sorted.filter(s => s.timestamp > sevenDayCutoff)
-  const prev7 = sorted.filter(
-    s => s.timestamp > fourteenDayCutoff && s.timestamp <= sevenDayCutoff
-  )
+  const prev7 = sorted.filter(s => s.timestamp > fourteenDayCutoff && s.timestamp <= sevenDayCutoff)
   const sevenDaysAgoIdx = sorted.findIndex(s => s.timestamp > sevenDayCutoff)
   const tvlPrev =
-    sevenDaysAgoIdx > 0
-      ? sorted[sevenDaysAgoIdx - 1].totalLiquidity
-      : sorted[0].totalLiquidity
+    sevenDaysAgoIdx > 0 ? sorted[sevenDaysAgoIdx - 1].totalLiquidity : sorted[0].totalLiquidity
   const sum = (arr: SnapshotLike[], key: 'volume24h' | 'fees24h' | 'surplus24h') =>
     arr.reduce((acc, s) => acc + (s[key] || 0), 0)
   const volume = sum(last7, 'volume24h')
@@ -191,9 +181,7 @@ function summarize7d(snapshots: readonly SnapshotLike[]): {
   const surplus = sum(last7, 'surplus24h')
   const surplusPrev = sum(prev7, 'surplus24h')
   const ratio = (curr: number, prev: number): number | null =>
-    prev > 0 && Number.isFinite(curr) && Number.isFinite(prev)
-      ? ((curr - prev) / prev) * 100
-      : null
+    prev > 0 && Number.isFinite(curr) && Number.isFinite(prev) ? ((curr - prev) / prev) * 100 : null
   return {
     tvl,
     tvlPrev,
@@ -259,7 +247,12 @@ function PoolHeader({
   name: string
   address: string
   id: string
-  tokens: { address: string; symbol?: string | null; logoURI?: string | null; weight?: string | null }[]
+  tokens: {
+    address: string
+    symbol?: string | null
+    logoURI?: string | null
+    weight?: string | null
+  }[]
 }): React.JSX.Element {
   const slug = chainToSlugMap[chain] ?? 'ethereum'
   return (
@@ -273,7 +266,14 @@ function PoolHeader({
           <Badge fontSize="2xs" px="xs" py="0" rounded="full" variant="outline">
             v{protocolVersion}
           </Badge>
-          <Badge fontSize="2xs" px="xs" py="0" rounded="full" textTransform="none" variant="outline">
+          <Badge
+            fontSize="2xs"
+            px="xs"
+            py="0"
+            rounded="full"
+            textTransform="none"
+            variant="outline"
+          >
             {formatPoolTypeLabel(type)}
           </Badge>
         </HStack>
@@ -288,7 +288,11 @@ function PoolHeader({
                 analytics ↗
               </Text>
             </Link>
-            <Link href={frontendPoolHref(chain, id, protocolVersion)} rel="noreferrer" target="_blank">
+            <Link
+              href={frontendPoolHref(chain, id, protocolVersion)}
+              rel="noreferrer"
+              target="_blank"
+            >
               <HStack color="font.link" spacing="2xs">
                 <Text fontFamily="mono" fontSize="2xs">
                   balancer.fi
@@ -405,17 +409,32 @@ function ColumnHeader({ a, b }: { a: string; b: string }): React.JSX.Element {
     >
       <GridItem />
       <GridItem>
-        <Text color="font.secondary" fontSize="2xs" letterSpacing="0.04em" textTransform="uppercase">
+        <Text
+          color="font.secondary"
+          fontSize="2xs"
+          letterSpacing="0.04em"
+          textTransform="uppercase"
+        >
           {a}
         </Text>
       </GridItem>
       <GridItem>
-        <Text color="font.secondary" fontSize="2xs" letterSpacing="0.04em" textTransform="uppercase">
+        <Text
+          color="font.secondary"
+          fontSize="2xs"
+          letterSpacing="0.04em"
+          textTransform="uppercase"
+        >
           {b}
         </Text>
       </GridItem>
       <GridItem>
-        <Text color="font.secondary" fontSize="2xs" letterSpacing="0.04em" textTransform="uppercase">
+        <Text
+          color="font.secondary"
+          fontSize="2xs"
+          letterSpacing="0.04em"
+          textTransform="uppercase"
+        >
           Δ B − A
         </Text>
       </GridItem>
@@ -628,9 +647,7 @@ export function PoolComparisonModal({
     // dynamicData is the freshest 24h reading on api-v3 (recomputed every
     // few minutes), so we prefer it for the headline. Surplus only lives
     // on the snapshot series — fall back to the latest 24h bucket there.
-    const latestSnapshot = [...target.snapshots]
-      .sort((a, b) => a.timestamp - b.timestamp)
-      .at(-1)
+    const latestSnapshot = [...target.snapshots].sort((a, b) => a.timestamp - b.timestamp).at(-1)
     return {
       tvl: Number(targetPool.dynamicData.totalLiquidity ?? 0),
       vol: Number(targetPool.dynamicData.volume24h ?? 0),
@@ -776,7 +793,7 @@ export function PoolComparisonModal({
             <Card overflow="hidden" p={{ base: 'sm', md: 'md' }} variant="subSection">
               <Flex align="center" justify="space-between" mb="sm">
                 <Heading size="h6">7-day trends</Heading>
-                {(target.snapshotsLoading) && <Spinner size="xs" />}
+                {target.snapshotsLoading && <Spinner size="xs" />}
               </Flex>
               <ColumnHeader a="Pool A · last 7d" b="Pool B · last 7d" />
               <Stack divider={undefined} spacing="0">
@@ -944,11 +961,15 @@ export function PoolComparisonModal({
                     label="Amplification"
                     loading={target.stateLoading && !target.state}
                     valueA={formatAmp(
-                      sourceAmp?.amplificationState?.value ?? sourceAmp?.amplificationParameter ?? null,
+                      sourceAmp?.amplificationState?.value ??
+                        sourceAmp?.amplificationParameter ??
+                        null,
                       sourceAmp?.amplificationState?.precision ?? '1000'
                     )}
                     valueB={formatAmp(
-                      target.amp?.amplificationState?.value ?? target.amp?.amplificationParameter ?? null,
+                      target.amp?.amplificationState?.value ??
+                        target.amp?.amplificationParameter ??
+                        null,
                       target.amp?.amplificationState?.precision ?? '1000'
                     )}
                   />

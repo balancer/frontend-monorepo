@@ -5,9 +5,7 @@ import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import type { GqlChainValues } from '@repo/lib/config/networks'
 import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
 import { fetchWithRetry } from '@analytics/lib/upstream/fetch-retry'
-import type {
-  AutoRangeHistoryResponse,
-} from '@analytics/app/api/pool/[chain]/[id]/autorange-history/route'
+import type { AutoRangeHistoryResponse } from '@analytics/app/api/pool/[chain]/[id]/autorange-history/route'
 import type { AutoRangeHistoryPoint } from '@analytics/lib/pool-state/autorange-history'
 
 /** Cached fetch result. Includes the request key that produced it so the

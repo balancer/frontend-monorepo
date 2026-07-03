@@ -73,10 +73,7 @@ function statusToErrorCode(status: number): OrderFlowErrorCode {
  * caller can render different empty-state copy for rate limits vs. other
  * failure modes.
  */
-export function usePoolOrderFlowData(
-  chain: GqlChainValues,
-  poolId: string
-): Result {
+export function usePoolOrderFlowData(chain: GqlChainValues, poolId: string): Result {
   const slug = chainToSlugMap[chain as GqlChain]
   const [state, setState] = useState<State>(INITIAL)
 

@@ -49,65 +49,65 @@ export function PortfolioAddressInput({ initialValue = '' }: { initialValue?: st
   return (
     <Card p={{ base: 'md', md: 'lg' }} variant="level1">
       <Box as="form" onSubmit={handleSubmit}>
-      <VStack align="stretch" spacing="md">
-        <Box>
-          <Text color="font.maxContrast" fontSize="sm" fontWeight="bold" mb="xs">
-            Wallet address or ENS name
-          </Text>
-          <HStack align="center" spacing="sm">
-            <InputGroup size="md">
-              <InputLeftElement pointerEvents="none">
-                <Box color="font.secondary">
-                  <Search size={14} />
-                </Box>
-              </InputLeftElement>
-              <Input
-                aria-label="Wallet address or ENS name"
-                autoComplete="off"
-                fontFamily="mono"
-                fontSize="sm"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-                placeholder="0x… or vitalik.eth"
-                spellCheck={false}
-                value={value}
-              />
-            </InputGroup>
-            <Button
-              isDisabled={!isReady}
-              isLoading={resolution.status === 'loading'}
-              minW="80px"
-              size="md"
-              type="submit"
-              variant="primary"
-            >
-              View
-            </Button>
-          </HStack>
-          {showStatus && <StatusLine resolution={resolution} />}
-        </Box>
+        <VStack align="stretch" spacing="md">
+          <Box>
+            <Text color="font.maxContrast" fontSize="sm" fontWeight="bold" mb="xs">
+              Wallet address or ENS name
+            </Text>
+            <HStack align="center" spacing="sm">
+              <InputGroup size="md">
+                <InputLeftElement pointerEvents="none">
+                  <Box color="font.secondary">
+                    <Search size={14} />
+                  </Box>
+                </InputLeftElement>
+                <Input
+                  aria-label="Wallet address or ENS name"
+                  autoComplete="off"
+                  fontFamily="mono"
+                  fontSize="sm"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+                  placeholder="0x… or vitalik.eth"
+                  spellCheck={false}
+                  value={value}
+                />
+              </InputGroup>
+              <Button
+                isDisabled={!isReady}
+                isLoading={resolution.status === 'loading'}
+                minW="80px"
+                size="md"
+                type="submit"
+                variant="primary"
+              >
+                View
+              </Button>
+            </HStack>
+            {showStatus && <StatusLine resolution={resolution} />}
+          </Box>
 
-        <HStack flexWrap="wrap" spacing="xs">
-          <Text color="font.secondary" fontSize="xs">
-            Try:
-          </Text>
-          {EXAMPLES.map(e => (
-            <Button
-              fontFamily={e.address.startsWith('0x') ? 'mono' : undefined}
-              fontSize="xs"
-              fontWeight="medium"
-              h="auto"
-              key={e.address}
-              onClick={() => handleExampleClick(e.address)}
-              px="sm"
-              py="xs"
-              size="xs"
-              variant="tertiary"
-            >
-              {e.label}
-            </Button>
-          ))}
-        </HStack>
-      </VStack>
+          <HStack flexWrap="wrap" spacing="xs">
+            <Text color="font.secondary" fontSize="xs">
+              Try:
+            </Text>
+            {EXAMPLES.map(e => (
+              <Button
+                fontFamily={e.address.startsWith('0x') ? 'mono' : undefined}
+                fontSize="xs"
+                fontWeight="medium"
+                h="auto"
+                key={e.address}
+                onClick={() => handleExampleClick(e.address)}
+                px="sm"
+                py="xs"
+                size="xs"
+                variant="tertiary"
+              >
+                {e.label}
+              </Button>
+            ))}
+          </HStack>
+        </VStack>
       </Box>
     </Card>
   )

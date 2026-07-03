@@ -81,10 +81,7 @@ export const V3_FILTER_A_EVENTS = [
 export const V3_STABLE_FILTER_B_EVENTS = V3_STABLE_POOL_EVENTS
 
 /** Filter B union for V2 Stable / ComposableStable pools (base + amp). */
-export const V2_STABLE_FILTER_B_EVENTS = [
-  ...V2_BASE_POOL_EVENTS,
-  ...V2_STABLE_POOL_EVENTS,
-] as const
+export const V2_STABLE_FILTER_B_EVENTS = [...V2_BASE_POOL_EVENTS, ...V2_STABLE_POOL_EVENTS] as const
 
 /** Filter B union for V2 non-Stable pools (weighted, etc.) — base only. */
 export const V2_NON_STABLE_FILTER_B_EVENTS = V2_BASE_POOL_EVENTS

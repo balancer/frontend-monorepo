@@ -255,11 +255,7 @@ function WeightRows({
   return (
     <VStack align="stretch" spacing="sm" w="full">
       {weights.map((w, i) => (
-        <StateRow
-          key={i}
-          label={tokens[i]?.symbol ?? `token ${i}`}
-          value={formatWeightPct(w)}
-        />
+        <StateRow key={i} label={tokens[i]?.symbol ?? `token ${i}`} value={formatWeightPct(w)} />
       ))}
     </VStack>
   )
@@ -520,8 +516,7 @@ function AutoRangeDistroBar({
   const greenW = hasData ? ((highTarget - lowTarget) / range) * 100 : 100 / 3
   const rightOrangeW = hasData ? ((maxPrice - highTarget) / range) * 100 : 100 / 3
 
-  const spotInside =
-    Number.isFinite(spotPrice) && spotPrice >= minPrice && spotPrice <= maxPrice
+  const spotInside = Number.isFinite(spotPrice) && spotPrice >= minPrice && spotPrice <= maxPrice
   const spotPct = !Number.isFinite(spotPrice)
     ? null
     : spotPrice < minPrice
@@ -530,11 +525,7 @@ function AutoRangeDistroBar({
         ? 100
         : ((spotPrice - minPrice) / range) * 100
 
-  const markerColor = !spotInside
-    ? 'red.400'
-    : isInRange
-      ? 'green.300'
-      : 'orange.300'
+  const markerColor = !spotInside ? 'red.400' : isInRange ? 'green.300' : 'orange.300'
 
   return (
     <Box h="36px" position="relative" w="full">
@@ -549,21 +540,9 @@ function AutoRangeDistroBar({
         top="6px"
         w="full"
       >
-        <Box
-          bgGradient="linear(to-b, orange.300, orange.500)"
-          h="full"
-          w={`${leftOrangeW}%`}
-        />
-        <Box
-          bgGradient="linear(to-b, green.300, green.500)"
-          h="full"
-          w={`${greenW}%`}
-        />
-        <Box
-          bgGradient="linear(to-b, orange.300, orange.500)"
-          h="full"
-          w={`${rightOrangeW}%`}
-        />
+        <Box bgGradient="linear(to-b, orange.300, orange.500)" h="full" w={`${leftOrangeW}%`} />
+        <Box bgGradient="linear(to-b, green.300, green.500)" h="full" w={`${greenW}%`} />
+        <Box bgGradient="linear(to-b, orange.300, orange.500)" h="full" w={`${rightOrangeW}%`} />
       </Flex>
       {/* Spot marker — a thin vertical line capped with a dot on top.
           The dot's color signals status without needing text. */}
@@ -680,8 +659,7 @@ function AutoRangeSection({
   tokens: PoolDetailToken[]
   manageButton?: React.ReactNode
 }): React.JSX.Element {
-  const updateActive =
-    rc.priceRatio.endTime > 0 && rc.priceRatio.start !== rc.priceRatio.end
+  const updateActive = rc.priceRatio.endTime > 0 && rc.priceRatio.start !== rc.priceRatio.end
 
   // Convert all contract values to plain numbers in their natural units.
   // Live + virtual balances are 1e18-scaled by the Vault's internal
@@ -767,12 +745,7 @@ function AutoRangeSection({
       <SimpleGrid columns={{ base: 2, sm: 3, md: 5 }} spacing="sm" w="full">
         <BoundaryChip label="Min" unit={unit} value={minPrice} />
         <BoundaryChip label="Low target" unit={unit} value={lowTargetPrice} />
-        <BoundaryChip
-          emphasis={spotEmphasis}
-          label="Spot"
-          unit={unit}
-          value={spotPrice}
-        />
+        <BoundaryChip emphasis={spotEmphasis} label="Spot" unit={unit} value={spotPrice} />
         <BoundaryChip label="High target" unit={unit} value={highTargetPrice} />
         <BoundaryChip label="Max" unit={unit} value={maxPrice} />
       </SimpleGrid>
@@ -827,13 +800,7 @@ function AutoRangeSection({
   )
 }
 
-function LbpSection({
-  lbp,
-  tokens,
-}: {
-  lbp: LbpTypeState
-  tokens: Token[]
-}): React.JSX.Element {
+function LbpSection({ lbp, tokens }: { lbp: LbpTypeState; tokens: Token[] }): React.JSX.Element {
   const hasSchedule = lbp.update.startTime > 0
   return (
     <TypeSection
@@ -931,10 +898,7 @@ type SurgeMetrics = {
   estimatedSurgeFeePct: number
 }
 
-function computeSurgeMetrics(
-  ss: StableSurgeState,
-  tokens: PoolDetailToken[]
-): SurgeMetrics {
+function computeSurgeMetrics(ss: StableSurgeState, tokens: PoolDetailToken[]): SurgeMetrics {
   let tvl = 0
   const balancesUsd = tokens.map(t => {
     const b = Number(t.balanceUSD) || 0
@@ -960,20 +924,14 @@ function computeSurgeMetrics(
           : sorted[mid]
   }
 
-  const totalImbalance = tokenPercentages.reduce(
-    (acc, t) => acc + Math.abs(t.pct - median),
-    0
-  )
+  const totalImbalance = tokenPercentages.reduce((acc, t) => acc + Math.abs(t.pct - median), 0)
   const surgeThresholdPct = (Number(ss.surgeThresholdPercentage) / 1e18) * 100
   const maxSurgeFeePct = (Number(ss.maxSurgeFeePercentage) / 1e18) * 100
   const isInSurgeMode = totalImbalance > surgeThresholdPct
 
   let estimatedSurgeFeePct = 0
   if (isInSurgeMode && surgeThresholdPct > 0) {
-    const intensity = Math.min(
-      (totalImbalance - surgeThresholdPct) / surgeThresholdPct,
-      1
-    )
+    const intensity = Math.min((totalImbalance - surgeThresholdPct) / surgeThresholdPct, 1)
     estimatedSurgeFeePct = intensity * maxSurgeFeePct
   }
 
@@ -1022,16 +980,8 @@ function SurgeImbalanceBar({
           top="2px"
           w="full"
         >
-          <Box
-            bgGradient="linear(to-b, green.300, green.500)"
-            h="full"
-            w={`${thresholdPos}%`}
-          />
-          <Box
-            bgGradient="linear(to-b, red.300, red.500)"
-            h="full"
-            w={`${100 - thresholdPos}%`}
-          />
+          <Box bgGradient="linear(to-b, green.300, green.500)" h="full" w={`${thresholdPos}%`} />
+          <Box bgGradient="linear(to-b, red.300, red.500)" h="full" w={`${100 - thresholdPos}%`} />
         </Flex>
         {/* Marker — vertical pill at the current imbalance position. */}
         <Box
@@ -1074,8 +1024,7 @@ function StableSurgeSection({
   manageButton?: React.ReactNode
 }): React.JSX.Element {
   const m = computeSurgeMetrics(ss, tokens)
-  const deviationFmt = (n: number) =>
-    `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`
+  const deviationFmt = (n: number) => `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`
 
   return (
     <TypeSection
@@ -1147,7 +1096,11 @@ function StableSurgeSection({
             // larger than the threshold is by definition pushing the pool
             // toward surge.
             const devColor =
-              devAbs >= m.surgeThresholdPct ? 'red.300' : devAbs >= 1 ? 'orange.300' : 'font.secondary'
+              devAbs >= m.surgeThresholdPct
+                ? 'red.300'
+                : devAbs >= 1
+                  ? 'orange.300'
+                  : 'font.secondary'
             return (
               <HStack justify="space-between" key={i} spacing="sm" w="full">
                 <Text fontFamily="mono" fontSize="sm">
@@ -1157,7 +1110,13 @@ function StableSurgeSection({
                   <Text fontFamily="mono" fontSize="sm">
                     {t.pct.toFixed(2)}%
                   </Text>
-                  <Text color={devColor} fontFamily="mono" fontSize="xs" minW="60px" textAlign="right">
+                  <Text
+                    color={devColor}
+                    fontFamily="mono"
+                    fontSize="xs"
+                    minW="60px"
+                    textAlign="right"
+                  >
                     {deviationFmt(dev)}
                   </Text>
                 </HStack>
@@ -1331,9 +1290,7 @@ function BufferSection({
   const priceRate = parseNum(token.priceRate)
   const balanceWrapped = parseNum(token.balance)
   const positionInUnderlying =
-    Number.isFinite(balanceWrapped) && Number.isFinite(priceRate)
-      ? balanceWrapped * priceRate
-      : NaN
+    Number.isFinite(balanceWrapped) && Number.isFinite(priceRate) ? balanceWrapped * priceRate : NaN
   const maxDeposit = parseNum(token.maxDeposit ?? '')
   const maxWithdraw = parseNum(token.maxWithdraw ?? '')
   const underlyingSymbol = token.underlyingToken?.symbol ?? '—'
@@ -1344,9 +1301,7 @@ function BufferSection({
     : NaN
   const bufferWrapped = buffer ? rawToHuman(buffer.wrappedBalanceRaw, token.decimals) : NaN
   const bufferWrappedAsUnderlying =
-    Number.isFinite(bufferWrapped) && Number.isFinite(priceRate)
-      ? bufferWrapped * priceRate
-      : NaN
+    Number.isFinite(bufferWrapped) && Number.isFinite(priceRate) ? bufferWrapped * priceRate : NaN
 
   const review = (token.erc4626ReviewData?.summary ?? '').toLowerCase()
   const reviewBadge =
@@ -1629,11 +1584,12 @@ function RateProvidersSection({
                       )}
                     </HStack>
                   )}
-                  {status.kind === 'warning' && (t.priceRateProviderData?.warnings ?? []).length > 0 && (
-                    <Text color="font.warning" fontSize="2xs" opacity={0.85}>
-                      {(t.priceRateProviderData?.warnings ?? []).join(' · ')}
-                    </Text>
-                  )}
+                  {status.kind === 'warning' &&
+                    (t.priceRateProviderData?.warnings ?? []).length > 0 && (
+                      <Text color="font.warning" fontSize="2xs" opacity={0.85}>
+                        {(t.priceRateProviderData?.warnings ?? []).join(' · ')}
+                      </Text>
+                    )}
                 </VStack>
               }
             />
@@ -1663,11 +1619,7 @@ function RateProvidersSection({
  *   - Stable / CoW / weight-less pools: implicit equal share `1/N`.
  *   - Mixed (some weights null): defensive fall-through to equal share.
  */
-function PoolBalancesSection({
-  tokens,
-}: {
-  tokens: PoolDetailToken[]
-}): React.JSX.Element | null {
+function PoolBalancesSection({ tokens }: { tokens: PoolDetailToken[] }): React.JSX.Element | null {
   const shares = tokens
     .map(t => ({ token: t, balanceUSD: Number(t.balanceUSD) }))
     .filter(s => Number.isFinite(s.balanceUSD))
@@ -1693,13 +1645,8 @@ function PoolBalancesSection({
     const ratioToTarget = targetWeight > 0 ? share / targetWeight : NaN
     return { ...s, share, targetWeight, ratioToTarget }
   })
-  const validRatios = enriched
-    .map(e => e.ratioToTarget)
-    .filter(r => Number.isFinite(r) && r > 0)
-  const ratio =
-    validRatios.length >= 2
-      ? Math.max(...validRatios) / Math.min(...validRatios)
-      : NaN
+  const validRatios = enriched.map(e => e.ratioToTarget).filter(r => Number.isFinite(r) && r > 0)
+  const ratio = validRatios.length >= 2 ? Math.max(...validRatios) / Math.min(...validRatios) : NaN
 
   const tooltipLabel = hasExplicitWeights
     ? 'Largest (actual share / target weight) divided by smallest. 1.00× means the pool sits on its design weights (e.g. 80/20 with each side exactly on target); higher means flow has tilted composition relative to design.'
@@ -1754,7 +1701,13 @@ function PoolBalancesSection({
                   </Text>
                 </HStack>
               </HStack>
-              <Box bg="background.level0" borderRadius="full" h="6px" overflow="hidden" position="relative">
+              <Box
+                bg="background.level0"
+                borderRadius="full"
+                h="6px"
+                overflow="hidden"
+                position="relative"
+              >
                 <Box
                   bg={barColor}
                   borderRadius="full"
@@ -1893,9 +1846,7 @@ export function PoolStatePanel({
   // the grid composition stays declarative below.
   let typeSpecificCard: React.ReactNode = null
   if (state.weighted) {
-    typeSpecificCard = (
-      <WeightedSection tokens={poolDetail.tokens} weighted={state.weighted} />
-    )
+    typeSpecificCard = <WeightedSection tokens={poolDetail.tokens} weighted={state.weighted} />
   } else if (state.gyroEclp) {
     typeSpecificCard = <GyroEclpSection eclp={state.gyroEclp} />
   } else if (state.reclamm) {
@@ -2076,7 +2027,5 @@ export function PoolStatePanel({
  *  weighted pools — which leave every token's `priceRateProvider` at the
  *  zero address — don't render an empty card. */
 function hasAnyRateProvider(tokens: PoolDetailToken[]): boolean {
-  return tokens.some(
-    t => t.priceRateProvider && t.priceRateProvider.toLowerCase() !== ZERO_ADDR
-  )
+  return tokens.some(t => t.priceRateProvider && t.priceRateProvider.toLowerCase() !== ZERO_ADDR)
 }

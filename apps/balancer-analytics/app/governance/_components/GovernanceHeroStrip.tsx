@@ -51,11 +51,7 @@ export function GovernanceHeroStrip() {
       <KpiCard
         isLoading={veBal.loading}
         label="Total veBAL"
-        sub={
-          bptLocked !== null
-            ? `${compactFmt.format(bptLocked)} BPT locked`
-            : undefined
-        }
+        sub={bptLocked !== null ? `${compactFmt.format(bptLocked)} BPT locked` : undefined}
         textured
         tooltip="Total veBAL voting power outstanding on mainnet. New locks are disabled per BIP-921."
         value={veBalTotal === null ? '—' : `${compactFmt.format(veBalTotal)} veBAL`}

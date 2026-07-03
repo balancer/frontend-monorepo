@@ -113,13 +113,7 @@ export function Governance({
   )
 }
 
-function ProposalRow({
-  proposal,
-  isLast,
-}: {
-  proposal: GovernanceProposal
-  isLast: boolean
-}) {
+function ProposalRow({ proposal, isLast }: { proposal: GovernanceProposal; isLast: boolean }) {
   const timeLabel =
     proposal.state === 'active'
       ? `closes ${relativeFromNow(proposal.end)}`
@@ -278,13 +272,7 @@ function ChoiceBars({ proposal }: { proposal: GovernanceProposal }) {
               </Text>
             </Flex>
             <Box bg="background.level0" borderRadius="full" h="6px" overflow="hidden">
-              <Box
-                bg={color}
-                borderRadius="full"
-                h="100%"
-                transition="width 0.2s"
-                w={`${pct}%`}
-              />
+              <Box bg={color} borderRadius="full" h="100%" transition="width 0.2s" w={`${pct}%`} />
             </Box>
           </Box>
         )

@@ -67,14 +67,10 @@ export function VeBalHoldersTable() {
     return rows.slice(start, start + pageSize)
   }, [rows, pageIndex, pageSize])
 
-  const paginationProps = getPaginationProps(
-    totalCount,
-    { pageIndex, pageSize },
-    state => {
-      setPageIndex(state.pageIndex)
-      setPageSize(state.pageSize)
-    }
-  )
+  const paginationProps = getPaginationProps(totalCount, { pageIndex, pageSize }, state => {
+    setPageIndex(state.pageIndex)
+    setPageSize(state.pageSize)
+  })
 
   const day = data?.day ?? ''
 
@@ -219,22 +215,13 @@ function TableRow({ row, day }: { row: VeBalHolderRow; day: string }) {
           </Text>
         </GridItem>
         <GridItem fontFamily="mono" fontSize="sm" justifySelf="end">
-          <Tooltip
-            hasArrow
-            label={`${intFmt.format(row.veBalBalance)} veBAL`}
-            openDelay={250}
-          >
+          <Tooltip hasArrow label={`${intFmt.format(row.veBalBalance)} veBAL`} openDelay={250}>
             <Text as="span" cursor="help" fontWeight="medium">
               {compactFmt.format(row.veBalBalance)}
             </Text>
           </Tooltip>
         </GridItem>
-        <GridItem
-          color="font.secondary"
-          fontFamily="mono"
-          fontSize="sm"
-          justifySelf="end"
-        >
+        <GridItem color="font.secondary" fontFamily="mono" fontSize="sm" justifySelf="end">
           {(row.pct * 100).toFixed(2)}%
         </GridItem>
       </Grid>
@@ -261,8 +248,8 @@ function DecommissionedBanner() {
             Decommissioned by BIP-921
           </Text>
           <Text color="font.secondary" fontSize="xs" lineHeight="short">
-            New veBAL locks are disabled. Existing locks remain queryable; the rows
-            below are preserved for historical reference.{' '}
+            New veBAL locks are disabled. Existing locks remain queryable; the rows below are
+            preserved for historical reference.{' '}
             <ChakraLink color="font.link" href={DECOM_BIP_URL} isExternal>
               Read BIP-921 <ExternalLink size={11} style={{ display: 'inline' }} />
             </ChakraLink>

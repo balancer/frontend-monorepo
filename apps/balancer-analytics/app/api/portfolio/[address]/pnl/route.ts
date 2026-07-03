@@ -30,8 +30,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 export const runtime = 'nodejs'
 export const revalidate = 600
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 
 // api-v3 caps `first` at 1000 per call. We paginate with `skip` up to a
 // hard ceiling — most chains finish in one page, and the ceiling prevents
@@ -228,8 +227,7 @@ async function buildPayload(address: string): Promise<PortfolioPnlPayload> {
     // a full last page — that's the case where older events almost
     // certainly exist beyond what we fetched.
     if (!complete && events.length > 0) {
-      cutoffsByChain[chain][type === 'ADD' ? 'add' : 'remove'] =
-        events[events.length - 1].timestamp
+      cutoffsByChain[chain][type === 'ADD' ? 'add' : 'remove'] = events[events.length - 1].timestamp
       truncated = true
     }
   }
@@ -249,14 +247,10 @@ async function buildPayload(address: string): Promise<PortfolioPnlPayload> {
 // blobs don't poison clients expecting the new schema.
 const CACHE_VERSION = 'v2'
 function makeCachedFetcher(address: string) {
-  return unstable_cache(
-    () => buildPayload(address),
-    ['portfolio-pnl', CACHE_VERSION, address],
-    {
-      revalidate: 600,
-      tags: [`portfolio-pnl:${address}`],
-    }
-  )
+  return unstable_cache(() => buildPayload(address), ['portfolio-pnl', CACHE_VERSION, address], {
+    revalidate: 600,
+    tags: [`portfolio-pnl:${address}`],
+  })
 }
 
 export async function GET(

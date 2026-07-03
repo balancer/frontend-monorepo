@@ -15,11 +15,7 @@
 import 'server-only'
 import pLimit from 'p-limit'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import {
-  getChainLimit,
-  getPublicClient,
-  UnsupportedChainError,
-} from './client'
+import { getChainLimit, getPublicClient, UnsupportedChainError } from './client'
 import { scrubSecret } from './scrub'
 
 /** Concurrent in-flight `eth_getTransactionByHash` requests per route hit.
@@ -79,9 +75,7 @@ export async function fetchTxToAddresses(
             // retry on the next visit. Log scrubbed for safety (drpc URLs
             // can contain the API key on viem errors).
             const msg = err instanceof Error ? err.message : String(err)
-            console.warn(
-              `[drpc/tx-info] tx ${hash.slice(0, 10)}…: ${scrubSecret(msg)}`
-            )
+            console.warn(`[drpc/tx-info] tx ${hash.slice(0, 10)}…: ${scrubSecret(msg)}`)
           }
         })
       )

@@ -32,8 +32,7 @@ import type { PoolStateResponse } from '@analytics/lib/pool-events/types'
 export const runtime = 'nodejs'
 export const revalidate = 60
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 
 // Accept either a 42-char address (V3) or a 66-char V2/CowAmm poolId.
 const PoolIdSchema = z

@@ -30,8 +30,7 @@ import { getPublicClient, UnsupportedChainError } from '@analytics/lib/drpc/clie
 export const runtime = 'nodejs'
 export const revalidate = 600
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 
 // Single canonical entry point — both old Curve-style gauges and newer
 // Balancer reward gauges expose this signature with identical semantics.

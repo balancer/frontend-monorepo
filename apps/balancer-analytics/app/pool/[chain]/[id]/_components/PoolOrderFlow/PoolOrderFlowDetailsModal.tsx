@@ -61,10 +61,7 @@ type Contributor = {
 
 /** Map a chart node `name` to a predicate against raw swap data, accounting
  *  for the unknown-split / Other-rollup decisions made by the builder. */
-function predicateFor(
-  nodeName: string,
-  graph: SankeyGraph
-): ((s: LabeledSwap) => boolean) | null {
+function predicateFor(nodeName: string, graph: SankeyGraph): ((s: LabeledSwap) => boolean) | null {
   if (nodeName.startsWith('src:')) {
     const id = nodeName.slice(4)
     if (id.startsWith('unknown:')) {
@@ -75,8 +72,7 @@ function predicateFor(
     if (id === 'unknown') {
       // Generic Unknown bucket — unknowns whose sender did NOT cross the split threshold
       return s =>
-        s.source.category === 'unknown' &&
-        !graph.splitUnknownSenders.has(s.sender.toLowerCase())
+        s.source.category === 'unknown' && !graph.splitUnknownSenders.has(s.sender.toLowerCase())
     }
     if (id === 'other') {
       // Synthetic Other rollup: labeled sources that fell under the share threshold
@@ -116,7 +112,10 @@ function aggregateBySender(swaps: readonly LabeledSwap[]): Contributor[] {
     row.valueUsd += s.valueUSD
     row.swapCount += 1
     // Track the highest-USD swap as the representative tx for the explorer link.
-    if (s.valueUSD > 0 && (row.exampleTxHash === s.tx || s.valueUSD >= row.valueUsd / row.swapCount)) {
+    if (
+      s.valueUSD > 0 &&
+      (row.exampleTxHash === s.tx || s.valueUSD >= row.valueUsd / row.swapCount)
+    ) {
       row.exampleTxHash = s.tx
     }
     m.set(addr, row)
@@ -218,25 +217,19 @@ export function PoolOrderFlowDetailsModal({
         <ModalBody pb={6}>
           {contributors.length === 0 ? (
             <Text color="font.secondary" fontSize="sm">
-              No contributing swaps in scope. (This usually means the
-              selection straddles two columns that don&apos;t share any
-              flow — e.g. the link between a source and a token that
-              swapped only the other direction.)
+              No contributing swaps in scope. (This usually means the selection straddles two
+              columns that don&apos;t share any flow — e.g. the link between a source and a token
+              that swapped only the other direction.)
             </Text>
           ) : (
             <VStack align="stretch" spacing={2}>
               <Text color="font.secondary" fontSize="xs">
-                Top {Math.min(contributors.length, MAX_CONTRIBUTORS)} of{' '}
-                {contributors.length} contributing sender
+                Top {Math.min(contributors.length, MAX_CONTRIBUTORS)} of {contributors.length}{' '}
+                contributing sender
                 {contributors.length === 1 ? '' : 's'} (by USD):
               </Text>
               {contributors.slice(0, MAX_CONTRIBUTORS).map(c => (
-                <ContributorRow
-                  chain={chain}
-                  contributor={c}
-                  key={c.address}
-                  totalUsd={totalUsd}
-                />
+                <ContributorRow chain={chain} contributor={c} key={c.address} totalUsd={totalUsd} />
               ))}
               {contributors.length > MAX_CONTRIBUTORS && (
                 <Text color="font.secondary" fontSize="xs" pt="sm">

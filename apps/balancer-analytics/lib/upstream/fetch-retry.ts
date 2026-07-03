@@ -98,11 +98,7 @@ export async function fetchWithRetry(
   url: string,
   options: FetchRetryOptions = {}
 ): Promise<Response> {
-  const {
-    retries = DEFAULT_RETRIES,
-    maxBackoffMs = DEFAULT_MAX_BACKOFF_MS,
-    ...init
-  } = options
+  const { retries = DEFAULT_RETRIES, maxBackoffMs = DEFAULT_MAX_BACKOFF_MS, ...init } = options
   const signal = init.signal ?? null
 
   let attempt = 0
@@ -111,10 +107,7 @@ export async function fetchWithRetry(
     try {
       res = await fetch(url, init)
     } catch (err) {
-      if (
-        attempt >= retries ||
-        (err instanceof Error && err.name === 'AbortError')
-      ) {
+      if (attempt >= retries || (err instanceof Error && err.name === 'AbortError')) {
         throw err
       }
       attempt++

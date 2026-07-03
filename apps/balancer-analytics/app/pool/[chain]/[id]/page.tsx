@@ -61,8 +61,7 @@ import { PoolPageUpstreamNotice } from './_components/PoolPageUpstreamNotice'
 
 export const dynamic = 'force-dynamic'
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
+const API_URL = process.env.NEXT_PUBLIC_BALANCER_API_URL ?? 'https://api-v3.balancer.fi/graphql'
 
 type RouteParams = { chain: string; id: string }
 
@@ -319,11 +318,7 @@ const POOL_DETAIL_QUERY = /* GraphQL */ `
 `
 
 const SNAPSHOTS_QUERY = /* GraphQL */ `
-  query AnalyticsPoolSnapshots(
-    $id: String!
-    $chain: GqlChain!
-    $range: GqlPoolSnapshotDataRange!
-  ) {
+  query AnalyticsPoolSnapshots($id: String!, $chain: GqlChain!, $range: GqlPoolSnapshotDataRange!) {
     snapshots: poolGetSnapshots(id: $id, chain: $chain, range: $range) {
       timestamp
       totalLiquidity
@@ -396,9 +391,7 @@ export default async function Page({
   }
   const rawRange = Array.isArray(search.range) ? search.range[0] : search.range
   const range: HistoryRange =
-    search.fullHistory !== undefined && search.range === undefined
-      ? 'all'
-      : parseRange(rawRange)
+    search.fullHistory !== undefined && search.range === undefined ? 'all' : parseRange(rawRange)
 
   // Snapshot enum per range. 30d uses the 90-day fetch and trims client-side
   // (api-v3 has no 30-day enum). The longer ranges round-trip directly.
@@ -566,12 +559,9 @@ export default async function Page({
   let snapshotsRes: SnapshotsRes | null
   try {
     ;[detailRes, snapshotsRes] = await Promise.all([
-      gqlFetch<DetailRes>(
-        POOL_DETAIL_QUERY,
-        { id: apiV3Id, chain },
-        'poolGetPool',
-        { forceFresh: forceRefresh }
-      ),
+      gqlFetch<DetailRes>(POOL_DETAIL_QUERY, { id: apiV3Id, chain }, 'poolGetPool', {
+        forceFresh: forceRefresh,
+      }),
       gqlFetch<SnapshotsRes>(
         SNAPSHOTS_QUERY,
         { id: apiV3Id, chain, range: SNAPSHOT_RANGE[range] },
@@ -656,9 +646,7 @@ export default async function Page({
     // Buffer reads only when the pool actually has ERC4626 tokens — saves
     // a multicall on plain v3 pools, which are the majority.
     const wrappedAddrs = poolDetail.hasErc4626
-      ? poolDetail.tokens
-          .filter(token => token.isErc4626)
-          .map(token => token.address as Address)
+      ? poolDetail.tokens.filter(token => token.isErc4626).map(token => token.address as Address)
       : []
     // One read per lane, dispatched on pool type. At most one type-specific
     // read fires (others resolve to `null` synchronously); `stableSurge` is
@@ -697,12 +685,7 @@ export default async function Page({
       }),
       isStable
         ? readV2StableTypeState(chain, contractAddress as Address).catch((err: unknown) => {
-            logRpcError(
-              '[pool/page] readV2StableTypeState failed',
-              chain,
-              contractAddress,
-              err
-            )
+            logRpcError('[pool/page] readV2StableTypeState failed', chain, contractAddress, err)
             return null
           })
         : Promise.resolve(null),

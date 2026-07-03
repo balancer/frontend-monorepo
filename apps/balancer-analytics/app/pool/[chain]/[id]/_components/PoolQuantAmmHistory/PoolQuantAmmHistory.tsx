@@ -21,11 +21,7 @@ import ReactECharts from 'echarts-for-react'
 import { useMemo } from 'react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import type {
-  PoolHistoryRange,
-  QuantAmmWeightSnapshot,
-  QuantAmmWeightedParams,
-} from '../../page'
+import type { PoolHistoryRange, QuantAmmWeightSnapshot, QuantAmmWeightedParams } from '../../page'
 
 type Token = {
   address: string
@@ -175,13 +171,7 @@ export function PoolQuantAmmHistory({ range, tokens, weightSnapshots, params }: 
                     : 'Not enough snapshots in range to chart yet.'}
                 </Text>
               </VStack>
-              <HStack
-                color="font.secondary"
-                flexWrap="wrap"
-                fontSize="xs"
-                rowGap="xs"
-                spacing="md"
-              >
+              <HStack color="font.secondary" flexWrap="wrap" fontSize="xs" rowGap="xs" spacing="md">
                 {tokens.map((t, i) => (
                   <LegendChip
                     color={TOKEN_COLORS[i % TOKEN_COLORS.length]}
@@ -204,9 +194,7 @@ export function PoolQuantAmmHistory({ range, tokens, weightSnapshots, params }: 
               )}
             </Box>
 
-            {hasData && (
-              <DriftGrid drift={drift} rangeLabel={RANGE_LABEL[range]} tokens={tokens} />
-            )}
+            {hasData && <DriftGrid drift={drift} rangeLabel={RANGE_LABEL[range]} tokens={tokens} />}
 
             <ParametersCard params={params} tokens={tokens} />
           </VStack>
@@ -494,10 +482,7 @@ function LegendChip({ color, label }: { color: string; label: string }) {
 
 // ── ECharts option builder ─────────────────────────────────────────────
 
-function buildChartOption(
-  samples: { timestamp: number; weights: number[] }[],
-  tokens: Token[]
-) {
+function buildChartOption(samples: { timestamp: number; weights: number[] }[], tokens: Token[]) {
   // ECharts time axis wants ms timestamps; api-v3 emits unix seconds.
   const x = samples.map(s => s.timestamp * 1000)
 

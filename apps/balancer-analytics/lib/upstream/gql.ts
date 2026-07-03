@@ -16,11 +16,7 @@
 
 import 'server-only'
 
-export type UpstreamErrorKind =
-  | 'rate_limit'
-  | 'upstream_error'
-  | 'graphql_error'
-  | 'network'
+export type UpstreamErrorKind = 'rate_limit' | 'upstream_error' | 'graphql_error' | 'network'
 
 export class UpstreamError extends Error {
   readonly kind: UpstreamErrorKind
@@ -106,13 +102,11 @@ export async function gqlFetch<T>(
 
   if (!res.ok) {
     const retryAfter = res.headers.get('retry-after')
-    console.warn(
-      `[${options.upstream}] ${options.label} HTTP ${res.status}`,
-      { variables, retryAfter }
-    )
-    const kind: UpstreamErrorKind = isRateLimitStatus(res.status)
-      ? 'rate_limit'
-      : 'upstream_error'
+    console.warn(`[${options.upstream}] ${options.label} HTTP ${res.status}`, {
+      variables,
+      retryAfter,
+    })
+    const kind: UpstreamErrorKind = isRateLimitStatus(res.status) ? 'rate_limit' : 'upstream_error'
     throw new UpstreamError(
       options.upstream,
       kind,
@@ -168,8 +162,7 @@ export function upstreamErrorToResponse(
 
   const body: Record<string, unknown> = { error: errorCode }
   if (isRateLimit) {
-    body.message =
-      `${err.upstream} API rate limit reached. Please wait a minute and try again.`
+    body.message = `${err.upstream} API rate limit reached. Please wait a minute and try again.`
   }
   if (options.includeDevDetail) {
     body.detail = err.message

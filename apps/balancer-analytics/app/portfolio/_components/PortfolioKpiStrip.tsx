@@ -5,10 +5,7 @@ import { KpiCard } from '../../_components/KpiCard'
 import { usd } from '../../_components/format'
 import { useGaugeRewards } from '@analytics/lib/hooks/useGaugeRewards'
 import { useMerklRewards } from '@analytics/lib/hooks/useMerklRewards'
-import type {
-  PortfolioSummary,
-  TokenAggregate,
-} from '@analytics/lib/hooks/usePortfolioByAddress'
+import type { PortfolioSummary, TokenAggregate } from '@analytics/lib/hooks/usePortfolioByAddress'
 
 const pct = (n: number, digits = 2) => `${(n * 100).toFixed(digits)}%`
 

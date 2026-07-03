@@ -74,10 +74,7 @@ export type Protocol =
 export const SOURCE_API = 'api-v3' as const
 export const SOURCE_DEFILLAMA = 'defillama' as const
 export const SOURCE_MANUAL = 'manual' as const
-export type SnapshotSource =
-  | typeof SOURCE_API
-  | typeof SOURCE_DEFILLAMA
-  | typeof SOURCE_MANUAL
+export type SnapshotSource = typeof SOURCE_API | typeof SOURCE_DEFILLAMA | typeof SOURCE_MANUAL
 
 /**
  * One DB row. Aggregate-across-all-chains rows use `chain = 'ALL'`; per-chain
@@ -302,10 +299,7 @@ export async function getPoolParamEvents(
  * pool can never self-heal on the warm `watermark + 1` path, so the sync
  * falls back to a cold-range rescan when this returns 0.
  */
-export async function countPoolParamEvents(
-  chain: string,
-  poolAddress: string
-): Promise<number> {
+export async function countPoolParamEvents(chain: string, poolAddress: string): Promise<number> {
   const rows = await trackDbOp(
     'read',
     'countPoolParamEvents',
@@ -318,9 +312,7 @@ export async function countPoolParamEvents(
   return Number((rows as Record<string, unknown>[])[0]?.n ?? 0)
 }
 
-export async function insertPoolParamEvents(
-  rows: readonly PoolParamEventRow[]
-): Promise<void> {
+export async function insertPoolParamEvents(rows: readonly PoolParamEventRow[]): Promise<void> {
   if (rows.length === 0) return
   // neon-serverless `sql` helper doesn't support multi-row VALUES tuples
   // through tagged-template params, so we batch via `sql.transaction([...])`
@@ -559,10 +551,18 @@ export async function getDuneLabelStats(): Promise<{
   byChain: Record<string, number>
   byCategory: Record<string, number>
 }> {
-  const rows = await trackDbOp('read', 'getDuneLabelStats', () => sql`
+  const rows = await trackDbOp(
+    'read',
+    'getDuneLabelStats',
+    () => sql`
     SELECT chain, category, count(*)::int AS n FROM dune_address_labels GROUP BY chain, category
-  `)
-  const stats = { total: 0, byChain: {} as Record<string, number>, byCategory: {} as Record<string, number> }
+  `
+  )
+  const stats = {
+    total: 0,
+    byChain: {} as Record<string, number>,
+    byCategory: {} as Record<string, number>,
+  }
   for (const r of rows as Record<string, unknown>[]) {
     const chain = r.chain as string
     const category = r.category as string
