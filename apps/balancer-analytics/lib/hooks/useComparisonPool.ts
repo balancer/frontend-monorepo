@@ -22,7 +22,6 @@ import { useQuery } from '@apollo/client/react'
 import {
   GetPoolSnapshotsDocument,
   GqlChain,
-  GqlPoolSnapshotDataRange,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
 import type { GqlChainValues } from '@repo/lib/config/networks'

@@ -15,7 +15,6 @@
  * against a high-volume pool and inspect the top "(unlabeled)" rows.
  */
 
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import type { LabelsByChain } from '../types'
 

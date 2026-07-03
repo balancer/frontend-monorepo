@@ -8,7 +8,6 @@ import {
   GetPoolsQuery,
   GetProtocolStatsDocument,
   GqlChain,
-  GqlPoolAprItemType,
   GqlPoolStakingType,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'

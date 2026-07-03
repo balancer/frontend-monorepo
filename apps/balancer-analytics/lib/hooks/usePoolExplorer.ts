@@ -7,8 +7,6 @@ import {
   GetPoolsDocument,
   GetPoolsQuery,
   GqlChain,
-  GqlPoolOrderBy,
-  GqlPoolOrderDirection,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'

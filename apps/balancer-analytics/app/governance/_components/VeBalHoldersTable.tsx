@@ -17,7 +17,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { AlertTriangle, ExternalLink } from 'react-feather'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { useVeBalHolders } from '@analytics/lib/hooks/useVeBalHolders'

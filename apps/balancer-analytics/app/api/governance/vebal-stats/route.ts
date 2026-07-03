@@ -18,7 +18,6 @@ import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { unstable_cache } from 'next/cache'
 import type { Address } from 'viem'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPublicClient } from '@analytics/lib/drpc/client'
 import { scrubError } from '@analytics/lib/drpc/scrub'
 
