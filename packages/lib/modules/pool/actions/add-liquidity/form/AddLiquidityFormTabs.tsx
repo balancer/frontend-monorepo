@@ -34,7 +34,7 @@ import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { MinimumDepositErrorsAlert } from '../MinimumDepositErrorsAlert'
 import { useStableSurgeMetrics } from '@repo/lib/modules/hooks/stable-surge/useStableSurgeMetrics'
-import { useAutoRangeChartData } from '@repo/lib/modules/autorange/useAutoRangeChartData'
+import { useAutoRangeData } from '@repo/lib/modules/autorange/useAutoRangeData'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
@@ -147,8 +147,8 @@ export function AddLiquidityFormTabs({
   const isOutOfRange = isGyroEPool(pool) && !poolIsInRange
 
   const isReclamm = isAutoRange(pool.type)
-  const autoRangeChartData = useAutoRangeChartData()
-  const isUnbalancedDisabled = isReclamm && !autoRangeChartData?.isPoolWithinTargetRange
+  const autoRangeData = useAutoRangeData()
+  const isUnbalancedDisabled = isReclamm && !autoRangeData?.isPoolWithinTargetRange
 
   const isDisabledFlexibleTab =
     requiresProportionalInput(pool) || isBelowMinTvlThreshold || surging || isReclamm

@@ -8,7 +8,7 @@ import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.util
 
 const DEFAULT_PRICE_RATE = '1'
 
-export type AutoRangeChartData =
+export type AutoRangeData =
   | {
       maxPriceValue: number
       minPriceValue: number
@@ -25,7 +25,7 @@ export type AutoRangeChartData =
     }
   | undefined
 
-export function useAutoRangeChartData(): AutoRangeChartData {
+export function useAutoRangeData(): AutoRangeData {
   const autoRangeData = useGetComputeAutoRangeData()
   const { pool } = usePool()
 

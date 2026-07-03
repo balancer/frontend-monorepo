@@ -5,8 +5,8 @@ import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 
-vi.mock('@repo/lib/modules/autorange/useAutoRangeChartData', () => ({
-  useAutoRangeChartData: vi.fn(),
+vi.mock('@repo/lib/modules/autorange/useAutoRangeData', () => ({
+  useAutoRangeData: vi.fn(),
 }))
 
 vi.mock('../AddLiquidityProvider', () => ({
@@ -46,7 +46,7 @@ vi.mock('../MinimumDepositErrorsAlert', () => ({
   MinimumDepositErrorsAlert: () => null,
 }))
 
-import { useAutoRangeChartData } from '@repo/lib/modules/autorange/useAutoRangeChartData'
+import { useAutoRangeData } from '@repo/lib/modules/autorange/useAutoRangeData'
 
 function buildReclammPool() {
   const pool = aBalWethPoolElementMock()
@@ -74,7 +74,7 @@ function renderTabs(props = defaultProps) {
 
 describe('AddLiquidityFormTabs for RECLAMM pools', () => {
   it('enables the Unbalanced tab when pool is within target range', () => {
-    vi.mocked(useAutoRangeChartData).mockReturnValue({
+    vi.mocked(useAutoRangeData).mockReturnValue({
       isPoolWithinTargetRange: true,
       isPoolWithinRange: true,
       maxPriceValue: 1,
@@ -97,7 +97,7 @@ describe('AddLiquidityFormTabs for RECLAMM pools', () => {
   })
 
   it('disables the Unbalanced tab when pool is readjusting (in range but not in target range)', () => {
-    vi.mocked(useAutoRangeChartData).mockReturnValue({
+    vi.mocked(useAutoRangeData).mockReturnValue({
       isPoolWithinTargetRange: false,
       isPoolWithinRange: true,
       maxPriceValue: 1,
@@ -119,7 +119,7 @@ describe('AddLiquidityFormTabs for RECLAMM pools', () => {
   })
 
   it('disables the Unbalanced tab when pool is out of range', () => {
-    vi.mocked(useAutoRangeChartData).mockReturnValue({
+    vi.mocked(useAutoRangeData).mockReturnValue({
       isPoolWithinTargetRange: false,
       isPoolWithinRange: false,
       maxPriceValue: 1,
@@ -141,7 +141,7 @@ describe('AddLiquidityFormTabs for RECLAMM pools', () => {
   })
 
   it('disables the Unbalanced tab when chart data is not yet available', () => {
-    vi.mocked(useAutoRangeChartData).mockReturnValue(undefined)
+    vi.mocked(useAutoRangeData).mockReturnValue(undefined)
 
     renderTabs()
 
