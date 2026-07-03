@@ -1,0 +1,122 @@
+'use client'
+
+import Link from 'next/link'
+import { Box, Container } from '@chakra-ui/react'
+import { Prose } from '@nikolovlazar/chakra-ui-prose'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+
+export default function Cookies() {
+  return (
+    <Container py="2xl">
+      <Prose>
+        <div className="pb-4">
+          <FadeInOnView>
+            <div className="subsection">
+              <Box mt="3xl">
+                <h1>Beets cookies&nbsp;policy</h1>
+                <p>
+                  <em>Last updated: October 2023</em>
+                </p>
+              </Box>
+            </div>
+          </FadeInOnView>
+          <FadeInOnView>
+            <div className="subsection">
+              <h2>I. Introduction and scope of policy</h2>
+              <p>
+                This Cookies Policy (“Policy”) applies to your interaction with BeethovenX DAO LLC
+                and material service providers operating under a legal agreement (“BeethovenX,”
+                “Beets,” “we,” “our,” or “us”).
+              </p>
+            </div>
+          </FadeInOnView>
+          <FadeInOnView>
+            <div className="subsection">
+              <h2>II. About cookies</h2>
+              <p>
+                Cookies are pieces of data stored on your device. Browser cookies are assigned by a
+                web server to the browser on your device. When you return to a site you have visited
+                before, your browser gives this data back to the server. Mobile applications may
+                also use cookies.
+              </p>
+
+              <p>
+                We do not generally use cookies; however, our third-party vendors do. We do not
+                intentionally collect information to customize your experience on the website or the
+                beets.fi user interface (UI) for the Beets Protocol (“Sites” or “Site”).
+              </p>
+              <p>
+                Industry standards are currently evolving, and we may not separately respond to or
+                take any action with respect to a “do not track” configuration set in your Internet
+                browser.
+              </p>
+              <p>
+                Other parties that collect information about your web browsing behavior when you use
+                our Site are generally limited to service providers that only use any information
+                collected to provide services for us and not to provide services or advertising for
+                any other party. Note, however, that we also provide certain widgets or tools on our
+                Sites that allow you to interact with third parties that provide these features,
+                such as tools that allow users to easily share information on another platform. At
+                other times, information from a third party may be embedded on our Site, such as a
+                map. These widgets, tools, and informational items often function through the use of
+                third-party cookies utilized by the third-party site. As a result, these third
+                parties may have access to information about your web browsing on the pages of our
+                Site where these widgets, tools, or information are placed. You may wish to review
+                information at third-party sites, where you have an account, to determine how these
+                third parties treat data that they obtain through the use of cookies.
+              </p>
+            </div>
+          </FadeInOnView>
+          <FadeInOnView>
+            <div className="subsection">
+              <h2>III. Do you have to accept cookies?</h2>
+
+              <p>
+                You may be able to set your browser to reject cookies. If you set your browser
+                options to disallow cookies, you may limit the functionality we can provide when you
+                visit our Site. The latest versions of Internet browsers provide cookie management
+                tools, such as the ability to delete or reject cookies. We recommend that you refer
+                to information supplied by browser providers for more specific information,
+                including how to use these tools.
+              </p>
+            </div>
+          </FadeInOnView>
+          <FadeInOnView>
+            <div className="subsection">
+              <h2>IV. Additional technologies</h2>
+              <p>
+                We do not typically use additional technologies such as pixel tags, web beacons, and
+                clear GIFs. We permit third-party service providers to use these technologies. They
+                use these technologies for purposes such as determining viewing and response rates.
+              </p>
+            </div>
+          </FadeInOnView>
+          <FadeInOnView>
+            <div className="subsection">
+              <h2>V. Using information</h2>
+              <p>
+                In addition to the uses described above, we may use information for purposes as
+                allowed by law such as: servicing; communicating with you; improving our Site,
+                products, or services; legal compliance; risk control; information security;
+                anti-fraud purposes; tracking website usage, such as number of hits, pages visited,
+                and the length of user sessions in order to evaluate the usefulness of our sites.
+              </p>
+            </div>
+          </FadeInOnView>
+          <FadeInOnView>
+            <div>
+              <h2>VI. Sharing</h2>
+              <p>
+                We share information with service providers and companies that help us serve you
+                better. When permitted or required by law, we may share information with additional
+                third parties for purposes including responding to legal process. As applicable,
+                please see our <Link href="privacy-policy">Privacy policy</Link> for more
+                information on how we may share information with affiliates and third parties.
+              </p>
+            </div>
+          </FadeInOnView>
+        </div>
+      </Prose>
+    </Container>
+  )
+}

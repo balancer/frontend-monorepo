@@ -6,7 +6,7 @@ import { Prose } from '@nikolovlazar/chakra-ui-prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useEffect } from 'react'
 
-export default function Privacy() {
+export default function Risks() {
   useEffect(() => {
     const handleHashChange = () => {
       const { hash } = window.location
@@ -29,7 +29,7 @@ export default function Privacy() {
             <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Beets</h1>
               <p>
-                <em>Last Updated: July 2025</em>
+                <em>Last updated: July 2025</em>
               </p>
               <p>
                 <em>
@@ -48,7 +48,7 @@ export default function Privacy() {
               <nav className="nav">
                 <h2>Contents</h2>
 
-                <h3>Liquidity Provider risks</h3>
+                <h3>Liquidity provider risks</h3>
 
                 <ul>
                   <li>
@@ -69,7 +69,7 @@ export default function Privacy() {
                         <Link href="risks#composability-risk">DeFi composability risk</Link>
                       </li>
                       <li>
-                        <Link href="risks#flash-loans-risk">Flash Loans risk</Link>
+                        <Link href="risks#flash-loans-risk">Flash loan risk</Link>
                       </li>
                       <li>
                         <Link href="risks#mutable-attributes-risk">
@@ -86,7 +86,7 @@ export default function Privacy() {
                         <Link href="risks#hooks-risk">Hooks risk</Link>
                       </li>
                       <li>
-                        <Link href="risks#ui-risk">User Interface risk</Link>
+                        <Link href="risks#ui-risk">User interface risk</Link>
                       </li>
                       <li>
                         <Link href="risks#regulatory-risk">Regulatory risk</Link>
@@ -120,7 +120,7 @@ export default function Privacy() {
                       </li>
                       <li>
                         <Link href="risks#autorange">
-                          AutoRange - Readjusting Concentrated Liquidity AMM
+                          AutoRange—Readjusting Concentrated Liquidity AMM
                         </Link>
                       </li>
                       <li>
@@ -134,7 +134,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Risks for Liquidity Providers (LPs)</h2>
+              <h2>Risks for liquidity providers (LPs)</h2>
               <h3 className="anchor" id="general">
                 General risks
               </h3>
@@ -144,8 +144,8 @@ export default function Privacy() {
               <p>
                 Smart contract risk is a general risk when using DeFi protocols, including Balancer.
                 Smart contracts are self-executing pieces of code that run on certain blockchains,
-                like Ethereum. Although they are designed to be secure, they can be vulnerable to
-                bugs and exploits.
+                like Sonic. Although they are designed to be secure, they can be vulnerable to bugs
+                and exploits.
               </p>
               <p>
                 If there is a flaw in the smart contract code, it can be exploited by attackers to
@@ -172,12 +172,12 @@ export default function Privacy() {
               <h5>How does Balancer work to mitigate this risk?</h5>
               <ul>
                 <li>
-                  Development teams have engaged with top tier smart contract auditing firms to
+                  Development teams have engaged with top-tier smart contract auditing firms to
                   identify and fix bugs before deployment.
                 </li>
                 <li>
                   The core of Balancer smart contracts are immutable and do not use proxies or other
-                  upgrade mechanisms. Note: Within DeFI, upgradable contracts are a major way
+                  upgrade mechanisms. Note: Within DeFi, upgradable contracts are a major way
                   exploits have been introduced.
                 </li>
                 <li>
@@ -203,9 +203,9 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection anchor" id="economic-risk">
-              <h4>Mechanism / Economic risk</h4>
+              <h4>Mechanism/economic risk</h4>
               <p>
-                An mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
+                A mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
                 to manipulate the economic incentives of the protocol to their advantage, resulting
                 in a loss of funds for other participants. This can happen even when there are no
                 smart contract bugs or other unintended logic errors.
@@ -217,7 +217,7 @@ export default function Privacy() {
               </p>
               <p>
                 In addition, the composable nature of DeFi means that a pool on Balancer may contain
-                tokens that may be manipulated by an attacker on a third party protocol, which
+                tokens that may be manipulated by an attacker on a third-party protocol, which
                 further increases risk.
               </p>
               <p>These types of economic exploits are difficult to detect and prevent.</p>
@@ -225,7 +225,7 @@ export default function Privacy() {
               <ul>
                 <li>
                   Balancer strives to deliver careful economic modeling, rigorous mechanism design,
-                  testing and audits by top tier auditing firms.
+                  testing and audits by top-tier auditing firms.
                 </li>
               </ul>
               <h5>How can LPs mitigate this risk?</h5>
@@ -342,7 +342,7 @@ export default function Privacy() {
                   risks.
                 </li>
                 <li>
-                  LP&rsquo;s should review all pool tokens before providing liquidity to ensure no
+                  LPs should review all pool tokens before providing liquidity to ensure no
                   constituent pool tokens are unsupported by the Balancer Protocol (e.g. rebasing
                   tokens).
                 </li>
@@ -395,7 +395,7 @@ export default function Privacy() {
               </p>
               <p>Flash Loans may be used on Balancer and interact with the Balancer Vault.</p>
               <p>
-                While Flash Loans offer many benefits, they also comes with certain risks. Flash
+                While Flash Loans offer many benefits, they also come with certain risks. Flash
                 Loans have also been used for multiple DeFi exploits resulting in losses worth
                 millions of dollars. Flash Loan exploits are relatively new with the full range of
                 attack surfaces still being discovered.
@@ -405,7 +405,7 @@ export default function Privacy() {
                 <li>The Balancer Vault is non-reentrant, which blocks most Flash Loan attacks.</li>
                 <li>
                   Balancer strives to deliver careful economic modeling, rigorous mechanism design,
-                  testing and audits by top tier auditing firms.
+                  testing and audits by top-tier auditing firms.
                 </li>
               </ul>
             </div>
@@ -466,7 +466,7 @@ export default function Privacy() {
               <h5>How can LPs mitigate this risk?</h5>
               <ul>
                 <li>
-                  LPs should check to see the edibility of pool attributes and understand who can
+                  LPs should check to see the editability of pool attributes and understand who can
                   authorize any changes.
                 </li>
               </ul>
@@ -489,21 +489,21 @@ export default function Privacy() {
               <p>
                 LPs should also consider the effect of slippage when adding liquidity to a pool.
                 Slippage occurs when market conditions change between the time your order is
-                submitted and the time it gets executed on Ethereum. Slippage tolerance is the
-                maximum change in price you are willing to accept.
+                submitted and the time it gets executed on Sonic. Slippage tolerance is the maximum
+                change in price you are willing to accept.
               </p>
               <p>
                 Slippage tolerance is a setting in both the Add/Remove liquidity flows on the
                 Balancer App UI. Setting a low slippage tolerance protects you from front-running
                 bots and miner extractable value (MEV).
               </p>
-              <h5>Due to high Gas fees</h5>
+              <h5>Due to high gas fees</h5>
               <p>
-                Gas on the Ethereum network refers to the unit that measures the amount of
-                computational effort required to execute specific operations. Gas fees in Ethereum
-                are the transaction costs users pay to have their transactions processed and
-                validated by the network&apos;s miners. Gas fees vary depending on network
-                congestion, transaction complexity, and the amount of gas a user is willing to pay.
+                Gas on the Sonic network refers to the unit that measures the amount of
+                computational effort required to execute specific operations. Gas fees on Sonic are
+                the transaction costs users pay to have their transactions processed and validated
+                by the network&apos;s validators. Gas fees vary depending on network congestion,
+                transaction complexity, and the amount of gas a user is willing to pay.
               </p>
               <p>
                 Gas fees can be particularly high during periods of network congestion. As a result,
@@ -518,14 +518,14 @@ export default function Privacy() {
                   The Balancer Smart Order router is used to route liquidity efficiently via pools
                   to minimize price impact.
                 </li>
-                <li>The Balancer App UI gives LP&rsquo;s control over their slippage settings.</li>
+                <li>The Balancer App UI gives LPs control over their slippage settings.</li>
                 <li>
-                  LP&rsquo;s are warned via the Balancer App UI when the price impact is excessive.
-                  Once price impact exceeds a certain threshold, the Balancer App UI prevents
-                  user&rsquo;s from executing a transaction where they would otherwise get rekt.
+                  LPs are warned via the Balancer App UI when the price impact is excessive. Once
+                  price impact exceeds a certain threshold, the Balancer App UI prevents users from
+                  executing a transaction where they would otherwise get rekt.
                 </li>
               </ul>
-              <h5>How LP&rsquo;s can mitigate this risk:</h5>
+              <h5>How LPs can mitigate this risk:</h5>
               <ul>
                 <li>
                   Users should review their slippage settings and potential price impact before
@@ -560,7 +560,7 @@ export default function Privacy() {
               </p>
               <p>
                 This risk is particularly relevant for pools with volatile assets where token prices
-                are likely diverge over time.
+                are likely to diverge over time.
               </p>
               <h5>How does Balancer work to mitigate this risk?</h5>
               <ul>
@@ -584,7 +584,7 @@ export default function Privacy() {
               <h5>How can LPs mitigate this risk?</h5>
               <ul>
                 <li>
-                  LPs should consider the risk of impermanent risk carefully before providing
+                  LPs should consider the risk of impermanent loss carefully before providing
                   liquidity to a Balancer pool.
                 </li>
                 <li>
@@ -597,9 +597,9 @@ export default function Privacy() {
                   price divergence. For example, stable pools or boosted pools.
                 </li>
                 <li>
-                  LP&rsquo;s should consider providing liquidity in unbalanced pools, like 80/20
-                  pools which result in less impermanent loss versus a 50/50 pool with the same
-                  underlying tokens.
+                  LPs should consider providing liquidity in unbalanced pools, like 80/20 pools
+                  which result in less impermanent loss versus a 50/50 pool with the same underlying
+                  tokens.
                 </li>
               </ul>
             </div>
@@ -610,10 +610,10 @@ export default function Privacy() {
                 Hooks
               </h4>
               <p>
-                Hooks introduces complex logic into Balancer pools and changes in its parameters can
-                significantly impact the risk profile of a pool. This complexity increases the
-                potential for unforeseen errors or vulnerabilities in the hook&apos;s code, that may
-                i.e. amplify impermanent loss, introduce new sources of volatility or impose
+                Hooks introduce complex logic into Balancer pools, and changes in their parameters
+                can significantly impact the risk profile of a pool. This complexity increases the
+                potential for unforeseen errors or vulnerabilities in hook code that may, for
+                example, amplify impermanent loss, introduce new sources of volatility, or impose
                 restrictions on pool interactions like joins and exits.
               </p>
               <ul>
@@ -638,26 +638,26 @@ export default function Privacy() {
           <FadeInOnView>
             <div className="subsection">
               <h4 className="anchor" id="ui-risk">
-                User Interface (UI) risk
+                User interface (UI) risk
               </h4>
               <p>
                 DeFi users, including liquidity providers and swappers, typically interact with
                 front-end user interfaces to interact with a protocol&rsquo;s smart contracts. An
-                example is the app.balancer.fi front-end UI instance which interacts with Balancer
-                Protocol smart contracts.
+                example is the beets.fi front-end UI instance which interacts with Balancer Protocol
+                smart contracts.
               </p>
 
               <p>A few risks of using front-ends to manage liquidity positions in DeFi:</p>
               <ul>
                 <li>
                   UIs may not always display timely, accurate data. This may be due to the use of
-                  third party data services experiencing periods of downtime or network congestion.
+                  third-party data services experiencing periods of downtime or network congestion.
                 </li>
                 <li>UIs could be maliciously updated or exploited by rogue developers.</li>
                 <li>UIs may be updated and remove certain feature sets.</li>
                 <li>
-                  UIs may block certain wallet addresses or user&rsquo;s in certain jurisdictions to
-                  comply with their regulations.
+                  UIs may block certain wallet addresses or users in certain jurisdictions to comply
+                  with their regulations.
                 </li>
                 <li>
                   UIs may experience periods of downtime or potentially be discontinued. UIs may
@@ -670,12 +670,12 @@ export default function Privacy() {
                 <li>
                   Since the Balancer smart contracts can be interacted with by any front-end UI,
                   there is less reliance on any one single UI. The Balancer App UI code is open
-                  source with an MIT License which allow other third party developers to fork the
+                  source with an MIT License which allows other third-party developers to fork the
                   code, make improvements and compete for users.
                 </li>
                 <li>
-                  Users or third party developers can keep track of changes and review the open
-                  source repository on the Balancer Github for potential malicious code.
+                  Users or third-party developers can keep track of changes and review the
+                  open-source repository on GitHub for potential malicious code.
                 </li>
                 <li>
                   The developers of the Balancer App UI have provided instructions on how to clone
@@ -686,8 +686,8 @@ export default function Privacy() {
               <h5>How can LPs mitigate this risk?</h5>
               <ul>
                 <li>
-                  LP&rsquo;s can learn how to interact with Balancer smart contracts on third party
-                  websites, like <a href="https://etherscan.io/">Etherscan</a>.
+                  LPs can learn how to interact with Balancer smart contracts on third-party
+                  websites, like <a href="https://sonicscan.org/">SonicScan</a>.
                 </li>
                 <li>
                   To mitigate the risks of downtime or lack of access, users can fork the open
@@ -712,13 +712,11 @@ export default function Privacy() {
                 DeFi ecosystem.
               </p>
               <p>
-                It&apos;s also possible that the Balancer App UI may be wholly or partially
-                suspended or terminated for any or no reason, which may limit your access to your
-                tokens via this website. In this scenario, you may be able to recover funds by
-                forking the open-source code on{' '}
-                <a href="https://github.com/balancer/frontend-v2/">Github</a> and running your own
-                local instance, or by using a third party website, like{' '}
-                <a href="https://etherscan.io/">Etherscan</a>.
+                It&apos;s also possible that the Beets App UI may be wholly or partially suspended
+                or terminated for any or no reason, which may limit your access to your tokens via
+                this website. In this scenario, you may be able to recover funds by running your own
+                local instance or by using a third-party website, like{' '}
+                <a href="https://sonicscan.org/">SonicScan</a>.
               </p>
             </div>
             <FadeInOnView>
@@ -834,23 +832,24 @@ export default function Privacy() {
                   <ul>
                     <li>
                       Pegged Tokens: Tokens that trade near 1:1, such as two stablecoins of the same
-                      currency (eg: DAI, USDC, USDT), or synthetic assets (eg: renBTC, sBTC, WBTC)
+                      currency (e.g., DAI, USDC, USDT), or synthetic assets (e.g., renBTC, sBTC,
+                      WBTC)
                     </li>
                     <li>
                       Correlated Tokens: Tokens that trade near each other with some slowly changing
-                      exchange rate, like derivatives (eg: wstETH, wETH)
+                      exchange rate, like derivatives (e.g., wstETH, wETH)
                     </li>
                   </ul>
                   <p>
                     Note: Composable Stable Pools are a superset of all previous Stable-type pools
-                    (Stable Pools, MetaStable Pools, StablePhantom Pools, and StablePool v2) and
-                    therefore obsolete all previous pools.
+                    (Stable Pools, MetaStable Pools, and StablePool v2) and therefore render all
+                    previous pools obsolete.
                   </p>
                   <p>
-                    Composable Stable Pools (including MetaStable Pools) carry the all of the same
-                    risks as stable pools, including the potential depegging of constituent
-                    stablecoin tokens. In addition, there are risks associated with the involvement
-                    of rate providers.
+                    Composable Stable Pools (including MetaStable Pools) carry all the same risks as
+                    stable pools, including the potential depegging of constituent stablecoin
+                    tokens. In addition, there are risks associated with the involvement of rate
+                    providers.
                   </p>
                   <div>
                     <h5 className="anchor" id="rate-provider-risk">
@@ -868,7 +867,9 @@ export default function Privacy() {
                   </div>
 
                   <div>
-                    <h6>Oracle risk</h6>
+                    <h6 className="anchor" id="oracles">
+                      Oracle risk
+                    </h6>
                     <p>
                       Oracles are data providers which supply external information to smart
                       contracts. Oracles, like Chainlink, may be used to source exchange rates
@@ -916,12 +917,6 @@ export default function Privacy() {
                     <p>
                       Pools may use rate providers that are bridged between blockchain networks.
                     </p>
-                    <p>
-                      For example, some pools on Polygon zkEVM use a rate provider that is bridged
-                      from Ethereum Mainnet via the Layer Zero (an omnichain messaging service). In
-                      these pools, LPs are exposed to risk of significant losses if an incorrect
-                      rate is received via the omnichain messaging service.
-                    </p>
                   </div>
                 </div>
               </FadeInOnView>
@@ -951,7 +946,7 @@ export default function Privacy() {
                       variety of yield increases from multiple yield protocols.
                     </li>
                   </ul>
-                  <h5>Third party platform risk exposure (DeFi composability risk)</h5>
+                  <h5>Third-party platform risk exposure (DeFi composability risk)</h5>
                   <p>
                     Since boosted pools deposit excess liquidity into third-party protocols, like
                     Aave, to generate yield, LPs must fully understand the risks of the underlying
@@ -968,7 +963,7 @@ export default function Privacy() {
                     Also note, some boosted pools may use strategies that utilize multiple yield
                     protocols in order to maximize yield. Since these strategies may change exposure
                     to the underlying yield protocols at any time, LPs must accept the risk that the
-                    protocol utilizing these strategies carefully vets all third party protocols to
+                    protocol utilizing these strategies carefully vets all third-party protocols to
                     reduce composability risks.
                   </p>
                   <p>
@@ -1007,8 +1002,8 @@ export default function Privacy() {
                     which inherently wants its token to stay as close to the peg as possible.
                   </p>
                   <p>
-                    Stable Surge hooks introduces dynamic swap fees designed to protect peg, but may
-                    also impact the risk profile of a pool. Please also refer to the{' '}
+                    StableSurge hooks introduce dynamic swap fees designed to protect the peg, but
+                    may also impact the risk profile of a pool. Please also refer to the{' '}
                     <Link href="risks#hooks-risk">
                       <span>Hooks</span>
                     </Link>{' '}
@@ -1060,7 +1055,7 @@ export default function Privacy() {
                     Liquidity Pools&rsquo; (CLPs) are a class of AMMs that price the exchange of
                     assets within a defined range. As such, any CLP only provides liquidity for
                     trading activity restricted to this specific region. The goal is to use the
-                    pool&rsquo;s capital efficiently. There&rsquo;s a few different types of CLPs:
+                    pool&rsquo;s capital efficiently. There are a few different types of CLPs:
                   </p>
                   <ul>
                     <li>
@@ -1070,7 +1065,7 @@ export default function Privacy() {
                       &lsquo;single tick&rsquo;, where liquidity is distributed evenly across a
                       single active trading range. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/2-clps">
-                        2-CLP&rsquo;s and their risks
+                        2-CLPs and their risks
                       </a>
                       .
                     </li>
@@ -1080,7 +1075,7 @@ export default function Privacy() {
                       2-CLPs. As a high-level summary, they amplify the benefits of 2-CLPs. Learn
                       more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/3-clps">
-                        3-CLP&rsquo;s and their risks
+                        3-CLPs and their risks
                       </a>
                       .
                     </li>
@@ -1090,7 +1085,7 @@ export default function Privacy() {
                       liquidity that allows highly flexible and asymmetric liquidity profiles in a
                       single pool position. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/e-clps">
-                        E-CLP&rsquo;s and their risks
+                        E-CLPs and their risks
                       </a>
                       .
                     </li>
@@ -1099,7 +1094,7 @@ export default function Privacy() {
                       E-CLPs combine asymmetric concentrated liquidity with auto-rehypothecation to
                       lending markets. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/rehype-e-clps">
-                        Rehype E-CLP&rsquo;s and their risks
+                        Rehype E-CLPs and their risks
                       </a>
                       .
                     </li>
@@ -1295,10 +1290,10 @@ export default function Privacy() {
                 Navigating these challenges calls for active engagement and open communication
                 within the community. Sharing insights, feedback, or concerns can contribute to
                 building a safer and more inclusive environment for all. Please feel free to reach
-                out with any questions, suggestions or propose changes for this page directly via
-                the{' '}
+                out with any questions or suggestions, or to propose changes for this page directly
+                via the{' '}
                 <a href="https://github.com/balancer/frontend-monorepo/blob/main/apps/beets-frontend-v3/app/(marketing)/risks/page.tsx">
-                  Balancer Github
+                  GitHub
                 </a>
                 .
               </p>

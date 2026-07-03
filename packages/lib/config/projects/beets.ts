@@ -11,6 +11,7 @@ export const ProjectConfigBeets: ProjectConfig = {
   projectName: 'Beets',
   projectUrl: 'https://beets.fi',
   projectLogo: 'https://beets.fi/images/icons/beets.svg',
+  acceptedPoliciesVersion: 1,
   supportedNetworks: beetsSupportedNetworks,
   networksForProtocolStats: [...beetsSupportedNetworks, GqlChainValues.Fantom],
   corePoolId: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005', // maBEETS BEETS8020 (Fresh BEETS) pool on Sonic
@@ -71,7 +72,13 @@ export const ProjectConfigBeets: ProjectConfig = {
         href: 'https://github.com/beethovenxfi/',
       },
     ],
-    legalLinks: [{ label: 'Terms of service', href: '/terms-of-service' }],
+    legalLinks: [
+      { label: 'Terms of Use', href: '/terms-of-use' },
+      { label: 'Privacy policy', href: '/privacy-policy' },
+      { label: 'Cookies policy', href: '/cookies-policy' },
+      { label: 'Risks', href: '/risks' },
+      { label: 'Third-party services', href: '/3rd-party-services' },
+    ],
   },
   footer: {
     linkSections: [

@@ -14,6 +14,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   projectName: 'Balancer',
   projectUrl: 'https://balancer.fi',
   projectLogo: 'https://balancer.fi/images/icons/balancer.svg',
+  acceptedPoliciesVersion: undefined,
   supportedNetworks: [
     GqlChainValues.Mainnet,
     GqlChainValues.Monad,

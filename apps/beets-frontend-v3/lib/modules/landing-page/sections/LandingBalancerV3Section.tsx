@@ -44,7 +44,7 @@ export function LandingBalancerV3Section() {
         href: 'https://docs.balancer.fi',
         isExternal: true,
       }}
-      subtitle="Revolutionizing Liquidity, Redefining DeFi"
+      subtitle="Revolutionizing liquidity, redefining DeFi"
       title="Powered by Balancer v3"
     >
       <Box bg="rgba(255, 255, 255, 0.05)" pb="xl" px="xl" w="full">
@@ -105,7 +105,7 @@ export function LandingBalancerV3Section() {
             textAlign="center"
             w={{ base: 'full', lg: '2xl' }}
           >
-            Balancer v3 transforms beets into a hub of cutting-edge liquidity solutions, empowering
+            Balancer v3 transforms Beets into a hub of cutting-edge liquidity solutions, empowering
             builders to shape the future of Sonic.
           </Box>
         </Center>

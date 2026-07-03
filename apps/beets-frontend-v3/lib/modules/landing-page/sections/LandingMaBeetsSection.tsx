@@ -93,7 +93,7 @@ export function LandingMaBeetsSection() {
           </GridItem>
           <GridItem>
             <FeatureCard
-              description="Earn based on both the size and maturity of your position, aligning long-term contributors with the protocol’s success. "
+              description="Earn based on both the size and maturity of your position, aligning long-term contributors with the protocol’s success."
               image={<MaBeetsFairerRewardsSvg />}
               title="Fairer Rewards"
             />
