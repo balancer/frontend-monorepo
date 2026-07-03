@@ -30,6 +30,11 @@ import type {
 import type { PoolDetailToken, PoolPageData, PriceRateProviderData } from '../page'
 import { getBlockExplorerAddressUrl } from '@analytics/lib/networks/chain-info'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  estimateReclammRecovery,
+  formatRecoveryDuration,
+  reclammTypeStateToRecoveryInput,
+} from '@repo/lib/modules/autorange/estimateReclammRecovery'
 
 const ZERO_ADDR = '0x0000000000000000000000000000000000000000'
 
@@ -637,6 +642,33 @@ function BoundaryChip({
   )
 }
 
+function getMarketPriceBPerA(tokens: PoolDetailToken[]): number | null {
+  const tokenA = tokens[0]
+  const tokenB = tokens[1]
+  if (!tokenA || !tokenB) return null
+
+  const balanceA = Number(tokenA.balance)
+  const balanceB = Number(tokenB.balance)
+  const balanceUsdA = Number(tokenA.balanceUSD)
+  const balanceUsdB = Number(tokenB.balanceUSD)
+  if (
+    !Number.isFinite(balanceA) ||
+    !Number.isFinite(balanceB) ||
+    !Number.isFinite(balanceUsdA) ||
+    !Number.isFinite(balanceUsdB) ||
+    balanceA <= 0 ||
+    balanceB <= 0 ||
+    balanceUsdA <= 0 ||
+    balanceUsdB <= 0
+  ) {
+    return null
+  }
+
+  const tokenAPriceUsd = balanceUsdA / balanceA
+  const tokenBPriceUsd = balanceUsdB / balanceB
+  return tokenBPriceUsd > 0 ? tokenAPriceUsd / tokenBPriceUsd : null
+}
+
 function AutoRangeSection({
   rc,
   tokens,
@@ -645,7 +677,7 @@ function AutoRangeSection({
   rc: ReclammTypeState
   /** Pool tokens in registration order — tokens[0] = A, tokens[1] = B.
    *  Drives the unit label on the boundary chips (e.g. "USDC per WETH"). */
-  tokens: Token[]
+  tokens: PoolDetailToken[]
   manageButton?: React.ReactNode
 }): React.JSX.Element {
   const updateActive =
@@ -705,6 +737,10 @@ function AutoRangeSection({
       ? 'in-range'
       : 'out-of-range'
 
+  const recovery = estimateReclammRecovery(
+    reclammTypeStateToRecoveryInput(rc, getMarketPriceBPerA(tokens))
+  )
+
   return (
     <TypeSection
       badge={
@@ -759,6 +795,11 @@ function AutoRangeSection({
         hint="cap on daily drift of the bounds when out-of-center"
         label="Daily price shift"
         value={formatWeightPct(rc.dailyPriceShiftExponent)}
+      />
+      <StateRow
+        hint="projected time for the green target band to reach market price at the current shift rate, assuming no further swaps"
+        label="Est. time to range"
+        value={formatRecoveryDuration(recovery.secondsToInRange)}
       />
       {rc.lastTimestamp > 0 && (
         <StateRow
