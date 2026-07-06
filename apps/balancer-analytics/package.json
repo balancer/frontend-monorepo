@@ -1,0 +1,40 @@
+{
+  "name": "balancer-analytics",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev -p 3002",
+    "lint": "eslint . --max-warnings 0 --cache",
+    "lint:fix": "eslint . --fix --max-warnings 0 --cache",
+    "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
+    "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
+    "start": "next start -p 3002",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
+  },
+  "dependencies": {
+    "@repo/lib": "workspace:*",
+    "next": "16.2.9",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/test": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "24.13.2",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.4",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "engineStrict": true
+}
