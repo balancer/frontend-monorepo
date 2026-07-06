@@ -7,8 +7,8 @@ Standalone analytics surface aggregating Balancer v2 and v3 data, hosted as a th
 
 Skeleton + Protocol overview page wired against `protocolMetricsAggregated` via `@repo/lib`.
 
-- `NEXT_PUBLIC_PROJECT_ID=analytics` resolves to `ProjectConfigAnalytics` (mirrors Balancer chain
-  set, identity-only overrides).
+- `NEXT_PUBLIC_PROJECT_ID=balancer` resolves to `ProjectConfigBalancer` (the app reuses the Balancer
+  project config; its own branding lives in local components/metadata).
 - Read-only: no wagmi / RainbowKit providers in the tree.
 - Chakra theme is a local copy of the bal theme (`lib/services/chakra/themes/analytics/`).
 

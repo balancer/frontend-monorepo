@@ -25,19 +25,46 @@ import { neon } from '@neondatabase/serverless'
 // in priority order. `DATABASE_URL` / `POSTGRES_URL` are the bare defaults;
 // the `DATABASE_`-prefixed variants come from a project that mounted the
 // integration under a "DATABASE" prefix.
-const dbUrl =
-  process.env.DATABASE_URL ||
-  process.env.POSTGRES_URL ||
-  process.env.DATABASE_POSTGRES_URL ||
-  process.env.DATABASE_POSTGRES_URL_NON_POOLING ||
-  process.env.DATABASE_URL_UNPOOLED
-if (!dbUrl) {
-  throw new Error(
-    'No Postgres connection string found. Set DATABASE_URL / POSTGRES_URL, or wire the Vercel Neon Marketplace integration (which also provides DATABASE_POSTGRES_URL).'
-  )
+function resolveDbUrl(): string {
+  const dbUrl =
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.DATABASE_POSTGRES_URL ||
+    process.env.DATABASE_POSTGRES_URL_NON_POOLING ||
+    process.env.DATABASE_URL_UNPOOLED
+  if (!dbUrl) {
+    throw new Error(
+      'No Postgres connection string found. Set DATABASE_URL / POSTGRES_URL, or wire the Vercel Neon Marketplace integration (which also provides DATABASE_POSTGRES_URL).'
+    )
+  }
+  return dbUrl
 }
 
-export const sql = neon(dbUrl)
+// Lazily construct the Neon client on first *use* rather than at module import.
+// A top-level `neon(resolveDbUrl())` throws during `next build` — which imports
+// every route module to collect page data — whenever the build environment has
+// no connection string. Deferring keeps the build green with no DB wired; the
+// "no connection string" error now surfaces at request time, inside the cron/
+// API routes that actually touch Postgres.
+type Sql = ReturnType<typeof neon>
+let client: Sql | undefined
+function getClient(): Sql {
+  if (!client) client = neon(resolveDbUrl())
+  return client
+}
+
+// A Proxy preserves both call shapes used across the app: the tagged-template
+// form (`sql`…``) via the `apply` trap, and method access (`sql.transaction`,
+// `sql.query`, …) via the `get` trap. Consumers keep importing `sql` unchanged.
+export const sql: Sql = new Proxy((() => {}) as unknown as Sql, {
+  apply(_target, _thisArg, args: unknown[]) {
+    return (getClient() as (...a: unknown[]) => unknown)(...args)
+  },
+  get(_target, prop, receiver) {
+    const value = Reflect.get(getClient() as object, prop, receiver)
+    return typeof value === 'function' ? value.bind(getClient()) : value
+  },
+})
 
 // ── Per-op structured logging ──────────────────────────────────────────────
 // Each Neon HTTP roundtrip emits one log line of `{ op, helper, ms }`. Post-
