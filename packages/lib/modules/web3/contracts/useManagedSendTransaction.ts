@@ -21,6 +21,7 @@ import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { useUserAccount } from '../UserAccountProvider'
 
 export type ManagedSendTransactionInput = {
   labels: TransactionLabels
@@ -38,6 +39,7 @@ export function useManagedSendTransaction({
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const { minConfirmations } = useNetworkConfig()
   const { updateTrackedTransaction } = useRecentTransactions()
+  const { connector } = useUserAccount()
 
   const estimateGasQueryOriginal = useEstimateGas({
     ...txConfig,
@@ -52,8 +54,11 @@ export function useManagedSendTransaction({
   // make a copy here so we can adjust the data below
   let estimateGasQuery = estimateGasQueryOriginal
 
+  // MetaMask on Monad rejects the app-estimated gas limit, so let the wallet estimate it
+  const isMetaMaskOnMonad = chainId === 143 && connector?.id === 'metaMask'
+
   // increase gas limit here to make sure v3 boosted pool transactions have enough gas
-  if (estimateGasQueryOriginal.data) {
+  if (estimateGasQueryOriginal.data && !isMetaMaskOnMonad) {
     const originalGas = estimateGasQueryOriginal.data
     const adjustedGas = BigInt(bn(originalGas).times(1.1).toFixed(0))
 
