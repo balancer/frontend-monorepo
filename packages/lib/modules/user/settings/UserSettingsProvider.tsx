@@ -2,11 +2,18 @@
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { SupportedCurrency } from '@repo/lib/shared/utils/currencies'
-import { PropsWithChildren, createContext } from 'react'
+import { PropsWithChildren, createContext, useCallback, useEffect } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '../../local-storage/local-storage.constants'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import {
+  AcceptedPoliciesStorage,
+  getAcceptedPolicies,
+  getAcceptedPoliciesStorage,
+  shouldResetAcceptedPolicies,
+} from './accepted-policies-storage'
 
 export type YesNo = 'yes' | 'no'
 
@@ -65,11 +72,32 @@ export function useUserSettingsLogic({
   const slippageDecimal = bn(slippage).div(100).toString()
   const slippageBps = bn(slippage).times(100).toString()
 
-  const [_acceptedPolicies, setAcceptedPolicies] = useLocalStorage<string[]>(
-    LS_KEYS.UserSettings.AcceptedPolicies,
-    initAcceptedPolicies
+  const [_acceptedPoliciesStorage, setAcceptedPoliciesStorage] =
+    useLocalStorage<AcceptedPoliciesStorage>(
+      LS_KEYS.UserSettings.AcceptedPolicies,
+      getAcceptedPoliciesStorage(initAcceptedPolicies, PROJECT_CONFIG.acceptedPoliciesVersion)
+    )
+
+  const acceptedPolicies = isMounted
+    ? getAcceptedPolicies(_acceptedPoliciesStorage, PROJECT_CONFIG.acceptedPoliciesVersion)
+    : initAcceptedPolicies
+
+  const setAcceptedPolicies = useCallback(
+    (nextAcceptedPolicies: string[]) => {
+      setAcceptedPoliciesStorage(
+        getAcceptedPoliciesStorage(nextAcceptedPolicies, PROJECT_CONFIG.acceptedPoliciesVersion)
+      )
+    },
+    [setAcceptedPoliciesStorage]
   )
-  const acceptedPolicies = isMounted ? _acceptedPolicies : initAcceptedPolicies
+
+  useEffect(() => {
+    if (
+      shouldResetAcceptedPolicies(_acceptedPoliciesStorage, PROJECT_CONFIG.acceptedPoliciesVersion)
+    ) {
+      setAcceptedPolicies([])
+    }
+  }, [_acceptedPoliciesStorage, setAcceptedPolicies])
 
   const [_enableTxBundling, setEnableTxBundling] = useLocalStorage<YesNo>(
     LS_KEYS.UserSettings.EnableTxBundling,

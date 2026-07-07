@@ -16,9 +16,9 @@ export function TOSCheckbox({
           <Checkbox isChecked={checked} onChange={e => onChange(e.target.checked)} size="lg">
             <Text as="div" fontSize="md" lineHeight="1" sx={{ textWrap: 'pretty' }}>
               <TextShine animationDuration="1.5s">
-                I agree to the terms of service as stated&nbsp;
+                I agree to the Terms of Use as stated&nbsp;
                 <Link
-                  href="https://beets.fi/terms-of-service"
+                  href="https://beets.fi/terms-of-use"
                   isExternal
                   onClick={e => e.stopPropagation()}
                 >

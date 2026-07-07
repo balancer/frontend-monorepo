@@ -15,8 +15,8 @@ export function LandingBeetsStakedSonic() {
         text: 'Stake $S',
         href: '/stake',
       }}
-      subtitle="stS redefines Liquid Staking by combining deep liquidity, robust security, and competitive yield into one powerful position. Purpose-built for Sonic, stS delivers an unparalleled staking experience—maximizing rewards without sacrificing flexibility."
-      title="stS: Liquid Staking on Sonic"
+      subtitle="stS redefines liquid staking by combining deep liquidity, robust security, and competitive yield into one powerful position. Purpose-built for Sonic, stS delivers an unparalleled staking experience—maximizing rewards without sacrificing flexibility."
+      title="stS: Liquid staking on Sonic"
     >
       <Box
         backgroundColor="rgba(255, 255, 255, 0.05)"
@@ -47,8 +47,8 @@ export function LandingBeetsStakedSonic() {
             <Box mb="xl">
               <Heading fontSize="3xl">Earn Network Rewards</Heading>
               <Text fontSize="lg" fontWeight="thin">
-                Convert S to stS and earn continuous staking yields - while keeping your capital
-                fully liquid.
+                Convert S to stS and earn continuous staking yields while keeping your capital fully
+                liquid.
               </Text>
             </Box>
           </GridItem>
@@ -69,7 +69,7 @@ export function LandingBeetsStakedSonic() {
               <Box flex="1" mr="xl">
                 <Heading fontSize="2xl">Composability</Heading>
                 <Text fontSize="lg" fontWeight="thin">
-                  Use stS seamlessly across DeFi - access lending markets, liquidity pools, and more
+                  Use stS seamlessly across DeFi—access lending markets, liquidity pools, and more
                   without pausing your rewards.
                 </Text>
               </Box>

@@ -48,7 +48,7 @@ export function LandingBeetsSocialClub() {
       <Center mb="2xl">
         <Text fontSize="2xl" fontWeight="thin" maxW="full" textAlign="center" w="2xl">
           Join our vibrant community of DeFi enthusiasts, builders, and visionaries. Share insights,
-          collaborate on projects, and help shape the BEETS ecosystem together. Connect, learn, and
+          collaborate on projects, and help shape the Beets ecosystem together. Connect, learn, and
           grow with us.
         </Text>
       </Center>

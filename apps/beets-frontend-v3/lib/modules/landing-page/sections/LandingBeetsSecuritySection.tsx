@@ -39,7 +39,7 @@ export function LandingBeetsSecuritySection() {
         href: 'https://docs.beets.fi/beets-dex/security#audits',
         isExternal: true,
       }}
-      subtitle="Built with security at its core, beets prioritizes trust at every level. From rigorous audits to open-source transparency and continuous monitoring, our ecosystem ensures your assets remain safe, reliable, and accessible."
+      subtitle="Built with security at its core, Beets prioritizes trust at every level. From rigorous audits to open-source transparency and continuous monitoring, our ecosystem ensures your assets remain safe, reliable, and accessible."
       title="Code you can trust"
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
@@ -75,11 +75,11 @@ export function LandingBeetsSecuritySection() {
             }
           />
           <Card
-            description="Ongoing security assessments ensure the integrity of the beets ecosystem."
+            description="Ongoing security assessments ensure the integrity of the Beets ecosystem."
             image={<SecurityMonitoringSvg />}
             title={
               <>
-                Continous
+                Continuous
                 <br />
                 Monitoring
               </>

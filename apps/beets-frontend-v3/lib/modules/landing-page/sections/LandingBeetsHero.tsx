@@ -15,8 +15,8 @@ export function LandingBeetsHero() {
             px={{ base: 'md', md: 'none' }}
             w="2xl"
           >
-            The Flagship LST Hub on Sonic. From seamless staking to earning real yield on
-            LST-focused liquidity pools, beets is the ultimate destination for your liquid-staked
+            The flagship LST hub on Sonic. From seamless staking to earning real yield on
+            LST-focused liquidity pools, Beets is the ultimate destination for your liquid staking
             tokens.
           </Text>
           <Flex gap="lg" mt="lg">

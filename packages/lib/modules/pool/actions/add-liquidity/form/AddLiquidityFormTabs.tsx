@@ -34,6 +34,7 @@ import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { MinimumDepositErrorsAlert } from '../MinimumDepositErrorsAlert'
 import { useStableSurgeMetrics } from '@repo/lib/modules/hooks/stable-surge/useStableSurgeMetrics'
+import { useAutoRangeData } from '@repo/lib/modules/autorange/useAutoRangeData'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
@@ -146,6 +147,8 @@ export function AddLiquidityFormTabs({
   const isOutOfRange = isGyroEPool(pool) && !poolIsInRange
 
   const isReclamm = isAutoRange(pool.type)
+  const autoRangeData = useAutoRangeData()
+  const isUnbalancedDisabled = isReclamm && !autoRangeData?.isPoolWithinTargetRange
 
   const isDisabledFlexibleTab =
     requiresProportionalInput(pool) || isBelowMinTvlThreshold || surging || isReclamm
@@ -192,8 +195,10 @@ export function AddLiquidityFormTabs({
         value: '0',
         label: 'Unbalanced',
         dataId: 'add-liquidity-tab-unbalanced',
-        disabled: false,
-        tabTooltipLabel: undefined,
+        disabled: isUnbalancedDisabled,
+        tabTooltipLabel: isUnbalancedDisabled
+          ? 'Unbalanced adds are disabled while the pool is not within its target range'
+          : undefined,
       }
     : {
         value: '0',
@@ -232,6 +237,12 @@ export function AddLiquidityFormTabs({
       setFlexibleTab()
     }
   }, [isDisabledUnbalancedTab, isLoading, isReclamm, tabIndex, setFlexibleTab])
+
+  useEffect(() => {
+    if (!isLoading && isReclamm && tabIndex === 0 && isUnbalancedDisabled) {
+      setProportionalTab()
+    }
+  }, [isUnbalancedDisabled, isLoading, isReclamm, tabIndex, setProportionalTab])
 
   const isProportional = tabIndex === 1
 
