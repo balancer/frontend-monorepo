@@ -60,7 +60,7 @@ export function useRemoveLiquidityLogic(
   const { getNativeAssetToken, getWrappedNativeAssetToken, usdValueForTokenAddress } = useTokens()
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
-  const { acceptPriceImpactRisk, hasToAcceptHighPriceImpact } = usePriceImpact()
+  const { acceptPriceImpactRisk, hasToAcceptHighPriceImpact, resetPriceImpact } = usePriceImpact()
   const needsToAcceptHighPI = hasToAcceptHighPriceImpact && !acceptPriceImpactRisk
 
   const humanBptIn: HumanAmount = bn(maxHumanBptIn ?? getUserWalletBalance(pool))
@@ -85,6 +85,17 @@ export function useRemoveLiquidityLogic(
 
   const setProportionalType = () => setRemovalType(RemoveLiquidityType.Proportional)
   const setSingleTokenType = () => setRemovalType(RemoveLiquidityType.SingleToken)
+
+  function setHumanBptInPercentWithReset(percent: number) {
+    setHumanBptInPercent(percent)
+    resetPriceImpact()
+  }
+
+  function setSingleTokenAddressWithReset(address: Address | undefined) {
+    setSingleTokenAddress(address)
+    resetPriceImpact()
+  }
+
   const isSingleToken = removalType === RemoveLiquidityType.SingleToken
   const isProportional = removalType === RemoveLiquidityType.Proportional
 
@@ -292,10 +303,10 @@ export function useRemoveLiquidityLogic(
     removeLiquidityTxSuccess,
     isSingleTokenBalanceMoreThat25Percent,
     setRemovalType,
-    setHumanBptInPercent,
+    setHumanBptInPercent: setHumanBptInPercentWithReset,
     setProportionalType,
     setSingleTokenType,
-    setSingleTokenAddress,
+    setSingleTokenAddress: setSingleTokenAddressWithReset,
     amountOutForToken,
     usdOutForToken,
     setWethIsEth,

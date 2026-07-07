@@ -338,6 +338,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       })
       if (state.tokenIn.amount !== newState.tokenIn.amount) {
         setTokenOutAmount('', { userTriggered: false })
+        resetPriceImpact()
       }
     } else {
       // Sometimes we want to set the amount without triggering a fetch or
@@ -390,6 +391,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       })
       if (state.tokenOut.amount !== newState.tokenOut.amount) {
         setTokenInAmount('', { userTriggered: false })
+        resetPriceImpact()
       }
     } else {
       // Sometimes we want to set the amount without triggering a fetch or

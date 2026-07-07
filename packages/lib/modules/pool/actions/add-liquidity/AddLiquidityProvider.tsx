@@ -117,6 +117,7 @@ export function useAddLiquidityLogic(
   ]
 
   const { usdValueFor } = useTotalUsdValue(validTokens)
+  const { acceptPriceImpactRisk, hasToAcceptHighPriceImpact, resetPriceImpact } = usePriceImpact()
 
   function setInitialHumanAmountsIn() {
     setHumanAmountsIn(mapTokensToEmptyHumanAmounts(tokens))
@@ -133,6 +134,7 @@ export function useAddLiquidityLogic(
         symbol: token.symbol,
       },
     ])
+    resetPriceImpact()
   }
 
   function clearAmountsIn(changedAmount?: HumanTokenAmountWithSymbol) {
@@ -173,7 +175,6 @@ export function useAddLiquidityLogic(
     enabled,
   })
 
-  const { acceptPriceImpactRisk, hasToAcceptHighPriceImpact } = usePriceImpact()
   const needsToAcceptHighPI = hasToAcceptHighPriceImpact && !acceptPriceImpactRisk
 
   const { steps, isLoadingSteps } = useAddLiquiditySteps({
