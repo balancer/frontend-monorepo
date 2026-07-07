@@ -4,7 +4,7 @@ import type {
 } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { Pool, TokenCore } from './pool.types'
 import { PoolToken, PoolCore } from './pool.types'
-import { isBoosted, isV3Pool } from './pool.helpers'
+import { isAutoRange, isBoosted, isV3Pool } from './pool.helpers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 import { sortBy, uniqBy } from 'lodash'
@@ -188,6 +188,8 @@ export function shouldUseUnderlyingToken(token: ApiToken, pool: Pool | GqlPoolBa
       `Underlying token is missing for ERC4626 token with address ${token.address} in chain ${pool.chain}`
     )
   }
+  // AutoRange pools do not support adding with underlying tokens
+  if (isAutoRange(pool.type)) return false
   // Only v3 pools should underlying tokens
   return (
     isV3Pool(pool) &&

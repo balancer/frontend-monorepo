@@ -35,7 +35,7 @@ import { AutoRangeChart } from '@repo/lib/modules/autorange/AutoRangeChart'
 import { ReversedToggleButton } from '@repo/lib/shared/components/btns/ReversedToggleButton'
 import { ThumbsDown, ThumbsUp } from 'react-feather'
 import { WandIcon } from '@repo/lib/shared/components/icons/WandIcon'
-import { useAutoRangeChartData } from '@repo/lib/modules/autorange/useAutoRangeChartData'
+import { useAutoRangeData } from '@repo/lib/modules/autorange/useAutoRangeData'
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
@@ -55,7 +55,7 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
 }
 
 export function PoolChartsContainer() {
-  const autoRangeChartData = useAutoRangeChartData()
+  const autoRangeChartData = useAutoRangeData()
   const eclpLiquidityProfile = useGetECLPLiquidityProfile()
 
   return (

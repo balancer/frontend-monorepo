@@ -44,7 +44,7 @@ import { useWrapUnderlying } from '../useWrapUnderlying'
 type AddLiquidityHandlerSelector = (
   pool: Pool,
   wantsProportional: boolean,
-  wantsUnbalanced?: boolean
+  wrapUnderlying?: boolean[]
 ) => AddLiquidityHandler
 
 type AddLiquidityStepsHook = (
@@ -97,8 +97,8 @@ export function useAddLiquidityLogic(
   const { slippage } = useUserSettings()
 
   const handler = useMemo(() => {
-    return addLiquidityHandlerSelector(pool, wantsProportional, wantsUnbalanced)
-  }, [pool, wantsProportional, wantsUnbalanced, addLiquidityHandlerSelector])
+    return addLiquidityHandlerSelector(pool, wantsProportional, wrapUnderlying)
+  }, [pool, wantsProportional, wrapUnderlying, addLiquidityHandlerSelector])
 
   /**
    * Helper functions & variables

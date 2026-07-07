@@ -3,7 +3,7 @@ import { fNum, invert } from '@repo/lib/shared/utils/numbers'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
-import type { AutoRangeChartData } from './useAutoRangeChartData'
+import type { AutoRangeData } from './useAutoRangeData'
 
 type AutoRangeChartContextType = ReturnType<typeof useAutoRangeChartLogic>
 
@@ -20,7 +20,7 @@ function getGradientColor(colorStops: string[]) {
   }
 }
 
-export function useAutoRangeChartLogic(chartData: AutoRangeChartData | undefined) {
+export function useAutoRangeChartLogic(chartData: AutoRangeData | undefined) {
   const { isMobile } = useBreakpoints()
   const [isReversed, setIsReversed] = useState(false)
   const [chartInstance, setChartInstance] = useState<any>(null)
@@ -681,7 +681,7 @@ export function AutoRangeChartProvider({
   children,
   chartData,
 }: PropsWithChildren<{
-  chartData: AutoRangeChartData | undefined
+  chartData: AutoRangeData | undefined
 }>) {
   const hook = useAutoRangeChartLogic(chartData)
   return <AutoRangeChartContext.Provider value={hook}>{children}</AutoRangeChartContext.Provider>
