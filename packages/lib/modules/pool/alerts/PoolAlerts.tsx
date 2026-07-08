@@ -87,12 +87,27 @@ function DeprecatedChainWarningContent({ chain }: { chain: GqlChain }) {
   const chainName = getChainName(chain)
   const problem = `The ${chainName} network is being sunset on Balancer.`
 
+  const learnMoreLink =
+    'https://forum.balancer.fi/t/bip-906-deprecation-of-polygon-zkevm-fraxtal-and-mode/6951'
+
   return (
     <HStack>
       <Text color="#000" fontWeight="bold">
         {problem}
       </Text>
       <Text color="#000">{`Remove any liquidity you have in ${chainName} pools.`}</Text>
+      <Link
+        _hover={{
+          color: '#555',
+        }}
+        color="#000"
+        fontWeight="bold"
+        href={learnMoreLink}
+        isExternal
+        textDecoration="underline"
+      >
+        Learn more
+      </Link>
     </HStack>
   )
 }
