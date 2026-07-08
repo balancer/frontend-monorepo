@@ -440,6 +440,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         scaledAmount: BigInt(0),
       },
     })
+
+    resetPriceImpact()
   }
 
   function setDefaultTokens() {
@@ -476,10 +478,24 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function calcPriceImpact() {
-    // Only calculate price impact if both tokens are selected
-    if (isTokenInSet && isTokenOutSet && !bn(tokenInUsd).isZero() && !bn(tokenOutUsd).isZero()) {
-      setPriceImpact(calcMarketPriceImpact(tokenInUsd, tokenOutUsd))
-    } else if (simulationQuery.data) {
+    // Always derive from the latest swap state so stale effects cannot re-apply an old price
+    // impact after the swap state has been reset (e.g. returning to a pool swap page).
+    const currentState = swapStateVar()
+    const currentTokenInInfo = getToken(currentState.tokenIn.address, selectedChain)
+    const currentTokenOutInfo = getToken(currentState.tokenOut.address, selectedChain)
+    const currentTokenInUsd = usdValueForToken(currentTokenInInfo, currentState.tokenIn.amount)
+    const currentTokenOutUsd = usdValueForToken(currentTokenOutInfo, currentState.tokenOut.amount)
+    const currentIsTokenInSet = currentState.tokenIn.address !== emptyAddress
+    const currentIsTokenOutSet = currentState.tokenOut.address !== emptyAddress
+
+    if (
+      currentIsTokenInSet &&
+      currentIsTokenOutSet &&
+      !bn(currentTokenInUsd).isZero() &&
+      !bn(currentTokenOutUsd).isZero()
+    ) {
+      setPriceImpact(calcMarketPriceImpact(currentTokenInUsd, currentTokenOutUsd))
+    } else {
       resetPriceImpact()
     }
   }
