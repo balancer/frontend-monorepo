@@ -11,7 +11,6 @@ import {
   HStack,
   Button,
   useDisclosure,
-  Link,
   Box,
 } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
@@ -412,8 +411,6 @@ function DeprecatedChainsAlert({ chains }: { chains: GqlChain[] }) {
   const chainNames = listFormatter.format(chains.map(getChainName))
   const title = `${chainNames} ${chains.length > 1 ? 'are' : 'is'} being sunset on Balancer soon.`
   const content = `Claim your incentives asap before ${chains.length > 1 ? 'they are' : 'it is'} no longer supported.`
-  const learnMoreLink =
-    'https://forum.balancer.fi/t/bip-906-deprecation-of-polygon-zkevm-fraxtal-and-mode/6951'
 
   return (
     <BalAlert
@@ -423,18 +420,6 @@ function DeprecatedChainsAlert({ chains }: { chains: GqlChain[] }) {
             {title}
           </Text>
           <Text color="#000">{content}</Text>
-          <Link
-            _hover={{
-              color: '#555',
-            }}
-            color="#000"
-            fontWeight="bold"
-            href={learnMoreLink}
-            isExternal
-            textDecoration="underline"
-          >
-            Learn more
-          </Link>
         </HStack>
       }
       status="warning"

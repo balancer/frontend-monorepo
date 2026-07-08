@@ -6,7 +6,6 @@ import avalanche from './avalanche'
 import gnosis from './gnosis'
 import mainnet from './mainnet'
 import polygon from './polygon'
-import zkevm from './zkevm'
 import fantom from './fantom'
 import optimism from './optimism'
 import base from './base'
@@ -29,7 +28,6 @@ const networkConfigs: NetworkConfigs = {
   [GqlChainValues.Gnosis]: gnosis,
   [GqlChainValues.Mainnet]: mainnet,
   [GqlChainValues.Polygon]: polygon,
-  [GqlChainValues.Zkevm]: zkevm,
   [GqlChainValues.Optimism]: optimism,
   [GqlChainValues.Sepolia]: sepolia,
   [GqlChainValues.Mode]: mode,
