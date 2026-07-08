@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/snapshot",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/sync-dune-labels",
+      "schedule": "0 3 * * 1"
+    }
+  ]
+}

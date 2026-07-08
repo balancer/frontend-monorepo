@@ -9,13 +9,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@repo/*": ["../../packages/*"],
-      "~/*": ["./lib/*"]
+      "@analytics/*": ["./*"],
+      "@repo/*": ["../../packages/*"]
     },
-    "types": ["vitest/globals"],
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "jsx": "preserve"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": [
     "**/*.ts",

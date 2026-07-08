@@ -1,8 +1,5 @@
-export default function Home() {
-  return (
-    <main>
-      <h1>Balancer Analytics</h1>
-      <p>Coming soon</p>
-    </main>
-  )
+import { ProtocolOverview } from './_components/ProtocolOverview'
+
+export default function Page() {
+  return <ProtocolOverview />
 }

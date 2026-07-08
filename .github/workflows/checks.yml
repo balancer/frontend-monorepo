@@ -49,7 +49,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run typecheck
         env:
-          NODE_OPTIONS: "--max_old_space_size=6144"
+          NODE_OPTIONS: '--max_old_space_size=6144'
         run: pnpm typecheck
       - name: Run unit tests
         run: pnpm test:unit
@@ -119,6 +119,27 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-smoke-report-beets
+          path: |
+            ./packages/e2e-tests/playwright-report/
+          retention-days: 30
+
+  E2E-Smoke-Test-Analytics:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Run Playwright smoke tests (Analytics)
+        run: pnpm test:e2e:build:analytics
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-smoke-report-analytics
           path: |
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
