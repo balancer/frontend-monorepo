@@ -50,26 +50,46 @@
     "DATABASE_NEON_AUTH_BASE_URL",
     "DATABASE_VITE_NEON_AUTH_URL"
   ],
-  "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN", "PLAYWRIGHT_BROWSERS_PATH"],
+  "globalPassThroughEnv": [
+    "SENTRY_AUTH_TOKEN",
+    "PLAYWRIGHT_BROWSERS_PATH"
+  ],
   "tasks": {
     "dev": {
       "cache": false,
       "persistent": true
     },
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ]
     },
     "start": {
-      "dependsOn": ["^start"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "dependsOn": [
+        "^start"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ]
     },
     "transit": {
-      "dependsOn": ["^transit"]
+      "dependsOn": [
+        "^transit"
+      ]
     },
     "lint": {
-      "dependsOn": ["^transit"],
+      "dependsOn": [
+        "^transit"
+      ],
       "outputs": [
         "node_modules/.cache/.eslintcache",
         ".next/cache/eslint",
@@ -77,92 +97,186 @@
       ]
     },
     "lint:fix": {
-      "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
+      "dependsOn": [
+        "^transit"
+      ],
+      "outputs": [
+        "node_modules/.cache/.eslintcache",
+        ".next/cache/eslint"
+      ]
     },
     "typecheck": {
-      "dependsOn": ["^graphql:gen", "^transit"],
-      "inputs": ["shared/services/api/generated/**"],
-      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
+      "dependsOn": [
+        "^graphql:gen",
+        "^transit"
+      ],
+      "inputs": [
+        "shared/services/api/generated/**"
+      ],
+      "outputs": [
+        "node_modules/.cache/tsbuildinfo.json"
+      ]
     },
     "test:unit": {
-      "dependsOn": ["^graphql:gen", "^test:unit"]
+      "dependsOn": [
+        "^graphql:gen",
+        "^test:unit"
+      ]
     },
     "test:unit:watch": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^graphql:gen"]
+      "dependsOn": [
+        "^graphql:gen"
+      ]
     },
     "test:integration": {
-      "dependsOn": ["^graphql:gen", "^test:integration"]
+      "dependsOn": [
+        "^graphql:gen",
+        "^test:integration"
+      ]
     },
     "test:integration:watch": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^graphql:gen"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "dependsOn": [
+        "^graphql:gen"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ]
     },
     "test:save-api-mocks": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^graphql:gen"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "dependsOn": [
+        "^graphql:gen"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ]
     },
     "test:e2e:build:bal": {
-      "dependsOn": ["frontend-v3#build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "dependsOn": [
+        "frontend-v3#build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ]
     },
     "test:e2e:build:ui:bal": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^transit"]
+      "dependsOn": [
+        "^transit"
+      ]
     },
     "test:e2e:build:beets": {
-      "dependsOn": ["beets-frontend-v3#build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "dependsOn": [
+        "beets-frontend-v3#build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ]
     },
     "test:e2e:build:ui:beets": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^transit"]
+      "dependsOn": [
+        "^transit"
+      ]
+    },
+    "test:e2e:build:analytics": {
+      "dependsOn": [
+        "balancer-analytics#build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ]
+    },
+    "test:e2e:build:ui:analytics": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [
+        "^transit"
+      ]
     },
     "test:e2e:dev:bal": {
-      "dependsOn": ["frontend-v3#build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
+      "dependsOn": [
+        "frontend-v3#build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "NEXT_E2E_DEV"
+      ]
     },
     "test:e2e:dev:ui:bal": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^transit"]
+      "dependsOn": [
+        "^transit"
+      ]
     },
     "test:e2e:dev:beets": {
-      "dependsOn": ["beets-frontend-v3#build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
+      "dependsOn": [
+        "beets-frontend-v3#build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "NEXT_E2E_DEV"
+      ]
     },
     "test:e2e:dev:ui:beets": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^transit"]
+      "dependsOn": [
+        "^transit"
+      ]
     },
     "graphql:gen": {
-      "dependsOn": ["^graphql:gen"],
-      "inputs": ["**/*.graphql"],
-      "outputs": ["shared/services/api/generated/**"]
+      "dependsOn": [
+        "^graphql:gen"
+      ],
+      "inputs": [
+        "**/*.graphql"
+      ],
+      "outputs": [
+        "shared/services/api/generated/**"
+      ]
     },
     "prettier": {
-      "dependsOn": ["^prettier"],
-      "outputs": [".prettiercache"]
+      "dependsOn": [
+        "^prettier"
+      ],
+      "outputs": [
+        ".prettiercache"
+      ]
     },
     "prettier:fix": {
-      "dependsOn": ["^prettier:fix"],
-      "outputs": [".prettiercache"],
+      "dependsOn": [
+        "^prettier:fix"
+      ],
+      "outputs": [
+        ".prettiercache"
+      ],
       "cache": false
     },
     "stylelint": {
-      "dependsOn": ["^stylelint"]
+      "dependsOn": [
+        "^stylelint"
+      ]
     },
     "stylelint:fix": {
-      "dependsOn": ["^stylelint:fix"],
+      "dependsOn": [
+        "^stylelint:fix"
+      ],
       "cache": false
     }
   },
