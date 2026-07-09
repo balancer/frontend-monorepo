@@ -538,8 +538,8 @@ importers:
         specifier: 'catalog:'
         version: 4.2.3(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.14.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rxjs@7.8.2)
       '@balancer-labs/balancer-maths':
-        specifier: 0.0.40
-        version: 0.0.40
+        specifier: 0.0.41
+        version: 0.0.41
       '@balancer/sdk':
         specifier: 6.1.1
         version: 6.1.1(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
@@ -1001,6 +1001,10 @@ packages:
 
   '@balancer-labs/balancer-maths@0.0.40':
     resolution: {integrity: sha512-oSd9ozJctBv6D/CjPZwCsGRerOHwIRjOciOnwxxNQUaSeFlbm8YSEAdDtQ8eggTmJ75pxEBHrl+rC4IpbgAWBg==}
+    engines: {node: '>=18.x'}
+
+  '@balancer-labs/balancer-maths@0.0.41':
+    resolution: {integrity: sha512-ihYLgOnFoVbyN1HJmLT2WH4DzCJt65PMfjtZVoXc4JaK+2Pd8dwcRVbpdLfyXAqfpVZAW9zqB/2JnBHemyuMrQ==}
     engines: {node: '>=18.x'}
 
   '@balancer/sdk@6.1.1':
@@ -8533,6 +8537,8 @@ snapshots:
       '@babel/helper-validator-identifier': 7.29.7
 
   '@balancer-labs/balancer-maths@0.0.40': {}
+
+  '@balancer-labs/balancer-maths@0.0.41': {}
 
   '@balancer/sdk@6.1.1(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
     dependencies:
