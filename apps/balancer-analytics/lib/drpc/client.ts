@@ -28,7 +28,6 @@ import {
   optimism,
   plasma,
   polygon,
-  polygonZkEvm,
   sepolia,
   sonic,
 } from 'viem/chains'
@@ -73,7 +72,6 @@ const VIEM_CHAINS: Partial<Record<GqlChain, Chain>> = {
   [GqlChainValues.Polygon]: polygon,
   [GqlChainValues.Sepolia]: sepolia,
   [GqlChainValues.Sonic]: sonic,
-  [GqlChainValues.Zkevm]: polygonZkEvm,
 }
 
 const clientCache = new Map<GqlChain, PublicClient>()
