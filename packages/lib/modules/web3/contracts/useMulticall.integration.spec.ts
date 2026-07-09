@@ -34,7 +34,7 @@ describe('Performs multicall in multiple chains', () => {
         value: 721n,
       }),
     ])
-  }, 20_000)
+  })
   const mainnetRequest: ChainContractConfig = {
     id: 'daiBalanceOnMainnet',
     chainId: mainnet.id,
