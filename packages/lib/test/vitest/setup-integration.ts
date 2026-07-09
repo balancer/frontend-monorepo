@@ -8,7 +8,11 @@ import {
   connectWithDefaultUser,
   disconnectDefaultUser,
 } from '@repo/test/utils/wagmi/wagmi-connections'
+import { configure } from '@testing-library/react'
 import { createPublicClient, http } from 'viem'
+
+// Integration tests hit anvil proxies over network; CI runners need more time
+configure({ asyncUtilTimeout: 30_000 })
 
 /*
   Specific setup for integration tests (that it is not needed in unit tests)
