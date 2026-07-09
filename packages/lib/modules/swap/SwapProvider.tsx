@@ -133,7 +133,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   const { isConnected } = useUserAccount()
   const { chain: walletChain } = useNetworkConfig()
-  const { getToken, getTokensByChain, usdValueForToken } = useTokens()
+  const { getToken, getTokensByChain, usdValueForToken, isLoadingTokens } = useTokens()
   const { tokens, setTokens } = useTokenBalances()
   const { hasValidationErrors, resetValidationErrors } = useTokenInputsValidation()
   const { setPriceImpact, resetPriceImpact } = usePriceImpact()
@@ -161,8 +161,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const tokenOutInfo = getToken(swapState.tokenOut.address, selectedChain)
 
   if (
-    (isTokenInSet && !tokenInInfo && !isPoolSwap) ||
-    (isTokenOutSet && !tokenOutInfo && !isPoolSwap)
+    !isLoadingTokens &&
+    ((isTokenInSet && !tokenInInfo && !isPoolSwap) ||
+      (isTokenOutSet && !tokenOutInfo && !isPoolSwap))
   ) {
     try {
       setDefaultTokens()
