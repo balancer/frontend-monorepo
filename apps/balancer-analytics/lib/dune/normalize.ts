@@ -28,7 +28,6 @@ const CHAIN_MAP: Record<string, GqlChain> = {
   gnosis: GqlChainValues.Gnosis,
   avalanche_c: GqlChainValues.Avalanche,
   avalanche: GqlChainValues.Avalanche,
-  zkevm: GqlChainValues.Zkevm,
   monad: GqlChainValues.Monad,
   fantom: GqlChainValues.Fantom,
   sonic: GqlChainValues.Sonic,

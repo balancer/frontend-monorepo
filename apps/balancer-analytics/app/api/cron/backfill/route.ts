@@ -81,7 +81,6 @@ const CHAIN_MAP: Record<string, GqlChain> = {
   Gnosis: GqlChainValues.Gnosis,
   xDai: GqlChainValues.Gnosis,
   Polygon: GqlChainValues.Polygon,
-  'Polygon zkEVM': GqlChainValues.Zkevm,
   Optimism: GqlChainValues.Optimism,
   'OP Mainnet': GqlChainValues.Optimism,
   Sonic: GqlChainValues.Sonic,

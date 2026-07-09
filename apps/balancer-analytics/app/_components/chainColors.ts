@@ -12,6 +12,5 @@ export const CHAIN_COLORS: Partial<Record<GqlChain, string>> = {
   OPTIMISM: '#FF0420',
   FRAXTAL: '#000000',
   MODE: '#DFFE00',
-  ZKEVM: '#9B7BFF',
   SEPOLIA: '#A0AEC0',
 }
