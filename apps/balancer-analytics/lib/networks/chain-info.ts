@@ -19,7 +19,7 @@
  *      and event-log windowing belong here; they were previously
  *      duplicated across `pool-state/autorange-history.ts`,
  *      `pool-events/initial-cap.ts`, and `pool-events/sync.ts` with
- *      divergent values (Arbitrum 0.25 vs 0.26, Zkevm 5 vs 30). The
+ *      divergent values (Arbitrum 0.25 vs 0.26). The
  *      canonical map below is the one source of truth — callers pull
  *      `secondsPerBlock(chain)` so a tuning change touches one file.
  *
@@ -70,7 +70,6 @@ const SECONDS_PER_BLOCK: Partial<Record<GqlChain, number>> = {
   [GqlChainValues.Optimism]: 2,
   [GqlChainValues.Avalanche]: 2,
   [GqlChainValues.Polygon]: 2.2,
-  [GqlChainValues.Zkevm]: 5,
   [GqlChainValues.Gnosis]: 5,
   [GqlChainValues.Fraxtal]: 2,
   [GqlChainValues.Mode]: 2,
