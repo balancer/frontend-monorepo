@@ -128,9 +128,6 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x2791bca1f2de4661ed88a30c99a7a9449aa84174': { from: '#1075E2', to: '#62A8F4' }, // USDC
     '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359': { from: '#1075E2', to: '#62A8F4' }, // USDC
   },
-  [GqlChainValues.Zkevm]: {
-    '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#FF5733', to: '#FF5733' }, // DAI
-  },
   [GqlChainValues.Sepolia]: {
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#FF5733', to: '#FF5733' }, // DAI
   },

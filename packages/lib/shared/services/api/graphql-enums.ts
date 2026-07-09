@@ -33,7 +33,6 @@ export const GqlChainValues = {
   Sepolia: 'SEPOLIA',
   Sonic: 'SONIC',
   Xlayer: 'XLAYER',
-  Zkevm: 'ZKEVM',
 } as const satisfies Record<string, GqlChain>
 
 export const GqlHookTypeValues = {

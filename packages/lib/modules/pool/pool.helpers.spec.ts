@@ -326,14 +326,6 @@ describe('shouldBlockAddLiquidity', () => {
     expect(shouldBlockAddLiquidity(pool)).toBe(true)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
   })
-
-  it('should block for zkEvm pools', () => {
-    const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-    pool.chain = GqlChainValues.Zkevm
-
-    expect(shouldBlockAddLiquidity(pool)).toBe(true)
-    expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
-  })
 })
 
 describe('getPoolActivityTitle', () => {
