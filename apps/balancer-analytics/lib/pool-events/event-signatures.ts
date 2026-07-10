@@ -56,6 +56,16 @@ export const V3_STABLE_POOL_EVENTS = parseAbi([
   'event AmpUpdateStopped(uint256 currentValue)',
 ] as const)
 
+// reClamm (AutoRange) manager-driven parameter changes. We deliberately
+// exclude the pool's runtime-state events (`VirtualBalancesUpdated`,
+// `LastTimestampUpdated`) — they fire on nearly every swap/recentering step
+// and would flood the timeline with noise, not parameter changes.
+export const V3_RECLAMM_POOL_EVENTS = parseAbi([
+  'event CenterednessMarginUpdated(uint256 centerednessMargin)',
+  'event DailyPriceShiftExponentUpdated(uint256 dailyPriceShiftExponent, uint256 dailyPriceShiftBase)',
+  'event PriceRatioStateUpdated(uint256 startFourthRootPriceRatio, uint256 endFourthRootPriceRatio, uint256 priceRatioUpdateStartTime, uint256 priceRatioUpdateEndTime)',
+] as const)
+
 export const V2_BASE_POOL_EVENTS = parseAbi([
   'event SwapFeePercentageChanged(uint256 swapFeePercentage)',
   'event PausedStateChanged(bool paused)',
@@ -79,6 +89,9 @@ export const V3_FILTER_A_EVENTS = [
 
 /** Filter B union for V3 Stable pools. */
 export const V3_STABLE_FILTER_B_EVENTS = V3_STABLE_POOL_EVENTS
+
+/** Filter B union for V3 reClamm (AutoRange) pools. */
+export const V3_RECLAMM_FILTER_B_EVENTS = V3_RECLAMM_POOL_EVENTS
 
 /** Filter B union for V2 Stable / ComposableStable pools (base + amp). */
 export const V2_STABLE_FILTER_B_EVENTS = [...V2_BASE_POOL_EVENTS, ...V2_STABLE_POOL_EVENTS] as const
