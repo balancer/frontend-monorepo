@@ -95,14 +95,18 @@ function getSuggestions(poolTokens: PoolCreationToken[], poolType: SupportedPool
 
   const poolSymbol = poolTypePrefix ? `${poolTypePrefix}-${tokenSymbols}` : tokenSymbols
   const suggestedPoolSymbol =
-    poolSymbol.length <= MAX_POOL_SYMBOL_LENGTH ? poolSymbol : tokenSymbols
+    poolSymbol.length <= MAX_POOL_SYMBOL_LENGTH
+      ? poolSymbol
+      : tokenSymbols.slice(0, MAX_POOL_SYMBOL_LENGTH)
 
   const { projectName } = PROJECT_CONFIG
 
   const poolName = poolTypePrefix ? `${poolTypePrefix} ${tokenSymbols}` : tokenSymbols
   const poolNameWithProject = `${projectName} ${poolName}`
   const suggestedPoolName =
-    poolNameWithProject.length <= MAX_POOL_NAME_LENGTH ? poolNameWithProject : poolName
+    poolNameWithProject.length <= MAX_POOL_NAME_LENGTH
+      ? poolNameWithProject
+      : poolName.slice(0, MAX_POOL_NAME_LENGTH)
 
   return { suggestedPoolName, suggestedPoolSymbol }
 }

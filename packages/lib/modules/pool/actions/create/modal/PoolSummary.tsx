@@ -60,7 +60,6 @@ function PoolTitleCard() {
         <Text color="font.secondary">{symbol}</Text>
         <HStack flexWrap="wrap" gap="sm">
           <NetworkIcon bg="background.level4" chain={network} shadow="lg" size={8} />
-
           {poolTokens.map((token, idx) => (
             <Box flexShrink={0} key={idx}>
               <Card
@@ -166,11 +165,8 @@ function PoolDetailsCard() {
           </Box>
           <AccordionIcon />
         </AccordionButton>
-
-        <AccordionPanel p="ms">
-          <VStack align="start" spacing="sm" w="full">
-            <PoolDetailsContent />
-          </VStack>
+        <AccordionPanel p="sm">
+          <PoolDetailsContent />
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
