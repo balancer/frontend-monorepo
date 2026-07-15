@@ -14,7 +14,7 @@ import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enum
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
 import { PropsWithChildren, createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
@@ -191,11 +191,13 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   const shouldFetchSwap = (state: SwapState, urlTxHash?: Hash) => {
     if (urlTxHash) return false
+    const swapAmount = getSwapAmount()
     return (
       isAddress(state.tokenIn.address) &&
       isAddress(state.tokenOut.address) &&
       !!state.swapType &&
-      bn(getSwapAmount()).gt(0)
+      isValidNumber(swapAmount) &&
+      bn(swapAmount).gt(0)
     )
   }
 
@@ -486,7 +488,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const wethIsEth =
     isSameAddress(swapState.tokenIn.address, networkConfig.tokens.nativeAsset.address) ||
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
-  const validAmountOut = swapState.tokenOut.amount !== '' && bn(swapState.tokenOut.amount).gt(0)
+  const validAmountOut =
+    isValidNumber(swapState.tokenOut.amount) && bn(swapState.tokenOut.amount).gt(0)
 
   const protocolVersion =
     ((simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion as ProtocolVersion) || 2
@@ -563,9 +566,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function setInitialAmounts(slugAmountIn?: string, slugAmountOut?: string) {
-    if (slugAmountIn && !slugAmountOut && bn(slugAmountIn).gt(0)) {
+    if (slugAmountIn && !slugAmountOut && isValidNumber(slugAmountIn) && bn(slugAmountIn).gt(0)) {
       setTokenInAmount(slugAmountIn as HumanAmount)
-    } else if (slugAmountOut && bn(slugAmountOut).gt(0)) {
+    } else if (slugAmountOut && isValidNumber(slugAmountOut) && bn(slugAmountOut).gt(0)) {
       setTokenOutAmount(slugAmountOut as HumanAmount)
     } else resetSwapAmounts()
   }
@@ -601,6 +604,25 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     const swapState = swapStateVar()
     return getNetworkConfig(swapState.selectedChain)
   }
+
+  // Heal invalid persisted amounts (e.g. '.') that older versions could write
+  // to localStorage, so affected users recover without clearing storage manually
+  useEffect(() => {
+    const state = swapStateVar()
+    const invalidTokenIn = state.tokenIn.amount !== '' && !isValidNumber(state.tokenIn.amount)
+    const invalidTokenOut = state.tokenOut.amount !== '' && !isValidNumber(state.tokenOut.amount)
+    if (invalidTokenIn || invalidTokenOut) {
+      swapStateVar({
+        ...state,
+        tokenIn: invalidTokenIn
+          ? { ...state.tokenIn, amount: '', scaledAmount: BigInt(0) }
+          : state.tokenIn,
+        tokenOut: invalidTokenOut
+          ? { ...state.tokenOut, amount: '', scaledAmount: BigInt(0) }
+          : state.tokenOut,
+      })
+    }
+  }, [])
 
   // Set state on initial load
   useEffect(() => {
