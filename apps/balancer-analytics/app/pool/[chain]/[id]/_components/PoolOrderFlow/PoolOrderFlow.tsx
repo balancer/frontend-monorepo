@@ -610,13 +610,13 @@ function ErrorMessage({ error }: { error: OrderFlowError }) {
   const headline = isRateLimit
     ? (error.userMessage ?? 'Balancer API rate limit reached.')
     : isUpstreamDown
-      ? 'The Balancer API is temporarily unavailable.'
+      ? 'Balancer API is busy right now.'
       : 'Unable to load order flow.'
 
   const subline = isRateLimit
     ? 'This is a per-IP limit on the upstream API. Wait about a minute, then refresh the page.'
     : isUpstreamDown
-      ? 'This is an upstream outage, not a problem with your connection. Try again in a few minutes.'
+      ? 'Opening many pools in quick succession can briefly throttle the shared Balancer API. Wait a moment, then refresh the page.'
       : `Details: ${error.message}`
 
   return (

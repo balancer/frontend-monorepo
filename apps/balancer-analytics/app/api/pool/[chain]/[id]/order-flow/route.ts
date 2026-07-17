@@ -25,6 +25,7 @@
 
 import 'server-only'
 import { z } from 'zod'
+import { unstable_cache } from 'next/cache'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ChainSlug, getChainSlug } from '@repo/lib/modules/pool/pool.utils'
@@ -287,6 +288,160 @@ function unlabeledUsdByTx(
 
 type RouteContext = { params: Promise<{ chain: string; id: string }> }
 
+/** Shared-cache TTL for a built order-flow payload. Long enough to amortize
+ *  the api-v3 fan-out + enrichment; short enough that fresh swaps surface
+ *  within the same trading session. */
+const ORDER_FLOW_TTL_SECONDS = 600
+
+/**
+ * Builds the full labeled order-flow payload for a pool.
+ *
+ * This is the most expensive unit of work in the app: up to 20 paginated
+ * api-v3 roundtrips, ~100 drpc `tx.to` lookups, and two Postgres reads. The
+ * window it covers is 30 days, of which 29 are immutable — so recomputing it
+ * per request was pure waste. `Cache-Control: s-maxage` alone only helped
+ * when a shared cache sat in front and had a warm entry; every CDN miss (and
+ * every local dev request) paid the whole bill, which is what the header
+ * comment above means by "trips upstream rate limits within seconds".
+ *
+ * Extracted to module scope so `unstable_cache` can memoize it. `now` is
+ * computed inside rather than passed in: a per-request timestamp in the cache
+ * key would make every key unique and never hit. The TTL below is what bounds
+ * staleness instead, so `fetchedWindow.to` can trail real time by up to
+ * `ORDER_FLOW_TTL_SECONDS` — which the client already renders honestly.
+ */
+async function buildOrderFlow(chain: GqlChain, poolId: string): Promise<OrderFlowResponse> {
+  const now = Math.floor(Date.now() / 1000)
+  const cutoff = now - FETCH_WINDOW_DAYS * 86400
+
+  await ensureSchemaOnce()
+
+  const { swaps, capped, truncated } = await fetchSwaps(poolId, chain, cutoff)
+  if (truncated) {
+    console.warn('[order-flow] partial result returned (api-v3 paging stopped early)', {
+      chain,
+      pool: poolId,
+      partial: swaps.length,
+    })
+  }
+  const totalUsd = swaps.reduce((a, s) => a + (s.valueUSD || 0), 0)
+
+  // ── tx.to enrichment ────────────────────────────────────────────────
+  // api-v3's `sender` field is the tx originator EOA, which is mostly
+  // anonymous. The actual entry contract (aggregator, router, MEV bot
+  // contract) lives in `tx.to`. We look it up via drpc, persist a
+  // per-tx cache, and feed both signals into the cascade.
+  const distinctTxHashes = Array.from(
+    new Set(swaps.map(s => s.tx?.toLowerCase()).filter((x): x is string => Boolean(x)))
+  )
+  const txToCache = await getSwapTxMetadata(chain, distinctTxHashes)
+
+  // Prioritize *unlabeled* txs by USD volume — txs whose sender is
+  // already in the direct dict are classified correctly without any
+  // tx.to lookup, so spending RPC budget on them is wasted. This is
+  // empirical: on MEV-saturated pools the top-USD txs are ALL labeled
+  // MEV operator infra, and naive top-USD enrichment left coverage
+  // unchanged because the cascade had already decided.
+  const labeledByDictSenders = DIRECT_LABELS[chain] ?? {}
+  const unlabeledUsd = unlabeledUsdByTx(swaps, labeledByDictSenders)
+  const txsToEnrich = [...unlabeledUsd.entries()]
+    .filter(([tx]) => !txToCache.has(tx))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, ENRICH_LIMIT_PER_REQUEST)
+    .map(([tx]) => tx)
+
+  if (txsToEnrich.length > 0) {
+    try {
+      const fresh = await fetchTxToAddresses(chain, txsToEnrich)
+      // Merge in-memory + persist. `fresh` is seeded with `null` for
+      // every input hash so the cache reliably records "we tried" and
+      // doesn't re-enrich the same tx on next visit.
+      for (const [hash, toAddr] of fresh) txToCache.set(hash, toAddr)
+      await upsertSwapTxMetadata(
+        chain,
+        [...fresh.entries()].map(([txHash, toAddress]) => ({ txHash, toAddress }))
+      )
+    } catch (err) {
+      // Enrichment failures must never break the response. The cascade
+      // falls back to sender-lookup which still catches Dune-listed MEV
+      // searcher EOAs.
+      console.warn(
+        '[order-flow] tx.to enrichment failed:',
+        err instanceof Error ? err.message : String(err)
+      )
+    }
+  }
+
+  // ── Dune label lookup ──────────────────────────────────────────────
+  // Bulk-fetched weekly via `/api/cron/sync-dune-labels` from Dune query
+  // 3004790. Looked up by both `sender` (EOA) AND `tx.to` (entry
+  // contract); the cascade consults each in priority order.
+  const lookupAddresses = new Set<string>()
+  for (const s of swaps) {
+    if (s.sender) lookupAddresses.add(s.sender.toLowerCase())
+  }
+  for (const toAddr of txToCache.values()) {
+    if (toAddr) lookupAddresses.add(toAddr.toLowerCase())
+  }
+  const duneCache = await getDuneLabels(chain, [...lookupAddresses])
+
+  // Cascade-label every swap with whatever we have now.
+  const labeled: LabeledSwap[] = []
+  for (const s of swaps) {
+    if (!s.sender) continue // shouldn't happen on V3/CowAmm swaps but guard anyway
+    const source: SourceLabel = labelSwapSource(
+      { __typename: s.__typename, sender: s.sender, tx: s.tx },
+      chain,
+      { txTo: txToCache, dune: duneCache }
+    )
+    labeled.push({
+      id: s.id,
+      timestamp: s.timestamp,
+      tx: s.tx,
+      valueUSD: s.valueUSD || 0,
+      sender: s.sender,
+      tokenIn: s.tokenIn ?? { address: '', amount: '0' },
+      tokenOut: s.tokenOut ?? { address: '', amount: '0' },
+      source,
+    })
+  }
+
+  // Coverage = "we put a real label on it" (anything not 'unknown').
+  let labeledUsd = 0
+  const unknownSenderSet = new Set<string>()
+  for (const s of labeled) {
+    if (s.source.category === 'unknown') unknownSenderSet.add(s.sender.toLowerCase())
+    else labeledUsd += s.valueUSD
+  }
+
+  // `fetchedWindow.from` is the *intended* cutoff; the actual oldest swap
+  // may be more recent if pagination capped (capped=true) or if the pool
+  // simply has no older swaps. The client uses both to render an honest
+  // "showing last N swaps from the last X days" subtitle.
+  const oldestSwapTs =
+    swaps.length > 0 ? swaps.reduce((min, s) => Math.min(min, s.timestamp), Infinity) : now
+
+  return {
+    pool: poolId,
+    chain,
+    fetchedWindow: { from: cutoff, to: now, oldestSwapTs, days: FETCH_WINDOW_DAYS },
+    totals: { swapCount: labeled.length, volumeUsd: totalUsd, capped, truncated },
+    coverage: {
+      labeledUsd,
+      labeledPct: totalUsd > 0 ? labeledUsd / totalUsd : 0,
+      unknownSenders: unknownSenderSet.size,
+    },
+    swaps: labeled,
+  }
+}
+
+/** Memoized `buildOrderFlow`, keyed on (chain, poolId) by `unstable_cache`.
+ *  This is the layer that actually stops the api-v3 re-pagination — the
+ *  response header only ever protected callers sitting behind a warm CDN. */
+const buildOrderFlowCached = unstable_cache(buildOrderFlow, ['order-flow-v1'], {
+  revalidate: ORDER_FLOW_TTL_SECONDS,
+})
+
 export async function GET(_request: Request, ctx: RouteContext): Promise<Response> {
   const raw = await ctx.params
 
@@ -299,136 +454,15 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
   }
   const { chain, id } = parsed.data
   const poolId = id.toLowerCase()
-  const now = Math.floor(Date.now() / 1000)
-  const cutoff = now - FETCH_WINDOW_DAYS * 86400
 
   try {
-    await ensureSchemaOnce()
-
-    const { swaps, capped, truncated } = await fetchSwaps(poolId, chain, cutoff)
-    if (truncated) {
-      console.warn('[order-flow] partial result returned (api-v3 paging stopped early)', {
-        chain,
-        pool: poolId,
-        partial: swaps.length,
-      })
-    }
-    const totalUsd = swaps.reduce((a, s) => a + (s.valueUSD || 0), 0)
-
-    // ── tx.to enrichment ────────────────────────────────────────────────
-    // api-v3's `sender` field is the tx originator EOA, which is mostly
-    // anonymous. The actual entry contract (aggregator, router, MEV bot
-    // contract) lives in `tx.to`. We look it up via drpc, persist a
-    // per-tx cache, and feed both signals into the cascade.
-    const distinctTxHashes = Array.from(
-      new Set(swaps.map(s => s.tx?.toLowerCase()).filter((x): x is string => Boolean(x)))
-    )
-    const txToCache = await getSwapTxMetadata(chain, distinctTxHashes)
-
-    // Prioritize *unlabeled* txs by USD volume — txs whose sender is
-    // already in the direct dict are classified correctly without any
-    // tx.to lookup, so spending RPC budget on them is wasted. This is
-    // empirical: on MEV-saturated pools the top-USD txs are ALL labeled
-    // MEV operator infra, and naive top-USD enrichment left coverage
-    // unchanged because the cascade had already decided.
-    const labeledByDictSenders = DIRECT_LABELS[chain] ?? {}
-    const unlabeledUsd = unlabeledUsdByTx(swaps, labeledByDictSenders)
-    const txsToEnrich = [...unlabeledUsd.entries()]
-      .filter(([tx]) => !txToCache.has(tx))
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, ENRICH_LIMIT_PER_REQUEST)
-      .map(([tx]) => tx)
-
-    if (txsToEnrich.length > 0) {
-      try {
-        const fresh = await fetchTxToAddresses(chain, txsToEnrich)
-        // Merge in-memory + persist. `fresh` is seeded with `null` for
-        // every input hash so the cache reliably records "we tried" and
-        // doesn't re-enrich the same tx on next visit.
-        for (const [hash, toAddr] of fresh) txToCache.set(hash, toAddr)
-        await upsertSwapTxMetadata(
-          chain,
-          [...fresh.entries()].map(([txHash, toAddress]) => ({ txHash, toAddress }))
-        )
-      } catch (err) {
-        // Enrichment failures must never break the response. The cascade
-        // falls back to sender-lookup which still catches Dune-listed MEV
-        // searcher EOAs.
-        console.warn(
-          '[order-flow] tx.to enrichment failed:',
-          err instanceof Error ? err.message : String(err)
-        )
-      }
-    }
-
-    // ── Dune label lookup ──────────────────────────────────────────────
-    // Bulk-fetched weekly via `/api/cron/sync-dune-labels` from Dune query
-    // 3004790. Looked up by both `sender` (EOA) AND `tx.to` (entry
-    // contract); the cascade consults each in priority order.
-    const lookupAddresses = new Set<string>()
-    for (const s of swaps) {
-      if (s.sender) lookupAddresses.add(s.sender.toLowerCase())
-    }
-    for (const toAddr of txToCache.values()) {
-      if (toAddr) lookupAddresses.add(toAddr.toLowerCase())
-    }
-    const duneCache = await getDuneLabels(chain, [...lookupAddresses])
-
-    // Cascade-label every swap with whatever we have now.
-    const labeled: LabeledSwap[] = []
-    for (const s of swaps) {
-      if (!s.sender) continue // shouldn't happen on V3/CowAmm swaps but guard anyway
-      const source: SourceLabel = labelSwapSource(
-        { __typename: s.__typename, sender: s.sender, tx: s.tx },
-        chain,
-        { txTo: txToCache, dune: duneCache }
-      )
-      labeled.push({
-        id: s.id,
-        timestamp: s.timestamp,
-        tx: s.tx,
-        valueUSD: s.valueUSD || 0,
-        sender: s.sender,
-        tokenIn: s.tokenIn ?? { address: '', amount: '0' },
-        tokenOut: s.tokenOut ?? { address: '', amount: '0' },
-        source,
-      })
-    }
-
-    // Coverage = "we put a real label on it" (anything not 'unknown').
-    let labeledUsd = 0
-    const unknownSenderSet = new Set<string>()
-    for (const s of labeled) {
-      if (s.source.category === 'unknown') unknownSenderSet.add(s.sender.toLowerCase())
-      else labeledUsd += s.valueUSD
-    }
-
-    // `fetchedWindow.from` is the *intended* cutoff; the actual oldest swap
-    // may be more recent if pagination capped (capped=true) or if the pool
-    // simply has no older swaps. The client uses both to render an honest
-    // "showing last N swaps from the last X days" subtitle.
-    const oldestSwapTs =
-      swaps.length > 0 ? swaps.reduce((min, s) => Math.min(min, s.timestamp), Infinity) : now
-
-    const payload: OrderFlowResponse = {
-      pool: poolId,
-      chain,
-      fetchedWindow: { from: cutoff, to: now, oldestSwapTs, days: FETCH_WINDOW_DAYS },
-      totals: { swapCount: labeled.length, volumeUsd: totalUsd, capped, truncated },
-      coverage: {
-        labeledUsd,
-        labeledPct: totalUsd > 0 ? labeledUsd / totalUsd : 0,
-        unknownSenders: unknownSenderSet.size,
-      },
-      swaps: labeled,
-    }
+    // Cache call sits inside the try / catch outside, so a failed build is
+    // never written to the cache (same shape as the other routes here).
+    const payload = await buildOrderFlowCached(chain, poolId)
 
     return Response.json(payload, {
       headers: {
-        // 10 min shared cache, 30 min stale-while-revalidate. Long enough to
-        // amortize the api-v3 fan-out + any enrichment latency; short enough
-        // that fresh swaps surface within the same trading session.
-        'Cache-Control': 's-maxage=600, stale-while-revalidate=1800',
+        'Cache-Control': `s-maxage=${ORDER_FLOW_TTL_SECONDS}, stale-while-revalidate=1800`,
       },
     })
   } catch (err) {

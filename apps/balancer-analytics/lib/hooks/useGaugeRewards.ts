@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import type { AnalyticsGaugeRewardsPayload } from '@analytics/app/api/portfolio/[address]/gauge-rewards/route'
+import { dedupedLoad } from '@analytics/lib/upstream/request-cache'
 
 export type UseGaugeRewardsResult = {
   loading: boolean
@@ -15,6 +16,9 @@ const EMPTY: AnalyticsGaugeRewardsPayload = {
   chainErrors: {},
 }
 
+/** Matches the route's `max-age=300`. */
+const TTL_MS = 300_000
+
 type AsyncState =
   | { kind: 'pending'; address: string }
   | { kind: 'resolved'; address: string; payload: AnalyticsGaugeRewardsPayload }
@@ -23,25 +27,38 @@ type AsyncState =
 /**
  * Fetch aggregated gauge-claimable rewards for an address. The server-side
  * route handles api-v3 lookup, the multicall fan-out, and price conversion;
- * this hook owns lifecycle + abort.
+ * this hook owns lifecycle.
+ *
+ * PortfolioKpiStrip and PortfolioMerklCard both mount this in the same
+ * commit, so the request is shared via the module-level dedupe rather than
+ * fired twice — this route does a multi-chain multicall fan-out server-side,
+ * so the duplicate was expensive. No per-caller abort: one card unmounting
+ * must not cancel the fetch the other is awaiting.
  */
 export function useGaugeRewards(address: string | null): UseGaugeRewardsResult {
   const [asyncState, setAsyncState] = useState<AsyncState | null>(null)
 
   useEffect(() => {
     if (!address) return
-    const controller = new AbortController()
-    fetch(`/api/portfolio/${address}/gauge-rewards`, { signal: controller.signal })
-      .then(async res => {
+    let cancelled = false
+    const url = `/api/portfolio/${address}/gauge-rewards`
+    dedupedLoad(url, TTL_MS, () =>
+      fetch(url).then(async res => {
         if (!res.ok) throw new Error(`gauge-rewards ${res.status}`)
         return (await res.json()) as AnalyticsGaugeRewardsPayload
       })
-      .then(payload => setAsyncState({ kind: 'resolved', address, payload }))
+    )
+      .then(payload => {
+        if (cancelled) return
+        setAsyncState({ kind: 'resolved', address, payload })
+      })
       .catch((err: Error) => {
-        if (err.name === 'AbortError') return
+        if (cancelled) return
         setAsyncState({ kind: 'error', address, error: err.message })
       })
-    return () => controller.abort()
+    return () => {
+      cancelled = true
+    }
   }, [address])
 
   return useMemo<UseGaugeRewardsResult>(() => {
