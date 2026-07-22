@@ -43,14 +43,10 @@ import { PoolExplorerFilters } from './PoolExplorerFilters'
 const SORT_KEYS = ['TVL', 'VOLUME', 'FEES', 'APR', 'YIELD_DAY', 'USAGE', 'HOLDERS'] as const
 
 // chain icon · pool · details · TVL · vol · fees · APR · usage · holders
-// On `base`-`md` the table is horizontal-scrollable. On `lg` we hide
-// `usage` + `holders` so the eight remaining columns fit in a 1280px
-// viewport. On `2xl+` (≥1536) all columns appear without scroll.
-const GRID_COLS_BASE =
+// All columns always render — never hide data responsively. Below the
+// table's natural width, the surrounding Card scrolls horizontally instead.
+const POOL_TABLE_COLS =
   '36px minmax(260px, 1.4fr) minmax(190px, 0.9fr) 110px 110px 110px 90px 90px 80px'
-const GRID_COLS_LG = '32px minmax(220px, 1.5fr) minmax(160px, 0.8fr) 100px 100px 100px 80px'
-const GRID_COLS_2XL =
-  '36px minmax(260px, 1.6fr) minmax(190px, 0.9fr) 110px 110px 110px 90px 90px 80px'
 
 const usd = (n: number, abbrev = true) =>
   new Intl.NumberFormat('en-US', {
@@ -235,13 +231,8 @@ export function PoolExplorer() {
           </Text>
         )}
 
-        <Card
-          overflowX={{ base: 'auto', lg: 'hidden' }}
-          overflowY="hidden"
-          p={0}
-          variant="subSection"
-        >
-          <Box minW={{ base: '1100px', lg: 'auto' }} w="full">
+        <Card overflowX="auto" overflowY="hidden" p={0} variant="subSection">
+          <Box minW="1100px" w="full">
             <PaginatedTable<EnrichedPool>
               getRowId={p => `${p.chain}-${p.id}`}
               items={pageItems}
@@ -263,16 +254,6 @@ export function PoolExplorer() {
   )
 }
 
-// Hidden at the `lg` breakpoint: details column gets folded into the pool
-// name (PoolDetailsCellLite is rendered below the token pills on lg), and
-// the usage/holders columns are hidden so the table fits a 1280px viewport.
-// At `2xl` everything reappears as standalone columns.
-const RESPONSIVE_COLS = {
-  base: GRID_COLS_BASE,
-  lg: GRID_COLS_LG,
-  '2xl': GRID_COLS_2XL,
-}
-
 function TableHeader({
   sortKey,
   sortDir,
@@ -291,7 +272,7 @@ function TableHeader({
       borderBottom="1px solid"
       borderColor="border.base"
       gap={{ base: 'sm', lg: 'ms' }}
-      gridTemplateColumns={RESPONSIVE_COLS}
+      gridTemplateColumns={POOL_TABLE_COLS}
       px={{ base: 'md', lg: 'ms' }}
       py="sm"
       w="full"
@@ -302,7 +283,7 @@ function TableHeader({
           Pool
         </Text>
       </GridItem>
-      <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }}>
+      <GridItem>
         <Text color="font.secondary" fontSize="xs" fontWeight="bold">
           Details
         </Text>
@@ -343,7 +324,7 @@ function TableHeader({
           sorting={sorting}
         />
       </GridItem>
-      <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} justifySelf="end">
+      <GridItem justifySelf="end">
         <SortableHeader
           align="right"
           isSorted={sorted('USAGE')}
@@ -352,7 +333,7 @@ function TableHeader({
           sorting={sorting}
         />
       </GridItem>
-      <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} justifySelf="end">
+      <GridItem justifySelf="end">
         <SortableHeader
           align="right"
           isSorted={sorted('HOLDERS')}
@@ -407,7 +388,7 @@ function TableRow({ pool, index }: { pool: EnrichedPool; index: number }) {
         <Grid
           alignItems="center"
           gap={{ base: 'sm', lg: 'ms' }}
-          gridTemplateColumns={RESPONSIVE_COLS}
+          gridTemplateColumns={POOL_TABLE_COLS}
           position="relative"
           px={{ base: 'md', lg: 'ms' }}
           py="ms"
@@ -418,20 +399,10 @@ function TableRow({ pool, index }: { pool: EnrichedPool; index: number }) {
           </GridItem>
 
           <GridItem minW={0}>
-            <Box
-              display={{ base: 'block', lg: 'flex', '2xl': 'block' }}
-              flexDirection="column"
-              gap="xxs"
-            >
-              <PoolTokenPillsLite tokens={pool.poolTokens ?? []} type={pool.type} />
-              {/* On lg only, fold the details under the pool tokens. */}
-              <Box display={{ base: 'none', lg: 'block', '2xl': 'none' }}>
-                <PoolDetailsCellLite pool={pool} />
-              </Box>
-            </Box>
+            <PoolTokenPillsLite tokens={pool.poolTokens ?? []} type={pool.type} />
           </GridItem>
 
-          <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} minW={0}>
+          <GridItem minW={0}>
             <PoolDetailsCellLite pool={pool} />
           </GridItem>
 
@@ -469,12 +440,12 @@ function TableRow({ pool, index }: { pool: EnrichedPool; index: number }) {
               />
             </Flex>
           </GridItem>
-          <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} justifySelf="end">
+          <GridItem justifySelf="end">
             <Text color={usageColor} fontWeight="medium" textAlign="right">
               {pct(pool._usage, 1)}
             </Text>
           </GridItem>
-          <GridItem display={{ base: 'block', lg: 'none', '2xl': 'block' }} justifySelf="end">
+          <GridItem justifySelf="end">
             <Text color="font.secondary" fontSize="sm" textAlign="right">
               {num(pool._holders)}
             </Text>
