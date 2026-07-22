@@ -1,13 +1,12 @@
 'use client'
 
-import { useApolloClient } from '@apollo/client/react'
 import {
-  GetProtocolStatsPerChainDocument,
   GetProtocolStatsPerChainQuery,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
+import type { ProtocolStatsByChainResponse } from '@analytics/app/api/protocol-stats-by-chain/route'
+import { dedupedLoad, peekCached } from '@analytics/lib/upstream/request-cache'
 
 export type ChainStat = GetProtocolStatsPerChainQuery['protocolMetricsChain'] & {
   chain: GqlChain
@@ -19,53 +18,58 @@ type State = {
   error: Error | null
 }
 
+const URL = '/api/protocol-stats-by-chain'
+
+/** Matches the route's `s-maxage=300`. */
+const TTL_MS = 300_000
+
+function load(): Promise<ChainStat[]> {
+  return fetch(URL)
+    .then(r => {
+      if (!r.ok) throw new Error(`protocol-stats-by-chain HTTP ${r.status}`)
+      return r.json() as Promise<ProtocolStatsByChainResponse>
+    })
+    .then(json => json.stats ?? [])
+}
+
 /**
- * Fans out GetProtocolStatsPerChain across all supported networks in parallel.
- * api-v3 has no protocol-level cross-chain time series, so we issue one query
- * per chain and aggregate client-side. Each query is independently cached by
- * Apollo, so subsequent renders reuse results without refetching.
+ * Per-chain protocol metrics, already aggregated and sorted by TVL desc.
+ *
+ * Reads `/api/protocol-stats-by-chain`, which fans out across supported
+ * networks server-side using one aliased api-v3 document and caches the
+ * result. This hook previously did that fan-out in the browser — one Apollo
+ * `GetProtocolStatsPerChain` per chain, ~12 direct api-v3 POSTs on every cold
+ * landing-page visit. Apollo's cache made *repeat* renders free but did
+ * nothing for first paint, which is where the rate-limit pressure came from.
+ *
+ * Two consumers mount this in the same commit (TvlByChainBars and
+ * ProtocolHighlights via useDashboardHighlights); the module-level dedupe
+ * folds them onto one request, replacing what Apollo's cache-first policy
+ * used to do here.
  */
-export function useChainProtocolStats() {
-  const client = useApolloClient()
-  const chains = useMemo(() => PROJECT_CONFIG.supportedNetworks, [])
-  const [state, setState] = useState<State>({ data: [], loading: true, error: null })
+export function useChainProtocolStats(): State {
+  const [state, setState] = useState<State>(() => {
+    const cached = peekCached<ChainStat[]>(URL, TTL_MS)
+    return cached
+      ? { data: cached, loading: false, error: null }
+      : { data: [], loading: true, error: null }
+  })
 
   useEffect(() => {
     let cancelled = false
-
-    async function run() {
-      setState(s => ({ ...s, loading: true, error: null }))
-      try {
-        const results = await Promise.all(
-          chains.map(chain =>
-            client
-              .query({
-                query: GetProtocolStatsPerChainDocument,
-                variables: { chain },
-                fetchPolicy: 'cache-first',
-              })
-              .then(r => ({ chain, metrics: r.data?.protocolMetricsChain }))
-          )
-        )
+    dedupedLoad(URL, TTL_MS, load)
+      .then(data => {
         if (cancelled) return
-        const data = results
-          .filter((r): r is { chain: GqlChain; metrics: NonNullable<typeof r.metrics> } =>
-            Boolean(r.metrics)
-          )
-          .map(r => ({ ...r.metrics, chain: r.chain }))
-          .sort((a, b) => Number(b.totalLiquidity) - Number(a.totalLiquidity))
         setState({ data, loading: false, error: null })
-      } catch (err) {
+      })
+      .catch(err => {
         if (cancelled) return
         setState({ data: [], loading: false, error: err as Error })
-      }
-    }
-
-    run()
+      })
     return () => {
       cancelled = true
     }
-  }, [client, chains])
+  }, [])
 
   return state
 }
