@@ -77,7 +77,6 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
     removeLiquidityTxHash,
     setProportionalType,
     setSingleTokenType,
-    setNeedsToAcceptHighPI,
     tokens,
     humanBptInPercent,
     setHumanBptInPercent,
@@ -223,7 +222,6 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
                 }
                 action="remove"
                 isDisabled={!isProportionalTabSelected && !priceImpactQuery.data}
-                setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}
           </VStack>

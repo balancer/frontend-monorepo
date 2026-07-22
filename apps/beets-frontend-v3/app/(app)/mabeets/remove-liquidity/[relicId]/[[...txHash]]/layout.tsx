@@ -5,6 +5,7 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { isHash, Hash } from 'viem'
 import { RelicRemoveLiquidityProvider } from '@/lib/modules/reliquary/RelicRemoveLiquidityProvider'
 import { PermitSignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/PermitSignatureProvider'
+import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 type Props = PropsWithChildren<{
   params: Promise<{ relicId: string; txHash?: string[] }>
@@ -18,9 +19,11 @@ export default function RelicRemoveLiquidityLayoutWrapper({ params, children }: 
   return (
     <DefaultPageContainer>
       <PermitSignatureProvider>
-        <RelicRemoveLiquidityProvider relicId={relicId} urlTxHash={urlTxHash}>
-          {children}
-        </RelicRemoveLiquidityProvider>
+        <PriceImpactProvider>
+          <RelicRemoveLiquidityProvider relicId={relicId} urlTxHash={urlTxHash}>
+            {children}
+          </RelicRemoveLiquidityProvider>
+        </PriceImpactProvider>
       </PermitSignatureProvider>
     </DefaultPageContainer>
   )
