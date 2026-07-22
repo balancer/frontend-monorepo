@@ -249,6 +249,9 @@ describe('isValidNumber', () => {
     expect(isValidNumber(undefined)).toBe(false)
     expect(isValidNumber('')).toBe(false)
     expect(isValidNumber('abc')).toBe(false)
+    expect(isValidNumber('.')).toBe(false)
+    expect(isValidNumber(',')).toBe(false)
+    expect(isValidNumber('1,5')).toBe(false)
   })
 
   test('returns true for valid numbers and numeric strings', () => {
@@ -259,5 +262,7 @@ describe('isValidNumber', () => {
     expect(isValidNumber('1.5')).toBe(true)
     expect(isValidNumber('100')).toBe(true)
     expect(isValidNumber('0.0000000000000035')).toBe(true)
+    expect(isValidNumber('0.')).toBe(true)
+    expect(isValidNumber('.5')).toBe(true)
   })
 })
