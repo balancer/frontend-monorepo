@@ -1,7 +1,7 @@
 import { base, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
+import { getRpcUrlByChainId, getDrpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 
 type NetworksWithFork = readonly [
   typeof mainnet,
@@ -118,6 +118,12 @@ export function getTestRpcSetup(networkName: ChainIdWithFork) {
  */
 export function getForkUrl(chainId: ChainIdWithFork, verbose = false): string {
   const network = ANVIL_NETWORKS[chainId]
+  const directDevProjectId = process.env['NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID']
+
+  if (directDevProjectId) {
+    return getRpcUrlByChainId(chainId, directDevProjectId)
+  }
+
   const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
 
   if (!privateKey) {
@@ -125,7 +131,7 @@ export function getForkUrl(chainId: ChainIdWithFork, verbose = false): string {
   }
 
   if (privateKey) {
-    return drpcUrlByChainId(chainId, privateKey)
+    return getDrpcUrlByChainId(chainId, privateKey)
   }
 
   if (!network.fallBackRpc) {

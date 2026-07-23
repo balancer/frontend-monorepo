@@ -13,6 +13,7 @@ env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
   SLACK_BOT_TOKEN: ${{secrets.SLACK_BOT_TOKEN}}
+  NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID }}
 
 jobs:
   # Skip this job as it is already part of the E2E-Smoke-Test job
@@ -162,7 +163,12 @@ jobs:
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@b00af27efadbc7b4ca8b82abbd903b17cc874d2a # v1
       - name: Start anvil fork in mainnet
-        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+        run: |
+          if [ -n "${{ env.NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID }}" ]; then
+            anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://prod.rpc.direct.dev/v1/${{ env.NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID }}/ethereum" --port 8545 &
+          else
+            anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+          fi
       - name: Run Playwright dev tests (Balancer)
         run: pnpm test:e2e:dev:bal
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -192,7 +198,12 @@ jobs:
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@b00af27efadbc7b4ca8b82abbd903b17cc874d2a # v1
       - name: Start anvil fork in sonic
-        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+        run: |
+          if [ -n "${{ env.NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID }}" ]; then
+            anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://prod.rpc.direct.dev/v1/${{ env.NEXT_PUBLIC_DIRECT_DEV_PROJECT_ID }}/sonic" --port 8545 &
+          else
+            anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+          fi
       - name: Run Playwright dev tests (Beets)
         run: pnpm test:e2e:dev:beets
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
