@@ -129,7 +129,7 @@ export function usePoolListQueryState() {
     if (checked) {
       setUserAddress(address)
     } else {
-      setUserAddress('')
+      setUserAddress(null)
     }
   }
 
