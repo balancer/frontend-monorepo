@@ -11,7 +11,6 @@ import {
   mainnet,
   optimism,
   polygon,
-  polygonZkEvm,
   sepolia,
   sonic,
 } from 'viem/chains'
@@ -25,7 +24,6 @@ const SAFE_CHAIN_PREFIX: Record<SupportedChainId, string> = {
   [sepolia.id]: 'sep',
   [arbitrum.id]: 'arb',
   [polygon.id]: 'matic',
-  [polygonZkEvm.id]: 'zkevm',
   [optimism.id]: 'oeth',
   [base.id]: 'base',
   [sonic.id]: 'sonic',

@@ -22,6 +22,7 @@ export function createIntegrationVitestConfig(monorepoRoot: string): ViteUserCon
     ],
     globalSetup: [resolveFromRoot('./packages/test/anvil/anvil-global-setup.ts')],
     testTimeout: 120_000,
+    hookTimeout: 120_000,
     // The integration suite shares one set of anvil forks. Keep test files serial so
     // concurrent workers do not overload or mutate the same forked RPC state.
     maxWorkers: 1,

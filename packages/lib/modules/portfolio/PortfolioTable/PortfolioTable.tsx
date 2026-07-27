@@ -154,7 +154,7 @@ export function PortfolioTable() {
             content={`You have ${deprecatedChainPools} affected ${deprecatedChainPools === 1 ? 'position' : 'positions'} on this chains.
             Please remove your liquidity asap.`}
             status="warning"
-            title="zkEVM, Mode and Fraxtal are being sunset on Balancer"
+            title="Mode and Fraxtal are being sunset on Balancer"
           />
         )}
 

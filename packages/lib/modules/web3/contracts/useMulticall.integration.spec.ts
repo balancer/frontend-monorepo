@@ -34,7 +34,7 @@ describe('Performs multicall in multiple chains', () => {
         value: 721n,
       }),
     ])
-  }, 20_000)
+  })
   const mainnetRequest: ChainContractConfig = {
     id: 'daiBalanceOnMainnet',
     chainId: mainnet.id,
@@ -67,7 +67,17 @@ describe('Performs multicall in multiple chains', () => {
 
     const { result } = testHook(() => useMulticall(multicallRequests))
 
-    await waitFor(() => expect(result.current.results[mainnet.id].data).toBeDefined())
+    const waitForChainData = async (chainId: number, label: string) => {
+      await waitFor(() => {
+        const r = result.current.results[chainId]
+        if (r?.error) {
+          console.error(`useMulticall error for ${label} (chainId ${chainId}):`, r.error)
+        }
+        expect(r?.data).toBeDefined()
+      })
+    }
+
+    await waitForChainData(mainnet.id, 'mainnet')
     expect(result.current.results[mainnet.id].data).toMatchInlineSnapshot(`
       {
         "daiBalanceOnMainnet": {
@@ -77,7 +87,7 @@ describe('Performs multicall in multiple chains', () => {
       }
     `)
 
-    await waitFor(() => expect(result.current.results[base.id].data).toBeDefined())
+    await waitForChainData(base.id, 'base')
     expect(result.current.results[base.id].data).toMatchInlineSnapshot(`
       {
         "ghoBalanceOnBase": {
@@ -87,7 +97,7 @@ describe('Performs multicall in multiple chains', () => {
       }
     `)
 
-    await waitFor(() => expect(result.current.results[polygon.id].data).toBeDefined())
+    await waitForChainData(polygon.id, 'polygon')
     expect(result.current.results[polygon.id].data).toMatchInlineSnapshot(`
     {
       "polBalanceOnPolygon": {

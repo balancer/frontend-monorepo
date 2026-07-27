@@ -1,0 +1,33 @@
+query GetRecentActivity($since: BigInt!, $first: Int!) {
+  swaps(
+    first: $first
+    where: { blockTimestamp_gte: $since }
+    orderBy: blockTimestamp
+    orderDirection: desc
+  ) {
+    id
+    pool
+    tokenIn
+    tokenInSymbol
+    tokenAmountIn
+    tokenOut
+    tokenOutSymbol
+    tokenAmountOut
+    swapFeeAmount
+    blockTimestamp
+  }
+  addRemoves(
+    first: $first
+    where: { blockTimestamp_gte: $since }
+    orderBy: blockTimestamp
+    orderDirection: desc
+  ) {
+    id
+    type
+    pool {
+      id
+    }
+    user
+    blockTimestamp
+  }
+}

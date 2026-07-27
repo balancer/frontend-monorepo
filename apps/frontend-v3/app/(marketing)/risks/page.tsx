@@ -138,9 +138,6 @@ export default function Privacy() {
                         <Link href="risks#polygon">Polygon PoS</Link>
                       </li>
                       <li>
-                        <Link href="risks#polygon-zkevm">Polygon zkEVM</Link>
-                      </li>
-                      <li>
                         <Link href="risks#gnosis">Gnosis chain</Link>
                       </li>
                       <li>
@@ -1102,10 +1099,10 @@ export default function Privacy() {
                       Pools may use rate providers that are bridged between blockchain networks.
                     </p>
                     <p>
-                      For example, some pools on Polygon zkEVM use a rate provider that is bridged
-                      from Ethereum Mainnet via the Layer Zero (an omnichain messaging service). In
-                      these pools, LPs are exposed to risk of significant losses if an incorrect
-                      rate is received via the omnichain messaging service.
+                      For example, some pools may use a rate provider that is bridged from Ethereum
+                      Mainnet via the Layer Zero (an omnichain messaging service). In these pools,
+                      LPs are exposed to risk of significant losses if an incorrect rate is received
+                      via the omnichain messaging service.
                     </p>
                   </div>
                 </div>
@@ -1762,30 +1759,6 @@ export default function Privacy() {
                 Polygon is subject to the same risks of other PoS chains. In particular, it has a
                 smaller pool of capital and validator set to gain consensus compared to Ethereum
                 Mainnet.
-              </p>
-            </div>
-          </FadeInOnView>
-          <FadeInOnView>
-            <div className="subsection">
-              <h4 className="anchor" id="polygon-zkevm">
-                Polygon zkEVM risks
-              </h4>
-              <p>
-                <a href="https://polygon.technology/polygon-zkevm">Polygon zkEVM</a> is a
-                EVM-compatible ZK Rollup built by Polygon Labs. Polygon zkEVM harnesses the power of
-                ZK proofs to reduce transaction costs and massively increase throughput, all while
-                inheriting the security of Ethereum L1.
-              </p>
-              <p>
-                Note: Polygon has announced
-                <a href="https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020">
-                  zkEVM will be deprecated by 2026
-                </a>
-                , recommending users to migrate liquidity to Polygon PoS.
-              </p>
-              <p>
-                View the risks of using Polygon zkEVM on{' '}
-                <a href="https://l2beat.com/scaling/projects/polygonzkevm">L2Beat</a>.
               </p>
             </div>
           </FadeInOnView>

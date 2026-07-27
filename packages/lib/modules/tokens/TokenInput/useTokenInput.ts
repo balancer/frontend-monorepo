@@ -1,4 +1,4 @@
-import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
+import { Numberish, bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { ChangeEvent } from 'react'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
@@ -13,6 +13,17 @@ export function overflowProtected(value: Numberish, decimalLimit: number): strin
     const maxLength = numberSegment.length + decimalLimit + 1
     return stringValue.slice(0, maxLength)
   } else return stringValue
+}
+
+export function cleanAmountInput(newValue: string): string {
+  let cleanValue = newValue.replace(',', '.')
+  cleanValue = cleanValue.replace(/[^\d.]/g, '')
+  let separators = 0 // Remove all non decimal chars except the first decimal separator
+  cleanValue = cleanValue.replace('.', () => (separators++ === 0 ? '.' : ''))
+  // A bare leading separator ('.') is not parseable by BigNumber and would crash downstream
+  if (cleanValue.startsWith('.')) cleanValue = '0' + cleanValue
+
+  return cleanValue
 }
 
 type Params = {
@@ -44,7 +55,7 @@ export function useTokenInput({
     const userBalance = balanceFor(tokenAddress)
 
     removeValidationErrors(tokenAddress, [EXCEEDS_BALANCE_ERROR])
-    if (value && userBalance !== undefined && !disableBalanceValidation) {
+    if (value && isValidNumber(value) && userBalance !== undefined && !disableBalanceValidation) {
       if (bn(value).gt(bn(userBalance.formatted))) {
         return setValidationError(tokenAddress, EXCEEDS_BALANCE_ERROR)
       }
@@ -52,14 +63,7 @@ export function useTokenInput({
   }
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.currentTarget.value
-
-    let cleanValue = newValue.replace(',', '.')
-    cleanValue = cleanValue.replace(/[^\d.]/g, '')
-    let separators = 0 // Remove all non decimal chars except the first decimal separator
-    cleanValue = cleanValue.replace('.', () => (separators++ === 0 ? '.' : ''))
-
-    updateValue(cleanValue)
+    updateValue(cleanAmountInput(event.currentTarget.value))
   }
 
   return {

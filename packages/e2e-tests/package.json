@@ -10,6 +10,8 @@
     "test:e2e:build:ui:bal": "NEXT_PUBLIC_PROJECT_ID=balancer pnpm exec playwright test tests/build/balancer --ui",
     "test:e2e:build:beets": "NEXT_PUBLIC_PROJECT_ID=beets start-server-and-test 'cd ../../ && pnpm start --filter beets-frontend-v3' 'http://localhost:3001' 'pnpm exec playwright test tests/build/beets'",
     "test:e2e:build:ui:beets": "NEXT_PUBLIC_PROJECT_ID=beets pnpm exec playwright test tests/build/beets --ui",
+    "test:e2e:build:analytics": "start-server-and-test 'cd ../../ && pnpm start --filter balancer-analytics' 'http://localhost:3002' 'pnpm exec playwright test tests/build/analytics'",
+    "test:e2e:build:ui:analytics": "pnpm exec playwright test tests/build/analytics --ui",
     "test:e2e:dev:bal": "NEXT_PUBLIC_E2E_DEV=1 start-server-and-test 'cd ../../ &&  pnpm start --filter frontend-v3' 'http://localhost:3000' 'pnpm exec playwright test tests/dev/balancer'",
     "test:e2e:dev:ui:bal": "NEXT_PUBLIC_E2E_DEV=1 pnpm exec playwright test tests/dev/balancer --ui",
     "test:e2e:dev:beets": "NEXT_PUBLIC_E2E_DEV=1 start-server-and-test 'cd ../../ &&  pnpm start --filter beets-frontend-v3' 'http://localhost:3001' 'pnpm exec playwright test tests/dev/beets'",

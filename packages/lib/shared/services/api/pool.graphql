@@ -222,6 +222,7 @@ query GetPoolEvents(
     chain
     userAddress
     ... on GqlPoolSwapEventV3 {
+      sender
       tokenIn {
         address
         amount
@@ -232,6 +233,7 @@ query GetPoolEvents(
       }
     }
     ... on GqlPoolSwapEventCowAmm {
+      sender
       tokenIn {
         address
         amount

@@ -14,7 +14,7 @@ import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enum
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
 import { PropsWithChildren, createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
@@ -33,7 +33,7 @@ import { DefaultSwapHandler } from './handlers/DefaultSwap.handler'
 import { NativeWrapHandler } from './handlers/NativeWrap.handler'
 import { SwapHandler } from './handlers/Swap.handler'
 import { useSimulateSwapQuery } from './queries/useSimulateSwapQuery'
-import { isAuraBalSwap } from './swap.helpers'
+import { isAuraBalSwap, sanitizeSwapState } from './swap.helpers'
 import {
   OSwapAction,
   SdkSimulateSwapResponse,
@@ -123,7 +123,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       selectedChain: isPoolSwap ? pool.chain : PROJECT_CONFIG.defaultNetwork,
     },
     isLbpSwap ? 'lbpSwapState' : 'swapState',
-    shouldDiscardOldPersistedValue
+    shouldDiscardOldPersistedValue,
+    sanitizeSwapState
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -132,7 +133,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   const { isConnected } = useUserAccount()
   const { chain: walletChain } = useNetworkConfig()
-  const { getToken, getTokensByChain, usdValueForToken } = useTokens()
+  const { getToken, getTokensByChain, usdValueForToken, isLoadingTokens } = useTokens()
   const { tokens, setTokens } = useTokenBalances()
   const { hasValidationErrors, resetValidationErrors } = useTokenInputsValidation()
   const { setPriceImpact, resetPriceImpact, acceptPriceImpactRisk, hasToAcceptHighPriceImpact } =
@@ -162,8 +163,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const tokenOutInfo = getToken(swapState.tokenOut.address, selectedChain)
 
   if (
-    (isTokenInSet && !tokenInInfo && !isPoolSwap) ||
-    (isTokenOutSet && !tokenOutInfo && !isPoolSwap)
+    !isLoadingTokens &&
+    ((isTokenInSet && !tokenInInfo && !isPoolSwap) ||
+      (isTokenOutSet && !tokenOutInfo && !isPoolSwap))
   ) {
     try {
       setDefaultTokens()
@@ -191,11 +193,13 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   const shouldFetchSwap = (state: SwapState, urlTxHash?: Hash) => {
     if (urlTxHash) return false
+    const swapAmount = getSwapAmount()
     return (
       isAddress(state.tokenIn.address) &&
       isAddress(state.tokenOut.address) &&
       !!state.swapType &&
-      bn(getSwapAmount()).gt(0)
+      isBnParseable(swapAmount) &&
+      bn(swapAmount).gt(0)
     )
   }
 
@@ -504,7 +508,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const wethIsEth =
     isSameAddress(swapState.tokenIn.address, networkConfig.tokens.nativeAsset.address) ||
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
-  const validAmountOut = swapState.tokenOut.amount !== '' && bn(swapState.tokenOut.amount).gt(0)
+  const validAmountOut =
+    isBnParseable(swapState.tokenOut.amount) && bn(swapState.tokenOut.amount).gt(0)
 
   const protocolVersion =
     ((simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion as ProtocolVersion) || 2
@@ -581,9 +586,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function setInitialAmounts(slugAmountIn?: string, slugAmountOut?: string) {
-    if (slugAmountIn && !slugAmountOut && bn(slugAmountIn).gt(0)) {
+    if (slugAmountIn && !slugAmountOut && isBnParseable(slugAmountIn) && bn(slugAmountIn).gt(0)) {
       setTokenInAmount(slugAmountIn as HumanAmount)
-    } else if (slugAmountOut && bn(slugAmountOut).gt(0)) {
+    } else if (slugAmountOut && isBnParseable(slugAmountOut) && bn(slugAmountOut).gt(0)) {
       setTokenOutAmount(slugAmountOut as HumanAmount)
     } else resetSwapAmounts()
   }

@@ -9,7 +9,6 @@ import { usePoolMigrations } from '../migrations/PoolMigrationsProvider'
 import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../migrations/MigrationAlert'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { isChainDeprecated } from '../../chains/chain.utils'
 import { useStableSurgeMetrics } from '../../hooks/stable-surge/useStableSurgeMetrics'
 import { ArrowUpRight } from 'react-feather'
@@ -86,14 +85,10 @@ function V2ExploitContentWarning() {
 
 function DeprecatedChainWarningContent({ chain }: { chain: GqlChain }) {
   const chainName = getChainName(chain)
+  const problem = `The ${chainName} network is being sunset on Balancer.`
+
   const learnMoreLink =
-    chain === GqlChainValues.Zkevm
-      ? 'https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020'
-      : 'https://forum.balancer.fi/t/bip-906-deprecation-of-polygon-zkevm-fraxtal-and-mode/6951'
-  const problem =
-    chain === GqlChainValues.Zkevm
-      ? `Polygon has decided to sunset the ${chainName} network`
-      : `The ${chainName} network is being sunset on Balancer.`
+    'https://forum.balancer.fi/t/bip-906-deprecation-of-polygon-zkevm-fraxtal-and-mode/6951'
 
   return (
     <HStack>

@@ -1,11 +1,26 @@
 # Balancer Analytics
 
-Analytics dashboard for the Balancer protocol.
+Standalone analytics surface aggregating Balancer v2 and v3 data, hosted as a third app inside
+`frontend-monorepo` alongside `frontend-v3` and `beets-frontend-v3`.
 
-## Getting Started
+## Phase 0 status
+
+Skeleton + Protocol overview page wired against `protocolMetricsAggregated` via `@repo/lib`.
+
+- `NEXT_PUBLIC_PROJECT_ID=balancer` resolves to `ProjectConfigBalancer` (the app reuses the Balancer
+  project config; its own branding lives in local components/metadata).
+- Read-only: no wagmi / RainbowKit providers in the tree.
+- Chakra theme is a local copy of the bal theme (`lib/services/chakra/themes/analytics/`).
+
+## Getting started
+
+From the monorepo root:
 
 ```bash
-pnpm dev
+cp apps/balancer-analytics/.env.template apps/balancer-analytics/.env.local
+cp apps/balancer-analytics/.env.local packages/lib/.env.local   # codegen reads from here
+pnpm install
+pnpm dev:analytics
 ```
 
-Open [http://localhost:3002](http://localhost:3002) to view the app.
+App runs at <http://localhost:3002>.

@@ -31,7 +31,7 @@ jobs:
   Lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run lint
@@ -44,12 +44,12 @@ jobs:
   Unit-Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run typecheck
         env:
-          NODE_OPTIONS: "--max_old_space_size=6144"
+          NODE_OPTIONS: '--max_old_space_size=6144'
         run: pnpm typecheck
       - name: Run unit tests
         run: pnpm test:unit
@@ -64,15 +64,12 @@ jobs:
 
   Integration-Test:
     runs-on: ubuntu-latest
-    concurrency:
-      group: anvil-tests
-      queue: max
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@c7450ba673e133f5ee30098b3b54f444d3a2ca2d # v1
+        uses: foundry-rs/foundry-toolchain@b00af27efadbc7b4ca8b82abbd903b17cc874d2a # v1
         # with:
         #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
@@ -87,7 +84,7 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: balancer
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run Playwright smoke tests (Balancer)
@@ -110,7 +107,7 @@ jobs:
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run Playwright smoke tests (Beets)
@@ -123,23 +120,41 @@ jobs:
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
 
+  E2E-Smoke-Test-Analytics:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Run Playwright smoke tests (Analytics)
+        run: pnpm test:e2e:build:analytics
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-smoke-report-analytics
+          path: |
+            ./packages/e2e-tests/playwright-report/
+          retention-days: 30
+
   E2E-Dev-Test-Balancer:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    concurrency:
-      group: anvil-tests
-      queue: max
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
     env:
       NEXT_PUBLIC_PROJECT_ID: balancer
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@c7450ba673e133f5ee30098b3b54f444d3a2ca2d # v1
+        uses: foundry-rs/foundry-toolchain@b00af27efadbc7b4ca8b82abbd903b17cc874d2a # v1
       - name: Start anvil fork in mainnet
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Run Playwright dev tests (Balancer)
@@ -155,9 +170,6 @@ jobs:
   E2E-Dev-Test-Beets:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    concurrency:
-      group: anvil-tests
-      queue: max
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
     env:
@@ -165,11 +177,11 @@ jobs:
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@c7450ba673e133f5ee30098b3b54f444d3a2ca2d # v1
+        uses: foundry-rs/foundry-toolchain@b00af27efadbc7b4ca8b82abbd903b17cc874d2a # v1
       - name: Start anvil fork in sonic
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Run Playwright dev tests (Beets)
