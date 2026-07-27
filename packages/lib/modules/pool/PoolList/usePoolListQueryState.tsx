@@ -322,6 +322,11 @@ export function usePoolListQueryState() {
     textSearch,
   }
 
+  function _setMinTvl(value: number | null) {
+    if (skip) setSkip(0)
+    setMinTvl(value)
+  }
+
   return {
     state: {
       first,
@@ -342,7 +347,7 @@ export function usePoolListQueryState() {
     setSorting,
     setPagination,
     setSearch,
-    setMinTvl,
+    setMinTvl: _setMinTvl,
     setPoolTypes,
     setPoolTags,
     setPoolHookTags,
