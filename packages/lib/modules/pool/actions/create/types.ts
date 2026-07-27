@@ -79,8 +79,6 @@ export type AutoRangeConfig = {
 export type EclpConfigForm = {
   alpha: string
   beta: string
-  c: string
-  s: string
   lambda: string
   peakPrice: string
 }

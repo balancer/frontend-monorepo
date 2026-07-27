@@ -5,6 +5,7 @@ import { PERCENTAGE_DECIMALS, DEFAULT_DECIMALS } from '../constants'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
 import { CreatePoolInput } from '../types'
+import { calculateRotationComponents } from '../steps/details/gyro.helpers'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
   const { poolCreationForm, autoRangeConfigForm, eclpConfigForm } = usePoolCreationForm()
@@ -113,7 +114,8 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
   }
 
   if (poolType === PoolType.GyroE) {
-    const { alpha, beta, s, c, lambda } = eclpConfigForm.getValues()
+    const { alpha, beta, peakPrice, lambda } = eclpConfigForm.getValues()
+    const { c, s } = calculateRotationComponents(peakPrice || '')
 
     // The SDK's normalizeEclpParamsAndTokens handles token sorting and param inversion
     const eclpParams = {
