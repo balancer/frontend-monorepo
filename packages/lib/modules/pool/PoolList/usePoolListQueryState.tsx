@@ -178,7 +178,10 @@ export function usePoolListQueryState() {
     if (checked) {
       setNetworks(current => uniq([...current, network]))
     } else {
-      setNetworks(current => current.filter(chain => chain !== network))
+      setNetworks(current => {
+        const next = current.filter(chain => chain !== network)
+        return next.length ? next : null
+      })
     }
   }
 
