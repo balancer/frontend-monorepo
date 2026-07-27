@@ -14,7 +14,15 @@
  * the existing markArea logic and any future grouping needs.
  */
 
-export type EventCategory = 'fee' | 'state' | 'amp' | 'surge' | 'registration' | 'rate' | 'other'
+export type EventCategory =
+  | 'fee'
+  | 'state'
+  | 'amp'
+  | 'autorange'
+  | 'surge'
+  | 'registration'
+  | 'rate'
+  | 'other'
 
 export type EventStyle = {
   color: string
@@ -103,6 +111,28 @@ export const EVENT_STYLES: Record<string, EventStyle> = {
     pinLabel: 'AMP×',
     legendLabel: 'Amp ramp stopped',
     category: 'amp',
+  },
+
+  // ── reClamm (AutoRange) parameter adjustments ──
+  // Blue family — distinct from the fee purples and amp ambers. These are
+  // the manager-driven config changes on an AutoRange pool.
+  DailyPriceShiftExponentUpdated: {
+    color: '#2563eb',
+    pinLabel: 'SHIFT',
+    legendLabel: 'Daily price shift',
+    category: 'autorange',
+  },
+  CenterednessMarginUpdated: {
+    color: '#3b82f6',
+    pinLabel: 'CTR·M',
+    legendLabel: 'Centeredness margin',
+    category: 'autorange',
+  },
+  PriceRatioStateUpdated: {
+    color: '#60a5fa',
+    pinLabel: 'RATIO',
+    legendLabel: 'Price ratio update',
+    category: 'autorange',
   },
 
   // ── State changes ──
@@ -195,6 +225,7 @@ export function getEventStyle(eventName: string): EventStyle {
 export const CATEGORY_ORDER: EventCategory[] = [
   'fee',
   'amp',
+  'autorange',
   'state',
   'surge',
   'rate',

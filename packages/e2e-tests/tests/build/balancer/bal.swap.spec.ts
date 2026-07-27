@@ -1,9 +1,15 @@
-import { button, clickButton, clickLink } from '@/helpers/user.helpers'
+import { button, clickButton } from '@/helpers/user.helpers'
 import { test, expect } from '@playwright/test'
 
+const GRAPHQL_URL = 'https://test-api-v3.balancer.fi/graphql'
+
 test('Balancer: swap page renders', async ({ page }) => {
-  await page.goto('http://localhost:3000/')
-  await clickLink(page, 'Swap')
+  const tokensResponsePromise = page.waitForResponse(
+    res => res.url() === GRAPHQL_URL && res.status() === 200,
+    { timeout: 90_000 },
+  )
+  await page.goto('http://localhost:3000/swap/ethereum/ETH')
+  await tokensResponsePromise
 
   await expect(button(page, 'ETH')).toBeVisible()
 

@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js'
 import {
   bn,
-  fNum,
   BN_LOWER_THRESHOLD,
-  sum,
+  fNum,
   formatFalsyValueAsDash,
-  ZERO_VALUE_DASH,
+  isBnParseable,
   isValidNumber,
+  sum,
+  ZERO_VALUE_DASH,
 } from './numbers'
 
 test('Stringifies bigints', () => {
@@ -249,6 +250,9 @@ describe('isValidNumber', () => {
     expect(isValidNumber(undefined)).toBe(false)
     expect(isValidNumber('')).toBe(false)
     expect(isValidNumber('abc')).toBe(false)
+    expect(isValidNumber('.')).toBe(false)
+    expect(isValidNumber(',')).toBe(false)
+    expect(isValidNumber('1,5')).toBe(false)
   })
 
   test('returns true for valid numbers and numeric strings', () => {
@@ -259,5 +263,32 @@ describe('isValidNumber', () => {
     expect(isValidNumber('1.5')).toBe(true)
     expect(isValidNumber('100')).toBe(true)
     expect(isValidNumber('0.0000000000000035')).toBe(true)
+    expect(isValidNumber('0.')).toBe(true)
+    expect(isValidNumber('.5')).toBe(true)
+  })
+})
+describe('isBnParseable', () => {
+  test('returns false for nullish and values bn() cannot parse', () => {
+    expect(isBnParseable(null)).toBe(false)
+    expect(isBnParseable(undefined)).toBe(false)
+    expect(isBnParseable('')).toBe(false)
+    expect(isBnParseable('.')).toBe(false)
+    expect(isBnParseable(',')).toBe(false)
+    expect(isBnParseable('1,5')).toBe(false)
+    expect(isBnParseable('1.2.3')).toBe(false)
+    // Passes isValidNumber (lodash toNumber) but throws in bn() — the reason this guard exists
+    expect(isBnParseable('  ')).toBe(false)
+  })
+
+  test('returns true for values bn() can parse', () => {
+    expect(isBnParseable(0)).toBe(true)
+    expect(isBnParseable(1.5)).toBe(true)
+    expect(isBnParseable(12345678901234567890n)).toBe(true)
+    expect(isBnParseable(bn('1.5'))).toBe(true)
+    expect(isBnParseable('0')).toBe(true)
+    expect(isBnParseable('1.5')).toBe(true)
+    expect(isBnParseable('0.')).toBe(true)
+    expect(isBnParseable('.5')).toBe(true)
+    expect(isBnParseable('0.0000000000000035')).toBe(true)
   })
 })

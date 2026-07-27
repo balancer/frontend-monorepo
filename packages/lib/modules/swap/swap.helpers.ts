@@ -1,5 +1,5 @@
 import { Address } from 'viem'
-import { OSwapAction, SdkSimulateSwapResponse, SwapAction } from './swap.types'
+import { OSwapAction, SdkSimulateSwapResponse, SwapAction, SwapState } from './swap.types'
 import type { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import {
@@ -10,6 +10,7 @@ import {
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isMainnet } from '../chains/chain.utils'
 import { SwapSimulationQueryResult } from './queries/useSimulateSwapQuery'
+import { isBnParseable } from '@repo/lib/shared/utils/numbers'
 
 export function swapActionPastTense(action: SwapAction): string {
   switch (action) {
@@ -77,4 +78,18 @@ export function orderRouteVersion(simulationQuery: SwapSimulationQueryResult): n
   const queryData = simulationQuery.data as SdkSimulateSwapResponse
   const orderRouteVersion = queryData ? queryData.protocolVersion : 2
   return orderRouteVersion
+}
+// Heals invalid persisted amounts (e.g. '.') that older versions could write
+// to localStorage, so affected users recover without clearing storage manually
+export function sanitizeSwapState(state: SwapState): SwapState {
+  const sanitizeToken = (token: SwapState['tokenIn']) =>
+    token.amount !== '' && !isBnParseable(token.amount)
+      ? { ...token, amount: '', scaledAmount: BigInt(0) }
+      : token
+
+  return {
+    ...state,
+    tokenIn: sanitizeToken(state.tokenIn),
+    tokenOut: sanitizeToken(state.tokenOut),
+  }
 }

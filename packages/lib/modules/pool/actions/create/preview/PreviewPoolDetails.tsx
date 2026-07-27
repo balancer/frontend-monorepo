@@ -1,4 +1,4 @@
-import { CardHeader, CardBody, Heading, VStack, HStack, Text } from '@chakra-ui/react'
+import { CardHeader, CardBody, Heading, HStack, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
@@ -15,9 +15,7 @@ export function PreviewPoolDetails() {
         <Heading size="md">Details</Heading>
       </CardHeader>
       <CardBody>
-        <VStack spacing="0">
-          <PoolDetailsContent />
-        </VStack>
+        <PoolDetailsContent />
       </CardBody>
     </PreviewPoolCreationCard>
   )
@@ -103,16 +101,15 @@ export function PoolDetailsContent() {
       align="start"
       justify="space-between"
       key={label}
-      px="md"
       py="sm"
       sx={{
         '&:hover p': isDetailsActive ? { color: 'font.maxContrast' } : {},
       }}
       transition="1s all var(--ease-out-cubic)"
-      w="calc((100% + var(--chakra-space-md) * 2) - 2px)"
+      w="full"
     >
       <Text color="font.secondary">{label}</Text>
-      <Text as="span" color="font.secondary">
+      <Text color="font.secondary" ml="auto">
         {isBeforeStep('Details') ? '—' : value}
       </Text>
     </HStack>

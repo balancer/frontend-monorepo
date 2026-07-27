@@ -55,6 +55,7 @@ function shortHash(h: string): string {
 const CATEGORY_LABELS: Record<EventCategory, string> = {
   fee: 'Fees',
   amp: 'Amp',
+  autorange: 'AutoRange',
   state: 'Pause / recovery',
   surge: 'Surge',
   rate: 'Rate',
@@ -68,6 +69,7 @@ const CATEGORY_LABELS: Record<EventCategory, string> = {
 const CATEGORY_COLOR: Record<EventCategory, string> = {
   fee: '#7c6ff5',
   amp: '#f59e0b',
+  autorange: '#3b82f6',
   state: '#ef4444',
   surge: '#ec4899',
   rate: '#10b981',

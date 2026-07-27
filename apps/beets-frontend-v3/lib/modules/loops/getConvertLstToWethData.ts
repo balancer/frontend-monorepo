@@ -6,7 +6,7 @@ export function getConvertLstToWethData(data: Hex | undefined): `0x${string}` | 
   const abi = [
     {
       inputs: [{ internalType: 'bytes', name: '', type: 'bytes' }],
-      name: 'swapWithMagpieSignature',
+      name: 'swapWithBackendSignature',
       outputs: [{ internalType: 'uint256', name: 'amountOut', type: 'uint256' }],
       stateMutability: 'payable',
       type: 'function',

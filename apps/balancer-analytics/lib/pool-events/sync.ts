@@ -43,6 +43,7 @@ import { V3_VAULT_ADDRESS } from '@analytics/lib/abis/v3-vault'
 import {
   V3_FILTER_A_EVENTS,
   V3_STABLE_FILTER_B_EVENTS,
+  V3_RECLAMM_FILTER_B_EVENTS,
   V2_STABLE_FILTER_B_EVENTS,
   V2_NON_STABLE_FILTER_B_EVENTS,
 } from './event-signatures'
@@ -443,8 +444,9 @@ function pickFilterBEvents(metadata: PoolMetadata): readonly unknown[] {
   const t = metadata.type.toUpperCase()
   if (metadata.protocolVersion === 3) {
     if (t === 'STABLE') return V3_STABLE_FILTER_B_EVENTS
-    // Other V3 types currently have no Filter B events (Weighted is
-    // immutable; ECLP / AutoRange / LBP will be added in later phases).
+    if (t === 'RECLAMM') return V3_RECLAMM_FILTER_B_EVENTS
+    // Remaining V3 types currently have no Filter B events (Weighted is
+    // immutable; ECLP / LBP will be added in later phases).
     return []
   }
   if (metadata.protocolVersion === 2) {
