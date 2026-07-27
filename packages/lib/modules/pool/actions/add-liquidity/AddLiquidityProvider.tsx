@@ -31,6 +31,7 @@ import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
+import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
 import { Pool } from '../../pool.types'
@@ -81,7 +82,6 @@ export function useAddLiquidityLogic(
   )
   // only used by Proportional handlers that require a referenceAmount
   const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
-  const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
 
@@ -117,6 +117,7 @@ export function useAddLiquidityLogic(
   ]
 
   const { usdValueFor } = useTotalUsdValue(validTokens)
+  const { acceptPriceImpactRisk, hasToAcceptHighPriceImpact, resetPriceImpact } = usePriceImpact()
 
   function setInitialHumanAmountsIn() {
     setHumanAmountsIn(mapTokensToEmptyHumanAmounts(tokens))
@@ -133,6 +134,7 @@ export function useAddLiquidityLogic(
         symbol: token.symbol,
       },
     ])
+    resetPriceImpact()
   }
 
   function clearAmountsIn(changedAmount?: HumanTokenAmountWithSymbol) {
@@ -172,6 +174,8 @@ export function useAddLiquidityLogic(
     humanAmountsIn,
     enabled,
   })
+
+  const needsToAcceptHighPI = hasToAcceptHighPriceImpact && !acceptPriceImpactRisk
 
   const { steps, isLoadingSteps } = useAddLiquiditySteps({
     helpers,
@@ -272,7 +276,6 @@ export function useAddLiquidityLogic(
     setHumanAmountsIn,
     clearAmountsIn,
     setReferenceAmountAddress,
-    setNeedsToAcceptHighPI,
     setAcceptPoolRisks,
     setWethIsEth,
     setWrapUnderlyingByIndex,

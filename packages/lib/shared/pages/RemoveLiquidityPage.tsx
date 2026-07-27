@@ -24,13 +24,13 @@ export function RemoveLiquidityPage({ txHash, redirectPath }: Props) {
       <TransactionStateProvider>
         <RelayerSignatureProvider>
           <PermitSignatureProvider>
-            <RemoveLiquidityProvider urlTxHash={urlTxHash}>
-              <PoolActionsLayout redirectPath={redirectPath}>
-                <PriceImpactProvider>
+            <PriceImpactProvider>
+              <RemoveLiquidityProvider urlTxHash={urlTxHash}>
+                <PoolActionsLayout redirectPath={redirectPath}>
                   <RemoveLiquidityForm />
-                </PriceImpactProvider>
-              </PoolActionsLayout>
-            </RemoveLiquidityProvider>
+                </PoolActionsLayout>
+              </RemoveLiquidityProvider>
+            </PriceImpactProvider>
           </PermitSignatureProvider>
         </RelayerSignatureProvider>
       </TransactionStateProvider>

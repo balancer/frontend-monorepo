@@ -25,6 +25,7 @@ import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/per
 import { PermitSignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/PermitSignatureProvider'
 import { sleep } from '@repo/lib/shared/utils/sleep'
 import { ApolloProvider } from '@apollo/client/react'
+import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 export type Wrapper = ({ children }: PropsWithChildren) => ReactNode
 
@@ -102,26 +103,33 @@ export async function waitForLoadedUseQuery(hookResult: { current: { loading: bo
 
 export function DefaultAddLiquidityTestProvider({ children }: PropsWithChildren) {
   return (
-    <RelayerSignatureProvider>
-      <Permit2SignatureProvider>
-        <TokenInputsValidationProvider>
-          <AddLiquidityProvider>{children}</AddLiquidityProvider>
-        </TokenInputsValidationProvider>
-      </Permit2SignatureProvider>
-    </RelayerSignatureProvider>
+    <PriceImpactProvider>
+      <RelayerSignatureProvider>
+        <Permit2SignatureProvider>
+          <TokenInputsValidationProvider>
+            <AddLiquidityProvider>{children}</AddLiquidityProvider>
+          </TokenInputsValidationProvider>
+        </Permit2SignatureProvider>
+      </RelayerSignatureProvider>
+    </PriceImpactProvider>
   )
 }
 
 export function DefaultRemoveLiquidityTestProvider({ children }: PropsWithChildren) {
   return (
-    <RelayerSignatureProvider>
-      <RemoveLiquidityProvider>{children}</RemoveLiquidityProvider>
-    </RelayerSignatureProvider>
+    <PriceImpactProvider>
+      <RelayerSignatureProvider>
+        <RemoveLiquidityProvider>{children}</RemoveLiquidityProvider>
+      </RelayerSignatureProvider>
+    </PriceImpactProvider>
   )
 }
 
 /* Builds a PoolProvider that injects the provided pool data*/
-export const buildDefaultPoolTestProvider = (pool: GqlPoolElement = aGqlPoolElementMock()) =>
+export const buildDefaultPoolTestProvider = (
+  pool: GqlPoolElement = aGqlPoolElementMock(),
+  LiquidityProviderWrapper: Wrapper = EmptyWrapper
+) =>
   function ({ children }: PropsWithChildren) {
     return (
       <TransactionStateProvider>
@@ -136,7 +144,7 @@ export const buildDefaultPoolTestProvider = (pool: GqlPoolElement = aGqlPoolElem
               id={pool.id}
               variant={BaseVariant.v2}
             >
-              {children}
+              <LiquidityProviderWrapper>{children}</LiquidityProviderWrapper>
             </PoolProvider>
           </PermitSignatureProvider>
         </RelayerSignatureProvider>
