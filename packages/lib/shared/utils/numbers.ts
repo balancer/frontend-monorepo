@@ -392,3 +392,18 @@ export function formatFalsyValueAsDash(
   // Otherwise return the string representation of the value
   return stringValue
 }
+/**
+ * True when `bn()` can parse the value without throwing.
+ * Prefer this over `isValidNumber` when guarding a `bn()` call: `isValidNumber`
+ * uses lodash `toNumber`, whose grammar differs from BigNumber's
+ * (e.g. 'Infinity' and whitespace-only strings pass `isValidNumber` but throw in `bn()`).
+ */
+export function isBnParseable(value: Numberish | undefined | null): boolean {
+  if (value == null) return false
+  try {
+    bn(value)
+    return true
+  } catch {
+    return false
+  }
+}
