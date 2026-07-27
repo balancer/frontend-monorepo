@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import type { AnalyticsGaugeRewardsPayload } from '@analytics/app/api/portfolio/[address]/gauge-rewards/route'
-import { dedupedLoad } from '@analytics/lib/upstream/request-cache'
+import { dedupedLoad, peekCached } from '@analytics/lib/upstream/request-cache'
 
 export type UseGaugeRewardsResult = {
   loading: boolean
@@ -36,7 +36,15 @@ type AsyncState =
  * must not cancel the fetch the other is awaiting.
  */
 export function useGaugeRewards(address: string | null): UseGaugeRewardsResult {
-  const [asyncState, setAsyncState] = useState<AsyncState | null>(null)
+  // Seed from the module cache when present — a remount (or a second card
+  // mounting after the first resolved) shows the payload on the first
+  // render instead of bouncing through a `loading: true` frame.
+  const [asyncState, setAsyncState] = useState<AsyncState | null>(() => {
+    if (!address) return null
+    const url = `/api/portfolio/${address}/gauge-rewards`
+    const cached = peekCached<AnalyticsGaugeRewardsPayload>(url, TTL_MS)
+    return cached ? { kind: 'resolved', address, payload: cached } : null
+  })
 
   useEffect(() => {
     if (!address) return

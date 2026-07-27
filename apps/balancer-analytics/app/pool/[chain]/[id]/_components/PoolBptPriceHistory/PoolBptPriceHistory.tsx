@@ -41,8 +41,9 @@ import { useMemo, useRef, useState } from 'react'
 import { useInView } from 'motion/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { useHodlComparison, type TokenDailyPrices } from '@analytics/lib/hooks/useHodlComparison'
+import { useHodlComparison } from '@analytics/lib/hooks/useHodlComparison'
 import type { PoolHistoryRange, PoolPageData } from '../../page'
+import { computeHodl, type HodlResult, type HodlToken, type Sample } from './computeHodl'
 import { HistoryRangeToggle, type HistoryRange } from '../HistoryRangeToggle'
 
 type Token = {
@@ -55,14 +56,6 @@ type Token = {
   /** The wrapper's underlying asset, or null on non-wrapped tokens. */
   underlyingToken: { address: string; symbol: string } | null
 }
-
-/** The two legs of a token for the HODL basket: `wrapped` (what the pool
- *  actually holds, so its price gives the pool's USD value) and `hodl` (what
- *  the "just held it instead" basket is valued in — the *underlying* for a
- *  yield-bearing wrapper, else the token itself). Fixing the basket in
- *  underlying terms strips the wrapper's yield out of HODL so the LP's yield
- *  advantage shows, instead of accruing to both sides and cancelling. */
-type HodlToken = { wrapped: string; hodl: string }
 
 type Props = {
   chain: string
@@ -81,8 +74,6 @@ type Props = {
  *  otherwise-tiny LP-vs-HODL divergence is actually visible; `usd` shows the
  *  raw per-BPT / per-basket dollar value. */
 type Mode = 'usd' | 'return'
-
-type Sample = PoolPageData['snapshots'][number]
 
 const RANGE_LABEL: Record<PoolHistoryRange, string> = {
   '30d': '30d',
@@ -115,9 +106,6 @@ const CHART_COLORS = {
   tooltipText: '#e5e7eb',
   tooltipHead: '#E5D3BE',
 } as const
-
-const DAY = 86400
-const dayStart = (tsSeconds: number): number => Math.floor(tsSeconds / DAY) * DAY
 
 /** BPT prices span orders of magnitude (a stable BPT ≈ $1.02, an ETH pool
  *  BPT ≈ $2.4k, a BTC pool BPT ≈ $60k). Scale the precision to the value so
@@ -244,83 +232,6 @@ function ModeToggle({
       })}
     </Flex>
   )
-}
-
-/** Per-BPT HODL basket valued forward from a fixed reference point.
- *  `values[i]` aligns with `samples[i]` (null before t₀ or where a token is
- *  unpriced that day). `baseIndex` / `baseValue` are the t₀ anchor. */
-type HodlResult = {
-  values: (number | null)[]
-  baseIndex: number
-  baseValue: number
-}
-
-/** Price on the snapshot's UTC-day, walking back up to two weeks to bridge a
- *  missing bucket (token oracle gap) before giving up. */
-function priceAt(daily: Map<number, number>, tsSeconds: number): number | null {
-  const start = dayStart(tsSeconds)
-  for (let back = 0; back <= 14; back++) {
-    const p = daily.get(start - back * DAY)
-    if (p != null) return p
-  }
-  return null
-}
-
-function computeHodl(
-  samples: Sample[],
-  hodlTokens: HodlToken[],
-  series: TokenDailyPrices[] | null
-): HodlResult | null {
-  if (!series || series.length === 0 || hodlTokens.length === 0) return null
-
-  const byAddr = new Map(series.map(s => [s.address, s.daily]))
-  // Each token needs two price series: `wrapped` (values the pool's holding,
-  // in the ERC4626 units `amounts` is denominated in) and `hodl` (values the
-  // fixed alternative basket — the underlying for a wrapper). For non-wrapped
-  // tokens the two addresses are identical, so both resolve to one series.
-  const legs = hodlTokens.map(t => ({
-    wrapped: byAddr.get(t.wrapped),
-    hodl: byAddr.get(t.hodl),
-  }))
-  if (legs.some(l => l.wrapped == null || l.hodl == null)) return null
-  const priced = legs as { wrapped: Map<number, number>; hodl: Map<number, number> }[]
-
-  // t₀ = first snapshot with a well-formed amounts vector and a price (both
-  // legs) for every token. Almost always the range's first sample; later only
-  // when a token's price history starts inside the window.
-  //
-  // Fix the HODL quantities *in underlying terms* here: the pool holds
-  // `amounts/totalShares` wrapped tokens per BPT, worth `× wrappedPx(t₀)` in
-  // USD; dividing by the underlying price at t₀ converts that to a fixed
-  // underlying quantity. `wrappedPx/hodlPx` is exactly the ERC4626 conversion
-  // rate at t₀ (== 1 for non-wrapped tokens). By construction the basket's t₀
-  // value equals sharePrice(t₀), so both lines start together.
-  let baseIndex = -1
-  let qty: number[] | null = null
-  for (let i = 0; i < samples.length; i++) {
-    const s = samples[i]
-    if (!s.amounts || s.amounts.length !== hodlTokens.length || !(s.totalShares > 0)) continue
-    const wpx = priced.map(l => priceAt(l.wrapped, s.timestamp))
-    const hpx = priced.map(l => priceAt(l.hodl, s.timestamp))
-    if (wpx.some(p => p == null) || hpx.some(p => p == null)) continue
-    qty = s.amounts.map((a, k) => (a / s.totalShares) * ((wpx[k] as number) / (hpx[k] as number)))
-    baseIndex = i
-    break
-  }
-  if (!qty || baseIndex < 0) return null
-
-  const values: (number | null)[] = samples.map((s, i) => {
-    if (i < baseIndex) return null
-    const hpx = priced.map(l => priceAt(l.hodl, s.timestamp))
-    if (hpx.some(p => p == null)) return null
-    let v = 0
-    for (let k = 0; k < qty!.length; k++) v += qty![k] * (hpx[k] as number)
-    return v
-  })
-
-  const baseValue = values[baseIndex]
-  if (baseValue == null || !(baseValue > 0)) return null
-  return { values, baseIndex, baseValue }
 }
 
 /** LP-vs-HODL spread at the latest commonly-priced sample: how much more (or

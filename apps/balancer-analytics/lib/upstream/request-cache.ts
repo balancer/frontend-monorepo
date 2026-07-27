@@ -3,14 +3,15 @@
 /**
  * Module-level request cache + in-flight dedupe for client-side fetches.
  *
- * Generalizes the store that `lib/snapshots/useProtocolSnapshots.ts` grew
- * inline. The problem it solves is the same wherever two components read the
- * same feed: each hook instance owns its own `useEffect` + `fetch`, so two
- * consumers mounting in the same commit fire two identical requests. The
- * browser HTTP cache does NOT save you here — concurrent requests race before
- * either response exists to cache, so both reach the origin. `/portfolio`
- * mounted `useMerklRewards` + `useGaugeRewards` from two cards and paid 4
- * requests for 2 payloads; `/governance` did the same with `bal-supply`.
+ * Generalizes the store that `lib/snapshots/useProtocolSnapshots.ts` originally
+ * grew inline (now migrated to this shared module). The problem it solves is
+ * the same wherever two components read the same feed: each hook instance
+ * owns its own `useEffect` + `fetch`, so two consumers mounting in the same
+ * commit fire two identical requests. The browser HTTP cache does NOT save
+ * you here — concurrent requests race before either response exists to
+ * cache, so both reach the origin. `/portfolio` mounted `useMerklRewards` +
+ * `useGaugeRewards` from two cards and paid 4 requests for 2 payloads;
+ * `/governance` did the same with `bal-supply`.
  *
  *   - `inflight` folds concurrent callers with the same key onto one promise.
  *   - `settled` reuses the parsed value within `ttlMs`, skipping the network

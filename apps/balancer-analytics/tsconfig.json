@@ -2,6 +2,7 @@
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
     "module": "esnext",
+    "types": ["vitest/globals"],
     "baseUrl": ".",
     "plugins": [
       {
