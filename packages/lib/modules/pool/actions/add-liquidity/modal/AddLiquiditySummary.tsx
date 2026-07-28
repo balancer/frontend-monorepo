@@ -22,6 +22,7 @@ import {
   SlippageSelector,
 } from '../../SlippageSelector'
 import { bn, isZero } from '@repo/lib/shared/utils/numbers'
+import { getCanStake } from '../../stake.helpers'
 
 export function AddLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -143,7 +144,7 @@ export function AddLiquiditySummary({
         <>
           <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="staking-options">
-            {pool.staking && (
+            {pool.staking && getCanStake(pool) && (
               <Box pt="sm">
                 <Divider mb="md" />
                 <StakingOptions />
