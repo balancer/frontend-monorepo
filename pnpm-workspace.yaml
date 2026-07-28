@@ -25,6 +25,9 @@ peerDependencyRules:
 overrides:
   '@types/react': '19.2'
   '@types/react-dom': '19.2'
+  # @reown/appkit-wallet pins zod@3.22.4 (no v4/ subpath), but @hookform/resolvers
+  # imports zod/v4/core as a phantom dep. Force 3.25.76 so both resolve correctly.
+  'zod': '3.25.76'
 
 publicHoistPattern:
   - '*graphql*' # https://github.com/vercel/next.js/issues/68805
