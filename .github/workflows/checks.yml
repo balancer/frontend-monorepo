@@ -141,7 +141,7 @@ jobs:
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
 
-  E2E-Dev-Test-Balancer:
+  E2E-Dev-Test-Balancer-1:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
@@ -157,15 +157,41 @@ jobs:
         uses: foundry-rs/foundry-toolchain@b00af27efadbc7b4ca8b82abbd903b17cc874d2a # v1
       - name: Start anvil fork in mainnet
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
-      - name: Run Playwright dev tests (Balancer)
-        run: pnpm test:e2e:dev:bal
+      - name: Run Playwright dev tests (Balancer part 1)
+        run: pnpm test:e2e:dev:bal:1
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ !cancelled() }}
         with:
-          name: playwright-dev-report-bal
+          name: playwright-dev-report-bal-1
           path: |
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
+
+    E2E-Dev-Test-Balancer-2:
+      timeout-minutes: 15
+      runs-on: ubuntu-latest
+      container:
+        image: mcr.microsoft.com/playwright:v1.59.1-noble
+      env:
+        NEXT_PUBLIC_PROJECT_ID: balancer
+        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      steps:
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        - name: Setup
+          uses: ./.github/actions/setup
+        - name: Set up foundry (includes anvil)
+          uses: foundry-rs/foundry-toolchain@b00af27efadbc7b4ca8b82abbd903b17cc874d2a # v1
+        - name: Start anvil fork in mainnet
+          run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+        - name: Run Playwright dev tests (Balancer part 2)
+          run: pnpm test:e2e:dev:bal:2
+        - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+          if: ${{ !cancelled() }}
+          with:
+            name: playwright-dev-report-bal-2
+            path: |
+              ./packages/e2e-tests/playwright-report/
+            retention-days: 30
 
   E2E-Dev-Test-Beets:
     timeout-minutes: 15
