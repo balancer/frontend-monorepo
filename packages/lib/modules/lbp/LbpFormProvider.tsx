@@ -8,7 +8,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLocalStorage } from 'usehooks-ts'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
 import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
@@ -115,7 +115,11 @@ export function useLbpFormLogic() {
   const isCollateralNativeAsset =
     (collateralTokenAddress || '').toLowerCase() === tokens.nativeAsset.address.toLowerCase()
 
-  const launchTokenSeed = Number(saleTokenAmount || 0)
+  const hasParseableSaleTokenAmount = isBnParseable(saleTokenAmount)
+  const hasParseableLaunchTokenRate = isBnParseable(launchTokenRate)
+  const safeSaleTokenAmount = hasParseableSaleTokenAmount ? (saleTokenAmount ?? '0') : '0'
+  const safeLaunchTokenRate = hasParseableLaunchTokenRate ? (launchTokenRate ?? '0') : '0'
+  const launchTokenSeed = Number(safeSaleTokenAmount)
 
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress || '', chain)
 
@@ -126,12 +130,12 @@ export function useLbpFormLogic() {
   const collateralTokenPrice = collateralTokenAddress ? priceFor(collateralTokenAddress, chain) : 0
 
   const launchTokenPriceUsd =
-    collateralTokenPrice && launchTokenRate
-      ? bn(launchTokenRate).times(collateralTokenPrice).toString()
+    collateralTokenPrice && hasParseableLaunchTokenRate
+      ? bn(safeLaunchTokenRate).times(collateralTokenPrice).toString()
       : '0'
 
-  const totalValue = saleTokenAmount
-    ? bn(saleTokenAmount).times(launchTokenPriceUsd).toString()
+  const totalValue = hasParseableSaleTokenAmount
+    ? bn(safeSaleTokenAmount).times(launchTokenPriceUsd).toString()
     : '0'
 
   const updatePriceStats = (prices: LbpPrice[]) => {
