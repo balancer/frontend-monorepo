@@ -119,7 +119,7 @@ describe('invalid balance fallbacks', () => {
       totalBalanceUsd: 300,
       stakedBalances: [
         {
-          balance: '',
+          balance: ' ',
           balanceUsd: 0,
           stakingType: GqlPoolStakingTypeValues.Gauge,
           stakingId: '0x1',

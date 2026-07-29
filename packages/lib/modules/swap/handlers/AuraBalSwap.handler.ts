@@ -12,7 +12,7 @@ import {
 } from '../swap.types'
 import { getRpcUrl } from '../../web3/transports'
 import { isNativeAsset, isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { ApiToken } from '../../tokens/token.types'
 
 export class AuraBalSwapHandler implements SwapHandler {
@@ -72,8 +72,8 @@ export class AuraBalSwapHandler implements SwapHandler {
       queryOutput.expectedAmountOut.token.decimals
     )
 
-    const safeSwapAmount = isValidNumber(variables.swapAmount) ? variables.swapAmount : '0'
-    const safeReturnAmount = isValidNumber(returnAmount) ? returnAmount : '0'
+    const safeSwapAmount = isBnParseable(variables.swapAmount) ? variables.swapAmount : '0'
+    const safeReturnAmount = isBnParseable(returnAmount) ? returnAmount : '0'
 
     return {
       returnAmount,

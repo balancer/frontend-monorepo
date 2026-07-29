@@ -18,7 +18,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { bn, fNum, isValidNumber } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { useLayoutEffect, useRef, useState, Fragment } from 'react'
 import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
@@ -51,7 +51,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
     const virtualToken = pool.poolTokens[pool.reserveTokenIndex].address
     const price = priceFor(virtualToken, chain)
     virtualAmount =
-      isValidNumber(pool.reserveTokenVirtualBalance) && isValidNumber(price)
+      isBnParseable(pool.reserveTokenVirtualBalance) && isBnParseable(price)
         ? bn(pool.reserveTokenVirtualBalance).times(price).toString()
         : '0'
   }
@@ -86,7 +86,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
 
           const tokenValue =
             isSeedlessLBP && isVirtualPairedToken
-              ? isValidNumber(poolToken.balance) && isValidNumber(pool.reserveTokenVirtualBalance)
+              ? isBnParseable(poolToken.balance) && isBnParseable(pool.reserveTokenVirtualBalance)
                 ? bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance)
                 : poolToken.balance
               : poolToken.balance
@@ -109,8 +109,8 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                 <VStack pl="8" w="full">
                   {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
                     const calculatedWeight =
-                      isValidNumber(nestedPoolToken.balanceUSD) &&
-                      isValidNumber(poolToken.balanceUSD)
+                      isBnParseable(nestedPoolToken.balanceUSD) &&
+                      isBnParseable(poolToken.balanceUSD)
                         ? bn(nestedPoolToken.balanceUSD).div(bn(poolToken.balanceUSD))
                         : bn(0)
                     return (
@@ -124,8 +124,8 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                         targetWeight={
                           nestedPoolToken.weight &&
                           poolToken.weight &&
-                          isValidNumber(nestedPoolToken.weight) &&
-                          isValidNumber(poolToken.weight)
+                          isBnParseable(nestedPoolToken.weight) &&
+                          isBnParseable(poolToken.weight)
                             ? bn(nestedPoolToken.weight).times(poolToken.weight).toString()
                             : undefined
                         }
@@ -140,8 +140,8 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                 <VStack pl="8" w="full">
                   <TokenRow
                     actualWeight={
-                      isValidNumber(poolToken.balance) &&
-                      isValidNumber(pool.reserveTokenVirtualBalance)
+                      isBnParseable(poolToken.balance) &&
+                      isBnParseable(pool.reserveTokenVirtualBalance)
                         ? bn(actualWeight)
                             .times(pool.reserveTokenVirtualBalance)
                             .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
@@ -159,8 +159,8 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                   />
                   <TokenRow
                     actualWeight={
-                      isValidNumber(poolToken.balance) &&
-                      isValidNumber(pool.reserveTokenVirtualBalance)
+                      isBnParseable(poolToken.balance) &&
+                      isBnParseable(pool.reserveTokenVirtualBalance)
                         ? bn(actualWeight)
                             .times(poolToken.balance)
                             .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))

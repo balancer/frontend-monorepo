@@ -2,7 +2,7 @@ import { Pool } from './pool.types'
 import type { GqlToken } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { sumBy } from 'lodash'
 import { useTokens } from '../tokens/TokensProvider'
-import { bn, Numberish, isValidNumber } from '@repo/lib/shared/utils/numbers'
+import { bn, Numberish, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { calcPotentialYieldFor } from './pool.utils'
 import { oneWeekInSecs } from '@repo/lib/shared/utils/time'
 
@@ -14,7 +14,7 @@ export function useGetPoolRewards(pool: Pool) {
   const currentRewardsPerWeek = currentRewards.map(reward => {
     return {
       ...reward,
-      rewardPerWeek: isValidNumber(reward.rewardPerSecond)
+      rewardPerWeek: isBnParseable(reward.rewardPerSecond)
         ? bn(reward.rewardPerSecond).times(oneWeekInSecs)
         : bn(0),
     }
@@ -33,7 +33,7 @@ export function useGetPoolRewards(pool: Pool) {
   const weeklyRewardsByToken = Object.fromEntries(
     currentRewards.map(reward => [
       reward.tokenAddress,
-      isValidNumber(reward.rewardPerSecond)
+      isBnParseable(reward.rewardPerSecond)
         ? bn(reward.rewardPerSecond).times(oneWeekInSecs).toString()
         : '0',
     ])
