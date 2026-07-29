@@ -1,4 +1,4 @@
-import { bn, safeSum, isValidNumber } from '@repo/lib/shared/utils/numbers'
+import { bn, safeSum, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { Pool } from './pool.types'
 import { PoolListItem } from './pool.types'
 import { parseUnits } from 'viem'
@@ -21,7 +21,7 @@ export function calcStakedBalance(
 
   return safeSum(
     filteredBalances.map(stakedBalance =>
-      isValidNumber(stakedBalance.balance) ? bn(stakedBalance.balance) : bn(0)
+      isBnParseable(stakedBalance.balance) ? bn(stakedBalance.balance) : bn(0)
     )
   ) as HumanAmount
 }
@@ -41,7 +41,7 @@ export function calcTotalStakedBalanceUsd(pool: Pool): number {
   return Number(
     safeSum(
       userBalance.stakedBalances.map(stakedBalance =>
-        isValidNumber(stakedBalance.balanceUsd) ? bn(stakedBalance.balanceUsd) : bn(0)
+        isBnParseable(stakedBalance.balanceUsd) ? bn(stakedBalance.balanceUsd) : bn(0)
       )
     )
   )
@@ -55,7 +55,7 @@ export function getUserTotalBalance(pool: Pool | PoolListItem): HumanAmount {
   const userBalance = pool.userBalance
   if (!userBalance) return '0'
 
-  return isValidNumber(userBalance.totalBalance)
+  return isBnParseable(userBalance.totalBalance)
     ? (bn(userBalance.totalBalance).toFixed(18) as HumanAmount)
     : '0'
 }
@@ -91,7 +91,7 @@ export function getUserTotalBalanceInt(pool: Pool): bigint {
   // decimals and so it borked the whole pool page. toFixed(18) ensures the
   // value cannot be more than 18 decimals when passed into parseUnits.
   const totalBalanceStr = getUserTotalBalance(pool)
-  const totalBalance = isValidNumber(totalBalanceStr)
+  const totalBalance = isBnParseable(totalBalanceStr)
     ? bn(totalBalanceStr).toFixed(BPT_DECIMALS)
     : '0'
   return parseUnits(totalBalance, BPT_DECIMALS)
@@ -150,7 +150,7 @@ export function calcStakedBalanceInt(pool: Pool, stakingType: GqlPoolStakingType
 
 export function calcStakedBalanceUsd(pool: Pool, stakingType: GqlPoolStakingType): number {
   const balanceUsd = getStakedBalance(pool, stakingType).balanceUsd
-  return isValidNumber(balanceUsd) ? Number(bn(balanceUsd)) : 0
+  return isBnParseable(balanceUsd) ? Number(bn(balanceUsd)) : 0
 }
 
 export function calcGaugeStakedBalanceUsd(pool: Pool): number {
@@ -159,7 +159,7 @@ export function calcGaugeStakedBalanceUsd(pool: Pool): number {
 
 export function hasTotalBalance(pool: Pool) {
   const totalBalance = getUserTotalBalance(pool)
-  return isValidNumber(totalBalance) && bn(totalBalance).gt(0)
+  return isBnParseable(totalBalance) && bn(totalBalance).gt(0)
 }
 
 export function hasBalancerStakedBalance(pool: Pool | PoolListItem): boolean {
@@ -180,7 +180,7 @@ export function hasStakedBalanceFor(
   return userBalance.stakedBalances.some(
     balance =>
       balance.stakingType === stakingType &&
-      isValidNumber(balance.balance) &&
+      isBnParseable(balance.balance) &&
       bn(balance.balance).gt(0)
   )
 }

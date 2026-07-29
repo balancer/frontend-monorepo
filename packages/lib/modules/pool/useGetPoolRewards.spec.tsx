@@ -53,7 +53,7 @@ function getPoolWithInvalidStakingGaugeRewards() {
   pool.staking.gauge.rewards = [
     {
       id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0xba100000625a3754423978a60c9317c58a424e3d-balgauge',
-      rewardPerSecond: null as any,
+      rewardPerSecond: ' ' as any,
       tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
     } as GqlPoolStakingGaugeReward,
     {

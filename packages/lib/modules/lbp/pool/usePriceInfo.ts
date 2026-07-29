@@ -12,7 +12,7 @@ import {
   secondsToMilliseconds,
   startOfHour,
 } from 'date-fns'
-import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
 import { now } from '@repo/lib/shared/utils/time'
 
@@ -61,7 +61,7 @@ export function usePriceInfo(chain: GqlChain, poolId: Address, isFixedLbp = fals
 function toLbpSnapshots(apiPrices: LbpPriceChartDataFragment[]): LbpSnapshot[] {
   return apiPrices.map(price => ({
     timestamp: new Date(secondsToMilliseconds(price.timestamp)),
-    projectTokenPrice: isValidNumber(price.projectTokenPrice)
+    projectTokenPrice: isBnParseable(price.projectTokenPrice)
       ? bn(price.projectTokenPrice)
           .times(price.reservePrice || 1)
           .toNumber()

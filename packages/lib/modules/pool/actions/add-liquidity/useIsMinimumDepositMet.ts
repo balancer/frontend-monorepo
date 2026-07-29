@@ -4,7 +4,7 @@ import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useGetMinimumWrapAmount } from '@repo/lib/shared/hooks/useGetMinimumWrapAmount'
-import { bn, isValidNumber } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { Address, formatUnits, zeroAddress } from 'viem'
 import { getCompositionTokens } from '../../pool-tokens.utils'
 import { usePool } from '../../PoolProvider'
@@ -23,7 +23,7 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
   const { minimumWrapAmount } = useGetMinimumWrapAmount(chain)
   const { minimumTradeAmount } = useGetMinimumTradeAmount(chain)
 
-  if (!isValidNumber(totalUSDValue) || bn(totalUSDValue).isZero()) {
+  if (!isBnParseable(totalUSDValue) || bn(totalUSDValue).isZero()) {
     return { isMinimumDepositMet: true, errors: {} }
   }
 
@@ -101,7 +101,7 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
     ) {
       address = token.underlyingToken.address
       balance =
-        isValidNumber(token.balance) && isValidNumber(token.priceRate)
+        isBnParseable(token.balance) && isBnParseable(token.priceRate)
           ? bn(token.balance).div(token.priceRate).toString()
           : '0'
       decimals = token.underlyingToken.decimals

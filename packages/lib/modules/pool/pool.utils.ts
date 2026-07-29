@@ -9,7 +9,7 @@ import {
   GqlPoolAprItemTypeValues,
   GqlPoolTypeValues,
 } from '@repo/lib/shared/services/api/graphql-enums'
-import { Numberish, bn, fNum, isValidNumber } from '@repo/lib/shared/utils/numbers'
+import { Numberish, bn, fNum, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import type BigNumber from 'bignumber.js'
 import { cloneDeep, invert } from 'lodash'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
@@ -138,7 +138,7 @@ export function getTotalApr(aprItems: GqlPoolAprItem[]): [BigNumber, BigNumber] 
     // Filter known APR types to avoid including new unknown API types that are not yet displayed in the APR tooltip
     .filter(item => TOTAL_APR_TYPES.includes(item.type))
     .forEach(item => {
-      if (!isValidNumber(item.apr)) return
+      if (!isBnParseable(item.apr)) return
 
       if (item.type === GqlPoolAprItemTypeValues.StakingBoost) {
         maxTotal = bn(item.apr).plus(maxTotal)

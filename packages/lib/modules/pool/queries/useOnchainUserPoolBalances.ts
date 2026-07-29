@@ -4,7 +4,7 @@ import type {
 } from '@repo/lib/shared/services/api/graphql-derived-types'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { bn, safeSum, isValidNumber } from '@repo/lib/shared/utils/numbers'
+import { bn, safeSum, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { captureNonFatalError } from '@repo/lib/shared/utils/query-errors'
 import { HumanAmount } from '@balancer/sdk'
 import type BigNumber from 'bignumber.js'
@@ -129,7 +129,7 @@ function overwriteOnchainPoolBalanceData(
     }
 
     const onchainUnstakedBalance = onchainUnstakedBalances.unstakedBalance as HumanAmount
-    const safeOnchainUnstakedBalance = isValidNumber(onchainUnstakedBalance)
+    const safeOnchainUnstakedBalance = isBnParseable(onchainUnstakedBalance)
       ? onchainUnstakedBalance
       : ('0' as HumanAmount)
     const onchainUnstakedBalanceUsd = bn(safeOnchainUnstakedBalance).times(bptPrice).toNumber()
@@ -142,7 +142,7 @@ function overwriteOnchainPoolBalanceData(
     }
     const onchainTotalStakedBalance = safeSum(
       onchainStakedBalances.map(stakedBalance =>
-        isValidNumber(stakedBalance.balance) ? stakedBalance.balance : '0'
+        isBnParseable(stakedBalance.balance) ? stakedBalance.balance : '0'
       )
     )
 
