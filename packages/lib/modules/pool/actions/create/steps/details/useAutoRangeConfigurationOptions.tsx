@@ -1,5 +1,5 @@
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef } from 'react'
 import { formatNumber } from '../../helpers'
 import { usePoolSpotPriceWithoutRate } from './usePoolSpotPriceWithoutRate'
@@ -21,6 +21,22 @@ import { useWatch } from 'react-hook-form'
 import { ConfigOptionsGroupProps } from './AutoRangeConfiguration'
 import { AutoRangeConfig } from '../../types'
 
+export function calculatePriceBounds(targetPrice: string, spread: string) {
+  if (!isBnParseable(targetPrice) || !isBnParseable(spread)) {
+    return { initialMinPrice: '', initialMaxPrice: '' }
+  }
+
+  const spreadValue = bn(spread)
+  const lowerBoundPercentage = (100 - spreadValue.toNumber()) / 100
+  const upperBoundPercentage = (100 + spreadValue.toNumber()) / 100
+  const targetPriceValue = bn(targetPrice)
+
+  return {
+    initialMinPrice: targetPriceValue.times(lowerBoundPercentage).toString(),
+    initialMaxPrice: targetPriceValue.times(upperBoundPercentage).toString(),
+  }
+}
+
 export function useAutoRangeConfigurationOptions(): ConfigOptionsGroupProps<AutoRangeConfig>[] {
   const { poolCreationForm, autoRangeConfigForm } = usePoolCreationForm()
   const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
@@ -34,16 +50,6 @@ export function useAutoRangeConfigurationOptions(): ConfigOptionsGroupProps<Auto
   const { spotPriceWithoutRate } = usePoolSpotPriceWithoutRate()
   const currentPriceMinus5 = spotPriceWithoutRate.times(0.95).toString()
   const currentPricePlus5 = spotPriceWithoutRate.times(1.05).toString()
-
-  const calculatePriceBounds = (targetPrice: string, spread: string) => {
-    const lowerBoundPercentage = (100 - bn(spread).toNumber()) / 100
-    const upperBoundPercentage = (100 + bn(spread).toNumber()) / 100
-
-    const initialMinPrice = bn(targetPrice).times(lowerBoundPercentage).toString()
-    const initialMaxPrice = bn(targetPrice).times(upperBoundPercentage).toString()
-
-    return { initialMinPrice, initialMaxPrice }
-  }
 
   const updatePriceBounds = (targetPrice: string, spread: string) => {
     const { initialMinPrice, initialMaxPrice } = calculatePriceBounds(targetPrice, spread)

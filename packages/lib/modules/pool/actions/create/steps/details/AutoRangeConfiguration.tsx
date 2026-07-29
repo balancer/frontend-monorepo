@@ -3,7 +3,7 @@ import { InfoIconPopover } from '../../InfoIconPopover'
 import { useAutoRangeConfigurationOptions } from './useAutoRangeConfigurationOptions'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
 import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
@@ -84,6 +84,7 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
   const isCustom = forceCustom || (!matchedOption && normalizedFormValue !== '')
   const selectedValue = isCustom ? '' : (matchedOption?.rawValue ?? '')
   const isCustomTargetPrice = isCustom && name === 'initialTargetPrice'
+  const hasParseableTargetPrice = isBnParseable(initialTargetPrice)
   const ispriceRangePercentage = name === 'priceRangePercentage'
   const isCustomPriceRange = isCustom && ispriceRangePercentage
   const isPercentage = name === 'centerednessMargin' || name === 'priceShiftDailyRate'
@@ -174,10 +175,14 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
             label={'Range low price'}
             name={'initialMinPrice'}
             percentageLabel={
-              initialMinPrice ? getPercentFromPrice(initialMinPrice, initialTargetPrice) : '-10.00'
+              initialMinPrice && hasParseableTargetPrice
+                ? getPercentFromPrice(initialMinPrice, initialTargetPrice)
+                : '-10.00'
             }
             placeholder={
-              initialTargetPrice ? bn(initialTargetPrice).times(0.9).toString().slice(0, 7) : ''
+              hasParseableTargetPrice
+                ? bn(initialTargetPrice).times(0.9).toString().slice(0, 7)
+                : ''
             }
             validate={value => {
               if (Number(value) >= Number(initialTargetPrice)) {
@@ -195,10 +200,14 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
             label={'Range high price'}
             name={'initialMaxPrice'}
             percentageLabel={
-              initialMaxPrice ? getPercentFromPrice(initialMaxPrice, initialTargetPrice) : '10.00'
+              initialMaxPrice && hasParseableTargetPrice
+                ? getPercentFromPrice(initialMaxPrice, initialTargetPrice)
+                : '10.00'
             }
             placeholder={
-              initialTargetPrice ? formatNumber(bn(initialTargetPrice).times(1.1).toString()) : ''
+              hasParseableTargetPrice
+                ? formatNumber(bn(initialTargetPrice).times(1.1).toString())
+                : ''
             }
             validate={value => {
               if (Number(value) <= Number(initialTargetPrice)) {
@@ -219,7 +228,9 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
           label={customInputLabel}
           name={name}
           percentageLabel={
-            isCustomTargetPrice ? getPercentFromPrice(formValue, options[1].rawValue) : ''
+            isCustomTargetPrice && isBnParseable(formValue)
+              ? getPercentFromPrice(formValue, options[1].rawValue)
+              : ''
           }
           placeholder={options[1].displayValue.replace('%', '')}
           validate={value => validateFn(Number.isNaN(value) ? '' : value.toString())}
