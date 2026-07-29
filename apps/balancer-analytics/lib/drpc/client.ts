@@ -111,6 +111,13 @@ export function getPublicClient(chain: GqlChain): PublicClient {
   // 522 page. Restore once drpc is verified working end-to-end.
   const client = createPublicClient({
     chain: VIEM_CHAINS[chain],
+    // Coalesce concurrent `readContract`/`multicall` work into a single
+    // `aggregate3` eth_call. The pool page fires several independent state
+    // reads at once (universal + type-specific + surge + ERC4626 buffers);
+    // without this each opens its own multicall and its own HTTP request —
+    // 4 drpc round trips per render for a boosted stable pool. The reads
+    // stay written as separate call sites; viem fuses them at the transport.
+    batch: { multicall: true },
     transport: http(primary, {
       retryCount: 2,
       retryDelay: 250,

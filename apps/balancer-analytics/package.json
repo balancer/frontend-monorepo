@@ -16,7 +16,9 @@
     "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/analytics/analytics.theme.ts",
-    "postinstall": "pnpm run gen:theme-typings"
+    "postinstall": "pnpm run gen:theme-typings",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest"
   },
   "dependencies": {
     "@apollo/client": "catalog:",

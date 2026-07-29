@@ -30,6 +30,7 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolEvents } from '@analytics/lib/hooks/usePoolEvents'
 import type { PoolPageData } from '../page'
 import { PoolHistoryChart } from './PoolHistoryChart'
+import { PoolBptPriceHistory } from './PoolBptPriceHistory/PoolBptPriceHistory'
 import { PoolStatePanel } from './PoolStatePanel'
 import { PoolEventLog } from './PoolEventLog'
 import { getEventStyle } from './eventStyles'
@@ -278,7 +279,7 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
                   {formatPoolTypeLabel(poolDetail.type)}
                 </Badge>
               </Flex>
-              <Heading size="h3" sx={{ textWrap: 'balance' }} variant="special">
+              <Heading pb="5px" size="h3" sx={{ textWrap: 'balance' }} variant="special">
                 {poolDetail.name}
               </Heading>
               <Text fontSize="sm" sx={{ textWrap: 'balance' }} variant="secondary">
@@ -380,6 +381,29 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
           </Stack>
         </FadeInOnView>
 
+        {/* BPT price + LP-vs-HODL — a core metric, so it reads directly below
+            the TVL/volume bento and ahead of the order-flow / type modules.
+            Rendered here (not via the module registry) so it can share the
+            page's range-toggle wiring: its own range buttons drive the same
+            `?range=` navigation as the top chart, and vice versa. */}
+        {snapshots.some(s => s.sharePrice > 0) && (
+          <PoolBptPriceHistory
+            chain={poolDetail.chain}
+            onRangeSelect={handleRangeSelect}
+            pendingRange={pendingRange}
+            range={range}
+            snapshots={snapshots}
+            tokens={poolDetail.tokens.map(t => ({
+              address: t.address,
+              symbol: t.symbol,
+              isErc4626: t.isErc4626,
+              underlyingToken: t.underlyingToken
+                ? { address: t.underlyingToken.address, symbol: t.underlyingToken.symbol }
+                : null,
+            }))}
+          />
+        )}
+
         {/* Pool-type-specific modules — driven by a tiny registry so adding
             Autorange / LBP / other type panels next is a one-entry addition
             in `poolTypeModules.tsx` rather than more conditionals here. */}
@@ -411,16 +435,23 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
         </FadeInOnView>
       </VStack>
 
-      <PoolPickerModal
-        currentPool={{
-          id: poolDetail.id,
-          chain: poolDetail.chain,
-          name: poolDetail.name,
-        }}
-        isOpen={pickerOpen}
-        onClose={() => setPickerOpen(false)}
-        onSelect={handleCompareSelect}
-      />
+      {/* Mounted only while open. Chakra's `isOpen` merely hides the modal,
+          so an unconditional mount ran the picker's `usePoolExplorer` — a
+          direct 500-row api-v3 query — on every pool page visit, for a modal
+          most visitors never open. Same conditional-mount shape as
+          PoolComparisonModal below. */}
+      {pickerOpen && (
+        <PoolPickerModal
+          currentPool={{
+            id: poolDetail.id,
+            chain: poolDetail.chain,
+            name: poolDetail.name,
+          }}
+          isOpen
+          onClose={() => setPickerOpen(false)}
+          onSelect={handleCompareSelect}
+        />
+      )}
       {compareTarget && (
         <PoolComparisonModal
           isOpen={compareTarget !== null}

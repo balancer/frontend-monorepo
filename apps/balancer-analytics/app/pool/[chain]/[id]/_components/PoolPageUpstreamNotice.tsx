@@ -49,7 +49,7 @@ export function PoolPageUpstreamNotice({ chainSlug, poolId, error }: Props) {
   const isRateLimit = error.kind === 'rate_limit'
   const headline = isRateLimit
     ? 'Balancer API rate limit reached'
-    : 'Balancer API is temporarily unavailable'
+    : 'Balancer API is busy right now'
 
   // `Retry-After` is upstream's hint about when to come back. Fall back to
   // 60s on rate limits (typical per-IP bucket refill) so we always render
@@ -60,7 +60,7 @@ export function PoolPageUpstreamNotice({ chainSlug, poolId, error }: Props) {
     ? retryAfterSeconds
       ? `This is a per-IP throttle on the upstream Balancer API. Please wait about ${formatSeconds(retryAfterSeconds)} and try again.`
       : 'This is a per-IP throttle on the upstream Balancer API. Please wait a minute and try again.'
-    : 'The upstream Balancer API is returning errors. This is not a problem with your connection or with the pool. Try again in a few minutes.'
+    : 'This often happens when many pools are opened in quick succession — the shared Balancer API briefly throttles the burst of requests. It can also be a short upstream hiccup. It usually clears within a minute or two, so give it a moment and try again.'
 
   return (
     <DefaultPageContainer pb="2xl" pt={['md', 'lg']}>

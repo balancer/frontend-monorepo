@@ -53,10 +53,12 @@ function getTotalApr(pool: Pool): number {
 /**
  * Derives the three leaderboard cards rendered by ProtocolHighlights.
  *
- * Reuses queries already issued elsewhere on the page (same variables
- * → Apollo cache hit): `GetProtocolStatsPerChain` via useChainProtocolStats
- * (also feeds TvlByChainBars), and `GetPools` with the same TVL-desc / 500-row
- * shape PoolExplorer uses, so no extra network roundtrips on the dashboard.
+ * Reuses data already fetched elsewhere on the page, so it adds no network
+ * roundtrips to the dashboard: per-chain stats via `useChainProtocolStats`
+ * (shared with TvlByChainBars through that hook's module-level dedupe — it
+ * reads the cached `/api/protocol-stats-by-chain` route, not Apollo), and
+ * `GetPools` with the same TVL-desc / 500-row variables PoolExplorer uses,
+ * which Apollo serves cache-first.
  */
 export function useDashboardHighlights(): DashboardHighlights {
   const { data: chainData, loading: chainsLoading } = useChainProtocolStats()

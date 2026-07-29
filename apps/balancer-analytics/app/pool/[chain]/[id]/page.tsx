@@ -25,6 +25,7 @@
  */
 
 import { notFound } from 'next/navigation'
+import { unstable_cache } from 'next/cache'
 import type { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -154,6 +155,14 @@ export type PoolSnapshot = {
   fees24h: number
   surplus24h: number
   sharePrice: number
+  /** Pool token balances at the snapshot, in human-readable units. Aligns
+   *  index-for-index with `poolDetail.tokens`. Divided by `totalShares` this
+   *  gives the per-BPT token composition the LP-vs-HODL overlay fixes at its
+   *  reference point. */
+  amounts: number[]
+  /** Total BPT supply at the snapshot, human units. `totalLiquidity /
+   *  totalShares === sharePrice`. */
+  totalShares: number
 }
 
 /** Per-token weight snapshot from api-v3. `weights[i]` aligns with
@@ -326,6 +335,8 @@ const SNAPSHOTS_QUERY = /* GraphQL */ `
       fees24h
       surplus24h
       sharePrice
+      amounts
+      totalShares
     }
   }
 `
@@ -344,6 +355,132 @@ function logRpcError(label: string, chain: GqlChain, pool: string, err: unknown)
  *  letting newly-changed pools sit stale long. `?refresh` overrides this to
  *  `cache: 'no-store'`, preserving the documented bypass path. */
 const POOL_FETCH_REVALIDATE_SECONDS = 60
+
+/** Data Cache TTL for the on-chain state reads. Matches the GraphQL TTL —
+ *  the values behind it (swap fee, amp factor, pause flags, buffer
+ *  balances) move on governance/pool-op timescales, not per-request. */
+const POOL_STATE_REVALIDATE_SECONDS = 60
+
+/** Everything the page needs from the chain, in one cacheable unit. Mirrors
+ *  `PoolPageData['state']`. */
+type PoolStateBundle = {
+  universal: UniversalV3State | null
+  stable: StableTypeState | null
+  v2Base: V2BasePoolState | null
+  weighted: WeightedTypeState | null
+  gyroEclp: GyroEclpTypeState | null
+  reclamm: ReclammTypeState | null
+  lbp: LbpTypeState | null
+  quantAmm: QuantAmmTypeState | null
+  stableSurge: StableSurgeState | null
+  bufferStates: BufferState[] | null
+}
+
+const EMPTY_STATE: PoolStateBundle = {
+  universal: null,
+  stable: null,
+  v2Base: null,
+  weighted: null,
+  gyroEclp: null,
+  reclamm: null,
+  lbp: null,
+  quantAmm: null,
+  stableSurge: null,
+  bufferStates: null,
+}
+
+/**
+ * State reads dispatch on the resolved pool protocol version. V3 uses
+ * VaultExplorer + FeeController for universal state, V2 reads directly off
+ * the pool contract.
+ *
+ * Extracted to module scope so it can sit behind `unstable_cache` below.
+ * Every input it depends on is an explicit parameter, which is what makes
+ * the cache key sound — nothing is closed over from the request.
+ *
+ * Safe to cache: every state type coerces its `bigint` reads to `string` at
+ * the read boundary (see `lib/pool-state/read.ts`), so the bundle is plain
+ * JSON and survives the Data Cache round-trip.
+ */
+async function readPoolState(
+  chain: GqlChain,
+  contractAddress: string,
+  protocolVersion: number,
+  type: string,
+  wrappedAddrs: Address[]
+): Promise<PoolStateBundle> {
+  const isStable = type === 'STABLE' || type === 'COMPOSABLE_STABLE'
+
+  // Wrap a state read so a single reverting helper-contract call degrades to
+  // `null` (panel falls back to universal state) instead of failing render.
+  const rescue = <T,>(label: string, p: Promise<T | null>): Promise<T | null> =>
+    p.catch((err: unknown) => {
+      logRpcError(`[pool/page] ${label} failed`, chain, contractAddress, err)
+      return null
+    })
+
+  if (protocolVersion === 3) {
+    const addr = contractAddress as Address
+    // One read per lane, dispatched on pool type. At most one type-specific
+    // read fires (others resolve to `null` synchronously); `stableSurge` is
+    // additive on STABLE pools and self-nulls when the hook isn't attached.
+    const [u, s, w, ge, rc, l, qa, ss, bs] = await Promise.all([
+      rescue('readUniversalV3State', readUniversalV3State(chain, addr)),
+      isStable ? rescue('readStableTypeState', readStableTypeState(chain, addr)) : null,
+      type === 'WEIGHTED'
+        ? rescue('readWeightedTypeState', readWeightedTypeState(chain, addr))
+        : null,
+      type === 'GYROE' ? rescue('readGyroEclpTypeState', readGyroEclpTypeState(chain, addr)) : null,
+      type === 'RECLAMM' ? rescue('readReclammTypeState', readReclammTypeState(chain, addr)) : null,
+      type === 'LIQUIDITY_BOOTSTRAPPING'
+        ? rescue('readLbpTypeState', readLbpTypeState(chain, addr))
+        : null,
+      type === 'QUANT_AMM_WEIGHTED'
+        ? rescue('readQuantAmmTypeState', readQuantAmmTypeState(chain, addr))
+        : null,
+      isStable ? rescue('readStableSurgeState', readStableSurgeState(chain, addr)) : null,
+      wrappedAddrs.length > 0
+        ? rescue('readBufferStates', readBufferStates(chain, wrappedAddrs))
+        : null,
+    ])
+    return {
+      ...EMPTY_STATE,
+      universal: u,
+      stable: s,
+      weighted: w,
+      gyroEclp: ge,
+      reclamm: rc,
+      lbp: l,
+      quantAmm: qa,
+      stableSurge: ss,
+      bufferStates: bs,
+    }
+  }
+
+  if (protocolVersion === 2) {
+    const [b, s] = await Promise.all([
+      rescue('readV2BasePoolState', readV2BasePoolState(chain, contractAddress as Address)),
+      isStable
+        ? rescue('readV2StableTypeState', readV2StableTypeState(chain, contractAddress as Address))
+        : null,
+    ])
+    return { ...EMPTY_STATE, v2Base: b, stable: s }
+  }
+
+  return EMPTY_STATE
+}
+
+/**
+ * Cached `readPoolState`. Nothing these reads touch depends on `?range=`,
+ * but the page is `force-dynamic` and had no cache layer around them — so a
+ * user clicking 30d → 90d → 180d → 1y → all re-fired every multicall five
+ * times to re-answer questions (amp factor, swap fee) whose answers hadn't
+ * changed. Keyed on pool identity + the fields the dispatch reads, so a
+ * range toggle is now a pure Data Cache hit and costs zero RPC.
+ */
+const readPoolStateCached = unstable_cache(readPoolState, ['pool-state-v1'], {
+  revalidate: POOL_STATE_REVALIDATE_SECONDS,
+})
 
 /** Thin wrapper around the shared `gqlFetch` so the existing call sites
  *  keep their (query, variables, label, options) signature. Rate-limit
@@ -545,6 +682,8 @@ export default async function Page({
     fees24h: string
     surplus24h: string
     sharePrice: string
+    amounts: string[]
+    totalShares: string
   }
   type SnapshotsRes = { snapshots: RawSnapshot[] }
 
@@ -617,82 +756,34 @@ export default async function Page({
       detailRes.poolGetPool.liquidityManagement?.disableUnbalancedLiquidity ?? null,
   }
 
-  // State reads dispatch on the resolved pool protocol version. V3 uses
-  // VaultExplorer + FeeController for universal state, V2 reads directly
-  // off the pool contract.
-  let universal: UniversalV3State | null = null
-  let stable: StableTypeState | null = null
-  let v2Base: V2BasePoolState | null = null
-  let weighted: WeightedTypeState | null = null
-  let gyroEclp: GyroEclpTypeState | null = null
-  let reclamm: ReclammTypeState | null = null
-  let lbp: LbpTypeState | null = null
-  let quantAmm: QuantAmmTypeState | null = null
-  let stableSurge: StableSurgeState | null = null
-  let bufferStates: BufferState[] | null = null
-  const isStable = poolDetail.type === 'STABLE' || poolDetail.type === 'COMPOSABLE_STABLE'
-
-  // Wrap a state read so a single reverting helper-contract call degrades to
-  // `null` (panel falls back to universal state) instead of failing render.
-  const rescue = <T,>(label: string, p: Promise<T | null>): Promise<T | null> =>
-    p.catch((err: unknown) => {
-      logRpcError(`[pool/page] ${label} failed`, chain, contractAddress, err)
-      return null
-    })
-
-  if (poolDetail.protocolVersion === 3) {
-    const addr = contractAddress as Address
-    const t = poolDetail.type
-    // Buffer reads only when the pool actually has ERC4626 tokens — saves
-    // a multicall on plain v3 pools, which are the majority.
-    const wrappedAddrs = poolDetail.hasErc4626
+  // Buffer reads only when the pool actually has ERC4626 tokens — saves a
+  // multicall on plain v3 pools, which are the majority.
+  const wrappedAddrs =
+    poolDetail.protocolVersion === 3 && poolDetail.hasErc4626
       ? poolDetail.tokens.filter(token => token.isErc4626).map(token => token.address as Address)
       : []
-    // One read per lane, dispatched on pool type. At most one type-specific
-    // read fires (others resolve to `null` synchronously); `stableSurge` is
-    // additive on STABLE pools and self-nulls when the hook isn't attached.
-    const [u, s, w, ge, rc, l, qa, ss, bs] = await Promise.all([
-      rescue('readUniversalV3State', readUniversalV3State(chain, addr)),
-      isStable ? rescue('readStableTypeState', readStableTypeState(chain, addr)) : null,
-      t === 'WEIGHTED' ? rescue('readWeightedTypeState', readWeightedTypeState(chain, addr)) : null,
-      t === 'GYROE' ? rescue('readGyroEclpTypeState', readGyroEclpTypeState(chain, addr)) : null,
-      t === 'RECLAMM' ? rescue('readReclammTypeState', readReclammTypeState(chain, addr)) : null,
-      t === 'LIQUIDITY_BOOTSTRAPPING'
-        ? rescue('readLbpTypeState', readLbpTypeState(chain, addr))
-        : null,
-      t === 'QUANT_AMM_WEIGHTED'
-        ? rescue('readQuantAmmTypeState', readQuantAmmTypeState(chain, addr))
-        : null,
-      isStable ? rescue('readStableSurgeState', readStableSurgeState(chain, addr)) : null,
-      wrappedAddrs.length > 0
-        ? rescue('readBufferStates', readBufferStates(chain, wrappedAddrs))
-        : null,
-    ])
-    universal = u
-    stable = s
-    weighted = w
-    gyroEclp = ge
-    reclamm = rc
-    lbp = l
-    quantAmm = qa
-    stableSurge = ss
-    bufferStates = bs
-  } else if (poolDetail.protocolVersion === 2) {
-    const [b, s] = await Promise.all([
-      readV2BasePoolState(chain, contractAddress as Address).catch((err: unknown) => {
-        logRpcError('[pool/page] readV2BasePoolState failed', chain, contractAddress, err)
-        return null
-      }),
-      isStable
-        ? readV2StableTypeState(chain, contractAddress as Address).catch((err: unknown) => {
-            logRpcError('[pool/page] readV2StableTypeState failed', chain, contractAddress, err)
-            return null
-          })
-        : Promise.resolve(null),
-    ])
-    v2Base = b
-    stable = s
-  }
+
+  // `?refresh` keeps its documented meaning — bypass every cache — by calling
+  // the uncached reader directly rather than the memoized one.
+  const readState = forceRefresh ? readPoolState : readPoolStateCached
+  const {
+    universal,
+    stable,
+    v2Base,
+    weighted,
+    gyroEclp,
+    reclamm,
+    lbp,
+    quantAmm,
+    stableSurge,
+    bufferStates,
+  } = await readState(
+    chain,
+    contractAddress,
+    poolDetail.protocolVersion,
+    poolDetail.type,
+    wrappedAddrs
+  )
 
   // For the 30d range we fetched the 90-day snapshot enum (api-v3 has no
   // 30d enum) and trim to the latest-30-days window. We anchor the cutoff
@@ -710,6 +801,8 @@ export default async function Page({
     fees24h: Number(s.fees24h),
     surplus24h: Number(s.surplus24h),
     sharePrice: Number(s.sharePrice),
+    amounts: (s.amounts ?? []).map(Number),
+    totalShares: Number(s.totalShares),
   }))
   // Drop any snapshot timestamped before the pool was deployed. api-v3
   // occasionally back-fills the snapshot series with a leading zero-TVL
