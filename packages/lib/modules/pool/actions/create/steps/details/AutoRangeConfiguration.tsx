@@ -187,10 +187,11 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
                 : ''
             }
             validate={value => {
-              if (Number(value) >= Number(initialTargetPrice)) {
+              if (!isBnParseable(value)) return true
+              if (hasParseableTargetPrice && bn(value).gte(bn(initialTargetPrice))) {
                 return 'Range low price must be less than target price'
               }
-              if (Number(value) >= Number(initialMaxPrice)) {
+              if (hasParseableMaxPrice && bn(value).gte(bn(initialMaxPrice))) {
                 return 'Range low price must be less than range high price'
               }
               return true
@@ -212,11 +213,12 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
                 : ''
             }
             validate={value => {
-              if (Number(value) <= Number(initialTargetPrice)) {
+              if (!isBnParseable(value)) return true
+              if (hasParseableTargetPrice && bn(value).lte(bn(initialTargetPrice))) {
                 return 'Range high price must be greater than target price'
               }
-              if (Number(value) <= Number(initialMinPrice)) {
-                return 'Range low price must be greater than range low price'
+              if (hasParseableMinPrice && bn(value).lte(bn(initialMinPrice))) {
+                return 'Range high price must be greater than range low price'
               }
               return true
             }}
