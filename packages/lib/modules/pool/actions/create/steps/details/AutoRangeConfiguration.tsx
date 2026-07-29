@@ -84,7 +84,9 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
   const isCustom = forceCustom || (!matchedOption && normalizedFormValue !== '')
   const selectedValue = isCustom ? '' : (matchedOption?.rawValue ?? '')
   const isCustomTargetPrice = isCustom && name === 'initialTargetPrice'
+  const hasParseableMinPrice = isBnParseable(initialMinPrice)
   const hasParseableTargetPrice = isBnParseable(initialTargetPrice)
+  const hasParseableMaxPrice = isBnParseable(initialMaxPrice)
   const ispriceRangePercentage = name === 'priceRangePercentage'
   const isCustomPriceRange = isCustom && ispriceRangePercentage
   const isPercentage = name === 'centerednessMargin' || name === 'priceShiftDailyRate'
@@ -175,7 +177,7 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
             label={'Range low price'}
             name={'initialMinPrice'}
             percentageLabel={
-              initialMinPrice && hasParseableTargetPrice
+              hasParseableMinPrice && hasParseableTargetPrice
                 ? getPercentFromPrice(initialMinPrice, initialTargetPrice)
                 : '-10.00'
             }
@@ -200,7 +202,7 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
             label={'Range high price'}
             name={'initialMaxPrice'}
             percentageLabel={
-              initialMaxPrice && hasParseableTargetPrice
+              hasParseableMaxPrice && hasParseableTargetPrice
                 ? getPercentFromPrice(initialMaxPrice, initialTargetPrice)
                 : '10.00'
             }
