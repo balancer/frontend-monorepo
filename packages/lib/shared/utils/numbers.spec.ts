@@ -5,6 +5,7 @@ import {
   fNum,
   formatFalsyValueAsDash,
   isBnParseable,
+  isGreaterThanZeroValidation,
   isValidNumber,
   sum,
   ZERO_VALUE_DASH,
@@ -267,6 +268,22 @@ describe('isValidNumber', () => {
     expect(isValidNumber('.5')).toBe(true)
   })
 })
+describe('isGreaterThanZeroValidation', () => {
+  test('returns error for whitespace instead of throwing', () => {
+    expect(isGreaterThanZeroValidation('  ')).toBe('Amount must be greater than 0')
+  })
+
+  test('returns true for values greater than zero', () => {
+    expect(isGreaterThanZeroValidation('1')).toBe(true)
+    expect(isGreaterThanZeroValidation('0.0001')).toBe(true)
+  })
+
+  test('returns error for zero or negative values', () => {
+    expect(isGreaterThanZeroValidation('0')).toBe('Amount must be greater than 0')
+    expect(isGreaterThanZeroValidation('-1')).toBe('Amount must be greater than 0')
+  })
+})
+
 describe('isBnParseable', () => {
   test('returns false for nullish and values bn() cannot parse', () => {
     expect(isBnParseable(null)).toBe(false)
