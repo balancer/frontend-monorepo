@@ -19,10 +19,11 @@ import {
   Switch,
 } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
-import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
+import { blockInvalidNumberInput, bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { Percent, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
 import { EnableTxBundleSetting } from './EnableTxBundlesSetting'
+import { useEffect, useRef, useState } from 'react'
 
 interface SlippageInputProps {
   slippage: string
@@ -31,11 +32,59 @@ interface SlippageInputProps {
 
 export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
   const presetOpts = ['0.5', '1', '2']
+  const [inputSlippage, setInputSlippage] = useState(slippage)
+  const [previousSlippage, setPreviousSlippage] = useState(slippage)
+  const inputSlippageRef = useRef(slippage)
+  const slippageBeforeEditingRef = useRef(slippage)
+  const isEditingRef = useRef(false)
+  const setSlippageRef = useRef(setSlippage)
+
+  if (slippage !== previousSlippage) {
+    setPreviousSlippage(slippage)
+    setInputSlippage(slippage)
+  }
+
+  useEffect(() => {
+    setSlippageRef.current = setSlippage
+  }, [setSlippage])
+
+  useEffect(() => {
+    inputSlippageRef.current = inputSlippage
+  }, [inputSlippage])
+
+  useEffect(() => {
+    return () => {
+      if (inputSlippageRef.current === '') {
+        setSlippageRef.current(slippageBeforeEditingRef.current)
+      }
+    }
+  }, [])
+
+  const beginEditing = () => {
+    if (!isEditingRef.current) {
+      slippageBeforeEditingRef.current = slippage
+      isEditingRef.current = true
+    }
+  }
+
+  const restoreEmptyDraft = () => {
+    if (inputSlippageRef.current === '') {
+      const previousSlippage = slippageBeforeEditingRef.current
+      inputSlippageRef.current = previousSlippage
+      setInputSlippage(previousSlippage)
+      setSlippage(previousSlippage)
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    beginEditing()
     const value = e.currentTarget.value
-    if (parseFloat(value) <= 50 || !value) {
-      setSlippage(value)
+    if (!value || (parseFloat(value) <= 50 && isBnParseable(value))) {
+      inputSlippageRef.current = value
+      setInputSlippage(value)
+      if (value && bn(value).gt(0)) {
+        setSlippage(value)
+      }
     }
   }
 
@@ -52,10 +101,15 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
           bg="background.level1"
           // max={50}
           min={0}
+          onBlur={() => {
+            restoreEmptyDraft()
+            isEditingRef.current = false
+          }}
           onChange={handleChange}
+          onFocus={beginEditing}
           onKeyDown={blockInvalidNumberInput}
           type="number"
-          value={slippage}
+          value={inputSlippage}
         />
         <InputRightElement pointerEvents="none">
           <Percent color="grayText" size="20px" />
