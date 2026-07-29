@@ -3,7 +3,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { SupportedCurrency } from '@repo/lib/shared/utils/currencies'
 import { PropsWithChildren, createContext, useCallback, useEffect } from 'react'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '../../local-storage/local-storage.constants'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
@@ -23,6 +23,10 @@ const DEFAULT_ENABLE_SIGNATURES: YesNo = 'yes'
 const DEFAULT_ACCEPTED_POLICIES: string[] = []
 const DEFAULT_ALLOW_SOUNDS: YesNo = 'yes'
 const DEFAULT_ENABLE_TX_BUNDLING: YesNo = 'yes'
+
+function isValidSlippage(value: string): boolean {
+  return isBnParseable(value) && bn(value).gt(0)
+}
 
 export type UseUserSettingsResult = ReturnType<typeof useUserSettingsLogic>
 export const UserSettingsContext = createContext<UseUserSettingsResult | null>(null)
@@ -50,7 +54,7 @@ export function useUserSettingsLogic({
   )
   const currency = isMounted ? _currency : initCurrency
 
-  const [_slippage, setSlippage] = useLocalStorage<string>(
+  const [_slippage, setStoredSlippage] = useLocalStorage<string>(
     LS_KEYS.UserSettings.Slippage,
     initSlippage
   )
@@ -68,9 +72,24 @@ export function useUserSettingsLogic({
   )
   const allowSounds = isMounted ? _allowSounds : initAllowSounds
 
-  const slippage = isMounted ? _slippage : initSlippage
+  const fallbackSlippage = isValidSlippage(initSlippage) ? initSlippage : DEFAULT_SLIPPAGE
+  const storedSlippage = isMounted ? _slippage : initSlippage
+  const slippage = isValidSlippage(storedSlippage) ? storedSlippage : fallbackSlippage
   const slippageDecimal = bn(slippage).div(100).toString()
   const slippageBps = bn(slippage).times(100).toString()
+
+  const setSlippage = useCallback(
+    (value: string) => {
+      setStoredSlippage(isValidSlippage(value) ? value : fallbackSlippage)
+    },
+    [fallbackSlippage, setStoredSlippage]
+  )
+
+  useEffect(() => {
+    if (isMounted && _slippage !== slippage) {
+      setStoredSlippage(slippage)
+    }
+  }, [isMounted, _slippage, setStoredSlippage, slippage])
 
   const [_acceptedPoliciesStorage, setAcceptedPoliciesStorage] =
     useLocalStorage<AcceptedPoliciesStorage>(
