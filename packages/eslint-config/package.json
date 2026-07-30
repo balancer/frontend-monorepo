@@ -10,20 +10,20 @@
     "./react-internal": "./react-internals.js"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.4",
+    "@eslint/js": "9.39.5",
     "@next/eslint-plugin-next": "16.2.9",
     "@repo/prettier-config": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "8.60.1",
-    "@typescript-eslint/parser": "8.60.1",
-    "eslint": "9.39.4",
+    "@typescript-eslint/eslint-plugin": "8.65.0",
+    "@typescript-eslint/parser": "8.65.0",
+    "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-only-warn": "1.2.1",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-turbo": "2.9.18",
+    "eslint-plugin-turbo": "2.10.6",
     "globals": "17.5.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.60.1"
+    "typescript-eslint": "8.65.0"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0 --cache",
