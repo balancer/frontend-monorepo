@@ -5,6 +5,7 @@ packages:
 allowBuilds:
   '@parcel/watcher': true
   '@sentry/cli': true
+  '@reown/appkit': true
   bufferutil: true
   esbuild: true
   msw: true
