@@ -32,7 +32,7 @@
     "@chakra-ui/next-js": "2.4.2",
     "@chakra-ui/react": "2.10.10",
     "@chakra-ui/theme-tools": "2.2.6",
-    "@coinbase/wallet-sdk": "4.3.6",
+    "@coinbase/wallet-sdk": "4.3.7",
     "@dicebear/collection": "9.4.2",
     "@dicebear/core": "9.4.3",
     "@emotion/react": "11.14.0",
@@ -66,7 +66,7 @@
     "motion": "12.42.2",
     "next": "16.2.12",
     "numeral": "^2.0.6",
-    "nuqs": "2.9.2",
+    "nuqs": "2.9.3",
     "pluralize": "^8.0.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -82,7 +82,7 @@
     "use-sound": "5.0.0",
     "usehooks-ts": "3.1.1",
     "viem": "2.51.3",
-    "wagmi": "3.6.21",
+    "wagmi": "3.7.4",
     "zod": "3.25.76"
   },
   "devDependencies": {
