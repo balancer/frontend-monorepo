@@ -9,13 +9,11 @@ import { Abi, Address, erc20Abi } from 'viem'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 
 export type TransactionSimulation = (
-  | ReturnType<typeof useSimulateContract>
-  | ReturnType<typeof useEstimateGas>
+  ReturnType<typeof useSimulateContract> | ReturnType<typeof useEstimateGas>
 ) & { variables: { chainId: SupportedChainId } }
 
 export type TransactionExecution =
-  | ReturnType<typeof useWriteContract>
-  | ReturnType<typeof useSendTransaction>
+  ReturnType<typeof useWriteContract> | ReturnType<typeof useSendTransaction>
 export type TransactionResult = UseWaitForTransactionReceiptReturnType
 export type TransactionBundle = {
   chainId: SupportedChainId

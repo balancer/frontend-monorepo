@@ -31,8 +31,7 @@ type Erc20AbiWithIncreaseApproval = typeof erc20AbiWithIncreaseApproval
 export interface ManagedErc20TransactionInput {
   tokenAddress: Address
   functionName:
-    | ContractFunctionName<Erc20AbiWithIncreaseApproval, WriteAbiMutability>
-    | 'increaseApproval' // Edge-case for veBalBpt approval
+    ContractFunctionName<Erc20AbiWithIncreaseApproval, WriteAbiMutability> | 'increaseApproval' // Edge-case for veBalBpt approval
   labels: TransactionLabels
   isComplete?: () => boolean
   onTransactionChange: (transaction: ManagedResult) => void

@@ -115,12 +115,10 @@ export function sqrt(input: bigint, tolerance: bigint): bigint {
 
   // Check square is more or less correct (in some epsilon range)
   const guessSquared = (guess * guess) / ONE
-  if (
-    !(
-      guessSquared <= input + mulUp(guess, tolerance) &&
-      guessSquared >= input - mulUp(guess, tolerance)
-    )
-  ) {
+  if (!(
+    guessSquared <= input + mulUp(guess, tolerance) &&
+    guessSquared >= input - mulUp(guess, tolerance)
+  )) {
     throw new Error('GyroEPool: sqrt failed')
   }
 

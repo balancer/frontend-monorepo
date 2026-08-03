@@ -87,9 +87,8 @@ const AddressesSchema = z
 const RangeSchema = z
   .string()
   .optional()
-  .transform(
-    (raw): HistoryRange =>
-      raw && (RANGE_VALUES as readonly string[]).includes(raw) ? (raw as HistoryRange) : '90d'
+  .transform((raw): HistoryRange =>
+    raw && (RANGE_VALUES as readonly string[]).includes(raw) ? (raw as HistoryRange) : '90d'
   )
 
 const QUERY = /* GraphQL */ `

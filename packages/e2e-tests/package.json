@@ -25,13 +25,13 @@
   "license": "ISC",
   "devDependencies": {
     "@balancer/sdk": "6.1.1",
-    "@playwright/test": "1.59.1",
+    "@playwright/test": "1.62.0",
     "@repo/lib": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "24.13.3",
     "beets-frontend-v3": "workspace:*",
     "dotenv": "17.4.2",
     "frontend-v3": "workspace:*",
-    "start-server-and-test": "3.0.2"
+    "start-server-and-test": "3.0.11"
   }
 }

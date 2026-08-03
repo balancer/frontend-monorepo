@@ -28,8 +28,7 @@
  */
 
 type Entry =
-  | { state: 'inflight'; promise: Promise<unknown> }
-  | { state: 'settled'; data: unknown; ts: number }
+  { state: 'inflight'; promise: Promise<unknown> } | { state: 'settled'; data: unknown; ts: number }
 
 const cache = new Map<string, Entry>()
 

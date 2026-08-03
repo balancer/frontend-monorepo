@@ -93,10 +93,7 @@ export const PROTOCOL_V2 = 'V2' as const
 export const PROTOCOL_V3 = 'V3' as const
 export const PROTOCOL_COW_AMM = 'COW_AMM' as const
 export type Protocol =
-  | typeof PROTOCOL_CORE
-  | typeof PROTOCOL_V2
-  | typeof PROTOCOL_V3
-  | typeof PROTOCOL_COW_AMM
+  typeof PROTOCOL_CORE | typeof PROTOCOL_V2 | typeof PROTOCOL_V3 | typeof PROTOCOL_COW_AMM
 
 export const SOURCE_API = 'api-v3' as const
 export const SOURCE_DEFILLAMA = 'defillama' as const

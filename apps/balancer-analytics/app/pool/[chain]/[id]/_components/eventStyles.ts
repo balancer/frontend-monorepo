@@ -15,14 +15,7 @@
  */
 
 export type EventCategory =
-  | 'fee'
-  | 'state'
-  | 'amp'
-  | 'autorange'
-  | 'surge'
-  | 'registration'
-  | 'rate'
-  | 'other'
+  'fee' | 'state' | 'amp' | 'autorange' | 'surge' | 'registration' | 'rate' | 'other'
 
 export type EventStyle = {
   color: string

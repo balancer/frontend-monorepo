@@ -36,8 +36,7 @@ import type { LabeledSwap } from './types'
 /** ECharts emits a `name` for nodes and a `data.source`/`data.target` for
  *  edges. We normalize to a discriminated union the drawer can switch on. */
 export type SankeySelection =
-  | { kind: 'node'; nodeName: string }
-  | { kind: 'edge'; source: string; target: string }
+  { kind: 'node'; nodeName: string } | { kind: 'edge'; source: string; target: string }
 
 type Props = {
   selection: SankeySelection | null

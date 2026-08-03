@@ -1,13 +1,7 @@
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type SourceCategory =
-  | 'aggregator'
-  | 'intent'
-  | 'direct'
-  | 'mev_bot'
-  | 'market_maker'
-  | 'bridge'
-  | 'unknown'
+  'aggregator' | 'intent' | 'direct' | 'mev_bot' | 'market_maker' | 'bridge' | 'unknown'
 
 export type SourceLabel = {
   /** Stable grouping key. Multiple addresses can share an id (e.g. paraswap v6 + v6_1).
