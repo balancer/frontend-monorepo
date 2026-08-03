@@ -32,7 +32,7 @@
     "@chakra-ui/next-js": "2.4.2",
     "@chakra-ui/react": "2.10.10",
     "@chakra-ui/theme-tools": "2.2.6",
-    "@coinbase/wallet-sdk": "4.3.6",
+    "@coinbase/wallet-sdk": "4.3.7",
     "@dicebear/collection": "9.4.2",
     "@dicebear/core": "9.4.3",
     "@emotion/react": "11.14.0",
