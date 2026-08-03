@@ -34,12 +34,7 @@ import { useInterval } from 'usehooks-ts'
 // timeout =  the transaction hash was generated but waitForTransactionReceipt throws a timeout error (edge-case in polygon)
 // unknown =  the transaction hash was generated but waitForTransactionReceipt throws a non timeout error (we never had this error)
 export type TransactionStatus =
-  | 'confirming'
-  | 'confirmed'
-  | 'reverted'
-  | 'rejected'
-  | 'timeout'
-  | 'unknown'
+  'confirming' | 'confirmed' | 'reverted' | 'rejected' | 'timeout' | 'unknown'
 
 export type SafeTransactionStatus = SafeTxStatus
 

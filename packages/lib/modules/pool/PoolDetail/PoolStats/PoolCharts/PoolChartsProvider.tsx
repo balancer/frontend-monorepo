@@ -377,10 +377,7 @@ export function usePoolChartsLogic() {
   const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, theme)
 
   type SupportedPoolChartTab =
-    | PoolChartTab.VOLUME
-    | PoolChartTab.TVL
-    | PoolChartTab.FEES
-    | PoolChartTab.SURPLUS
+    PoolChartTab.VOLUME | PoolChartTab.TVL | PoolChartTab.FEES | PoolChartTab.SURPLUS
 
   const poolChartTypeOptions: Record<SupportedPoolChartTab, PoolChartTypeOptions> = {
     [PoolChartTab.VOLUME]: {

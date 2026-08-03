@@ -143,9 +143,7 @@ type MaybeBatchableTx = {
 }
 
 type TransactionInput =
-  | ManagedTransactionInput
-  | ManagedErc20TransactionInput
-  | ManagedSendTransactionInput
+  ManagedTransactionInput | ManagedErc20TransactionInput | ManagedSendTransactionInput
 
 // In some cases, the onSuccess callback must be retried, for instance, when the refetchApprovals has not finished yet
 export const Retry = 'retry'

@@ -46,8 +46,7 @@ function getSimulationQueryData(simulationQuery: RemoveLiquiditySimulationQueryR
   if (!simulationQuery.data) return { rawAmount: 0n, spenderAddress: '' as Address }
   // TODO: Create a common interface for  all possible types (like NestedProportionalQueryRemoveLiquidityOutput)
   const simulationData = simulationQuery.data as
-    | SdkQueryRemoveLiquidityOutput
-    | NestedProportionalQueryRemoveLiquidityOutput
+    SdkQueryRemoveLiquidityOutput | NestedProportionalQueryRemoveLiquidityOutput
 
   const rawAmount = getRawAmount(simulationData)
 

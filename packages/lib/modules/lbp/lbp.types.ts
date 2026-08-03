@@ -19,8 +19,7 @@ export enum SeedType {
 }
 
 export type SaleTypeOptionValue =
-  | typeof GqlPoolTypeValues.LiquidityBootstrapping
-  | typeof GqlPoolTypeValues.FixedLbp
+  typeof GqlPoolTypeValues.LiquidityBootstrapping | typeof GqlPoolTypeValues.FixedLbp
 
 export type SaleStructureForm = {
   selectedChain: GqlChain

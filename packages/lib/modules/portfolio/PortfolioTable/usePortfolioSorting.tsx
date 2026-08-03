@@ -47,8 +47,7 @@ const generateStakingWeightForSort = (pool: ExpandedPoolInfo) => {
 type SortingState = PortfolioSortingData | null
 
 type SortingAction =
-  | { type: 'SET_SORTING'; payload: PortfolioSortingData }
-  | { type: 'RESET_SORTING' }
+  { type: 'SET_SORTING'; payload: PortfolioSortingData } | { type: 'RESET_SORTING' }
 
 function sortingReducer(state: SortingState, action: SortingAction): SortingState {
   switch (action.type) {
