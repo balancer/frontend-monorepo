@@ -94,7 +94,6 @@ export function SwapForm({
     setTokenIn,
     setTokenOut,
     switchTokens,
-    setNeedsToAcceptHighPI,
     resetSwapAmounts,
     replaceUrlPath,
   } = useSwap()
@@ -107,7 +106,7 @@ export function SwapForm({
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
-  const { priceImpact, priceImpactColor, priceImpactLevel } = usePriceImpact()
+  const { priceImpact, priceImpactColor, priceImpactLevel, resetPriceImpact } = usePriceImpact()
 
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
@@ -190,6 +189,7 @@ export function SwapForm({
 
     if (swapTxHash) {
       resetSwapAmounts()
+      resetPriceImpact()
       transactionSteps.resetTransactionSteps()
       if (isPoolSwapUrl || isLbpSwap) return redirectToPoolPage?.()
       replaceUrlPath()
@@ -345,7 +345,6 @@ export function SwapForm({
                     action="swap"
                     cowLink={cowLink}
                     isDisabled={!simulationQuery.data}
-                    setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                   />
                 </>
               )}

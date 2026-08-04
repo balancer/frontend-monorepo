@@ -94,7 +94,6 @@ export function RemoveLiquidityForm() {
     setProportionalType,
     setSingleTokenType,
     setHumanBptInPercent,
-    setNeedsToAcceptHighPI,
     amountsOut,
   } = useRemoveLiquidity()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
@@ -280,7 +279,6 @@ export function RemoveLiquidityForm() {
                   }
                   action="remove"
                   isDisabled={priceImpactQuery.isLoading && !priceImpactQuery.isSuccess}
-                  setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                 />
               )}
               {isV3LBP(pool) && (

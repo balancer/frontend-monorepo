@@ -3,6 +3,7 @@
 import { PropsWithChildren } from 'react'
 import { RelicAddLiquidityProvider } from '@/lib/modules/reliquary/RelicAddLiquidityProvider'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { isHash, Hash } from 'viem'
 
 type Props = PropsWithChildren<{
@@ -15,7 +16,9 @@ export default function RelicAddLiquidityLayoutWrapper({ params: { txHash }, chi
 
   return (
     <DefaultPageContainer>
-      <RelicAddLiquidityProvider urlTxHash={urlTxHash}>{children}</RelicAddLiquidityProvider>
+      <PriceImpactProvider>
+        <RelicAddLiquidityProvider urlTxHash={urlTxHash}>{children}</RelicAddLiquidityProvider>
+      </PriceImpactProvider>
     </DefaultPageContainer>
   )
 }

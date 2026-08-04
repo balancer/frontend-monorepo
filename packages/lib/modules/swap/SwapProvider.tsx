@@ -128,7 +128,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   )
 
   const swapState = useReactiveVar(swapStateVar)
-  const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [tokenSelectKey, setTokenSelectKey] = useState<'tokenIn' | 'tokenOut'>('tokenIn')
   const hasInitializedUserChain = useRef(false)
 
@@ -137,7 +136,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { getToken, getTokensByChain, usdValueForToken, isLoadingTokens } = useTokens()
   const { tokens, setTokens } = useTokenBalances()
   const { hasValidationErrors, resetValidationErrors } = useTokenInputsValidation()
-  const { setPriceImpact, resetPriceImpact } = usePriceImpact()
+  const { setPriceImpact, resetPriceImpact, acceptPriceImpactRisk, hasToAcceptHighPriceImpact } =
+    usePriceImpact()
+  const needsToAcceptHighPI = hasToAcceptHighPriceImpact && !acceptPriceImpactRisk
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
   const selectedChainRef = useRef(selectedChain)
@@ -341,6 +342,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       })
       if (state.tokenIn.amount !== newState.tokenIn.amount) {
         setTokenOutAmount('', { userTriggered: false })
+        resetPriceImpact()
       }
     } else {
       // Sometimes we want to set the amount without triggering a fetch or
@@ -393,6 +395,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       })
       if (state.tokenOut.amount !== newState.tokenOut.amount) {
         setTokenInAmount('', { userTriggered: false })
+        resetPriceImpact()
       }
     } else {
       // Sometimes we want to set the amount without triggering a fetch or
@@ -441,6 +444,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         scaledAmount: BigInt(0),
       },
     })
+
+    resetPriceImpact()
   }
 
   function setDefaultTokens() {
@@ -477,10 +482,24 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function calcPriceImpact() {
-    // Only calculate price impact if both tokens are selected
-    if (isTokenInSet && isTokenOutSet && !bn(tokenInUsd).isZero() && !bn(tokenOutUsd).isZero()) {
-      setPriceImpact(calcMarketPriceImpact(tokenInUsd, tokenOutUsd))
-    } else if (simulationQuery.data) {
+    // Always derive from the latest swap state so stale effects cannot re-apply an old price
+    // impact after the swap state has been reset (e.g. returning to a pool swap page).
+    const currentState = swapStateVar()
+    const currentTokenInInfo = getToken(currentState.tokenIn.address, selectedChain)
+    const currentTokenOutInfo = getToken(currentState.tokenOut.address, selectedChain)
+    const currentTokenInUsd = usdValueForToken(currentTokenInInfo, currentState.tokenIn.amount)
+    const currentTokenOutUsd = usdValueForToken(currentTokenOutInfo, currentState.tokenOut.amount)
+    const currentIsTokenInSet = currentState.tokenIn.address !== emptyAddress
+    const currentIsTokenOutSet = currentState.tokenOut.address !== emptyAddress
+
+    if (
+      currentIsTokenInSet &&
+      currentIsTokenOutSet &&
+      !bn(currentTokenInUsd).isZero() &&
+      !bn(currentTokenOutUsd).isZero()
+    ) {
+      setPriceImpact(calcMarketPriceImpact(currentTokenInUsd, currentTokenOutUsd))
+    } else {
       resetPriceImpact()
     }
   }
@@ -744,7 +763,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     setTokenIn,
     setTokenOut,
     switchTokens,
-    setNeedsToAcceptHighPI,
   }
 }
 
