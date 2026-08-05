@@ -15,7 +15,7 @@ export default function Privacy() {
               <Box mt="3xl">
                 <h1>Balancer Foundation Privacy&nbsp;Policy</h1>
                 <p>
-                  <em>Last Updated: April 2025</em>
+                  <em>Last Updated: August 2026</em>
                 </p>
               </Box>
               <p>
@@ -308,8 +308,8 @@ export default function Privacy() {
                     </p>
 
                     <p>
-                      With our compliance partner, TRM Labs, we only share wallet addresses used to
-                      connect a wallet to our UI (all other user information like IP addresses,
+                      With our compliance partner, Hypernative, we only share wallet addresses used
+                      to connect a wallet to our UI (all other user information like IP addresses,
                       device identifiers and location are not shared). The code for the UI is open
                       source, and can be reviewed by anyone at any time.
                     </p>
