@@ -94,7 +94,6 @@ const networkConfig: NetworkConfig = {
     omniVotingEscrow: '0x96484f2aBF5e58b15176dbF1A799627B53F13B6d',
     permit2: PERMIT2[mainnet.id],
     gaugeController: '0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD',
-    rewardDistributor: '0xa9b08B4CeEC1EF29EdEC7F9C94583270337D6416',
     merkl: {
       claims: '0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae',
     },

@@ -22,7 +22,6 @@ import { chainToSlugMap } from '../../../pool/pool.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useMemo, useState, type ReactNode } from 'react'
 import ClaimProtocolRevenueModal from '../ClaimProtocolRevenueModal'
-import ClaimHiddenHandRewardsModal from '../ClaimHiddenHandRewardsModal'
 import { useRouter } from 'next/navigation'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
@@ -35,8 +34,6 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { isAfter } from 'date-fns'
-import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { sumRecoveredFundsTotal, useRecoveredFunds } from '../recovered-funds/useRecoveredFunds'
 import { ClaimRecoveredFundsModal } from '../recovered-funds/ClaimRecoveredFundsModal'
@@ -79,13 +76,11 @@ export function ClaimNetworkPools() {
     poolsWithOnchainUserBalances,
     isLoadingRewards,
     isLoadingPortfolio,
-    hiddenHandRewardsData,
   } = usePortfolio()
 
   const { hasRecoveredFunds, claims: recoveredFundsClaims } = useRecoveredFunds()
 
   const [isOpenedProtocolRevenueModal, setIsOpenedProtocolRevenueModal] = useState(false)
-  const [isOpenedHiddenHandRewardsModal, setIsOpenedHiddenHandRewardsModal] = useState(false)
 
   const {
     isOpen: isClaimRecoveredFundModalOpen,
@@ -103,7 +98,6 @@ export function ClaimNetworkPools() {
   const router = useRouter()
 
   const hasProtocolRewards = protocolRewardsBalance && protocolRewardsBalance.isGreaterThan(0)
-  const hasHiddenHandRewards = hiddenHandRewardsData && hiddenHandRewardsData.totalValueUsd > 0
 
   const chainIds = PROJECT_CONFIG.merklRewardsChains.map(chain => getChainId(chain))
   const { hasMerklRewards } = useHasMerklRewards(poolsWithOnchainUserBalances, chainIds)
@@ -123,10 +117,6 @@ export function ClaimNetworkPools() {
     balance => balance.toNumber() > 0
   )
   const noRewards = !hasProtocolRewards && !hasChainRewards
-
-  // hidden hand claims expire after 30 June 2026
-  const julyFirstMidnightUTC = new Date(Date.UTC(2026, 6, 1, 0, 0, 0))
-  const isPastJulyFirst = isAfter(new Date(), julyFirstMidnightUTC)
 
   const deprecatedChains = poolsWithChain
     .map(item => item[0])
@@ -154,14 +144,6 @@ export function ClaimNetworkPools() {
       })
     }
 
-    if (hasHiddenHandRewards && !isPastJulyFirst) {
-      items.push({
-        type: 'hidden-hand',
-        chain: PROJECT_CONFIG.defaultNetwork,
-        amount: hiddenHandRewardsData.totalValueUsd,
-      })
-    }
-
     if (isBalancer && hasRecoveredFunds) {
       items.push({
         type: 'recovered-funds',
@@ -178,9 +160,6 @@ export function ClaimNetworkPools() {
     totalFiatClaimableBalanceByChain,
     hasProtocolRewards,
     protocolRewardsBalance,
-    hasHiddenHandRewards,
-    isPastJulyFirst,
-    hiddenHandRewardsData,
     hasRecoveredFunds,
     recoveredFundsClaims,
   ])
@@ -191,14 +170,6 @@ export function ClaimNetworkPools() {
         <Heading size="h4" variant="special">
           Claimable incentives
         </Heading>
-        {hasHiddenHandRewards && !isPastJulyFirst && (
-          <AnimatedAlert>
-            <BalAlert
-              content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
-              status="warning"
-            />
-          </AnimatedAlert>
-        )}
         {isBalancer && hasRecoveredFunds && (
           <AnimatedAlert>
             <BalAlert
@@ -304,9 +275,6 @@ export function ClaimNetworkPools() {
                       case 'protocol':
                         setIsOpenedProtocolRevenueModal(true)
                         break
-                      case 'hidden-hand':
-                        setIsOpenedHiddenHandRewardsModal(true)
-                        break
                       case 'recovered-funds':
                         openClaimRecoveredFundModal()
                         break
@@ -353,10 +321,7 @@ export function ClaimNetworkPools() {
         isOpen={isOpenedProtocolRevenueModal}
         onClose={() => setIsOpenedProtocolRevenueModal(false)}
       />
-      <ClaimHiddenHandRewardsModal
-        isOpen={isOpenedHiddenHandRewardsModal}
-        onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
-      />
+
       <ClaimRecoveredFundsModal
         isOpen={isClaimRecoveredFundModalOpen}
         onClose={onClaimRecoveredFundModalClose}
@@ -381,22 +346,6 @@ function getCardTitle(itemType: string) {
   switch (itemType) {
     case 'protocol':
       return 'Balancer protocol revenue'
-    case 'hidden-hand':
-      return (
-        <LabelWithTooltip
-          bgClip="text"
-          bgColor="rgb(229, 211, 190)"
-          color="transparent"
-          fontSize="16px"
-          fontWeight="700"
-          label="Hidden Hand rewards"
-          mb={0}
-          mt={0}
-          placement="top"
-          textTransform="capitalize"
-          tooltip="Available until June 30, 2026"
-        />
-      )
     case 'recovered-funds':
       return 'v2 incident recovered funds'
     default:

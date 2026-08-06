@@ -10,7 +10,6 @@ import {
   balancerV2GaugeV5Abi,
   balancerV2VaultAbi,
   feeDistributorAbi,
-  rewardDistributorAbi,
   veBalAbi,
   veDelegationProxyAbi,
 } from './abi/generated'
@@ -42,7 +41,6 @@ export const AbiMap = {
   'balancer.gaugeControllerAbi': GaugeControllerAbi,
   'balancer.liquidityGaugeV5Abi': LiquidityGaugeV5Abi,
   'snapshot.delegateRegistry': DelegateRegistryAbi,
-  'balancer.rewardDistributor': rewardDistributorAbi, // hidden hand rewards
   'beets.lstStaking': sonicStakingAbi,
   'beets.sfc': sfcAbi,
   'beets.reliquary': reliquaryAbi,

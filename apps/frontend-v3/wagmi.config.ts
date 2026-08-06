@@ -89,10 +89,6 @@ export default defineConfig(() => {
             address: '0x3f89f8c0e0ffdfae0b97959303831fa893f1cfe0',
           },
           { name: 'BalancerV3StablePool', address: '0x57c23c58b1d8c3292c15becf07c62c5c52457a42' },
-          {
-            name: 'RewardDistributor',
-            address: '0xa9b08B4CeEC1EF29EdEC7F9C94583270337D6416',
-          },
         ],
       }),
     ],
