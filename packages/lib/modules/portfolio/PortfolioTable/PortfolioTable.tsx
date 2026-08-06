@@ -15,6 +15,7 @@ import {
   Text,
   useBreakpointValue,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useUserAccount } from '../../web3/UserAccountProvider'
@@ -215,6 +216,13 @@ export function PortfolioTable() {
             </Text>
           </Checkbox>
         )}
+        <Text color="font.secondary" fontSize="sm">
+          Any positions for legacy chains can be found on{' '}
+          <Link href="https://legacy.balancer.fi" isExternal textDecoration="underline">
+            legacy.balancer.fi
+          </Link>
+          .
+        </Text>
       </VStack>
     </FadeInOnView>
   )
