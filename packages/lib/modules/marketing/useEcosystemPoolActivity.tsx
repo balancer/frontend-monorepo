@@ -72,14 +72,6 @@ export const gradientMap: Partial<Record<GqlChain, { from: string; to: string }>
     from: '#7D84FF',
     to: '#5468FF',
   },
-  [GqlChainValues.Fraxtal]: {
-    from: '#E0E7FF',
-    to: '#8C9EFF',
-  },
-  [GqlChainValues.Mode]: {
-    from: '#FFD77D',
-    to: '#FFB74D',
-  },
   [GqlChainValues.Sepolia]: {
     from: '#D1B3FF',
     to: '#A384FF',
@@ -104,8 +96,6 @@ function getDefaultChainMeta(): Partial<Record<GqlChain, []>> {
     [GqlChainValues.Gnosis]: [],
     [GqlChainValues.Avalanche]: [],
     [GqlChainValues.Fantom]: [],
-    [GqlChainValues.Fraxtal]: [],
-    [GqlChainValues.Mode]: [],
     [GqlChainValues.Sepolia]: [],
     [GqlChainValues.Sonic]: [],
     [GqlChainValues.Hyperevm]: [],

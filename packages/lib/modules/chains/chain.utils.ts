@@ -11,5 +11,7 @@ export function isNotMainnet(chain: GqlChain | number): boolean {
 }
 
 export function isChainDeprecated(chain: GqlChain) {
-  return ([GqlChainValues.Mode, GqlChainValues.Fraxtal] as GqlChain[]).includes(chain)
+  // No chains are currently deprecated. Kept as a function so callers don't
+  // need to change when a chain is sunset.
+  return chain === chain && false
 }

@@ -60,8 +60,6 @@ export const chainToSlugMap: Partial<Record<GqlChain, ChainSlug>> = {
   [GqlChainValues.Optimism]: ChainSlug.Optimisim,
   [GqlChainValues.Gnosis]: ChainSlug.Gnosis,
   [GqlChainValues.Sepolia]: ChainSlug.Sepolia,
-  [GqlChainValues.Mode]: ChainSlug.Mode,
-  [GqlChainValues.Fraxtal]: ChainSlug.Fraxtal,
   [GqlChainValues.Sonic]: ChainSlug.Sonic,
   [GqlChainValues.Hyperevm]: ChainSlug.HyperEVM,
   [GqlChainValues.Plasma]: ChainSlug.Plasma,

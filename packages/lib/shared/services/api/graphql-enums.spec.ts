@@ -30,7 +30,7 @@ describe('graphql-enums', () => {
   it('every exported const object matches the schema enum exactly', () => {
     // Deprecated values that are kept in the schema but intentionally removed from the UI.
     const deprecatedValuesByEnum: Record<string, string[]> = {
-      GqlChain: ['ZKEVM'],
+      GqlChain: ['ZKEVM', 'MODE', 'FRAXTAL'],
     }
 
     for (const exported of exportedValues) {
