@@ -181,8 +181,6 @@ export const INITIAL_AUTORANGE_CONFIG: AutoRangeConfig = {
 export const INITIAL_ECLP_CONFIG: EclpConfigForm = {
   alpha: '',
   beta: '',
-  c: '',
-  s: '',
   lambda: '',
   peakPrice: '',
 }

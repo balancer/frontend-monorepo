@@ -329,8 +329,6 @@ export function useUninitializedPool() {
     return {
       alpha,
       beta,
-      c,
-      s,
       lambda,
       peakPrice: calculatePeakPrice({ c, s }),
     }

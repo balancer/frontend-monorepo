@@ -75,13 +75,11 @@ export function usePoolFormLogic() {
   }
 
   const invertGyroEclpPriceParams = () => {
-    const { alpha, beta, peakPrice, s, c, lambda } = eclpConfigForm.getValues()
+    const { alpha, beta, peakPrice, lambda } = eclpConfigForm.getValues()
     eclpConfigForm.reset({
       alpha: fNumCustom(invertNumber(beta), NUM_FORMAT),
       beta: fNumCustom(invertNumber(alpha), NUM_FORMAT),
       peakPrice: fNumCustom(invertNumber(peakPrice), NUM_FORMAT),
-      s: c,
-      c: s,
       lambda: lambda,
     })
 

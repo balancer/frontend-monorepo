@@ -119,7 +119,7 @@ describe('usePoolFormLogic', () => {
   })
 
   describe('invertGyroEclpPriceParams', () => {
-    it('inverts alpha/beta/peakPrice, swaps s<->c, preserves lambda, and reverses poolTokens', async () => {
+    it('inverts alpha/beta/peakPrice, preserves lambda, and reverses poolTokens', async () => {
       const { result } = await renderPoolForm()
 
       const tokenA = { ...INITIAL_POOL_CREATION_FORM.poolTokens[0], weight: '50' }
@@ -130,8 +130,6 @@ describe('usePoolFormLogic', () => {
         result.current.eclpConfigForm.setValue('alpha', '2')
         result.current.eclpConfigForm.setValue('beta', '4')
         result.current.eclpConfigForm.setValue('peakPrice', '5')
-        result.current.eclpConfigForm.setValue('s', '0.1')
-        result.current.eclpConfigForm.setValue('c', '0.9')
         result.current.eclpConfigForm.setValue('lambda', '100')
       })
 
@@ -144,9 +142,6 @@ describe('usePoolFormLogic', () => {
       expect(Number(eclp.alpha)).toBeCloseTo(0.25)
       expect(Number(eclp.beta)).toBeCloseTo(0.5)
       expect(Number(eclp.peakPrice)).toBeCloseTo(0.2)
-      // s and c are swapped as-is (no inversion, no reformat)
-      expect(eclp.s).toBe('0.9')
-      expect(eclp.c).toBe('0.1')
       // lambda is preserved
       expect(eclp.lambda).toBe('100')
       expect(result.current.poolCreationForm.getValues('poolTokens')).toEqual([tokenB, tokenA])

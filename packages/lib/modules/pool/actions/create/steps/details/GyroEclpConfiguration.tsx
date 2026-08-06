@@ -51,9 +51,9 @@ function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
-  const [alpha, beta, peakPrice, lambda, c, s] = useWatch({
+  const [alpha, beta, peakPrice, lambda] = useWatch({
     control: eclpConfigForm.control,
-    name: ['alpha', 'beta', 'peakPrice', 'lambda', 'c', 's'],
+    name: ['alpha', 'beta', 'peakPrice', 'lambda'],
   })
 
   const tokenPricePair = poolTokens
@@ -61,12 +61,8 @@ function EclpParamInputs() {
     .filter(Boolean)
     .join(' / ')
 
-  // peak price is used to calculate c and s
-  useEffect(() => {
-    const { c, s } = calculateRotationComponents(peakPrice || '')
-    eclpConfigForm.setValue('c', c, { shouldValidate: true })
-    eclpConfigForm.setValue('s', s, { shouldValidate: true })
-  }, [peakPrice])
+  // c and s are derived from peakPrice, computed directly to avoid effect-based mirroring
+  const { c, s } = calculateRotationComponents(peakPrice || '')
 
   // reset init amounts when eclp params change
   useEffect(() => {

@@ -2,6 +2,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { usePoolSpotPriceWithoutRate } from '../details/usePoolSpotPriceWithoutRate'
 import { isGyroEllipticPool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
+import { calculateRotationComponents } from '../details/gyro.helpers'
 
 export function useGyroEclpInitAmountsRatio() {
   const { spotPriceWithoutRate, rateTokenA, rateTokenB, isRateLoading } =
@@ -12,8 +13,9 @@ export function useGyroEclpInitAmountsRatio() {
 
   const alpha = Number(eclpParams.alpha)
   const beta = Number(eclpParams.beta)
-  const c = Number(eclpParams.c)
-  const s = Number(eclpParams.s)
+  const { c: cStr, s: sStr } = calculateRotationComponents(eclpParams.peakPrice || '')
+  const c = Number(cStr)
+  const s = Number(sStr)
   const lambda = Number(eclpParams.lambda)
   const rateA = Number(rateTokenA)
   const rateB = Number(rateTokenB)

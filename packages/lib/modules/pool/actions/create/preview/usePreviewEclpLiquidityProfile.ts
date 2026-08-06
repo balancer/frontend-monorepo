@@ -5,6 +5,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { usePoolSpotPriceWithoutRate } from '../steps/details/usePoolSpotPriceWithoutRate'
 import { isGyroEllipticPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
+import { calculateRotationComponents } from '../steps/details/gyro.helpers'
 
 export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
@@ -20,10 +21,12 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
 
   const priceRateRatio = bn(rateTokenA).div(bn(rateTokenB))
 
-  const [alpha, beta, s, c, lambda] = useWatch({
+  const [alpha, beta, peakPrice, lambda] = useWatch({
     control: eclpConfigForm.control,
-    name: ['alpha', 'beta', 's', 'c', 'lambda'],
+    name: ['alpha', 'beta', 'peakPrice', 'lambda'],
   })
+
+  const { c, s } = calculateRotationComponents(peakPrice || '')
 
   const tokenRateScalingFactorString = '1'
 
