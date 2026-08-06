@@ -18,7 +18,8 @@
     "test:e2e:dev:ui:bal": "NEXT_PUBLIC_E2E_DEV=1 pnpm exec playwright test tests/dev/balancer --ui",
     "test:e2e:dev:beets": "NEXT_PUBLIC_E2E_DEV=1 start-server-and-test 'cd ../../ &&  pnpm start --filter beets-frontend-v3' 'http://localhost:3001' 'pnpm exec playwright test tests/dev/beets'",
     "test:e2e:dev:ui:beets": "NEXT_PUBLIC_E2E_DEV=1 pnpm exec playwright test tests/dev/beets --ui",
-    "test:e2e:local": "pnpm exec playwright test tests"
+    "test:e2e:local": "pnpm exec playwright test tests",
+    "test:e2e:ios": "pnpm exec playwright test tests/ios --config=playwright.ios.config.ts"
   },
   "keywords": [],
   "author": "",

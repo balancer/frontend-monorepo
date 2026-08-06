@@ -1,0 +1,40 @@
+name: iOS Smoke Test
+
+# Manual only — run from the Actions tab. Not part of regular PR CI.
+on:
+  workflow_dispatch:
+
+env:
+  NEXT_PUBLIC_BALANCER_API_URL: https://test-api-v3.balancer.fi/graphql
+  NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
+  NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.PRIVATE_ALCHEMY_KEY }}
+  NEXT_PRIVATE_DRPC_KEY: ${{ secrets.PRIVATE_DRPC_KEY }}
+  NEXT_PUBLIC_PROJECT_ID: balancer
+
+jobs:
+  ios-smoke:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Install Playwright WebKit
+        working-directory: packages/e2e-tests
+        run: pnpm exec playwright install webkit
+      - name: Build frontend
+        run: pnpm build --filter frontend-v3
+      - name: Run iOS smoke tests (WebKit / iPhone 13 profile)
+        working-directory: packages/e2e-tests
+        run: |
+          pnpm exec start-server-and-test \
+            'cd ../../ && pnpm start --filter frontend-v3' \
+            'http://localhost:3000' \
+            'pnpm run test:e2e:ios'
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-ios-report
+          path: |
+            ./packages/e2e-tests/playwright-report/
+          retention-days: 30
