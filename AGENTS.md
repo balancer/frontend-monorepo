@@ -28,6 +28,26 @@ pnpm workspaces + Turborepo. Both `apps/frontend-v3` (Balancer) and `apps/beets-
 - **URL state**: `nuqs` for query-string-based state management.
 - **Pool types**: Weighted, Stable, CowAmm, LBP, AutoRange, ECLP — each with specific UI and action handlers.
 
+## Pull Requests
+
+When creating a PR, read `.github/pull_request_template.md` and fill in every section. The `<!-- -->` blocks in the template are examples — treat them as guidance for tone and format, but strip them from the final PR body. Do not leave placeholder text, empty sections, or `...` in the body.
+
+Use `gh pr create --title ... --body ...` with a fully populated body. Do not rely on the interactive editor.
+
+### Section guidance
+
+- **What** — Summarize the diff at a high level, one bullet per logical change: `- Added...`, `- Updated...`, `- Refactored...`, `- Moved...`. Do not restate every file; group related changes.
+- **Why** — Ground the motivation in something concrete: a requested feature, design feedback, a fast-follow fix, or preparation for a planned change. If the change was requested in an issue/ticket, reference it here.
+- **Test Steps** — List concrete manual verification steps a reviewer can follow, one checkbox per step. Include the feature flag to enable (if any), the page/route to visit, and the expected result. If the change has no manual surface, say so explicitly instead of leaving it blank.
+- **Risks / Breaking Changes** — Call out anything that could regress: changed token decimals or balances handling, migration requirements, changes behind a feature flag (name the flag), dependency bumps, or anything touching shared `packages/lib` code that also serves the Beets app.
+- **Other Notes** — Only if genuinely applicable: known limitations, follow-up work, or things deliberately left out of this change. Omit the section entirely if there is nothing to note.
+
+### Rules
+
+- Verify each claim against the actual diff — do not invent test steps, flags, or risks. If you did not change it, do not describe it.
+- If the PR touches `packages/lib`, note in **Risks** whether the change affects the other app (Balancer ↔ Beets) via `NEXT_PUBLIC_PROJECT_ID`.
+- Always write test steps you could actually run — no generic filler.
+
 ## Testing
 
 Vitest across all packages. Integration tests live in `packages/lib` and use a separate config.
