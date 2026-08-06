@@ -81,7 +81,6 @@ export interface ContractsConfig {
   omniVotingEscrow?: Address
   gaugeWorkingBalanceHelper?: Address
   gaugeController?: Address
-  rewardDistributor?: Address // hidden hand rewards distributor
   signatureRegistry?: Address
 }
 
