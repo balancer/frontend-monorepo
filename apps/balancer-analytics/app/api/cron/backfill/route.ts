@@ -84,8 +84,6 @@ const CHAIN_MAP: Record<string, GqlChain> = {
   Optimism: GqlChainValues.Optimism,
   'OP Mainnet': GqlChainValues.Optimism,
   Sonic: GqlChainValues.Sonic,
-  Fraxtal: GqlChainValues.Fraxtal,
-  Mode: GqlChainValues.Mode,
   Monad: GqlChainValues.Monad,
   'Hyperliquid L1': GqlChainValues.Hyperevm,
   Plasma: GqlChainValues.Plasma,

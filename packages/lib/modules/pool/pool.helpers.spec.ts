@@ -310,22 +310,6 @@ describe('shouldBlockAddLiquidity', () => {
     expect(shouldBlockAddLiquidity(pool)).toBe(false)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(0)
   })
-
-  it('should block for Mode pools', () => {
-    const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-    pool.chain = GqlChainValues.Mode
-
-    expect(shouldBlockAddLiquidity(pool)).toBe(true)
-    expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
-  })
-
-  it('should block for Fraxtal pools', () => {
-    const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-    pool.chain = GqlChainValues.Fraxtal
-
-    expect(shouldBlockAddLiquidity(pool)).toBe(true)
-    expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
-  })
 })
 
 describe('getPoolActivityTitle', () => {

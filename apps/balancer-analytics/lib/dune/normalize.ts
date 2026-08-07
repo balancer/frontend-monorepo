@@ -31,8 +31,6 @@ const CHAIN_MAP: Record<string, GqlChain> = {
   monad: GqlChainValues.Monad,
   fantom: GqlChainValues.Fantom,
   sonic: GqlChainValues.Sonic,
-  fraxtal: GqlChainValues.Fraxtal,
-  mode: GqlChainValues.Mode,
 }
 
 export function duneChainToGqlChain(blockchain: string): GqlChain | null {

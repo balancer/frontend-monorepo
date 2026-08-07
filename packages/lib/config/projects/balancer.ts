@@ -26,8 +26,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
     GqlChainValues.Optimism,
     GqlChainValues.Plasma,
     GqlChainValues.Polygon,
-    GqlChainValues.Fraxtal,
-    GqlChainValues.Mode,
 
     // testnets only in dev mode
     ...(isProd ? [] : [GqlChainValues.Xlayer, GqlChainValues.Sepolia]),
@@ -44,12 +42,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   defaultNetwork: GqlChainValues.Mainnet,
   ensNetwork: GqlChainValues.Mainnet,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
-  merklRewardsChains: [
-    GqlChainValues.Mainnet,
-    GqlChainValues.Arbitrum,
-    GqlChainValues.Base,
-    GqlChainValues.Mode,
-  ],
+  merklRewardsChains: [GqlChainValues.Mainnet, GqlChainValues.Arbitrum, GqlChainValues.Base],
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: ['DYNAMIC_ECLP'],

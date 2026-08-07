@@ -10,8 +10,6 @@ import fantom from './fantom'
 import optimism from './optimism'
 import base from './base'
 import sepolia from './sepolia'
-import mode from './mode'
-import fraxtal from './fraxtal'
 import sonic from './sonic'
 import hyperevm from './hyperevm'
 import plasma from './plasma'
@@ -30,8 +28,6 @@ const networkConfigs: NetworkConfigs = {
   [GqlChainValues.Polygon]: polygon,
   [GqlChainValues.Optimism]: optimism,
   [GqlChainValues.Sepolia]: sepolia,
-  [GqlChainValues.Mode]: mode,
-  [GqlChainValues.Fraxtal]: fraxtal,
   [GqlChainValues.Fantom]: fantom,
   [GqlChainValues.Sonic]: sonic,
   [GqlChainValues.Hyperevm]: hyperevm,
