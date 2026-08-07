@@ -119,6 +119,6 @@
     "lokijs": "1.5.12",
     "msw": "2.15.0",
     "prool": "0.2.14",
-    "sentry-testkit": "7.1.0"
+    "sentry-testkit": "7.2.1"
   }
 }
