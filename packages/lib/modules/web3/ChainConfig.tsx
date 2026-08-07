@@ -14,7 +14,6 @@ import {
   sonic,
   plasma,
   monad,
-  xLayer,
 } from 'wagmi/chains'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { keyBy } from 'lodash'
@@ -42,7 +41,6 @@ export const rpcFallbacks: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChainValues.Hyperevm]: 'https://1rpc.io/hyperliquid',
   [GqlChainValues.Plasma]: 'https://rpc.plasma.to',
   [GqlChainValues.Monad]: 'https://rpc.monad.xyz',
-  [GqlChainValues.Xlayer]: 'https://rpc.xlayer.tech',
 }
 
 const baseUrl = getBaseUrl()
@@ -66,7 +64,6 @@ export const rpcOverrides: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChainValues.Hyperevm]: getPrivateRpcUrl(GqlChainValues.Hyperevm),
   [GqlChainValues.Plasma]: getPrivateRpcUrl(GqlChainValues.Plasma),
   [GqlChainValues.Monad]: getPrivateRpcUrl(GqlChainValues.Monad),
-  [GqlChainValues.Xlayer]: getPrivateRpcUrl(GqlChainValues.Xlayer),
 }
 
 const gqlChainToWagmiChainMap: Partial<Record<GqlChain, Chain>> = {
@@ -83,7 +80,6 @@ const gqlChainToWagmiChainMap: Partial<Record<GqlChain, Chain>> = {
   [GqlChainValues.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...(hyperEVM as Chain) }, // TODO: fix type when rainbowkit is updated
   [GqlChainValues.Plasma]: { iconUrl: '/images/chains/PLASMA.svg', ...plasma },
   [GqlChainValues.Monad]: { iconUrl: '/images/chains/MONAD.svg', ...monad },
-  [GqlChainValues.Xlayer]: { iconUrl: '/images/chains/XLAYER.svg', ...xLayer },
 } as const
 
 export const supportedNetworks = PROJECT_CONFIG.supportedNetworks
