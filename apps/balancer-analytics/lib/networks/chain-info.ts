@@ -73,7 +73,6 @@ const SECONDS_PER_BLOCK: Partial<Record<GqlChain, number>> = {
   [GqlChainValues.Gnosis]: 5,
   [GqlChainValues.Sonic]: 0.4,
   [GqlChainValues.Fantom]: 1,
-  [GqlChainValues.Xlayer]: 3,
   [GqlChainValues.Hyperevm]: 1,
   [GqlChainValues.Plasma]: 1,
   [GqlChainValues.Monad]: 0.5,
