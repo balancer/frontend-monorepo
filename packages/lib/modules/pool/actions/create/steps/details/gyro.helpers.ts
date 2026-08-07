@@ -1,4 +1,4 @@
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 
 /**
  * Calculates rotation components "c" and "s" for E-CLP parameters
@@ -6,10 +6,11 @@ import { bn } from '@repo/lib/shared/utils/numbers'
  * @returns c and s with 18 decimal precision
  */
 export function calculateRotationComponents(peakPrice: string): { c: string; s: string } {
-  if (!peakPrice || Number(peakPrice) === 0) return { c: '', s: '' }
+  if (!isBnParseable(peakPrice)) return { c: '', s: '' }
 
   // Convert input to precise decimal representation of tan(θ)
   const tanθ = bn(peakPrice)
+  if (tanθ.isZero()) return { c: '', s: '' }
 
   // Calculate hypotenuse of right triangle with legs (1, tanθ)
   // This represents √(1 + tan²θ) from Pythagorean theorem
@@ -32,7 +33,10 @@ export function calculateRotationComponents(peakPrice: string): { c: string; s: 
  * @returns peakPrice as tan(θ) = s/c
  */
 export function calculatePeakPrice({ c, s }: { c: string; s: string }): string {
-  if (!c || !s || Number(c) === 0) return ''
+  if (!isBnParseable(c) || !isBnParseable(s)) return ''
 
-  return bn(s).div(bn(c)).toString()
+  const cValue = bn(c)
+  if (cValue.isZero()) return ''
+
+  return bn(s).div(cValue).toString()
 }
