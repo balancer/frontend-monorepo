@@ -397,7 +397,6 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
   [GqlChainValues.Hyperevm]: [],
   [GqlChainValues.Plasma]: [],
   [GqlChainValues.Monad]: [],
-  [GqlChainValues.Xlayer]: [],
 }
 
 export const HIGH_RISK_POOL_IDS: string[] = [

@@ -28,7 +28,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
     GqlChainValues.Polygon,
 
     // testnets only in dev mode
-    ...(isProd ? [] : [GqlChainValues.Xlayer, GqlChainValues.Sepolia]),
+    ...(isProd ? [] : [GqlChainValues.Sepolia]),
   ],
   variantConfig: {
     [PartnerVariant.cow]: {

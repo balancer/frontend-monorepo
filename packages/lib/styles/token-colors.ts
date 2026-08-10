@@ -183,12 +183,6 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x4917a5ec9fcb5e10f47cbb197abe6ab63be81fe8': { from: '#001E5E', to: '#003EC2' }, //  AZND
     '0xd786f7569c39a9f64e6a54eb77db21364e90f279': { from: '#FEFFFF', to: '#8FB4FF' }, //  wnLOAZND
   },
-  [GqlChainValues.Xlayer]: {
-    '0x1e4a5963abfd975d8c9021ce480b42188849d41d': { from: '#27A17C', to: '#42EBB8' }, // USDT,
-    '0x779ded0c9e1022225f8e0630b35a9b54be713736': { from: '#27A17C', to: '#42EBB8' }, // USDT0,
-    '0x74b7f16337b8972027f6196a17a631ac6de26d22': { from: '#1075E2', to: '#62A8F4' }, // USDC,
-    '0x5a77f1443d16ee5761d310e38b62f77f726bc71c': { from: '#F2F3F7', to: '#CECDFE' }, // WETH,
-  },
 }
 
 const DEFAULT_TOKEN_COLORS: TokenColorDef[] = [
