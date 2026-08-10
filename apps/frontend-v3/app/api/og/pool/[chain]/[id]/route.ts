@@ -54,6 +54,7 @@ export async function GET(
     } catch {
       // Never let error reporting break the fallback response
     }
+    console.error(`[og] render failed for ${chain}/${id}:`, error)
     return new Response(null, {
       status: 302,
       headers: { Location: FALLBACK_IMAGE_URL, ...FALLBACK_HEADERS },

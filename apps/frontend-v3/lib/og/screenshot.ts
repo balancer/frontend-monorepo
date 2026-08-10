@@ -3,10 +3,12 @@ import { launchOgBrowser } from './browser'
 export const OG_IMAGE_WIDTH = 1200
 export const OG_IMAGE_HEIGHT = 630
 
-// Whole-render budget: must stay below the platform function timeout (10s on
-// Vercel Hobby) so a cold Chromium start falls back to a static image instead
-// of the request being killed (→ 504 → generic social preview).
-const RENDER_TIMEOUT_MS = 8_000
+// Whole-render budget: must stay below the platform function timeout (maxDuration
+// 30s below). A cold @sparticuz/chromium start (Brotli extraction to /tmp +
+// launch + render) can exceed 10s, so 20s gives it room while still falling back
+// to a static image before the platform kills the request (→ 504 → generic
+// social preview).
+const RENDER_TIMEOUT_MS = 20_000
 
 type CreateOgScreenshotOptions = {
   /** Internal route to screenshot, e.g. `/_og/pool/ethereum/0x…` */
