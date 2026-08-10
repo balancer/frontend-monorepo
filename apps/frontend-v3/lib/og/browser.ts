@@ -13,6 +13,22 @@
 export async function launchOgBrowser() {
   const { chromium } = await import('playwright-core')
 
+  // Diagnose the deployed bundle: where does playwright-core resolve from, and
+  // is browsers.json present next to it? (browsers.json is read via a runtime
+  // require that Turbopack's static trace misses; if missing, this logs why.)
+  try {
+    const { createRequire } = await import('node:module')
+    const { existsSync } = await import('node:fs')
+    const { dirname, join } = await import('node:path')
+    const req = createRequire(import.meta.url)
+    const pkgJson = req.resolve('playwright-core/package.json')
+    const pkgRoot = dirname(pkgJson)
+    console.log('[og] playwright-core resolved:', pkgJson)
+    console.log('[og] browsers.json exists:', existsSync(join(pkgRoot, 'browsers.json')))
+  } catch (e) {
+    console.warn('[og] playwright-core diagnostic failed:', e)
+  }
+
   if (process.env.VERCEL) {
     const { default: sparticuzChromium } = await import('@sparticuz/chromium')
     return chromium.launch({

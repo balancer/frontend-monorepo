@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "next start",
-    "build": "pnpm --filter @repo/lib graphql:gen && next build",
-    "postbuild": "node scripts/patch-og-trace.mjs",
+    "build": "pnpm --filter @repo/lib graphql:gen && next build && node scripts/patch-og-trace.mjs",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev\"",
     "dev:no-gen": "next dev",
     "gen:wagmi": "pnpm wagmi generate",
