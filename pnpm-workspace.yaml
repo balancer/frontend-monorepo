@@ -14,7 +14,7 @@ allowBuilds:
   utf-8-validate: true
 
 catalog:
-  '@apollo/client': '4.2.9'
+  '@apollo/client': '4.2.10'
 
 peerDependencyRules:
   allowedVersions:
