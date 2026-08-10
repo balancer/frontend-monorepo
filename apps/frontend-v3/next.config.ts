@@ -4,26 +4,6 @@ import type { NextConfig } from 'next'
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
-  outputFileTracingIncludes: {
-    // Ship playwright-core's browsers.json (read via runtime require, invisible
-    // to static tracing) and the @sparticuz/chromium binary with the OG
-    // function. Globbed from the app dir against the pnpm store at the repo root.
-    '/api/og/pool/[chain]/[id]': [
-      '../../node_modules/.pnpm/@sparticuz+chromium@*/node_modules/@sparticuz/chromium/bin/**/*',
-      '../../node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/browsers.json',
-    ],
-  },
-  serverExternalPackages: [
-    'thread-stream',
-    'real-require',
-    'lokijs',
-    'encoding',
-    // Ship playwright-core and the Chromium binary whole with the OG function:
-    // Turbopack traces only the static import graph, so runtime requires like
-    // playwright-core's require('browsers.json') would be missing otherwise.
-    'playwright-core',
-    '@sparticuz/chromium',
-  ],
   logging: {
     fetches: {
       fullUrl: true,
