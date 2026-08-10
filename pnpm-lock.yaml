@@ -291,9 +291,6 @@ importers:
       eslint:
         specifier: 9.39.5
         version: 9.39.5(jiti@2.7.0)(supports-color@10.2.2)
-      lokijs:
-        specifier: 1.5.12
-        version: 1.5.12
 
   apps/frontend-v3:
     dependencies:
@@ -448,9 +445,6 @@ importers:
       eslint:
         specifier: 9.39.5
         version: 9.39.5(jiti@2.7.0)(supports-color@10.2.2)
-      lokijs:
-        specifier: 1.5.12
-        version: 1.5.12
       prool:
         specifier: 0.2.14
         version: 0.2.14(debug@4.4.3(supports-color@10.2.2))
@@ -803,9 +797,6 @@ importers:
       eslint:
         specifier: 9.39.5
         version: 9.39.5(jiti@2.7.0)(supports-color@10.2.2)
-      lokijs:
-        specifier: 1.5.12
-        version: 1.5.12
       msw:
         specifier: 2.15.0
         version: 2.15.0(@types/node@24.13.3)(typescript@5.9.3)
@@ -7335,9 +7326,6 @@ packages:
   log-update@6.1.0:
     resolution: {integrity: sha512-9ie8ItPR6tjY5uYJh8K/Zrv/RMZ5VOlOWvtZdEHYSTFKZfIBPQa9tOAEeAWhd+AnIneLJ22w5fjOYtoutpWq5w==}
     engines: {node: '>=18'}
-
-  lokijs@1.5.12:
-    resolution: {integrity: sha512-Q5ALD6JiS6xAUWCwX3taQmgwxyveCtIIuL08+ml0nHwT3k0S/GIFJN+Hd38b1qYIMaE5X++iqsqWVksz7SYW+Q==}
 
   long@5.3.2:
     resolution: {integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==}
@@ -17533,8 +17521,6 @@ snapshots:
       slice-ansi: 7.1.2
       strip-ansi: 7.2.0
       wrap-ansi: 9.0.2
-
-  lokijs@1.5.12: {}
 
   long@5.3.2: {}
 

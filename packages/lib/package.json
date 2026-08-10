@@ -114,7 +114,6 @@
     "autoprefixer": "10.5.4",
     "cross-fetch": "4.1.0",
     "eslint": "9.39.5",
-    "lokijs": "1.5.12",
     "msw": "2.15.0",
     "prool": "0.2.14",
     "sentry-testkit": "7.2.1"
