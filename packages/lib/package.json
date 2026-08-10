@@ -38,7 +38,6 @@
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@hookform/resolvers": "5.5.8",
-    "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@nktkas/hyperliquid": "0.23.1",
     "@rainbow-me/rainbowkit": "2.2.11",
