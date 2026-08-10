@@ -54,7 +54,6 @@
     "bignumber.js": "11.1.5",
     "chakra-react-select": "5.1.1",
     "date-fns": "4.4.0",
-    "deepmerge": "^4.3.1",
     "echarts": "6.1.0",
     "echarts-for-react": "3.0.6",
     "graphql": "16.14.2",
