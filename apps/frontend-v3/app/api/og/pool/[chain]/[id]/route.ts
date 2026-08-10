@@ -44,7 +44,11 @@ export async function GET(
     // Never leak rendering failures; serve the static fallback image instead.
     // Covers render errors AND any unexpected throw (params, launch, module
     // init) so this route can never return 500 to a social crawler.
-    captureError(ensureError(error), { extra: { og: { chain, id } } })
+    try {
+      captureError(ensureError(error), { extra: { og: { chain, id } } })
+    } catch {
+      // Never let error reporting break the fallback response
+    }
     return new Response(null, {
       status: 302,
       headers: { Location: FALLBACK_IMAGE_URL, ...FALLBACK_HEADERS },

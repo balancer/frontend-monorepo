@@ -1,5 +1,3 @@
-import { chromium } from 'playwright-core'
-
 /**
  * Launches a headless Chromium for OG screenshotting.
  *
@@ -7,11 +5,14 @@ import { chromium } from 'playwright-core'
  * (playwright-core resolves it from the browser registry).
  * Production (Vercel): uses @sparticuz/chromium's serverless-compatible binary.
  *
- * @sparticuz/chromium is imported lazily so a missing/broken binary can never
- * crash the API route at module load — it only surfaces as a launch error,
- * which callers catch and turn into the static-image fallback.
+ * Both playwright-core and @sparticuz/chromium are imported lazily so a
+ * missing/broken binary or a tracing issue can never crash the API route at
+ * module load — they only surface as a launch error, which callers catch and
+ * turn into the static-image fallback.
  */
 export async function launchOgBrowser() {
+  const { chromium } = await import('playwright-core')
+
   if (process.env.VERCEL) {
     const { default: sparticuzChromium } = await import('@sparticuz/chromium')
     return chromium.launch({
