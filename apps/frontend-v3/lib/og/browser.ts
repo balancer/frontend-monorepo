@@ -1,5 +1,4 @@
 import { chromium } from 'playwright-core'
-import sparticuzChromium from '@sparticuz/chromium'
 
 /**
  * Launches a headless Chromium for OG screenshotting.
@@ -7,9 +6,14 @@ import sparticuzChromium from '@sparticuz/chromium'
  * Local: uses the Chromium installed via `pnpm playwright:install:chromium`
  * (playwright-core resolves it from the browser registry).
  * Production (Vercel): uses @sparticuz/chromium's serverless-compatible binary.
+ *
+ * @sparticuz/chromium is imported lazily so a missing/broken binary can never
+ * crash the API route at module load — it only surfaces as a launch error,
+ * which callers catch and turn into the static-image fallback.
  */
 export async function launchOgBrowser() {
   if (process.env.VERCEL) {
+    const { default: sparticuzChromium } = await import('@sparticuz/chromium')
     return chromium.launch({
       args: sparticuzChromium.args,
       executablePath: await sparticuzChromium.executablePath(),

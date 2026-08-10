@@ -41,7 +41,9 @@ export async function GET(
 
     return new Response(new Uint8Array(image), { headers: CACHE_HEADERS })
   } catch (error: unknown) {
-    // Never leak rendering failures; serve the static fallback image instead
+    // Never leak rendering failures; serve the static fallback image instead.
+    // Covers render errors AND any unexpected throw (params, launch, module
+    // init) so this route can never return 500 to a social crawler.
     captureError(ensureError(error), { extra: { og: { chain, id } } })
     return new Response(null, {
       status: 302,
