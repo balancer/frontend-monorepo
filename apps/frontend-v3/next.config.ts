@@ -5,10 +5,10 @@ import type { NextConfig } from 'next'
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
   serverExternalPackages: ['thread-stream', 'real-require', 'lokijs', 'encoding'],
-  outputFileTracingExcludes: {
-    // @sparticuz/chromium ships a ~60MB Chromium binary; exclude it from the
-    // server trace so it is only deployed when the OG route actually needs it.
-    '/*': ['node_modules/@sparticuz/chromium/bin/**/*'],
+  outputFileTracingIncludes: {
+    // Ensure the ~60MB @sparticuz/chromium binary travels with the OG function
+    // (it is only reachable from this route's import graph).
+    '/api/og/pool/[chain]/[id]': ['./node_modules/@sparticuz/chromium/bin/**/*'],
   },
   logging: {
     fetches: {

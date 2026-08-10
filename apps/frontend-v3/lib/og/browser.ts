@@ -17,7 +17,11 @@ export async function launchOgBrowser() {
     })
   }
 
-  // Local: playwright-core resolves Chromium from the browser registry
-  // (install via `pnpm playwright:install:chromium`)
-  return chromium.launch({ headless: true })
+  // Local: playwright-core's default headless launch prefers the separate
+  // headless-shell build; pass the full Chromium executablePath explicitly
+  // (installed via `pnpm playwright:install:chromium`)
+  return chromium.launch({
+    executablePath: chromium.executablePath(),
+    headless: true,
+  })
 }

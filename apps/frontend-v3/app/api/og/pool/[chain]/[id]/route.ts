@@ -1,6 +1,4 @@
 import { NextRequest } from 'next/server'
-import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import { ChainSlug } from '@repo/lib/modules/pool/pool.utils'
 import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
 import { createOgScreenshot } from '@bal/lib/og/screenshot'
@@ -9,7 +7,9 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
 
-const fallbackImage = readFile(join(process.cwd(), 'public/images/opengraph/og-balancer-pool.jpg'))
+// public/ is served by the platform (not inside serverless functions), so the
+// fallback redirects to the CDN-served asset instead of reading it from disk.
+const FALLBACK_IMAGE_URL = '/images/opengraph/og-balancer-pool.jpg'
 
 const CACHE_HEADERS = {
   'Content-Type': 'image/png',
@@ -17,7 +17,6 @@ const CACHE_HEADERS = {
 }
 
 const FALLBACK_HEADERS = {
-  'Content-Type': 'image/jpeg',
   'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
 }
 
@@ -44,6 +43,9 @@ export async function GET(
   } catch (error: unknown) {
     // Never leak rendering failures; serve the static fallback image instead
     captureError(ensureError(error), { extra: { og: { chain, id } } })
-    return new Response(await fallbackImage, { headers: FALLBACK_HEADERS })
+    return new Response(null, {
+      status: 302,
+      headers: { Location: FALLBACK_IMAGE_URL, ...FALLBACK_HEADERS },
+    })
   }
 }
