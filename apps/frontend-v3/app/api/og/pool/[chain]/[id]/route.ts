@@ -2,6 +2,11 @@ import { NextRequest } from 'next/server'
 import { ChainSlug } from '@repo/lib/modules/pool/pool.utils'
 import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
 import { createOgScreenshot } from '@bal/lib/og/screenshot'
+// Ensure playwright-core/browsers.json is included in the serverless function
+// bundle: playwright-core reads it via a runtime require that Turbopack's
+// static trace cannot see. Importing the file (through the app-level symlink to
+// the pnpm store) marks it for tracing. Resolves at runtime to the real file.
+import '../../../../../../node_modules/playwright-core/browsers.json'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
