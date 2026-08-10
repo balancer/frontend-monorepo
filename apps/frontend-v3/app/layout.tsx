@@ -1,17 +1,18 @@
 import { Metadata } from 'next'
 import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
-import NextTopLoader from 'nextjs-toploader'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import '@repo/lib/assets/css/global.css'
 import Script from 'next/script'
 import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
-import { NavBarContainer } from '@bal/lib/components/navs/NavBarContainer'
 import { ThemeProvider } from '@bal/lib/services/chakra/ThemeProvider'
-import { BalancerLogoType } from '@bal/lib/components/imgs/BalancerLogoType'
-import { Footer } from '@repo/lib/shared/components/navs/Footer'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.VERCEL_BRANCH_URL
+      ? `https://${process.env.VERCEL_BRANCH_URL}`
+      : 'https://balancer.fi'
+  ),
   title: `Balancer—DeFi Liquidity Pools`,
   description: `Explore liquidity pools on Balancer and earn passively in yield-bearing pools.`,
   icons: [
@@ -47,16 +48,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
         className={satoshiFont.className}
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
       >
-        <NextTopLoader color="#7f6ae8" showSpinner={false} />
         <ThemeProvider>
           <Providers>
-            <NavBarContainer />
             {children}
-            <Footer
-              logoType={<BalancerLogoType />}
-              subTitle="Balancer is a battle-tested toolkit for true AMM experimentation and innovation."
-              title="AMMs made easy"
-            />
             <SpeedInsights />
             <Script async src="https://w.appzi.io/w.js?token=8TY8k" />
           </Providers>

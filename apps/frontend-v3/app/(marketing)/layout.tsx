@@ -1,6 +1,6 @@
-import { Box } from '@chakra-ui/react'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
+import { BaseLayout } from '../layouts/base-layout'
 
 export const metadata: Metadata = {
   title: `Balancer—AMMs made easy`,
@@ -13,5 +13,5 @@ export const metadata: Metadata = {
 }
 
 export default function MarketingLayout({ children }: PropsWithChildren) {
-  return <Box>{children}</Box>
+  return <BaseLayout>{children}</BaseLayout>
 }

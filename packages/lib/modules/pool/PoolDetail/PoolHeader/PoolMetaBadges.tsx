@@ -4,16 +4,28 @@ import { Flex, Box } from '@chakra-ui/react'
 import Image from 'next/image'
 import { PoolVersionTag } from '../../PoolList/PoolListTable/PoolVersionTag'
 import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
-import { usePool } from '../../PoolProvider'
+import { PoolContext } from '../../PoolProvider'
 import { shouldHideSwapFee } from '../../pool.utils'
 import { PoolHookTag } from '../PoolHookTag'
 import { PoolTypeTag } from '../PoolTypeTag'
 import { PoolSwapFees } from './PoolSwapFees'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { getChainShortName } from '@repo/lib/config/app.config'
+import { useOptionalContext } from '@repo/lib/shared/utils/contexts'
+import { Pool } from '../../pool.types'
 
-export default function PoolMetaBadges() {
-  const { pool, chain } = usePool()
+type PoolMetaBadgesProps = {
+  /** Pass a pool to render outside PoolProvider (e.g. OG images) */
+  pool?: Pool
+}
+
+export default function PoolMetaBadges({ pool: poolProp }: PoolMetaBadgesProps = {}) {
+  const poolContext = useOptionalContext(PoolContext)
+  const pool = poolProp ?? poolContext?.pool
+  const chain = poolProp?.chain ?? poolContext?.chain
+
+  if (!pool || !chain) return null
+
   const chainName = getChainShortName(chain)
 
   return (

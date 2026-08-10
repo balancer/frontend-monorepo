@@ -1,5 +1,5 @@
 import { FetchPoolProps, PoolVariant } from '@repo/lib/modules/pool/pool.types'
-import { ChainSlug } from '@repo/lib/modules/pool/pool.utils'
+import { ChainSlug, chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
 import { generatePoolMetadata, PoolLayout, PoolMetadata } from '@repo/lib/shared/layouts/PoolLayout'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
@@ -13,11 +13,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const poolMetadata: PoolMetadata = await generatePoolMetadata(resolvedParams)
 
   function getOpenGraphImage(variant?: PoolVariant) {
-    // We could use poolMetadata?.pool to have a more accurate image (by pool type, chain, etc)
+    // CoW pools keep their branded static image
     if (variant && variant === 'cow') {
       return `/images/opengraph/og-cow-pool.png`
     }
-    return `/images/opengraph/og-balancer-pool.jpg`
+    const chain = poolMetadata?.pool?.chain
+    const chainSlug = chain ? chainToSlugMap[chain] : undefined
+    return `/api/og/pool/${chainSlug ?? poolMetadata?.pool?.chain.toLowerCase()}/${poolMetadata?.pool?.id}`
   }
 
   return {
