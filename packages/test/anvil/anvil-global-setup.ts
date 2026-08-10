@@ -24,6 +24,29 @@ async function sleep(time: number) {
   })
 }
 
+async function waitForAnvilReady(port: number, chainName: string, maxAttempts = 90) {
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      const response = await fetch(`http://127.0.0.1:${port}/1`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_blockNumber', params: [] }),
+      })
+      if (response.ok) {
+        console.log(`Anvil instance for ${chainName} (port ${port}) is ready`)
+        return
+      }
+    } catch {
+      // Proxy or anvil not yet listening
+    }
+    if (i > 0 && i % 10 === 0) {
+      console.log(`Waiting for anvil ${chainName} (port ${port})... ${i}s`)
+    }
+    await sleep(1000)
+  }
+  throw new Error(`Anvil instance for ${chainName} (port ${port}) did not become ready in time`)
+}
+
 export async function setup() {
   const promises = []
   for (const chain of Object.values(testChains)) {
@@ -49,8 +72,11 @@ export async function setup() {
     promises.push(server.start().then(() => server.stop.bind(server)))
   }
   const results = await Promise.all(promises)
-  // Wait for the proxy to start
-  await sleep(2000)
+
+  // Warm up each anvil instance so the first test using a chain doesn't hit a cold fork
+  await Promise.all(
+    Object.values(testChains).map(chain => waitForAnvilReady(chain.port, chain.name))
+  )
 
   return async () => {
     await Promise.all(results.map(shutdown => shutdown()))
