@@ -98,7 +98,10 @@ export function isSafeTxSuccess(safeTxStatus?: SafeTransactionStatus): boolean {
 }
 
 export function isSafeTxRejected(safeTxStatus?: SafeTransactionStatus): boolean {
-  return safeTxStatus === (SafeTransactionStatus.CANCELLED || SafeTransactionStatus.FAILED)
+  return (
+    safeTxStatus === SafeTransactionStatus.CANCELLED ||
+    safeTxStatus === SafeTransactionStatus.FAILED
+  )
 }
 
 export function isSafeTxCancelled(safeTxStatus?: SafeTransactionStatus): boolean {
