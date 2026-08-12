@@ -21,6 +21,7 @@ export function AppRouterContextProviderMock({
     replace: vi.fn(),
     refresh: vi.fn(),
     prefetch: vi.fn(),
+    bfcacheId: 'test-bfcache-id',
     ...router,
   }
   return <AppRouterContext.Provider value={mockedRouter}>{children}</AppRouterContext.Provider>
