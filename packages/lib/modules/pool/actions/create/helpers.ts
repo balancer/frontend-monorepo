@@ -1,5 +1,5 @@
 import { PoolType } from '@balancer/sdk'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
 import type { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
@@ -61,7 +61,7 @@ export function getMinSwapFeePercentage(poolType: PoolType): number {
 }
 
 export function getPercentFromPrice(value: string, price: string) {
-  if (!value) return '0.00'
+  if (!isBnParseable(value) || !isBnParseable(price) || bn(price).isZero()) return '0.00'
   return bn(value).minus(price).div(price).times(100).toFixed(2)
 }
 
