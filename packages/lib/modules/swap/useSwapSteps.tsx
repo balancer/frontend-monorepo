@@ -2,7 +2,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { useMemo } from 'react'
 import { Address, parseUnits } from 'viem'
 import { useApproveRelayerStep } from '../relayer/useApproveRelayerStep'
-import { useRelayerMode } from '../relayer/useRelayerMode'
+import { useRelayerMode, RelayerMode } from '../relayer/useRelayerMode'
 import { RawAmount } from '../tokens/approvals/approval-rules'
 import { useTokenApprovalSteps } from '../tokens/approvals/useTokenApprovalSteps'
 import { useSignRelayerStep } from '../transactions/transaction-steps/useSignRelayerStep'
@@ -14,6 +14,9 @@ import { permit2Address } from '../tokens/approvals/permit2/permit2.helpers'
 import { isNativeAsset } from '../tokens/token.helpers'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { usePermit2ApprovalSteps } from '../tokens/approvals/permit2/usePermit2ApprovalSteps'
+import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
+import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 
 type Params = SwapStepParams & {
   vaultAddress: Address
@@ -110,37 +113,39 @@ export function useSwapSteps({
   // native tokenIn does not require permit2 signature
   const isNativeTokenIn = tokenInInfo && isNativeAsset(tokenInInfo?.address, chain)
 
-  const steps = useMemo(() => {
-    const stepList = []
+  const shouldBatchTransactions = useShouldBatchTransactions()
 
-    if (swapRequiresRelayer) {
-      if (relayerMode === 'approveRelayer') stepList.push(approveRelayerStep)
-      else stepList.push(signRelayerStep)
-    }
-
-    stepList.push(...tokenApprovalSteps)
-
-    if (isPermit2 && signPermit2Step && !isNativeTokenIn) {
-      if (shouldUseSignatures) stepList.push(signPermit2Step)
-      else stepList.push(...permit2ApprovalSteps)
-    }
-
-    stepList.push(swapStep)
-
-    return stepList
-  }, [
-    swapRequiresRelayer,
-    tokenApprovalSteps,
-    isPermit2,
-    swapStep,
-    signPermit2Step,
-    permit2ApprovalSteps,
-    relayerMode,
-    approveRelayerStep,
-    signRelayerStep,
-    isNativeTokenIn,
-    shouldUseSignatures,
-  ])
+  const steps = useMemo(
+    () =>
+      getApprovalAndSwapSteps({
+        swapRequiresRelayer,
+        relayerMode,
+        approveRelayerStep,
+        signRelayerStep,
+        tokenApprovalSteps,
+        isPermit2,
+        signPermit2Step,
+        permit2ApprovalSteps,
+        shouldUseSignatures,
+        isNativeTokenIn,
+        shouldBatchTransactions,
+        swapStep,
+      }),
+    [
+      swapRequiresRelayer,
+      relayerMode,
+      approveRelayerStep,
+      signRelayerStep,
+      tokenApprovalSteps,
+      isPermit2,
+      signPermit2Step,
+      permit2ApprovalSteps,
+      shouldUseSignatures,
+      isNativeTokenIn,
+      shouldBatchTransactions,
+      swapStep,
+    ]
+  )
 
   return {
     isLoadingSteps:
@@ -157,4 +162,69 @@ function approvalActionType(isLBP: boolean, swapAction: SwapAction) {
   else if (swapAction === OSwapAction.UNWRAP) return 'Unwrapping'
 
   return 'Swapping'
+}
+export function getApprovalAndSwapSteps({
+  swapRequiresRelayer,
+  relayerMode,
+  approveRelayerStep,
+  signRelayerStep,
+  tokenApprovalSteps,
+  isPermit2,
+  signPermit2Step,
+  permit2ApprovalSteps,
+  shouldUseSignatures,
+  isNativeTokenIn,
+  shouldBatchTransactions,
+  swapStep,
+}: {
+  swapRequiresRelayer: boolean
+  relayerMode: RelayerMode
+  approveRelayerStep: TransactionStep
+  signRelayerStep: TransactionStep
+  tokenApprovalSteps: TransactionStep[]
+  isPermit2: boolean
+  signPermit2Step?: TransactionStep
+  permit2ApprovalSteps: TransactionStep[]
+  shouldUseSignatures: boolean
+  isNativeTokenIn: boolean | undefined
+  shouldBatchTransactions: boolean
+  swapStep: TransactionStep
+}): TransactionStep[] {
+  const stepList: TransactionStep[] = []
+
+  if (swapRequiresRelayer) {
+    if (relayerMode === 'approveRelayer') stepList.push(approveRelayerStep)
+    else stepList.push(signRelayerStep)
+  }
+
+  const isPermit2WithStep = isPermit2 && signPermit2Step && !isNativeTokenIn
+
+  // Approvals that can be batched with the swap are attached as nested steps,
+  // mirroring how add/remove liquidity bundle approvals for smart accounts.
+  swapStep.nestedSteps = isPermit2WithStep
+    ? shouldUseSignatures
+      ? tokenApprovalSteps
+      : [...tokenApprovalSteps, ...permit2ApprovalSteps]
+    : tokenApprovalSteps
+
+  const shouldDisplayBatch = shouldBatchTransactions && hasSomePendingNestedTxInBatch(swapStep)
+
+  if (shouldDisplayBatch) {
+    // Hide approvals when batching (they are executed in the same atomic tx as the swap).
+    // The permit2 signature step stays visible: it is a gasless signature, not a batched call.
+    if (isPermit2WithStep && shouldUseSignatures) stepList.push(signPermit2Step)
+    stepList.push(swapStep)
+    return stepList
+  }
+
+  stepList.push(...tokenApprovalSteps)
+
+  if (isPermit2WithStep) {
+    if (shouldUseSignatures) stepList.push(signPermit2Step)
+    else stepList.push(...permit2ApprovalSteps)
+  }
+
+  stepList.push(swapStep)
+
+  return stepList
 }
