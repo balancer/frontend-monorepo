@@ -1,9 +1,5 @@
 import { Hex } from 'viem'
 import { TransactionStep, TxBatch } from '../transactions/transaction-steps/lib'
-import {
-  buildTxBatch,
-  hasSomePendingNestedTxInBatch,
-} from '../transactions/transaction-steps/safe/safe.helpers'
 import { useUserAccount } from './UserAccountProvider'
 import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTxQuery'
 import { useWalletConnectMetadata } from './wallet-connect/useWalletConnectMetadata'
@@ -11,6 +7,10 @@ import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import {
+  buildTxBatch,
+  hasSomePendingNestedTxInBatch,
+} from '../transactions/transaction-steps/tx-batch.helpers'
 
 // Returns true when using a Safe Smart account:
 // - app running as a Safe App

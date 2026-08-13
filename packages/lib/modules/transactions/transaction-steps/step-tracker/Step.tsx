@@ -11,11 +11,11 @@ import { StepProps, getStepSettings } from './getStepSettings'
 import { ArrowUpRight, Check } from 'react-feather'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
 import { indexToLetter } from '@repo/lib/shared/labels'
-import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/safe.helpers'
 import { useTransactionGasCost } from '../useTransactionGasCost'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { TxnSpeedSetting } from './TxnSpeedSetting'
+import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../tx-batch.helpers'
 
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
