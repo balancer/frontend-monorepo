@@ -144,6 +144,65 @@ describe('slippage', () => {
   })
 })
 
+describe('weight', () => {
+  test('Abbreviated format', () => {
+    expect(fNum('weight', '0.5')).toBe('50%')
+    expect(fNum('weight', '0.255')).toBe('26%')
+    expect(fNum('weight', '0.254')).toBe('25%')
+    expect(fNum('weight', '0.8')).toBe('80%')
+    expect(fNum('weight', '0.333')).toBe('33%')
+    expect(fNum('weight', '1')).toBe('100%')
+    expect(fNum('weight', '0.005')).toBe('1%')
+    expect(fNum('weight', '0.999')).toBe('100%')
+  })
+
+  test('Non-abbreviated formats', () => {
+    expect(fNum('weight', '0.5', { abbreviated: false })).toBe('50.00%')
+    expect(fNum('weight', '0.255', { abbreviated: false })).toBe('25.50%')
+    expect(fNum('weight', '0.2545', { abbreviated: false })).toBe('25.45%')
+    expect(fNum('weight', '0.333', { abbreviated: false })).toBe('33.30%')
+    expect(fNum('weight', '0.5', { abbreviated: false, decimals: 1 })).toBe('50.0%')
+    expect(fNum('weight', '0.255', { abbreviated: false, decimals: 1 })).toBe('25.5%')
+    expect(fNum('weight', '0.254', { abbreviated: false, decimals: 1 })).toBe('25.4%')
+    expect(fNum('weight', '0.333', { abbreviated: false, decimals: 1 })).toBe('33.3%')
+  })
+})
+
+describe('boost', () => {
+  test('Fixed 3 decimals', () => {
+    expect(fNum('boost', '1')).toBe('1.000')
+    expect(fNum('boost', '2.5')).toBe('2.500')
+    expect(fNum('boost', '1.2345')).toBe('1.235')
+    expect(fNum('boost', '1.2344')).toBe('1.234')
+    expect(fNum('boost', '0.0004')).toBe('0.000')
+    expect(fNum('boost', '2.9999')).toBe('3.000')
+    expect(fNum('boost', '12.3456789')).toBe('12.346')
+  })
+})
+
+describe('tokenRatio', () => {
+  test('Fixed decimal bands', () => {
+    expect(fNum('tokenRatio', '0.000123456')).toBe('0.000123')
+    expect(fNum('tokenRatio', '0.0009999')).toBe('0.001000')
+    expect(fNum('tokenRatio', '0.001')).toBe('0.00100')
+    expect(fNum('tokenRatio', '0.00555')).toBe('0.00555')
+    expect(fNum('tokenRatio', '0.009999')).toBe('0.01000')
+    expect(fNum('tokenRatio', '0.01')).toBe('0.0100')
+    expect(fNum('tokenRatio', '0.123456')).toBe('0.1235')
+    expect(fNum('tokenRatio', '1.199999')).toBe('1.2000')
+    expect(fNum('tokenRatio', '1.2')).toBe('1.200')
+    expect(fNum('tokenRatio', '1.5555')).toBe('1.556')
+    expect(fNum('tokenRatio', '1.999')).toBe('1.999')
+    expect(fNum('tokenRatio', '2')).toBe('2.00')
+    expect(fNum('tokenRatio', '9.999')).toBe('10.00')
+    expect(fNum('tokenRatio', '10')).toBe('10.0')
+    expect(fNum('tokenRatio', '99.99')).toBe('100.0')
+    expect(fNum('tokenRatio', '100')).toBe('100')
+    expect(fNum('tokenRatio', '1234.5678')).toBe('1,235')
+    expect(fNum('tokenRatio', '999999')).toBe('999,999')
+  })
+})
+
 describe('bn', () => {
   test('creates a BigNumber instance from different formats', () => {
     expect(bn(1234567).toFixed()).toBe('1234567')

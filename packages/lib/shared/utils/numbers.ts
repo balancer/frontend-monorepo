@@ -100,7 +100,8 @@ function toIntegerGrouped(val: BigNumber): string {
   if (val.isZero()) return '0'
   const neg = val.isNegative()
   const abs = val.abs()
-  const intStr = abs.integerValue(BigNumber.ROUND_FLOOR).toFixed(0)
+  // ROUND_HALF_UP to match numeral's '0,0' rounding (e.g. 1234.5678 -> 1,235)
+  const intStr = abs.integerValue(BigNumber.ROUND_HALF_UP).toFixed(0)
   const grouped = groupIntegerString(intStr)
   return neg ? `-${grouped}` : grouped
 }
@@ -323,9 +324,11 @@ function weightFormat(
 
   const percent = bn(val).times(100)
 
+  // numeral treats the parens in '(%0,0)' as a percent marker: value x100 + '%'
+  // (verified against numeral 2.0.6: format('(%0,0)') on 0.5 => '50%')
   if (abbreviated) {
     // (%0,0)
-    return `(${toIntegerGrouped(roundHalfUp(percent, 0))})`
+    return `${toIntegerGrouped(percent)}%`
   }
 
   if (decimals === 1) {
@@ -336,7 +339,7 @@ function weightFormat(
     const neg = intPart.startsWith('-')
     const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
     const sign = neg ? '-' : ''
-    return `(${sign}${groupedInt}.${frac})`
+    return `${sign}${groupedInt}.${frac}%`
   }
 
   // (%0,0.00)
@@ -346,7 +349,7 @@ function weightFormat(
   const neg = intPart.startsWith('-')
   const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
   const sign = neg ? '-' : ''
-  return `(${sign}${groupedInt}.${frac})`
+  return `${sign}${groupedInt}.${frac}%`
 }
 
 // Formats a price impact value as a percentage.
