@@ -20,6 +20,14 @@ BigNumber.set({ STRICT: true })
 export const MAX_BIGINT = BigInt(MAX_UINT256)
 export const MAX_BIGNUMBER = bn(MAX_UINT256)
 
+// Format-string constants for the supported fNumCustom dispatch cases.
+// They exist so call sites and the dispatch table share one source of truth.
+export const ABBREVIATED_INTEGER_FORMAT = '0a'
+export const SWAP_FEE_FORMAT = '0.00[00]%'
+export const ECLP_CONFIG_FORMAT = '0.00000000'
+export const GROUPED_INTEGER_FORMAT = '0,000'
+export const GROUPED_INTEGER_2DP_FORMAT = '0,000.00'
+export const FIXED_6DP_FORMAT = '0.000000'
 export const INTEGER_FORMAT = '0,0'
 export const FIAT_FORMAT_A = '0,0.00a'
 export const FIAT_FORMAT_3_DECIMALS = '0,0.000a'
@@ -449,15 +457,86 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
   }
 }
 
+/**
+ * Formats a value with one of the numeral-style format strings used by
+ * fNumCustom call sites (see the inventory in issue #2643). This is a closed
+ * dispatch over the strings actually used in the repo — not a general numeral
+ * parser. Unknown formats throw so new call sites fail loudly in development
+ * instead of silently rendering raw values.
+ */
 export function fNumCustom(val: Numberish, format: string): string {
-  // numeral format-string replacement is not supported by Intl.
-  // Keep a minimal fallback that matches the old intent as best we can:
-  // if caller passes something like '0,0' or '0.000' they likely want fixed rounding.
-  // For full numeral-token-string support, you'd need to re-implement numeral’s parser.
-  // Here we just return a grouped integer or raw value.
-  if (format === INTEGER_FORMAT) return integerFormat(val)
-  if (format === BOOST_FORMAT) return boostFormat(val)
-  return bn(val).toString()
+  switch (format) {
+    case ABBREVIATED_INTEGER_FORMAT:
+      // Abbreviated integer: 1000 -> 1k, 999500 -> 1m (round then promote)
+      return formatAbbreviatedInteger(val)
+    case SWAP_FEE_FORMAT:
+      // Percent with 2 required + up to 2 optional decimals: 0.0025 -> 0.25%
+      return formatPercentOptionalDecimals(val, 2, 2)
+    case ECLP_CONFIG_FORMAT:
+      return bn(val).toFixed(8)
+    case INTEGER_FORMAT:
+      return toIntegerGrouped(bn(val))
+    case FIXED_6DP_FORMAT:
+      return bn(val).toFixed(6)
+    case GROUPED_INTEGER_2DP_FORMAT:
+      return formatNumberWithFixedDpGrouped(bn(val), 2)
+    case GROUPED_INTEGER_FORMAT:
+      return toIntegerGrouped(bn(val))
+    case BOOST_FORMAT:
+      return boostFormat(val)
+    default:
+      throw new Error(
+        `fNumCustom: unknown format string "${format}". ` +
+          `Add golden tests + a dispatch case (see issue #2643).`
+      )
+  }
+}
+
+// '0a': rounds to an integer at each magnitude and promotes the suffix when
+// rounding crosses the boundary (999500 -> 1000k -> 1m), matching numeral.
+// '0a': rounds to an integer at each magnitude and promotes the suffix when
+// rounding crosses the boundary (999500 -> 1000k -> 1m), matching numeral.
+function formatAbbreviatedInteger(val: Numberish): string {
+  const v = bn(val)
+  const abs = v.abs()
+  const neg = v.isNegative() ? '-' : ''
+
+  if (abs.lt(1000)) return `${neg}${toIntegerGrouped(abs)}`
+
+  // Smallest tier first: if the rounded value still has 4+ digits, promote
+  // to the next tier (999.5k rounds to 1000k => 1m).
+  const tiers: [BigNumber, string][] = [
+    [bn(1_000), 'k'],
+    [bn(1_000_000), 'm'],
+    [bn(1_000_000_000), 'b'],
+  ]
+
+  for (const [divisor, suffix] of tiers) {
+    const scaled = roundHalfUp(abs.div(divisor), 0)
+    if (scaled.lt(1000) || suffix === 'b') return `${neg}${scaled.toFixed(0)}${suffix}`
+  }
+
+  // Unreachable: the 'b' tier always returns above
+  return `${neg}${toIntegerGrouped(abs)}`
+}
+
+// '0.00[00]%': value x100 with `required` always-shown decimals plus up to
+// `optional` more that are trimmed when zero (0.0025 -> 0.25%, 0.001 -> 0.10%).
+function formatPercentOptionalDecimals(val: Numberish, required: number, optional: number): string {
+  const percent = bn(val).times(100)
+  const maxDp = required + optional
+  const rounded = roundHalfUp(percent, maxDp)
+  const s = rounded.toFixed(maxDp)
+
+  const neg = s.startsWith('-')
+  const unsigned = neg ? s.slice(1) : s
+  const [intPart, fracPart = ''] = unsigned.split('.')
+
+  const requiredFrac = fracPart.slice(0, required)
+  const optionalFrac = fracPart.slice(required).replace(/0+$/, '')
+
+  const groupedInt = groupIntegerString(intPart)
+  return `${neg ? '-' : ''}${groupedInt}.${requiredFrac}${optionalFrac}%`
 }
 
 // Edge case where we need to display 3 decimals for small amounts between 0.001 and 0.01
