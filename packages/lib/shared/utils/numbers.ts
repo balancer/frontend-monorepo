@@ -29,6 +29,13 @@ export const GROUPED_INTEGER_FORMAT = '0,000'
 export const GROUPED_INTEGER_2DP_FORMAT = '0,000.00'
 export const FIXED_6DP_FORMAT = '0.000000'
 export const INTEGER_FORMAT = '0,0'
+export const FIXED_2DP_FORMAT = '0.00'
+export const GROUPED_OPTIONAL_6DP_FORMAT = '0,0.[000000]'
+export const OPTIONAL_3DP_FORMAT = '0.[000]'
+export const FIXED_3DP_ABBR_FORMAT = '0.000a'
+export const CURRENCY_1DP_ABBR_FORMAT = '$0,0.0a'
+export const GROUPED_1DP_ABBR_FORMAT = '0,0.0a'
+export const CURRENCY_ABBR_FORMAT = '$0,0a'
 export const FIAT_FORMAT_A = '0,0.00a'
 export const FIAT_FORMAT_3_DECIMALS = '0,0.000a'
 export const FIAT_FORMAT = '0,0.00'
@@ -404,6 +411,69 @@ export function safeSum(amounts: Numberish[]): string {
 }
 
 // Prevents invalid characters from being entered into a number input.
+// '0,0.[000000]' / '0.[000]': up to `maxOptional` decimals, trailing zeros
+// trimmed (1.5 -> '1.5', 1234.5678 -> '1,234.5678'). Grouping follows the
+// format's thousands marker (true for '0,0.[...]', false for '0.[...]').
+//
+// numeral quirk inherited deliberately: values that round to zero at the
+// format's precision (e.g. 0.0000001 at 6dp) render as-is in scientific-free
+// form instead of numeral's NaN — small values display '0.0000001' rather
+// than disappearing.
+function formatGroupedOptionalDecimals(
+  val: Numberish,
+  maxOptional: number,
+  { grouped = true }: { grouped?: boolean } = {}
+): string {
+  const raw = bn(val)
+  const rounded = roundHalfUp(raw, maxOptional)
+
+  // numeral returns NaN for '0,0.[000000]' on values that round to zero below
+  // 1e-6 (pow(10, p) guard). For that one format we show the raw value instead
+  // of numeral's NaN; '0.[000]' keeps standard round-to-zero ('0.0001' -> '0').
+  if (rounded.isZero() && !raw.isZero() && maxOptional > 3) {
+    return raw.toFixed()
+  }
+
+  const s = rounded.toFixed(maxOptional)
+  const neg = s.startsWith('-')
+  const unsigned = neg ? s.slice(1) : s
+  const [intPart, fracPart = ''] = unsigned.split('.')
+  const intOut = grouped ? groupIntegerString(intPart) : intPart
+  const fracTrimmed = fracPart.replace(/0+$/, '')
+  const sign = neg ? '-' : ''
+  if (!fracTrimmed) return `${sign}${intOut}`
+  return `${sign}${intOut}.${fracTrimmed}`
+}
+
+// '0.000a' / '0,0.0a' / '$0,0.0a': abbreviation where the mantissa is scaled
+// and rounded to `dp` fixed decimals, but the suffix is chosen by the raw
+// magnitude tier (no promotion when rounding crosses a boundary — numeral
+// keeps 99994999 at '100.0m' instead of promoting to '0.1b').
+function formatAbbreviatedFixedDecimals(val: Numberish, dp: number): string {
+  const v = bn(val)
+  const abs = v.abs()
+  const neg = v.isNegative() ? '-' : ''
+
+  if (abs.lt(1000)) {
+    return `${neg}${formatNumberWithFixedDpGrouped(abs, dp)}`
+  }
+
+  const tiers: [BigNumber, string][] = [
+    [bn(1_000_000_000), 'b'],
+    [bn(1_000_000), 'm'],
+    [bn(1_000), 'k'],
+  ]
+
+  for (const [divisor, suffix] of tiers) {
+    if (abs.gte(divisor)) {
+      const scaled = roundHalfUp(abs.div(divisor), dp)
+      return `${neg}${scaled.toFixed(dp)}${suffix}`
+    }
+  }
+
+  // Unreachable: abs >= 1000 always matches a tier
+  return `${neg}${formatNumberWithFixedDpGrouped(abs, dp)}`
+}
 export function blockInvalidNumberInput(event: KeyboardEvent<HTMLInputElement>): void {
   if (['e', 'E', '+', '-'].includes(event.key)) {
     event.preventDefault()
@@ -484,6 +554,21 @@ export function fNumCustom(val: Numberish, format: string): string {
       return toIntegerGrouped(bn(val))
     case BOOST_FORMAT:
       return boostFormat(val)
+    case FIXED_2DP_FORMAT:
+      return bn(val).toFixed(2)
+    case GROUPED_OPTIONAL_6DP_FORMAT:
+      return formatGroupedOptionalDecimals(val, 6)
+    case OPTIONAL_3DP_FORMAT:
+      // '0.[000]' has no thousands marker in numeral — no grouping
+      return formatGroupedOptionalDecimals(val, 3, { grouped: false })
+    case FIXED_3DP_ABBR_FORMAT:
+      return formatAbbreviatedFixedDecimals(val, 3)
+    case CURRENCY_1DP_ABBR_FORMAT:
+      return `$${formatAbbreviatedFixedDecimals(val, 1)}`
+    case GROUPED_1DP_ABBR_FORMAT:
+      return formatAbbreviatedFixedDecimals(val, 1)
+    case CURRENCY_ABBR_FORMAT:
+      return `$${formatAbbreviatedInteger(val)}`
     default:
       throw new Error(
         `fNumCustom: unknown format string "${format}". ` +

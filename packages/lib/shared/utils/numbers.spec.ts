@@ -330,6 +330,107 @@ describe('fNumCustom', () => {
     expect(fNumCustom('2.5', '0.000')).toBe('2.500')
     expect(fNumCustom('1.2345', '0.000')).toBe('1.235')
   })
+
+  // Beets + marketing app call sites (added after the apps/ inventory)
+
+  test("'0.00' — fixed 2 decimals (maBEETS avg relic maturity)", () => {
+    expect(fNumCustom('0', '0.00')).toBe('0.00')
+    expect(fNumCustom('1', '0.00')).toBe('1.00')
+    expect(fNumCustom('1.234', '0.00')).toBe('1.23')
+    expect(fNumCustom('1.235', '0.00')).toBe('1.24')
+    expect(fNumCustom('1.236', '0.00')).toBe('1.24')
+    expect(fNumCustom('2.5678', '0.00')).toBe('2.57')
+    expect(fNumCustom('10', '0.00')).toBe('10.00')
+    expect(fNumCustom('0.004', '0.00')).toBe('0.00')
+    expect(fNumCustom('0.005', '0.00')).toBe('0.01')
+    expect(fNumCustom('123.456', '0.00')).toBe('123.46')
+  })
+
+  test("'0,0.[000000]' — grouped, up to 6 optional decimals (YouWillReceive)", () => {
+    expect(fNumCustom('0', '0,0.[000000]')).toBe('0')
+    expect(fNumCustom('1', '0,0.[000000]')).toBe('1')
+    expect(fNumCustom('1.5', '0,0.[000000]')).toBe('1.5')
+    expect(fNumCustom('0.1', '0,0.[000000]')).toBe('0.1')
+    expect(fNumCustom('0.000001', '0,0.[000000]')).toBe('0.000001')
+    expect(fNumCustom('1234.5678', '0,0.[000000]')).toBe('1,234.5678')
+    expect(fNumCustom('1234.567891', '0,0.[000000]')).toBe('1,234.567891')
+    expect(fNumCustom('123456789.123456789', '0,0.[000000]')).toBe('123,456,789.123457')
+    expect(fNumCustom('999.9999999', '0,0.[000000]')).toBe('1,000')
+    // numeral bug (not inherited): values below 1e-6 return NaN
+    expect(fNumCustom('0.0000001', '0,0.[000000]')).toBe('0.0000001')
+  })
+
+  test("'0.[000]' — up to 3 optional decimals (Loops health factor / leverage)", () => {
+    expect(fNumCustom('0', '0.[000]')).toBe('0')
+    expect(fNumCustom('1', '0.[000]')).toBe('1')
+    expect(fNumCustom('1.2345', '0.[000]')).toBe('1.235')
+    expect(fNumCustom('1.2344', '0.[000]')).toBe('1.234')
+    expect(fNumCustom('2.5', '0.[000]')).toBe('2.5')
+    expect(fNumCustom('0.5', '0.[000]')).toBe('0.5')
+    expect(fNumCustom('0.0001', '0.[000]')).toBe('0')
+    expect(fNumCustom('12.3456', '0.[000]')).toBe('12.346')
+    expect(fNumCustom('1234.5', '0.[000]')).toBe('1234.5')
+  })
+
+  test("'0.000a' — 3 fixed decimals + abbreviation (maBEETS voting power)", () => {
+    expect(fNumCustom('0', '0.000a')).toBe('0.000')
+    expect(fNumCustom('1', '0.000a')).toBe('1.000')
+    expect(fNumCustom('999', '0.000a')).toBe('999.000')
+    expect(fNumCustom('999.9', '0.000a')).toBe('999.900')
+    expect(fNumCustom('1000', '0.000a')).toBe('1.000k')
+    expect(fNumCustom('1234', '0.000a')).toBe('1.234k')
+    expect(fNumCustom('12345', '0.000a')).toBe('12.345k')
+    expect(fNumCustom('123456', '0.000a')).toBe('123.456k')
+    expect(fNumCustom('1234567', '0.000a')).toBe('1.235m')
+    expect(fNumCustom('12345678', '0.000a')).toBe('12.346m')
+    expect(fNumCustom('1234567890', '0.000a')).toBe('1.235b')
+    expect(fNumCustom('999499', '0.000a')).toBe('999.499k')
+    expect(fNumCustom('999500', '0.000a')).toBe('999.500k')
+  })
+
+  test("'$0,0.0a' — currency 1dp + abbreviation (landing TVL)", () => {
+    expect(fNumCustom('0', '$0,0.0a')).toBe('$0.0')
+    expect(fNumCustom('999', '$0,0.0a')).toBe('$999.0')
+    expect(fNumCustom('1000', '$0,0.0a')).toBe('$1.0k')
+    expect(fNumCustom('1234', '$0,0.0a')).toBe('$1.2k')
+    expect(fNumCustom('1234567', '$0,0.0a')).toBe('$1.2m')
+    expect(fNumCustom('12345678', '$0,0.0a')).toBe('$12.3m')
+    expect(fNumCustom('123456789', '$0,0.0a')).toBe('$123.5m')
+    expect(fNumCustom('1234567890', '$0,0.0a')).toBe('$1.2b')
+    expect(fNumCustom('999499', '$0,0.0a')).toBe('$999.5k')
+    // numeral picks the tier from raw magnitude, then rounds the mantissa —
+    // no promotion when rounding crosses a boundary
+    expect(fNumCustom('999500', '$0,0.0a')).toBe('$999.5k')
+    expect(fNumCustom('99994999', '$0,0.0a')).toBe('$100.0m')
+    expect(fNumCustom('99995000', '$0,0.0a')).toBe('$100.0m')
+  })
+
+  test("'0,0.0a' — grouped 1dp + abbreviation (landing pool count)", () => {
+    expect(fNumCustom('0', '0,0.0a')).toBe('0.0')
+    expect(fNumCustom('5', '0,0.0a')).toBe('5.0')
+    expect(fNumCustom('999', '0,0.0a')).toBe('999.0')
+    expect(fNumCustom('1000', '0,0.0a')).toBe('1.0k')
+    expect(fNumCustom('1234', '0,0.0a')).toBe('1.2k')
+    expect(fNumCustom('12345', '0,0.0a')).toBe('12.3k')
+    expect(fNumCustom('999499', '0,0.0a')).toBe('999.5k')
+    expect(fNumCustom('999500', '0,0.0a')).toBe('999.5k')
+    expect(fNumCustom('1234567', '0,0.0a')).toBe('1.2m')
+  })
+
+  test("'$0,0a' — currency abbreviated integer (landing 24h volume)", () => {
+    expect(fNumCustom('0', '$0,0a')).toBe('$0')
+    expect(fNumCustom('999', '$0,0a')).toBe('$999')
+    expect(fNumCustom('1000', '$0,0a')).toBe('$1k')
+    expect(fNumCustom('1500', '$0,0a')).toBe('$2k')
+    expect(fNumCustom('12345678', '$0,0a')).toBe('$12m')
+    expect(fNumCustom('999499', '$0,0a')).toBe('$999k')
+    expect(fNumCustom('999500', '$0,0a')).toBe('$1m')
+    expect(fNumCustom('1234567890', '$0,0a')).toBe('$1b')
+  })
+
+  test('Unknown format strings throw loudly', () => {
+    expect(() => fNumCustom('1', '0.0e+0')).toThrow('unknown format string')
+  })
 })
 
 describe('bn', () => {
