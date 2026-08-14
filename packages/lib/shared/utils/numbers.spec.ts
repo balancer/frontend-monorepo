@@ -3,6 +3,7 @@ import {
   bn,
   BN_LOWER_THRESHOLD,
   fNum,
+  fNumCustom,
   formatFalsyValueAsDash,
   isBnParseable,
   isGreaterThanZeroValidation,
@@ -245,6 +246,89 @@ describe('stakedPercentage', () => {
     expect(fNum('stakedPercentage', '1')).toBe('100.00%')
     expect(fNum('stakedPercentage', '0.0001')).toBe('0.01%')
     expect(fNum('stakedPercentage', '0.00001')).toBe('<0.01%')
+  })
+})
+
+describe('fNumCustom', () => {
+  // Golden outputs captured from numeral 2.0.6 for every format string used by
+  // fNumCustom call sites (see issue #2643 inventory).
+
+  test("'0a' — abbreviated integer (PoolsPage liquidity providers count)", () => {
+    expect(fNumCustom('0', '0a')).toBe('0')
+    expect(fNumCustom('5', '0a')).toBe('5')
+    expect(fNumCustom('999', '0a')).toBe('999')
+    expect(fNumCustom('1000', '0a')).toBe('1k')
+    expect(fNumCustom('1500', '0a')).toBe('2k')
+    expect(fNumCustom('12345', '0a')).toBe('12k')
+    expect(fNumCustom('999499', '0a')).toBe('999k')
+    expect(fNumCustom('999500', '0a')).toBe('1m')
+    expect(fNumCustom('1000000', '0a')).toBe('1m')
+    expect(fNumCustom('2500000', '0a')).toBe('3m')
+    expect(fNumCustom('1234567890', '0a')).toBe('1b')
+  })
+
+  test("'0.00[00]%' — swap fee (PoolSwapFees)", () => {
+    expect(fNumCustom('0.001', '0.00[00]%')).toBe('0.10%')
+    expect(fNumCustom('0.0001', '0.00[00]%')).toBe('0.01%')
+    expect(fNumCustom('0.0025', '0.00[00]%')).toBe('0.25%')
+    expect(fNumCustom('0.005', '0.00[00]%')).toBe('0.50%')
+    expect(fNumCustom('0.01', '0.00[00]%')).toBe('1.00%')
+    expect(fNumCustom('0.1', '0.00[00]%')).toBe('10.00%')
+    expect(fNumCustom('0.000001', '0.00[00]%')).toBe('0.0001%')
+    expect(fNumCustom('0.0000001', '0.00[00]%')).toBe('0.00%')
+    expect(fNumCustom('0.5', '0.00[00]%')).toBe('50.00%')
+    expect(fNumCustom('1', '0.00[00]%')).toBe('100.00%')
+  })
+
+  test("'0.00000000' — ECLP config values (NUM_FORMAT)", () => {
+    expect(fNumCustom('1', '0.00000000')).toBe('1.00000000')
+    expect(fNumCustom('1.23456789', '0.00000000')).toBe('1.23456789')
+    expect(fNumCustom('1.234567891', '0.00000000')).toBe('1.23456789')
+    expect(fNumCustom('0.5', '0.00000000')).toBe('0.50000000')
+    expect(fNumCustom('123.456', '0.00000000')).toBe('123.45600000')
+    expect(fNumCustom('0.999999999', '0.00000000')).toBe('1.00000000')
+    // numeral bug: values below 1e-7 hit its pow(10, p) overflow guard and return
+    // NaN. ECLP config values are prices >= ~1e-4 in practice; we do not inherit
+    // the NaN and format correctly instead.
+    expect(fNumCustom('0.00000001', '0.00000000')).toBe('0.00000001')
+  })
+
+  test("'0,0' — grouped integer (ClpPoolAttributes lambda)", () => {
+    expect(fNumCustom('0', '0,0')).toBe('0')
+    expect(fNumCustom('1', '0,0')).toBe('1')
+    expect(fNumCustom('0.4', '0,0')).toBe('0')
+    expect(fNumCustom('0.5', '0,0')).toBe('1')
+    expect(fNumCustom('1234.5', '0,0')).toBe('1,235')
+    expect(fNumCustom('9999', '0,0')).toBe('9,999')
+  })
+
+  test("'0.000000' — pool creation formatNumber default band", () => {
+    expect(fNumCustom('0', '0.000000')).toBe('0.000000')
+    expect(fNumCustom('0.123456789', '0.000000')).toBe('0.123457')
+    expect(fNumCustom('1', '0.000000')).toBe('1.000000')
+    expect(fNumCustom('1.5', '0.000000')).toBe('1.500000')
+    expect(fNumCustom('999.999999', '0.000000')).toBe('999.999999')
+    expect(fNumCustom('1000', '0.000000')).toBe('1000.000000')
+  })
+
+  test("'0,000.00' — pool creation formatNumber > 1k band", () => {
+    expect(fNumCustom('1001', '0,000.00')).toBe('1,001.00')
+    expect(fNumCustom('1234.5678', '0,000.00')).toBe('1,234.57')
+    expect(fNumCustom('99999.999', '0,000.00')).toBe('100,000.00')
+    expect(fNumCustom('100000', '0,000.00')).toBe('100,000.00')
+  })
+
+  test("'0,000' — pool creation formatNumber > 100k band", () => {
+    expect(fNumCustom('100001', '0,000')).toBe('100,001')
+    expect(fNumCustom('123456.789', '0,000')).toBe('123,457')
+    expect(fNumCustom('999999.9', '0,000')).toBe('1,000,000')
+    expect(fNumCustom('123456789', '0,000')).toBe('123,456,789')
+  })
+
+  test("'0.000' — boost format (already supported fast path)", () => {
+    expect(fNumCustom('1', '0.000')).toBe('1.000')
+    expect(fNumCustom('2.5', '0.000')).toBe('2.500')
+    expect(fNumCustom('1.2345', '0.000')).toBe('1.235')
   })
 })
 
