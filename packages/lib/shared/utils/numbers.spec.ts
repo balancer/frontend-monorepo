@@ -203,6 +203,51 @@ describe('tokenRatio', () => {
   })
 })
 
+describe('integer', () => {
+  test('Grouped integer format', () => {
+    expect(fNum('integer', '0')).toBe('0')
+    expect(fNum('integer', '1')).toBe('1')
+    expect(fNum('integer', '0.4')).toBe('0')
+    expect(fNum('integer', '0.5')).toBe('1')
+    expect(fNum('integer', '12.3456789')).toBe('12')
+    expect(fNum('integer', '999.4')).toBe('999')
+    expect(fNum('integer', '999.5')).toBe('1,000')
+    expect(fNum('integer', '1234.4')).toBe('1,234')
+    expect(fNum('integer', '1234.5')).toBe('1,235')
+    expect(fNum('integer', '1234.5678')).toBe('1,235')
+    expect(fNum('integer', '999999.9')).toBe('1,000,000')
+    expect(fNum('integer', '123456789')).toBe('123,456,789')
+  })
+})
+
+describe('priceImpact', () => {
+  test('Fixed 2 decimal percentage', () => {
+    expect(fNum('priceImpact', '0.05')).toBe('5.00%')
+    expect(fNum('priceImpact', '0.055')).toBe('5.50%')
+    expect(fNum('priceImpact', '0.001')).toBe('0.10%')
+    expect(fNum('priceImpact', '0.0001')).toBe('0.01%')
+    expect(fNum('priceImpact', '0.2545')).toBe('25.45%')
+    expect(fNum('priceImpact', '0.9999')).toBe('99.99%')
+    expect(fNum('priceImpact', '1')).toBe('100.00%')
+    expect(fNum('priceImpact', '12.345')).toBe('1,234.50%')
+  })
+
+  test('Small values below the threshold', () => {
+    expect(fNum('priceImpact', '0.00001')).toBe('<0.01%')
+    expect(fNum('priceImpact', '0.00009')).toBe('<0.01%')
+  })
+})
+
+describe('stakedPercentage', () => {
+  test('Routes through priceImpact format', () => {
+    expect(fNum('stakedPercentage', '0.5')).toBe('50.00%')
+    expect(fNum('stakedPercentage', '0.2545')).toBe('25.45%')
+    expect(fNum('stakedPercentage', '1')).toBe('100.00%')
+    expect(fNum('stakedPercentage', '0.0001')).toBe('0.01%')
+    expect(fNum('stakedPercentage', '0.00001')).toBe('<0.01%')
+  })
+})
+
 describe('bn', () => {
   test('creates a BigNumber instance from different formats', () => {
     expect(bn(1234567).toFixed()).toBe('1234567')
