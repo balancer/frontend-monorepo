@@ -22,8 +22,13 @@ type ContentProps = {
   stepType: StepType
 }
 function Content({ stepType }: ContentProps) {
-  const operationName = stepType === 'addLiquidity' ? 'add liquidity' : 'remove liquidity'
-  const description = `For a better experience, token approvals and ${operationName} operation will be bundled into a single transaction.`
+  const operationName =
+    stepType === 'addLiquidity'
+      ? 'add liquidity'
+      : stepType === 'removeLiquidity'
+        ? 'remove liquidity'
+        : 'swap'
+  const description = `For a better experience, token approvals and the ${operationName} operation will be bundled into a single transaction.`
   return (
     <HStack flexWrap={{ base: 'wrap', md: 'nowrap' }}>
       <BalAlertContent

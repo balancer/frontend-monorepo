@@ -4,13 +4,10 @@ import {
   TransactionStatus as SafeTransactionStatus,
 } from '@safe-global/safe-apps-sdk'
 import {
-  buildTxBatch,
-  getPendingNestedSteps,
   getRemainingSignatures,
   getRemainingSignaturesLabel,
   getSafeWebUrl,
   getSignConfirmationsLabel,
-  hasSomePendingNestedTxInBatch,
   isMultisig,
   isSafeTxCancelled,
   isSafeTxRejected,
@@ -71,26 +68,6 @@ describe('isMultisig', () => {
   })
 })
 
-describe('getPendingNestedSteps / hasSomePendingNestedTxInBatch', () => {
-  const pendingStep = { isComplete: () => false }
-  const completedStep = { isComplete: () => true }
-
-  it('filters out completed nested steps', () => {
-    const step = { nestedSteps: [pendingStep, completedStep] } as any
-    expect(getPendingNestedSteps(step)).toHaveLength(1)
-  })
-
-  it('returns true when any nested step is pending', () => {
-    const step = { nestedSteps: [pendingStep, completedStep] } as any
-    expect(hasSomePendingNestedTxInBatch(step)).toBe(true)
-  })
-
-  it('returns false when all nested steps are complete or absent', () => {
-    expect(hasSomePendingNestedTxInBatch({ nestedSteps: [completedStep] } as any)).toBe(false)
-    expect(hasSomePendingNestedTxInBatch({} as any)).toBe(false)
-  })
-})
-
 describe('getSignConfirmationsLabel / getRemainingSignatures / getRemainingSignaturesLabel', () => {
   it('returns null and 0 for non-multisig details', () => {
     expect(getSignConfirmationsLabel(nonMultisigDetails())).toBeNull()
@@ -109,32 +86,6 @@ describe('getSignConfirmationsLabel / getRemainingSignatures / getRemainingSigna
       '2 more signatures are required'
     )
     expect(getRemainingSignaturesLabel(multisigDetails(3, 3))).toBeUndefined()
-  })
-})
-
-describe('buildTxBatch', () => {
-  it('builds a single-element batch when there are no nested steps', () => {
-    const step = { batchableTxCall: { to: '0xaaa', value: 1n } } as any
-    expect(buildTxBatch(step)).toEqual([{ to: '0xaaa', value: '1' }])
-  })
-
-  it('serializes value to a string, defaulting to 0', () => {
-    const step = { batchableTxCall: { to: '0xaaa' } } as any
-    expect(buildTxBatch(step)).toEqual([{ to: '0xaaa', value: '0' }])
-  })
-
-  it('prepends pending nested step calls and always appends the parent call', () => {
-    const step = {
-      nestedSteps: [
-        { isComplete: () => false, batchableTxCall: { to: '0xbbb' } },
-        { isComplete: () => true, batchableTxCall: { to: '0xccc' } },
-      ],
-      batchableTxCall: { to: '0xaaa' },
-    } as any
-    expect(buildTxBatch(step)).toEqual([
-      { to: '0xbbb', value: '0' },
-      { to: '0xaaa', value: '0' },
-    ])
   })
 })
 

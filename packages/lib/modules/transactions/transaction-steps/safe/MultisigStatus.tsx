@@ -2,14 +2,14 @@ import { Button, Card, HStack, Text, VStack, Link } from '@chakra-ui/react'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { GatewayTransactionDetails, TransactionStatus } from '@safe-global/safe-apps-sdk'
 import { ArrowUpRight } from 'react-feather'
+import { TransactionStep } from '../lib'
+import { Address } from 'viem'
+import { hasSomePendingNestedTxInBatch } from '../tx-batch.helpers'
 import {
   getRemainingSignaturesLabel,
   getSafeWebUrl,
   getSignConfirmationsLabel,
-  hasSomePendingNestedTxInBatch,
 } from './safe.helpers'
-import { TransactionStep } from '../lib'
-import { Address } from 'viem'
 
 type MultisigProps = {
   details: GatewayTransactionDetails
