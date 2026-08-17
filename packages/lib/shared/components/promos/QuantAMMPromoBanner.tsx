@@ -2,7 +2,7 @@
 
 import { Button, Heading, Flex, Box, Center, Text, Stack, Link } from '@chakra-ui/react'
 import { Picture } from '../other/Picture'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { usePool } from '../../../modules/pool/PoolProvider'
 
 export function QuantAMMPromoBanner() {

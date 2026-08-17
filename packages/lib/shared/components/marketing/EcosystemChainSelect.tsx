@@ -5,7 +5,7 @@ import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { Select, OptionBase, GroupBase, SingleValue, chakraComponents } from 'chakra-react-select'
 import { ReactNode } from 'react'
-import { ChevronDown } from 'react-feather'
+import { ChevronDown } from 'lucide-react'
 import { motion } from 'motion/react'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'

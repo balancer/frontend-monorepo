@@ -13,7 +13,7 @@ import {
   VStack,
   Link,
 } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { Picture } from '../other/Picture'
 
 export enum RedirectPartner {

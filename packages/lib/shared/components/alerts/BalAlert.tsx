@@ -9,7 +9,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { MouseEventHandler, ReactNode } from 'react'
-import { AlertTriangle, Check, Loader, XOctagon } from 'react-feather'
+import { AlertTriangle, Check, Loader, XOctagon } from 'lucide-react'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
 import { LightbulbIcon } from '../icons/LightbulbIcon'
 

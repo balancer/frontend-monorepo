@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
 import { blockInvalidNumberInput, bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
-import { Percent, Settings } from 'react-feather'
+import { Percent, Settings } from 'lucide-react'
 import { CurrencySelect } from './CurrencySelect'
 import { EnableTxBundleSetting } from './EnableTxBundlesSetting'
 import { useEffect, useRef, useState } from 'react'

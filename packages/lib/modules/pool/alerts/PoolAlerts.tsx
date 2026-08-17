@@ -11,7 +11,7 @@ import { MigrationAlert } from '../migrations/MigrationAlert'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isChainDeprecated } from '../../chains/chain.utils'
 import { useStableSurgeMetrics } from '../../hooks/stable-surge/useStableSurgeMetrics'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { isEmpty } from '@repo/lib/shared/utils/array'
 
 export function PoolAlerts() {

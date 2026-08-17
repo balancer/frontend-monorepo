@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
   VStack,
 } from '@chakra-ui/react'
-import { Tool } from 'react-feather'
+import { Wrench } from 'lucide-react'
 import { useImpersonateAccount } from './useImpersonateAccount'
 import { isAddress } from 'viem'
 import TimeMocker from './TimeMocker'
@@ -29,7 +29,7 @@ export function ImpersonatorSettings({ impersonatedAddress, setIsFakeTime }: Pro
     <Popover isLazy>
       <PopoverTrigger>
         <Button p="0" variant="tertiary">
-          <Tool size={18} />
+          <Wrench size={18} />
         </Button>
       </PopoverTrigger>
       <PopoverContent>
@@ -37,7 +37,7 @@ export function ImpersonatorSettings({ impersonatedAddress, setIsFakeTime }: Pro
         <PopoverCloseButton />
         <PopoverBody p="0">
           <HStack color="font.primary" p="md" pb="0">
-            <Tool size={20} />
+            <Wrench size={20} />
             <Heading size="md" variant="special">
               Impersonation settings
             </Heading>

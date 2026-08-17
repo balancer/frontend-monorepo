@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { Settings } from 'react-feather'
+import { Settings } from 'lucide-react'
 import { CurrencySelect } from './CurrencySelect'
 import { EnableSignaturesSelect, SlippageInput } from './UserSettings'
 import { EnableTxBundleSetting } from './EnableTxBundlesSetting'

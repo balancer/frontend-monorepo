@@ -2,7 +2,7 @@ import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Center, HStack, ModalHeader, VStack, Text, Link } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ReactNode } from 'react'
-import { ArrowUpRight, Check } from 'react-feather'
+import { ArrowUpRight, Check } from 'lucide-react'
 import { Hash } from 'viem'
 import { getBlockExplorerTxUrl } from '../../utils/blockExplorer'
 

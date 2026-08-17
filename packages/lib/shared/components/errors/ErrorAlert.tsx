@@ -2,7 +2,7 @@
 
 import { Alert, AlertDescription, AlertIcon, AlertProps, AlertTitle, Box } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
-import { XCircle } from 'react-feather'
+import { XCircle } from 'lucide-react'
 
 type Props = AlertProps & {
   title?: string

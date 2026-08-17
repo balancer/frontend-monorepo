@@ -15,7 +15,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { useRef } from 'react'
-import { ArrowUpRight, Check, X } from 'react-feather'
+import { ArrowUpRight, Check, X } from 'lucide-react'
 
 type Props = ToastProps & {
   linkUrl?: string

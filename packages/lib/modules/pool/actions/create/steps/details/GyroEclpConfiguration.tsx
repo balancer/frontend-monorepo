@@ -1,5 +1,5 @@
 import { VStack, Heading, Text, HStack, Link } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useSuggestedGyroEclpConfig } from './useSuggestedGyroEclpConfig'
 import { calculateRotationComponents } from './gyro.helpers'

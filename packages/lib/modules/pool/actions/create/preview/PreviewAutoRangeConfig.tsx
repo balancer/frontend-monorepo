@@ -10,7 +10,7 @@ import {
   Box,
 } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { RefreshCcw } from 'react-feather'
+import { RefreshCcw } from 'lucide-react'
 import { formatNumber } from '../helpers'
 import ReactECharts from 'echarts-for-react'
 import { useAutoRangeChart } from '@repo/lib/modules/autorange/AutoRangeChartProvider'

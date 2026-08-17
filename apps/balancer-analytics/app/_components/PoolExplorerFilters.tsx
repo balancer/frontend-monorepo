@@ -30,7 +30,7 @@ import {
 } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'motion/react'
 import Image from 'next/image'
-import { Filter } from 'react-feather'
+import { Filter } from 'lucide-react'
 import { useState } from 'react'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'

@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { getBlockExplorerName, getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
-import { ExternalLink } from 'react-feather'
+import { ExternalLink } from 'lucide-react'
 import { useBiggestSwaps, type BiggestSwap } from '@analytics/lib/hooks/useBiggestSwaps'
 import { TokenIconLite } from './TokenIconLite'
 

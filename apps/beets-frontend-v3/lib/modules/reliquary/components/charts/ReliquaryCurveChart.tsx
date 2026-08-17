@@ -3,7 +3,7 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { EChartsOption, graphic } from 'echarts'
 import ReactECharts from 'echarts-for-react'
-import { ExternalLink } from 'react-feather'
+import { ExternalLink } from 'lucide-react'
 import { InfoButton } from '~/components/info-button/InfoButton'
 
 export function ReliquaryCurveChart() {

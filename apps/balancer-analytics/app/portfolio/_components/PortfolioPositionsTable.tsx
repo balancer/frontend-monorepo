@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { ChevronRight } from 'react-feather'
+import { ChevronRight } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { parseAsStringEnum, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'

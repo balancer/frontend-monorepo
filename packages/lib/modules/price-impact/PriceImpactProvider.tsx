@@ -1,4 +1,4 @@
-import { AlertTriangle, XOctagon } from 'react-feather'
+import { AlertTriangle, XOctagon } from 'lucide-react'
 import { PropsWithChildren, createContext, useCallback, useRef, useState } from 'react'
 import { useMandatoryContext } from '../../shared/utils/contexts'
 import { Box, BoxProps } from '@chakra-ui/react'

@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { SpearbitLogo } from '@repo/lib/shared/components/imgs/SpearbitLogo'
 import { TrailOfBitsLogo } from '@repo/lib/shared/components/imgs/TrailOfBitsLogo'

@@ -13,7 +13,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { ExternalLink, MessageSquare, Users } from 'react-feather'
+import { ExternalLink, MessageSquare, Users } from 'lucide-react'
 import { useGovernance, type GovernanceProposal } from '@analytics/lib/hooks/useGovernance'
 
 const STATE_COLOR: Record<GovernanceProposal['state'], string> = {

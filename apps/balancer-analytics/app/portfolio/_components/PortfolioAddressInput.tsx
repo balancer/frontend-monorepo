@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useCallback, useState } from 'react'
-import { Search } from 'react-feather'
+import { Search } from 'lucide-react'
 import { useEnsResolution } from '@analytics/lib/hooks/useEnsResolution'
 
 const EXAMPLES = [

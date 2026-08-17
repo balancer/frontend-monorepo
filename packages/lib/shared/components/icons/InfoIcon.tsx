@@ -1,5 +1,5 @@
 import { Box, BoxProps, forwardRef } from '@chakra-ui/react'
-import { Info } from 'react-feather'
+import { Info } from 'lucide-react'
 
 export const InfoIcon = forwardRef<BoxProps, 'div'>((props, ref) => {
   return (

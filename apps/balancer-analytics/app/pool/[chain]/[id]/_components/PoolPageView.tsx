@@ -18,7 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { ChevronRight, ExternalLink, GitBranch, Home } from 'react-feather'
+import { ChevronRight, ExternalLink, GitBranch, Home } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'

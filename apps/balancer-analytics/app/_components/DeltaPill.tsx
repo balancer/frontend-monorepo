@@ -1,7 +1,7 @@
 'use client'
 
 import { HStack, Icon } from '@chakra-ui/react'
-import { ArrowDown, ArrowUp } from 'react-feather'
+import { ArrowDown, ArrowUp } from 'lucide-react'
 
 type Props = {
   value: number // 0.0124 means +1.24%

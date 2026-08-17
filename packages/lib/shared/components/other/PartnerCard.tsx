@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Heading, Text, Link, Stack, VStack, Image as ChakraImage } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { Picture } from './Picture'
 // import { ArrowRightIcon } from '@chakra-ui/icons'
 

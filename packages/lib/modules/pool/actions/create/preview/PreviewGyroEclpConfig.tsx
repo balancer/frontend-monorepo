@@ -1,6 +1,6 @@
 import { Card, VStack, Text, SimpleGrid, Box, HStack, Divider, Button } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { RefreshCcw } from 'react-feather'
+import { RefreshCcw } from 'lucide-react'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { NUM_FORMAT } from '../constants'
 import ReactECharts from 'echarts-for-react'

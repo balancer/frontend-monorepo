@@ -1,6 +1,6 @@
 import { Badge, HStack, Text, Box } from '@chakra-ui/react'
 import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { Repeat } from 'react-feather'
+import { Repeat } from 'lucide-react'
 import { Pool } from '../../pool.types'
 import { shouldCallComputeDynamicSwapFee } from '../../pool.utils'
 import { FluidIcon } from '@repo/lib/shared/components/icons/FluidIcon'

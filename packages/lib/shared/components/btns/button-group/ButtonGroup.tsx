@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { LayoutGroup, motion } from 'motion/react'
 import { ReactNode } from 'react'
-import { Info } from 'react-feather'
+import { Info } from 'lucide-react'
 
 export type ButtonGroupOption = {
   value: string

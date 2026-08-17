@@ -13,7 +13,7 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
 

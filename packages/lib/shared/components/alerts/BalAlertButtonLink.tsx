@@ -3,7 +3,7 @@
 import { Box, Button, ButtonProps, Link } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import NextLink from 'next/link'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 export function BalAlertButtonLink({
   href,

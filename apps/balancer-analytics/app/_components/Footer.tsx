@@ -3,14 +3,15 @@
 import { Box, Divider, HStack, Heading, Link, Stack, Text, VStack } from '@chakra-ui/react'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { ArrowUpRight, GitHub } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { GithubIcon } from '@repo/lib/shared/components/icons/social/GithubIcon'
 
 type FooterLink = { label: string; href: string; icon?: 'github' }
 
 const RESOURCES: FooterLink[] = [
   { label: 'Balancer App', href: 'https://balancer.fi' },
-  { label: 'GitHub Repo', href: 'https://github.com/balancer/frontend-monorepo', icon: 'github' },
+  { label: 'Github Repo', href: 'https://github.com/balancer/frontend-monorepo', icon: 'github' },
 ]
 
 export function Footer() {
@@ -61,7 +62,7 @@ export function Footer() {
                     <HStack spacing="xxs">
                       {link.icon === 'github' ? (
                         <Box as="span" position="relative" top="-1px">
-                          <GitHub size={14} />
+                          <GithubIcon size={14} />
                         </Box>
                       ) : null}
                       <Box as="span">{link.label}</Box>

@@ -1,7 +1,7 @@
 'use client'
 
 import { HStack, Link, Text } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { Address } from 'viem'
 import type { GqlChain } from '../services/api/generated/graphql'
 import { getBlockExplorerName, getBlockExplorerTxUrl } from '../utils/blockExplorer'

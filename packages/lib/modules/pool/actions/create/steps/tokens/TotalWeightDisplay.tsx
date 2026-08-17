@@ -1,6 +1,5 @@
-import { HStack, Text } from '@chakra-ui/react'
-import { AlertTriangle } from 'react-feather'
-import { Icon } from '@chakra-ui/react'
+import { HStack, Icon, Text } from '@chakra-ui/react'
+import { AlertTriangle } from 'lucide-react'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useWatch } from 'react-hook-form'

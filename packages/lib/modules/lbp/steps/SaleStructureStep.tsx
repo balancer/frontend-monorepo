@@ -21,7 +21,7 @@ import { Control, Controller, SubmitHandler, UseFormSetValue } from 'react-hook-
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { Percent } from 'react-feather'
+import { Percent } from 'lucide-react'
 import { useTokenMetadata, useTokenMetadataAcrossChains } from '../../tokens/useTokenMetadata'
 import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'

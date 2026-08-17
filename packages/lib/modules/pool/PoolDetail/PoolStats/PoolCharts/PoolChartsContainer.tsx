@@ -33,7 +33,7 @@ import {
 } from '@repo/lib/modules/autorange/AutoRangeChartProvider'
 import { AutoRangeChart } from '@repo/lib/modules/autorange/AutoRangeChart'
 import { ReversedToggleButton } from '@repo/lib/shared/components/btns/ReversedToggleButton'
-import { ThumbsDown, ThumbsUp } from 'react-feather'
+import { ThumbsDown, ThumbsUp } from 'lucide-react'
 import { WandIcon } from '@repo/lib/shared/components/icons/WandIcon'
 import { useAutoRangeData } from '@repo/lib/modules/autorange/useAutoRangeData'
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'

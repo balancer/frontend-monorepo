@@ -1,7 +1,7 @@
 import { HStack, Text, Link, VStack, UnorderedList, ListItem } from '@chakra-ui/react'
 import { BalAlert } from './BalAlert'
 import { BalAlertContent } from './BalAlertContent'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { useSafeAppLink } from '@repo/lib/modules/web3/safe.hooks'
 
 export function ContractWalletAlert() {

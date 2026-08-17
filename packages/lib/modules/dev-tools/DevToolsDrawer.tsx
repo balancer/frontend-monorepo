@@ -16,7 +16,7 @@ import {
   Divider,
   VStack,
 } from '@chakra-ui/react'
-import { Tool } from 'react-feather'
+import { Wrench } from 'lucide-react'
 import { ImpersonateAccount } from '../web3/impersonation/ImpersonateAccount'
 import TimeMocker from '../web3/impersonation/TimeMocker'
 import { useCurrentDate, useFakeTime } from '@repo/lib/shared/hooks/date.hooks'
@@ -29,7 +29,7 @@ export function DevToolsDrawerButton() {
   return (
     <>
       <Button aria-label="Dev tools button" onClick={onOpen} p="0" variant="tertiary">
-        <Tool size={18} />
+        <Wrench size={18} />
       </Button>
 
       <DevToolsDrawer isOpen={isOpen} onClose={onClose} />

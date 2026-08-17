@@ -2,7 +2,7 @@ import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react'
 import { useRef, useState, useLayoutEffect, useEffect } from 'react'
 import { useReliquary } from '../ReliquaryProvider'
 import { RelicCard } from './RelicCard'
-import { ChevronLeft, ChevronRight } from 'react-feather'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 type Props = {
   focusRelicId?: string | null

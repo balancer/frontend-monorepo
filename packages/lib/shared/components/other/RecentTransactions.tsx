@@ -24,7 +24,7 @@ import {
   useRecentTransactions,
 } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { isEmpty, orderBy } from 'lodash'
-import { Activity, ArrowUpRight, Check, Clock, X, XOctagon } from 'react-feather'
+import { Activity, ArrowUpRight, Check, Clock, X, XOctagon } from 'lucide-react'
 import { getChainId, getChainShortName } from '@repo/lib/config/app.config'
 import { getBlockExplorerTxUrl } from '../../utils/blockExplorer'
 import { getSafeWebUrl } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'

@@ -8,7 +8,7 @@ import { motion, useInView } from 'motion/react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 import { useState } from 'react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { MotionButtonProps } from './types'
 
 const MotionButton = motion(Button) as React.FC<MotionButtonProps>

@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Card, Flex, Icon, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { HelpCircle } from 'react-feather'
+import { HelpCircle } from 'lucide-react'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { Sparkline } from './Sparkline'
 import { DeltaPill } from './DeltaPill'
