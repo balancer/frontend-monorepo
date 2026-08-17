@@ -16,7 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { AlertTriangle, ArrowUpRight, CheckCircle, HelpCircle } from 'react-feather'
+import { AlertTriangle, ArrowUpRight, CheckCircle, HelpCircle } from 'lucide-react'
 import type {
   BufferState,
   GyroEclpTypeState,

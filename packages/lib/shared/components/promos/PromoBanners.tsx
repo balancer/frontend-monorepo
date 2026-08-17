@@ -11,7 +11,7 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
 import { PromoHookIcon } from '../icons/promos/PromoHookIcon'

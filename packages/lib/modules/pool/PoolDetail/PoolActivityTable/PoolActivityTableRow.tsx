@@ -13,7 +13,7 @@ import {
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { PoolActivityEl, PoolActivityTokens } from '../PoolActivity/poolActivity.types'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'

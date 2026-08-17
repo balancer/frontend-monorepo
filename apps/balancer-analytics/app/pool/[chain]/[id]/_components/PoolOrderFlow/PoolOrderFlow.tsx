@@ -25,7 +25,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Sliders } from 'react-feather'
+import { Sliders } from 'lucide-react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import type { GqlChainValues } from '@repo/lib/config/networks'

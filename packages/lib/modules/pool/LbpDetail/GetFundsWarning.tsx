@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, HStack, Spacer } from '@chakra-ui/react'
 import { BalAlertButtonLink } from '@repo/lib/shared/components/alerts/BalAlertButtonLink'
-import { AlertTriangle } from 'react-feather'
+import { AlertTriangle } from 'lucide-react'
 import { getPoolPath } from '../pool.utils'
 import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { usePool } from '../PoolProvider'

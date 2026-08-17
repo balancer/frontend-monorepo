@@ -27,7 +27,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { zeroAddress } from 'viem'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 export function RecoveryMode() {

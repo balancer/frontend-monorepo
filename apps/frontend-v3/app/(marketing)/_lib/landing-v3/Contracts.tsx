@@ -5,7 +5,7 @@ import { Box, Card, Grid, GridItem, HStack, IconButton, Text, VStack, Link } fro
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
 // @ts-ignore
-import { ArrowUpRight, Code } from 'react-feather'
+import { ArrowUpRight, Code } from 'lucide-react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import { useState } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'

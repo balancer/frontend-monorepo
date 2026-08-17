@@ -21,7 +21,7 @@ import {
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { AlertTriangle, Plus } from 'react-feather'
+import { AlertTriangle, Plus } from 'lucide-react'
 import { Controller, UseFormReturn, useFormState, useWatch } from 'react-hook-form'
 import { ProjectInfoForm } from '../../lbp.types'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'

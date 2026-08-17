@@ -18,7 +18,7 @@ import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButto
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { ReactNode } from 'react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { SandBg } from './shared/SandBg'
 import Image from 'next/image'
 

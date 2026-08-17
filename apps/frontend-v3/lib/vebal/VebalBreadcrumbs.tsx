@@ -1,5 +1,5 @@
 import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button } from '@chakra-ui/react'
-import { ChevronRight, Home } from 'react-feather'
+import { ChevronRight, Home } from 'lucide-react'
 
 export function VebalBreadcrumbs() {
   return (

@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useMerklRewards } from '@analytics/lib/hooks/useMerklRewards'
 import { useGaugeRewards } from '@analytics/lib/hooks/useGaugeRewards'

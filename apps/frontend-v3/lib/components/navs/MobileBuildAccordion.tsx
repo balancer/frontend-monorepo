@@ -12,7 +12,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import NextLink from 'next/link'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
 import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIconCircular'

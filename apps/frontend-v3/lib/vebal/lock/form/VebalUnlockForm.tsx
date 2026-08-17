@@ -26,7 +26,7 @@ import { format } from 'date-fns'
 import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
-import { ArrowRight } from 'react-feather'
+import { ArrowRight } from 'lucide-react'
 
 export interface ClickableCardProps extends CardProps {
   color?: string

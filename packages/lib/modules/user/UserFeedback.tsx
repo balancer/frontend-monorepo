@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@chakra-ui/react'
-import { ThumbsUp } from 'react-feather'
+import { ThumbsUp } from 'lucide-react'
 import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 
 export function UserFeedback() {

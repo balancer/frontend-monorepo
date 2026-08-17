@@ -16,7 +16,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { AlertTriangle, ExternalLink } from 'react-feather'
+import { AlertTriangle, ExternalLink } from 'lucide-react'
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { useVeBalHolders } from '@analytics/lib/hooks/useVeBalHolders'

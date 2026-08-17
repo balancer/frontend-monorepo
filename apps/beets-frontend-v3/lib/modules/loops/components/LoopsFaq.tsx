@@ -16,7 +16,7 @@ import {
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 const FAQ_ITEMS = [
   {

@@ -9,7 +9,7 @@ import {
   Box,
   IconButton,
 } from '@chakra-ui/react'
-import { Maximize2, Minimize2 } from 'react-feather'
+import { Maximize2, Minimize2 } from 'lucide-react'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PoolActivityProvider, usePoolActivity } from './usePoolActivity'
 import { PoolActivityChart } from '../PoolActivityChart/PoolActivityChart'

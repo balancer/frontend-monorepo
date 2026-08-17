@@ -19,7 +19,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { useMemo } from 'react'
 import type {
   GqlPriceRateProviderData,
@@ -29,7 +29,7 @@ import type {
 import { HookFragment } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { AlertTriangle, XCircle } from 'react-feather'
+import { AlertTriangle, XCircle } from 'lucide-react'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getWarnings, isBoosted, isV3LBP, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'

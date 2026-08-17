@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-import { ChevronDown } from 'react-feather'
+import { ChevronDown } from 'lucide-react'
 import useMeasure from 'react-use-measure'
 
 type Props<Value> = {

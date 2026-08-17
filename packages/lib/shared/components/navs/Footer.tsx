@@ -5,7 +5,7 @@ import { Stack, Divider, Text, Box, VStack, HStack, Link, IconButton } from '@ch
 import { staggeredFadeIn } from '@repo/lib/shared/utils/animations'
 import { motion } from 'motion/react'
 import { DefaultPageContainer } from '../containers/DefaultPageContainer'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { AppLink } from '../navs/useNav'
 import { LinkSection } from './footer.types'
 import { ReactNode } from 'react'

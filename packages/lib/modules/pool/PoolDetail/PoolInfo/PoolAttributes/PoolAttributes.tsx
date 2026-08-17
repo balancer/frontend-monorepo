@@ -1,6 +1,6 @@
 import { Box, Card, Stack, Heading, Text, VStack, Divider, HStack, Link } from '@chakra-ui/react'
 import { useFormattedPoolAttributes } from './useFormattedPoolAttributes'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { isGyroEPool, isV3LBP } from '../../../pool.helpers'
 import { usePool } from '../../../PoolProvider'
 import { LbpPoolAttributes } from './LbpPoolAttributes'

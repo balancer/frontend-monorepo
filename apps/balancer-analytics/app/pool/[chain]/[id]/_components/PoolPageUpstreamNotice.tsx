@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ChevronRight, Home, RefreshCw } from 'react-feather'
+import { ChevronRight, Home, RefreshCw } from 'lucide-react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'

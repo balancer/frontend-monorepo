@@ -1,5 +1,5 @@
 import { Box, Divider, Heading, HStack, Link, Stack, Text, VStack } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { useLbpPoolCharts } from '../../../LbpDetail/LbpPoolCharts/LbpPoolChartsProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isAfter } from 'date-fns'

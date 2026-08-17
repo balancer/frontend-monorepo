@@ -2,7 +2,7 @@
 
 import { Button, Heading, Flex, Box, Center, Text, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { Picture } from '../other/Picture'
 
 export function MevCapturePromoBanner() {

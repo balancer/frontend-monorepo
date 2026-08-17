@@ -1,6 +1,6 @@
 import { Card, CardProps, HStack, Heading, IconButton, Stack } from '@chakra-ui/react'
 import Link from 'next/link'
-import { ArrowLeft } from 'react-feather'
+import { ArrowLeft } from 'lucide-react'
 
 interface Props extends CardProps {
   backLink: string

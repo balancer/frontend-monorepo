@@ -8,7 +8,7 @@ import { GetPoolEventsQuery } from '@repo/lib/shared/services/api/generated/grap
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { secondsToMilliseconds } from 'date-fns'
-import { ArrowRight, ArrowUpRight } from 'react-feather'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isEmpty } from 'lodash'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'

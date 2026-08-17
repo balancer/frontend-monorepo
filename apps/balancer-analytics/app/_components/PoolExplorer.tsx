@@ -12,7 +12,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { ChevronRight } from 'react-feather'
+import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useMemo } from 'react'
 import {

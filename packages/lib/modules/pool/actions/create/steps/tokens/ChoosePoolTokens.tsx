@@ -19,9 +19,9 @@ import { ApiToken, ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types
 import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
 import { TOKEN_BLACKLIST, WeightedPoolStructure } from '../../constants'
-import { PlusCircle, Trash2 } from 'react-feather'
+import { PlusCircle, Trash2 } from 'lucide-react'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
-import { AlertTriangle } from 'react-feather'
+import { AlertTriangle } from 'lucide-react'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
@@ -33,7 +33,7 @@ import {
 import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   isWeightedPool,

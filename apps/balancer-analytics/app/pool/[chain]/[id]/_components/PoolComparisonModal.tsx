@@ -55,7 +55,7 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useMemo } from 'react'
-import { ExternalLink } from 'react-feather'
+import { ExternalLink } from 'lucide-react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { chainToSlugMap, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'

@@ -6,7 +6,7 @@ import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion, useInView } from 'motion/react'
 import Image from 'next/image'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 // @ts-ignore
 import bgDarkSrc from './images/hero-bg-dark.png'

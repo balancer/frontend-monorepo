@@ -1,5 +1,5 @@
 import { Box, HStack, Text, Tooltip } from '@chakra-ui/react'
-import { AlertTriangle } from 'react-feather'
+import { AlertTriangle } from 'lucide-react'
 
 export function TokenMissingPriceWarning({ message }: { message: string }) {
   return (

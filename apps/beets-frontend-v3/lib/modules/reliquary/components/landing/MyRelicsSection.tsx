@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { CheckCircle, XCircle } from 'react-feather'
+import { CheckCircle, XCircle } from 'lucide-react'
 import { useReliquaryDelegationTransaction } from '../../hooks/useReliquaryDelegationTransaction'
 import { useReliquary } from '../../ReliquaryProvider'
 import { ReliquaryDelegationModal } from '../ReliquaryDelegationModal'

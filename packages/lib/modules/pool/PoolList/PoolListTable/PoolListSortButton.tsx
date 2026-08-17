@@ -1,5 +1,5 @@
 import { ButtonProps, Text, VStack, HStack, Button, Icon } from '@chakra-ui/react'
-import { ChevronDown, ChevronUp } from 'react-feather'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 interface Props extends ButtonProps {
   title: string

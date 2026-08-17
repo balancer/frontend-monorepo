@@ -18,7 +18,7 @@ import { isSaleOngoing } from '../../lbp/pool/lbp.helpers'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { GroupBase, OptionBase, Select, chakraComponents } from 'chakra-react-select'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { WeightsChartContainer } from '@repo/lib/modules/lbp/steps/sale-structure/WeightsChartContainer'
 
 const TABS_LIST: ButtonGroupOption[] = [

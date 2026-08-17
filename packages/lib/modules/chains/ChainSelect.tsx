@@ -9,7 +9,7 @@ import {
   SingleValueProps,
   OptionProps,
 } from 'chakra-react-select'
-import { ChevronDown } from 'react-feather'
+import { ChevronDown } from 'lucide-react'
 import { motion } from 'motion/react'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'

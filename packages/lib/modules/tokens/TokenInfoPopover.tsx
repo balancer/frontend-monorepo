@@ -16,7 +16,7 @@ import { CopyAddressButton } from './CopyAddressButton'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { CoingeckoIcon } from '@repo/lib/shared/components/icons/CoingeckoIcon'
 import { AddTokenToWalletButton } from './AddTokenToWalletButton'
-import { ExternalLink } from 'react-feather'
+import { ExternalLink } from 'lucide-react'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { useTokens } from './TokensProvider'
 import {

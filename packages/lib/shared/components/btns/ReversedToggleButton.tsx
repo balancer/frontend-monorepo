@@ -1,6 +1,6 @@
 import { Button, Flex, Text } from '@chakra-ui/react'
 import { Icon } from '@chakra-ui/react'
-import { Repeat } from 'react-feather'
+import { Repeat } from 'lucide-react'
 
 interface ReversedToggleButtonProps {
   toggleIsReversed: () => void

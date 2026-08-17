@@ -8,7 +8,7 @@ import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { HStack, Image, Link, Text } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 export function EnsOrAddress({
   userAddress,

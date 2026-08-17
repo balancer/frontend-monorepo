@@ -1,7 +1,7 @@
 'use client'
 
 import { Stack, Heading, Button, Flex, Box, Center, Text, Link } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { Picture } from '../../other/Picture'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 // import Stat from '../../other/Stat'

@@ -10,7 +10,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import BaseAprTooltip, { BaseAprTooltipProps } from './BaseAprTooltip'
-import { Info } from 'react-feather'
+import { Info } from 'lucide-react'
 import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
 import StarsIcon from '../../icons/StarsIcon'
 import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
