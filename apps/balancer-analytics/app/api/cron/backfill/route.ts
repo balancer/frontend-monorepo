@@ -32,8 +32,11 @@
  * won't touch api-v3 rows) and also deletes orphaned defillama rows for any
  * chain that's no longer in supportedNetworks.
  *
- * Auth: same `CRON_SECRET` Bearer as the hourly cron. Not on a Vercel cron
- * schedule — run manually:
+ * Auth: same `CRON_SECRET` Bearer as the hourly cron. Scheduled daily in
+ * `vercel.json` (`15 1 * * *` UTC) so V2/V3 breakdowns stay fresh — without
+ * that, the Protocol Metrics stack falls back to 100% v2 once the chart
+ * window no longer overlaps the last DefiLlama day. Still safe to run
+ * manually:
  *   curl -H "Authorization: Bearer $CRON_SECRET" .../api/cron/backfill
  */
 

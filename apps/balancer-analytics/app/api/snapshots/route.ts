@@ -24,6 +24,10 @@
  * data — it only keeps Neon warm and burns compute units. Different
  * `granularity` values get independent cache entries, so daily-for-90D
  * and hourly-for-7D coexist.
+ *
+ * When a window is missing V2/V3 DefiLlama rows, the response forward-fills
+ * those breakdowns from the latest ALL-chain V2/V3 seed so charts do not
+ * silently attribute everything to v2.
  */
 
 import 'server-only'
@@ -37,6 +41,10 @@ import {
   PROTOCOL_V3,
   PROTOCOL_COW_AMM,
 } from '@analytics/lib/db'
+import {
+  forwardFillVersionBreakdowns,
+  type VersionBreakdownSeed,
+} from '@analytics/lib/snapshots/forwardFillBreakdowns'
 import type {
   ChainSnapshotPoint,
   ProtocolBreakdown,
@@ -255,6 +263,59 @@ function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
   return { points, generatedAt: points.at(-1)?.timestamp ?? null }
 }
 
+/**
+ * Latest ALL-chain V2 + V3 rows, used as a ratio seed when the requested
+ * window has no DefiLlama breakdowns (e.g. backfill lagged and the 90D chart
+ * only sees api-v3 CORE+COW rows). Without this, the client defaults the
+ * stack to 100% v2 / 0% v3.
+ */
+async function fetchLatestVersionSeed(): Promise<VersionBreakdownSeed | null> {
+  const rows = (await sql`
+    SELECT DISTINCT ON (protocol)
+           protocol, total_liquidity, swap_volume_24h, swap_fee_24h
+    FROM protocol_snapshots
+    WHERE chain = ${AGGREGATE_KEY}
+      AND protocol = ANY(${[PROTOCOL_V2, PROTOCOL_V3]}::text[])
+    ORDER BY protocol, ts DESC
+  `) as {
+    protocol: string
+    total_liquidity: string
+    swap_volume_24h: string
+    swap_fee_24h: string
+  }[]
+
+  let v2: VersionBreakdownSeed['v2'] | null = null
+  let v3: VersionBreakdownSeed['v3'] | null = null
+  for (const r of rows) {
+    const partial = {
+      totalLiquidity: Number.parseFloat(r.total_liquidity) || 0,
+      swapVolume24h: Number.parseFloat(r.swap_volume_24h) || 0,
+      swapFee24h: Number.parseFloat(r.swap_fee_24h) || 0,
+    }
+    if (r.protocol === PROTOCOL_V2) v2 = partial
+    if (r.protocol === PROTOCOL_V3) v3 = partial
+  }
+  if (!v2 || !v3) return null
+  return { v2, v3 }
+}
+
+function seriesNeedsVersionSeed(series: ProtocolSnapshotSeries): boolean {
+  return series.points.some(p => !p.breakdowns?.V2 || !p.breakdowns?.V3)
+}
+
+async function buildSnapshotSeries(
+  days: AllowedDays,
+  granularity: Granularity
+): Promise<ProtocolSnapshotSeries> {
+  const rows = await fetchRows(days, granularity)
+  const series = foldRows(rows)
+  // Only hit the seed query when the window is missing V2/V3 somewhere —
+  // healthy DefiLlama-backed windows skip the extra round trip.
+  const seed = seriesNeedsVersionSeed(series) ? await fetchLatestVersionSeed() : null
+  forwardFillVersionBreakdowns(series.points, seed)
+  return series
+}
+
 // Cache the entire folded payload. Keyed on the validated (days, granularity)
 // tuple so the only distinct keys ever generated are
 // `4 buckets × 2 granularities = 8`, regardless of what the URL string
@@ -263,10 +324,11 @@ function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
 // more than once per (days, granularity) per `revalidate` window.
 const getSnapshotSeries = unstable_cache(
   async (days: AllowedDays, granularity: Granularity): Promise<ProtocolSnapshotSeries> => {
-    const rows = await fetchRows(days, granularity)
-    return foldRows(rows)
+    return buildSnapshotSeries(days, granularity)
   },
-  ['protocol-snapshots'],
+  // Bump the key when the forward-fill seed lands so CDN/unstable_cache
+  // entries that predate V2/V3 attribution don't keep serving a zeroed stack.
+  ['protocol-snapshots-v2'],
   // 1-hour TTL matches the cron write cadence. Combined with the
   // `s-maxage=3600` Cache-Control below, the CDN serves between writes and
   // the function only re-fetches from Postgres once per (days, granularity)
@@ -293,7 +355,7 @@ export async function GET(req: Request) {
   // below and the client's module-level cache, so origin load stays bounded.
   const series =
     granularity === 'hourly'
-      ? foldRows(await fetchRows(days, granularity))
+      ? await buildSnapshotSeries(days, granularity)
       : await getSnapshotSeries(days, granularity)
   // Browser + CDN cache. `s-maxage=3600` lets the Vercel edge share-cache
   // the response across visitors for the full snapshot interval; without

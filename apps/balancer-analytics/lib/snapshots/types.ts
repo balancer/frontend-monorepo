@@ -13,11 +13,13 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
  *
  * Stacking V2 + V3 + COW_AMM approximates CORE. From DefiLlama backfill rows
  * they sum exactly (CORE was derived as the sum). From api-v3 cron rows
- * only COW_AMM is populated (no clean V2/V3 split available without BPT
- * double-counting), so the stack only renders for historical days.
+ * only COW_AMM is written by the hourly job; `/api/snapshots` forward-fills
+ * V2/V3 onto those points from the latest DefiLlama ratio so the stack does
+ * not collapse to 100% v2 when the chart window no longer overlaps a
+ * backfill day.
  *
  * Source: `'api-v3'` rows come from the hourly cron. `'defillama'` rows come
- * from the one-shot historical backfill (only TVL / volume / fees populated;
+ * from the daily DefiLlama backfill cron (only TVL / volume / fees populated;
  * the Balancer-specific fields are 0).
  */
 
@@ -58,7 +60,7 @@ export type ProtocolSnapshotPoint = {
   numLiquidityProviders: number
   /** Per-chain CORE breakdown. Sparse — chains absent at capture time are omitted. */
   byChain: Partial<Record<GqlChain, ChainSnapshotPoint>>
-  /** Optional per-version sub-series (V2 / V3 / COW_AMM). Always present for defillama rows, COW_AMM-only for api-v3 rows. */
+  /** Optional per-version sub-series (V2 / V3 / COW_AMM). Always present for defillama rows; api-v3 rows get COW_AMM from the hourly cron and V2/V3 forward-filled from the latest DefiLlama ratio at read time. */
   breakdowns?: Partial<Record<ProtocolKey, ProtocolBreakdown>>
   /** Where this point came from. */
   source?: SnapshotSource
