@@ -103,7 +103,6 @@
     "@types/js-cookie": "3.0.6",
     "@types/lodash": "4.17.25",
     "@types/node": "24.13.3",
-    "@types/numeral": "2.0.5",
     "@types/pluralize": "0.0.33",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
