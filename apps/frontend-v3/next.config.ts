@@ -34,6 +34,16 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   redirects: async () => [
     {
+      source: '/pools/mode/:path*',
+      destination: 'https://legacy.balancer.fi',
+      permanent: true,
+    },
+    {
+      source: '/pools/fraxtal/:path*',
+      destination: 'https://legacy.balancer.fi',
+      permanent: true,
+    },
+    {
       source: '/vebal',
       destination: '/vebal/manage',
       permanent: true,
