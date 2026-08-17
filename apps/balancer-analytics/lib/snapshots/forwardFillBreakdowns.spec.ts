@@ -1,8 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  forwardFillVersionBreakdowns,
-  type VersionBreakdownSeed,
-} from './forwardFillBreakdowns'
+import { forwardFillVersionBreakdowns, type VersionBreakdownSeed } from './forwardFillBreakdowns'
 import type { ProtocolSnapshotPoint } from './types'
 
 function point(
