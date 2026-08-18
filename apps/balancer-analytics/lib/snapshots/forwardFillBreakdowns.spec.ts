@@ -24,6 +24,7 @@ describe('forwardFillVersionBreakdowns', () => {
       v2: { totalLiquidity: 40, swapVolume24h: 10, swapFee24h: 1 },
       v3: { totalLiquidity: 60, swapVolume24h: 30, swapFee24h: 3 },
     }
+
     const points = [
       point({
         timestamp: 1,
@@ -50,11 +51,13 @@ describe('forwardFillVersionBreakdowns', () => {
     expect(points[0].breakdowns?.V3?.totalLiquidity).toBeCloseTo(60)
     expect(points[0].breakdowns?.V2?.swapVolume24h).toBeCloseTo(10)
     expect(points[0].breakdowns?.V3?.swapVolume24h).toBeCloseTo(30)
+
     // Stack still equals CORE
     const stack =
       (points[0].breakdowns?.V2?.totalLiquidity ?? 0) +
       (points[0].breakdowns?.V3?.totalLiquidity ?? 0) +
       (points[0].breakdowns?.COW_AMM?.totalLiquidity ?? 0)
+
     expect(stack).toBeCloseTo(110)
   })
 
