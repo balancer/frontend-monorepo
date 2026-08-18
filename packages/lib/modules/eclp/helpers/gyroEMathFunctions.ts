@@ -133,6 +133,9 @@ function setup(
   const r = rVec.y
   const { c, s, lambda } = params
   const [x0, y0] = balances
+  if (x0 === undefined || y0 === undefined) {
+    throw new Error('ECLP requires at least two balances')
+  }
   const a = virtualOffset0(params, derived, rVec)
   const b = virtualOffset1(params, derived, rVec)
   const ls = ONE - divDown(ONE, mulDown(lambda, lambda))
