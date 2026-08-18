@@ -168,7 +168,7 @@ function formatNumberWithFixedDpGrouped(val: BigNumber, dp: number): string {
 
   const rounded = roundHalfUp(abs, dp)
   const s = rounded.toFixed(dp)
-  const [intPart, fracPart] = s.split('.')
+  const [intPart, fracPart] = splitDecimalString(s)
 
   const groupedInt = groupIntegerString(intPart)
   const sign = neg ? '-' : ''
@@ -269,7 +269,7 @@ function tokenFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): s
   // Non-abbreviated: 0,0.[0000] => up to 4 decimals, trim trailing zeros
   const rounded4 = roundHalfUp(bnVal, 4)
   const s = rounded4.toFixed(4)
-  const [intPart, fracPart] = s.split('.')
+  const [intPart, fracPart] = splitDecimalString(s)
   const sign = s.startsWith('-') ? '-' : ''
   const absInt = s.startsWith('-') ? intPart.slice(1) : intPart
   const groupedInt = groupIntegerString(absInt)
@@ -294,7 +294,7 @@ function aprFormat(apr: Numberish, { canBeNegative = false }: FormatOpts = {}): 
   // Otherwise 2 decimals: 0.10 => 10.00%
   const rounded2 = roundHalfUp(aprBn.times(100), 2)
   const s = rounded2.toFixed(2) // keep 2 decimals
-  const [intPart, frac] = s.split('.')
+  const [intPart, frac] = splitDecimalString(s)
   const neg = intPart.startsWith('-')
   const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
   const sign = neg ? '-' : ''
@@ -309,7 +309,7 @@ function slippageFormat(slippage: Numberish): string {
   const v = bn(slippage).div(100)
   const rounded2 = roundHalfUp(v.times(100), 2)
   const s = rounded2.toFixed(2)
-  const [intPart, frac] = s.split('.')
+  const [intPart, frac] = splitDecimalString(s)
   const neg = intPart.startsWith('-')
   const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
   const sign = neg ? '-' : ''
@@ -350,7 +350,7 @@ function weightFormat(
     // (%0,0.0)
     const rounded1 = roundHalfUp(percent, 1)
     const s = rounded1.toFixed(1)
-    const [intPart, frac] = s.split('.')
+    const [intPart, frac] = splitDecimalString(s)
     const neg = intPart.startsWith('-')
     const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
     const sign = neg ? '-' : ''
@@ -360,7 +360,7 @@ function weightFormat(
   // (%0,0.00)
   const rounded2 = roundHalfUp(percent, 2)
   const s = rounded2.toFixed(2)
-  const [intPart, frac] = s.split('.')
+  const [intPart, frac] = splitDecimalString(s)
   const neg = intPart.startsWith('-')
   const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
   const sign = neg ? '-' : ''
@@ -373,7 +373,7 @@ function priceImpactFormat(val: Numberish): string {
   const v = bn(val).times(100)
   const rounded2 = roundHalfUp(v, 2)
   const s = rounded2.toFixed(2)
-  const [intPart, frac] = s.split('.')
+  const [intPart, frac] = splitDecimalString(s)
   const neg = intPart.startsWith('-')
   const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
   const sign = neg ? '-' : ''
@@ -437,7 +437,7 @@ function formatGroupedOptionalDecimals(
   const s = rounded.toFixed(maxOptional)
   const neg = s.startsWith('-')
   const unsigned = neg ? s.slice(1) : s
-  const [intPart, fracPart = ''] = unsigned.split('.')
+  const [intPart, fracPart] = splitDecimalString(unsigned)
   const intOut = grouped ? groupIntegerString(intPart) : intPart
   const fracTrimmed = fracPart.replace(/0+$/, '')
   const sign = neg ? '-' : ''
@@ -615,7 +615,7 @@ function formatPercentOptionalDecimals(val: Numberish, required: number, optiona
 
   const neg = s.startsWith('-')
   const unsigned = neg ? s.slice(1) : s
-  const [intPart, fracPart = ''] = unsigned.split('.')
+  const [intPart, fracPart] = splitDecimalString(unsigned)
 
   const requiredFrac = fracPart.slice(0, required)
   const optionalFrac = fracPart.slice(required).replace(/0+$/, '')
@@ -679,7 +679,7 @@ export const isValidNumber = (value: string | number | undefined | null): boolea
 // If we do not have enough decimals to express the number, we truncate it
 export function safeParseFixedBigInt(value: string, decimals = 0): bigint {
   value = value.split(',').join('')
-  const [integer, fraction] = value.split('.')
+  const [integer, fraction] = splitDecimalString(value)
   if (!fraction) {
     return parseUnits(value, decimals)
   }
@@ -768,4 +768,9 @@ export function isBnParseable(value: Numberish | undefined | null): boolean {
   } catch {
     return false
   }
+}
+function splitDecimalString(value: string): [integerPart: string, fractionPart: string] {
+  const decimalIndex = value.indexOf('.')
+  if (decimalIndex === -1) return [value, '']
+  return [value.slice(0, decimalIndex), value.slice(decimalIndex + 1)]
 }
