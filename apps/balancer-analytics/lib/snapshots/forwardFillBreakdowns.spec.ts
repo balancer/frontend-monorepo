@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { forwardFillVersionBreakdowns, type VersionBreakdownSeed } from './forwardFillBreakdowns'
-import type { ProtocolSnapshotPoint } from './types'
+import { forwardFillVersionBreakdowns } from './forwardFillBreakdowns'
+import type { ProtocolSnapshotPoint, VersionBreakdownSeed } from './types'
 
 function point(
   partial: Partial<ProtocolSnapshotPoint> & { timestamp: number }

@@ -6,12 +6,12 @@
  *   The hourly api-v3 cron writes CORE + COW_AMM only — it cannot emit a clean
  *   V2/V3 split (BPT double-count). Explicit V2/V3 rows come from the DefiLlama
  *   backfill. When that backfill lags (or a chart window simply doesn't reach
- *   the last DefiLlama day), `useTvlSeries` defaults the stack to 100% v2 /
- *   0% v3 and Balancer v3 silently disappears from the Protocol Metrics chart.
+ *   the last DefiLlama day), charts would otherwise default the stack to 100%
+ *   v2 / 0% v3 and Balancer v3 would silently disappear.
  *
  * Strategy:
  *   Walk points ascending. Whenever an explicit V2+V3 pair is present, remember
- *   its TVL/volume share. For subsequent points missing that pair, attribute
+ *   its TVL/volume/fees share. For subsequent points missing that pair, attribute
  *   `(CORE − COW)` using the last known share so the stacked total still
  *   matches the api-v3 headline.
  *
@@ -19,16 +19,56 @@
  *   V2/V3 ALL-chain rows in Postgres (see `/api/snapshots`).
  */
 
-import type { ProtocolBreakdown, ProtocolSnapshotPoint } from './types'
+import type {
+  ProtocolBreakdown,
+  ProtocolSnapshotPoint,
+  VersionBreakdownSeed,
+  VersionMetricSlice,
+} from './types'
 
-export type VersionBreakdownSeed = {
-  v2: Pick<ProtocolBreakdown, 'totalLiquidity' | 'swapVolume24h' | 'swapFee24h'>
-  v3: Pick<ProtocolBreakdown, 'totalLiquidity' | 'swapVolume24h' | 'swapFee24h'>
+type VersionShare = { v2: number; v3: number }
+
+type VersionRatios = {
+  tvl: VersionShare
+  volume: VersionShare
+  fees: VersionShare
+  known: boolean
 }
 
-function emptyBreakdown(
-  partial: Pick<ProtocolBreakdown, 'totalLiquidity' | 'swapVolume24h' | 'swapFee24h'>
-): ProtocolBreakdown {
+function emptyRatios(): VersionRatios {
+  return {
+    tvl: { v2: 1, v3: 0 },
+    volume: { v2: 1, v3: 0 },
+    fees: { v2: 1, v3: 0 },
+    known: false,
+  }
+}
+
+function share(a: number, b: number): VersionShare | null {
+  const sum = a + b
+  if (sum <= 0) return null
+  return { v2: a / sum, v3: b / sum }
+}
+
+function applyPair(ratios: VersionRatios, v2: VersionMetricSlice, v3: VersionMetricSlice): void {
+  const tvl = share(v2.totalLiquidity, v3.totalLiquidity)
+  if (tvl) {
+    ratios.tvl = tvl
+    ratios.known = true
+  }
+  const volume = share(v2.swapVolume24h, v3.swapVolume24h)
+  if (volume) {
+    ratios.volume = volume
+    ratios.known = true
+  }
+  const fees = share(v2.swapFee24h, v3.swapFee24h)
+  if (fees) {
+    ratios.fees = fees
+    ratios.known = true
+  }
+}
+
+function emptyBreakdown(partial: VersionMetricSlice): ProtocolBreakdown {
   return {
     totalLiquidity: partial.totalLiquidity,
     swapVolume24h: partial.swapVolume24h,
@@ -52,63 +92,18 @@ export function forwardFillVersionBreakdowns(
   points: ProtocolSnapshotPoint[],
   seed: VersionBreakdownSeed | null = null
 ): number {
-  let ratioTvlV2 = 1
-  let ratioTvlV3 = 0
-  let ratioVolV2 = 1
-  let ratioVolV3 = 0
-  let ratioFeeV2 = 1
-  let ratioFeeV3 = 0
-  let known = false
-
-  if (seed) {
-    const tvlSum = seed.v2.totalLiquidity + seed.v3.totalLiquidity
-    const volSum = seed.v2.swapVolume24h + seed.v3.swapVolume24h
-    const feeSum = seed.v2.swapFee24h + seed.v3.swapFee24h
-    if (tvlSum > 0) {
-      ratioTvlV2 = seed.v2.totalLiquidity / tvlSum
-      ratioTvlV3 = seed.v3.totalLiquidity / tvlSum
-      known = true
-    }
-    if (volSum > 0) {
-      ratioVolV2 = seed.v2.swapVolume24h / volSum
-      ratioVolV3 = seed.v3.swapVolume24h / volSum
-      known = true
-    }
-    if (feeSum > 0) {
-      ratioFeeV2 = seed.v2.swapFee24h / feeSum
-      ratioFeeV3 = seed.v3.swapFee24h / feeSum
-      known = true
-    }
-  }
+  const ratios = emptyRatios()
+  if (seed) applyPair(ratios, seed.v2, seed.v3)
 
   let filled = 0
 
   for (const p of points) {
     if (hasExplicitPair(p)) {
-      const v2 = p.breakdowns!.V2!
-      const v3 = p.breakdowns!.V3!
-      const tvlSum = v2.totalLiquidity + v3.totalLiquidity
-      const volSum = v2.swapVolume24h + v3.swapVolume24h
-      const feeSum = v2.swapFee24h + v3.swapFee24h
-      if (tvlSum > 0) {
-        ratioTvlV2 = v2.totalLiquidity / tvlSum
-        ratioTvlV3 = v3.totalLiquidity / tvlSum
-        known = true
-      }
-      if (volSum > 0) {
-        ratioVolV2 = v2.swapVolume24h / volSum
-        ratioVolV3 = v3.swapVolume24h / volSum
-        known = true
-      }
-      if (feeSum > 0) {
-        ratioFeeV2 = v2.swapFee24h / feeSum
-        ratioFeeV3 = v3.swapFee24h / feeSum
-        known = true
-      }
+      applyPair(ratios, p.breakdowns!.V2!, p.breakdowns!.V3!)
       continue
     }
 
-    if (!known) continue
+    if (!ratios.known) continue
 
     const cowTvl = p.breakdowns?.COW_AMM?.totalLiquidity ?? 0
     const cowVol = p.breakdowns?.COW_AMM?.swapVolume24h ?? 0
@@ -119,14 +114,14 @@ export function forwardFillVersionBreakdowns(
 
     if (!p.breakdowns) p.breakdowns = {}
     p.breakdowns.V2 = emptyBreakdown({
-      totalLiquidity: nonCowTvl * ratioTvlV2,
-      swapVolume24h: nonCowVol * ratioVolV2,
-      swapFee24h: nonCowFee * ratioFeeV2,
+      totalLiquidity: nonCowTvl * ratios.tvl.v2,
+      swapVolume24h: nonCowVol * ratios.volume.v2,
+      swapFee24h: nonCowFee * ratios.fees.v2,
     })
     p.breakdowns.V3 = emptyBreakdown({
-      totalLiquidity: nonCowTvl * ratioTvlV3,
-      swapVolume24h: nonCowVol * ratioVolV3,
-      swapFee24h: nonCowFee * ratioFeeV3,
+      totalLiquidity: nonCowTvl * ratios.tvl.v3,
+      swapVolume24h: nonCowVol * ratios.volume.v3,
+      swapFee24h: nonCowFee * ratios.fees.v3,
     })
     filled++
   }

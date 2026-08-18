@@ -41,10 +41,7 @@ import {
   PROTOCOL_V3,
   PROTOCOL_COW_AMM,
 } from '@analytics/lib/db'
-import {
-  forwardFillVersionBreakdowns,
-  type VersionBreakdownSeed,
-} from '@analytics/lib/snapshots/forwardFillBreakdowns'
+import { forwardFillVersionBreakdowns } from '@analytics/lib/snapshots/forwardFillBreakdowns'
 import type {
   ChainSnapshotPoint,
   ProtocolBreakdown,
@@ -52,6 +49,7 @@ import type {
   ProtocolSnapshotPoint,
   ProtocolSnapshotSeries,
   SnapshotSource,
+  VersionBreakdownSeed,
 } from '@analytics/lib/snapshots/types'
 
 export const runtime = 'nodejs'

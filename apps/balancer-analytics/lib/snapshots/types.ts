@@ -45,6 +45,17 @@ export type ProtocolBreakdown = {
   byChain: Partial<Record<GqlChain, ChainSnapshotPoint>>
 }
 
+/** TVL / volume / fees slice used to seed V2 vs V3 attribution. */
+export type VersionMetricSlice = Pick<
+  ProtocolBreakdown,
+  'totalLiquidity' | 'swapVolume24h' | 'swapFee24h'
+>
+
+export type VersionBreakdownSeed = {
+  v2: VersionMetricSlice
+  v3: VersionMetricSlice
+}
+
 export type ProtocolKey = 'V2' | 'V3' | 'COW_AMM'
 
 export type ProtocolSnapshotPoint = {
