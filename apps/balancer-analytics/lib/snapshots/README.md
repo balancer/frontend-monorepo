@@ -50,7 +50,7 @@ we already run for the Hyperliquid dashboard, and we know it works.
 - `../db.ts` — Neon client + `ensureSchema()`.
 - `../../app/api/cron/snapshot/route.ts` — hourly writer.
 - `../../app/api/snapshots/route.ts` — public read endpoint.
-- `../../vercel.json` — cron schedule (`0 * * * *`, UTC).
+- `../../vercel.json` — cron schedule (`0 * * * *` snapshot + `15 1 * * *` DefiLlama backfill, UTC).
 
 ## Setup
 

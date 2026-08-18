@@ -6,6 +6,10 @@
       "schedule": "0 * * * *"
     },
     {
+      "path": "/api/cron/backfill",
+      "schedule": "15 1 * * *"
+    },
+    {
       "path": "/api/cron/sync-dune-labels",
       "schedule": "0 3 * * 1"
     }

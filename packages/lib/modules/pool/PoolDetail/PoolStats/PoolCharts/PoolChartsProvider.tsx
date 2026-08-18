@@ -16,6 +16,7 @@ import { isCowAmmPool } from '../../../pool.helpers'
 import { PoolChartTab, usePoolChartTabs } from './PoolChartTabsProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { alignUtcWithLocalDay } from '@repo/lib/shared/utils/time'
+type NonEmptyPoolChartPeriods = [PoolChartPeriod, ...PoolChartPeriod[]]
 
 const MIN_DISPLAY_PERIOD_DAYS = 30
 
@@ -24,7 +25,7 @@ export type PoolChartPeriod = {
   label: string
 }
 
-export const poolChartPeriods: PoolChartPeriod[] = [
+export const poolChartPeriods: NonEmptyPoolChartPeriods = [
   {
     value: GqlPoolSnapshotDataRangeValues.ThirtyDays,
     label: '30d',
