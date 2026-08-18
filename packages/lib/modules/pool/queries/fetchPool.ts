@@ -17,6 +17,7 @@ export async function getPoolQuery(apolloClient: ApolloClient, chain: ChainSlug,
         },
       },
     })
+
     return { data: result.data, error: null }
   } catch (error: unknown) {
     return { data: null, error: ensureError(error) }

@@ -80,9 +80,11 @@ export function useDashboardHighlights(): DashboardHighlights {
 
   const topVolumeChain = useMemo<ChainVolumeLeader | null>(() => {
     if (!chainData.length) return null
+
     const totals = chainData
       .map(c => ({ chain: c.chain, volume24h: Number(c.swapVolume24h || 0) }))
       .filter(c => c.volume24h > 0)
+
     if (!totals.length) return null
     const total = totals.reduce((a, b) => a + b.volume24h, 0)
     const winner = totals.reduce((a, b) => (b.volume24h > a.volume24h ? b : a))
@@ -112,6 +114,7 @@ export function useDashboardHighlights(): DashboardHighlights {
       if (fees24h > 0 && (!feeLeader || fees24h > feeLeader.fees24h)) {
         feeLeader = { pool, fees24h, totalApr, tvl }
       }
+
       if (tvl >= APR_MIN_TVL_USD && totalApr > 0 && (!aprLeader || totalApr > aprLeader.totalApr)) {
         aprLeader = { pool, fees24h, totalApr, tvl }
       }

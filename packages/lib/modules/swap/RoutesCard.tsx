@@ -228,6 +228,7 @@ function PathRoute({ chain, path, totalAmount, colors }: PathRouteProps) {
     .shiftedBy(-path.tokens[0].decimals)
     .div(totalAmount)
     .toNumber()
+
   const { getToken } = useTokens()
 
   return (
@@ -429,6 +430,7 @@ function sortTokens(tokens: PoolToken[], inputToken: ApiToken, outputToken: ApiT
 
   const outputIndex = tokens.findIndex(token => token.address === outputToken.address)
   if (outputIndex === -1) return tokens
+
   ;[tokens[tokens.length - 1], tokens[outputIndex]] = [
     tokens[outputIndex],
     tokens[tokens.length - 1],

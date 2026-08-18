@@ -102,6 +102,7 @@ export class LiquidityActionHelpers {
             : null,
       })
     )
+
     const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
       id: this.pool.id as Hex,
       address: this.pool.address as Address,
@@ -110,6 +111,7 @@ export class LiquidityActionHelpers {
       tokens: poolTokensWithUnderlyings,
       totalShares: this.pool.dynamicData.totalShares as HumanAmount,
     }
+
     return state
   }
 
@@ -143,6 +145,7 @@ export class LiquidityActionHelpers {
       .filter(({ humanAmount }) => humanAmount && bn(humanAmount).gt(0))
       .map(({ tokenAddress, humanAmount, symbol, decimals: humanAmountDecimals }) => {
         const chain = this.pool.chain
+
         if (isNativeAsset(tokenAddress, chain)) {
           const decimals = getNativeAsset(chain).decimals
           return {
@@ -155,6 +158,7 @@ export class LiquidityActionHelpers {
 
         const allTokens = allPoolTokens(this.pool)
         const token = allTokens.find(token => isSameAddress(token.address, tokenAddress))
+
         if (token) {
           return {
             address: token.address as Address,
@@ -273,6 +277,7 @@ export function requiresProportionalInputReason(pool: Pool): string | undefined 
   if (isV3Pool(pool) && isUnbalancedLiquidityDisabled(pool)) {
     return 'Adding unbalanced liquidity has been disabled in this pool'
   }
+
   if (isGyro(pool.type) && !isV3Pool(pool)) return requiresProportionalTemplate('Gyro (CLP)')
   if (isCowAmmPool(pool.type)) return requiresProportionalTemplate('Cow AMM')
 
@@ -291,6 +296,7 @@ export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
 export function supportsProportionalAddLiquidityReasons(pool: Pool): string | undefined {
   if (isV2Pool(pool)) {
     if (pool.type === GqlPoolTypeValues.Stable) return supportsProportionalTemplate('v2 stable')
+
     if (pool.type === GqlPoolTypeValues.MetaStable) {
       return supportsProportionalTemplate('v2 metastable')
     }
@@ -321,6 +327,7 @@ export function isWeightedPool2Tokens(pool: Pool): boolean {
   ) {
     return true
   }
+
   return false
 }
 
@@ -412,6 +419,7 @@ export function injectNativeAsset(
   ) {
     return [nativeAsset, ...validTokens]
   }
+
   return validTokens
 }
 

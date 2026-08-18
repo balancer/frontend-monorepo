@@ -46,6 +46,7 @@ export function VebalUnlockForm() {
   function onModalClose(isSuccess: boolean) {
     previewModalDisclosure.onClose()
     refetchAll()
+
     if (isSuccess) {
       router.push('/vebal/manage')
     }

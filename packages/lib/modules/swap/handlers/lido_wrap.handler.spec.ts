@@ -100,6 +100,7 @@ describe('LidoWrapHandler.build', () => {
 
   it('throws for invalid wrap tokens', () => {
     mockNetworkConfig = emptyWrappersConfig
+
     expect(() =>
       handler.build({
         tokenIn: {

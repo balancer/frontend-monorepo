@@ -150,6 +150,7 @@ export function PoolTypeTag({ pool }: PoolTypeTagProps) {
 
   const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
   const formattedProtocolNames = formatStringsToSentenceList(protocolNames)
+
   const boostedWarningMsg = `This Boosted pool uses wrapped ${formattedProtocolNames} tokens to generate yield from lending on ${
     protocolNames.length === 1 ? 'that protocol' : 'those protocols'
   }. This results in continuous appreciation of the pool's total value over time.`

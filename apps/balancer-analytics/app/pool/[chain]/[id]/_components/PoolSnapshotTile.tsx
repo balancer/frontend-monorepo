@@ -119,6 +119,7 @@ function MetricRow({
 
 // Locale-independent DD.MM.YYYY, HH:mm — matches the event log column.
 const pad2 = (n: number): string => (n < 10 ? `0${n}` : `${n}`)
+
 function fmtWhen(unixSec: number): string {
   const d = new Date(unixSec * 1000)
   return `${pad2(d.getDate())}.${pad2(d.getMonth() + 1)}.${d.getFullYear()}, ${pad2(d.getHours())}:${pad2(d.getMinutes())}`
@@ -187,6 +188,7 @@ export function PoolSnapshotTile({
   let volumeTotal = 0
   let feesTotal = 0
   let surplusTotal = 0
+
   for (const s of sorted) {
     volumeTotal += s.volume24h
     feesTotal += s.fees24h
@@ -200,6 +202,7 @@ export function PoolSnapshotTile({
   // Latest tracked param event (max blockTimestamp). Stable+amp pools can
   // have multiple events at the same block — break ties on logIndex too.
   let lastEvent: Ev | null = null
+
   for (const e of events) {
     if (
       !lastEvent ||

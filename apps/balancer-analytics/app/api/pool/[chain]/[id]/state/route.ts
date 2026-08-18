@@ -76,6 +76,7 @@ async function fetchPoolMeta(chain: GqlChain, idOrAddress: string): Promise<Pool
       }
     }
   `
+
   const addrQuery = /* GraphQL */ `
     query StateMetaByAddress($address: String!, $chain: GqlChain!) {
       pools: poolGetPools(where: { addressIn: [$address], chainIn: [$chain] }, first: 1) {
@@ -84,19 +85,23 @@ async function fetchPoolMeta(chain: GqlChain, idOrAddress: string): Promise<Pool
       }
     }
   `
+
   const idRes = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query: idQuery, variables: { id: idOrAddress, chain } }),
     cache: 'no-store',
   })
+
   if (idRes.ok) {
     const json = (await idRes.json()) as {
       data?: { poolGetPool?: { type: string; protocolVersion: number } }
     }
+
     const p = json.data?.poolGetPool
     if (p) return { type: p.type, protocolVersion: p.protocolVersion as 1 | 2 | 3 }
   }
+
   if (idOrAddress.length !== 42) return null
 
   const addrRes = await fetch(API_URL, {
@@ -108,10 +113,13 @@ async function fetchPoolMeta(chain: GqlChain, idOrAddress: string): Promise<Pool
     }),
     cache: 'no-store',
   })
+
   if (!addrRes.ok) return null
+
   const json = (await addrRes.json()) as {
     data?: { pools?: { type: string; protocolVersion: number }[] }
   }
+
   const p = json.data?.pools?.[0]
   if (!p) return null
   return { type: p.type, protocolVersion: p.protocolVersion as 1 | 2 | 3 }
@@ -120,12 +128,14 @@ async function fetchPoolMeta(chain: GqlChain, idOrAddress: string): Promise<Pool
 export async function GET(_request: Request, ctx: RouteContext): Promise<Response> {
   const raw = await ctx.params
   const parsed = z.object({ chain: ChainSchema, id: PoolIdSchema }).safeParse(raw)
+
   if (!parsed.success) {
     return Response.json(
       { error: 'invalid input', details: parsed.error.flatten() },
       { status: 400 }
     )
   }
+
   const { chain, id } = parsed.data
   const rawId = id.toLowerCase()
   // 20-byte contract address for the on-chain multicall.
@@ -151,6 +161,7 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
         readUniversalV3State(chain, pool),
         isStable ? readStableTypeState(chain, pool) : Promise.resolve(null),
       ])
+
       if (u) {
         universal = {
           swapFeePercentage: u.swapFeePercentage,
@@ -159,6 +170,7 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
           isPaused: u.isPaused,
           isInRecoveryMode: u.isInRecoveryMode,
         }
+
         if (isStable && s) {
           typeSpecific = {
             poolCreatorSwapFeePercentage: u.poolCreatorSwapFeePercentage,
@@ -176,6 +188,7 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
         readV2BasePoolState(chain, pool),
         isStable ? readV2StableTypeState(chain, pool) : Promise.resolve(null),
       ])
+
       if (v2) {
         universal = {
           swapFeePercentage: v2.swapFeePercentage,
@@ -187,6 +200,7 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
           isPaused: v2.isPaused,
           isInRecoveryMode: v2.isInRecoveryMode ?? false,
         }
+
         if (isStable && s) {
           typeSpecific = {
             poolCreatorSwapFeePercentage: null,

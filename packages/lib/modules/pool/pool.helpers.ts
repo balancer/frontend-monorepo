@@ -208,6 +208,7 @@ export function noInitLiquidity(pool: GqlPoolBase): boolean {
   //   return true;
   return bn(pool.dynamicData.totalShares || '0').eq(0)
 }
+
 export function preMintedBptIndex(pool: GqlPoolBase): number | void {
   return allPoolTokens(pool).findIndex(token => isSameAddress(token.address, pool.address))
 }
@@ -258,6 +259,7 @@ export function getPoolHelpers(pool: Pool, chain: GqlChain) {
     pool?.staking?.gauge?.gaugeAddress as Address,
     chain
   )
+
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
   const hasGaugeAddress = !!pool?.staking?.gauge?.gaugeAddress
   const gaugeAddress = pool?.staking?.gauge?.gaugeAddress || ''
@@ -315,6 +317,7 @@ export function allClaimableGaugeAddressesFor(pool: ClaimablePool) {
   }
 
   const otherGauges = staking.gauge?.otherGauges || []
+
   const otherClaimableGaugeAddresses = otherGauges
     .filter(gauge => isClaimableGauge(gauge, pool.chain))
     .map(g => g.gaugeAddress as Address)
@@ -358,6 +361,7 @@ export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {
   const nestedHooks = pool.poolTokens.flatMap(token =>
     token.nestedPool ? token.nestedPool.hook : []
   )
+
   const hooks = [...(pool.hook ? [pool.hook] : []), ...nestedHooks]
 
   return hooks.some(hook => hook && hook.type === hookType)
@@ -391,6 +395,7 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
   if (isManaged(pool.type)) reasons.push('Managed pools are not supported. Seek help in Discord.')
   if (pool.dynamicData.isPaused) reasons.push('Paused pool')
   if (pool.dynamicData.isInRecoveryMode) reasons.push('Pool in recovery')
+
   if (isAffectedByV2Exploit(pool)) {
     reasons.push('This pool type is affected by an exploit. Adding liquidity is not allowed')
   }
@@ -406,11 +411,13 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
 
   if (pool.hook && !hasReviewedHook(pool.hook)) reasons.push('Unreviewed hook')
   if (pool.hook?.reviewData?.summary === 'unsafe') reasons.push('Unsafe hook')
+
   if (isChainDeprecated(pool.chain)) {
     reasons.push(`${getChainName(pool.chain)} is being sunset on Balancer`)
   }
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+
   for (const token of poolTokens) {
     // if token is not allowed - we should block adding liquidity
     if (!token.isAllowed) {
@@ -454,6 +461,7 @@ export function isAffectedByV2Exploit(pool: Pool) {
       return true
     }
   }
+
   return false
 }
 
@@ -489,6 +497,7 @@ function isAffectedBy(pool: Pool, poolIssue: PoolIssue) {
 
 export function getVaultConfig(pool: Pool) {
   const networkConfig = getNetworkConfig(pool.chain)
+
   const vaultAddress =
     pool.protocolVersion === 3
       ? networkConfig.contracts.balancer.vaultV3!
@@ -552,6 +561,7 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
   ) {
     return false
   }
+
   return true
 }
 
@@ -595,6 +605,7 @@ export function getPoolActivityDateCaption(minTimestampSeconds: number): string 
     new Date(),
     new Date(secondsToMilliseconds(minTimestampSeconds))
   )
+
   if (diffInDays === 0) return 'today'
   if (diffInDays === 1) return 'since yesterday'
   return `in last ${diffInDays} days`

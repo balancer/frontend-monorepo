@@ -25,6 +25,7 @@ export const StakeContext = createContext<UseStakeResponse | null>(null)
 export function useStakeLogic() {
   const { userAddress, isConnected } = useUserAccount()
   const { pool, chainId, isLoadingOnchainUserBalances } = usePool()
+
   const { isDisabled, disabledReason } = isDisabledWithReason([
     !isConnected,
     LABELS.walletNotConnected,
@@ -49,6 +50,7 @@ export function useStakeLogic() {
    * Side-effects
    */
   const stakedBalance = getStakedBalance(pool, GqlPoolStakingTypeValues.Gauge)
+
   const { quoteAmountIn, quoteAmountInUsd } = useMemo(() => {
     const stakableBalance: HumanAmount = getUserWalletBalance(pool)
     const stakableBalanceUsd: HumanAmount = getUserWalletBalanceUsd(pool).toFixed() as HumanAmount

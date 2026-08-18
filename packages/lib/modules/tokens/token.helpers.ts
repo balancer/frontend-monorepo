@@ -36,9 +36,11 @@ export function isNativeOrWrappedNative(
 export function nativeAssetFilter(chain: GqlChain | SupportedChainId) {
   return (token: TokenBase | string) => {
     const nativeAssetAddress = getNativeAssetAddress(chain)
+
     if (typeof token === 'string') {
       return isSameAddress(token, nativeAssetAddress)
     }
+
     return isSameAddress(token.address, nativeAssetAddress)
   }
 }
@@ -46,9 +48,11 @@ export function nativeAssetFilter(chain: GqlChain | SupportedChainId) {
 export function wrappedNativeAssetFilter(chain: GqlChain | SupportedChainId) {
   return (token: TokenBase | string) => {
     const wNativeAssetAddress = getWrappedNativeAssetAddress(chain)
+
     if (typeof token === 'string') {
       return isSameAddress(token, wNativeAssetAddress)
     }
+
     return isSameAddress(token.address, wNativeAssetAddress)
   }
 }
@@ -56,9 +60,11 @@ export function wrappedNativeAssetFilter(chain: GqlChain | SupportedChainId) {
 export function exclNativeAssetFilter(chain: GqlChain | SupportedChainId) {
   return (token: TokenBase | string) => {
     const nativeAssetAddress = getNativeAssetAddress(chain)
+
     if (typeof token === 'string') {
       return !isSameAddress(token, nativeAssetAddress)
     }
+
     return !isSameAddress(token.address, nativeAssetAddress)
   }
 }
@@ -66,9 +72,11 @@ export function exclNativeAssetFilter(chain: GqlChain | SupportedChainId) {
 export function exclWrappedNativeAssetFilter(chain: GqlChain | SupportedChainId) {
   return (token: TokenBase | string) => {
     const wNativeAssetAddress = getWrappedNativeAssetAddress(chain)
+
     if (typeof token === 'string') {
       return !isSameAddress(token, wNativeAssetAddress)
     }
+
     return !isSameAddress(token.address, wNativeAssetAddress)
   }
 }
@@ -84,6 +92,7 @@ export function swapNativeWithWrapped(inputAmounts: InputAmount[], chain: GqlCha
         address: getWrappedNativeAssetAddress(chain),
       }
     }
+
     return inputAmount
   })
 }
@@ -99,6 +108,7 @@ export function swapWrappedWithNative(inputAmounts: HumanTokenAmountWithSymbol[]
         tokenAddress: getNativeAssetAddress(chain),
       } as HumanTokenAmountWithSymbol
     }
+
     return inputAmount
   })
 }
@@ -141,22 +151,28 @@ function getTokenOrUnderlying(token: PoolToken): ApiToken {
 
 export function getSpenderForAddLiquidity(pool: Pool): Address {
   if (isCowAmmPool(pool.type)) return pool.address as Address
+
   if (isV3Pool(pool)) {
     const permit2Address = getNetworkConfig(pool.chain).contracts.permit2
+
     if (!permit2Address) {
       throw new Error(`Permit2 feature is not yet available for this chain (${pool.chain}) `)
     }
+
     return permit2Address
   }
+
   const { vaultAddress } = getVaultConfig(pool)
   return vaultAddress
 }
 
 export function getSpenderForCreatePool(chain: GqlChain): Address {
   const permit2Address = getNetworkConfig(chain).contracts.permit2
+
   if (!permit2Address) {
     throw new Error(`Permit2 feature is not yet available for this chain (${chain}) `)
   }
+
   return permit2Address
 }
 

@@ -27,6 +27,7 @@ export class AuraBalSwapHandler implements SwapHandler {
     const tokenInAddress = isNativeAsset(chain, variables.tokenIn)
       ? getWrappedNativeAssetAddress(chain)
       : variables.tokenIn
+
     const tokenOutAddress = isNativeAsset(chain, variables.tokenOut)
       ? getWrappedNativeAssetAddress(chain)
       : variables.tokenOut
@@ -41,10 +42,12 @@ export class AuraBalSwapHandler implements SwapHandler {
     const tokenIn = new Token(_tokenIn.chainId, tokenInAddress, _tokenIn.decimals)
     const tokenOut = new Token(_tokenOut.chainId, tokenOutAddress, _tokenOut.decimals)
     const swapAmountToken = swapType === GqlSorSwapTypeValues.ExactIn ? tokenIn : tokenOut
+
     const swapAmount = TokenAmount.fromHumanAmount(
       swapAmountToken,
       variables.swapAmount as HumanAmount
     )
+
     const kind = this.swapTypeToKind(swapType)
 
     const auraBalSwap = new AuraBalSwap(rpcUrl)

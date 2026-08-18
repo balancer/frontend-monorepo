@@ -271,11 +271,14 @@ export function getProportionalExitAmountsFromScaledBptIn(
 export function getPoolsByGaugesMap(pools: ClaimablePool[]) {
   return pools.reduce((acc: Record<string, ClaimablePool>, pool) => {
     const gaugeId = pool.staking?.gauge?.id || ''
+
     if (gaugeId) {
       acc[gaugeId] = pool
     }
+
     pool.staking?.gauge?.otherGauges?.forEach(otherGauge => {
       const otherGaugeId = otherGauge.id
+
       if (otherGaugeId) {
         acc[otherGaugeId] = pool
       }

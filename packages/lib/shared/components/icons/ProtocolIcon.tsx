@@ -8,6 +8,7 @@ type Props = Omit<ImageProps, 'src' | 'alt' | 'width' | 'height'> & {
   size?: number
   sx?: SystemProps
 }
+
 export function ProtocolIcon({ size = 18, protocol, ...props }: Props) {
   const src = protocolIconPaths[protocol]
   const alt = protocol

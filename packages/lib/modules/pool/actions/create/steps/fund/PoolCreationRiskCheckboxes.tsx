@@ -6,6 +6,7 @@ import { useWatch } from 'react-hook-form'
 
 export function PoolCreationRiskCheckboxes() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['hasAcceptedTokenWeightsRisk', 'hasAcceptedPoolCreationRisk', 'poolType'],

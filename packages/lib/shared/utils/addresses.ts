@@ -56,6 +56,7 @@ export function selectByAddress<T>(map: Record<string, T>, address: string): T |
       return true
     }
   })
+
   if (foundAddress) return map[foundAddress]
 }
 

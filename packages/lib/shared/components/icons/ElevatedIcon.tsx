@@ -4,6 +4,7 @@ type Props = {
   sizePx: string
   as: any
 }
+
 export function ElevatedIcon({
   sizePx,
   background = 'background.level2',

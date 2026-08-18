@@ -26,6 +26,7 @@ function getAvailableLockActions(
       [LockActionType.Unlock]: isExpired,
     }
   }
+
   return {
     [LockActionType.Unlock]: false,
   }

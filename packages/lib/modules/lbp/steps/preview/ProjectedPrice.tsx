@@ -39,13 +39,16 @@ export function ProjectedPrice({
   onPriceChange,
 }: Props) {
   const [maxPrice, setMaxPrice] = useState('')
+
   const updateMaxPrice = (prices: LbpPrice[]) => {
     setMaxPrice(fNum('fiat', max(prices)))
   }
 
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
+
   const hoursDiff =
     differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
+
   const salePeriodText =
     startDateTime && endDateTime
       ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`

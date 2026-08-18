@@ -8,6 +8,7 @@ export function aTokenAmountMock(tokenAddress: Address, amount: HumanAmount): To
     amount: parseUnits(amount, 18),
     token: aToken({ address: tokenAddress }),
   })
+
   return Object.assign({}, defaultTokenAmount)
 }
 

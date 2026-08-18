@@ -79,9 +79,11 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     beginEditing()
     const value = e.currentTarget.value
+
     if (!value || (parseFloat(value) <= 50 && isBnParseable(value))) {
       inputSlippageRef.current = value
       setInputSlippage(value)
+
       if (value && bn(value).gt(0)) {
         setSlippage(value)
       }

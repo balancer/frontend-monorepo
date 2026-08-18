@@ -36,6 +36,7 @@ export function AddLiquidityModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
+
   const {
     transactionSteps,
     lastTransaction,
@@ -44,6 +45,7 @@ export function AddLiquidityModal({
     urlTxHash,
     setInitialHumanAmountsIn,
   } = useAddLiquidity()
+
   const { pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { redirectToPoolPage } = usePoolRedirect(pool)

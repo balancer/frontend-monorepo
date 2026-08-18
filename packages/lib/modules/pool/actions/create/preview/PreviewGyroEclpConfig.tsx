@@ -10,10 +10,12 @@ import { useWatch } from 'react-hook-form'
 export function PreviewGyroEclpConfig() {
   const { eclpConfigForm, poolCreationForm, invertGyroEclpPriceParams, isBeforeStep } =
     usePoolCreationForm()
+
   const [alpha, beta, peakPrice] = useWatch({
     control: eclpConfigForm.control,
     name: ['alpha', 'beta', 'peakPrice'],
   })
+
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const { options } = useEclpChart()
@@ -35,6 +37,7 @@ export function PreviewGyroEclpConfig() {
       value: beta ? fNumCustom(beta, NUM_FORMAT) : '-',
     },
   ]
+
   const tokenSymbols = poolTokens.map(token => token.data?.symbol).filter(Boolean)
   const tokenSymbolsString = tokenSymbols.join(' / ')
 

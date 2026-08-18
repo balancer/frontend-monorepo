@@ -20,6 +20,7 @@ export function useHook(pool: PoolCore) {
         const metadataAddresses = metadata.addresses[chainId.toString()]?.map(address =>
           address.toLowerCase()
         )
+
         return (
           hookAddress && metadataAddresses && metadataAddresses.includes(hookAddress.toLowerCase())
         )

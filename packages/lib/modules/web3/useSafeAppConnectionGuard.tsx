@@ -7,8 +7,10 @@ import { useEffect } from 'react'
 */
 export function useSafeAppConnectionGuard(newConnector?: Connector, chainId?: number) {
   const { connect, connectors } = useConnect()
+
   useEffect(() => {
     const safeConnector = connectors.find(c => c.id === 'safe')
+
     if (isSafeApp() && newConnector && newConnector?.id !== 'safe' && safeConnector) {
       connect({ chainId, connector: safeConnector })
     }

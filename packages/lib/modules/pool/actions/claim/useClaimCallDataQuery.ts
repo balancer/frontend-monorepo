@@ -29,6 +29,7 @@ export function useClaimCallDataQuery({
       const claimRewardsCallData = gaugeService.getGaugeEncodeClaimRewardsCallData({
         gauges: claimRewardGauges,
       })
+
       calls.push(claimRewardsCallData)
     }
 
@@ -37,6 +38,7 @@ export function useClaimCallDataQuery({
         gauges: mintBalRewardGauges,
         outputReference: 0n,
       })
+
       calls.push(mintCallData)
     }
 

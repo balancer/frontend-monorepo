@@ -102,6 +102,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
     setTabIndex(0)
     setWantsProportional(false)
   }
+
   const setProportionalTab = () => {
     setTabIndex(1)
     setWantsProportional(true)
@@ -121,6 +122,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
 
   const onModalOpen = async () => {
     previewModalDisclosure.onOpen()
+
     if (requiresProportionalInput(pool)) {
       await refetchQuote()
     }

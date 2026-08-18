@@ -82,6 +82,7 @@ function calculateBalance(
 
     const swapEvent = event as GqlPoolSwapEventV3
     const eventType = swapEvent.tokenOut.address === projectTokenAddress ? 'Buy' : 'Sell'
+
     if (eventType === 'Buy') {
       return acc.plus(swapEvent.tokenOut.amount)
     } else {

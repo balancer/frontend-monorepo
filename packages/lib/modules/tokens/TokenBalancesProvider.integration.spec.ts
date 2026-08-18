@@ -89,6 +89,7 @@ test('Should not return balances when user is not connected (account is empty) '
     decimals: 18,
     formatted: '0',
   })
+
   expect(result.current.balances[1]).toMatchObject({
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainId: 1,

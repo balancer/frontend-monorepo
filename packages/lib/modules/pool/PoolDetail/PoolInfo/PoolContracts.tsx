@@ -67,6 +67,7 @@ function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean
             <Image alt="Notes" height={16} src="/images/icons/notes.svg" width={16} />
           </Box>
         )
+
         level = 2
       }
     } else {
@@ -155,6 +156,7 @@ export function PoolContracts({ ...props }: CardProps) {
 
     if (isV3LBP(pool)) {
       const lbpPool = pool as LbpV3
+
       contracts.push({
         label: 'Sale token contract',
         address: abbreviateAddress(lbpPool.projectToken as Address),
@@ -182,6 +184,7 @@ export function PoolContracts({ ...props }: CardProps) {
     const nestedHooks = pool.poolTokens.flatMap(token =>
       token.nestedPool ? token.nestedPool.hook : []
     )
+
     return [...(pool.hook ? [pool.hook] : []), ...nestedHooks].filter(Boolean)
   }, [pool])
 
@@ -193,6 +196,7 @@ export function PoolContracts({ ...props }: CardProps) {
     const erc4626Tokens = pool.poolTokens.filter(
       token => token.isErc4626 && token.useUnderlyingForAddRemove
     )
+
     const erc4626NestedTokens = pool.poolTokens.flatMap(token =>
       token.nestedPool
         ? token.nestedPool.tokens.filter(
@@ -200,6 +204,7 @@ export function PoolContracts({ ...props }: CardProps) {
           )
         : []
     )
+
     return [...(erc4626Tokens ? erc4626Tokens : []), ...erc4626NestedTokens]
   }, [pool])
 

@@ -54,12 +54,14 @@ function useReliquaryBuildCallDataQuery({
       'Reliquary add liquidity query',
       simulationQuery.data
     )
+
     const response = await handler.buildCallData({
       account: userAddress,
       humanAmountsIn,
       slippagePercent: slippage,
       queryOutput,
     })
+
     console.log('Reliquary call data built:', response)
     return response
   }
@@ -122,6 +124,7 @@ export function useReliquaryAddLiquidityStep(
   )
 
   const isComplete = () => isTransactionSuccess(transaction)
+
   useEffect(() => {
     // simulationQuery is refetched every 30 seconds
     if (simulationQuery.data && isStepActivated) {

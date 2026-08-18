@@ -83,15 +83,19 @@ export async function POST(req: Request) {
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) return unauthorized()
 
   let body: { rows?: InputRow[]; force?: boolean }
+
   try {
     body = await req.json()
   } catch {
     return badRequest('invalid JSON body')
   }
+
   const rows = body?.rows
+
   if (!Array.isArray(rows) || rows.length === 0) {
     return badRequest('body.rows must be a non-empty array')
   }
+
   const force = !!body.force
 
   await ensureSchemaOnce()
@@ -101,20 +105,26 @@ export async function POST(req: Request) {
 
   for (const r of rows) {
     const ts = parseDayToUnixSeconds(r.day)
+
     if (ts === null) {
       rejected.push({ row: r, reason: 'invalid day' })
       continue
     }
+
     const protocol = VERSION_TO_PROTOCOL[r.version]
+
     if (!protocol) {
       rejected.push({ row: r, reason: `unknown version ${r.version}` })
       continue
     }
+
     const tvl = Number(r.tvl)
+
     if (!Number.isFinite(tvl) || tvl < 0) {
       rejected.push({ row: r, reason: 'invalid tvl' })
       continue
     }
+
     accepted.push({ ts, protocol, tvl })
   }
 
@@ -138,6 +148,7 @@ export async function POST(req: Request) {
             captured_at     = now()
         `
       }
+
       // Gap-fill: insert if missing; if a placeholder row exists with
       // total_liquidity = 0 (e.g. DefiLlama wrote volume but no TVL), patch it.
       return sql`

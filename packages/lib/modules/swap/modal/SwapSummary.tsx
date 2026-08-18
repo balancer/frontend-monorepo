@@ -33,6 +33,7 @@ export function SwapSummary({
 }: SwapReceiptResult) {
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
+
   const {
     tokenIn,
     tokenOut,
@@ -50,9 +51,11 @@ export function SwapSummary({
   } = useSwap()
 
   const { slippage } = useUserSettings()
+
   const [selectedSlippage, setSelectedSlippage] = useState(
     swapType === GqlSorSwapTypeValues.ExactIn ? 0 : Number(slippage) / 100
   )
+
   const calculateSlippage = (value: SlippageOptions) => {
     if (value === 'zero') setSelectedSlippage(0)
     else if (value === 'max') setSelectedSlippage(Number(slippage) / 100)
@@ -62,6 +65,7 @@ export function SwapSummary({
 
   const shouldShowReceipt =
     !isWrap && !!swapTxHash && !isLoadingReceipt && !!receivedToken && !!sentToken
+
   const shouldShowErrors = hasQuoteContext ? swapTxConfirmed : swapTxHash
   const isWrapComplete = isWrap && swapTxHash && swapTxConfirmed
 
@@ -83,9 +87,11 @@ export function SwapSummary({
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
   }
+
   if (shouldShowErrors && error) {
     return <BalAlert content="We were unable to find this transaction hash" status="warning" />
   }
+
   if (shouldShowErrors && !isLoadingReceipt && (!receivedToken || !sentToken)) {
     return (
       <BalAlert
@@ -114,6 +120,7 @@ export function SwapSummary({
       : bn(tokenIn.amount || '0')
           .times(1 + selectedSlippage)
           .toString()
+
   const outAmountWithSlippage =
     swapType === GqlSorSwapTypeValues.ExactOut
       ? tokenOut.amount

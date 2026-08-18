@@ -107,9 +107,11 @@ export function RadialPattern({
 
   const circles = useMemo(() => {
     const circles = []
+
     for (let i = circleCount; i >= 1; i--) {
       const currentWidth = `${baseWidth - widthDifference * (circleCount - i)}px`
       const currentHeight = `${baseHeight - heightDifference * (circleCount - i)}px`
+
       circles.push({
         currentWidth,
         currentHeight,
@@ -119,6 +121,7 @@ export function RadialPattern({
         circleProgressStage: (100 / circleCount) * (circleCount - i),
       })
     }
+
     return circles
   }, [
     circleCount,

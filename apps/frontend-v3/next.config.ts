@@ -76,6 +76,7 @@ async function manifestHeaders() {
       value: 'X-Requested-With, content-type, Authorization',
     },
   ]
+
   return [
     {
       source: '/manifest.json',

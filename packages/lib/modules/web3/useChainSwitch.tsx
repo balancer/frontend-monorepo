@@ -35,6 +35,7 @@ export interface NetworkSwitchButtonProps {
 }
 
 type Props = { chainId: SupportedChainId }
+
 export function NetworkSwitchButton({ chainId }: Props) {
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
   const isSafeApp = useIsSafeApp()

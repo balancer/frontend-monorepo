@@ -14,6 +14,7 @@ test('getBlockExplorerName', () => {
 
 test('getBlockExplorerName', () => {
   const gnosisUserAddress = '0x90830ed558f12d826370dc52e9d87947a7f18de9'
+
   expect(getBlockExplorerAddressUrl(gnosisUserAddress, GqlChainValues.Gnosis)).toBe(
     'https://gnosisscan.io/address/0x90830ed558f12d826370dc52e9d87947a7f18de9'
   )
@@ -21,6 +22,7 @@ test('getBlockExplorerName', () => {
 
 test('getBlockExplorerName', () => {
   const blockNumber = 12345
+
   expect(getBlockExplorerBlockUrl(blockNumber, GqlChainValues.Optimism)).toBe(
     'https://optimistic.etherscan.io/block/12345'
   )
@@ -34,6 +36,7 @@ test('getBlockExplorerTokenUrl', () => {
 
 test('getBlockExplorerTxUrl', () => {
   const txHash = '0xb677ff33a885d57f19d23f0042eee4c049a52ee8339221dcf3099bd6a3fdaefc'
+
   expect(getBlockExplorerTxUrl(txHash, GqlChainValues.Mainnet)).toBe(
     'https://etherscan.io/tx/0xb677ff33a885d57f19d23f0042eee4c049a52ee8339221dcf3099bd6a3fdaefc'
   )

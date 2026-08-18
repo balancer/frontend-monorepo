@@ -58,18 +58,21 @@ function getTargetBand(
   }
 
   const invariant = (balanceA + virtualBalanceA) * (balanceB + virtualBalanceB)
+
   const lowerMarginBal = calculateLowerMargin({
     margin,
     invariant,
     virtualBalanceA,
     virtualBalanceB,
   })
+
   const upperMarginBal = calculateUpperMargin({
     margin,
     invariant,
     virtualBalanceA,
     virtualBalanceB,
   })
+
   if (!Number.isFinite(lowerMarginBal) || !Number.isFinite(upperMarginBal)) return null
 
   return {
@@ -83,9 +86,11 @@ function projectSecondsToInRange(input: ReclammRecoveryInput): number | null {
     virtualBalanceA: input.virtualBalanceA,
     virtualBalanceB: input.virtualBalanceB,
   }
+
   const band = getTargetBand(input, state)
   const referencePrice = input.marketPrice
   const dailyShiftExponent = Number(input.dailyPriceShiftExponent) / Number(WAD)
+
   if (
     !band ||
     referencePrice === null ||
@@ -152,10 +157,12 @@ export function formatRecoveryDuration(seconds: number | null): string {
   if (seconds <= 0) return 'now'
   if (seconds < 120) return `~${Math.max(1, Math.round(seconds))} s`
   if (seconds < 3600) return `~${Math.round(seconds / 60)} min`
+
   if (seconds < 86400) {
     const hours = seconds / 3600
     return hours < 10 ? `~${hours.toFixed(1).replace(/\.0$/, '')} hr` : `~${Math.round(hours)} hr`
   }
+
   const days = seconds / 86400
   if (days < 60) return `~${Math.round(days)} days`
   if (days < 365) return `~${Math.round(days / 30)} mo`

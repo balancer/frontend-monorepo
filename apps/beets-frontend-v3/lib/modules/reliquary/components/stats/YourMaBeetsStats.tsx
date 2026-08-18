@@ -50,12 +50,14 @@ export function YourMaBeetsStats() {
             isValidNumber(relic.amount) && userTotalBalance > 0
               ? bn(relic.amount).div(userTotalBalance).toNumber()
               : 0
+
           return sum + (relic.level + 1) * weight // +1 because levels are 0-indexed
         }, 0)
       : 0
 
   // Calculate Total maBEETS Share as percentage
   const globalTotalBalance = bn(globalStats?.totalBalance || '1').toNumber() // Avoid division by zero
+
   const relicShareDecimal =
     globalTotalBalance > 0 ? bn(userTotalBalance).div(globalTotalBalance).toNumber() : 0
 

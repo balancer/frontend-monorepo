@@ -13,6 +13,7 @@ export function useHasMerklRewards(poolsWithOnchainUserBalances: Pool[], chainId
     // Check rewards for each chain ID
     const hasRewardsPromises = chainIds.map(async chainId => {
       const url = `https://api.merkl.xyz/v4/users/${userAddress}/rewards?chainId=${chainId}`
+
       try {
         const response = await fetch(url)
         const rewards = (await response.json()) as MerklRewardsResponse

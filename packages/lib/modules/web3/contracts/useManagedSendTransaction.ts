@@ -131,6 +131,7 @@ export function useManagedSendTransaction({
     ? async () => {
         if (!estimateGasQuery.data) return
         if (!txConfig?.to) return
+
         try {
           return writeMutation.sendTransactionAsync({
             chainId,
@@ -145,6 +146,7 @@ export function useManagedSendTransaction({
             txConfig,
             gas: estimateGasQuery.data,
           })
+
           throw e
         }
       }

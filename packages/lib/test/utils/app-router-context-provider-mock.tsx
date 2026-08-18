@@ -24,5 +24,6 @@ export function AppRouterContextProviderMock({
     bfcacheId: 'test-bfcache-id',
     ...router,
   }
+
   return <AppRouterContext.Provider value={mockedRouter}>{children}</AppRouterContext.Provider>
 }

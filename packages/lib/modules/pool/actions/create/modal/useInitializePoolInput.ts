@@ -9,6 +9,7 @@ import { useWatch } from 'react-hook-form'
 
 export function useInitializePoolInput(chainId: number): ExtendedInitPoolInput {
   const { poolCreationForm } = usePoolCreationForm()
+
   const poolTokens = useWatch({
     control: poolCreationForm.control,
     name: 'poolTokens',

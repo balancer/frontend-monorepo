@@ -17,6 +17,7 @@ import { findFirstNonPreferentialStaking } from '../stake.helpers'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 const unstakeStepId = 'unstake-non-preferential-gauge'
+
 /*
   Only used in the edge case of a user staked in a non-preferential gauge that is not claimable.
   In this case we run a single unstake transaction instead of unstake + claim multicall.

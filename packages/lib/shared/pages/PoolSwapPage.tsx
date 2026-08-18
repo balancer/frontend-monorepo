@@ -44,6 +44,7 @@ export function PoolSwapPage({ txHash }: Props) {
     tokenOut: poolActionableTokens[1]?.address,
     urlTxHash: maybeTxHash,
   }
+
   const props: SwapProviderProps = {
     pathParams,
     pool,

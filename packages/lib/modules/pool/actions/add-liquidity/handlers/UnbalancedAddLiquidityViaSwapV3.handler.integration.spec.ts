@@ -7,6 +7,7 @@ import { fetchPoolMock, minimalPoolQuery } from '../../../__mocks__/fetchPoolMoc
 describe('When adding unbalanced liquidity via swap for a V3 2-token pool', async () => {
   const waEthWETHAddress = '0x0bfc9d54fc184518a81162f8fb99c2eaca081202'
   const poolId = '0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3' // rETH-waEthWETH
+
   const v3Pool = await fetchPoolMock({
     poolId,
     chain: GqlChainValues.Mainnet,

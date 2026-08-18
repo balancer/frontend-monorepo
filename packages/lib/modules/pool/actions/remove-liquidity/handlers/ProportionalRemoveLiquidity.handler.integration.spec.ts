@@ -36,6 +36,7 @@ describe('When proportionally removing liquidity for a weighted v2 pool', async 
 
     expect(priceImpact).toBe(0)
   })
+
   test('queries amounts out', async () => {
     const handler = selectProportionalHandler(poolMock)
 

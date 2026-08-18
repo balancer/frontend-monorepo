@@ -82,6 +82,7 @@ export function useAprTooltip({
   const dynamicSwapFee = aprItems.find(
     item => item.type === GqlPoolAprItemTypeValues.DynamicSwapFee24h
   )
+
   const dynamicSwapFeesDisplayed = numberFormatter(
     dynamicSwapFee ? dynamicSwapFee.apr.toString() : '0'
   )
@@ -138,6 +139,7 @@ export function useAprTooltip({
 
   // Fuul incentives
   const fuulIncentives = aprItems.find(item => item.type === GqlPoolAprItemTypeValues.Fuul)
+
   const fuulIncentivesDisplayed = numberFormatter(
     fuulIncentives ? fuulIncentives.apr.toString() : '0'
   )
@@ -182,11 +184,13 @@ export function useAprTooltip({
   const totalBase = aprItems
     .filter(item => TOTAL_BASE_APR_TYPES.includes(item.type))
     .reduce((acc, item) => acc.plus(item.apr), bn(0))
+
   const totalBaseDisplayed = numberFormatter(totalBase.toString())
 
   const totalCombined = aprItems
     .filter(item => TOTAL_APR_TYPES.includes(item.type))
     .reduce((acc, item) => acc.plus(item.apr), bn(0))
+
   const totalCombinedDisplayed = numberFormatter(totalCombined.toString())
 
   const stakingIncentivesAprDisplayed = stakingIncentivesDisplayed.reduce(

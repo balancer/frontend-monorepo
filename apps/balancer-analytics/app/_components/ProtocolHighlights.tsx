@@ -250,6 +250,7 @@ function PoolIconStack({ tokens }: { tokens: PoolToken[] }) {
 function isValidImgSrc(src: string | null | undefined): src is string {
   if (!src) return false
   if (src.startsWith('/')) return true
+
   try {
     const u = new URL(src)
     return u.protocol === 'http:' || u.protocol === 'https:' || u.protocol === 'data:'

@@ -40,12 +40,15 @@ const NAV_LINKS: NavLink[] = [
  */
 function scrollToSection(id: string, attempt = 0): void {
   const el = document.getElementById(id)
+
   if (!el) {
     if (attempt < 30) {
       requestAnimationFrame(() => scrollToSection(id, attempt + 1))
     }
+
     return
   }
+
   const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET
   window.scrollTo({ top, behavior: attempt === 0 ? 'smooth' : 'auto' })
 }
@@ -75,6 +78,7 @@ export function Navbar() {
       const hash = window.location.hash.replace('#', '')
       if (hash) scrollToSection(hash)
     }
+
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
@@ -90,20 +94,25 @@ export function Navbar() {
       const sectionLinks = NAV_LINKS.filter(
         (l): l is NavLink & { section: string } => l.section !== null
       )
+
       const hasAnySection = sectionLinks.some(link => document.getElementById(link.section))
+
       if (!hasAnySection) {
         setActiveSection('')
         return
       }
 
       let current = sectionLinks[0]?.section ?? ''
+
       for (const link of sectionLinks) {
         const el = document.getElementById(link.section)
         if (!el) continue
         if (el.getBoundingClientRect().top - SCROLL_OFFSET <= 0) current = link.section
       }
+
       setActiveSection(current)
     }
+
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
@@ -118,11 +127,14 @@ export function Navbar() {
     (event: React.MouseEvent<HTMLAnchorElement>, section: string) => {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
       event.preventDefault()
+
       if (pathname === '/') {
         const nextUrl = `/#${section}`
+
         if (window.location.hash !== `#${section}`) {
           window.history.pushState(null, '', nextUrl)
         }
+
         scrollToSection(section)
         setActiveSection(section)
       } else {

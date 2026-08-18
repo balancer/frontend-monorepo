@@ -47,6 +47,7 @@ type Props = {
 export function PoolPageUpstreamNotice({ chainSlug, poolId, error }: Props) {
   const router = useRouter()
   const isRateLimit = error.kind === 'rate_limit'
+
   const headline = isRateLimit
     ? 'Balancer API rate limit reached'
     : 'Balancer API is busy right now'

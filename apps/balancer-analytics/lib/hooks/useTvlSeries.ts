@@ -128,13 +128,16 @@ function buildSeries(
   // metric. For sparse metrics this is what we use as the lower bound; for
   // dense metrics (TVL/Volume/Fees) it's just used to populate `firstDataAt`.
   let firstDataIdx = -1
+
   for (let i = 0; i < snapshots.length; i++) {
     const v = pickMetric(snapshots[i], metric)
+
     if (Number.isFinite(v) && v > 0) {
       firstDataIdx = i
       break
     }
   }
+
   const firstDataAt = firstDataIdx >= 0 ? snapshots[firstDataIdx].timestamp * 1000 : null
 
   const anchor = snapshots.at(-1)!.timestamp
@@ -145,12 +148,14 @@ function buildSeries(
   // For sparse metrics, clamp the lower bound to the first day we have real
   // data. For dense metrics, honor the requested range as-is.
   const sparse = SPARSE_METRICS.has(metric)
+
   const effectiveCutoff =
     sparse && firstDataIdx >= 0
       ? Math.max(rangeCutoff, snapshots[firstDataIdx].timestamp)
       : rangeCutoff
 
   const sliced = snapshots.filter(p => p.timestamp >= effectiveCutoff)
+
   if (!sliced.length) {
     return {
       points: [],
@@ -179,8 +184,10 @@ function buildSeries(
       if (p.timestamp >= effectiveCutoff) break
       const v2 = pickBreakdownMetric(p.breakdowns?.V2, metric)
       const v3 = pickBreakdownMetric(p.breakdowns?.V3, metric)
+
       if (v2 !== undefined && v3 !== undefined) {
         const sum = v2 + v3
+
         if (sum > 0) {
           ratio.v2 = v2 / sum
           ratio.v3 = v3 / sum
@@ -199,14 +206,17 @@ function buildSeries(
     let v2 = 0
     let v3 = 0
     let cow = 0
+
     if (stacked) {
       cow = pickBreakdownMetric(p.breakdowns?.COW_AMM, metric) ?? 0
       const v2Explicit = pickBreakdownMetric(p.breakdowns?.V2, metric)
       const v3Explicit = pickBreakdownMetric(p.breakdowns?.V3, metric)
+
       if (v2Explicit !== undefined && v3Explicit !== undefined) {
         v2 = v2Explicit
         v3 = v3Explicit
         const sum = v2 + v3
+
         if (sum > 0) {
           ratio.v2 = v2 / sum
           ratio.v3 = v3 / sum
@@ -214,6 +224,7 @@ function buildSeries(
         }
       } else {
         const nonCow = Math.max(total - cow, 0)
+
         if (ratio.known) {
           v2 = nonCow * ratio.v2
           v3 = nonCow * ratio.v3
@@ -236,11 +247,13 @@ function buildSeries(
   // 24h change is only meaningful when both endpoints carry real values. For
   // sparse metrics with a single real day, suppress the delta.
   let change24h: number | null = null
+
   if (points.length >= 2) {
     const a = points.at(-1)!.value
     const b = points.at(-2)!.value
     if (b > 0 && Number.isFinite(a)) change24h = (a - b) / b
   }
+
   return { points, change24h, stacked, sparse, firstDataAt, realPointCount }
 }
 

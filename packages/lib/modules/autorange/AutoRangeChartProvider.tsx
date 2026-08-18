@@ -109,6 +109,7 @@ export function useAutoRangeChartLogic(chartData: AutoRangeData | undefined) {
 
     // for some reason the number of orange (or green) bars matters to echarts in the grid
     const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '1%'
+
     const gridBottomMobile =
       baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '28%' : '16%'
 
@@ -276,19 +277,23 @@ export function useAutoRangeChartLogic(chartData: AutoRangeData | undefined) {
         trigger: 'item',
         formatter: (params: any) => {
           const { data } = params
+
           // data.segmentType: 'orange', 'green', 'grey'
           // data.segmentStartIndex, data.segmentEndIndex
           if (data.segmentType === 'orange') {
             // Determine if left or right orange by index
             return `The ${data.segmentStartIndex < baseGreyBarCount + baseOrangeBarCount ? 'lower' : 'upper'} margin is part of the uniform concentrated liquidity of the pool. When the current price is within this range, swaps continue to route through the pool and LPs earn swap fees. Also, the pool will begin to automatically readjust and recenter the concentrated liquidity around the current price.`
           }
+
           if (data.segmentType === 'green') {
             return 'This is part of the uniform concentrated liquidity of the pool. When the current price is anywhere within this range, swaps route through the pool and LPs earn swap fees that are likely to be higher compared to an otherwise equivalent weighted pool.'
           }
+
           if (data.segmentType === 'grey') {
             // Determine if left or right grey by index
             return `When the current price is ${data.segmentStartIndex < baseGreyBarCount ? 'below the minimum' : 'above the maximum'} price of the concentrated liquidity range, swaps will not route through the pool and LPs will not earn fees. The pool will automatically readjust ${data.segmentStartIndex < baseGreyBarCount ? 'downwards' : 'upwards'} to recenter the concentrated liquidity around the current price.`
           }
+
           return ''
         },
         backgroundColor: '#222',
@@ -465,6 +470,7 @@ export function useAutoRangeChartLogic(chartData: AutoRangeData | undefined) {
               barWidth: isMiddleBar ? '120%' : '110%',
             }
           }
+
           segmentStates[segmentKey] = segmentBars
         }
       }
@@ -644,6 +650,7 @@ export function useAutoRangeChartLogic(chartData: AutoRangeData | undefined) {
         window.clearTimeout(hoverTimer)
         hoverTimer = null
       }
+
       resetHoverEffect()
     }
 

@@ -14,6 +14,7 @@ describe('Creates pool alerts for', () => {
         </PoolsMetadataProvider>
       ),
     })
+
     expect(result.current.poolAlerts).toMatchInlineSnapshot(`
       [
         {

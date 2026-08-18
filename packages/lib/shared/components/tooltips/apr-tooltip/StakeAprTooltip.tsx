@@ -16,6 +16,7 @@ interface Props {
 
 function StakeAprTooltip({ pool, totalUsdValue, weeklyRewards }: Props) {
   const potentialYield = calcPotentialYieldFor(pool, totalUsdValue)
+
   const weeklyYield =
     weeklyRewards && bn(potentialYield).gt(weeklyRewards) ? weeklyRewards : potentialYield
 

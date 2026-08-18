@@ -20,6 +20,7 @@ export function usePoolHooksWhitelist(network: GqlChain) {
       const response = await fetch(
         'https://raw.githubusercontent.com/balancer/metadata/main/hooks/index.json'
       )
+
       const data: PoolHookMetadata[] = await response.json()
       return data
     },

@@ -11,6 +11,7 @@ export function PoolTokensStep() {
   const {
     poolCreationForm: { control },
   } = usePoolCreationForm()
+
   const [poolType, poolTokens] = useWatch({
     control,
     name: ['poolType', 'poolTokens'],

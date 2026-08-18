@@ -31,6 +31,7 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
   )
 
   const { wethIsEth, simulationQuery } = params
+
   // Only used to sign permit for v3 pools (standard permit is supported by all BPTs by contract)
   const signPermitStep = useSignPermitStep({
     pool,
@@ -97,6 +98,7 @@ export function getApprovalAndRemoveSteps({
   removeLiquidityStep: TransactionStep
 }) {
   removeLiquidityStep.nestedSteps = tokenApprovalSteps
+
   if (isV3Pool(pool)) {
     /*
       Standard permit signatures are not supported by all Safe scenarios (such as Safe + WC where signer != owner).
@@ -107,12 +109,14 @@ export function getApprovalAndRemoveSteps({
         // tokenApprovalSteps are hidden for Safe accounts (will be included in the tx batch)
         return [removeLiquidityStep]
       }
+
       return [...tokenApprovalSteps, removeLiquidityStep]
     }
 
     // Standard Permit signature
     return [signPermitStep, removeLiquidityStep]
   }
+
   // V2 and V1 (CoW AMM) pools use the Vault relayer so they do not require permit signatures
   return [removeLiquidityStep]
 }

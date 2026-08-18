@@ -123,6 +123,7 @@ export function getPublicClient(chain: GqlChain): PublicClient {
       timeout: 45_000,
     }),
   })
+
   clientCache.set(chain, client)
   return client
 }

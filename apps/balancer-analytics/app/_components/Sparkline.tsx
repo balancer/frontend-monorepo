@@ -24,25 +24,32 @@ export function Sparkline({
 
   const { d, area } = useMemo(() => {
     if (!values?.length) return { d: '', area: '' }
+
     const min = Math.min(...values),
       max = Math.max(...values)
+
     const range = max - min || 1
     const stepX = width / (values.length - 1)
+
     const pts: [number, number][] = values.map((v, i) => [
       i * stepX,
       height - ((v - min) / range) * (height - 4) - 2,
     ])
+
     let d = `M ${pts[0][0]} ${pts[0][1]}`
+
     if (smooth) {
       for (let i = 1; i < pts.length; i++) {
         const [x0, y0] = pts[i - 1],
           [x1, y1] = pts[i]
+
         const cx = (x0 + x1) / 2
         d += ` Q ${cx} ${y0} ${cx} ${(y0 + y1) / 2} T ${x1} ${y1}`
       }
     } else {
       for (let i = 1; i < pts.length; i++) d += ` L ${pts[i][0]} ${pts[i][1]}`
     }
+
     const area = d + ` L ${width} ${height} L 0 ${height} Z`
     return { d, area }
   }, [values, width, height, smooth])

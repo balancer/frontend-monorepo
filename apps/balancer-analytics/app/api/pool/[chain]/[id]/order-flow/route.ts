@@ -191,6 +191,7 @@ async function fetchSwaps(
 
   while (swaps.length < HARD_CAP) {
     let res: Response
+
     try {
       res = await fetch(API_URL, {
         method: 'POST',
@@ -212,6 +213,7 @@ async function fetchSwaps(
           `api-v3 fetch failed: ${err instanceof Error ? err.message : String(err)}`
         )
       }
+
       console.warn('[order-flow] api-v3 mid-pagination network error — returning partial')
       truncated = true
       break
@@ -222,18 +224,22 @@ async function fetchSwaps(
         const kind: UpstreamErrorKind = isRateLimitStatus(res.status)
           ? 'rate_limit'
           : 'upstream_5xx'
+
         throw new UpstreamError(kind, `api-v3 HTTP ${res.status} (skip=${skip})`, res.status)
       }
+
       console.warn(`[order-flow] api-v3 HTTP ${res.status} at skip=${skip} — returning partial`)
       truncated = true
       break
     }
 
     const json = (await res.json()) as { data?: { poolEvents?: RawSwap[] }; errors?: unknown }
+
     if (json.errors) {
       if (swaps.length === 0) {
         throw new UpstreamError('graphql', `api-v3 errors: ${JSON.stringify(json.errors)}`)
       }
+
       console.warn('[order-flow] api-v3 GraphQL errors mid-pagination — returning partial')
       truncated = true
       break
@@ -243,15 +249,18 @@ async function fetchSwaps(
     if (page.length === 0) break
 
     let pageOldest = Infinity
+
     for (const ev of page) {
       pageOldest = Math.min(pageOldest, ev.timestamp)
       if (ev.timestamp >= cutoffTs) swaps.push(ev)
     }
+
     // The page is timestamp-desc — once its oldest entry crosses the cutoff
     // we've consumed everything in-range. Bail without re-fetching.
     if (pageOldest < cutoffTs) break
     skip += PAGE_SIZE
   }
+
   if (swaps.length >= HARD_CAP) capped = true
   return { swaps, capped, truncated }
 }
@@ -269,20 +278,25 @@ function unlabeledUsdByTx(
   // First pass: mark any tx that has at least one labeled-sender swap as
   // "already covered" — enriching its tx.to wouldn't change the cascade.
   const alreadyLabeled = new Set<string>()
+
   for (const s of swaps) {
     if (!s.tx || !s.sender) continue
+
     if (labeledSenders[s.sender.toLowerCase()]) {
       alreadyLabeled.add(s.tx.toLowerCase())
     }
   }
+
   // Second pass: sum USD for the remaining txs.
   const m = new Map<string, number>()
+
   for (const s of swaps) {
     if (!s.tx) continue
     const tx = s.tx.toLowerCase()
     if (alreadyLabeled.has(tx)) continue
     m.set(tx, (m.get(tx) ?? 0) + (s.valueUSD || 0))
   }
+
   return m
 }
 
@@ -317,6 +331,7 @@ async function buildOrderFlow(chain: GqlChain, poolId: string): Promise<OrderFlo
   await ensureSchemaOnce()
 
   const { swaps, capped, truncated } = await fetchSwaps(poolId, chain, cutoff)
+
   if (truncated) {
     console.warn('[order-flow] partial result returned (api-v3 paging stopped early)', {
       chain,
@@ -324,6 +339,7 @@ async function buildOrderFlow(chain: GqlChain, poolId: string): Promise<OrderFlo
       partial: swaps.length,
     })
   }
+
   const totalUsd = swaps.reduce((a, s) => a + (s.valueUSD || 0), 0)
 
   // ── tx.to enrichment ────────────────────────────────────────────────
@@ -334,6 +350,7 @@ async function buildOrderFlow(chain: GqlChain, poolId: string): Promise<OrderFlo
   const distinctTxHashes = Array.from(
     new Set(swaps.map(s => s.tx?.toLowerCase()).filter((x): x is string => Boolean(x)))
   )
+
   const txToCache = await getSwapTxMetadata(chain, distinctTxHashes)
 
   // Prioritize *unlabeled* txs by USD volume — txs whose sender is
@@ -344,6 +361,7 @@ async function buildOrderFlow(chain: GqlChain, poolId: string): Promise<OrderFlo
   // unchanged because the cascade had already decided.
   const labeledByDictSenders = DIRECT_LABELS[chain] ?? {}
   const unlabeledUsd = unlabeledUsdByTx(swaps, labeledByDictSenders)
+
   const txsToEnrich = [...unlabeledUsd.entries()]
     .filter(([tx]) => !txToCache.has(tx))
     .sort((a, b) => b[1] - a[1])
@@ -357,6 +375,7 @@ async function buildOrderFlow(chain: GqlChain, poolId: string): Promise<OrderFlo
       // every input hash so the cache reliably records "we tried" and
       // doesn't re-enrich the same tx on next visit.
       for (const [hash, toAddr] of fresh) txToCache.set(hash, toAddr)
+
       await upsertSwapTxMetadata(
         chain,
         [...fresh.entries()].map(([txHash, toAddress]) => ({ txHash, toAddress }))
@@ -377,23 +396,29 @@ async function buildOrderFlow(chain: GqlChain, poolId: string): Promise<OrderFlo
   // 3004790. Looked up by both `sender` (EOA) AND `tx.to` (entry
   // contract); the cascade consults each in priority order.
   const lookupAddresses = new Set<string>()
+
   for (const s of swaps) {
     if (s.sender) lookupAddresses.add(s.sender.toLowerCase())
   }
+
   for (const toAddr of txToCache.values()) {
     if (toAddr) lookupAddresses.add(toAddr.toLowerCase())
   }
+
   const duneCache = await getDuneLabels(chain, [...lookupAddresses])
 
   // Cascade-label every swap with whatever we have now.
   const labeled: LabeledSwap[] = []
+
   for (const s of swaps) {
     if (!s.sender) continue // shouldn't happen on V3/CowAmm swaps but guard anyway
+
     const source: SourceLabel = labelSwapSource(
       { __typename: s.__typename, sender: s.sender, tx: s.tx },
       chain,
       { txTo: txToCache, dune: duneCache }
     )
+
     labeled.push({
       id: s.id,
       timestamp: s.timestamp,
@@ -409,6 +434,7 @@ async function buildOrderFlow(chain: GqlChain, poolId: string): Promise<OrderFlo
   // Coverage = "we put a real label on it" (anything not 'unknown').
   let labeledUsd = 0
   const unknownSenderSet = new Set<string>()
+
   for (const s of labeled) {
     if (s.source.category === 'unknown') unknownSenderSet.add(s.sender.toLowerCase())
     else labeledUsd += s.valueUSD
@@ -446,12 +472,14 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
   const raw = await ctx.params
 
   const parsed = z.object({ chain: ChainSchema, id: PoolIdSchema }).safeParse(raw)
+
   if (!parsed.success) {
     return Response.json(
       { error: 'invalid input', details: parsed.error.flatten() },
       { status: 400 }
     )
   }
+
   const { chain, id } = parsed.data
   const poolId = id.toLowerCase()
 
@@ -467,8 +495,10 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
+
     const kind: UpstreamErrorKind | 'internal' =
       err instanceof UpstreamError ? err.kind : 'internal'
+
     console.error('[order-flow] failed', { chain, id: poolId, kind, message })
 
     // Map each upstream-failure flavor to (status, error code). The client
@@ -477,6 +507,7 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
     // future browser-side retry logic behave sensibly.
     const isRateLimit = kind === 'rate_limit'
     const status = isRateLimit ? 429 : 502
+
     const errorCode = isRateLimit
       ? 'rate_limited'
       : kind === 'network'
@@ -492,11 +523,13 @@ export async function GET(_request: Request, ctx: RouteContext): Promise<Respons
     // we keep the generic message — these errors can include URLs or other
     // diagnostic noise we don't want to leak.
     const body: Record<string, unknown> = { error: errorCode }
+
     if (isRateLimit) {
       // Reading the upstream's Retry-After would be ideal; api-v3 doesn't
       // expose it in dev tests but the structure is here for future use.
       body.message = 'Balancer API rate limit reached. Please wait a minute and try again.'
     }
+
     if (process.env.NODE_ENV !== 'production') body.detail = message
 
     const headers: Record<string, string> = { 'Cache-Control': 'no-store' }

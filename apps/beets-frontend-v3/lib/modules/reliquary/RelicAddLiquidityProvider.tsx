@@ -31,6 +31,7 @@ export function RelicAddLiquidityProvider({
   const reliquaryHandlerSelector = useCallback(
     (pool: Pool, wantsProportional: boolean) => {
       const networkConfig = getNetworkConfig(pool.chain)
+
       const batchRelayer = BeetsBatchRelayerService.create(
         networkConfig.contracts.balancer.relayerV6
       )

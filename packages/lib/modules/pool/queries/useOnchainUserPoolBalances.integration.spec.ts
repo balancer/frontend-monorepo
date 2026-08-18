@@ -14,6 +14,7 @@ import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-deriv
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {
   const weightedPoolMock = toGqlWeighedPoolMock(pool)
+
   const { result } = testHook(() => {
     return useOnchainUserPoolBalances([weightedPoolMock])
   })
@@ -65,6 +66,7 @@ describe('fetches onchain and overrides user balances', async () => {
 
   test('when the pool has no gaugeAddress', async () => {
     const poolMockWithEmptyGaugeAddress = aBalWethPoolElementMock() // Provides 80BAL-20WETH pool by default
+
     // Empty staking address
     if (poolMockWithEmptyGaugeAddress.staking?.gauge?.gaugeAddress) {
       poolMockWithEmptyGaugeAddress.staking.gauge.gaugeAddress = ''

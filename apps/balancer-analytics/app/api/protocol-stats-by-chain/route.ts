@@ -61,6 +61,7 @@ function buildQuery(chains: readonly GqlChain[]): string {
   const body = chains
     .map((chain, i) => `  c${i}: protocolMetricsChain(chain: ${chain}) {${FIELDS}\n  }`)
     .join('\n')
+
   return `query AnalyticsProtocolStatsByChain {\n${body}\n}`
 }
 
@@ -118,6 +119,7 @@ export async function GET(): Promise<Response> {
       const { status, body, headers } = upstreamErrorToResponse(err)
       return Response.json(body, { status, headers })
     }
+
     console.error('[protocol-stats-by-chain] failed', { chains: CHAINS.length })
     return Response.json(
       { error: 'protocol stats fetch failed' },

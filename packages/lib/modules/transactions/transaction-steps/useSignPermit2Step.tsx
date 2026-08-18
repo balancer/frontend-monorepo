@@ -122,8 +122,10 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
 
 function getTitle(details?: StepDetails): string {
   if (!details?.batchApprovalTokens) return `Permit on ${PROJECT_CONFIG.projectName}`
+
   if (details.batchApprovalTokens.length === 1) {
     return `${details.batchApprovalTokens[0]}: Permit on ${PROJECT_CONFIG.projectName}`
   }
+
   return 'Sign token approvals'
 }

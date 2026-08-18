@@ -13,6 +13,7 @@ async function renderUsePoolsList() {
   const { result, waitForLoadedUseQuery } = testHook(() => usePoolListLogic(), {
     wrapper: TestWrapper,
   })
+
   await waitForLoadedUseQuery(result)
   return result
 }

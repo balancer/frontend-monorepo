@@ -133,6 +133,7 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
   useEffect(() => {
     window.scrollTo({ top: 0 })
   }, [poolDetail.chain, poolDetail.id])
+
   const RANGE_LABEL: Record<typeof range, string> = {
     '30d': '30-day history',
     '90d': '90-day history',
@@ -140,6 +141,7 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
     '1y': '1-year history',
     all: 'Full history',
   }
+
   const RANGE_SUBTITLE: Record<typeof range, string> = {
     '30d': 'last 30 days',
     '90d': 'last 90 days',
@@ -157,6 +159,7 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
     a: null,
     b: null,
   })
+
   const handleCursorClick = useCallback((t: number) => {
     setCursors(prev => {
       if (prev.a === null) return { a: t, b: null }
@@ -164,6 +167,7 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
       return { a: t, b: null }
     })
   }, [])
+
   const clearCursors = useCallback(() => setCursors({ a: null, b: null }), [])
 
   // Range-navigation pending state. The chart/event payloads only update
@@ -177,8 +181,10 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
   const searchParams = useSearchParams()
   const [, startTransition] = useTransition()
   const [clickedRange, setClickedRange] = useState<HistoryRange | null>(null)
+
   const pendingRange: HistoryRange | null =
     clickedRange && clickedRange !== range ? clickedRange : null
+
   const handleRangeSelect = useCallback(
     (next: HistoryRange) => {
       if (next === range) return
@@ -197,6 +203,7 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
     },
     [range, router, pathname, searchParams]
   )
+
   const isRangeChanging = pendingRange !== null
 
   // Pool-vs-pool comparison state. The picker opens first; once a target is
@@ -205,10 +212,12 @@ export function PoolPageView({ data }: { data: PoolPageData }): React.JSX.Elemen
   // user-side modal-close cycles without re-fetching the picker list.
   const [pickerOpen, setPickerOpen] = useState(false)
   const [compareTarget, setCompareTarget] = useState<EnrichedPool | null>(null)
+
   const handleCompareSelect = useCallback((pool: EnrichedPool) => {
     setCompareTarget(pool)
     setPickerOpen(false)
   }, [])
+
   const closeComparison = useCallback(() => setCompareTarget(null), [])
 
   return (

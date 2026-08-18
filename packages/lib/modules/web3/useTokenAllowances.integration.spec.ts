@@ -14,6 +14,7 @@ function testTokenAllowances(tokenAddresses: Address[]) {
       tokenAddresses,
     })
   )
+
   return result
 }
 

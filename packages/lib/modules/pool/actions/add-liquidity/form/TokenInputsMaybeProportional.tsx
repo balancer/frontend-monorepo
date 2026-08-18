@@ -40,6 +40,7 @@ function calcProportionalAddableUsdBalance(
       const token = tokens.find(token =>
         isSameAddress(token.address as Address, amountIn.tokenAddress)
       )
+
       if (!token) return bn(sum)
 
       return bn(sum).plus(usdValueForToken(token, amountIn.humanAmount || '0'))
@@ -101,6 +102,7 @@ export function TokenInputsMaybeProportional({ isProportional, wantsUnbalanced }
     wrapUnderlying,
     clearAmountsIn,
   } = useAddLiquidity()
+
   const { isConnected, isLoading: isUserAccountLoading } = useUserAccount()
   const { usdValueForToken } = useTokens()
   const { chain, pool } = usePool()
@@ -111,6 +113,7 @@ export function TokenInputsMaybeProportional({ isProportional, wantsUnbalanced }
     maxProportionalHumanAmountsIn,
     handleMaximizeProportionalAmounts,
   } = useProportionalInputs()
+
   const { setValidationError } = useTokenInputsValidation()
 
   const setAmountIn = isProportional ? handleProportionalHumanInputChange : setHumanAmountIn
@@ -206,6 +209,7 @@ export function TokenInputsMaybeProportional({ isProportional, wantsUnbalanced }
     } else {
       setWethIsEth(false)
     }
+
     setAmountIn(token, '0')
 
     // reset any validation errors for native assets
@@ -220,12 +224,14 @@ export function TokenInputsMaybeProportional({ isProportional, wantsUnbalanced }
     }
 
     const wrappedAndUnderlying = getWrappedAndUnderlyingTokenFn(token, pool, balanceFor)()
+
     if (wrappedAndUnderlying) {
       return () => {
         setWrappedAndUnderlying(wrappedAndUnderlying)
         return boostedTokenSelectDisclosure.onOpen()
       }
     }
+
     return undefined
   }
 

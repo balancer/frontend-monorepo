@@ -67,6 +67,7 @@ const SLUG_TO_PROTOCOL = {
   'balancer-v3': PROTOCOL_V3,
   'balancer-cow-amm': PROTOCOL_COW_AMM,
 } as const
+
 type Slug = keyof typeof SLUG_TO_PROTOCOL
 const SLUGS = Object.keys(SLUG_TO_PROTOCOL) as Slug[]
 
@@ -107,19 +108,23 @@ function getBucket(
   key: GqlChain | typeof AGGREGATE_KEY
 ): Bucket {
   let b = map.get(key)
+
   if (!b) {
     b = emptyBucket()
     map.set(key, b)
   }
+
   return b
 }
 
 function ensureDay(pivot: DayMap, ts: number) {
   let m = pivot.get(ts)
+
   if (!m) {
     m = new Map()
     pivot.set(ts, m)
   }
+
   return m
 }
 
@@ -128,6 +133,7 @@ function ensureDay(pivot: DayMap, ts: number) {
 function mergePivot(dst: DayMap, src: DayMap) {
   for (const [ts, byChain] of src) {
     const day = ensureDay(dst, ts)
+
     for (const [chain, b] of byChain) {
       const target = getBucket(day, chain)
       target.tvl += b.tvl
@@ -170,19 +176,23 @@ type FoldCtx = { unknown: Set<string>; unmapped: Set<string> }
 
 function resolveChain(chainName: string, ctx: FoldCtx): GqlChain | null {
   const chain = CHAIN_MAP[chainName]
+
   if (!chain) {
     ctx.unknown.add(chainName)
     return null
   }
+
   if (!SUPPORTED.has(chain)) {
     ctx.unmapped.add(chainName)
     return null
   }
+
   return chain
 }
 
 function foldTvl(pivot: DayMap, data: ProtocolTvl | null, ctx: FoldCtx) {
   if (!data?.chainTvls) return
+
   for (const [chainName, ct] of Object.entries(data.chainTvls)) {
     // DefiLlama uses "*" aliases for borrowed/staked tvl variants (e.g.
     // "Ethereum-borrowed"). They double-count, skip them.
@@ -194,14 +204,17 @@ function foldTvl(pivot: DayMap, data: ProtocolTvl | null, ctx: FoldCtx) {
     // into the same midnight-UTC bucket. Summing them double-counts today.
     // Keep only the latest point per bucket per chain.
     const latestByDay = new Map<number, { rawDate: number; value: number }>()
+
     for (const point of ct.tvl ?? []) {
       const ts = midnightUtc(point.date)
       const value = Number(point.totalLiquidityUSD) || 0
       const cur = latestByDay.get(ts)
+
       if (!cur || point.date > cur.rawDate) {
         latestByDay.set(ts, { rawDate: point.date, value })
       }
     }
+
     for (const [ts, { value }] of latestByDay) {
       const day = ensureDay(pivot, ts)
       getBucket(day, chain).tvl += value
@@ -217,9 +230,11 @@ function foldBreakdown(
   field: 'volume' | 'fees'
 ) {
   if (!data?.totalDataChartBreakdown) return
+
   for (const [rawTs, byChain] of data.totalDataChartBreakdown) {
     const ts = midnightUtc(Number(rawTs))
     const day = ensureDay(pivot, ts)
+
     for (const [chainName, byProduct] of Object.entries(byChain)) {
       const chain = resolveChain(chainName, ctx)
       if (!chain) continue
@@ -232,10 +247,12 @@ function foldBreakdown(
 
 function pivotToRows(pivot: DayMap, protocol: Protocol): SnapshotRow[] {
   const rows: SnapshotRow[] = []
+
   for (const [ts, byChain] of pivot) {
     for (const [chain, b] of byChain) {
       // Skip empty buckets (e.g. a chain only had volume on a day, no TVL).
       if (b.tvl === 0 && b.volume === 0 && b.fees === 0) continue
+
       rows.push({
         ts,
         chain,
@@ -251,6 +268,7 @@ function pivotToRows(pivot: DayMap, protocol: Protocol): SnapshotRow[] {
       })
     }
   }
+
   return rows
 }
 
@@ -267,8 +285,10 @@ async function upsertRows(rows: SnapshotRow[], force: boolean): Promise<void> {
   const PARALLELISM = 6
   const chunks: SnapshotRow[][] = []
   for (let i = 0; i < rows.length; i += CHUNK) chunks.push(rows.slice(i, i + CHUNK))
+
   for (let i = 0; i < chunks.length; i += PARALLELISM) {
     const batch = chunks.slice(i, i + PARALLELISM)
+
     await Promise.all(
       batch.map(slice =>
         sql.transaction(
@@ -293,6 +313,7 @@ async function upsertRows(rows: SnapshotRow[], force: boolean): Promise<void> {
                 WHERE protocol_snapshots.source = 'defillama'
               `
             }
+
             return sql`
               INSERT INTO protocol_snapshots (
                 ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
@@ -326,6 +347,7 @@ async function upsertRows(rows: SnapshotRow[], force: boolean): Promise<void> {
 // scoped aggregate.
 async function purgeUnsupported(): Promise<{ defillama: number; apiv3: number }> {
   const supported = [AGGREGATE_KEY, ...PROJECT_CONFIG.supportedNetworks]
+
   const dl = (await sql`
     DELETE FROM protocol_snapshots
     WHERE source = 'defillama'
@@ -339,14 +361,17 @@ async function purgeUnsupported(): Promise<{ defillama: number; apiv3: number }>
     WHERE source = 'api-v3'
       AND chain <> ALL(${supported}::text[])
   `) as { ts: string }[]
+
   if (stale.length === 0) return { defillama: dl.length, apiv3: 0 }
   const staleTs = stale.map(r => Number(r.ts))
+
   const apiv3 = (await sql`
     DELETE FROM protocol_snapshots
     WHERE source = 'api-v3'
       AND ts = ANY(${staleTs}::bigint[])
     RETURNING ts
   `) as { ts: string }[]
+
   return { defillama: dl.length, apiv3: apiv3.length }
 }
 
@@ -364,12 +389,14 @@ export async function GET(req: Request) {
   await ensureSchemaOnce()
 
   const ctx: FoldCtx = { unknown: new Set(), unmapped: new Set() }
+
   const rowsByProtocol: Record<Protocol, SnapshotRow[]> = {
     [PROTOCOL_CORE]: [],
     [PROTOCOL_V2]: [],
     [PROTOCOL_V3]: [],
     [PROTOCOL_COW_AMM]: [],
   }
+
   let purged: { defillama: number; apiv3: number } = { defillama: 0, apiv3: 0 }
   let error: string | undefined
 
@@ -382,6 +409,7 @@ export async function GET(req: Request) {
 
     // Per-slug pivot — directly maps to V2 / V3 / COW_AMM rows.
     const slugPivots: DayMap[] = SLUGS.map(() => new Map())
+
     for (let i = 0; i < SLUGS.length; i++) {
       foldTvl(slugPivots[i], protocols[i], ctx)
       foldBreakdown(slugPivots[i], dexes[i], ctx, 'volume')
@@ -401,6 +429,7 @@ export async function GET(req: Request) {
       ...rowsByProtocol[PROTOCOL_V3],
       ...rowsByProtocol[PROTOCOL_COW_AMM],
     ]
+
     await upsertRows(all, force)
     if (force) purged = await purgeUnsupported()
   } catch (e) {

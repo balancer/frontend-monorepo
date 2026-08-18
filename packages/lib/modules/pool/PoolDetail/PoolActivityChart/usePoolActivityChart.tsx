@@ -116,6 +116,7 @@ const getDefaultPoolActivityChartOptions = (
         const timestamp = data.value[0]
         const metaData = data.data[2] as PoolActivityMetaData
         const userAddress = metaData.userAddress
+
         const tokens = metaData.tokens.filter(token => {
           if (!token.token) return false
           if (Number(token.amount) === 0) return false
@@ -247,8 +248,10 @@ export function usePoolActivityChart() {
   const { toCurrency } = useCurrency()
   const { chain } = useParams()
   const theme = useChakraTheme()
+
   const { sortedPoolEvents, minDate, maxDate, maxYAxisValue, isExpanded, isLoading } =
     usePoolActivity()
+
   const _chain = getChainSlug(chain as ChainSlug)
   const chartHeight = isExpanded ? 400 : 90
 

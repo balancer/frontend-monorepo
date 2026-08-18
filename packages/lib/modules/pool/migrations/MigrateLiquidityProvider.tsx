@@ -27,6 +27,7 @@ function useMigrateLiquidityLogic(protocol: number, chainId: number, poolId: str
     lastTransaction: removeLiquidityTx,
     hasQuoteContext: removeLiquidityHasQuoteContext,
   } = useRemoveLiquidity()
+
   const {
     transactionSteps: addLiquiditySteps,
     humanAmountsIn,
@@ -54,6 +55,7 @@ function useMigrateLiquidityLogic(protocol: number, chainId: number, poolId: str
     protocolVersion: oldPool?.protocolVersion as ProtocolVersion,
     txReceipt: removeLiquidityTx?.result,
   })
+
   const amounts =
     removeLiquidityReceipt.receivedTokens.length > 0
       ? removeLiquidityReceipt.receivedTokens

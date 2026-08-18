@@ -47,6 +47,7 @@ describe('usePersistentForm', () => {
 
   it('should reset to initial values', () => {
     window.localStorage.setItem('test-key', JSON.stringify({ a: 'FROM_LS_A', b: 'FROM_LS_B' }))
+
     const { result } = testHook(() =>
       usePersistentForm<TestForm>('test-key', { a: 'DEFAULT_A', b: 'DEFAULT_B' })
     )
@@ -58,9 +59,11 @@ describe('usePersistentForm', () => {
 
     expect(result.current.getValues('a')).toBe('DEFAULT_A')
     expect(result.current.getValues('b')).toBe('DEFAULT_B')
+
     expect((JSON.parse(window.localStorage.getItem('test-key') || '{}') as TestForm).a).toBe(
       'DEFAULT_A'
     )
+
     expect((JSON.parse(window.localStorage.getItem('test-key') || '{}') as TestForm).b).toBe(
       'DEFAULT_B'
     )

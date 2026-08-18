@@ -19,10 +19,12 @@ export class TwammAddLiquidityHandler implements AddLiquidityHandler {
   // TODO: This is a non-sense example implementation
   public async simulate(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
     this.humanAmountsIn = humanAmountsIn
+
     const tokenAmount = TokenAmount.fromHumanAmount(
       {} as unknown as Token,
       humanAmountsIn[0]?.humanAmount || '0'
     )
+
     const bptOut: TokenAmount = tokenAmount
     return { bptOut, to: emptyAddress }
   }

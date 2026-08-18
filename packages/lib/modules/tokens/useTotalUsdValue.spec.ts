@@ -9,6 +9,7 @@ import { HumanTokenAmountWithSymbol } from './token.types'
 
 const balPrice = 2
 const wethPrice = 3
+
 mockTokenPricesList([
   aTokenPriceMock({ address: balAddress, price: balPrice }),
   aTokenPriceMock({ address: wETHAddress, price: wethPrice }),

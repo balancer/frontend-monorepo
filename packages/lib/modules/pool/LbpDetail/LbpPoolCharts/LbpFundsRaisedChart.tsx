@@ -32,6 +32,7 @@ export function LbpFundsRaisedChart() {
     currentFundsRaised,
     currentFundsRaisedPercentage,
   } = useLbpPoolCharts()
+
   const theme = useChakraTheme()
   const { isMobile } = useBreakpoints()
 

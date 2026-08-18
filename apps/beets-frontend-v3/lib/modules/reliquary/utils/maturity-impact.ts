@@ -43,6 +43,7 @@ export function calculateMaturityImpact(input: MaturityImpactInput): MaturityImp
   const maxLevel = maturityLevels.length - 1
 
   let newLevel = 0
+
   maturityLevels.forEach((level, i) => {
     if (newMaturity >= Number(level)) {
       newLevel = i

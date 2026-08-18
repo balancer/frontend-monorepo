@@ -10,6 +10,7 @@ async function testQuery(pool: Pool) {
   const { result } = testHook(() => usePoolStateWithBalancesQuery(pool), {
     wrapper: buildDefaultPoolTestProvider(pool as GqlPoolElement),
   })
+
   return result
 }
 

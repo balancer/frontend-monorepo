@@ -47,9 +47,11 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
   const { priceFor } = useTokens()
   const isSeedlessLBP = isDynamicLBP(pool) && pool.isSeedless
   let virtualAmount = '0'
+
   if (isSeedlessLBP) {
     const virtualToken = pool.poolTokens[pool.reserveTokenIndex].address
     const price = priceFor(virtualToken, chain)
+
     virtualAmount =
       isBnParseable(pool.reserveTokenVirtualBalance) && isBnParseable(price)
         ? bn(pool.reserveTokenVirtualBalance).times(price).toString()
@@ -81,6 +83,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
       <VStack spacing="md" width="full">
         {poolTokens.map(poolToken => {
           const actualWeight = poolTokensWithActualWeights[poolToken.address]
+
           const isVirtualPairedToken =
             isSeedlessLBP && pool.poolTokens[pool.reserveTokenIndex].address === poolToken.address
 
@@ -113,6 +116,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                       isBnParseable(poolToken.balanceUSD)
                         ? bn(nestedPoolToken.balanceUSD).div(bn(poolToken.balanceUSD))
                         : bn(0)
+
                     return (
                       <TokenRow
                         actualWeight={bn(actualWeight).times(calculatedWeight).toString()}

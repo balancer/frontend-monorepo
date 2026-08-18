@@ -18,6 +18,7 @@ function getPoolWithStakingGaugeRewards() {
       tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d', // BAL
     } as GqlPoolStakingGaugeReward,
   ]
+
   return pool
 }
 
@@ -43,6 +44,7 @@ function getPoolWithMultipleStakingGaugeRewards() {
       tokenAddress: '0x0000000000000000000000000000000000000000', // Zero rewards
     } as GqlPoolStakingGaugeReward,
   ]
+
   return pool
 }
 
@@ -62,6 +64,7 @@ function getPoolWithInvalidStakingGaugeRewards() {
       tokenAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
     } as GqlPoolStakingGaugeReward,
   ]
+
   return pool
 }
 
@@ -116,9 +119,11 @@ describe('useGetPoolRewards', () => {
     expect(Object.keys(result.current.weeklyRewardsByToken)).toContain(
       '0xba100000625a3754423978a60c9317c58a424e3d'
     )
+
     expect(Object.keys(result.current.weeklyRewardsByToken)).toContain(
       '0x6b175474e89094c44da98b954eedeac495271d0f'
     )
+
     expect(Object.keys(result.current.weeklyRewardsByToken)).toContain(
       '0x0000000000000000000000000000000000000000'
     )
@@ -150,6 +155,7 @@ describe('useGetPoolRewards', () => {
     expect(result.current.weeklyRewardsByToken['0xba100000625a3754423978a60c9317c58a424e3d']).toBe(
       '0'
     )
+
     // Valid rewardPerSecond should still calculate correctly
     expect(result.current.weeklyRewardsByToken['0x6b175474e89094c44da98b954eedeac495271d0f']).toBe(
       '604.8'

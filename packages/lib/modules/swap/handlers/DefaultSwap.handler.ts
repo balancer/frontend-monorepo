@@ -26,13 +26,16 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
       })
       .catch(e => {
         const error = ensureError(e)
+
         if (isFailedToFetchApolloError(error)) {
           throw new Error(swapApolloNetworkErrorMessage, { cause: error })
         }
+
         throw error
       })
 
     const hopCount: number = data?.swaps.routes[0]?.hops?.length || 0
+
     const paths = data?.swaps.paths.map(
       path =>
         ({

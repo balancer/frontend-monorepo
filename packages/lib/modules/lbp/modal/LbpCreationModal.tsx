@@ -60,6 +60,7 @@ export function LbpCreationModal({
   })
 
   const shouldBatchTransactions = useShouldBatchTransactions()
+
   const {
     saveMetadata,
     error: saveMetadataError,
@@ -91,6 +92,7 @@ export function LbpCreationModal({
     const handleSaveMetadata = async () => {
       if (poolAddress && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
         hasAttemptedSaveMetadata.current = true
+
         try {
           await saveMetadata()
         } catch (error) {
@@ -98,6 +100,7 @@ export function LbpCreationModal({
         }
       }
     }
+
     handleSaveMetadata()
   }, [poolAddress, isMetadataSaved, saveMetadata])
 

@@ -65,6 +65,7 @@ export function SwapPreviewModal({
       const url = isPoolSwapUrl
         ? `${window.location.pathname}/${swapTxHash}`
         : `/swap/${chainToSlugMap[selectedChain]}/${swapTxHash}`
+
       window.history.pushState({}, '', url)
     }
   }, [swapTxHash])

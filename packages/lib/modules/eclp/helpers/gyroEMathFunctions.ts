@@ -35,6 +35,7 @@ export function calcSpotPriceYGivenX(
     x: virtualOffset0(params, d, r),
     y: virtualOffset1(params, d, r),
   }
+
   const newSpotPriceFactor = solveDerivativeQuadraticSwap(
     params.lambda,
     x,
@@ -45,6 +46,7 @@ export function calcSpotPriceYGivenX(
     d.tauBeta,
     d.dSq
   )
+
   return newSpotPriceFactor
 }
 
@@ -58,6 +60,7 @@ export function calcSpotPriceXGivenY(
     x: virtualOffset1(params, d, r),
     y: virtualOffset0(params, d, r),
   }
+
   const newSpotPriceFactor = solveDerivativeQuadraticSwap(
     params.lambda,
     y,
@@ -71,6 +74,7 @@ export function calcSpotPriceXGivenY(
     },
     d.dSq
   )
+
   return newSpotPriceFactor
 }
 
@@ -88,11 +92,13 @@ function solveDerivativeQuadraticSwap(
     x: ONE_XP - divDownMagU(divDownMagU(ONE_XP, lambda), lambda),
     y: ONE_XP - divUpMagU(divUpMagU(ONE_XP, lambda), lambda),
   }
+
   const q: QParams = {
     a: 0n,
     b: 0n,
     c: 0n,
   }
+
   const xp = x - ab.x
   q.b = mulUpXpToNpU(mulDownMagU(s, c), divXpU(lamBar.y, dSq))
 
@@ -100,6 +106,7 @@ function solveDerivativeQuadraticSwap(
     x: divXpU(mulDownMagU(mulDownMagU(lamBar.y, s), s), dSq),
     y: divXpU(mulUpMagU(mulUpMagU(lamBar.x, s), s), dSq + 1n) + 1n,
   }
+
   sTerm.x = ONE_XP - sTerm.x
   sTerm.y = ONE_XP - sTerm.y
 
@@ -115,6 +122,7 @@ function solveDerivativeQuadraticSwap(
   } else {
     q.a = mulUpXpToNpU(q.b - q.c, divXpU(ONE_XP, sTerm.x))
   }
+
   return q.a
 }
 
@@ -133,15 +141,18 @@ function setup(
   const r = rVec.y
   const { c, s, lambda } = params
   const [x0, y0] = balances
+
   if (x0 === undefined || y0 === undefined) {
     throw new Error('ECLP requires at least two balances')
   }
+
   const a = virtualOffset0(params, derived, rVec)
   const b = virtualOffset1(params, derived, rVec)
   const ls = ONE - divDown(ONE, mulDown(lambda, lambda))
   const f = ONE - fee
 
   let R: bigint
+
   if (ixVar === 0) {
     R = sqrt(
       mulDown(mulDown(r, r), ONE - mulDown(ls, mulDown(s, s))) -

@@ -55,6 +55,7 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
   const feePercentage = fNumCustom(pool.dynamicData.swapFee, '0.00[00]%')
 
   let headerText: string
+
   if (hasStableSurgeHook) {
     headerText = 'Dynamic Stable Surge swap fee'
   } else if (pool.swapFeeManager === zeroAddress && !isV3) {

@@ -19,6 +19,7 @@ export function ReceiptTokenOutRow({
 }) {
   const { simulationQuery } = useSwap()
   const expectedTokenOut = simulationQuery?.data?.returnAmount as HumanAmount
+
   const rightElement = (
     <Text color="font.primary">
       {slippageDiffLabel(actualReceivedTokenAmount, expectedTokenOut)}

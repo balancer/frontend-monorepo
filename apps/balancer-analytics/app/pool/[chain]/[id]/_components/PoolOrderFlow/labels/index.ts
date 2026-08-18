@@ -77,6 +77,7 @@ export function labelSwapSource(
 
   // Tier 2-3: tx.to — the actual entry contract.
   const txTo = caches.txTo.get(swap.tx.toLowerCase())
+
   if (txTo) {
     const direct = directDict[txTo]
     if (direct) return direct

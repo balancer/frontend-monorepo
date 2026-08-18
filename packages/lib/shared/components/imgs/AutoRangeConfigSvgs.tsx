@@ -56,6 +56,7 @@ function normalizeWeights(tokenCount: number, tokenWeights?: number[]) {
   if (tokenCount === 0) return []
 
   const base = tokenWeights?.slice(0, tokenCount) ?? []
+
   const weights = Array.from({ length: tokenCount }, (_, i) => {
     const raw = base[i]
     return typeof raw === 'number' && Number.isFinite(raw) && raw > 0 ? raw : 0
@@ -127,6 +128,7 @@ export function NetworkPreviewSVG({
 
   const prevAddressesRef = useRef<Address[]>([])
   const prevCountRef = useRef(0)
+
   const prevArcMapRef = useRef<
     Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>
   >(new Map())
@@ -153,6 +155,7 @@ export function NetworkPreviewSVG({
 
   useEffect(() => {
     const next = new Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>()
+
     for (const arc of arcs) {
       next.set(arc.address, {
         dashLen: arc.dashLen,
@@ -160,6 +163,7 @@ export function NetworkPreviewSVG({
         gradientId: arc.gradientId,
       })
     }
+
     prevArcMapRef.current = next
   }, [arcs])
 
@@ -194,6 +198,7 @@ export function NetworkPreviewSVG({
       prevCountRef.current = currentAddresses.length
 
       const next = new Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>()
+
       for (const arc of arcs) {
         next.set(arc.address, {
           dashLen: arc.dashLen,
@@ -201,6 +206,7 @@ export function NetworkPreviewSVG({
           gradientId: arc.gradientId,
         })
       }
+
       prevArcMapRef.current = next
       return
     }
@@ -224,12 +230,14 @@ export function NetworkPreviewSVG({
     // - swap: collapse removed -> fill gap -> draw new
     const collapseStartMs = removed.length > 0 ? globalDelayMs : 0
     const fillGapStartMs = removed.length > 0 ? globalDelayMs + tweenMs : 0
+
     const addDrawDelayMs =
       removed.length > 0
         ? globalDelayMs + tweenMs * 2
         : prevCount === 0
           ? globalDelayMs
           : globalDelayMs + tweenMs
+
     const pulseDelayMs = addDrawDelayMs + tweenMs
 
     // 1) Freeze current visible circles to their previous geometry so nothing animates behind the modal.
@@ -265,6 +273,7 @@ export function NetworkPreviewSVG({
 
     // 2) If removing, create temporary circles for removed segments and animate them to 0.
     const tempRemovedCircles: SVGCircleElement[] = []
+
     if (removed.length > 0) {
       for (const addr of removed) {
         const prev = prevArcMap.get(addr)
@@ -419,10 +428,12 @@ export function NetworkPreviewSVG({
           const gapY = 5
 
           const estCharW = 7.5
+
           const estW = Math.max(
             120,
             Math.ceil(Math.max(header.length, pct.length) * estCharW) + padding * 2
           )
+
           const estH = padding * 2 + 18 + (showPct ? gapY + 16 : 0)
 
           let left = hoverClientPoint.x + 12

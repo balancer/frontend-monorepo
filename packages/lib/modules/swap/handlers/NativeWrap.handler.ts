@@ -33,6 +33,7 @@ export class NativeWrapHandler implements SwapHandler {
     const { tokens } = getNetworkConfig(selectedChain)
 
     let data: Hex | undefined
+
     if (wrapType === OWrapType.WRAP) {
       data = this.buildWrapCallData()
     } else if (wrapType === OWrapType.UNWRAP) {

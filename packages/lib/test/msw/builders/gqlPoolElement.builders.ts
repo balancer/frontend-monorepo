@@ -76,6 +76,7 @@ export function toGqlWeighedPoolMock(poolElement: GqlPoolElement): GqlPoolWeight
     ...poolElement,
     __typename: 'GqlPoolWeighted',
   }
+
   return pool
 }
 
@@ -108,6 +109,7 @@ export function aGqlPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlP
     staking: aGqlStakingMock(),
     type: GqlPoolTypeValues.Weighted,
   }
+
   return Object.assign({}, defaultPool, defaultPool1, ...options)
 }
 

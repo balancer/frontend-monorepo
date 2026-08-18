@@ -32,6 +32,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const { userAddress } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
+
   const labels: TransactionLabels = useMemo(
     () => ({
       init: getInitLabel(lockActionType),

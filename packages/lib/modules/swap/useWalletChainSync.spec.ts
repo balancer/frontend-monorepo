@@ -10,6 +10,7 @@ describe('getWalletChainSyncAction', () => {
       GqlChainValues.Mainnet,
       GqlChainValues.Polygon
     )
+
     expect(action).toBe('reset')
   })
 
@@ -20,6 +21,7 @@ describe('getWalletChainSyncAction', () => {
       GqlChainValues.Mainnet,
       GqlChainValues.Polygon
     )
+
     expect(action).toBe('init')
   })
 
@@ -30,6 +32,7 @@ describe('getWalletChainSyncAction', () => {
       GqlChainValues.Mainnet,
       GqlChainValues.Polygon
     )
+
     expect(action).toBe('sync')
   })
 
@@ -40,6 +43,7 @@ describe('getWalletChainSyncAction', () => {
       GqlChainValues.Mainnet,
       GqlChainValues.Mainnet
     )
+
     expect(action).toBe('init')
   })
 })

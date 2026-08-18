@@ -36,6 +36,7 @@ export type BasePermit2Params = {
   spender: Address
   isComplete?: boolean
 }
+
 export function useSignPermit2({
   tokenAmountsIn,
   nonces,
@@ -57,6 +58,7 @@ export function useSignPermit2({
     if (isLoading) {
       return setSignPermit2State(SignatureState.Preparing)
     }
+
     if (isSimulationReady) {
       setPermit2Signature(undefined)
       setSignPermit2State(SignatureState.Ready)
@@ -75,6 +77,7 @@ export function useSignPermit2({
 
       if (signature) {
         setSignPermit2State(SignatureState.Completed)
+
         toast({
           title: 'Permit approval signed!',
           description: '',

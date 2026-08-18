@@ -110,6 +110,7 @@ export function nameToSourceId(name: string): string {
   for (const [pattern, id] of NAME_TO_ID_ALIASES) {
     if (pattern.test(name)) return id
   }
+
   return slugify(name)
 }
 
@@ -144,6 +145,7 @@ export function nameToCategory(name: string): SourceCategory {
     'bungee',
     'socket',
   ]
+
   if (BRIDGE_NAMES.includes(n)) return 'bridge'
 
   // Intent venues (RFQ / batch auction protocols where solvers fill user intents)
@@ -186,6 +188,7 @@ export function normalizeDuneRow(raw: {
   ) {
     return null
   }
+
   const chain = duneChainToGqlChain(raw.blockchain)
   if (!chain) return null
   const address = raw.address.toLowerCase()

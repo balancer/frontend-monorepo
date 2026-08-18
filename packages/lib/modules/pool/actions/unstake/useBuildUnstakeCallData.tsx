@@ -9,6 +9,7 @@ type Params = {
   hasUnclaimedBalRewards: boolean
   userAddress: Address
 }
+
 export function useBuildUnstakeCallData({
   amount,
   gaugeService,

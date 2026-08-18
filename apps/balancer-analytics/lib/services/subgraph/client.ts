@@ -20,6 +20,7 @@ export function getV3VaultClient(chain: GqlChain): ApolloClient | null {
     link: new HttpLink({ uri }),
     queryDeduplication: true,
   })
+
   v3VaultClients.set(chain, client)
   return client
 }

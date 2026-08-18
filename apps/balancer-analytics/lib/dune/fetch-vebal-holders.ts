@@ -85,24 +85,30 @@ export async function fetchVeBalHoldersSnapshot(): Promise<VeBalHoldersSnapshot>
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
   let data: DuneResponse
+
   try {
     const res = await fetch(url, {
       headers: { 'x-dune-api-key': apiKey },
       signal: controller.signal,
       cache: 'no-store',
     })
+
     if (!res.ok) {
       const body = await res.text().catch(() => '')
       throw new Error(`dune HTTP ${res.status} ${body.slice(0, 200)}`)
     }
+
     data = (await res.json()) as DuneResponse
   } finally {
     clearTimeout(timer)
   }
+
   if (data.error) {
     throw new Error(`dune error: ${JSON.stringify(data.error).slice(0, 200)}`)
   }
+
   const raw = data.result?.rows ?? []
+
   if (raw.length === 0) {
     return { day: '', rows: [] }
   }
@@ -110,6 +116,7 @@ export async function fetchVeBalHoldersSnapshot(): Promise<VeBalHoldersSnapshot>
   // Pick the latest day present in the result set — string compare works
   // on Dune's `YYYY-MM-DD HH:MM:SS` format (ISO lexicographic order).
   let latestDay = ''
+
   for (const r of raw) {
     if (typeof r.day === 'string' && r.day > latestDay) latestDay = r.day
   }

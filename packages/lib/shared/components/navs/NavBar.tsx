@@ -237,6 +237,7 @@ export function NavBar({
   }, [])
 
   const { scrollYBoundedProgress } = useBoundedScroll(72)
+
   const scrollYBoundedProgressDelayed = useTransform(
     scrollYBoundedProgress,
     [0, 0.75, 1],

@@ -43,16 +43,19 @@ type DuneResponse = {
 async function fetchPage(url: string, apiKey: string): Promise<DuneResponse> {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), PAGE_TIMEOUT_MS)
+
   try {
     const res = await fetch(url, {
       headers: { 'x-dune-api-key': apiKey },
       signal: controller.signal,
       cache: 'no-store',
     })
+
     if (!res.ok) {
       const body = await res.text().catch(() => '')
       throw new Error(`dune HTTP ${res.status} ${body.slice(0, 200)}`)
     }
+
     return (await res.json()) as DuneResponse
   } finally {
     clearTimeout(timer)
@@ -71,19 +74,25 @@ export async function fetchAllDuneLabels(): Promise<{
   if (!apiKey) throw new Error('NEXT_PRIVATE_DUNE_API_KEY is not set')
 
   const rows: DuneLabelRowRaw[] = []
+
   let nextUrl: string | null =
     `https://api.dune.com/api/v1/query/${DUNE_QUERY_ID}/results?limit=${PAGE_LIMIT}`
+
   let pages = 0
+
   while (nextUrl && pages < HARD_PAGE_CAP) {
     pages += 1
     const data: DuneResponse = await fetchPage(nextUrl, apiKey)
+
     if (data.error) {
       throw new Error(`dune error: ${JSON.stringify(data.error).slice(0, 200)}`)
     }
+
     const page = data.result?.rows ?? []
     if (page.length === 0) break
     rows.push(...page)
     nextUrl = data.next_uri ?? null
   }
+
   return { rows, pages }
 }

@@ -53,6 +53,7 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
       const minUnderlyingTradeAmount = addBuffer(
         formatUnits(minimumWrapAmount, underlying.decimals)
       )
+
       if (bn(amount.humanAmount).lt(minUnderlyingTradeAmount)) {
         prev[underlying.symbol] = round(minUnderlyingTradeAmount, underlying.decimals)
       }
@@ -60,20 +61,24 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
       // We have an underlying token that will have to be wrapped
       // (checking amounts before and after the wrap)
       let minWrapAmount = addBuffer(formatUnits(minimumWrapAmount, underlying.decimals))
+
       if (bn(amount.humanAmount).lt(minWrapAmount)) {
         prev[underlying.symbol] = round(minWrapAmount, underlying.decimals)
       }
 
       const wrapperAmount = bn(amount.humanAmount).div(token.priceRate)
       minWrapAmount = addBuffer(formatUnits(minimumWrapAmount, token.decimals))
+
       if (bn(wrapperAmount).lt(minWrapAmount)) {
         const minUnderlyingAmount = bn(minWrapAmount).times(token.priceRate)
+
         if (minUnderlyingAmount.gt(prev[underlying.symbol] || 0)) {
           prev[underlying.symbol] = round(minUnderlyingAmount, underlying.decimals)
         }
       }
     } else {
       const minTradeAmount = addBuffer(formatUnits(minimumWrapAmount, token.decimals))
+
       if (bn(amount.humanAmount).lt(minTradeAmount)) {
         prev[token.symbol] = round(minTradeAmount, token.decimals)
       }
@@ -100,10 +105,12 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
       isSameAddress((token.underlyingToken?.address || zeroAddress) as Address, amount.tokenAddress)
     ) {
       address = token.underlyingToken.address
+
       balance =
         isBnParseable(token.balance) && isBnParseable(token.priceRate)
           ? bn(token.balance).div(token.priceRate).toString()
           : '0'
+
       decimals = token.underlyingToken.decimals
     }
 
@@ -113,8 +120,10 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
     const tokenShareInDollars = bn(totalUSDValue).times(weight)
     const tokenPrice = priceFor(amount.tokenAddress, pool.chain)
     const tokenShare = tokenShareInDollars.div(tokenPrice)
+
     if (tokenShare.lte(minTradeAmount)) {
       const minTotalUSD = minTradeAmount.times(tokenPrice).div(weight)
+
       if (minTotalUSD.gt(prev['PriceImpact'] ? prev['PriceImpact'] : 0)) {
         prev['PriceImpact'] = round(minTotalUSD, 6)
       }
@@ -146,6 +155,7 @@ function findToken(tokens: PoolToken[], address: Address) {
 // this can give bigger min amounts that the calculated here. The solution
 // for that is to add some buffer to our calculations
 const BUFFER_MULTIPLIER = 1.01
+
 function addBuffer(n: HumanAmount) {
   return bn(n).times(BUFFER_MULTIPLIER)
 }

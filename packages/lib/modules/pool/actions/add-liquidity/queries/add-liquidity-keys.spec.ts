@@ -19,6 +19,7 @@ function testGenerateLiquidityKeys(pool: Pool) {
       symbol: 'WETH',
     },
   ]
+
   return addLiquidityKeys.priceImpact({
     handler: new UnbalancedAddLiquidityV2Handler(aWjAuraWethPoolElementMock()),
     userAddress: defaultTestUserAccount,

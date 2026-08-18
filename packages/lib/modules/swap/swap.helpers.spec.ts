@@ -111,6 +111,7 @@ describe('swap.helpers', () => {
 
     it('returns false on non-mainnet chain', () => {
       vi.mocked(isMainnet).mockReturnValue(false)
+
       expect(
         isAuraBalSwap(
           TEST_ADDRESSES.eth,
@@ -123,6 +124,7 @@ describe('swap.helpers', () => {
 
     it('returns false when neither input nor output is auraBAL or relevant token', () => {
       const randomAddress = '0x1234567890abcdef1234567890abcdef12345678'
+
       expect(
         isAuraBalSwap(
           TEST_ADDRESSES.auraBal,

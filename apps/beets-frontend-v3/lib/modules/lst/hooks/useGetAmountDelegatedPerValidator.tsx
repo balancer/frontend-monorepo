@@ -59,6 +59,7 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
 
   const amountResults = useMemo(() => {
     const results = stakeRequests[chainId]
+
     if (results?.isSuccess) {
       return results?.data as Result
     }

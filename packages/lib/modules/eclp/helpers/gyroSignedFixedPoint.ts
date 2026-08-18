@@ -63,10 +63,12 @@ export function mulUpMagU(a: bigint, b: bigint): bigint {
 
 export function divUpMagU(a: bigint, b: bigint): bigint {
   if (b === 0n) throw new Error('ZERO DIVISION')
+
   if (b < 0n) {
     b = b * -1n
     a = a * -1n
   }
+
   if (a === 0n) {
     return 0n
   } else {
@@ -105,6 +107,7 @@ export function sqrt(input: bigint, tolerance: bigint): bigint {
   if (input === 0n) {
     return 0n
   }
+
   let guess = makeInitialGuess(input)
 
   // 7 iterations
@@ -115,6 +118,7 @@ export function sqrt(input: bigint, tolerance: bigint): bigint {
 
   // Check square is more or less correct (in some epsilon range)
   const guessSquared = (guess * guess) / ONE
+
   if (!(
     guessSquared <= input + mulUp(guess, tolerance) &&
     guessSquared >= input - mulUp(guess, tolerance)
@@ -132,54 +136,71 @@ function makeInitialGuess(input: bigint): bigint {
     if (input <= 10n) {
       return SQRT_1E_NEG_17
     }
+
     if (input <= 100n) {
       return 10000000000n
     }
+
     if (input <= 1000n) {
       return SQRT_1E_NEG_15
     }
+
     if (input <= 10000n) {
       return 100000000000n
     }
+
     if (input <= 100000n) {
       return SQRT_1E_NEG_13
     }
+
     if (input <= 1000000n) {
       return 1000000000000n
     }
+
     if (input <= 10000000n) {
       return SQRT_1E_NEG_11
     }
+
     if (input <= 100000000n) {
       return 10000000000000n
     }
+
     if (input <= 1000000000n) {
       return SQRT_1E_NEG_9
     }
+
     if (input <= 10000000000n) {
       return 100000000000000n
     }
+
     if (input <= 100000000000n) {
       return SQRT_1E_NEG_7
     }
+
     if (input <= 1000000000000n) {
       return 1000000000000000n
     }
+
     if (input <= 10000000000000n) {
       return SQRT_1E_NEG_5
     }
+
     if (input <= 100000000000000n) {
       return 10000000000000000n
     }
+
     if (input <= 1000000000000000n) {
       return SQRT_1E_NEG_3
     }
+
     if (input <= 10000000000000000n) {
       return 100000000000000000n
     }
+
     if (input <= 100000000000000000n) {
       return SQRT_1E_NEG_1
     }
+
     return input
   }
 }
@@ -189,6 +210,7 @@ function intLog2Halved(x: bigint): number {
 
   for (let i = 128; i >= 2; i = i / 2) {
     const factor = 2n ** BigInt(i)
+
     if (x >= factor) {
       x = x / factor
       n += i / 2

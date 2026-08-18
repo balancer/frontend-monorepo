@@ -117,6 +117,7 @@ function PoolEventRow({
   }
 
   let eventType: EventType
+
   if (poolEvent.type === 'SWAP') {
     const swapEvent = poolEvent as GqlPoolSwapEventV3
     eventType = swapEvent.tokenOut.address === projectTokenAddress ? 'Buy' : 'Sell'

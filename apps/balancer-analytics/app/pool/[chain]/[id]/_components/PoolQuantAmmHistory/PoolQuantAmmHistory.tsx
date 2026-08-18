@@ -137,6 +137,7 @@ export function PoolQuantAmmHistory({ range, tokens, weightSnapshots, params }: 
     const valid = weightSnapshots.filter(
       s => Array.isArray(s.weights) && s.weights.length === tokens.length
     ) as { timestamp: number; weights: number[] }[]
+
     if (range === 'all' || valid.length === 0) return valid
     const latest = valid[valid.length - 1].timestamp
     const cutoff = latest - RANGE_SECONDS[range]
@@ -229,6 +230,7 @@ function computeDrift(
       maxStepPp: NaN,
     }))
   }
+
   const first = samples[0]
   const last = samples[samples.length - 1]
   const days = Math.max((last.timestamp - first.timestamp) / 86400, 1 / 24) // 1h floor
@@ -237,6 +239,7 @@ function computeDrift(
     const end = last.weights[i] ?? NaN
     const deltaPp = end - start
     let maxStepPp = 0
+
     for (let k = 1; k < samples.length; k++) {
       const prev = samples[k - 1].weights[i]
       const curr = samples[k].weights[i]
@@ -244,6 +247,7 @@ function computeDrift(
       const step = Math.abs(curr - prev)
       if (step > maxStepPp) maxStepPp = step
     }
+
     return { start, end, deltaPp, perDayPp: deltaPp / days, maxStepPp }
   })
 }
@@ -277,12 +281,14 @@ function DriftGrid({
       >
         {tokens.map((t, i) => {
           const d = drift[i]
+
           const dirColor =
             !Number.isFinite(d.deltaPp) || Math.abs(d.deltaPp) < 0.0001
               ? 'font.secondary'
               : d.deltaPp > 0
                 ? 'green.300'
                 : 'red.300'
+
           return (
             <Box
               bg="background.level0"
@@ -524,13 +530,16 @@ function buildChartOption(samples: { timestamp: number; weights: number[] }[], t
         const i = params[0]?.dataIndex
         if (i === undefined) return ''
         const ts = new Date(samples[i].timestamp * 1000)
+
         const date = ts.toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
         })
+
         const dot = (color: string) =>
           `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:6px;vertical-align:middle"></span>`
+
         const rows = tokens
           .map((t, k) => {
             const w = samples[i].weights[k]
@@ -538,6 +547,7 @@ function buildChartOption(samples: { timestamp: number; weights: number[] }[], t
             return `<div style="display:flex;justify-content:space-between;gap:18px;padding:1px 0"><span style="opacity:0.85">${dot(TOKEN_COLORS[k % TOKEN_COLORS.length])}${t.symbol}</span><span style="font-family:ui-monospace,monospace">${value}</span></div>`
           })
           .join('')
+
         return `<div style="font-weight:600;margin-bottom:6px">${date}</div>${rows}`
       },
     },

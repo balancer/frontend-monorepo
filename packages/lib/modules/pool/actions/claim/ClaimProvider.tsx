@@ -17,6 +17,7 @@ export type ClaimablePool = Pool | PoolListItem
 export function useClaimLogic(pools: ClaimablePool[]) {
   const { isConnected } = useUserAccount()
   const previewModalDisclosure = useDisclosure()
+
   const { isDisabled, disabledReason } = isDisabledWithReason([
     !isConnected,
     LABELS.walletNotConnected,
@@ -36,6 +37,7 @@ export function useClaimLogic(pools: ClaimablePool[]) {
     claimableBalancesQuery,
     balTokenRewardsQuery,
   })
+
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
   const claimTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash

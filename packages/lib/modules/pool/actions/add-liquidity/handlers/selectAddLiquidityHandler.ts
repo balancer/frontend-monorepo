@@ -47,6 +47,7 @@ export function selectAddLiquidityHandler(
     pool.poolTokens.length === 2
   ) {
     const usingUnderlyingTokens = wrapUnderlying?.some(w => w)
+
     if (!usingUnderlyingTokens) {
       return new UnbalancedAddLiquidityViaSwapV3Handler(pool)
     }
@@ -57,6 +58,7 @@ export function selectAddLiquidityHandler(
     if (wantsProportional) {
       return new ProportionalBoostedAddLiquidityV3(pool)
     }
+
     return new BoostedUnbalancedAddLiquidityV3Handler(pool)
   }
 
@@ -64,6 +66,7 @@ export function selectAddLiquidityHandler(
     if (isV3Pool(pool)) {
       return new ProportionalAddLiquidityHandlerV3(pool)
     }
+
     return new ProportionalAddLiquidityHandler(pool)
   }
 

@@ -30,6 +30,7 @@ type Props = {
   onTokenSelect: (token: ApiOrCustomToken) => void
   enableUnlistedToken?: boolean
 }
+
 function OtherTokens() {
   return (
     <Box bg="background.level1">
@@ -173,6 +174,7 @@ export function TokenSelectList({
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isLoadingTokenPrices } = useTokens()
   const { isConnected } = useUserAccount()
+
   const { orderedTokens } = useTokenSelectList(
     chain,
     tokens,
@@ -180,6 +182,7 @@ export function TokenSelectList({
     pinNativeAsset,
     searchTerm
   )
+
   const { openConnectModal } = useConnectModal()
 
   const { name, symbol, decimals } = useTokenMetadata(searchTerm ?? '', chain)
@@ -199,7 +202,9 @@ export function TokenSelectList({
   const tokensWithBalance = isConnected
     ? orderedTokens.filter(token => balanceFor(token)?.amount)
     : []
+
   const tokensWithoutBalance = orderedTokens.filter(token => !tokensWithBalance.includes(token))
+
   const tokensToShow = [
     ...tokensWithBalance,
     ...tokensWithoutBalance,
@@ -218,18 +223,22 @@ export function TokenSelectList({
     />,
     <OtherTokens key="other-tokens" />,
   ]
+
   const groupCounts = [
     tokensWithBalance.length,
     tokensWithoutBalance.length + (unlistedTokenToShow ? 1 : 0),
   ]
 
   const decrementActiveIndex = () => setActiveIndex(prev => Math.max(prev - 1, 0))
+
   const incrementActiveIndex = () =>
     setActiveIndex(prev => Math.min(prev + 1, tokensToShow.length - 1))
+
   const hotkeyOpts = { enableOnFormTags: true }
 
   const selectActiveToken = () => {
     const token = tokensToShow[activeIndex]
+
     if (token) {
       onTokenSelect(token)
     }

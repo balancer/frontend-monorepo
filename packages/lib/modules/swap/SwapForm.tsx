@@ -61,6 +61,7 @@ type Props = {
   customToken?: ApiToken
   customTokenUsdPrice?: number
 }
+
 export function SwapForm({
   redirectToPoolPage,
   hasDisabledInputs,
@@ -120,6 +121,7 @@ export function SwapForm({
 
   function handleTokenSelect(token: ApiToken) {
     if (!token) return
+
     if (tokenSelectKey === 'tokenIn') {
       setTokenIn(token.address as Address)
     } else if (tokenSelectKey === 'tokenOut') {
@@ -140,6 +142,7 @@ export function SwapForm({
       if (tokenOut.address) return switchTokens()
       return setTokenIn(tokenAddress)
     }
+
     if (
       tokens.length === 2 &&
       tokenSelectKey === 'tokenOut' &&

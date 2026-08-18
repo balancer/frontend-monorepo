@@ -6,6 +6,7 @@ import { use } from 'react'
 type Props = {
   params: Promise<{ txHash?: string[] }>
 }
+
 // Page for swapping from a pool page
 export default function PoolSwapPageWrapper({ params }: Props) {
   const resolvedParams = use(params)

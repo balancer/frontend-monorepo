@@ -11,8 +11,10 @@ import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
 
 export function PoolActivityTable() {
   const isMounted = useIsMounted()
+
   const { sortedPoolEvents, pagination, setPagination, isLoading, count, showPagination } =
     usePoolActivity()
+
   const paginationProps = {
     ...getPaginationProps(count, pagination, setPagination, true),
   }

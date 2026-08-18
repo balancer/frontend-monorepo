@@ -8,10 +8,12 @@ import { normalizeHandle } from '@repo/lib/shared/utils/links'
 
 export function useLbpMetadata() {
   const [createLbp, { error, reset }] = useMutation(CreateLbpDocument)
+
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
+
   const [isMetadataSaved, setIsMetadataSaved] = useLocalStorage<boolean>(
     LS_KEYS.LbpConfig.IsMetadataSaved,
     false
@@ -19,6 +21,7 @@ export function useLbpMetadata() {
 
   const { saleStructureForm, projectInfoForm } = useLbpForm()
   const { selectedChain, saleType } = saleStructureForm.getValues()
+
   const { name, description, websiteUrl, tokenIconUrl, telegramHandle, xHandle, discordUrl } =
     projectInfoForm.getValues()
 

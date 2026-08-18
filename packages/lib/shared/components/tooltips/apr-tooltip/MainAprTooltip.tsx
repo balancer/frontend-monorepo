@@ -66,6 +66,7 @@ export function SparklesIcon({
     '#91A1B6', // light from
     '#A0AEC0' // dark from
   )
+
   const defaultGradTo = useColorModeValue(
     '#BCCCE1', // light to
     '#E9EEF5' // dark to
@@ -75,6 +76,7 @@ export function SparklesIcon({
     '#BFA672', // light from
     '#AE8C56' // dark from
   )
+
   const corePoolGradTo = useColorModeValue(
     '#D9C47F', // light to
     '#F4EAD2' // dark to
@@ -84,6 +86,7 @@ export function SparklesIcon({
     '#F49A55', // light from
     '#F49175' // dark from
   )
+
   const rewardsGradTo = useColorModeValue(
     '#FCD45B', // light to
     '#FFCC33' // dark to

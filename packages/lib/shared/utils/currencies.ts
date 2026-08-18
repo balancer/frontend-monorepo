@@ -43,6 +43,7 @@ export async function getFxRates(): Promise<FxRates | undefined> {
     const res = await fetch(`https://api.currencyapi.com/v3/latest?apikey=${API_KEY}`, {
       next: { revalidate: mins(5).toSecs() },
     })
+
     const { data: rates } = (await res.json()) as FxRatesResponse
     return rates
   } catch (error) {

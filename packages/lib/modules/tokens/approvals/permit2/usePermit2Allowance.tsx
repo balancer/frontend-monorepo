@@ -17,6 +17,7 @@ type Params = {
   enabled: boolean
   spender: Address
 }
+
 export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, spender }: Params) {
   const networkConfig = getNetworkConfig(getGqlChain(chainId))
   const permit2Address = networkConfig.contracts.permit2!

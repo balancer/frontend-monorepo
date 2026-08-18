@@ -29,6 +29,7 @@ async function testAddReceipt(
       protocolVersion,
     })
   })
+
   return result
 }
 
@@ -46,6 +47,7 @@ async function testRemoveReceipt(
       protocolVersion,
     })
   })
+
   return result
 }
 
@@ -63,6 +65,7 @@ async function testSwapReceipt(
       protocolVersion,
     })
   })
+
   return result
 }
 
@@ -80,6 +83,7 @@ async function testLstStakeReceipt(
       protocolVersion,
     })
   })
+
   return result
 }
 
@@ -97,6 +101,7 @@ async function testLstWithdrawReceipt(
       protocolVersion,
     })
   })
+
   return result
 }
 
@@ -264,6 +269,7 @@ describe('queries swap transaction in polygon', () => {
     })
   })
 })
+
 describe('queries swap transaction in non polygon networks', () => {
   test('when the native asset is the token out that goes through a wrap (from stataEthDAI to WETH and then to ETH)', async () => {
     const userAddress = '0x5036388C540994Ed7b74b82F71175a441F85BdA1'
@@ -271,6 +277,7 @@ describe('queries swap transaction in non polygon networks', () => {
     const txHash = '0x2ecd5a98edb0fb58160a85d913ab1623d7f48cc72b14567059f831bf3d1686d5'
 
     const protocolVersion = 3
+
     const result = await testSwapReceipt(
       userAddress,
       txHash,

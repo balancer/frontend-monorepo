@@ -60,9 +60,11 @@ export async function GET(
   ctx: { params: Promise<{ address: string }> }
 ): Promise<NextResponse<AnalyticsMerklPayload | { error: string }>> {
   const { address: rawAddress } = await ctx.params
+
   if (!isAddress(rawAddress)) {
     return NextResponse.json({ error: 'invalid address' }, { status: 400 })
   }
+
   const address = rawAddress.toLowerCase()
 
   const chainIds = PROJECT_CONFIG.supportedNetworks
@@ -74,10 +76,12 @@ export async function GET(
   const settled = await Promise.allSettled(
     chainIds.map(async chainId => {
       const url = `https://api.merkl.xyz/v4/users/${address}/rewards?chainId=${chainId}`
+
       const res = await fetch(url, {
         next: { revalidate: 600 },
         headers: { accept: 'application/json' },
       })
+
       if (!res.ok) throw new Error(`merkl ${chainId} → ${res.status}`)
       return (await res.json()) as MerklChainEnvelope[]
     })
@@ -88,18 +92,22 @@ export async function GET(
 
   for (const result of settled) {
     if (result.status === 'rejected') continue
+
     for (const envelope of result.value) {
       for (const reward of envelope.rewards) {
         const decimals = reward.token.decimals ?? 18
         const divisor = 10 ** decimals
+
         const unclaimedUnits = Math.max(
           0,
           (Number(reward.amount ?? 0) - Number(reward.claimed ?? 0)) / divisor
         )
+
         const pendingUnits = Math.max(0, Number(reward.pending ?? 0) / divisor)
         if (unclaimedUnits <= 0 && pendingUnits <= 0) continue
 
         const key = `${envelope.chain.id}:${reward.token.address.toLowerCase()}`
+
         const existing = aggregated.get(key) ?? {
           symbol: reward.token.symbol,
           tokenAddress: reward.token.address,
@@ -110,9 +118,11 @@ export async function GET(
           pending: 0,
           unclaimedUsd: null,
         }
+
         existing.unclaimed += unclaimedUnits
         existing.pending += pendingUnits
         const price = reward.token.price
+
         if (typeof price === 'number' && Number.isFinite(price)) {
           const usd = (existing.unclaimedUsd ?? 0) + unclaimedUnits * price
           existing.unclaimedUsd = usd
@@ -120,6 +130,7 @@ export async function GET(
           // header would silently undercount mismatched-price tokens.
           totalUnclaimedUsd += unclaimedUnits * price
         }
+
         aggregated.set(key, existing)
       }
     }

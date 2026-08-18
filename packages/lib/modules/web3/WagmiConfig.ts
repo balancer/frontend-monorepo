@@ -53,6 +53,7 @@ if (isBrowser()) {
 */
   if (!isConnectedToWC()) {
     const lastConnector = connectors[connectors.length - 1]
+
     if (lastConnector({} as any).id !== 'walletConnect') {
       connectors.push(
         createWalletConnectConnector({ index: connectors.length, walletConnectProjectId })
@@ -95,9 +96,11 @@ export function impersonateWagmiConfig(impersonationAddress?: Address) {
       If needed, this could be easily extended to use different RPC URLs for different chains
      */
     chains.forEach(chain => (chain.rpcUrls.default.http = [defaultAnvilForkRpcUrl]))
+
     _transports = Object.fromEntries(
       chains.map(chain => [chain.id, fallback([http(defaultAnvilForkRpcUrl)])])
     )
+
     console.log(
       'All chains and transports updated to use default Anvil fork RPC URL: ',
       defaultAnvilForkRpcUrl

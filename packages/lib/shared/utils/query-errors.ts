@@ -53,6 +53,7 @@ type RemoveMetaParams = RemoveLiquidityParams & {
   chainId: number
   blockNumber?: bigint
 } & EdgeCasePoolMetaParams
+
 export function sentryMetaForRemoveLiquidityHandler(
   errorMessage: string,
   params: RemoveMetaParams
@@ -74,6 +75,7 @@ export type SwapMetaParams = (SimulateSwapParams | SwapBuildCallExtras) & {
 export type CreatePoolMetaParams = CreatePoolInput & {
   blockNumber?: bigint
 }
+
 export function sentryMetaForCreatePoolHandler(errorMessage: string, params: CreatePoolMetaParams) {
   return createCreatePoolMetadata('HandlerQueryError', errorMessage, params)
 }
@@ -81,6 +83,7 @@ export function sentryMetaForCreatePoolHandler(errorMessage: string, params: Cre
 export type InitPoolMetaParams = InitPoolInputV3 & {
   blockNumber?: bigint
 }
+
 export function sentryMetaForInitializePoolHandler(
   errorMessage: string,
   params: InitPoolMetaParams
@@ -131,6 +134,7 @@ type NonFatalErrorParams = {
   errorMessage?: string
   extra?: Extras
 }
+
 export function captureNonFatalError({
   error,
   errorName,
@@ -156,6 +160,7 @@ function createAddHandlerMetadata(
   params: AddLiquidityParams
 ) {
   const { pool, ...restParams } = params
+
   const extra: Extras = {
     handler: params.handler.constructor.name,
     params: {
@@ -165,6 +170,7 @@ function createAddHandlerMetadata(
       humanAmountsIn: stringifyHumanAmountsIn(pool, params.humanAmountsIn),
     },
   }
+
   return createFatalMetadata(errorName, errorMessage, extra)
 }
 
@@ -180,6 +186,7 @@ function createRemoveHandlerMetadata(
     handler: params.handler.constructor.name,
     params,
   }
+
   return createFatalMetadata(errorName, errorMessage, extra)
 }
 
@@ -192,10 +199,12 @@ function createSwapHandlerMetadata(
   params: SwapMetaParams
 ) {
   const { handler, ...rest } = params
+
   const extra: Extras = {
     handler: handler.constructor.name,
     params: rest,
   }
+
   return createFatalMetadata(errorName, errorMessage, extra)
 }
 
@@ -210,6 +219,7 @@ function createCreatePoolMetadata(
   const extra: Extras = {
     params,
   }
+
   return createFatalMetadata(errorName, errorMessage, extra)
 }
 
@@ -222,6 +232,7 @@ function createFatalMetadata(
     extra,
     level: 'fatal',
   }
+
   return {
     errorMessage,
     errorName,
@@ -238,6 +249,7 @@ function createNonFatalMetadata(
     extra,
     level: 'error',
   }
+
   return {
     errorMessage,
     errorName,
@@ -254,6 +266,7 @@ export function createErrorMetadata(
     extra,
     level: 'error',
   }
+
   return {
     errorMessage,
     errorName,
@@ -406,6 +419,7 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   if (message.startsWith('WebSocket connection failed for host: wss://relay.walletconnect.com')) {
     return true
   }
+
   if (message.startsWith('WebSocket connection closed abnormally with code: 3000')) {
     return true
   }

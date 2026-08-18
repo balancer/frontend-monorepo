@@ -10,6 +10,7 @@ type Props = {
   currentSortingObj: PortfolioSortingData
   setCurrentSortingObj: (value: PortfolioSortingData) => void
 }
+
 export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, ...rest }: Props) {
   const portfolioOrderBy = portfolioOrderByFn()
 

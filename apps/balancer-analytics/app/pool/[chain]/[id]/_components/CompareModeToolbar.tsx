@@ -99,12 +99,14 @@ function formatChange(c: ParamChange): { before: string; after: string } {
       after: formatBool(c.after as boolean | undefined),
     }
   }
+
   if (c.key === 'ampValue') {
     return {
       before: formatAmp(c.before as string | undefined),
       after: formatAmp(c.after as string | undefined),
     }
   }
+
   return {
     before: formatPercent(c.before as string | undefined),
     after: formatPercent(c.after as string | undefined),
@@ -138,6 +140,7 @@ function MetricTile({
         ? 'green.400'
         : 'red.400'
     : undefined
+
   return (
     <Box>
       <Text color="font.secondary" fontSize="xs" mb="2xs">
@@ -210,6 +213,7 @@ export function CompareModeToolbar({
     if (cursorA !== null && cursorB !== null) {
       return cursorA <= cursorB ? [cursorA, cursorB] : [cursorB, cursorA]
     }
+
     return [cursorA, cursorB]
   }, [cursorA, cursorB])
 
@@ -217,6 +221,7 @@ export function CompareModeToolbar({
     () => (lo !== null ? computeParamSnapshot(events, lo) : null),
     [events, lo]
   )
+
   const snapshotB: ParamSnapshot | null = useMemo(
     () => (hi !== null ? computeParamSnapshot(events, hi) : null),
     [events, hi]
@@ -244,12 +249,14 @@ export function CompareModeToolbar({
   }, [snapshots, lo, hi])
 
   if (cursorA === null && cursorB === null) return null
+
   if (lo === null || hi === null) {
     // Only one cursor placed.
     const only = cursorA ?? cursorB
     if (only === null) return null
     return <ArmingHint cursorA={only} onClear={onClear} />
   }
+
   if (!metrics || !snapshotA || !snapshotB) return null
 
   return (

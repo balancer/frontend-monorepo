@@ -11,6 +11,7 @@ function TagValue({ tag }: { tag: PoolTag }) {
       return <Text fontSize="xs" fontWeight="bold" ml="xs" mr="xs">{`${tag.value}x`}</Text>
     }
   }
+
   return null
 }
 

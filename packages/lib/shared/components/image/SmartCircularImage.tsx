@@ -74,6 +74,7 @@ export function SmartCircularImage({
                 if (checkCorner(x, y)) {
                   transparentPixels++
                 }
+
                 totalPixels++
               }
             }

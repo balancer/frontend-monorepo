@@ -18,16 +18,20 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function DynamicLbpTokenAmountInputs() {
   const { getToken } = useTokens()
+
   const {
     launchToken,
     saleStructureForm: { control },
     isSeedless,
   } = useLbpForm()
+
   useFormState({ control })
+
   const [collateralTokenAddress, selectedChain, startDateTime] = useWatch({
     control,
     name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'],
   })
+
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
   const saleStart = startDateTime
 
@@ -103,6 +107,7 @@ function CollateralTokenAmountInput({
     saleStructureForm: { clearErrors },
     isSeedless,
   } = useLbpForm()
+
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const balance = balanceFor(collateralTokenAddress)
 

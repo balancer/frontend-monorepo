@@ -22,10 +22,12 @@ export function ParallaxImage({
   overflow = 'hidden',
 }: ParallaxImageProps) {
   const ref = useRef(null)
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   })
+
   const y = useTransform(scrollYProgress, [0, 1], [yStart, yEnd])
   const scale = useTransform(scrollYProgress, [0, 1], [scaleStart, scaleEnd])
 

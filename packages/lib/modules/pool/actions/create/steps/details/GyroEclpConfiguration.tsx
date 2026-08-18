@@ -51,6 +51,7 @@ function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
+
   const [alpha, beta, peakPrice, lambda] = useWatch({
     control: eclpConfigForm.control,
     name: ['alpha', 'beta', 'peakPrice', 'lambda'],
@@ -84,12 +85,15 @@ function EclpParamInputs() {
     },
     validate: (value: number) => {
       if (value < 0) return 'Lower bound price must be greater than 0'
+
       if (value >= Number(peakPrice)) {
         return 'Lower bound price must be less than peak price'
       }
+
       if (value >= Number(beta)) {
         return 'Lower bound price must be less than upper bound price'
       }
+
       return true
     },
   }
@@ -124,12 +128,15 @@ function EclpParamInputs() {
     },
     validate: (value: number) => {
       if (value < 0) return 'Upper bound price must be greater than 0'
+
       if (value <= Number(alpha)) {
         return 'Upper bound price must be greater than lower bound price'
       }
+
       if (value <= Number(peakPrice)) {
         return 'Upper bound price must be greater than peak price'
       }
+
       return true
     },
   }

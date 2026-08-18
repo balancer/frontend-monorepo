@@ -138,6 +138,7 @@ function bucketize(type: string | null | undefined, title: string | undefined): 
     if (/reward|emission|aura|bal/i.test(title ?? '')) return 'staking'
     return 'other'
   }
+
   if (FEE_TYPES.has(type) || /SWAP_FEE/i.test(type)) return 'fees'
   if (YIELD_TYPES.has(type) || /YIELD|SURPLUS|UPLIFT/i.test(type)) return 'yield'
   if (STAKING_TYPES.has(type)) return 'staking'
@@ -162,12 +163,14 @@ function readPosition(pool: PortfolioPool): {
   const stakedUsd = Math.max(0, positionUsd - walletUsd)
   const tvl = Number(pool.dynamicData.totalLiquidity ?? 0)
   const shareOfPool = tvl > 0 ? positionUsd / tvl : 0
+
   // Pick the staked balance with the largest USD value to surface a single
   // "primary" staking type for the row (gauge / aura / reliquary / vebal).
   const stakingType =
     (ub?.stakedBalances ?? [])
       .filter(b => Number(b.balanceUsd ?? 0) > 0)
       .sort((a, b) => Number(b.balanceUsd ?? 0) - Number(a.balanceUsd ?? 0))[0]?.stakingType ?? null
+
   return { positionUsd, walletUsd, stakedUsd, shareOfPool, stakingType }
 }
 
@@ -178,6 +181,7 @@ function buildPosition(pool: PortfolioPool): PortfolioPosition | null {
   if (positionUsd <= 0) return null
 
   const aprItems = pool.dynamicData.aprItems ?? []
+
   const aprBreakdown: AprBreakdownItem[] = aprItems.map(item => ({
     id: item.id,
     title: item.title,
@@ -191,11 +195,13 @@ function buildPosition(pool: PortfolioPool): PortfolioPosition | null {
   let feeApr = 0
   let yieldApr = 0
   let rewardApr = 0
+
   for (const item of aprBreakdown) {
     if (item.bucket === 'fees') feeApr += item.apr
     else if (item.bucket === 'yield') yieldApr += item.apr
     else if (item.bucket === 'staking') rewardApr += item.apr
   }
+
   const totalApr = feeApr + yieldApr + rewardApr
 
   // Daily $ — fees + yield apply to the whole position; staking rewards only
@@ -259,11 +265,13 @@ function aggregate(
       positionUsd: 0,
       count: 0,
     }
+
     chainBucket.positionUsd += pos.positionUsd
     chainBucket.count += 1
     chainMap.set(pos.chain, chainBucket)
 
     const tokens = pos.pool.poolTokens ?? []
+
     for (const t of tokens) {
       // Skip nested BPTs that don't represent a real underlying — they
       // double-count value that already flows through the nested pool.
@@ -277,6 +285,7 @@ function aggregate(
       // Key by chain + address so the same symbol on two chains stays
       // distinct (USDC on Ethereum vs Base).
       const key = `${pos.chain}:${t.address.toLowerCase()}`
+
       const existing = tokenMap.get(key) ?? {
         address: t.address,
         chain: pos.chain,
@@ -286,14 +295,17 @@ function aggregate(
         balance: 0,
         contributions: [],
       }
+
       existing.valueUsd += userValue
       existing.balance += userBalance
+
       existing.contributions.push({
         poolId: pos.pool.id,
         poolName: pos.pool.name,
         valueUsd: userValue,
         balance: userBalance,
       })
+
       tokenMap.set(key, existing)
     }
   }
@@ -340,6 +352,7 @@ export function usePortfolioByAddress(rawAddress: string | null): UsePortfolioBy
   // keep the Apollo cache key stable across pasted vs checksummed addresses.
   const address =
     rawAddress && /^0x[a-fA-F0-9]{40}$/.test(rawAddress) ? rawAddress.toLowerCase() : null
+
   const chainIn = PROJECT_CONFIG.supportedNetworks
 
   const poolsQuery = useQuery(GetPoolsDocument, {
@@ -370,10 +383,12 @@ export function usePortfolioByAddress(rawAddress: string | null): UsePortfolioBy
         summary: { ...EMPTY_SUMMARY, protocolTvl },
       }
     }
+
     const positions = (poolsQuery.data?.pools ?? [])
       .map(buildPosition)
       .filter((p): p is PortfolioPosition => p !== null)
       .sort((a, b) => b.positionUsd - a.positionUsd)
+
     return { positions, ...aggregate(positions, protocolTvl) }
   }, [poolsQuery.data, protocolTvl, address])
 

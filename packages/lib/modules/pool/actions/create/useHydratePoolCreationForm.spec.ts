@@ -31,6 +31,7 @@ describe('useHydratePoolCreationForm', () => {
       areAllParamsDefined: true,
       poolAddressParam: undefined,
     })
+
     ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
       poolCreationForm: { reset: vi.fn() },
       setPoolAddress,
@@ -55,6 +56,7 @@ describe('useHydratePoolCreationForm', () => {
     const autoRangeConfigFormReset = vi.fn()
     const eclpConfigFormReset = vi.fn()
     const setPoolAddress = vi.fn()
+
     const goToLastStep = vi.fn()
 
     ;(useUninitializedPool as ReturnType<typeof vi.fn>).mockReturnValue({
@@ -66,6 +68,7 @@ describe('useHydratePoolCreationForm', () => {
       areAllParamsDefined: false,
       poolAddressParam: '0xpoolAddress123',
     })
+
     ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
       poolCreationForm: { reset: poolCreationFormReset },
       setPoolAddress,
@@ -99,6 +102,7 @@ describe('useHydratePoolCreationForm', () => {
       areAllParamsDefined: false,
       poolAddressParam: undefined,
     })
+
     ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
       poolCreationForm: { reset: poolCreationFormReset },
       setPoolAddress: vi.fn(),
@@ -117,6 +121,7 @@ describe('useHydratePoolCreationForm', () => {
 
     const poolCreationFormReset = vi.fn()
     const setPoolAddress = vi.fn()
+
     const goToLastStep = vi.fn()
 
     ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({

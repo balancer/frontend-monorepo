@@ -27,6 +27,7 @@ export function usePoolStateWithBalancesQuery(pool: Pool) {
 
   const queryFn = async () => {
     const rpcUrl = getRpcUrl(chainId)
+
     if (isV3Pool(pool)) {
       return isBoosted(pool)
         ? getBoostedPoolStateWithBalancesV3(helpers.boostedPoolState, chainId, rpcUrl)

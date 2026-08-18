@@ -22,8 +22,10 @@ type SignPermit2SwapParams = {
   queryOutput: ExactInQueryOutput | ExactOutQueryOutput
   tokenIn?: TokenAmountIn
 }
+
 export async function signPermit2Swap(params: SignPermit2SwapParams): Promise<Permit2 | undefined> {
   if (!params.nonces) throw new Error('Missing nonces in signPermitSwap')
+
   try {
     const signature = await sign(params)
     return signature
@@ -54,9 +56,11 @@ async function sign({
   const MaxAllowance = MaxUint159
 
   const maximizedQueryOutput = { ...queryOutput }
+
   if (maximizedQueryOutput.swapKind === SwapKind.GivenIn) {
     maximizedQueryOutput.amountIn.amount = MaxAllowance
   }
+
   if (maximizedQueryOutput.swapKind === SwapKind.GivenOut) {
     maximizedQueryOutput.amountOut.amount = MaxAllowance
   }

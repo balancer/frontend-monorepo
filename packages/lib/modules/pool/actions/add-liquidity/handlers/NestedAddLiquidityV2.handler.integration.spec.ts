@@ -15,6 +15,7 @@ function selectNestedHandler(pool: Pool) {
 
 // Balancer 50WETH-50-3pool
 const poolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0'
+
 const nestedPool = await fetchPoolMock({
   poolId,
   chain: GqlChainValues.Mainnet,
@@ -28,6 +29,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
     const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '100', tokenAddress: daiAddress, symbol: 'DAI' },
     ]
+
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
     expect(priceImpact).toBeGreaterThan(0)
   })
