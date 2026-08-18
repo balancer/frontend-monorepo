@@ -6,6 +6,7 @@ import { PoolVariant, BaseVariant } from '../../../pool.types'
 import { usePool } from '../../../PoolProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PoolChartPeriod } from './PoolChartsProvider'
+type NonEmptyPoolChartTabs = [PoolChartTypeTab, ...PoolChartTypeTab[]]
 
 export enum PoolChartTab {
   VOLUME = 'volume',
@@ -24,17 +25,17 @@ export interface PoolChartTypeTab {
 }
 
 type PoolTabsMap = {
-  [key in GqlPoolType]?: PoolChartTypeTab[]
+  [key in GqlPoolType]?: NonEmptyPoolChartTabs
 } & {
-  default: PoolChartTypeTab[] // Make default required
+  default: NonEmptyPoolChartTabs
 }
 
-const BASE_TABS: PoolChartTypeTab[] = [
+const BASE_TABS: NonEmptyPoolChartTabs = [
   { value: PoolChartTab.VOLUME, label: 'Volume' },
   { value: PoolChartTab.TVL, label: 'TVL' },
 ]
 
-const TABS_WITH_FEES: PoolChartTypeTab[] = [
+const TABS_WITH_FEES: NonEmptyPoolChartTabs = [
   ...BASE_TABS,
   { value: PoolChartTab.FEES, label: 'Fees' },
 ]
@@ -66,7 +67,7 @@ export function getPoolTabsList({
 }: {
   variant: PoolVariant
   poolType: GqlPoolType
-}): PoolChartTypeTab[] {
+}): NonEmptyPoolChartTabs {
   // LBP pools in v2 only show base tabs
   if (poolType === GqlPoolTypeValues.LiquidityBootstrapping && variant === BaseVariant.v2) {
     return BASE_TABS
@@ -82,17 +83,16 @@ export const PoolChartTabsContext = createContext<PoolChartTabsResponse | null>(
 
 export function usePoolChartTabsLogic() {
   const { pool } = usePool()
-  const { variant } = useParams()
+  const { variant } = useParams<{ variant: PoolVariant }>()
 
-  const tabsList = useMemo(() => {
-    const poolType = pool?.type
-    if (!poolType || typeof variant !== 'string') return []
-
-    return getPoolTabsList({
-      variant: variant as PoolVariant,
-      poolType: poolType,
-    })
-  }, [pool?.type, variant])
+  const tabsList = useMemo(
+    () =>
+      getPoolTabsList({
+        variant,
+        poolType: pool.type,
+      }),
+    [pool.type, variant]
+  )
 
   const [activeTab, setActiveTab] = useState(tabsList[0])
 
