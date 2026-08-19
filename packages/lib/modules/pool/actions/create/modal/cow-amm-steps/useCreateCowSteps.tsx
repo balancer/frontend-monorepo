@@ -24,13 +24,15 @@ export function useCreateCowSteps({ initPoolInput, network, poolType }: UseCreat
   const txConfig = { network, poolType, poolAddress }
 
   // cow pool will always be exactly 2 tokens
+  const [token0, token1] = amountsIn
+
   const { step: bindToken0Step, isLoading: isLoadingBindToken0 } = useBindTokenStep({
-    token: amountsIn[0]!,
+    token: token0!,
     ...txConfig,
   })
 
   const { step: bindToken1Step, isLoading: isLoadingBindToken1 } = useBindTokenStep({
-    token: amountsIn[1]!,
+    token: token1!,
     ...txConfig,
   })
 
