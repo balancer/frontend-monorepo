@@ -48,7 +48,7 @@ export function calculateNormalizedLiquidity(
 }
 
 export function calculateInvariantWithError(
-  balances: bigint[],
+  balances: [bigint, bigint],
   params: GyroEParams,
   derived: DerivedGyroEParams
 ): [bigint, bigint] {
@@ -87,7 +87,7 @@ export function calculateInvariantWithError(
 }
 
 export function calcOutGivenIn(
-  balances: bigint[],
+  balances: [bigint, bigint],
   amountIn: bigint,
   tokenInIsToken0: boolean,
   params: GyroEParams,
@@ -101,11 +101,11 @@ export function calcOutGivenIn(
 
   const calcGiven = tokenInIsToken0 ? calcYGivenX : calcXGivenY
 
-  const balInNew = balances[ixIn] + amountIn
+  const balInNew = balances[ixIn]! + amountIn
 
   checkAssetBounds(params, derived, invariant, balInNew, ixIn)
   const balOutNew = calcGiven(balInNew, params, derived, invariant)
-  const amountOut = balances[ixOut] - balOutNew
+  const amountOut = balances[ixOut]! - balOutNew
   if (amountOut < 0n) {
     // Should never happen; check anyways to catch a numerical bug.
     throw new Error('ASSET BOUNDS EXCEEDED 1')
@@ -115,7 +115,7 @@ export function calcOutGivenIn(
 }
 
 export function calcInGivenOut(
-  balances: bigint[],
+  balances: [bigint, bigint],
   amountOut: bigint,
   tokenInIsToken0: boolean,
   params: GyroEParams,
@@ -129,12 +129,12 @@ export function calcInGivenOut(
 
   const calcGiven = tokenInIsToken0 ? calcXGivenY : calcYGivenX
 
-  if (amountOut > balances[ixOut]) throw new Error('ASSET BOUNDS EXCEEDED 2')
-  const balOutNew = balances[ixOut] - amountOut
+  if (amountOut > balances[ixOut]!) throw new Error('ASSET BOUNDS EXCEEDED 2')
+  const balOutNew = balances[ixOut]! - amountOut
 
   const balInNew = calcGiven(balOutNew, params, derived, invariant)
   checkAssetBounds(params, derived, invariant, balInNew, ixIn)
-  const amountIn = balInNew - balances[ixIn]
+  const amountIn = balInNew - balances[ixIn]!
 
   if (amountIn < 0n) {
     // Should never happen; check anyways to catch a numerical bug.
@@ -144,7 +144,7 @@ export function calcInGivenOut(
 }
 
 export function calcSpotPriceAfterSwapOutGivenIn(
-  balances: bigint[],
+  balances: [bigint, bigint],
   amountIn: bigint,
   tokenInIsToken0: boolean,
   params: GyroEParams,
@@ -157,13 +157,13 @@ export function calcSpotPriceAfterSwapOutGivenIn(
 
   const calcSpotPriceGiven = tokenInIsToken0 ? calcSpotPriceYGivenX : calcSpotPriceXGivenY
 
-  const balInNew = balances[ixIn] + amountIn
+  const balInNew = balances[ixIn]! + amountIn
   const newSpotPriceFactor = calcSpotPriceGiven(balInNew, params, derived, invariant)
   return divDown(ONE, mulDown(newSpotPriceFactor, f))
 }
 
 export function calcSpotPriceAfterSwapInGivenOut(
-  balances: bigint[],
+  balances: [bigint, bigint],
   amountOut: bigint,
   tokenInIsToken0: boolean,
   params: GyroEParams,
@@ -176,13 +176,13 @@ export function calcSpotPriceAfterSwapInGivenOut(
 
   const calcSpotPriceGiven = tokenInIsToken0 ? calcSpotPriceXGivenY : calcSpotPriceYGivenX
 
-  const balOutNew = balances[ixOut] - amountOut
+  const balOutNew = balances[ixOut]! - amountOut
   const newSpotPriceFactor = calcSpotPriceGiven(balOutNew, params, derived, invariant)
   return divDown(newSpotPriceFactor, f)
 }
 
 export function calcDerivativePriceAfterSwapOutGivenIn(
-  balances: bigint[],
+  balances: [bigint, bigint],
   tokenInIsToken0: boolean,
   params: GyroEParams,
   derived: DerivedGyroEParams,
@@ -199,7 +199,7 @@ export function calcDerivativePriceAfterSwapOutGivenIn(
 }
 
 export function calcDerivativeSpotPriceAfterSwapInGivenOut(
-  balances: bigint[],
+  balances: [bigint, bigint],
   tokenInIsToken0: boolean,
   params: GyroEParams,
   derived: DerivedGyroEParams,
