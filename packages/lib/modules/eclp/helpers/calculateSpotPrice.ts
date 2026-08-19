@@ -47,17 +47,17 @@ export function destructureRequiredPoolParams(
 ) {
   if (!isGyroEPool(pool)) return null
 
-  const tokens = pool.poolTokens
-  if (!tokens[0].balance || !tokens[1].balance) return null
+  const [token0, token1] = pool.poolTokens
+  if (!token0?.balance || !token1?.balance) return null
 
-  const balanceIn = safeParseFixedBigInt(tokens[0].balance, tokens[0].decimals)
-  const balanceOut = safeParseFixedBigInt(tokens[1].balance, tokens[1].decimals)
+  const balanceIn = safeParseFixedBigInt(token0.balance, token0.decimals)
+  const balanceOut = safeParseFixedBigInt(token1.balance, token1.decimals)
 
   return {
     balanceIn,
     balanceOut,
-    decimalsIn: tokens[0].decimals,
-    decimalsOut: tokens[1].decimals,
+    decimalsIn: token0.decimals,
+    decimalsOut: token1.decimals,
     gyroEParams: {
       alpha: safeParseFixedBigInt(pool.alpha as string, 18),
       beta: safeParseFixedBigInt(pool.beta as string, 18),
@@ -103,7 +103,7 @@ function calculateGyroESpotPrice(params: GyroEParams): bigint {
 
   const [rate0, rate1] = params.tokenRates ?? []
 
-  const scaledBalances =
+  const scaledBalances: [bigint, bigint] =
     rate0 && rate1
       ? [mulDownMagU(normalizedBalances[0], rate0), mulDownMagU(normalizedBalances[1], rate1)]
       : normalizedBalances
