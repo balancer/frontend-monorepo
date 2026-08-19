@@ -25,7 +25,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
   const protocolNetworks = isCowProtocol(protocol) ? cowSupportedNetworks : supportedNetworks
 
   const networkOptions: RadioCardOption<GqlChain>[] = [
-    protocolNetworks[0]!,
+    protocolNetworks[0],
     ...protocolNetworks.slice(1).sort(),
   ]
     .filter(

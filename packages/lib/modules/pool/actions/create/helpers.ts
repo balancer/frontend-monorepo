@@ -27,7 +27,9 @@ export function getGqlPoolType(poolType: PoolType): GqlPoolType {
   return gqlPoolType
 }
 
-export function getSwapFeePercentageOptions(poolType: PoolType): { value: string; tip: string }[] {
+export function getSwapFeePercentageOptions(
+  poolType: PoolType
+): [SwapFeePercentageOption, SwapFeePercentageOption] {
   const isStablePool = poolType === PoolType.Stable || poolType === PoolType.StableSurge
 
   if (isStablePool) {
@@ -124,3 +126,5 @@ export function isPoolCreatorEnabled(poolType: PoolType): boolean {
   // AutoRange and eclp factories still require zero address
   return poolType === PoolType.Stable || poolType === PoolType.Weighted
 }
+
+export type SwapFeePercentageOption = { value: string; tip: string }
