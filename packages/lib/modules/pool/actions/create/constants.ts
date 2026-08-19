@@ -159,7 +159,7 @@ export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   swapFeeManager: zeroAddress,
   pauseManager: zeroAddress,
   poolCreator: zeroAddress,
-  swapFeePercentage: getSwapFeePercentageOptions(PoolType.Stable)[0].value,
+  swapFeePercentage: getSwapFeePercentageOptions(PoolType.Stable)[0]!.value,
   amplificationParameter: '100',
   poolHooksContract: zeroAddress,
   enableDonation: false,

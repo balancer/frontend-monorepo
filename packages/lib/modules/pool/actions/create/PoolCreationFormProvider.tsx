@@ -59,7 +59,9 @@ export function usePoolFormLogic() {
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const currentPoolTokens = poolCreationForm.getValues('poolTokens')
     const newPoolTokens = [...currentPoolTokens]
-    newPoolTokens[index] = { ...newPoolTokens[index], ...updates }
+    const currentToken = newPoolTokens[index]
+    if (!currentToken) return
+    newPoolTokens[index] = { ...currentToken, ...updates }
     poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
 

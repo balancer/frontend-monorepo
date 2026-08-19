@@ -109,7 +109,7 @@ export function PoolCreationForm() {
 
               <Divider />
 
-              {canRenderStep && <currentStep.Component />}
+              {canRenderStep && currentStep && <currentStep.Component />}
             </VStack>
             {!isMobile && <PreviewPoolCreation />}
           </>
