@@ -4,6 +4,7 @@ import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api
 import { isProd, isDev, isStaging } from '@repo/lib/config/app.config'
 
 const prodHiddenPoolTypes = [GqlPoolTypeValues.LiquidityBootstrapping] satisfies PoolFilterType[]
+
 const hiddenPoolTypes: PoolFilterType[] = [
   GqlPoolTypeValues.Fx,
   ...(isProd ? prodHiddenPoolTypes : []),
