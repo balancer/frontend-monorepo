@@ -31,14 +31,12 @@ export function usePoolHooksWhitelist(network: GqlChain) {
   const poolHooksWhitelist = useMemo(() => {
     return (
       data
-        ?.filter(hook => Object.keys(hook.addresses).includes(chainId.toString()))
-        .map(hook => {
+        ?.map(hook => {
           const hooksArray = hook.addresses[chainId.toString()]
-          return {
-            label: hook.name,
-            value: hooksArray[hooksArray.length - 1], // use the most recently deployed hook?
-          }
-        }) || []
+          const value = hooksArray?.[hooksArray.length - 1] // use the most recently deployed hook?
+          return value ? { label: hook.name, value } : null
+        })
+        .filter((hook): hook is { label: string; value: Address } => hook !== null) || []
     )
   }, [data, chainId])
 

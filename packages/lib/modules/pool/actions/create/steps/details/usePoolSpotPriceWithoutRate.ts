@@ -21,8 +21,8 @@ export function usePoolSpotPriceWithoutRate() {
   const tokenA = poolTokens[0]
   const tokenB = poolTokens[1]
 
-  const priceTokenA = tokenA.usdPrice || priceFor(tokenA?.address || '', network)
-  const priceTokenB = tokenB.usdPrice || priceFor(tokenB?.address || '', network)
+  const priceTokenA = tokenA?.usdPrice || priceFor(tokenA?.address || '', network)
+  const priceTokenB = tokenB?.usdPrice || priceFor(tokenB?.address || '', network)
 
   const { rate: rawRateTokenA, isRatePending: isRateAPending } = useRateProvider(
     tokenA?.rateProvider,
