@@ -27,7 +27,7 @@ type Vector2 = {
 // Functions
 
 export function calcSpotPrice0in1(
-  balances: bigint[],
+  balances: [bigint, bigint],
   params: GyroEParams,
   derived: DerivedGyroEParams,
   invariant: bigint

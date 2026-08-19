@@ -65,7 +65,7 @@ export function addFee(amountIn: bigint, swapFee: bigint): bigint {
 ////////
 export function normalizeBalances(balances: bigint[], decimals: number[]): bigint[] {
   const scalingFactors = decimals.map(d => BigInt(10) ** BigInt(d))
-  return balances.map((bal, index) => (bal * ONE_XP) / scalingFactors[index])
+  return balances.map((bal, index) => (bal * ONE_XP) / (scalingFactors[index] ?? 1n))
 }
 
 export function balancesFromTokenInOut(
