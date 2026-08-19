@@ -25,13 +25,13 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
   const protocolNetworks = isCowProtocol(protocol) ? cowSupportedNetworks : supportedNetworks
 
   const networkOptions: RadioCardOption<GqlChain>[] = [
-    protocolNetworks[0],
+    protocolNetworks[0]!,
     ...protocolNetworks.slice(1).sort(),
   ]
     .filter(
-      network =>
+      (network): network is GqlChain =>
         // balancer v3 pool creation not yet supported on these networks
-        !([GqlChainValues.Polygon] as GqlChain[]).includes(network)
+        !!network && !([GqlChainValues.Polygon] as GqlChain[]).includes(network)
     )
     .map(network => ({
       value: network,

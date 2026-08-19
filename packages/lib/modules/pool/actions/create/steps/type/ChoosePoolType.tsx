@@ -44,7 +44,7 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
               poolCreationForm.reset({
                 ...INITIAL_POOL_CREATION_FORM,
                 network,
-                swapFeePercentage: getSwapFeePercentageOptions(value)[0].value,
+                swapFeePercentage: getSwapFeePercentageOptions(value)[0]!.value,
                 poolType: value,
               })
             }}

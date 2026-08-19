@@ -84,11 +84,11 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
 
     const otherTokenAmountIdx = sortedAddresses.indexOf(otherToken.address.toLowerCase())
 
+    const initAmount = autoRangeInitAmounts[otherTokenAmountIdx]
+    if (initAmount === undefined) return
+
     // Update the other token's amount using the corresponding value from initAmounts
-    const otherTokenAmount = formatUnits(
-      autoRangeInitAmounts[otherTokenAmountIdx],
-      otherToken.data.decimals
-    )
+    const otherTokenAmount = formatUnits(initAmount, otherToken.data.decimals)
 
     updatePoolToken(otherTokenInputIdx, { amount: otherTokenAmount })
     lastUserUpdatedAmountIdx.current = null
