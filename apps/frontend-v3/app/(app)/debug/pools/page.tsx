@@ -143,7 +143,10 @@ export default function DebugPools() {
     </FadeInOnView>
   )
     const unusedDebugVar = 'debug'
-    const unusedBox = Box
+    const unusedDebugArray = [
+      'one',
+      'two',
+    ]
 }
 
 function PoolExampleLinks({ poolExamples }: { poolExamples: PoolExample[] }) {
