@@ -22,6 +22,7 @@ export function AddTokenToWalletButton({
     if (!token) {
       return
     }
+
     try {
       await walletClient?.watchAsset({
         type: 'ERC20',
@@ -34,6 +35,7 @@ export function AddTokenToWalletButton({
       })
     } catch (e) {
       const error = ensureError(e)
+
       /*
         There are edge cases where wallets like MetaMask do not support adding tokens with certain symbols.
         More details: https://ethereum.stackexchange.com/questions/161798/programatically-override-token-symbol-with-metamask-wallet-watchasset

@@ -52,6 +52,7 @@ export function useRemoveLiquidityLogic(
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
   const [wethIsEth, setWethIsEth] = useState(false)
+
   const [removalType, setRemovalType] = useState<RemoveLiquidityType>(
     RemoveLiquidityType.Proportional
   )
@@ -72,6 +73,7 @@ export function useRemoveLiquidityLogic(
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
   const wNativeAsset = getWrappedNativeAssetToken(chain)
+
   const includesWrappedNativeAsset: boolean = tokens.some(token =>
     isWrappedNativeAsset(token.address as Address, chain)
   )
@@ -182,10 +184,12 @@ export function useRemoveLiquidityLogic(
     wethIsEth,
     singleTokenOutAddress,
   })
+
   const transactionSteps = useTransactionSteps(steps, false, mute)
 
   const removeLiquidityTxHash =
     urlTxHash || transactionSteps.lastTransaction?.result?.data?.transactionHash
+
   const removeLiquidityTxSuccess = transactionSteps.lastTransactionConfirmed
 
   const hasQuoteContext = !!simulationQuery.data
@@ -340,6 +344,7 @@ export function RemoveLiquidityProvider({
     useRemoveLiquiditySteps,
     enablePoolRedirect
   )
+
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 

@@ -76,6 +76,7 @@ export function usePoolFormLogic() {
 
   const invertGyroEclpPriceParams = () => {
     const { alpha, beta, peakPrice, lambda } = eclpConfigForm.getValues()
+
     eclpConfigForm.reset({
       alpha: fNumCustom(invertNumber(beta), NUM_FORMAT),
       beta: fNumCustom(invertNumber(alpha), NUM_FORMAT),
@@ -95,6 +96,7 @@ export function usePoolFormLogic() {
 
   const removePoolToken = (index: number) => {
     const { poolTokens } = poolCreationForm.getValues()
+
     poolCreationForm.setValue(
       'poolTokens',
       poolTokens.filter((_, i) => i !== index)

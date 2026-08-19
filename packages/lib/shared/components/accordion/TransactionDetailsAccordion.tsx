@@ -19,6 +19,7 @@ export function TransactionDetailsAccordion() {
   const { pool } = usePool()
   const { toCurrency } = useCurrency()
   const priceImpact = priceImpactQuery?.data
+
   const priceImpactUsdValue = priceImpact
     ? bn(totalUSDValue).multipliedBy(bn(priceImpact)).toString()
     : '-'

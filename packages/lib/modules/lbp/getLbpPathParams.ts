@@ -5,6 +5,7 @@ type LbpPathParams = {
   chain?: GqlChain
   poolAddress?: Address
 }
+
 export function getLbpPathParams(slug?: string[]): LbpPathParams {
   if (!slug || slug.length === 0) {
     return {}

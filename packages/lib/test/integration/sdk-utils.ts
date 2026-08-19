@@ -82,6 +82,7 @@ export async function getSdkTestUtils({
     const txReceipt = await client.waitForTransactionReceipt({
       hash,
     })
+
     return txReceipt.status === 'success'
   }
 
@@ -98,6 +99,7 @@ export async function getSdkTestUtils({
     tokens = getTokensForBalanceCheck(true)
   ): Promise<Promise<bigint[]>> {
     const balances: Promise<bigint>[] = []
+
     for (let i = 0; i < tokens.length; i++) {
       if (tokens[i] === ZERO_ADDRESS) {
         balances[i] = client.getBalance({
@@ -107,6 +109,7 @@ export async function getSdkTestUtils({
         balances[i] = getErc20Balance(tokens[i] as Address, account)
       }
     }
+
     return Promise.all(balances)
   }
 
@@ -118,10 +121,12 @@ export async function getSdkTestUtils({
   // Includes BPT token address
   function getTokensForBalanceCheck(checkNativeBalance = true) {
     const poolTokens = getPoolTokens()
+
     // Replace with native asset if required
     const poolTokensAddr = checkNativeBalance
       ? replaceWrapped(poolTokens, chainId).map(t => t.address)
       : poolTokens.map(t => t.address)
+
     return [...poolTokensAddr, pool.address]
   }
 
@@ -143,10 +148,12 @@ export async function getSdkTestUtils({
 
     const balanceDeltas = balancesAfter.map((balanceAfter, i) => {
       let _balanceAfter = balanceAfter
+
       if (tokensForBalanceCheck[i] === ZERO_ADDRESS) {
         // ignore ETH delta from gas cost
         _balanceAfter = balanceAfter + gasPrice
       }
+
       const delta = _balanceAfter - (balanceBefore[i] || 0n)
       return delta >= 0n ? delta : -delta
     })
@@ -176,6 +183,7 @@ export async function getSdkTestUtils({
     const accountAddressBytes = pad(toBytes(account))
 
     let index: Address
+
     if (isVyperMapping) {
       index = keccak256(concat([slotBytes, accountAddressBytes])) // slot, key
     } else {
@@ -207,15 +215,18 @@ export async function getSdkTestUtils({
       [{ name: 'probeA', type: 'uint256' }],
       [BigInt((Math.random() * 10000).toFixed())]
     )
+
     const probeB = encodeAbiParameters(
       [{ name: 'probeA', type: 'uint256' }],
       [BigInt((Math.random() * 10000).toFixed())]
     )
+
     for (let i = 0; i < 999; i++) {
       // encode probed slot
       const slotBytes = pad(toBytes(i))
       const accountAddressBytes = pad(toBytes(accountAddress))
       let probedSlot: Address
+
       if (isVyperMapping) {
         probedSlot = keccak256(concat([slotBytes, accountAddressBytes])) // slot, key
       } else {
@@ -233,6 +244,7 @@ export async function getSdkTestUtils({
 
       // set storage slot to new probe
       const probe = prev === probeA ? probeB : probeA
+
       await client.setStorageAt({
         address: tokenAddress,
         index: probedSlot,
@@ -252,6 +264,7 @@ export async function getSdkTestUtils({
       // return slot if balance changed
       if (balance === hexToBigInt(probe)) return i
     }
+
     throw new Error('Balance slot not found!')
   }
 
@@ -275,6 +288,7 @@ export async function getSdkTestUtils({
     const tokens = getPoolTokens().map(token => token.address)
 
     let _slots: number[]
+
     if (slots) {
       _slots = slots
     } else {
@@ -340,6 +354,7 @@ type SetUserTokenBalanceParams = {
   balance: bigint
   isVyperMapping?: boolean
 }
+
 export async function setUserTokenBalance({
   client,
   account,
@@ -353,6 +368,7 @@ export async function setUserTokenBalance({
   const accountAddressBytes = pad(toBytes(account))
 
   let index: Address
+
   if (isVyperMapping) {
     index = keccak256(concat([slotBytes, accountAddressBytes])) // slot, key
   } else {
@@ -372,6 +388,7 @@ type GetUserBalanceParams = {
   account: Address
   tokenAddress: Address
 }
+
 export async function getTokenUserBalance({
   client,
   account,
@@ -413,6 +430,7 @@ export async function approveToken({
   const txReceipt = await client.waitForTransactionReceipt({
     hash,
   })
+
   return txReceipt.status === 'success'
 }
 
@@ -457,6 +475,7 @@ type SetVeBalTokenBalanceParams = {
   account: Address
   balance: bigint
 }
+
 export async function setVeBalBptBalance({ account, balance }: SetVeBalTokenBalanceParams) {
   const veBalBpt = mainnetNetworkConfig.tokens.addresses.veBalBpt as Address
 

@@ -122,6 +122,7 @@ function getCurrentSnapshotValue(
 
   const currentTime = now()
   if (isBefore(currentTime, snapshots[0].timestamp)) return selector(snapshots[0])
+
   if (isAfter(currentTime, snapshots[snapshots.length - 1].timestamp)) {
     return selector(snapshots[snapshots.length - 1])
   }

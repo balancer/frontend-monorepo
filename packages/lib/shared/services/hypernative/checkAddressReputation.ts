@@ -49,6 +49,7 @@ export async function checkAddressReputation({
 
     const response: ReputationResponse = await res.json()
     const recommendation = response.data[0]?.recommendation
+
     if (!recommendation) {
       throw new Error('Invalid reputation response: ' + JSON.stringify(response.data))
     }

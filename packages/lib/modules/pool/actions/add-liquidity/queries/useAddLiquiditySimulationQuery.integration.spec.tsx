@@ -12,12 +12,14 @@ const SIMULATION_TEST_TIMEOUT_MS = 120_000
 
 async function testQuery(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
   const handler = selectAddLiquidityHandler(aWjAuraWethPoolElementMock())
+
   const { result } = testHook(
     () => useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enabled: true }),
     {
       wrapper: DefaultPoolTestProvider,
     }
   )
+
   return result
 }
 

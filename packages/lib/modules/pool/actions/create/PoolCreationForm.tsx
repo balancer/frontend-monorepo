@@ -30,14 +30,17 @@ export function PoolCreationForm() {
     const raf = requestAnimationFrame(() => {
       if (!stepperRef.current) return
       const rect = stepperRef.current.getBoundingClientRect()
+
       const navbarHeight =
         parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) ||
         72
+
       window.scrollTo({
         top: window.scrollY + rect.top - navbarHeight - 16,
         behavior: 'smooth',
       })
     })
+
     return () => cancelAnimationFrame(raf)
   }, [currentStepIndex])
 

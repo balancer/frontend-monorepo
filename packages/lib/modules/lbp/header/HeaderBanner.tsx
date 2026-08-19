@@ -14,12 +14,14 @@ export function HeaderBanner() {
   weight to a lower weight over time creates a smoother pricing curve, making
   it more difficult for whales to dominate the initial distribution.
 `
+
   const capitalEfficiencyDescription = `
   Projects can launch with minimal starting capital since LBPs don't require
   the traditional 50:50 asset ratio. Teams can start with as little as 5-10%
   of the collateral asset (like USDC or ETH) paired with their token, significantly
   reducing initial capital requirements.
 `
+
   const immediateLiquidityDescription = `
   Once the LBP concludes, you get immediate access to the funds raised. Further,
   the new token holders can immediately trade their tokens, providing instant

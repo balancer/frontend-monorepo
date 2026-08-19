@@ -32,6 +32,7 @@ export function useGovernance() {
   useEffect(() => {
     let cancelled = false
     const controller = new AbortController()
+
     // `cache: 'no-store'` bypasses the browser's HTTP cache so the user
     // sees freshly-revalidated data on every page load. The real cache
     // lives in `unstable_cache` on the server (10-min revalidate), so this
@@ -43,6 +44,7 @@ export function useGovernance() {
       })
       .then(data => {
         if (cancelled) return
+
         setState({
           items: data.items,
           loading: false,
@@ -54,6 +56,7 @@ export function useGovernance() {
       .catch(error => {
         if (cancelled) return
         if (error instanceof Error && error.name === 'AbortError') return
+
         setState({
           items: [],
           loading: false,
@@ -62,6 +65,7 @@ export function useGovernance() {
           space: null,
         })
       })
+
     return () => {
       cancelled = true
       controller.abort()

@@ -50,6 +50,7 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
         // Avoid more retries
         return false
       }
+
       // 2 retries by default
       return failureCount < 2
     },

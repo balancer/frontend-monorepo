@@ -24,8 +24,10 @@ const commonNoisyCardProps: { contentProps: BoxProps; cardProps: BoxProps } = {
     flex: 1,
   },
 }
+
 export function PortfolioSummary() {
   const { colorMode } = useColorMode()
+
   const {
     portfolioData,
     totalFiatClaimableBalance,
@@ -33,6 +35,7 @@ export function PortfolioSummary() {
     isLoadingPortfolio,
     isLoadingClaimableRewards,
   } = usePortfolio()
+
   const { toCurrency } = useCurrency()
 
   const totalBalance = portfolioData?.userTotalBalance?.toNumber()

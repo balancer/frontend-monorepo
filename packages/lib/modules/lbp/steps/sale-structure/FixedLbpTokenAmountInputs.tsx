@@ -100,6 +100,7 @@ function LaunchTokenRateInput({
   const {
     saleStructureForm: { clearErrors },
   } = useLbpForm()
+
   const { errors: formErrors } = useFormState({ control, name: ['launchTokenRate'] })
   const launchTokenRateError = errors.launchTokenRate || formErrors.launchTokenRate
 

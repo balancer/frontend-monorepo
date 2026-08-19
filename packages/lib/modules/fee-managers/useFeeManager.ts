@@ -12,6 +12,7 @@ export function useFeeManager(pool: Pool) {
     const metadataAddresses = metadata.addresses[chainId.toString()]?.map(address =>
       address.toLowerCase()
     )
+
     return (
       metadataAddresses &&
       pool.swapFeeManager &&

@@ -28,6 +28,7 @@ export function AddLiquidityFormCheckbox() {
 
   const { tokens, setAcceptPoolRisks } = useAddLiquidity()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
+
   const hasNoPoolTokensInWallet = tokens.every(
     token => token && balanceFor(token.address)?.formatted === '0'
   )
@@ -40,6 +41,7 @@ export function AddLiquidityFormCheckbox() {
   const numberOfProtocols = protocolNames.length
 
   let dynamicProtocolString
+
   if (numberOfProtocols === 1) {
     dynamicProtocolString = `${protocolNames[0]}—an unaffiliated third party. If ${protocolNames[0]} is`
   } else if (numberOfProtocols === 2) {
@@ -49,6 +51,7 @@ export function AddLiquidityFormCheckbox() {
     const last = protocolNames[protocolNames.length - 1]
     dynamicProtocolString = `${allButLast}, and ${last}—unaffiliated third parties. If any of these are`
   }
+
   const boostedRiskDescription = `I accept that by adding tokens to this Boosted Pool, my tokens are deposited into ${dynamicProtocolString} compromised, I may lose all my tokens in this pool.`
 
   useEffect(() => {

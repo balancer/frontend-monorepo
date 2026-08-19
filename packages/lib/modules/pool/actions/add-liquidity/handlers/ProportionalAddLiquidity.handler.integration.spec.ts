@@ -17,6 +17,7 @@ function selectProportionalHandler(pool: Pool) {
 
 describe('When adding proportional liquidity for a CoW AMM pool', async () => {
   const cowAMMPoolId = '0xf08d4dea369c456d26a3168ff0024b904f2d8b91'
+
   const cowAmmPool = await fetchPoolMock({
     poolId: cowAMMPoolId,
     chain: GqlChainValues.Mainnet,

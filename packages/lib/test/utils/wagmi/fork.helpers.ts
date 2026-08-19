@@ -43,6 +43,7 @@ type SetBalancesParams = {
   tokenBalances: TokenBalancesByChain
   chainId?: number
 }
+
 export async function setTokenBalances({
   setBalance,
   tokenBalances,
@@ -73,9 +74,11 @@ export async function setTokenBalances({
 
 export function resetFork(chainId: number = mainnet.id) {
   const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
+
   if (!privateKey) {
     throw new Error('NEXT_PRIVATE_DRPC_KEY is missing')
   }
+
   return forkClient.reset({
     jsonRpcUrl: drpcUrlByChainId(chainId, privateKey),
   })

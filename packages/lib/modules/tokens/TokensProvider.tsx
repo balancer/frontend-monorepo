@@ -30,6 +30,7 @@ export const TokensContext = createContext<UseTokensResult | null>(null)
 export type GetTokenFn = (address: string, chain: GqlChain) => ApiToken | undefined
 
 const POLL_INTERVAL = mins(3).toMs()
+
 const SUPPORTED_CHAINS = {
   chains: PROJECT_CONFIG.supportedNetworks,
 }
@@ -38,6 +39,7 @@ export function useTokensLogic() {
   const { data: tokensData, loading: isLoadingTokens } = useQuery(GetTokensDocument, {
     variables: SUPPORTED_CHAINS,
   })
+
   const tokens = tokensData?.tokens || []
 
   const {
@@ -59,6 +61,7 @@ export function useTokensLogic() {
     nextFetchPolicy: 'cache-and-network',
     pollInterval: POLL_INTERVAL,
   })
+
   const prices = tokenPricesData?.tokenPrices || []
 
   const getToken = (address: string, chain: GqlChain | number): ApiToken | undefined => {

@@ -100,9 +100,11 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
 
   function toggleTab(option: ButtonGroupOption) {
     setActiveTab(option)
+
     if (option.value === 'proportional') {
       setProportionalType()
     }
+
     if (option.value === 'single') {
       setSingleTokenType()
     }

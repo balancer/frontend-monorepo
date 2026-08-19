@@ -14,6 +14,7 @@ const thresholds = [
   '5443200',
   '6048000',
 ]
+
 const weekInSeconds = 604800
 
 function makeInput(overrides: Partial<MaturityImpactInput> = {}): MaturityImpactInput {

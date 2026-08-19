@@ -30,10 +30,12 @@ export function SimilarPoolsModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { poolCreationForm, resetPoolCreationForm } = usePoolCreationForm()
+
   const [network, hasAcceptedSimilarPoolsWarning] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'hasAcceptedSimilarPoolsWarning'],
   })
+
   const { similarPools } = useCheckForSimilarPools()
 
   useEffect(() => {

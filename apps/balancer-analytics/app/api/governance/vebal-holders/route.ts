@@ -71,6 +71,7 @@ export async function GET() {
       rows: [],
       generatedAt: Math.floor(Date.now() / 1000),
     }
+
     return Response.json(
       { ...empty, error: String(err) },
       { status: 502, headers: { 'Cache-Control': 'no-store' } }

@@ -71,6 +71,7 @@ export function PoolCompositionDonut() {
   )
 
   const total = data.reduce((a, b) => a + b.tvl, 0)
+
   const option = useMemo(
     () => ({
       tooltip: {

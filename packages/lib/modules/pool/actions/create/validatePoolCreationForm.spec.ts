@@ -27,6 +27,7 @@ describe('validatePoolCreationForm', () => {
             Array(5).fill(mockToken())
           )
         ).toBe(true)
+
         expect(
           validatePoolTokens.isAtMaxTokens(PoolType.Stable as SupportedPoolTypes, [mockToken()])
         ).toBe(false)
@@ -50,12 +51,14 @@ describe('validatePoolCreationForm', () => {
             mockToken({ weight: '40' }),
           ])
         ).toBe(true)
+
         expect(
           validatePoolTokens.isTotalWeightTooLow([
             mockToken({ weight: '50' }),
             mockToken({ weight: '50' }),
           ])
         ).toBe(false)
+
         expect(
           validatePoolTokens.isTotalWeightTooLow([
             mockToken({ weight: '60' }),
@@ -73,12 +76,14 @@ describe('validatePoolCreationForm', () => {
             mockToken({ weight: '50' }),
           ])
         ).toBe(true)
+
         expect(
           validatePoolTokens.isTotalWeightTooHigh([
             mockToken({ weight: '50' }),
             mockToken({ weight: '50' }),
           ])
         ).toBe(false)
+
         expect(
           validatePoolTokens.isTotalWeightTooHigh([
             mockToken({ weight: '30' }),
@@ -100,6 +105,7 @@ describe('validatePoolCreationForm', () => {
             mockToken({ weight: '50' }),
           ])
         ).toBe(true)
+
         expect(
           validatePoolTokens.isValidTokenWeights(PoolType.Weighted, [
             mockToken({ weight: '30' }),
@@ -115,6 +121,7 @@ describe('validatePoolCreationForm', () => {
           validatePoolTokens.hasAmountError(mockToken({ address: undefined }), PoolType.Weighted)
             .error
         ).toBeUndefined()
+
         expect(
           validatePoolTokens.hasAmountError(mockToken({ amount: '' }), PoolType.Weighted).error
         ).toBeUndefined()
@@ -137,11 +144,13 @@ describe('validatePoolCreationForm', () => {
 
       it('enforces higher minimum for CowAmm tokens with low decimals', () => {
         const lowDecimalsToken = mockToken({ amount: '0.001', data: { decimals: 6 } as any })
+
         expect(validatePoolTokens.hasAmountError(lowDecimalsToken, PoolType.CowAmm).error).toBe(
           'Minimum amount is 1'
         )
 
         const sufficientToken = mockToken({ amount: '100', data: { decimals: 6 } as any })
+
         expect(
           validatePoolTokens.hasAmountError(sufficientToken, PoolType.CowAmm).error
         ).toBeUndefined()
@@ -155,6 +164,7 @@ describe('validatePoolCreationForm', () => {
         expect(
           validatePoolSettings.poolRoleAccount('0x1234567890123456789012345678901234567890')
         ).toBe(true)
+
         expect(validatePoolSettings.poolRoleAccount('invalid')).toBe('Invalid address')
         expect(validatePoolSettings.poolRoleAccount('')).toBe('Invalid address')
       })
@@ -171,6 +181,7 @@ describe('validatePoolCreationForm', () => {
         expect(validatePoolSettings.swapFeePercentage('0.00001', PoolType.Weighted)).toContain(
           'Value must be between'
         )
+
         expect(validatePoolSettings.swapFeePercentage('0.00005', PoolType.Stable)).toContain(
           'Value must be between'
         )
@@ -192,9 +203,11 @@ describe('validatePoolCreationForm', () => {
         expect(validatePoolSettings.amplificationParameter('1')).toBe(true)
         expect(validatePoolSettings.amplificationParameter('100')).toBe(true)
         expect(validatePoolSettings.amplificationParameter('50000')).toBe(true)
+
         expect(validatePoolSettings.amplificationParameter('0.5')).toContain(
           'Value must be between'
         )
+
         expect(validatePoolSettings.amplificationParameter('50001')).toContain(
           'Value must be between'
         )
@@ -208,9 +221,11 @@ describe('validatePoolCreationForm', () => {
         expect(validatePoolDetails.name('My Pool')).toBe(true)
         expect(validatePoolDetails.name('ABC')).toBe(true)
         expect(validatePoolDetails.name('AB')).toBe('Pool name must be 3 characters or more')
+
         expect(validatePoolDetails.name('a'.repeat(33))).toBe(
           'Pool name must be 32 characters or less'
         )
+
         expect(validatePoolDetails.name('a'.repeat(32))).toBe(true)
       })
     })
@@ -220,9 +235,11 @@ describe('validatePoolCreationForm', () => {
         expect(validatePoolDetails.symbol('BAL')).toBe(true)
         expect(validatePoolDetails.symbol('WETH')).toBe(true)
         expect(validatePoolDetails.symbol('AB')).toBe('Pool symbol must be 3 characters or more')
+
         expect(validatePoolDetails.symbol('A'.repeat(27))).toBe(
           'Pool symbol must be 26 characters or less'
         )
+
         expect(validatePoolDetails.symbol('A'.repeat(26))).toBe(true)
       })
     })

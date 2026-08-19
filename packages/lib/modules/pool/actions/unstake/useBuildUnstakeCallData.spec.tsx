@@ -15,6 +15,7 @@ function testBuildUnstakeCallData(amount: bigint, userAddress: Address = default
 
   const gaugeService = new GaugeService(batchRelayerService)
   const gauges = [aGqlPoolElementMock().staking?.id || ''] as Address[]
+
   const { result } = testHook(() =>
     useBuildUnstakeCallData({
       amount,
@@ -28,6 +29,7 @@ function testBuildUnstakeCallData(amount: bigint, userAddress: Address = default
 
   return result
 }
+
 describe('useBuildUnstakeCallData', () => {
   test('when no amount', () => {
     const result = testBuildUnstakeCallData(0n)

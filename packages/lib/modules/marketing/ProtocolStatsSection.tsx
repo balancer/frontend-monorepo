@@ -11,6 +11,7 @@ type ProtocolStatsSectionProps = {
   value: string
   isLoading?: boolean
 }
+
 function ProtocolStatItem({ title, value, imgName, isLoading }: ProtocolStatsSectionProps) {
   const formatValue = (v: number) => {
     if (title === 'LPs') return v.toLocaleString()

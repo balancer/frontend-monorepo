@@ -254,6 +254,7 @@ export function usePoolChartsLogic() {
     if (!snapshots) return []
 
     let chartArr: [number, string][] = []
+
     if (activeTab.value === PoolChartTab.TVL) {
       chartArr = snapshots.map(snapshot => {
         return [snapshot.timestamp, snapshot.totalLiquidity]
@@ -294,6 +295,7 @@ export function usePoolChartsLogic() {
 
     const minDataDate = firstChartDataEl ? Number(firstChartDataEl[0]) * 1000 : today.getTime()
     const daysSinceMinDataDate = differenceInDays(today, new Date(minDataDate))
+
     const initialTotalLiquidity = isSelectedTabTVL
       ? firstChartDataEl
         ? firstChartDataEl[1]

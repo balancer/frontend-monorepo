@@ -161,6 +161,7 @@ export function AddLiquidityFormTabs({
     if (requiresProportionalInput(pool)) {
       return requiresProportionalInputReason(pool)
     }
+
     if (isBelowMinTvlThreshold) {
       return `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
     }
@@ -179,6 +180,7 @@ export function AddLiquidityFormTabs({
   function handleTabChanged(option: ButtonGroupOption): void {
     if (tabIndex.toString() === option.value) return // Avoids handling click in the current tab
     clearAmountsIn()
+
     if (option.value === '0') {
       if (isReclamm && setUnbalancedTab) {
         setUnbalancedTab()

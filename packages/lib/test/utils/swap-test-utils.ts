@@ -44,6 +44,7 @@ export function createMockSdkSimulateSwapResponse(overrides?: {
     value: BigInt(0),
     to: router,
   })
+
   const mockBuildCallWithPermit2 = vi.fn().mockReturnValue({
     callData: permit2CallData,
     value: BigInt(0),

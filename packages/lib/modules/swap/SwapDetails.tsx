@@ -30,6 +30,7 @@ export function OrderRoute() {
   const orderRouteVersion = queryData ? queryData.protocolVersion : 2
 
   const pathsCount = queryData?.paths?.length || 0
+
   const hopCount = queryData?.paths
     ? queryData.paths.reduce((acc, path) => {
         return acc + (path.isBuffer || []).filter(buffer => buffer === false).length
@@ -145,12 +146,14 @@ export function SwapDetails({ hideOrderRoute }: { hideOrderRoute?: boolean }) {
       : usdValueForToken(tokenInInfo, tokenIn.amount)
 
   const priceImpactUsd = bn(priceImpact || 0).times(returnAmountUsd)
+
   const fullPriceImpactLabel = getFullPriceImpactLabel(
     priceImpact,
     toCurrency(priceImpactUsd, { abbreviated: false })
   )
 
   const maxSlippageUsd = bn(_slippage).div(100).times(returnAmountUsd)
+
   const fullMaxSlippageLabel = getMaxSlippageLabel(
     _slippage,
     toCurrency(maxSlippageUsd, { abbreviated: false })
@@ -160,6 +163,7 @@ export function SwapDetails({ hideOrderRoute }: { hideOrderRoute?: boolean }) {
 
   const limitLabel = isExactIn ? "You'll get at least" : "You'll pay at most"
   const limitToken = isExactIn ? tokenOutInfo : tokenInInfo
+
   const limitValue = isExactIn
     ? bn(tokenOut.amount || '0')
         .minus(bn(tokenOut.amount || '0').times(_slippageDecimal))
@@ -167,6 +171,7 @@ export function SwapDetails({ hideOrderRoute }: { hideOrderRoute?: boolean }) {
     : bn(tokenIn.amount || '0')
         .plus(bn(tokenIn.amount || '0').times(_slippageDecimal))
         .toString()
+
   const limitTooltip = isExactIn
     ? 'You will get at least this amount, even if you suffer maximum slippage ' +
       'from unfavorable market price movements before your transaction executes on-chain.'

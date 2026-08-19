@@ -35,6 +35,7 @@ export function WeightsChart({
     endDateTime,
     cutTime
   )
+
   const collateralTokenData = invertData(launchTokenData)
   const collateralTokenDataAfterCutTime = invertData(launchTokenDataAfterCutTime)
 
@@ -76,6 +77,7 @@ export function WeightsChart({
             p.seriesId === 'launch-token-weight' ||
             p.seriesId === 'launch-token-weight-after-cut-time'
         )?.data[1]
+
         const collateralWeight = launchWeight ? 100 - launchWeight : null
 
         if (launchWeight !== undefined && collateralWeight !== null) {
@@ -313,6 +315,7 @@ function interpolateData(
   const startTimestamp = bn(startDateTime.getTime())
   const endTimestamp = bn(endDateTime.getTime())
   const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))
+
   const interpolate = (timestamp: BigNumber) =>
     bn(startWeight)
       .plus(slope.times(timestamp.minus(startTimestamp)))
@@ -322,13 +325,16 @@ function interpolateData(
   const dataAfterCutTime = []
 
   let currentPoint = startDateTime
+
   while (addHours(currentPoint, 1) < endDateTime) {
     const currentTimestamp = bn(currentPoint.getTime())
+
     if (!cutTime || isBefore(currentPoint, cutTime)) {
       data.push([currentPoint.getTime(), interpolate(currentTimestamp)])
     } else {
       dataAfterCutTime.push([currentPoint.getTime(), interpolate(currentTimestamp)])
     }
+
     currentPoint = addHours(currentPoint, 1)
   }
 

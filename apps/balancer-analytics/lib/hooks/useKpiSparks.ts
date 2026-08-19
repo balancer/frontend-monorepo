@@ -25,6 +25,7 @@ type Result = {
 }
 
 const EMPTY: KpiSpark = { values: [], latest: 0, delta24h: null }
+
 const EMPTY_RESULT: Omit<Result, 'loading'> = {
   tvl: EMPTY,
   volume: EMPTY,
@@ -59,24 +60,28 @@ function deriveSpark(
 ): KpiSpark {
   if (!points.length) return EMPTY
   const samples: { t: number; v: number }[] = []
+
   for (const p of points) {
     const v = pick(p)
     if (!Number.isFinite(v)) continue
     if (mode === 'nonzero' && v === 0) continue
     samples.push({ t: p.timestamp, v })
   }
+
   if (!samples.length) return EMPTY
   const latestSample = samples.at(-1)!
   const latest = latestSample.v
 
   let prev: number | null = null
   const target = latestSample.t - DAY_SECONDS
+
   for (let i = samples.length - 2; i >= 0; i--) {
     if (samples[i].t <= target) {
       prev = samples[i].v
       break
     }
   }
+
   // If the series doesn't reach back a full 24h (sparse metric just started
   // recording), fall back to the second-most-recent sample so we still emit
   // *some* delta rather than null.

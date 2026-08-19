@@ -51,12 +51,14 @@ export function ReliquaryAddLiquiditySummary({
     slippage,
     wantsProportional,
   } = useAddLiquidity()
+
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
 
   // Order amountsIn like the form inputs which uses the tokens array
   const [selectedSlippage, setSelectedSlippage] = useState(0)
+
   const amountsIn = tokens
     .map(token => humanAmountsIn.find(amount => amount.tokenAddress === token?.address))
     .filter(Boolean)
@@ -78,9 +80,11 @@ export function ReliquaryAddLiquiditySummary({
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
   }
+
   if (shouldShowErrors && error) {
     return <BalAlert content="We were unable to find this transaction hash" status="warning" />
   }
+
   if (shouldShowErrors && !isLoadingReceipt && !sentTokens.length) {
     return (
       <BalAlert

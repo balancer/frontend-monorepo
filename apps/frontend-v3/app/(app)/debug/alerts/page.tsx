@@ -7,6 +7,7 @@ import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { VStack } from '@chakra-ui/react'
 
 const exceptionName = 'Error fetching swap'
+
 const exceptionMessage = `Execution reverted for an unknown reason. Raw Call Arguments:
 to:0xE39B5e3B6D74016b2F6A9673D7d7493B6DF549d5
 Docs: https://viem.sh/docs/contract/simulateContract Details: execution reverted Version:

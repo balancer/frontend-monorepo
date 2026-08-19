@@ -182,14 +182,17 @@ export default function TokenRow({
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
+
   const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
     usePoolTokenPriceWarnings(pool)
 
   const token = customToken || (address ? getToken(address, chain) : undefined)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
+
   const poolToken = address
     ? userReferenceTokens.find(t => isSameAddress(t.address, address))
     : undefined
+
   const priceCheckAddress = token?.address ?? poolToken?.address ?? address
 
   const isTokenPriceMissing =

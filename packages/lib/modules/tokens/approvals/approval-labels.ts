@@ -47,6 +47,7 @@ function initApprovalLabelFor(
   if (isPermit2 && actionType === 'AddLiquidity') {
     return `${symbol}: Approve Permit`
   }
+
   switch (actionType) {
     case 'Locking':
       return `Approve ${lpToken} to lock`
@@ -71,8 +72,10 @@ function titleFor(actionType: ApprovalAction, symbol: string, isPermit2: boolean
   if (actionType === 'RemoveLiquidity') {
     return `Approve ${symbol}`
   }
+
   return isPermit2 ? `${symbol}: Approve Permit` : `Approve ${symbol}`
 }
+
 function descriptionFor(actionType: ApprovalAction, symbol: string, lpToken = 'LP token') {
   switch (actionType) {
     case 'Locking':

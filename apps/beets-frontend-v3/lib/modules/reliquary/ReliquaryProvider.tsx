@@ -44,9 +44,11 @@ export function useReliquaryLogic() {
   const { pool } = usePool()
   const { isConnected } = useUserAccount()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
+
   const [range, setRange] = useState<GqlPoolSnapshotDataRange>(
     GqlPoolSnapshotDataRangeValues.ThirtyDays
   )
+
   const { priceFor } = useTokens()
 
   const networkConfig = getNetworkConfig(CHAIN)
@@ -85,6 +87,7 @@ export function useReliquaryLogic() {
   const relicIds = relicPositions
     .filter(relic => isValidNumber(relic.relicId))
     .map(relic => bn(relic.relicId).toNumber())
+
   const beetsPerSecond = pool?.staking?.reliquary?.beetsPerSecond || '0'
   const reliquaryLevels = pool?.staking?.reliquary?.levels || []
 
@@ -97,6 +100,7 @@ export function useReliquaryLogic() {
   const relicPositionsForFarmId = relicPositions.filter(
     position => position.farmId.toString() === farmId
   )
+
   const totalMaBeetsVP = sumBy(relicPositionsForFarmId, position => {
     if (!isValidNumber(position.amount)) return 0
     const boost = reliquaryLevels.find(level => level.level === position.level)

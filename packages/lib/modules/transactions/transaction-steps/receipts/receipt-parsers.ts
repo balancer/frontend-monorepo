@@ -312,6 +312,7 @@ function filterEdgeCases(tokens: HumanTokenAmount[], chain: GqlChain) {
     if (chain === GqlChainValues.Polygon) return '0xE0aEa583266584DafBB3f9C3211d5588c73fEa8d'
     return '0x39b8B6385416f4cA36a20319F70D28621895279D' // mainnet
   }
+
   /*
       TODO:
         properly implement this filter getting this info from LiquidityAdded/Removed event instead of Transfers

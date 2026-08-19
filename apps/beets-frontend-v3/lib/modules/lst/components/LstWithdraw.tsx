@@ -35,6 +35,7 @@ export function LstWithdraw() {
     if (withdrawalsDataOrdered.length < first) {
       return withdrawalsDataOrdered.slice(skip)
     }
+
     return withdrawalsDataOrdered.slice(skip, first + skip)
   }, [withdrawalsDataOrdered, skip, first])
 

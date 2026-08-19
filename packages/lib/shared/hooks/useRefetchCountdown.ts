@@ -5,6 +5,7 @@ const DEFAULT_REFETCH_SECONDS_COUNTDOWN = 5 // TODO: increase after feature manu
 type Props = {
   countdownSeconds?: number
 }
+
 export function useRefetchCountdown({
   countdownSeconds = DEFAULT_REFETCH_SECONDS_COUNTDOWN,
 }: Props = {}) {

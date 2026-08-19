@@ -174,6 +174,7 @@ const getDefaultPoolActivityChartOptions = (
         const timestamp = data.value[0]
         const metaData = data.data[2] as ChartInfoMetaData
         const userAddress = metaData.userAddress
+
         const tokens = metaData.tokens.filter(token => {
           if (!token.token) return false
           if (Number(token.amount) === 0) return false
@@ -183,6 +184,7 @@ const getDefaultPoolActivityChartOptions = (
         const tx = metaData.tx
         const txLink = getBlockExplorerTxUrl(tx, metaData.chain)
         const addressLink = getBlockExplorerAddressUrl(userAddress, metaData.chain)
+
         const typeStr =
           metaData.type === GqlPoolEventTypeValues.Add
             ? 'Add'
@@ -344,6 +346,7 @@ export function useEcosystemPoolActivityChart() {
           token: getToken(item.tokenIn.address, chain),
           amount: item.tokenIn.amount,
         })
+
         tokens.push({
           token: getToken(item.tokenOut.address, chain),
           amount: item.tokenOut.amount,

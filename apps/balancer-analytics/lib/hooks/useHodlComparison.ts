@@ -79,10 +79,12 @@ export function useHodlComparison(
       })
       .then(json => {
         if (controller.signal.aborted) return
+
         const series: TokenDailyPrices[] = (json.series ?? []).map(t => ({
           address: t.address.toLowerCase(),
           daily: new Map(t.daily),
         }))
+
         setCached({ key: requestKey, series, error: null })
       })
       .catch(error => {

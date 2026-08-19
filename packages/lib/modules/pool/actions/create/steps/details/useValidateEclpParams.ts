@@ -10,6 +10,7 @@ import { calculateRotationComponents } from './gyro.helpers'
 export function useValidateEclpParams() {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const poolType = useWatch({ control: poolCreationForm.control, name: 'poolType' })
+
   const [alpha, beta, peakPrice, lambda] = useWatch({
     control: eclpConfigForm.control,
     name: ['alpha', 'beta', 'peakPrice', 'lambda'],

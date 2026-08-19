@@ -11,6 +11,7 @@ import { isCowPool } from '../helpers'
 
 export function useCheckForSimilarPools() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [network, poolType, poolTokens] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'poolType', 'poolTokens'],
@@ -43,6 +44,7 @@ export function useCheckForSimilarPools() {
     const sameTokens = similarPool.poolTokens.every(({ address }) =>
       selectedTokensSet.has(address.toLowerCase())
     )
+
     if (!sameTokens) return false
 
     const sameWeights = similarPool.poolTokens.every(
@@ -50,6 +52,7 @@ export function useCheckForSimilarPools() {
         poolTokens.find(poolToken => poolToken.address === token.address)?.weight ===
         (Number(token.weight) * 100).toString()
     )
+
     if (isWeightedPool(poolType) && !sameWeights) return false
 
     return true

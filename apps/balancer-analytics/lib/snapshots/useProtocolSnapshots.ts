@@ -73,6 +73,7 @@ export function useProtocolSnapshots({
 
   useEffect(() => {
     let cancelled = false
+
     dedupedLoad(key, CACHE_TTL_MS, () => loadSnapshots(days, granularity))
       .then(data => {
         if (cancelled) return
@@ -82,6 +83,7 @@ export function useProtocolSnapshots({
         if (cancelled) return
         setState({ data: EMPTY, loading: false, error: error as Error })
       })
+
     return () => {
       cancelled = true
     }

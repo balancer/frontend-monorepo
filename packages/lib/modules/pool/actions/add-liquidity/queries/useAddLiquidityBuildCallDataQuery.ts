@@ -55,6 +55,7 @@ export function useAddLiquidityBuildCallDataQuery({
 
   const queryFn = async () => {
     const queryOutput = ensureLastQueryResponse('Add liquidity query', simulationQuery.data)
+
     const response = await handler.buildCallData({
       account: userAddress,
       humanAmountsIn: debouncedHumanAmountsIn,
@@ -63,6 +64,7 @@ export function useAddLiquidityBuildCallDataQuery({
       relayerApprovalSignature, // only present in Add Nested Liquidity with sign relayer mode
       permit2, // only present in V3 pools
     })
+
     console.log('Call data built:', response)
     if (permit2) console.log('permit2 for call data:', permit2)
     return response

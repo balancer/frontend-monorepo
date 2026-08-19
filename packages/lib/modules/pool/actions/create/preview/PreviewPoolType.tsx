@@ -10,6 +10,7 @@ import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolType() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [network, protocol, poolType, weightedPoolStructure, poolTokens] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'protocol', 'poolType', 'weightedPoolStructure', 'poolTokens'],
@@ -18,9 +19,11 @@ export function PreviewPoolType() {
   const selectedPoolTokens = poolTokens.filter(token => token.address)
   const tokenAddresses = selectedPoolTokens.map(token => token.address!)
   const tokenSymbols = selectedPoolTokens.map(token => token.data?.symbol || '')
+
   const tokenWeights = isWeightedPool(poolType)
     ? selectedPoolTokens.map(token => Number(token.weight))
     : undefined
+
   const showWeightStructure = isWeightedPool(poolType) || isCowPool(poolType)
 
   const cardInformationRows = [

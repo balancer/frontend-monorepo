@@ -28,5 +28,6 @@ export function aGqlPoolMinimalMock(...options: Partial<GqlPoolMinimal>[]): GqlP
     symbol: 'B-80BAL-20WETH',
     type: GqlPoolTypeValues.Weighted,
   }
+
   return Object.assign({}, defaultPool, defaultPool1, ...options)
 }

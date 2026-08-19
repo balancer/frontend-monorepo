@@ -57,6 +57,7 @@ Sentry.init({
     if (originatesFromExtensionServiceWorker(event)) {
       return null
     }
+
     /*
       The transaction values in the nextjs-sentry integration are misleading
       so we replace them with the url of the request that caused the error
@@ -64,6 +65,7 @@ Sentry.init({
     if (event.transaction) {
       event.transaction = event.request?.url || ''
     }
+
     /*
       Ensure that we capture all possible errors, including the ones that NextJS/React Error boundaries can't properly catch.
       If the error comes from a flow url, we tag it as fatal and add custom exception type for better traceability/grouping.
@@ -83,10 +85,13 @@ Sentry.init({
       'swap',
       'create',
     ]
+
     const criticalFlowPath = criticalFlowPaths.find(path => event.request?.url?.includes(path))
+
     if (!criticalFlowPath || isNonFatalError(event)) {
       return handleNonFatalError(event)
     }
+
     return handleFatalError(event, criticalFlowPath)
   },
 })
@@ -112,6 +117,7 @@ function handleFatalError(
 
     const lastIndex = event.exception.values.length - 1
     const topValue = event.exception.values[lastIndex]
+
     if (topValue) {
       const flowType = uppercaseSegment(criticalFlowPath)
       topValue.value = `Unexpected error in ${flowType} flow. Cause: ${topValue.type}: ${topValue.value}`

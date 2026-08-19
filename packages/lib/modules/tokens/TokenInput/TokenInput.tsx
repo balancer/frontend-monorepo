@@ -148,6 +148,7 @@ function TokenInputFooter({
 
   const balance = token ? balanceFor(token?.address) : undefined
   const userBalance = customUserBalance || bn(token ? balance?.formatted || '0' : '0')
+
   const usdValue =
     value && customUsdPrice
       ? bn(value).times(customUsdPrice).toString()

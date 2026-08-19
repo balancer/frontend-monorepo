@@ -52,6 +52,7 @@ export function PortfolioTable() {
   const hasStakingBoost = sortedPools.some(pool =>
     pool.dynamicData?.aprItems?.some(item => item.type === 'STAKING_BOOST')
   )
+
   const tableRowProps = useMemo(() => rowProps(hasStakingBoost), [hasStakingBoost])
 
   const {
@@ -78,6 +79,7 @@ export function PortfolioTable() {
   }
 
   const { needsMigration } = usePoolMigrations()
+
   const poolsThatNeedMigration = useMemo(
     () =>
       sortedPools

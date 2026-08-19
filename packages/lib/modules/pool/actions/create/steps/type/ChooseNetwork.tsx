@@ -51,6 +51,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
             name={field.name}
             onChange={(value: GqlChain) => {
               field.onChange(value)
+
               poolCreationForm.reset({
                 ...INITIAL_POOL_CREATION_FORM,
                 network: value,

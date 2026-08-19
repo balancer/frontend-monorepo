@@ -115,6 +115,7 @@ function usePoolActivityLogic() {
             token: tokenIn,
             amount: item.tokenIn.amount,
           })
+
           tokens.push({
             token: tokenOut,
             amount: item.tokenOut.amount,

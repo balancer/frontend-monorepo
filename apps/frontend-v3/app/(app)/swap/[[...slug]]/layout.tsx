@@ -13,6 +13,7 @@ type Props = PropsWithChildren<{
 export default function Layout({ params, children }: Props) {
   const resolvedParams = use(params)
   const pathParams = getSwapPathParams(resolvedParams.slug)
+
   const swapProps: SwapProviderProps = {
     pathParams,
   }

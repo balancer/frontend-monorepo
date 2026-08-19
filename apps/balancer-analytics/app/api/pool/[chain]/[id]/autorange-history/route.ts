@@ -103,12 +103,14 @@ type RouteContext = { params: Promise<{ chain: string; id: string }> }
 export async function GET(request: Request, ctx: RouteContext): Promise<Response> {
   const raw = await ctx.params
   const parsed = z.object({ chain: ChainSchema, id: PoolIdSchema }).safeParse(raw)
+
   if (!parsed.success) {
     return Response.json(
       { error: 'invalid input', details: parsed.error.flatten() },
       { status: 400 }
     )
   }
+
   const { chain, id } = parsed.data
   const range = RangeSchema.parse(new URL(request.url).searchParams.get('range') ?? undefined)
 

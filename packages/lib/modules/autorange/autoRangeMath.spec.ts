@@ -17,6 +17,7 @@ describe('computeCenteredness', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 500,
     })
+
     expect(result.poolCenteredness).toBe(0)
     expect(result.isPoolAboveCenter).toBe(false)
   })
@@ -28,6 +29,7 @@ describe('computeCenteredness', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 500,
     })
+
     expect(result.poolCenteredness).toBe(0)
     expect(result.isPoolAboveCenter).toBe(true)
   })
@@ -39,6 +41,7 @@ describe('computeCenteredness', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 500,
     })
+
     expect(result.isPoolAboveCenter).toBe(true)
     expect(result.poolCenteredness).toBeCloseTo(0.5)
   })
@@ -50,6 +53,7 @@ describe('computeCenteredness', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 500,
     })
+
     expect(result.isPoolAboveCenter).toBe(false)
     expect(result.poolCenteredness).toBeCloseTo(0.5)
   })
@@ -61,6 +65,7 @@ describe('computeCenteredness', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 500,
     })
+
     expect(result.poolCenteredness).toBe(1)
     expect(result.isPoolAboveCenter).toBe(true)
   })
@@ -74,6 +79,7 @@ describe('calculateInvariant', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
+
     expect(result).toBe(600 * 500) // (100 + 500) * (200 + 300)
   })
 
@@ -84,6 +90,7 @@ describe('calculateInvariant', () => {
       virtualBalanceA: 0,
       virtualBalanceB: 0,
     })
+
     expect(result).toBe(0)
   })
 })
@@ -96,6 +103,7 @@ describe('calculateLowerMargin', () => {
       virtualBalanceA: 476,
       virtualBalanceB: 909,
     })
+
     expect(result).toBeCloseTo(462.37576625669095)
   })
 })
@@ -108,6 +116,7 @@ describe('calculateUpperMargin', () => {
       virtualBalanceA: 476,
       virtualBalanceB: 909,
     })
+
     expect(result).toBeCloseTo(339.7576625669094)
   })
 })
@@ -122,6 +131,7 @@ describe('calculateOutGivenIn', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
+
     expect(result).toBe(0)
   })
 
@@ -134,6 +144,7 @@ describe('calculateOutGivenIn', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
+
     expect(result).toBe(0)
   })
 
@@ -146,6 +157,7 @@ describe('calculateOutGivenIn', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
+
     expect(result).toBeCloseTo(8.196721311475358)
   })
 
@@ -158,6 +170,7 @@ describe('calculateOutGivenIn', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
+
     expect(result).toBeCloseTo(11.764705882352814)
   })
 })
@@ -172,6 +185,7 @@ describe('calculateBalancesAfterSwapIn', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
+
     expect(result.newBalanceA).toBe(110) // 100 + 10
     expect(result.newBalanceB).toBeCloseTo(191.80327868852464)
   })
@@ -185,6 +199,7 @@ describe('calculateBalancesAfterSwapIn', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
+
     expect(result.newBalanceB).toBe(210) // 200 + 10
     expect(result.newBalanceA).toBeCloseTo(88.23529411764719)
   })
@@ -222,6 +237,7 @@ describe('recalculateVirtualBalances', () => {
         secondsSinceLastInteraction: 0.001,
       },
     }
+
     const result = recalculateVirtualBalances(params)
     expect(result.newVirtualBalances.virtualBalanceA).toBe(500)
     expect(result.newVirtualBalances.virtualBalanceB).toBe(500)
@@ -247,6 +263,7 @@ describe('calculateInitialBalances', () => {
       maxPrice: 2,
       targetPrice: 1,
     })
+
     expect(result.balanceA).toBe(1000)
     expect(result.balanceB).toBeCloseTo(1000)
     expect(result.virtualBalanceA).toBeCloseTo(2414.2135623730956)
@@ -259,6 +276,7 @@ describe('calculateInitialBalances', () => {
       maxPrice: 1.1,
       targetPrice: 1,
     })
+
     expect(result.balanceA).toBe(1000)
     expect(result.balanceB).toBeCloseTo(1102.6978320796618)
     expect(result.virtualBalanceA).toBeCloseTo(20488.088481701463)

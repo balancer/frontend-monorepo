@@ -30,6 +30,7 @@ type SignPermit2AddParams = {
   slippagePercent: string
   sdkQueryOutput?: AddLiquidityQueryOutput
 }
+
 export async function signPermit2Add(params: SignPermit2AddParams): Promise<Permit2 | undefined> {
   if (!params.nonces) throw new Error('Missing nonces in signPermitAdd')
 
@@ -98,9 +99,11 @@ async function sign({
       filteredAmountsIn = filteredAmountsIn.filter(a => a.amount > 0n)
       return Permit2Helper.signAddLiquidityNestedApproval
     }
+
     if (isBoosted(pool)) {
       return Permit2Helper.signAddLiquidityBoostedApproval
     }
+
     return Permit2Helper.signAddLiquidityApproval
   }
 

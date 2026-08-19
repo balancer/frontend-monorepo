@@ -13,6 +13,7 @@ export async function fetchAndMapMetadata<T>(
     const res = await fetch(url, {
       next: { revalidate: mins(revalidateMins).toSecs() },
     })
+
     const metadata = (await res.json()) as T[]
     return mapFn(metadata)
   } catch (error) {

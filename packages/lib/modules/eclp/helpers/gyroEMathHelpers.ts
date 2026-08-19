@@ -92,6 +92,7 @@ export function calcAtAChi(x: bigint, y: bigint, p: GyroEParams, d: DerivedGyroE
   // (x lambda s + y lambda c) * u, note u > 0
   let termNp =
     mulDownMagU(mulDownMagU(x, p.lambda), p.s) + mulDownMagU(mulDownMagU(y, p.lambda), p.c)
+
   val = val + mulDownXpToNpU(termNp, divXpU(d.u, dSq2))
 
   // (sx+cy) * v, note v > 0
@@ -123,16 +124,20 @@ function calcMinAtxAChiySqPlusAtxSq(
   let termNp =
     mulUpMagU(mulUpMagU(mulUpMagU(x, x), p.c), p.c) +
     mulUpMagU(mulUpMagU(mulUpMagU(y, y), p.s), p.s)
+
   termNp = termNp - mulDownMagU(mulDownMagU(mulDownMagU(x, y), p.c * 2n), p.s)
+
   const termXp =
     mulXpU(d.u, d.u) +
     divDownMagU(mulXpU(d.u * 2n, d.v), p.lambda) +
     divDownMagU(divDownMagU(mulXpU(d.v, d.v), p.lambda), p.lambda)
 
   let val = mulDownXpToNpU(termNp * -1n, termXp)
+
   val =
     val +
     mulDownXpToNpU(divDownMagU(divDownMagU(termNp - 9n, p.lambda), p.lambda), divXpU(ONE_XP, d.dSq))
+
   return val
 }
 
@@ -162,6 +167,7 @@ function calcMinAtyAChixSqPlusAtySq(
   let termNp =
     mulUpMagU(mulUpMagU(mulUpMagU(x, x), p.s), p.s) +
     mulUpMagU(mulUpMagU(mulUpMagU(y, y), p.c), p.c)
+
   termNp = termNp + mulUpMagU(mulUpMagU(mulUpMagU(x, y), p.s * 2n), p.c)
   let termXp = mulXpU(d.z, d.z) + divDownMagU(divDownMagU(mulXpU(d.w, d.w), p.lambda), p.lambda)
   termXp = termXp + divDownMagU(mulXpU(d.z * 2n, d.w), p.lambda)
@@ -194,11 +200,13 @@ export function checkAssetBounds(
 ): void {
   if (assetIndex === 0) {
     const xPlus = maxBalances0(params, derived, invariant)
+
     if (newBal > MAX_BALANCES || newBal > xPlus) {
       throw new Error('ASSET BOUNDS EXCEEDED')
     }
   } else {
     const yPlus = maxBalances1(params, derived, invariant)
+
     if (newBal > MAX_BALANCES || newBal > yPlus) {
       throw new Error('ASSET BOUNDS EXCEEDED')
     }
@@ -246,6 +254,7 @@ export function calcXGivenY(
     x: virtualOffset1(params, d, r),
     y: virtualOffset0(params, d, r),
   }
+
   const x = solveQuadraticSwap(
     params.lambda,
     y,
@@ -259,6 +268,7 @@ export function calcXGivenY(
     },
     d.dSq
   )
+
   return x
 }
 
@@ -313,32 +323,39 @@ function solveQuadraticSwap(
     x: ONE_XP - divDownMagU(divDownMagU(ONE_XP, lambda), lambda),
     y: ONE_XP - divUpMagU(divUpMagU(ONE_XP, lambda), lambda),
   }
+
   const q: QParams = {
     a: 0n,
     b: 0n,
     c: 0n,
   }
+
   const xp = x - ab.x
+
   if (xp > 0n) {
     q.b = mulUpXpToNpU(mulDownMagU(mulDownMagU(xp * -1n, s), c), divXpU(lamBar.y, dSq))
   } else {
     q.b = mulUpXpToNpU(mulUpMagU(mulUpMagU(xp * -1n, s), c), divXpU(lamBar.x, dSq) + 1n)
   }
+
   const sTerm: Vector2 = {
     x: divXpU(mulDownMagU(mulDownMagU(lamBar.y, s), s), dSq),
     y: divXpU(mulUpMagU(mulUpMagU(lamBar.x, s), s), dSq + 1n) + 1n,
   }
+
   sTerm.x = ONE_XP - sTerm.x
   sTerm.y = ONE_XP - sTerm.y
 
   q.c = calcXpXpDivLambdaLambda(x, r, lambda, s, c, tauBeta, dSq) * -1n
   q.c = q.c + mulDownXpToNpU(mulDownMagU(r.y, r.y), sTerm.y) // r.y === currentInv + err
   q.c = q.c > 0n ? sqrt(q.c, 5n) : 0n
+
   if (q.b - q.c > 0n) {
     q.a = mulUpXpToNpU(q.b - q.c, divXpU(ONE_XP, sTerm.y) + 1n)
   } else {
     q.a = mulUpXpToNpU(q.b - q.c, divXpU(ONE_XP, sTerm.x))
   }
+
   return q.a + ab.y
 }
 
@@ -355,12 +372,15 @@ export function calcXpXpDivLambdaLambda(
     x: mulXpU(dSq, dSq),
     y: mulUpMagU(r.x, r.x),
   }
+
   const q: QParams = {
     a: 0n,
     b: 0n,
     c: 0n,
   }
+
   let termXp = divXpU(mulXpU(tauBeta.x, tauBeta.y), sqVars.x)
+
   if (termXp > 0n) {
     q.a = mulUpMagU(sqVars.y, s * 2n)
     q.a = mulUpXpToNpU(mulUpMagU(q.a, c), termXp + 7n)
@@ -374,6 +394,7 @@ export function calcXpXpDivLambdaLambda(
   } else {
     q.b = mulUpXpToNpU(mulDownMagU(mulDownMagU(r.y * -1n, x), c * 2n), divXpU(tauBeta.x, dSq))
   }
+
   q.a = q.a + q.b
   termXp = divXpU(mulXpU(tauBeta.y, tauBeta.y), sqVars.x) + 7n
   q.b = mulUpMagU(sqVars.y, s)

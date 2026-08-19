@@ -57,6 +57,7 @@ export function formatSourceId(id: string): string {
   if (id.startsWith('unknown:0x')) {
     return shortenAddress(id.slice('unknown:'.length))
   }
+
   switch (id) {
     case '1inch':
       return '1inch'

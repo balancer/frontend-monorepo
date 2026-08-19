@@ -56,11 +56,13 @@ function tokenSymbol(addr: string, tokenMap: TokenMap): string {
  *  (no truncation — there's space). Pass `truncate = true` for the former. */
 function decodeNodeName(name: string, tokenMap: TokenMap, truncate = false): string {
   if (name.startsWith('src:')) return formatSourceId(name.slice(4))
+
   if (name.startsWith('tin:') || name.startsWith('tout:')) {
     const addr = name.slice(name.indexOf(':') + 1)
     const sym = tokenSymbol(addr, tokenMap)
     return truncate ? truncateLabel(sym, MAX_LABEL_CHARS) : sym
   }
+
   return name
 }
 
@@ -96,10 +98,12 @@ export function PoolOrderFlowSankey({ graph, tokenMap, periodVolumeUsd, onSelect
       // source nodes) fall through to the series-level function formatter.
       const baseLabel = { color: '#e2e8f0', fontSize: 12 }
       let label: Record<string, unknown> = baseLabel
+
       if (n.kind === 'tokenIn' || n.kind === 'tokenOut') {
         const addr = n.tokenAddress ?? ''
         const info = tokenMap[addr]
         const symText = truncateLabel(info?.symbol ?? shortenAddress(addr), MAX_LABEL_CHARS)
+
         if (info?.logoURI) {
           label = {
             ...baseLabel,
@@ -174,16 +178,19 @@ export function PoolOrderFlowSankey({ graph, tokenMap, periodVolumeUsd, onSelect
               <div style="opacity:.55;font-size:10px;margin-top:6px">Click flow for contributor breakdown</div>
             </div>`
           }
+
           if (params.dataType === 'node' && params.name) {
             const node = graph.nodes.find(n => n.name === params.name)
             if (!node) return ''
             const label = decodeNodeName(params.name, tokenMap)
+
             const subtitle =
               node.kind === 'source' && node.source
                 ? formatCategory(node.source.category)
                 : node.kind === 'tokenIn'
                   ? 'Token in'
                   : 'Token out'
+
             const pct = periodVolumeUsd > 0 ? node.valueUsd / periodVolumeUsd : 0
             return `<div style="${TOOLTIP_STYLES}">
               <div style="color:#E5D3BE;font-weight:600;margin-bottom:4px">
@@ -195,6 +202,7 @@ export function PoolOrderFlowSankey({ graph, tokenMap, periodVolumeUsd, onSelect
               <div style="opacity:.55;font-size:10px;margin-top:6px">Click for contributor breakdown</div>
             </div>`
           }
+
           return ''
         },
       },
@@ -251,6 +259,7 @@ export function PoolOrderFlowSankey({ graph, tokenMap, periodVolumeUsd, onSelect
       onSelect({ kind: 'node', nodeName: params.name })
       return
     }
+
     if (params.dataType === 'edge' && params.data?.source && params.data?.target) {
       onSelect({ kind: 'edge', source: params.data.source, target: params.data.target })
     }

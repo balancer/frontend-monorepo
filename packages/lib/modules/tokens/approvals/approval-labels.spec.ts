@@ -6,7 +6,9 @@ test('Token approval labels for add liquidity', () => {
     symbol: 'WETH',
     requiredRawAmount: 100000000n,
   }
+
   const result = buildTokenApprovalLabels(args)
+
   expect(result).toMatchInlineSnapshot(`
     {
       "confirmed": "WETH approved!",
@@ -27,6 +29,7 @@ test('Token approval title when approving 0 USDT', () => {
     symbol: 'WETH',
     requiredRawAmount: 0n,
   }
+
   const result = buildTokenApprovalLabels(args)
   expect(result.title).toBe('Approve WETH')
 })
@@ -37,7 +40,9 @@ test('Token approval labels for unapprove', () => {
     symbol: 'WETH',
     requiredRawAmount: 100000000n,
   }
+
   const result = buildTokenApprovalLabels(args)
+
   expect(result).toMatchInlineSnapshot(`
     {
       "confirmed": "WETH unapproved",
@@ -58,7 +63,9 @@ test('Token approval labels for permit2', () => {
     requiredRawAmount: 100000000n,
     isPermit2: true,
   }
+
   const result = buildTokenApprovalLabels(args)
+
   expect(result).toMatchInlineSnapshot(`
     {
       "confirmed": "WETH approved!",

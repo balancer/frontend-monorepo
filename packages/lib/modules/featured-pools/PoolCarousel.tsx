@@ -15,6 +15,7 @@ type Props = {
 export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & BoxProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState<'left' | 'right'>('left')
+
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => next(),
     onSwipedRight: () => prev(),

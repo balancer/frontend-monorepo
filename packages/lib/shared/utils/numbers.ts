@@ -85,6 +85,7 @@ export function bn(val: Numberish): BigNumber {
   if (val == null) {
     throw new TypeError(`Cannot create BigNumber from ${val}`)
   }
+
   return new BigNumber(val.toString())
 }
 
@@ -205,9 +206,11 @@ function fiatFormat(
     // - < 1000 => 2 decimals, no suffix
     // - >= 1000 => compact k/m with 2 decimals (suffix trimmed)
     const abs = v.abs()
+
     if (abs.gte(bn('1000'))) {
       return formatCompactKMB(v, 2)
     }
+
     return formatNumberWithFixedDpGrouped(v, 2)
   }
 
@@ -474,6 +477,7 @@ function formatAbbreviatedFixedDecimals(val: Numberish, dp: number): string {
   // Unreachable: abs >= 1000 always matches a tier
   return `${neg}${formatNumberWithFixedDpGrouped(abs, dp)}`
 }
+
 export function blockInvalidNumberInput(event: KeyboardEvent<HTMLInputElement>): void {
   if (['e', 'E', '+', '-'].includes(event.key)) {
     event.preventDefault()
@@ -680,9 +684,11 @@ export const isValidNumber = (value: string | number | undefined | null): boolea
 export function safeParseFixedBigInt(value: string, decimals = 0): bigint {
   value = value.split(',').join('')
   const [integer, fraction] = splitDecimalString(value)
+
   if (!fraction) {
     return parseUnits(value, decimals)
   }
+
   const safeValue = integer + '.' + fraction.slice(0, decimals)
   return parseUnits(safeValue, decimals)
 }
@@ -762,6 +768,7 @@ export function formatFalsyValueAsDash(
  */
 export function isBnParseable(value: Numberish | undefined | null): boolean {
   if (value == null) return false
+
   try {
     bn(value)
     return true
@@ -769,6 +776,7 @@ export function isBnParseable(value: Numberish | undefined | null): boolean {
     return false
   }
 }
+
 function splitDecimalString(value: string): [integerPart: string, fractionPart: string] {
   const decimalIndex = value.indexOf('.')
   if (decimalIndex === -1) return [value, '']

@@ -6,5 +6,6 @@ test('Save api mocks', async () => {
     poolId: '0x3de27efa2f1aa663ae5d458857e731c129069f29000200000000000000000588',
     apiUrl: 'https://test-api-v3.balancer.fi/graphql',
   }
+
   await saveApiMocks(options)
 })

@@ -53,10 +53,12 @@ describe('Captures sentry error', () => {
     }
 
     const error = new Error('test cause error')
+
     const meta = sentryMetaForRemoveLiquidityHandler('Test error message', {
       ...params,
       chainId: 1,
     })
+
     captureSentryError(error, meta)
 
     const report = await getSentryReport()
@@ -64,6 +66,7 @@ describe('Captures sentry error', () => {
     expect(report.level).toBe('fatal')
     expect(report.error?.name).toBe('Error')
     expect(report.error?.message).toBe('test cause error')
+
     expect(report.extra).toMatchInlineSnapshot(`
       {
         "handler": "RecoveryRemoveLiquidityHandler",
@@ -83,6 +86,7 @@ describe('Captures sentry error', () => {
 
   test('for add liquidity handler query error', async function () {
     const pool = aWjAuraWethPoolElementMock()
+
     const params: AddLiquidityParams = {
       handler: new UnbalancedAddLiquidityV2Handler(pool),
       userAddress: defaultTestUserAccount,
@@ -103,6 +107,7 @@ describe('Captures sentry error', () => {
     expect(report.level).toBe('fatal')
     expect(report.error?.name).toBe('Error')
     expect(report.error?.message).toBe('test cause error')
+
     expect(report.extra).toMatchInlineSnapshot(`
       {
         "handler": "UnbalancedAddLiquidityV2Handler",
@@ -136,6 +141,7 @@ describe('Captures sentry error', () => {
     expect(report.level).toBe('fatal')
     expect(report.error?.name).toBe('Error')
     expect(report.error?.message).toBe('Error in viem')
+
     expect(report.extra).toMatchInlineSnapshot(`
       {
         "tokenAmount": 100,

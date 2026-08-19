@@ -33,6 +33,7 @@ const simulationQueryResult = {
     sdkQueryOutput: { bptIn: { amount: 100000n } },
   },
 }
+
 // Mock query to avoid onchain SDK call from unit tests
 vi.mock('./queries/useRemoveLiquiditySimulationQuery', () => {
   return {
@@ -60,6 +61,7 @@ async function testUseRemoveLiquidity(pool: GqlPoolElement = poolMock) {
 describe('When the user choses proportional remove liquidity', () => {
   const balPrice = 2
   const wethPrice = 3
+
   beforeEach(() => {
     mockTokenPricesList([
       aTokenPriceMock({ address: balAddress, price: balPrice }),
@@ -113,6 +115,7 @@ test('uses custom remove liquidity handler selector and forwards handler to cust
     getPriceImpact: vi.fn(),
     buildCallData: vi.fn(),
   }
+
   const handlerSelector = vi.fn(() => customHandler)
   const useRemoveLiquiditySteps = vi.fn(() => [])
 
@@ -132,6 +135,7 @@ test('uses custom remove liquidity handler selector and forwards handler to cust
 
   expect(result.current.handler).toBe(customHandler)
   expect(handlerSelector).toHaveBeenCalledWith(poolMock, RemoveLiquidityType.Proportional)
+
   expect(useRemoveLiquiditySteps).toHaveBeenCalledWith(
     expect.objectContaining({
       handler: customHandler,

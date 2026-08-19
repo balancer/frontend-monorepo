@@ -11,6 +11,7 @@ import { SeedAmountInput } from './SeedAmountInput'
 
 export function PoolFundStep() {
   const { poolAddress, poolCreationForm } = usePoolCreationForm()
+
   const [poolType, poolTokens, hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk] = useWatch(
     {
       control: poolCreationForm.control,
@@ -22,6 +23,7 @@ export function PoolFundStep() {
       ],
     }
   )
+
   const { hasValidationErrors } = useTokenInputsValidation()
 
   const isTokenAmountsValid = !hasValidationErrors || (isAutoRangePool(poolType) && !poolAddress)

@@ -23,6 +23,7 @@ export function PreviewPoolDetails() {
 
 export function PoolDetailsContent() {
   const { poolCreationForm, isBeforeStep, isStep } = usePoolCreationForm()
+
   const [
     network,
     name,

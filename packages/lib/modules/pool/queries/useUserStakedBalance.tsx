@@ -20,6 +20,7 @@ export function useUserStakedBalance(pools: Pool[] = []) {
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor } = useTokens()
   const poolByStaking = useMemo(() => createPoolByStakingRecord(pools), [pools])
+
   const contracts = useMemo(
     () => poolContracts(poolByStaking, userAddress),
     [poolByStaking, userAddress]
@@ -121,9 +122,11 @@ function createPoolByStakingRecord(pools: Pool[]): Record<Address, Pool> {
   return pools.reduce(
     (acc, pool) => {
       const stakingAddresses = getStakingAddresses(pool)
+
       stakingAddresses.forEach(stakingAddress => {
         acc[stakingAddress] = pool
       })
+
       return acc
     },
     {} as Record<Address, Pool>
@@ -132,7 +135,9 @@ function createPoolByStakingRecord(pools: Pool[]): Record<Address, Pool> {
 
 function getStakingAddresses(pool: Pool): Address[] {
   const preferentialGaugeAddress = pool.staking?.gauge?.gaugeAddress as Address
+
   const nonPreferentialGaugeAddresses =
     pool.staking?.gauge?.otherGauges?.map(otherGauge => otherGauge.gaugeAddress as Address) || []
+
   return [preferentialGaugeAddress, ...nonPreferentialGaugeAddresses].filter(Boolean)
 }

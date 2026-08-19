@@ -117,6 +117,7 @@ export function useManagedTransaction({
     confirmations: minConfirmations,
     timeout: getWaitForReceiptTimeout(chainId),
   })
+
   const prevTransactionStatus = useRef<typeof transactionStatusQuery.status | null>(null)
 
   const bundle = {
@@ -166,6 +167,7 @@ export function useManagedTransaction({
         chainId,
         request: simulateQuery.data.request,
       })
+
       throw e
     }
   }

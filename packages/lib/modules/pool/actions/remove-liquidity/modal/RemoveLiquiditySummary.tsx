@@ -35,6 +35,7 @@ export function RemoveLiquiditySummary({
     removeLiquidityTxHash,
     removeLiquidityTxSuccess,
   } = useRemoveLiquidity()
+
   const { isMobile } = useBreakpoints()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -56,6 +57,7 @@ export function RemoveLiquiditySummary({
           { ...nativeAsset, chain: pool.chain },
         ] as ApiToken[]
       }
+
       return { ...token, chain: pool.chain } as ApiToken
     })
     .flat()
@@ -63,9 +65,11 @@ export function RemoveLiquiditySummary({
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
   }
+
   if (shouldShowErrors && error) {
     return <BalAlert content="We were unable to find this transaction hash" status="warning" />
   }
+
   if (shouldShowErrors && !isLoadingReceipt && !receivedTokens.length) {
     return (
       <BalAlert

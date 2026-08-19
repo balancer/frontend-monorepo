@@ -74,6 +74,7 @@ export function useExpandedPools(pools: Pool[]) {
 
       if (stakedBalancesBalUsd > 0) {
         const poolType = isVeBal ? ExpandedPoolType.Locked : ExpandedPoolType.StakedBal
+
         expandedPools.push({
           ...pool,
           poolType,
@@ -84,11 +85,13 @@ export function useExpandedPools(pools: Pool[]) {
 
       if (walletBalanceUsd > 0) {
         const canStake = getCanStake(pool)
+
         const poolType = canStake
           ? isVeBal
             ? ExpandedPoolType.Unlocked
             : ExpandedPoolType.Unstaked
           : ExpandedPoolType.Default
+
         expandedPools.push({
           ...pool,
           poolType,
@@ -99,6 +102,7 @@ export function useExpandedPools(pools: Pool[]) {
 
       if (stakedBalancesBalUsd === 0 && walletBalanceUsd === 0) {
         const poolType = ExpandedPoolType.Default
+
         expandedPools.push({
           ...pool,
           poolType,

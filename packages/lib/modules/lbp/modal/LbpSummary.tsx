@@ -24,6 +24,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     isFixedSale,
     isSeeded,
   } = useLbpForm()
+
   const { isMobile } = useBreakpoints()
   const { getToken } = useTokens()
 

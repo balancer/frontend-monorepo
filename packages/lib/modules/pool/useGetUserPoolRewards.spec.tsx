@@ -21,6 +21,7 @@ function getPoolWithStakingGaugeRewards() {
       tokenAddress: balAddress,
     } as GqlPoolStakingGaugeReward,
   ]
+
   return pool
 }
 

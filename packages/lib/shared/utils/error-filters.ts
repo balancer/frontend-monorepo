@@ -57,6 +57,7 @@ export function isPausedErrorMessage(errorMessage: string): boolean {
 export function isUnbalancedAddError(error: Error | null, pool: Pool): boolean {
   if (!error) return false
   if (isPoolSurgingError(error.message, hasSurgeHook(pool))) return true
+
   if (
     isInvariantRatioSimulationErrorMessage(error.message) ||
     isInvariantRatioPIErrorMessage(error.message) ||
@@ -64,6 +65,7 @@ export function isUnbalancedAddError(error: Error | null, pool: Pool): boolean {
   ) {
     return true
   }
+
   return false
 }
 
@@ -73,6 +75,7 @@ export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
     'queryAddLiquidityUnbalanced',
     'Exact BPT out calculation failed',
   ] // [v2 error, v3 error, unbalanced via swap error]
+
   const hasErrors = (errorString: string) => error?.message.includes(errorString)
 
   return errorStrings.some(hasErrors)
@@ -88,12 +91,14 @@ export function isInvariantRatioSimulationErrorMessage(errorMessage?: string): b
 export function isInvariantRatioAboveMaxSimulationErrorMessage(errorMessage?: string): boolean {
   return !!errorMessage?.includes('InvariantRatioAboveMax')
 }
+
 export function isInvariantRatioAboveMinSimulationErrorMessage(errorMessage?: string): boolean {
   return !!errorMessage?.includes('InvariantRatioBelowMin')
 }
 
 export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
   if (!errorMessage) return false
+
   if (
     errorMessage.includes(
       'addLiquidityUnbalanced operation will fail at SC level with user defined input.'
@@ -102,6 +107,7 @@ export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
   ) {
     return true
   }
+
   return false
 }
 

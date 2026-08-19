@@ -99,6 +99,7 @@ export type SwapProviderProps = {
   pool?: Pool
   poolActionableTokens?: ApiToken[]
 }
+
 export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
@@ -107,6 +108,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
   const shouldDiscardOldPersistedValue = isPoolSwapUrl || isLbpSwap
+
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
       tokenIn: {
@@ -136,8 +138,10 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { getToken, getTokensByChain, usdValueForToken, isLoadingTokens } = useTokens()
   const { tokens, setTokens } = useTokenBalances()
   const { hasValidationErrors, resetValidationErrors } = useTokenInputsValidation()
+
   const { setPriceImpact, resetPriceImpact, acceptPriceImpactRisk, hasToAcceptHighPriceImpact } =
     usePriceImpact()
+
   const needsToAcceptHighPI = hasToAcceptHighPriceImpact && !acceptPriceImpactRisk
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
@@ -145,6 +149,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
+
   const handler = useMemo(() => {
     return selectSwapHandler(
       swapState.tokenIn.address,
@@ -229,6 +234,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   function handleSimulationResponse({ returnAmount, swapType }: SimulateSwapResponse) {
     const swapState = swapStateVar()
+
     swapStateVar({
       ...swapState,
       swapType,
@@ -287,12 +293,14 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   function switchTokens() {
     const swapState = swapStateVar()
+
     swapStateVar({
       ...swapState,
       tokenIn: swapState.tokenOut,
       tokenOut: swapState.tokenIn,
       swapType: GqlSorSwapTypeValues.ExactIn,
     })
+
     setTokenInAmount('', { userTriggered: false })
     setTokenOutAmount('', { userTriggered: false })
 
@@ -340,6 +348,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         ...newState,
         swapType: GqlSorSwapTypeValues.ExactIn,
       })
+
       if (state.tokenIn.amount !== newState.tokenIn.amount) {
         setTokenOutAmount('', { userTriggered: false })
         resetPriceImpact()
@@ -393,6 +402,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         ...newState,
         swapType: GqlSorSwapTypeValues.ExactOut,
       })
+
       if (state.tokenOut.amount !== newState.tokenOut.amount) {
         setTokenInAmount('', { userTriggered: false })
         resetPriceImpact()
@@ -466,9 +476,11 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (chainSlug) newPath.push(`/${chainSlug}`)
     if (_tokenIn) newPath.push(`/${_tokenIn}`)
     if (_tokenIn && _tokenOut) newPath.push(`/${_tokenOut}`)
+
     if (_tokenIn && _tokenOut && tokenIn.amount && swapType === GqlSorSwapTypeValues.ExactIn) {
       newPath.push(`/${tokenIn.amount}`)
     }
+
     if (_tokenIn && _tokenOut && tokenOut.amount && swapType === GqlSorSwapTypeValues.ExactOut) {
       newPath.push(`/0/${tokenOut.amount}`)
     }
@@ -505,14 +517,17 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   const networkConfig = getNetworkConfig(selectedChain)
+
   const wethIsEth =
     isSameAddress(swapState.tokenIn.address, networkConfig.tokens.nativeAsset.address) ||
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
+
   const validAmountOut =
     isBnParseable(swapState.tokenOut.amount) && bn(swapState.tokenOut.amount).gt(0)
 
   const protocolVersion =
     ((simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion as ProtocolVersion) || 2
+
   const { vaultAddress } = useVault(protocolVersion)
 
   const swapAction: SwapAction = useMemo(() => {
@@ -522,6 +537,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         swapState.tokenOut.address,
         selectedChain
       )
+
       return wrapType ? wrapType : OSwapAction.SWAP
     }
 
@@ -556,6 +572,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   function setInitialTokenIn(slugTokenIn?: string) {
     const { popularTokens } = getInitialNetworkConfig().tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
+
     if (slugTokenIn) {
       if (isAddress(slugTokenIn)) {
         setTokenIn(slugTokenIn as Address)
@@ -568,6 +585,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   function setInitialTokenOut(slugTokenOut?: string) {
     const { popularTokens } = getInitialNetworkConfig().tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
+
     if (slugTokenOut) {
       if (isAddress(slugTokenOut)) setTokenOut(slugTokenOut as Address)
       else if (symbolToAddressMap[slugTokenOut] && isAddress(symbolToAddressMap[slugTokenOut])) {
@@ -605,6 +623,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       setInitialTokenOut(lbpPool.poolTokens[lbpPool.projectTokenIndex].address)
     } else if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
+
       if (isStandardOrUnderlyingRootToken(pool, tokenIn as Address)) {
         setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
       } else {

@@ -557,6 +557,7 @@ describe('isValidNumber', () => {
     expect(isValidNumber('.5')).toBe(true)
   })
 })
+
 describe('isGreaterThanZeroValidation', () => {
   test('returns error for whitespace instead of throwing', () => {
     expect(isGreaterThanZeroValidation('  ')).toBe('Amount must be greater than 0')

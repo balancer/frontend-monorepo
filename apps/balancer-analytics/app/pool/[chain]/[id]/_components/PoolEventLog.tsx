@@ -33,10 +33,12 @@ import { getBlockExplorerTxUrl } from '@analytics/lib/networks/chain-info'
 // between "Sep 22 2026, 12:01 PM" / "22 Sept 12:01" / etc. depending on
 // browser locale; this hand-rolled formatter keeps the visual stable.
 const pad2 = (n: number): string => (n < 10 ? `0${n}` : `${n}`)
+
 function fmtWhen(unixSec: number): string {
   const d = new Date(unixSec * 1000)
   return `${pad2(d.getDate())}.${pad2(d.getMonth() + 1)}.${d.getFullYear()}, ${pad2(d.getHours())}:${pad2(d.getMinutes())}`
 }
+
 // Full timestamp for the hover tooltip — includes seconds + locale wording
 // so power users can copy a precise time from the title attribute.
 const dateFullFmt = new Intl.DateTimeFormat(undefined, {
@@ -195,6 +197,7 @@ function CategoryFilterMenu({
 
 function ArgList({ args }: { args: Record<string, string | number | boolean> }): React.JSX.Element {
   const entries = Object.entries(args)
+
   if (entries.length === 0) {
     return (
       <Text color="font.secondary" fontSize="sm">
@@ -202,6 +205,7 @@ function ArgList({ args }: { args: Record<string, string | number | boolean> }):
       </Text>
     )
   }
+
   // On `md+` flow args inline on a single wrapping line — `key=value` pairs
   // with a `·` separator. Single-arg events become one tight line; even amp
   // ramps (4 args) stay one short line on a wide viewport. On `base` we
@@ -409,10 +413,12 @@ export function PoolEventLog({
 
   const countByCategory = useMemo(() => {
     const m = new Map<EventCategory, number>()
+
     for (const e of sorted) {
       const cat = getEventStyle(e.eventName).category
       m.set(cat, (m.get(cat) ?? 0) + 1)
     }
+
     return m
   }, [sorted])
 
@@ -433,6 +439,7 @@ export function PoolEventLog({
       else next.add(cat)
       return next
     })
+
     setPageIndex(0)
   }, [])
 

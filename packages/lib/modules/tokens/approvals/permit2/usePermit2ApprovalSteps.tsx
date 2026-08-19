@@ -123,6 +123,7 @@ export function usePermit2ApprovalSteps({
     const id = tokenAddress + '-permit2Approval' // To avoid key collisions with default token approvals
     const token = getToken(tokenAddress, chain)
     const amountToApprove = getMaxAmountForPermit2(requestedRawAmount)
+
     // Compute symbol using first defined value
     const symbol =
       approvalSymbol && approvalSymbol !== 'Unknown'
@@ -152,6 +153,7 @@ export function usePermit2ApprovalSteps({
     }
 
     const isTxEnabled = !isLoadingPermit2Allowances && !!permit2Address
+
     const props: ManagedTransactionInput = {
       contractAddress: permit2Address || '',
       contractId: 'permit2',
@@ -188,6 +190,7 @@ export function usePermit2ApprovalSteps({
 }
 
 type Permit2ApproveArgs = [Address, Address, bigint, number]
+
 // Only used when wallet supports atomic bath (smart accounts like Gnosis Safe)
 function buildBatchableTxCall({
   permit2Address,
@@ -201,6 +204,7 @@ function buildBatchableTxCall({
     functionName: 'approve',
     args,
   })
+
   return {
     to: permit2Address,
     data: data,

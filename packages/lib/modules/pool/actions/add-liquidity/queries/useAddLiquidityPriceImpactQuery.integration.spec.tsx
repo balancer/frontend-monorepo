@@ -10,17 +10,20 @@ import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types
 
 async function testQuery(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
   const handler = selectAddLiquidityHandler(aWeightedV2PoolMock())
+
   const { result } = testHook(
     () => useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabled: true }),
     {
       wrapper: DefaultPoolTestProvider,
     }
   )
+
   return result
 }
 
 test('queries price impact for add liquidity', async () => {
   await connectWithDefaultUser()
+
   const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { tokenAddress: wstEthAddress, humanAmount: '1', symbol: 'wstETH' },
     { tokenAddress: aaveEthAddress, humanAmount: '1', symbol: 'AAVE' },

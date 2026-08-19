@@ -16,6 +16,7 @@
 
 const PERCENT_NAME_REGEX =
   /Percentage$|FeePerc|surgeThreshold$|surgeFee$|centerednessMargin$|dailyPriceShiftExponent$/i
+
 const AMP_NAME_REGEX = /^(startValue|endValue|currentValue)$/
 // reClamm price-ratio / shift fields are plain 1e18 fixed-point ratios, best
 // shown as decimals rather than percentages.
@@ -33,18 +34,22 @@ export function formatEventArgValue(key: string, value: unknown): string {
       const n = Number(value) / 1e18
       if (Number.isFinite(n)) return `${(n * 100).toFixed(4).replace(/\.?0+$/, '')}%`
     }
+
     if (AMP_NAME_REGEX.test(key)) {
       // V2 + V3 amp values are scaled by 1000 (the Stable pool's
       // amplification precision). Render as a plain decimal.
       const n = Number(value) / 1000
       if (Number.isFinite(n)) return n.toLocaleString(undefined, { maximumFractionDigits: 2 })
     }
+
     if (FP18_DECIMAL_NAME_REGEX.test(key)) {
       const n = Number(value) / 1e18
       if (Number.isFinite(n)) return n.toLocaleString(undefined, { maximumFractionDigits: 6 })
     }
+
     if (TIME_NAME_REGEX.test(key)) {
       const d = new Date(Number(value) * 1000)
+
       if (!isNaN(d.getTime())) {
         return d.toLocaleString(undefined, {
           month: 'short',

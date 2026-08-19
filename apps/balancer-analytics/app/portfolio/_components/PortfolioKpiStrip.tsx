@@ -42,8 +42,10 @@ export function PortfolioKpiStrip({
   const merklUsd = merkl.payload?.totalUnclaimedUsd ?? 0
   const gaugeUsd = gauge.payload?.totalUnclaimedUsd ?? 0
   const incentiveTotalUsd = merklUsd + gaugeUsd
+
   const incentiveTokenCount =
     (merkl.payload?.rewards.length ?? 0) + (gauge.payload?.rewards.length ?? 0)
+
   // Top 3 symbols across both sources, ordered by USD desc (with a token-
   // count fallback for unpriced rewards) so the subtitle highlights what
   // the user actually has the most of.

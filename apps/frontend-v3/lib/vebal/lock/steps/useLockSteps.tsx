@@ -25,6 +25,7 @@ export function useLockSteps({
 
   const steps = useMemo(() => {
     const lockSteps = [unlockStep]
+
     const selectedLockSteps = lockActionTypes
       .map(lockActionType => lockSteps.find(lockStep => lockStep.stepType === lockActionType))
       .filter(Boolean) as TransactionStep[]

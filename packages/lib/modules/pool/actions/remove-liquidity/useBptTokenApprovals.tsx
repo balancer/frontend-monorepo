@@ -25,6 +25,7 @@ export function useBptTokenApprovals(
     address: pool.address as Address,
     symbol: pool.symbol,
   }
+
   //Only used for v3 pools + Safe account scenario
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
@@ -44,6 +45,7 @@ function getSimulationQueryData(simulationQuery: RemoveLiquiditySimulationQueryR
 } {
   // Return default values if simulation query is not loaded
   if (!simulationQuery.data) return { rawAmount: 0n, spenderAddress: '' as Address }
+
   // TODO: Create a common interface for  all possible types (like NestedProportionalQueryRemoveLiquidityOutput)
   const simulationData = simulationQuery.data as
     SdkQueryRemoveLiquidityOutput | NestedProportionalQueryRemoveLiquidityOutput
@@ -60,9 +62,11 @@ function getRawAmount(
   if (isSdkQueryRemoveLiquidityOutput(simulationData)) {
     return simulationData.sdkQueryOutput.bptIn.amount
   }
+
   if (isNestedProportionalQueryRemoveLiquidityOutput(simulationData)) {
     return simulationData.sdkQueryOutput.bptAmountIn.amount
   }
+
   throw new Error(`Invalid simulation data: ${simulationData}`)
 }
 

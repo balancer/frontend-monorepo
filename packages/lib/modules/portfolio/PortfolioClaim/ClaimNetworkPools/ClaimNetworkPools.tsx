@@ -116,6 +116,7 @@ export function ClaimNetworkPools() {
   const hasChainRewards = Object.values(totalFiatClaimableBalanceByChain).some(
     balance => balance.toNumber() > 0
   )
+
   const noRewards = !hasProtocolRewards && !hasChainRewards
 
   const deprecatedChains = poolsWithChain
@@ -358,6 +359,7 @@ function DeprecatedChainsAlert({ chains }: { chains: GqlChain[] }) {
     style: 'long',
     type: 'conjunction',
   })
+
   const chainNames = listFormatter.format(chains.map(getChainName))
   const title = `${chainNames} ${chains.length > 1 ? 'are' : 'is'} being sunset on Balancer soon.`
   const content = `Claim your incentives asap before ${chains.length > 1 ? 'they are' : 'it is'} no longer supported.`

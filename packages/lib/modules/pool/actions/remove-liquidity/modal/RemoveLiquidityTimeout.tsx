@@ -30,6 +30,7 @@ function useRemoveLiquidityTimeout() {
       await Promise.all([simulationQuery.refetch(), priceImpactQuery.refetch()])
       startCountdown()
     }
+
     if (secondsToRefetch === 0 && !shouldFreezeQuote) refetchQueries()
   }, [secondsToRefetch])
 

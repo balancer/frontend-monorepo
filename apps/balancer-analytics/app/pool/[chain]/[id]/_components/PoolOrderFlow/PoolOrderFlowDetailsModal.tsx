@@ -63,32 +63,39 @@ type Contributor = {
 function predicateFor(nodeName: string, graph: SankeyGraph): ((s: LabeledSwap) => boolean) | null {
   if (nodeName.startsWith('src:')) {
     const id = nodeName.slice(4)
+
     if (id.startsWith('unknown:')) {
       // Specific split-out unknown sender
       const addr = id.slice('unknown:'.length)
       return s => s.source.category === 'unknown' && s.sender.toLowerCase() === addr
     }
+
     if (id === 'unknown') {
       // Generic Unknown bucket — unknowns whose sender did NOT cross the split threshold
       return s =>
         s.source.category === 'unknown' && !graph.splitUnknownSenders.has(s.sender.toLowerCase())
     }
+
     if (id === 'other') {
       // Synthetic Other rollup: labeled sources that fell under the share threshold
       return s => graph.rolledUpSourceIds.has(s.source.id)
     }
+
     // Labeled source id (e.g. '1inch', 'mev_bot', 'balancer'): match the raw id
     // BUT exclude rolled-up entries (they live under 'other').
     return s => s.source.id === id && !graph.rolledUpSourceIds.has(s.source.id)
   }
+
   if (nodeName.startsWith('tin:')) {
     const addr = nodeName.slice('tin:'.length)
     return s => s.tokenIn.address.toLowerCase() === addr
   }
+
   if (nodeName.startsWith('tout:')) {
     const addr = nodeName.slice('tout:'.length)
     return s => s.tokenOut.address.toLowerCase() === addr
   }
+
   return null
 }
 
@@ -105,11 +112,13 @@ function predicateForEdge(
 
 function aggregateBySender(swaps: readonly LabeledSwap[]): Contributor[] {
   const m = new Map<string, Contributor>()
+
   for (const s of swaps) {
     const addr = s.sender.toLowerCase()
     const row = m.get(addr) ?? { address: addr, valueUsd: 0, swapCount: 0, exampleTxHash: s.tx }
     row.valueUsd += s.valueUSD
     row.swapCount += 1
+
     // Track the highest-USD swap as the representative tx for the explorer link.
     if (
       s.valueUSD > 0 &&
@@ -117,8 +126,10 @@ function aggregateBySender(swaps: readonly LabeledSwap[]): Contributor[] {
     ) {
       row.exampleTxHash = s.tx
     }
+
     m.set(addr, row)
   }
+
   return [...m.values()].sort((a, b) => b.valueUsd - a.valueUsd)
 }
 
@@ -129,19 +140,24 @@ function describeSelection(
 ): { title: string; subtitle: string } {
   const decode = (name: string): string => {
     if (name.startsWith('src:')) return formatSourceId(name.slice(4))
+
     if (name.startsWith('tin:')) {
       const addr = name.slice(4)
       return tokenMap[addr]?.symbol ?? shortenAddress(addr)
     }
+
     if (name.startsWith('tout:')) {
       const addr = name.slice(5)
       return tokenMap[addr]?.symbol ?? shortenAddress(addr)
     }
+
     return name
   }
+
   if (sel.kind === 'node') {
     const node = graph.nodes.find(n => n.name === sel.nodeName)
     const title = decode(sel.nodeName)
+
     const subtitle = node
       ? node.kind === 'source' && node.source
         ? formatCategory(node.source.category)
@@ -149,8 +165,10 @@ function describeSelection(
           ? 'Token in'
           : 'Token out'
       : ''
+
     return { title, subtitle }
   }
+
   return {
     title: `${decode(sel.source)} → ${decode(sel.target)}`,
     subtitle: 'Flow',
@@ -171,10 +189,12 @@ export function PoolOrderFlowDetailsModal({
   // Compute contributing swaps + aggregate by sender. Empty when no selection.
   const { contributors, matchedSwaps } = useMemo(() => {
     if (!selection) return { contributors: [] as Contributor[], matchedSwaps: [] as LabeledSwap[] }
+
     const pred =
       selection.kind === 'node'
         ? predicateFor(selection.nodeName, graph)
         : predicateForEdge(selection.source, selection.target, graph)
+
     if (!pred) return { contributors: [], matchedSwaps: [] }
     const matched = swaps.filter(pred)
     return { contributors: aggregateBySender(matched), matchedSwaps: matched }
@@ -288,6 +308,7 @@ function ContributorRow({
           icon={<CopyIcon />}
           onClick={() => {
             onCopy()
+
             toast({
               title: 'Address copied',
               description: contributor.address,

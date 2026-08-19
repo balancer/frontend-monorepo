@@ -47,6 +47,7 @@ export function VebalLockModal({
 
   const { isLoading: userAccountIsLoading } = useUserAccount()
   const { isDesktop, isMobile } = useBreakpoints()
+
   const {
     vebalBptToken,
     totalAmount,
@@ -55,6 +56,7 @@ export function VebalLockModal({
     lockMode,
     isLoading: vebalLockIsLoading,
   } = useVebalLock()
+
   const { mainnetLockedInfo, isLoading: vebalLockDataIsLoading } = useVebalLockData()
 
   /*

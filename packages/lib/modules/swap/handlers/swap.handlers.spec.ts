@@ -149,6 +149,7 @@ describe('AuraBalSwapHandler.build', () => {
       { address: TEST_ADDRESSES.weth, chainId: 1, decimals: 18, name: 'WETH', symbol: 'WETH' },
       { address: TEST_ADDRESSES.bal, chainId: 1, decimals: 18, name: 'BAL', symbol: 'BAL' },
     ]
+
     handler = new AuraBalSwapHandler(mockTokens as any)
   })
 

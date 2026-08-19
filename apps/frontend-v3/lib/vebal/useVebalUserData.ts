@@ -20,12 +20,14 @@ export function useVebalUserData() {
   const noVeBALBalance = balanceResponse.veBALBalance === 0n
 
   const isLoading = apiResponse.loading || balanceResponse.isLoading
+
   const refetch = () => {
     apiResponse.refetch()
     balanceResponse.refetch()
   }
 
   const snapshots = apiResponse.data?.veBalGetUser.lockSnapshots
+
   const lastLockTimestamp =
     snapshots && snapshots.length > 0
       ? secondsToMilliseconds(calculateLastLock(snapshots)?.timestamp || 0)

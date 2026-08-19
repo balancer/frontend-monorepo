@@ -65,8 +65,10 @@ function SignRelayerButton({
 export function useSignRelayerStep(chain: GqlChain): TransactionStep {
   const chainId = getChainId(chain)
   const { isConnected } = useUserAccount()
+
   const { signRelayer, signRelayerState, isLoading, isDisabled, buttonLabel, error } =
     useSignRelayerApproval(chainId)
+
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
 
   const isComplete = signRelayerState === SignatureState.Completed

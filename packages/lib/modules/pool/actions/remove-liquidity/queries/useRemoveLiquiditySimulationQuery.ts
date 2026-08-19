@@ -48,6 +48,7 @@ export function useRemoveLiquiditySimulationQuery({
     tokenOut,
     tokensOut,
   }
+
   const queryKey = removeLiquidityKeys.preview(params)
 
   const queryFn = async () =>
@@ -70,5 +71,6 @@ export function useRemoveLiquiditySimulationQuery({
     }),
     ...onlyExplicitRefetch,
   })
+
   return result
 }

@@ -51,10 +51,12 @@ const MAX_ADDRESSES = 24
 
 const ChainSchema = z.string().transform((v, ctx): GqlChain => {
   const chain = v as GqlChain
+
   if (!(PROJECT_CONFIG.supportedNetworks as readonly GqlChain[]).includes(chain)) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: `unsupported chain: ${v}` })
     return z.NEVER
   }
+
   return chain
 })
 
@@ -70,17 +72,21 @@ const AddressesSchema = z
           .filter(Boolean)
       )
     )
+
     if (parts.length === 0 || parts.length > MAX_ADDRESSES) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: `1–${MAX_ADDRESSES} addresses` })
       return z.NEVER
     }
+
     if (parts.some(a => !/^0x[a-f0-9]{40}$/.test(a))) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'addresses must be 0x-prefixed 20-byte',
       })
+
       return z.NEVER
     }
+
     return parts
   })
 
@@ -121,6 +127,7 @@ export type HodlPricesResponse = {
 
 export async function GET(request: Request): Promise<Response> {
   const params = new URL(request.url).searchParams
+
   const parsed = z
     .object({ chain: ChainSchema, addresses: AddressesSchema, range: RangeSchema })
     .safeParse({
@@ -128,12 +135,14 @@ export async function GET(request: Request): Promise<Response> {
       addresses: params.get('addresses') ?? '',
       range: params.get('range') ?? undefined,
     })
+
   if (!parsed.success) {
     return Response.json(
       { error: 'invalid input', details: parsed.error.flatten() },
       { status: 400, headers: { 'Cache-Control': 'no-store' } }
     )
   }
+
   const { chain, addresses, range } = parsed.data
 
   try {
@@ -157,11 +166,13 @@ export async function GET(request: Request): Promise<Response> {
     const series = (data?.tokenGetHistoricalPrices ?? []).map(t => {
       // api-v3 returns prices ascending, so the last write per day wins.
       const daily = new Map<number, number>()
+
       for (const p of t.prices) {
         const ts = Number(p.timestamp)
         if (!Number.isFinite(ts) || !Number.isFinite(p.price)) continue
         daily.set(dayStart(ts), p.price)
       }
+
       const sorted = [...daily.entries()].sort((a, b) => a[0] - b[0]) as Array<[number, number]>
       return { address: t.address.toLowerCase(), daily: sorted }
     })
@@ -178,6 +189,7 @@ export async function GET(request: Request): Promise<Response> {
       const { status, body, headers } = upstreamErrorToResponse(err)
       return Response.json(body, { status, headers })
     }
+
     console.error('[token-prices] failed', { chain, range, count: addresses.length })
     return Response.json(
       { error: 'token prices fetch failed' },

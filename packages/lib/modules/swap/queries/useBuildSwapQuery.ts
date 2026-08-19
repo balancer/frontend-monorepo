@@ -63,6 +63,7 @@ export function useBuildSwapQuery({
       relayerApprovalSignature,
       permit2,
     })
+
     console.log('Swap callData built:', response)
     if (permit2) console.log('Swap permit2:', permit2)
 

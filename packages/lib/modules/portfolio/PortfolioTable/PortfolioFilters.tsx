@@ -242,6 +242,7 @@ export function PortfolioFilters({
   selectedPoolTypes?: PoolFilterType[]
 }) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+
   const {
     selectedNetworks: hookSelectedNetworks,
     setSelectedNetworks,

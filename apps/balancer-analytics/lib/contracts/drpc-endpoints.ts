@@ -44,17 +44,20 @@ export type ChainEndpoints = {
 export function getChainEndpoints(chain: GqlChain): ChainEndpoints {
   const key = process.env.NEXT_PRIVATE_DRPC_KEY ?? ''
   let primary: string | null = null
+
   try {
     primary = key ? drpcUrl(chain, key) : null
   } catch {
     primary = null
   }
+
   if (primary && !key) {
     // Unreachable: drpcUrl returns a slug-bearing URL only if the chain is
     // in the map, but we short-circuited above when key is empty. Kept as a
     // defense in depth so missing-key configs surface a clear error.
     throw new Error('NEXT_PRIVATE_DRPC_KEY is missing. Set it via Vercel env or .env.local.')
   }
+
   return {
     primary,
     fallback: PUBLIC_FALLBACK_URLS[chain] ?? null,

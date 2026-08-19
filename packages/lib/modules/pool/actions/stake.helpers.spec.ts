@@ -25,6 +25,7 @@ describe('stake.helpers', () => {
           tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
         } as GqlPoolStakingGaugeReward,
       ])
+
       expect(getCanStake(pool)).toBe(false)
     })
 
@@ -36,6 +37,7 @@ describe('stake.helpers', () => {
           tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
         } as GqlPoolStakingGaugeReward,
       ])
+
       expect(getCanStake(pool)).toBe(true)
     })
 
@@ -52,6 +54,7 @@ describe('stake.helpers', () => {
           tokenAddress: '0x0000000000000000000000000000000000000000',
         } as GqlPoolStakingGaugeReward,
       ])
+
       expect(getCanStake(pool)).toBe(true)
     })
 

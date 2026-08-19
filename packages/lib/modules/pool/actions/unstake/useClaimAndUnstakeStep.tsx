@@ -30,6 +30,7 @@ export type UnstakeParams = {
   amountOut: HumanAmount
   refetchPoolBalances: () => void
 }
+
 export function useClaimAndUnstakeStep({
   pool,
   gaugeAddress,

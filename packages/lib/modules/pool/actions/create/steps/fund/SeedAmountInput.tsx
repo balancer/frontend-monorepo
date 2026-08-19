@@ -21,11 +21,13 @@ interface TokenAmountInputProps {
 export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmountInputProps) {
   const { updatePoolToken, poolAddress, poolCreationForm } = usePoolCreationForm()
   const [network] = useWatch({ control: poolCreationForm.control, name: ['network'] })
+
   const { autoRangeInitAmounts } = useAutoRangeInitAmounts(
     isAutoRangePool(poolType),
     poolAddress,
     token
   )
+
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
   const { setValidationError, removeValidationErrors } = useTokenInputsValidation()
@@ -79,6 +81,7 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
       .map(t => t.address?.toLowerCase())
       .filter(Boolean)
       .sort((a, b) => a!.localeCompare(b!))
+
     const otherTokenAmountIdx = sortedAddresses.indexOf(otherToken.address.toLowerCase())
 
     // Update the other token's amount using the corresponding value from initAmounts
@@ -86,6 +89,7 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
       autoRangeInitAmounts[otherTokenAmountIdx],
       otherToken.data.decimals
     )
+
     updatePoolToken(otherTokenInputIdx, { amount: otherTokenAmount })
     lastUserUpdatedAmountIdx.current = null
   }, [idx, updatePoolToken, autoRangeInitAmounts, poolTokens])

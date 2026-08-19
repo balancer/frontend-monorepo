@@ -17,6 +17,7 @@ type BuildKeyParams = Pick<
   BuildSwapInputs,
   'account' | 'selectedChain' | 'slippagePercent' | 'simulateResponse'
 >
+
 function buildInputKey({
   account,
   selectedChain,

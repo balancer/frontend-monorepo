@@ -73,6 +73,7 @@ export function PoolChartsContainer() {
 
 function PoolChartsContent({ ...props }: any) {
   const { activeTab, setActiveTab, tabsList, getActiveTabLabel } = usePoolChartTabs()
+
   const {
     hasChartData: hasEclpChartData,
     isLoading: isLoadingEclpChartData,

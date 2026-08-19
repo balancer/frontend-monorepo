@@ -67,6 +67,7 @@ export function stripFeeRebates(rows: readonly PoolParamEventRow[]): RebateStrip
 
   // Group fee events by tx, preserving order within each group.
   const feeGroups = new Map<string, PoolParamEventRow[]>()
+
   for (const r of ordered) {
     if (r.eventName !== FEE_EVENT) continue
     const g = feeGroups.get(r.txHash)

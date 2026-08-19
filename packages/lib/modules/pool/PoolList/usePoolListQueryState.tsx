@@ -93,6 +93,7 @@ export function usePoolListQueryState() {
   const [networks, setNetworks] = useQueryState('networks', poolListQueryStateParsers.networks)
   const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
   const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
+
   const [poolHookTags, setPoolHookTags] = useQueryState(
     'poolHookTags',
     poolListQueryStateParsers.poolHookTags
@@ -117,15 +118,18 @@ export function usePoolListQueryState() {
     'userAddress',
     poolListQueryStateParsers.userAddress
   )
+
   const [joinablePoolsValue, setJoinablePoolsValue] = useQueryState(
     'joinablePools',
     poolListQueryStateParsers.joinablePools
   )
+
   const joinablePools = joinablePoolsValue === 'true'
 
   // Set internal checked state
   function toggleUserAddress(checked: boolean, address: string) {
     if (skip) setSkip(0)
+
     if (checked) {
       setUserAddress(address)
     } else {
@@ -149,6 +153,7 @@ export function usePoolListQueryState() {
   // Set internal checked state
   function togglePoolTag(checked: boolean, poolTag: PoolTagType) {
     if (skip) setSkip(0)
+
     if (checked) {
       setPoolTags(current => uniq([...current, poolTag]))
     } else {
@@ -162,6 +167,7 @@ export function usePoolListQueryState() {
   // Set internal checked state
   function togglePoolHookTag(checked: boolean, poolHookTag: PoolHookTagType) {
     if (skip) setSkip(0)
+
     if (checked) {
       setPoolHookTags(current => uniq([...current, poolHookTag]))
     } else {
@@ -175,6 +181,7 @@ export function usePoolListQueryState() {
   // Set internal checked state
   function toggleNetwork(checked: boolean, network: GqlChain) {
     if (skip) setSkip(0)
+
     if (checked) {
       setNetworks(current => uniq([...current, network]))
     } else {
@@ -188,6 +195,7 @@ export function usePoolListQueryState() {
   // Set internal checked state
   function togglePoolType(checked: boolean, poolType: PoolFilterType) {
     if (skip) setSkip(0)
+
     if (checked) {
       setPoolTypes(current => uniq([...current, poolType]))
     } else {
@@ -202,6 +210,7 @@ export function usePoolListQueryState() {
     if (sortingState.length > 0) {
       setSkip(0)
       setOrderBy(sortingState[0].id)
+
       setOrderDirection(
         sortingState[0].desc ? GqlPoolOrderDirectionValues.Desc : GqlPoolOrderDirectionValues.Asc
       )
@@ -213,6 +222,7 @@ export function usePoolListQueryState() {
 
   function setPagination(pagination: PaginationState) {
     setFirst(pagination.pageSize === 20 ? null : pagination.pageSize)
+
     setSkip(
       pagination.pageIndex * pagination.pageSize === 0
         ? null
@@ -224,6 +234,7 @@ export function usePoolListQueryState() {
     if (text.length > 0) {
       setSkip(0)
     }
+
     setTextSearch(text)
   }
 

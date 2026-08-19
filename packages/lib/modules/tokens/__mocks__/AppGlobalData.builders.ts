@@ -17,5 +17,6 @@ export function anAppGlobalData(options?: Partial<GetAppGlobalPollingDataQuery>)
       totalLiquidity: 'test liquidity',
     },
   }
+
   return Object.assign({}, defaultAppGlobalData, options)
 }

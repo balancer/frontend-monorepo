@@ -111,9 +111,11 @@ const TOUT_PREFIX = 'tout:'
 function sourceNodeName(id: string): string {
   return `${SOURCE_PREFIX}${id}`
 }
+
 function tokenInNodeName(addr: string): string {
   return `${TIN_PREFIX}${addr}`
 }
+
 function tokenOutNodeName(addr: string): string {
   return `${TOUT_PREFIX}${addr}`
 }
@@ -162,11 +164,13 @@ export function buildSankeyGraph(
   const eligible: LabeledSwap[] = []
   let volumeUsd = 0
   const usdByUnknownSender = new Map<string, number>()
+
   for (const s of swaps) {
     if (!Number.isFinite(s.valueUSD) || s.valueUSD < minUsd) continue
     if (!s.tokenIn?.address || !s.tokenOut?.address) continue
     eligible.push(s)
     volumeUsd += s.valueUSD
+
     if (s.source.category === 'unknown' && unknownSplitThresholdUsd > 0) {
       const sender = s.sender.toLowerCase()
       usdByUnknownSender.set(sender, (usdByUnknownSender.get(sender) ?? 0) + s.valueUSD)
@@ -212,6 +216,7 @@ export function buildSankeyGraph(
 
   // ── Second pass: per-source totals (post-split) for rollup decision ──
   const usdBySourceId = new Map<string, number>()
+
   for (const s of eligible) {
     const src = resolveSource(s)
     usdBySourceId.set(src.id, (usdBySourceId.get(src.id) ?? 0) + s.valueUSD)
@@ -222,13 +227,16 @@ export function buildSankeyGraph(
   // is never rolled up — those nodes are intentionally visible because
   // they ARE the curation backlog.
   const rolledUp = new Set<string>()
+
   if (otherThresholdPct > 0) {
     const threshold = volumeUsd * otherThresholdPct
+
     for (const [sourceId, usd] of usdBySourceId) {
       if (sourceId.startsWith('unknown')) continue
       if (usd < threshold) rolledUp.add(sourceId)
     }
   }
+
   function effectiveSource(swap: LabeledSwap): SourceLabel {
     const src = resolveSource(swap)
     return rolledUp.has(src.id) ? OTHER_LABEL : src
@@ -259,10 +267,12 @@ export function buildSankeyGraph(
 
     // Source node
     let srcRow = sourceAgg.get(src.id)
+
     if (!srcRow) {
       srcRow = { source: src, usd: 0, count: 0 }
       sourceAgg.set(src.id, srcRow)
     }
+
     srcRow.usd += s.valueUSD
     srcRow.count += 1
 
@@ -283,6 +293,7 @@ export function buildSankeyGraph(
     const toutNodeName = tokenOutNodeName(toutAddr)
 
     const link1Key = `${srcNodeName}->${tinNodeName}`
+
     const link1 = srcToTinLink.get(link1Key) ?? {
       source: srcNodeName,
       target: tinNodeName,
@@ -290,6 +301,7 @@ export function buildSankeyGraph(
       cat: src.category,
       count: 0,
     }
+
     link1.usd += s.valueUSD
     link1.count += 1
     srcToTinLink.set(link1Key, link1)
@@ -299,6 +311,7 @@ export function buildSankeyGraph(
     // color so a CowSwap-routed USDC→WETH leg renders distinctly from a
     // 1inch-routed one.
     const link2Key = `${tinNodeName}->${toutNodeName}@${src.category}`
+
     const link2 = tinToToutLink.get(link2Key) ?? {
       source: tinNodeName,
       target: toutNodeName,
@@ -306,6 +319,7 @@ export function buildSankeyGraph(
       cat: src.category,
       count: 0,
     }
+
     link2.usd += s.valueUSD
     link2.count += 1
     tinToToutLink.set(link2Key, link2)
@@ -325,6 +339,7 @@ export function buildSankeyGraph(
   // Token columns: by address. Token symbols are not used because two pools
   // can share a symbol, and we want one stable key.
   const nodes: SankeyNode[] = []
+
   const sortedSources = [...sourceAgg.values()].sort((a, b) => {
     const rankDiff = CATEGORY_RANK[a.source.category] - CATEGORY_RANK[b.source.category]
     if (rankDiff !== 0) return rankDiff
@@ -333,6 +348,7 @@ export function buildSankeyGraph(
     if (aOther !== bOther) return aOther - bOther
     return a.source.id.localeCompare(b.source.id)
   })
+
   for (const { source, usd, count } of sortedSources) {
     nodes.push({
       name: sourceNodeName(source.id),
@@ -344,7 +360,9 @@ export function buildSankeyGraph(
       swapCount: count,
     })
   }
+
   const sortedTokenIn = [...tokenInAgg.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+
   for (const [addr, { usd, count }] of sortedTokenIn) {
     nodes.push({
       name: tokenInNodeName(addr),
@@ -356,7 +374,9 @@ export function buildSankeyGraph(
       swapCount: count,
     })
   }
+
   const sortedTokenOut = [...tokenOutAgg.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+
   for (const [addr, { usd, count }] of sortedTokenOut) {
     nodes.push({
       name: tokenOutNodeName(addr),
@@ -382,6 +402,7 @@ export function buildSankeyGraph(
   // here pins each category to a single vertical lane across all columns.
   const nodeIndex = new Map<string, number>(nodes.map((n, i) => [n.name, i]))
   const links: SankeyLink[] = []
+
   for (const l of srcToTinLink.values()) {
     links.push({
       source: l.source,
@@ -391,6 +412,7 @@ export function buildSankeyGraph(
       swapCount: l.count,
     })
   }
+
   for (const l of tinToToutLink.values()) {
     links.push({
       source: l.source,
@@ -400,6 +422,7 @@ export function buildSankeyGraph(
       swapCount: l.count,
     })
   }
+
   links.sort((a, b) => {
     const aSrc = nodeIndex.get(a.source) ?? 0
     const bSrc = nodeIndex.get(b.source) ?? 0
@@ -412,9 +435,11 @@ export function buildSankeyGraph(
 
   // ── Category share ────────────────────────────────────────────────────
   const categoryShare = emptyCategoryShare()
+
   for (const { source, usd } of sourceAgg.values()) {
     categoryShare[source.category].usd += usd
   }
+
   for (const c of ALL_CATEGORIES) {
     categoryShare[c].pct = volumeUsd > 0 ? categoryShare[c].usd / volumeUsd : 0
   }

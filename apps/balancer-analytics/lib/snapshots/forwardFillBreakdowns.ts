@@ -52,16 +52,21 @@ function share(a: number, b: number): VersionShare | null {
 
 function applyPair(ratios: VersionRatios, v2: VersionMetricSlice, v3: VersionMetricSlice): void {
   const tvl = share(v2.totalLiquidity, v3.totalLiquidity)
+
   if (tvl) {
     ratios.tvl = tvl
     ratios.known = true
   }
+
   const volume = share(v2.swapVolume24h, v3.swapVolume24h)
+
   if (volume) {
     ratios.volume = volume
     ratios.known = true
   }
+
   const fees = share(v2.swapFee24h, v3.swapFee24h)
+
   if (fees) {
     ratios.fees = fees
     ratios.known = true
@@ -113,16 +118,19 @@ export function forwardFillVersionBreakdowns(
     const nonCowFee = Math.max(p.swapFee24h - cowFee, 0)
 
     if (!p.breakdowns) p.breakdowns = {}
+
     p.breakdowns.V2 = emptyBreakdown({
       totalLiquidity: nonCowTvl * ratios.tvl.v2,
       swapVolume24h: nonCowVol * ratios.volume.v2,
       swapFee24h: nonCowFee * ratios.fees.v2,
     })
+
     p.breakdowns.V3 = emptyBreakdown({
       totalLiquidity: nonCowTvl * ratios.tvl.v3,
       swapVolume24h: nonCowVol * ratios.volume.v3,
       swapFee24h: nonCowFee * ratios.fees.v3,
     })
+
     filled++
   }
 

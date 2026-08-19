@@ -155,6 +155,7 @@ describe('getDisplayTokens for flat pools', () => {
       'dai-aave',
       'usdc-aave',
     ])
+
     expect(getUserReferenceTokenSymbols(v2SepoliaStableWithERC4626)).toEqual([
       'dai-aave',
       'usdc-aave',
@@ -198,6 +199,7 @@ describe('getDisplayTokens for NESTED pools', () => {
 
     const pool = getApiPoolMock(staBALv2Nested)
     const staBalBPT = pool.poolTokens.find(t => t.hasNestedPool)
+
     expect(getNestedPoolTokens(staBalBPT as PoolToken).map(t => t.symbol)).toMatchInlineSnapshot(`
       [
         "USDT",
@@ -257,6 +259,7 @@ describe('Partial boosted pool: returns getPoolActionableTokens based on wrapUnd
       'waGnoGNO',
       'sDAI',
     ])
+
     expect(getPoolActionableTokenSymbols(partialBoosted, [false, true])).toEqual([
       'waGnoGNO',
       'sDAI',
@@ -408,6 +411,7 @@ describe('getBoostedActionableTokens', () => {
     expect(secondWrappedToken?.underlyingToken?.symbol).toBe('wUSDL')
   })
 })
+
 function requiredAt<T>(items: readonly T[], index: number): T {
   const item = items[index]
   if (!item) throw new Error(`Missing item at index ${index}`)

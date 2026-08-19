@@ -106,6 +106,7 @@ export function calcOutGivenIn(
   checkAssetBounds(params, derived, invariant, balInNew, ixIn)
   const balOutNew = calcGiven(balInNew, params, derived, invariant)
   const amountOut = balances[ixOut]! - balOutNew
+
   if (amountOut < 0n) {
     // Should never happen; check anyways to catch a numerical bug.
     throw new Error('ASSET BOUNDS EXCEEDED 1')
@@ -140,6 +141,7 @@ export function calcInGivenOut(
     // Should never happen; check anyways to catch a numerical bug.
     throw new Error('ASSET BOUNDS EXCEEDED 3')
   }
+
   return amountIn
 }
 

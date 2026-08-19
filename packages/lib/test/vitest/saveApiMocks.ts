@@ -56,5 +56,6 @@ function shouldSkipMock(apiUrl: string, example: PoolExample) {
   if (!apiUrl?.includes('test-api') && example.poolChain === GqlChainValues.Sepolia) {
     return true
   }
+
   return false
 }

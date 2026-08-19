@@ -14,6 +14,7 @@ export function LstUnstakeSummary() {
   const { chain, stakeTransactionSteps, lstUnstakeTxHash, stakedAsset, amountShares } = useLst()
 
   const shouldShowReceipt = !!lstUnstakeTxHash
+
   const handleDownloadReminder = () => {
     const start = addWeeks(new Date(), 2)
 

@@ -37,8 +37,10 @@ export const queryClient = new QueryClient({
       const sentryMeta = query?.meta as SentryMetadata
       if (shouldIgnore(error.message, error.stack)) return
       if (shouldIgnoreEdgeCaseError(error, sentryMeta)) return
+
       if (isSwapWithNoPathsError(error.message) && sentryMeta.context?.extra) {
         const params = sentryMeta.context?.extra['params'] as SwapParams
+
         sendMessage(
           SLACK_CHANNEL_ID,
           `chain: ${params.chainId}\n` +
@@ -56,11 +58,13 @@ export const queryClient = new QueryClient({
         error,
         queryKey: query.queryKey,
       })
+
       if (error.message.includes('unknown reason') || error.message.includes('custom error')) {
         console.log('Decoded reason: ', decodeError(error))
       }
 
       const sentryContext = sentryMeta?.context as ScopeContext
+
       if (sentryContext?.extra && !getTenderlyUrl(sentryMeta)) {
         sentryContext.extra.tenderlyUrl = getTenderlyUrlFromErrorMessage(error, sentryMeta)
       }
@@ -78,6 +82,7 @@ export const queryClient = new QueryClient({
     onError: (error, variables, _context, mutation) => {
       const mutationMeta = mutation?.meta as SentryMetadata
       if (shouldIgnore(error.message, error.stack)) return
+
       console.log('Sentry capturing mutation error: ', {
         meta: mutation?.meta,
         error,

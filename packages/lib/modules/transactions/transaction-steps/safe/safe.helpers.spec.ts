@@ -105,9 +105,11 @@ describe('getSignConfirmationsLabel / getRemainingSignatures / getRemainingSigna
   it('computes remaining signatures and their labels', () => {
     expect(getRemainingSignatures(multisigDetails(2, 3))).toBe(1)
     expect(getRemainingSignaturesLabel(multisigDetails(2, 3))).toBe('(1 more signature required)')
+
     expect(getRemainingSignaturesLabel(multisigDetails(1, 3))).toBe(
       '2 more signatures are required'
     )
+
     expect(getRemainingSignaturesLabel(multisigDetails(3, 3))).toBeUndefined()
   })
 })
@@ -131,6 +133,7 @@ describe('buildTxBatch', () => {
       ],
       batchableTxCall: { to: '0xaaa' },
     } as any
+
     expect(buildTxBatch(step)).toEqual([
       { to: '0xbbb', value: '0' },
       { to: '0xaaa', value: '0' },
@@ -166,6 +169,7 @@ describe('safeStatusToBalancerStatus', () => {
     expect(safeStatusToBalancerStatus(SafeTransactionStatus.AWAITING_CONFIRMATIONS)).toBe(
       'confirming'
     )
+
     expect(safeStatusToBalancerStatus(SafeTransactionStatus.AWAITING_EXECUTION)).toBe('confirming')
     expect(safeStatusToBalancerStatus(SafeTransactionStatus.CANCELLED)).toBe('rejected')
     expect(safeStatusToBalancerStatus(SafeTransactionStatus.FAILED)).toBe('reverted')

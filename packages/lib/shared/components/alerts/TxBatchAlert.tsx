@@ -6,21 +6,25 @@ import { StepType, TransactionStep } from '@repo/lib/modules/transactions/transa
 import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
 
 type Props = AlertProps & { steps: TransactionStep[] }
+
 export function TxBatchAlert({ steps, ...alertProps }: Props) {
   const { isMobile } = useBreakpoints()
   const lastStep = steps[steps.length - 1]
   const { isStepWithTxBatch } = useStepWithTxBatch(lastStep)
+
   if (isStepWithTxBatch && !isMobile) {
     return (
       <BalAlert content={<Content stepType={lastStep.stepType} />} status="info" {...alertProps} />
     )
   }
+
   return null
 }
 
 type ContentProps = {
   stepType: StepType
 }
+
 function Content({ stepType }: ContentProps) {
   const operationName = stepType === 'addLiquidity' ? 'add liquidity' : 'remove liquidity'
   const description = `For a better experience, token approvals and ${operationName} operation will be bundled into a single transaction.`

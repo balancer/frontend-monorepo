@@ -37,9 +37,11 @@ export const testAccounts: Address[] = [
 
 export function testAccountIndex(account: Address) {
   const index = testAccounts.indexOf(account)
+
   if (index < 0) {
     throw Error(`Account ${account} not found in test accounts.`)
   }
+
   return index
 }
 
@@ -135,5 +137,6 @@ export function getForkUrl(chainId: ChainIdWithFork, verbose = false): string {
   if (verbose) {
     console.warn(`Falling back to \`${network.fallBackRpc}\`.`)
   }
+
   return network.fallBackRpc
 }

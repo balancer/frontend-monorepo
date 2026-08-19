@@ -28,12 +28,15 @@ export function PreviewAutoRangeConfig({
   upperMarginValue,
 }: Props) {
   const { options } = useAutoRangeChart()
+
   const { autoRangeConfigForm, poolCreationForm, invertAutoRangePriceParams } =
     usePoolCreationForm()
+
   const [initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate] = useWatch({
     control: autoRangeConfigForm.control,
     name: ['initialTargetPrice', 'initialMinPrice', 'initialMaxPrice', 'priceShiftDailyRate'],
   })
+
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const autoRangeConfigCards = [

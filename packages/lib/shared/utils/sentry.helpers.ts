@@ -10,6 +10,7 @@ export function getErrorTextFromTop3Frames(event: ErrorEvent): string {
     const last3Exceptions = event.exception.values.slice(-3)
     return last3Exceptions.map(exception => `${exception.type}: ${exception.value}`).join(' | ')
   }
+
   return ''
 }
 
@@ -39,6 +40,7 @@ export function addFingerPrint(event: ErrorEvent) {
   if (errorMessage.includes(`Failed to execute 'transaction' on 'IDBDatabase'`)) {
     event.fingerprint = ['IDBDatabaseError']
   }
+
   if (errorMessage.includes(`'IDBDatabase': The database connection is closing.`)) {
     event.fingerprint = ['IDBDatabaseClosing']
   }
@@ -93,6 +95,7 @@ export function addFingerPrint(event: ErrorEvent) {
   if (errorMessage.includes('ConnectorChainMismatchError')) {
     event.fingerprint = ['ConnectorChainMismatchError']
   }
+
   /*
     Context: https://wagmi.sh/core/api/errors#connectoralreadyconnectederror
   */
@@ -137,21 +140,25 @@ export function addFingerPrint(event: ErrorEvent) {
   ) {
     event.fingerprint = ['ErrorSendingTransaction-InternalError']
   }
+
   if (
     errorMessage.includes('Error sending transaction') &&
     errorMessage.includes('An unknown RPC error occurred')
   ) {
     event.fingerprint = ['ErrorSendingTransaction-RPCError']
   }
+
   if (
     errorMessage.includes('Error sending transaction') &&
     errorMessage.includes('Requested resource not available')
   ) {
     event.fingerprint = ['ErrorSendingTransaction-ResourceNotAvailable']
   }
+
   if (errorMessage.includes('Error sending transaction') && errorMessage.includes('URL:')) {
     event.fingerprint = ['ErrorSendingTransaction-URL']
   }
+
   if (
     errorMessage.includes('Error sending transaction') &&
     errorMessage.includes(`does not match the connection's chain`)
@@ -168,15 +175,18 @@ export function addFingerPrint(event: ErrorEvent) {
   ) {
     event.fingerprint = ['SwapGasEstimationError-UnknownReason']
   }
+
   if (
     errorMessage.startsWith('Error in swap gas estimation') &&
     errorMessage.includes('transfer amount exceeds balance')
   ) {
     event.fingerprint = ['SwapGasEstimationError-TransferAmountExceedsBalance']
   }
+
   if (errorMessage.startsWith('Error in swap gas estimation') && errorMessage.includes('BAL#50')) {
     event.fingerprint = ['SwapGasEstimationError-BAL50x']
   }
+
   if (errorMessage.startsWith('Error in swap gas estimation') && errorMessage.includes('GYR#357')) {
     event.fingerprint = ['SwapGasEstimationError-GYR357']
   }
@@ -190,18 +200,21 @@ export function addFingerPrint(event: ErrorEvent) {
   ) {
     event.fingerprint = ['AddGasEstimationError-UnknownReason']
   }
+
   if (
     errorMessage.startsWith('Error in AddLiquidity gas estimation') &&
     errorMessage.includes('transfer amount exceeds balance')
   ) {
     event.fingerprint = ['AddGasEstimationError-TransferAmountExceedsBalance']
   }
+
   if (
     errorMessage.startsWith('Error in AddLiquidity gas estimation') &&
     errorMessage.includes('RPC Request failed')
   ) {
     event.fingerprint = ['AddGasEstimationError-RPCRequestFailed']
   }
+
   if (
     errorMessage.startsWith('Error in AddLiquidity gas estimation') &&
     errorMessage.includes('TRANSFER_FROM_FAILED')

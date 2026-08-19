@@ -19,6 +19,7 @@ export type RemoveLiquidityPermitParams = {
   queryOutput?: SdkQueryRemoveLiquidityOutput
   slippagePercent: string
 }
+
 export function useSignPermit({
   pool,
   wethIsEth,
@@ -58,6 +59,7 @@ export function useSignPermit({
 
       if (signature) {
         setSignPermitState(SignatureState.Completed)
+
         toast({
           title: 'Approval signed!',
           description: '',

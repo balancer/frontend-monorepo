@@ -113,6 +113,7 @@ export function useComparisonPool(
   useEffect(() => {
     if (skipState) return
     const controller = new AbortController()
+
     fetchWithRetry(`/api/pool/${slug}/${(poolId ?? '').toLowerCase()}/state`, {
       signal: controller.signal,
     })
@@ -122,6 +123,7 @@ export function useComparisonPool(
       })
       .then(payload => {
         if (controller.signal.aborted) return
+
         // `typeSpecific` is a `Record<string, unknown>` on the wire — the
         // amp keys live inside it for stable pools, both V2 and V3. Pick
         // them off defensively; anything else gets surfaced via state's
@@ -134,6 +136,7 @@ export function useComparisonPool(
             isUpdating?: boolean
           } | null
         }
+
         const amp: ComparisonAmpState =
           ts.amplificationParameter || ts.amplificationState
             ? {
@@ -147,6 +150,7 @@ export function useComparisonPool(
                   : null,
               }
             : null
+
         setStateRes({
           state: payload.universal,
           amp,

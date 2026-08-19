@@ -69,13 +69,16 @@ function parseTokenMetadata(
   const nameResult = typeof name?.result === 'string' ? name.result : undefined
   const symbolResult = typeof symbol?.result === 'string' ? symbol.result : undefined
   const decimalsResultRaw = decimals?.result
+
   const decimalsResult =
     typeof decimalsResultRaw === 'number'
       ? decimalsResultRaw
       : typeof decimalsResultRaw === 'bigint'
         ? Number(decimalsResultRaw)
         : undefined
+
   const totalSupplyResultRaw = totalSupply?.result
+
   const totalSupplyResult =
     typeof totalSupplyResultRaw === 'number' || typeof totalSupplyResultRaw === 'bigint'
       ? totalSupplyResultRaw
@@ -137,11 +140,13 @@ export function useTokenMetadataAcrossChains(
   })
 
   let match: TokenMetadataByChain | undefined
+
   if (tokenData && chains.length) {
     for (let index = 0; index < chains.length; index += 1) {
       const offset = index * 4
       const [name, symbol, decimals, totalSupply] = tokenData.slice(offset, offset + 4)
       const metadata = parseTokenMetadata(name, symbol, decimals, totalSupply, isLoading)
+
       if (metadata.symbol) {
         match = { chain: chains[index], metadata }
         break

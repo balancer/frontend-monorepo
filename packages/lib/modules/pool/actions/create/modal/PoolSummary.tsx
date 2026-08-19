@@ -29,6 +29,7 @@ import { isCowPool } from '../helpers'
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
   const { poolCreationForm, poolAddress } = usePoolCreationForm()
+
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'poolType'],
@@ -49,6 +50,7 @@ export function PoolSummary({ transactionSteps }: { transactionSteps: Transactio
 
 function PoolTitleCard() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, symbol, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'symbol', 'network'],
@@ -89,10 +91,12 @@ function PoolTitleCard() {
 
 function PoolTokenAmountsCard() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'network'],
   })
+
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
 
@@ -136,10 +140,12 @@ function PoolTokenAmountsCard() {
 
 function PoolDetailsCard() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [swapFeePercentage, poolType] = poolCreationForm.getValues([
     'swapFeePercentage',
     'poolType',
   ])
+
   const { isOpen, onToggle } = useDisclosure()
 
   const showSwapFee = !isCowPool(poolType) && !isOpen

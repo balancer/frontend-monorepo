@@ -31,6 +31,7 @@ export type PoolSettingsOption = {
 export function PoolSettings() {
   const { userAddress } = useUserAccount()
   const { poolCreationForm } = usePoolCreationForm()
+
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'poolType'],
@@ -73,6 +74,7 @@ export function PoolSettings() {
   useEffect(() => {
     if (isStableSurgePool(poolType) && poolHooksWhitelist) {
       const stableSurgeHookMetadata = poolHooksWhitelist.find(hook => hook.label === 'StableSurge')
+
       if (stableSurgeHookMetadata) {
         poolCreationForm.setValue('poolHooksContract', stableSurgeHookMetadata.value)
       }
@@ -88,18 +90,21 @@ export function PoolSettings() {
 
     try {
       if (!publicClient) return 'missing public client for hooks validation'
+
       const hookFlags = await publicClient.readContract({
         address: address as Address,
         abi: reClammPoolAbi,
         functionName: 'getHookFlags',
         args: [],
       })
+
       if (!hookFlags) return 'Invalid hooks contract address'
       return true
     } catch (error) {
       if (error && typeof error === 'object' && 'shortMessage' in error) {
         return (error as any).shortMessage
       }
+
       console.error(error)
       return 'Unexpected error validating hooks contract address'
     }

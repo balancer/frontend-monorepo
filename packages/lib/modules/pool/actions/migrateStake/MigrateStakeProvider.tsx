@@ -25,6 +25,7 @@ export function useMigrateStakeLogic() {
     migratedAmount,
     refetchPoolBalances
   )
+
   const transactionSteps = useTransactionSteps(steps, isLoading)
 
   const restakeTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash

@@ -31,6 +31,7 @@ const GRID_COLUMNS = '100px 150px 100px 1fr'
 function Action({ poolEventType }: { poolEventType: 'Add' | 'Remove' | 'Swap' }) {
   const eventTypeColor =
     poolEventType === 'Add' ? 'green.500' : poolEventType === 'Remove' ? 'red.500' : 'blue.500'
+
   return (
     <HStack>
       <Box

@@ -65,6 +65,7 @@ export function computeParamSnapshot(
   timestamp: number
 ): ParamSnapshot {
   const snap: ParamSnapshot = {}
+
   let ampRamp: {
     start: string
     end: string
@@ -81,6 +82,7 @@ export function computeParamSnapshot(
 
   for (const e of ordered) {
     const a = e.args
+
     switch (e.eventName) {
       // ── V3 Vault per-pool fees ────────────────────────────────────────
       case 'SwapFeePercentageChanged':
@@ -90,11 +92,13 @@ export function computeParamSnapshot(
         if (typeof a.aggregateSwapFeePercentage === 'string') {
           snap.aggregateSwapFeePercentage = a.aggregateSwapFeePercentage
         }
+
         break
       case 'AggregateYieldFeePercentageChanged':
         if (typeof a.aggregateYieldFeePercentage === 'string') {
           snap.aggregateYieldFeePercentage = a.aggregateYieldFeePercentage
         }
+
         break
       case 'InitialPoolAggregateSwapFeePercentage':
         // Use only as a t0 seed — explicit AggregateSwapFeePercentageChanged
@@ -105,6 +109,7 @@ export function computeParamSnapshot(
         ) {
           snap.aggregateSwapFeePercentage = a.aggregateSwapFeePercentage
         }
+
         break
       case 'InitialPoolAggregateYieldFeePercentage':
         if (
@@ -113,6 +118,7 @@ export function computeParamSnapshot(
         ) {
           snap.aggregateYieldFeePercentage = a.aggregateYieldFeePercentage
         }
+
         break
 
       // ── V3 ProtocolFeeController per-pool overrides ───────────────────
@@ -120,21 +126,25 @@ export function computeParamSnapshot(
         if (typeof a.poolCreatorSwapFeePercentage === 'string') {
           snap.poolCreatorSwapFeePercentage = a.poolCreatorSwapFeePercentage
         }
+
         break
       case 'PoolCreatorYieldFeePercentageChanged':
         if (typeof a.poolCreatorYieldFeePercentage === 'string') {
           snap.poolCreatorYieldFeePercentage = a.poolCreatorYieldFeePercentage
         }
+
         break
       case 'ProtocolSwapFeePercentageChanged':
         if (typeof a.protocolSwapFeePercentage === 'string') {
           snap.protocolSwapFeePercentage = a.protocolSwapFeePercentage
         }
+
         break
       case 'ProtocolYieldFeePercentageChanged':
         if (typeof a.protocolYieldFeePercentage === 'string') {
           snap.protocolYieldFeePercentage = a.protocolYieldFeePercentage
         }
+
         break
 
       // ── V3 StableSurge hook ───────────────────────────────────────────
@@ -142,11 +152,13 @@ export function computeParamSnapshot(
         if (typeof a.newSurgeThresholdPercentage === 'string') {
           snap.surgeThresholdPercentage = a.newSurgeThresholdPercentage
         }
+
         break
       case 'MaxSurgeFeePercentageChanged':
         if (typeof a.newMaxSurgeFeePercentage === 'string') {
           snap.maxSurgeFeePercentage = a.newMaxSurgeFeePercentage
         }
+
         break
 
       // ── Operational state (V3 + V2 both fold here) ────────────────────
@@ -177,6 +189,7 @@ export function computeParamSnapshot(
             endTime: Number(a.endTime),
           }
         }
+
         break
       case 'AmpUpdateStopped':
         if (typeof a.currentValue === 'string') snap.ampValue = a.currentValue
@@ -225,14 +238,17 @@ export function interpolateTvl(snapshots: readonly MetricSnapshot[], t: number):
   if (t <= snapshots[0].timestamp) return snapshots[0].totalLiquidity
   const last = snapshots[snapshots.length - 1]
   if (t >= last.timestamp) return last.totalLiquidity
+
   for (let i = 1; i < snapshots.length; i++) {
     const lo = snapshots[i - 1]
     const hi = snapshots[i]
+
     if (t >= lo.timestamp && t <= hi.timestamp) {
       const f = (t - lo.timestamp) / Math.max(1, hi.timestamp - lo.timestamp)
       return lo.totalLiquidity + (hi.totalLiquidity - lo.totalLiquidity) * f
     }
   }
+
   return last.totalLiquidity
 }
 
@@ -247,9 +263,11 @@ export function sumWindow(
 ): number {
   const [lo, hi] = ta <= tb ? [ta, tb] : [tb, ta]
   let total = 0
+
   for (const s of snapshots) {
     if (s.timestamp >= lo && s.timestamp <= hi) total += s[key]
   }
+
   return total
 }
 
@@ -332,6 +350,7 @@ const PARAM_DEFS: ReadonlyArray<{
  *  from unset → set still surfaces as a change. */
 export function diffSnapshots(a: ParamSnapshot, b: ParamSnapshot): ParamChange[] {
   const changes: ParamChange[] = []
+
   for (const def of PARAM_DEFS) {
     const before = a[def.key]
     const after = b[def.key]
@@ -341,5 +360,6 @@ export function diffSnapshots(a: ParamSnapshot, b: ParamSnapshot): ParamChange[]
     if (before === after) continue
     changes.push({ ...def, before, after })
   }
+
   return changes
 }

@@ -12,6 +12,7 @@ describe('graphql-enums', () => {
   const parsed = parse(schema)
 
   const schemaEnums = new Map<string, string[]>()
+
   for (const def of parsed.definitions) {
     if (def.kind === 'EnumTypeDefinition' && def.name) {
       const values = (def.values || []).map(v => v.name.value).filter(Boolean)
@@ -48,11 +49,13 @@ describe('graphql-enums', () => {
   it('warns if schema has Gql* enums missing from the const objects', () => {
     const exportedEnumNames = new Set(exportedValues.map(e => e.enumName))
     const missing: string[] = []
+
     for (const [enumName] of schemaEnums) {
       if (enumName.startsWith('Gql') && !exportedEnumNames.has(enumName)) {
         missing.push(enumName)
       }
     }
+
     // This is informational — not all schema enums need runtime objects.
     // Change to an assertion if you want to enforce completeness.
     console.info('Schema enums without runtime const objects:', missing)

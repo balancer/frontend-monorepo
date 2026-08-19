@@ -40,9 +40,11 @@ function isTransientStatus(status: number): boolean {
 function parseRetryAfterMs(header: string | null): number | null {
   if (!header) return null
   const n = Number(header)
+
   if (Number.isFinite(n) && n > 0) {
     return Math.min(RETRY_AFTER_CEILING_MS, Math.round(n * 1000))
   }
+
   // Retry-After may also be an HTTP-date. We don't parse it — the typical
   // case from the routes I control is integer seconds. Fall back to the
   // default backoff schedule when the header isn't a plain number.
@@ -60,12 +62,15 @@ function delay(ms: number, signal?: AbortSignal | null): Promise<void> {
       reject(signalAbortError(signal))
       return
     }
+
     const t = setTimeout(resolve, ms)
+
     if (signal) {
       const onAbort = () => {
         clearTimeout(t)
         reject(signalAbortError(signal))
       }
+
       signal.addEventListener('abort', onAbort, { once: true })
     }
   })
@@ -77,6 +82,7 @@ function signalAbortError(signal: AbortSignal): Error {
   if (typeof DOMException !== 'undefined') {
     return new DOMException(signal.reason?.message ?? 'Aborted', 'AbortError')
   }
+
   const err = new Error('Aborted')
   err.name = 'AbortError'
   return err
@@ -102,14 +108,17 @@ export async function fetchWithRetry(
   const signal = init.signal ?? null
 
   let attempt = 0
+
   while (true) {
     let res: Response
+
     try {
       res = await fetch(url, init)
     } catch (err) {
       if (attempt >= retries || (err instanceof Error && err.name === 'AbortError')) {
         throw err
       }
+
       attempt++
       await delay(backoffFor(attempt, maxBackoffMs), signal)
       continue
@@ -118,6 +127,7 @@ export async function fetchWithRetry(
     if (res.ok || !isTransientStatus(res.status) || attempt >= retries) {
       return res
     }
+
     attempt++
     const hinted = parseRetryAfterMs(res.headers.get('retry-after'))
     const wait = hinted ?? backoffFor(attempt, maxBackoffMs)

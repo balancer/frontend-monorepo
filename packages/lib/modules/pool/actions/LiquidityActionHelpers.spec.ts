@@ -77,6 +77,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
   it('for v2 composable stable pool with a nested phantom BPT', async () => {
     const nestedPool = getApiPoolMock(osETHPhantom)
+
     const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '100', tokenAddress: osEthAddress, symbol: 'osETH' },
     ]
@@ -205,6 +206,7 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
 
   it('boostedPoolState', async () => {
     const helpers = new LiquidityActionHelpers(v3BoostedPool)
+
     expect(helpers.boostedPoolState).toMatchObject({
       id: v3BoostedPool.id,
       protocolVersion: 3,
@@ -532,6 +534,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
 
   it('boostedPoolState', async () => {
     const helpers = new LiquidityActionHelpers(v3Pool)
+
     expect(helpers.boostedPoolState).toMatchObject({
       address: v3Pool.address,
       id: v3Pool.id,
@@ -700,6 +703,7 @@ describe('areEmptyAmounts', () => {
         symbol: '',
       },
     ]
+
     expect(areEmptyAmounts(humanAmountsIn)).toBeTruthy()
   })
 
@@ -719,6 +723,7 @@ describe('detects pools requiring recovery removal', () => {
     const pausedAndInRecoveryPool: Pool = mock<Pool>({
       dynamicData: { isInRecoveryMode: true, isPaused: true },
     })
+
     expect(shouldUseRecoveryRemoveLiquidity(pausedAndInRecoveryPool)).toBeTruthy()
   })
 
@@ -744,6 +749,7 @@ it('returns NestedPoolState for nested pools', () => {
 
   const secondPool = nestedPoolState.pools[1]
   expect(secondPool.id).toBe(threePoolId)
+
   expect(secondPool.tokens.sort().map(t => t.address)).toEqual([
     daiAddress,
     usdcDaiUsdtBptAddress,
@@ -752,6 +758,7 @@ it('returns NestedPoolState for nested pools', () => {
   ])
 
   expect(nestedPoolState.mainTokens).toHaveLength(4)
+
   expect(nestedPoolState.mainTokens.sort().map(t => t.address)).toEqual([
     wETHAddress,
     daiAddress,
@@ -769,10 +776,12 @@ describe('toInputAmounts', () => {
 
   it('when the token input includes the wrapped native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
+
     const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: wjAuraAddress, humanAmount: '10', symbol: '' },
       { tokenAddress: wETHAddress, humanAmount: '20', symbol: 'BAL' },
     ]
+
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([
       {
         address: wjAuraAddress,
@@ -791,9 +800,11 @@ describe('toInputAmounts', () => {
 
   it('when the token input is the native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
+
     const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: ethAddress, humanAmount: '30', symbol: 'ETH' },
     ]
+
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([
       {
         address: ethAddress,
@@ -806,17 +817,21 @@ describe('toInputAmounts', () => {
 
   it('when the token input is zero', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
+
     const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: wETHAddress, humanAmount: '0', symbol: 'WETH' },
     ]
+
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([])
   })
 
   it('when the token input is in scientific notation', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
+
     const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: wjAuraAddress, humanAmount: '6.1713167421e-8', symbol: 'BAL' },
     ]
+
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([
       {
         address: wjAuraAddress,
@@ -831,10 +846,13 @@ describe('toInputAmounts', () => {
 describe('toSdkInputAmounts', () => {
   it('swaps the native asset by the wrapped native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
+
     const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: ethAddress, humanAmount: '30', symbol: 'wjAura' },
     ]
+
     const wethAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+
     expect(helpers.toSdkInputAmounts(humanTokenAmountsWithAddress)).toEqual([
       {
         address: wethAddress,
@@ -851,6 +869,7 @@ test('trimDecimals', () => {
     { tokenAddress: ethAddress, humanAmount: '0.001013801345314809', symbol: 'ETH' },
     { tokenAddress: wETHAddress, humanAmount: '0.001302248169953014', symbol: 'WETH' },
   ]
+
   expect(roundDecimals(humanTokenAmountsWithAddress)).toEqual([
     {
       humanAmount: '0.0010138013',
@@ -893,6 +912,7 @@ describe('supportsProportionalAddLiquidityKind', () => {
   it('should not allow proportional add for v2 weighted 2 tokens', () => {
     const pool = getApiPoolMock(balWeth8020)
     pool.type = GqlPoolTypeValues.Weighted
+
     pool.factory =
       getNetworkConfig(pool.chain).contracts.balancer?.WeightedPool2TokensFactory ?? null
 
@@ -956,6 +976,7 @@ describe('requiresProportionalInput', () => {
 
   it('should require when unbalanced liquidity is disabled on v3', () => {
     const pool = getApiPoolMock(v3StableNonBoosted)
+
     pool.liquidityManagement = {
       __typename: 'LiquidityManagement',
       disableUnbalancedLiquidity: true,

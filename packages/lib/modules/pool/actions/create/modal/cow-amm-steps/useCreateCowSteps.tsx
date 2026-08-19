@@ -28,6 +28,7 @@ export function useCreateCowSteps({ initPoolInput, network, poolType }: UseCreat
     token: amountsIn[0],
     ...txConfig,
   })
+
   const { step: bindToken1Step, isLoading: isLoadingBindToken1 } = useBindTokenStep({
     token: amountsIn[1],
     ...txConfig,

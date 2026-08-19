@@ -74,6 +74,7 @@ function PoolTokensInWalletContent({
   if (!hasSelectedTokens) return <DefaultCardContent />
 
   const tokensWithBalance = selectedPoolTokens.filter(token => !token.hasZeroBalance)
+
   const totalLiquidityUsd = tokensWithBalance.reduce((acc, token) => {
     return acc + Number(token.userBalanceUsd || 0)
   }, 0)

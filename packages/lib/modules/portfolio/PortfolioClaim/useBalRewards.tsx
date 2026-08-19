@@ -89,6 +89,7 @@ export function useBalTokenRewards(pools: ClaimablePool[]) {
         if (!pool) return
         const balTokenAddress = getNetworkConfig(pool.chain).tokens.addresses.bal
         const tokenPrice = balTokenAddress ? priceFor(balTokenAddress, pool.chain) : 0
+
         const fiatBalance = tokenPrice
           ? bn(formatUnits(balance, BPT_DECIMALS)).multipliedBy(tokenPrice)
           : bn(0)

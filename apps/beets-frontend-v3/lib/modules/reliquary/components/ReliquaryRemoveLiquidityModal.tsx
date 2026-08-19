@@ -36,8 +36,10 @@ export function ReliquaryRemoveLiquidityModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
+
   const { transactionSteps, lastTransaction, removeLiquidityTxHash, hasQuoteContext, urlTxHash } =
     useRemoveLiquidity()
+
   const { pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { userAddress } = useUserAccount()

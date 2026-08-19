@@ -224,6 +224,7 @@ export function Features() {
           Math.max(((windowHeight - (rect.top + buffer)) / rect.height) * 100, 0),
           100
         )
+
         setScrollPercentage(progress)
       }
     }

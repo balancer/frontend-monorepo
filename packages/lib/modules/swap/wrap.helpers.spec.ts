@@ -106,6 +106,7 @@ describe('wrap.helpers', () => {
       expect(
         isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)
       ).toBe(true)
+
       expect(
         isSupportedWrap(TEST_ADDRESSES.wsteth, TEST_ADDRESSES.steth, GqlChainValues.Mainnet)
       ).toBe(true)
@@ -113,6 +114,7 @@ describe('wrap.helpers', () => {
 
     it('returns false when no wrappers configured', () => {
       mockNetworkConfig = emptyWrappersConfig
+
       expect(
         isSupportedWrap(TEST_ADDRESSES.steth, TEST_ADDRESSES.wsteth, GqlChainValues.Mainnet)
       ).toBe(false)
@@ -126,6 +128,7 @@ describe('wrap.helpers', () => {
         TEST_ADDRESSES.wsteth,
         GqlChainValues.Mainnet
       )
+
       expect(config.baseToken).toBe(TEST_ADDRESSES.steth)
       expect(config.wrappedToken).toBe(TEST_ADDRESSES.wsteth)
       expect(config.swapHandler).toBe(SupportedWrapHandler.LIDO)

@@ -52,7 +52,9 @@ export function TokenRowGroup({
         const existingAmount = isBnParseable(amountMap[key].humanAmount)
           ? bn(amountMap[key].humanAmount)
           : bn(0)
+
         const newAmount = isBnParseable(amount.humanAmount) ? bn(amount.humanAmount) : bn(0)
+
         amountMap[key] = {
           ...amountMap[key],
           humanAmount: existingAmount.plus(newAmount).toString() as HumanAmount,

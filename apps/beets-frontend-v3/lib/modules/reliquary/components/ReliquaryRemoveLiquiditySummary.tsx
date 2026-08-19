@@ -46,6 +46,7 @@ export function ReliquaryRemoveLiquiditySummary({
     removeLiquidityTxHash,
     removeLiquidityTxSuccess,
   } = useRemoveLiquidity()
+
   const { isMobile } = useBreakpoints()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -81,6 +82,7 @@ export function ReliquaryRemoveLiquiditySummary({
         { ...nativeAsset, chain },
       ] as ApiToken[]
     }
+
     return { ...token, chain } as ApiToken
   })
 
@@ -102,15 +104,18 @@ export function ReliquaryRemoveLiquiditySummary({
         humanAmount: `${Number(token.humanAmount) + Number(rewardsAmount?.humanAmount)}`,
       }
     }
+
     return token
   })
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
   }
+
   if (shouldShowErrors && error) {
     return <BalAlert content="We were unable to find this transaction hash" status="warning" />
   }
+
   if (shouldShowErrors && !isLoadingReceipt && !receivedTokens.length) {
     return (
       <BalAlert

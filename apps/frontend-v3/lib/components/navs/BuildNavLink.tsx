@@ -28,6 +28,7 @@ export function BuildNavLink() {
       const target = event.target as Node
       const isClickInsideTrigger = triggerRef.current?.contains(target)
       const isClickInsidePopover = popoverRef.current?.contains(target)
+
       if (!isClickInsideTrigger && !isClickInsidePopover) {
         onClose()
       }

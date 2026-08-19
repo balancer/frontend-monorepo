@@ -38,6 +38,7 @@ export function ReliquaryAddLiquidityModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
+
   const {
     transactionSteps,
     lastTransaction,
@@ -46,6 +47,7 @@ export function ReliquaryAddLiquidityModal({
     urlTxHash,
     setInitialHumanAmountsIn,
   } = useAddLiquidity()
+
   const { pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { userAddress } = useUserAccount()
@@ -75,6 +77,7 @@ export function ReliquaryAddLiquidityModal({
       const txPath = relicId
         ? `/mabeets/add-liquidity/${relicId}/${addLiquidityTxHash}`
         : `/mabeets/add-liquidity/new/${addLiquidityTxHash}`
+
       window.history.replaceState({}, '', txPath)
     }
   }, [addLiquidityTxHash, relicId])

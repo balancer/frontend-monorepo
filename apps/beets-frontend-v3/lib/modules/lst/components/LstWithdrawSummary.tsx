@@ -12,6 +12,7 @@ export function LstWithdrawSummary({
   receivedToken,
 }: LstWithdrawReceiptResult) {
   const { isMobile } = useBreakpoints()
+
   const { chain, withdrawTransactionSteps, lstWithdrawTxHash, nativeAsset, amountWithdraw } =
     useLst()
 

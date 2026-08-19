@@ -31,6 +31,7 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
       wethIsEth,
       queryOutput,
     }
+
     const isV3SwapRoute = protocolVersion === 3
 
     const buildCallParams = isV3SwapRoute
@@ -78,6 +79,7 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
 
     const queryOutput = await swap.query(rpcUrl)
     let onchainReturnAmount: TokenAmount
+
     if (queryOutput.swapKind === SwapKind.GivenIn) {
       onchainReturnAmount = queryOutput.expectedAmountOut
     } else {

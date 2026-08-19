@@ -57,6 +57,7 @@ export function useChainProtocolStats(): State {
 
   useEffect(() => {
     let cancelled = false
+
     dedupedLoad(URL, TTL_MS, load)
       .then(data => {
         if (cancelled) return
@@ -66,6 +67,7 @@ export function useChainProtocolStats(): State {
         if (cancelled) return
         setState({ data: [], loading: false, error: err as Error })
       })
+
     return () => {
       cancelled = true
     }

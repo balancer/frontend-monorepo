@@ -59,6 +59,7 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
     }
 
     const beetsAddress = config.tokens.addresses.beets!
+
     const rewards = query.data.map((reward, index) => {
       if (reward.status !== 'success') return null
       const amount = formatUnits(reward.result as bigint, 18)
@@ -76,9 +77,11 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
     const validRewards = rewards.filter(
       (reward): reward is NonNullable<typeof reward> => reward !== null
     )
+
     const relicIds = validRewards
       .filter(reward => isValidNumber(reward.relicId))
       .map(reward => bn(reward.relicId).toNumber())
+
     const totalAmount = sumBy(validRewards, reward =>
       isValidNumber(reward.amount) ? bn(reward.amount).toNumber() : 0
     ).toString()

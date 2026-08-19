@@ -7,6 +7,7 @@ import { isCowPool } from '../../helpers'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationForm> }) {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'poolType'],

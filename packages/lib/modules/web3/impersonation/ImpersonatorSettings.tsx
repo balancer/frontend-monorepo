@@ -22,6 +22,7 @@ type Props = {
   impersonatedAddress: string
   setIsFakeTime: (isFakeTime: boolean) => void
 }
+
 export function ImpersonatorSettings({ impersonatedAddress, setIsFakeTime }: Props) {
   const { reset } = useImpersonateAccount()
 

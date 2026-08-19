@@ -48,6 +48,7 @@ export function useMerklRewards(address: string | null): UseMerklRewardsResult {
     if (!address) return
     let cancelled = false
     const url = `/api/merkl/${address}`
+
     dedupedLoad(url, TTL_MS, () =>
       fetch(url).then(async res => {
         if (!res.ok) throw new Error(`merkl ${res.status}`)
@@ -62,6 +63,7 @@ export function useMerklRewards(address: string | null): UseMerklRewardsResult {
         if (cancelled) return
         setAsyncState({ kind: 'error', address, error: err.message })
       })
+
     return () => {
       cancelled = true
     }
@@ -69,9 +71,11 @@ export function useMerklRewards(address: string | null): UseMerklRewardsResult {
 
   return useMemo<UseMerklRewardsResult>(() => {
     if (!address) return { loading: false, error: null, payload: EMPTY }
+
     if (!asyncState || asyncState.address !== address) {
       return { loading: true, error: null, payload: null }
     }
+
     switch (asyncState.kind) {
       case 'pending':
         return { loading: true, error: null, payload: null }

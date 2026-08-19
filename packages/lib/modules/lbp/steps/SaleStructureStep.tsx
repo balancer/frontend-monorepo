@@ -90,6 +90,7 @@ export function SaleStructureStep() {
     launchTokenAddress,
     supportedChains
   )
+
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
 
   useEffect(() => {
@@ -104,6 +105,7 @@ export function SaleStructureStep() {
     const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || [])]
     if (isSeeded) collateralTokens.push(nativeAsset)
     const normalizedTokens = collateralTokens.filter(Boolean).map(token => token?.toLowerCase())
+
     const hasValidCollateral = normalizedTokens.includes(
       (collateralTokenAddress || '').toLowerCase()
     )
@@ -112,6 +114,7 @@ export function SaleStructureStep() {
       setValue('collateralTokenAddress', collateralTokens?.[0] || '', { shouldDirty: true })
     }
   }, [collateralTokenAddress, selectedChain, setValue, seedType])
+
   const onSubmit: SubmitHandler<SaleStructureForm> = () => {
     goToNextStep()
   }
@@ -324,6 +327,7 @@ function SaleEndInput({
 }) {
   const areSaleTimesValid = !!saleStart && !!value
   const daysDiff = areSaleTimesValid ? differenceInDays(parseISO(value), parseISO(saleStart)) : 0
+
   const hoursDiff = areSaleTimesValid
     ? differenceInHours(parseISO(value), parseISO(saleStart)) - daysDiff * 24
     : 0

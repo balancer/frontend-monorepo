@@ -5,12 +5,14 @@ import { motion, useScroll, useTransform, MotionValue } from 'motion/react'
 export function AnimatedSVG(): JSX.Element {
   const [bgColor] = useToken('colors', ['background.level2'])
   const containerRef = useRef<HTMLDivElement>(null)
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'end start'],
   })
 
   const pathLength: MotionValue<number> = useTransform(scrollYProgress, [0, 1], [0, 1])
+
   const pathD: MotionValue<string> = useTransform(
     scrollYProgress,
     [0, 1],

@@ -15,6 +15,7 @@ type Params = {
 
 export async function POST(request: NextRequest, props: Params) {
   const allowedOrigins = getAllowedOrigins()
+
   if (!isAllowedOrigin(request, allowedOrigins)) {
     return createForbiddenResponse()
   }

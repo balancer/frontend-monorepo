@@ -13,6 +13,7 @@ export function ImpersonateAccount() {
   const disconnect = useDisconnect()
 
   const impersonated = isConnected && impersonatedAddress === userAddress
+
   const impersonate = () =>
     impersonateAccount({ impersonatedAddress: impersonatedAddress as Address })
 

@@ -12,6 +12,7 @@ import { useFormState, useWatch } from 'react-hook-form'
 
 export function LbpFormAction() {
   const { isConnected } = useUserAccount()
+
   const {
     isLastStep,
     isFirstStep,
@@ -22,6 +23,7 @@ export function LbpFormAction() {
     validateCurrentStep,
     poolAddress,
   } = useLbpForm()
+
   const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
   const previewModalDisclosure = useDisclosure()
   const nextBtn = useRef(null)
@@ -61,6 +63,7 @@ export function LbpFormAction() {
         onClick={async () => {
           const isStepValid = await validateCurrentStep()
           if (!isStepValid) return
+
           if (isLastStep) {
             previewModalDisclosure.onOpen()
           } else {

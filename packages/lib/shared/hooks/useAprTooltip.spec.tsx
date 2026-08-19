@@ -18,6 +18,7 @@ function testUseAprTooltip({ aprItems }: { aprItems: GqlPoolAprItem[] }) {
       chain: GqlChainValues.Mainnet,
     })
   )
+
   return result
 }
 
@@ -49,6 +50,7 @@ it('When the pool has multiple Yield bearing token APRs', () => {
                     csUSDC 2%
   */
   expect(result.current.yieldBearingTokensAprDisplayed).toMatchInlineSnapshot(`"0.0372"`)
+
   expect(result.current.yieldBearingTokensDisplayed).toMatchInlineSnapshot(`
     [
       {
@@ -73,6 +75,7 @@ it('When the pool has multiple MERKL token incentives', () => {
                      MORPHO 1.80%
   */
   expect(result.current.merklIncentivesAprDisplayed).toMatchInlineSnapshot(`"0.01778366853303084"`)
+
   expect(result.current.merklTokensDisplayed).toMatchInlineSnapshot(`
     [
       {

@@ -16,6 +16,7 @@ import { useLoopsGetRate } from './hooks/useLoopsGetRate'
 import { useLoopsWithdrawSteps } from './hooks/useLoopsWithdrawSteps'
 
 const CHAIN = GqlChainValues.Sonic
+
 const DEFAULT_ACTIVE_TAB: ButtonGroupOption = {
   value: '0',
   label: 'Deposit',

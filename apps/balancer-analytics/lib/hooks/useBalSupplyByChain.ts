@@ -45,6 +45,7 @@ export function useBalSupplyByChain(): State {
 
   useEffect(() => {
     let cancelled = false
+
     dedupedLoad(URL, TTL_MS, load)
       .then(data => {
         if (cancelled) return
@@ -54,6 +55,7 @@ export function useBalSupplyByChain(): State {
         if (cancelled) return
         setState({ data: null, loading: false, error: error as Error })
       })
+
     return () => {
       cancelled = true
     }

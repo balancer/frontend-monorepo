@@ -6,6 +6,7 @@ describe('shouldIgnoreError', () => {
     expect(
       shouldIgnoreException(createSentryException('e.getAccounts is not a function'))
     ).toBeTruthy()
+
     expect(shouldIgnoreException(createSentryException('foo bar baz'))).toBeFalsy()
   })
 

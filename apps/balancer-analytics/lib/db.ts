@@ -32,11 +32,13 @@ function resolveDbUrl(): string {
     process.env.DATABASE_POSTGRES_URL ||
     process.env.DATABASE_POSTGRES_URL_NON_POOLING ||
     process.env.DATABASE_URL_UNPOOLED
+
   if (!dbUrl) {
     throw new Error(
       'No Postgres connection string found. Set DATABASE_URL / POSTGRES_URL, or wire the Vercel Neon Marketplace integration (which also provides DATABASE_POSTGRES_URL).'
     )
   }
+
   return dbUrl
 }
 
@@ -48,6 +50,7 @@ function resolveDbUrl(): string {
 // API routes that actually touch Postgres.
 type Sql = ReturnType<typeof neon>
 let client: Sql | undefined
+
 function getClient(): Sql {
   if (!client) client = neon(resolveDbUrl())
   return client
@@ -76,6 +79,7 @@ type DbOp = 'read' | 'write' | 'ddl'
 
 async function trackDbOp<T>(op: DbOp, helper: string, fn: () => Promise<T>): Promise<T> {
   const start = Date.now()
+
   try {
     const result = await fn()
     console.info('[db]', { op, helper, ms: Date.now() - start, ok: true })
@@ -126,6 +130,7 @@ export type SnapshotRow = {
 // idempotent, so re-running on the next cold start is also safe — we just
 // don't want to pay 13 round trips per request when the table already exists.
 let schemaPromise: Promise<void> | null = null
+
 export function ensureSchemaOnce(): Promise<void> {
   if (!schemaPromise) {
     schemaPromise = ensureSchema().catch(err => {
@@ -135,6 +140,7 @@ export function ensureSchemaOnce(): Promise<void> {
       throw err
     })
   }
+
   return schemaPromise
 }
 
@@ -156,11 +162,13 @@ export async function ensureSchema(): Promise<void> {
       PRIMARY KEY (ts, chain, protocol)
     )
   `
+
   // Migration path: a table created before the CORE/COW_AMM split has neither
   // the new columns nor the 3-col PK. Add columns idempotently then rebuild
   // the PK only if it doesn't already include `protocol`.
   await sql`ALTER TABLE protocol_snapshots ADD COLUMN IF NOT EXISTS protocol TEXT NOT NULL DEFAULT 'CORE'`
   await sql`ALTER TABLE protocol_snapshots ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'api-v3'`
+
   await sql`
     DO $$
     BEGIN
@@ -174,6 +182,7 @@ export async function ensureSchema(): Promise<void> {
       END IF;
     END $$;
   `
+
   await sql`CREATE INDEX IF NOT EXISTS idx_protocol_snapshots_ts ON protocol_snapshots (ts DESC)`
   await sql`CREATE INDEX IF NOT EXISTS idx_protocol_snapshots_chain_ts ON protocol_snapshots (chain, ts DESC)`
   await sql`CREATE INDEX IF NOT EXISTS idx_protocol_snapshots_protocol_ts ON protocol_snapshots (protocol, ts DESC)`
@@ -199,6 +208,7 @@ export async function ensureSchema(): Promise<void> {
       UNIQUE (chain, pool_address, block_number, log_index)
     )
   `
+
   await sql`CREATE INDEX IF NOT EXISTS idx_pool_param_events_pool ON pool_param_events (chain, pool_address, block_number)`
   await sql`CREATE INDEX IF NOT EXISTS idx_pool_param_events_pool_event ON pool_param_events (chain, pool_address, event_name)`
 
@@ -215,6 +225,7 @@ export async function ensureSchema(): Promise<void> {
       PRIMARY KEY (chain, pool_address)
     )
   `
+
   // `deep_synced` records that a one-time full-history scan (from the
   // pool's deployment block, not the 90-day cap) has completed for this
   // pool. Once true, a `?fullHistory` visit is served from the DB on the
@@ -239,6 +250,7 @@ export async function ensureSchema(): Promise<void> {
       PRIMARY KEY (chain, tx_hash)
     )
   `
+
   await sql`
     CREATE INDEX IF NOT EXISTS idx_swap_tx_metadata_to
     ON swap_tx_metadata (chain, to_address)
@@ -262,6 +274,7 @@ export async function ensureSchema(): Promise<void> {
       PRIMARY KEY (chain, address)
     )
   `
+
   await sql`CREATE INDEX IF NOT EXISTS idx_dune_labels_category ON dune_address_labels (chain, category)`
 }
 
@@ -302,6 +315,7 @@ export async function getPoolParamEvents(
       ORDER BY block_number ASC, log_index ASC
     `
   )
+
   return (rows as Record<string, unknown>[]).map(r => ({
     chain: r.chain as string,
     poolAddress: r.pool_address as string,
@@ -333,11 +347,13 @@ export async function countPoolParamEvents(chain: string, poolAddress: string): 
       WHERE chain = ${chain} AND pool_address = ${poolAddress.toLowerCase()}
     `
   )
+
   return Number((rows as Record<string, unknown>[])[0]?.n ?? 0)
 }
 
 export async function insertPoolParamEvents(rows: readonly PoolParamEventRow[]): Promise<void> {
   if (rows.length === 0) return
+
   // neon-serverless `sql` helper doesn't support multi-row VALUES tuples
   // through tagged-template params, so we batch via `sql.transaction([...])`
   // with one parameterized statement per row. INSERT ... ON CONFLICT keeps
@@ -362,6 +378,7 @@ export async function insertPoolParamEvents(rows: readonly PoolParamEventRow[]):
       ON CONFLICT (chain, pool_address, block_number, log_index) DO NOTHING
     `
   )
+
   await trackDbOp('write', `insertPoolParamEvents[n=${rows.length}]`, () =>
     sql.transaction(statements)
   )
@@ -393,6 +410,7 @@ export async function getPoolSyncState(
       LIMIT 1
     `
   )
+
   const r = (rows as Record<string, unknown>[])[0]
   if (!r) return null
   return {
@@ -441,6 +459,7 @@ export async function getSwapTxMetadata(
 ): Promise<Map<string, string | null>> {
   if (txHashes.length === 0) return new Map()
   const normalized = txHashes.map(h => h.toLowerCase())
+
   const rows = await trackDbOp(
     'read',
     `getSwapTxMetadata[n=${normalized.length}]`,
@@ -450,10 +469,13 @@ export async function getSwapTxMetadata(
       WHERE chain = ${chain} AND tx_hash = ANY(${normalized})
     `
   )
+
   const out = new Map<string, string | null>()
+
   for (const r of rows as Record<string, unknown>[]) {
     out.set(r.tx_hash as string, (r.to_address as string | null) ?? null)
   }
+
   return out
 }
 
@@ -467,6 +489,7 @@ export async function upsertSwapTxMetadata(
   rows: readonly SwapTxMetadataInsert[]
 ): Promise<void> {
   if (rows.length === 0) return
+
   const statements = rows.map(
     r => sql`
       INSERT INTO swap_tx_metadata (chain, tx_hash, to_address, fetched_at)
@@ -481,6 +504,7 @@ export async function upsertSwapTxMetadata(
             fetched_at = now()
     `
   )
+
   await trackDbOp('write', `upsertSwapTxMetadata[n=${rows.length}]`, () =>
     sql.transaction(statements)
   )
@@ -503,6 +527,7 @@ export async function getDuneLabels(
 ): Promise<Map<string, DuneLabel>> {
   if (addresses.length === 0) return new Map()
   const normalized = addresses.map(a => a.toLowerCase())
+
   const rows = await trackDbOp(
     'read',
     `getDuneLabels[n=${normalized.length}]`,
@@ -512,7 +537,9 @@ export async function getDuneLabels(
       WHERE chain = ${chain} AND address = ANY(${normalized})
     `
   )
+
   const out = new Map<string, DuneLabel>()
+
   for (const r of rows as Record<string, unknown>[]) {
     out.set(r.address as string, {
       sourceId: r.source_id as string,
@@ -520,6 +547,7 @@ export async function getDuneLabels(
       category: r.category as string,
     })
   }
+
   return out
 }
 
@@ -540,8 +568,10 @@ export async function upsertDuneLabels(
   if (rows.length === 0) return { written: 0 }
   const CHUNK = 500
   let written = 0
+
   for (let i = 0; i < rows.length; i += CHUNK) {
     const chunk = rows.slice(i, i + CHUNK)
+
     const statements = chunk.map(
       r => sql`
         INSERT INTO dune_address_labels (chain, address, source_id, name, category, fetched_at)
@@ -560,11 +590,14 @@ export async function upsertDuneLabels(
               fetched_at = now()
       `
     )
+
     await trackDbOp('write', `upsertDuneLabels[chunk=${chunk.length}]`, () =>
       sql.transaction(statements)
     )
+
     written += chunk.length
   }
+
   return { written }
 }
 
@@ -582,11 +615,13 @@ export async function getDuneLabelStats(): Promise<{
     SELECT chain, category, count(*)::int AS n FROM dune_address_labels GROUP BY chain, category
   `
   )
+
   const stats = {
     total: 0,
     byChain: {} as Record<string, number>,
     byCategory: {} as Record<string, number>,
   }
+
   for (const r of rows as Record<string, unknown>[]) {
     const chain = r.chain as string
     const category = r.category as string
@@ -595,5 +630,6 @@ export async function getDuneLabelStats(): Promise<{
     stats.byChain[chain] = (stats.byChain[chain] ?? 0) + n
     stats.byCategory[category] = (stats.byCategory[category] ?? 0) + n
   }
+
   return stats
 }

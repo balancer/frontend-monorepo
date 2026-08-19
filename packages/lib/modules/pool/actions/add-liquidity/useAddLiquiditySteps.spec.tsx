@@ -10,10 +10,12 @@ const mockTransactionStep = (id: string, completed = false): TransactionStep =>
 
 const addLiquidityStep = mockTransactionStep('addLiquidityStep')
 const signPermit2Step = mockTransactionStep('signPermit2Step')
+
 const tokenApprovalSteps = [
   mockTransactionStep('tokenApprovalStep1'),
   mockTransactionStep('tokenApprovalStep2'),
 ]
+
 const permit2ApprovalSteps = [
   mockTransactionStep('permit2ApprovalStep1'),
   mockTransactionStep('permit2ApprovalStep2'),
@@ -99,6 +101,7 @@ describe('getApprovalAndAddSteps', () => {
       const pendingTokenApproval = mockTransactionStep('tokenApprovalStep1', false)
       const completedTokenApproval = mockTransactionStep('tokenApprovalStep2', true)
       const tokenApprovalSteps = [pendingTokenApproval, completedTokenApproval]
+
       const steps = getApprovalAndAddSteps({
         isPermit2: true,
         shouldUseSignatures: true,
@@ -117,6 +120,7 @@ describe('getApprovalAndAddSteps', () => {
       const completedTokenApproval1 = mockTransactionStep('tokenApprovalStep1', true)
       const completedTokenApproval2 = mockTransactionStep('tokenApprovalStep2', true)
       const tokenApprovalSteps = [completedTokenApproval1, completedTokenApproval2]
+
       const steps = getApprovalAndAddSteps({
         isPermit2: true,
         shouldUseSignatures: true,

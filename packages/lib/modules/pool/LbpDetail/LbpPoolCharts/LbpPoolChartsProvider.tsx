@@ -32,8 +32,10 @@ export function useLbpPoolChartsLogic() {
   const now = new Date()
   const isSaleOngoing = isAfter(now, startDateTime) && isBefore(now, endDateTime)
   const daysDiff = differenceInDays(endDateTime, isSaleOngoing ? now : startDateTime)
+
   const hoursDiff =
     differenceInHours(endDateTime, isSaleOngoing ? now : startDateTime) - daysDiff * 24
+
   const salePeriodText = isSaleOngoing
     ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
     : `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`

@@ -7,6 +7,7 @@ export function useRelicAddLiquidityBalance(relicId: string) {
   const { bptPrice } = usePool()
 
   const relic = relicPositions.find(r => r.relicId === relicId)
+
   const relicBalanceUSD =
     relic && isValidNumber(relic.amount) ? bn(relic.amount).times(bptPrice).toNumber() : 0
 

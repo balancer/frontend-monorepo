@@ -110,9 +110,11 @@ export function useTokenApprovalSteps({
       requestedRawAmount,
       symbol: approvalSymbol,
     } = tokenAmountToApprove
+
     // USDT edge-case: requires setting approval to 0n before adjusting the value up again
     const isApprovingZeroForDoubleApproval =
       requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
+
     const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
 
     const token = getToken(tokenAddress, chain)
@@ -132,6 +134,7 @@ export function useTokenApprovalSteps({
 
     const isComplete = () => {
       const tokenAllowance = tokenAllowances.allowanceFor(tokenAddress)
+
       const nextToken = isApprovingZeroForDoubleApproval
         ? tokenAmountsToApprove[index + 1]
         : undefined
@@ -150,6 +153,7 @@ export function useTokenApprovalSteps({
       const nextToken = isApprovingZeroForDoubleApproval
         ? tokenAmountsToApprove[index + 1]
         : undefined
+
       if (
         !isTheApprovedAmountEnough(
           tokenAllowance,
@@ -169,6 +173,7 @@ export function useTokenApprovalSteps({
     }
 
     const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
+
     const props: ManagedErc20TransactionInput = {
       tokenAddress,
       functionName: isVeBalBtpAddress(tokenAddress) ? 'increaseApproval' : 'approve',
@@ -224,6 +229,7 @@ function buildBatchableTxCall({
     functionName: 'approve',
     args,
   })
+
   return {
     to: tokenAddress,
     data: data,

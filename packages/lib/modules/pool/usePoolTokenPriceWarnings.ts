@@ -69,6 +69,7 @@ export function usePoolTokenPriceWarnings(pool?: Pool) {
 
 export function formatStringsToSentenceList(strings: string[]) {
   if (strings.length === 1) return strings[0]
+
   if (strings.length > 1) {
     return strings.slice(0, -1).join(', ') + ` and ` + strings[strings.length - 1]
   }

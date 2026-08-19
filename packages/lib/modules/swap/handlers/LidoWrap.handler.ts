@@ -44,6 +44,7 @@ export class LidoWrapHandler implements SwapHandler {
     const { wrappedToken } = getWrapConfig(tokenIn.address, tokenOut.address, selectedChain)
 
     let data: Hex | undefined
+
     if (wrapType === OWrapType.WRAP) {
       data = this.buildWrapCallData(tokenIn.scaledAmount)
     } else if (wrapType === OWrapType.UNWRAP) {

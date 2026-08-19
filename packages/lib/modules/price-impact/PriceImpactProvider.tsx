@@ -10,17 +10,21 @@ export function usePriceImpactLogic() {
   const [acceptPriceImpactRisk, setAcceptPriceImpactRisk] = useState(false)
   const [priceImpact, setPriceImpact] = useState<string | number | undefined | null>()
   const priceImpactRef = useRef(priceImpact)
+
   const priceImpactValue =
     priceImpact == null
       ? undefined
       : typeof priceImpact === 'string'
         ? Number(priceImpact)
         : priceImpact
+
   const priceImpactLevel =
     priceImpactValue == null || Number.isNaN(priceImpactValue)
       ? 'low'
       : getPriceImpactLevel(priceImpactValue)
+
   const priceImpactColor = getPriceImpactColor(priceImpactLevel)
+
   const hasToAcceptHighPriceImpact =
     priceImpactLevel === 'high' || priceImpactLevel === 'max' || priceImpactLevel === 'unknown'
 

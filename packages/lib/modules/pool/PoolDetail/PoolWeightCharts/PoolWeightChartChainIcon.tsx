@@ -8,6 +8,7 @@ type Props = {
   isChartLoaded: boolean
   isSmall?: boolean
 }
+
 export default function PoolWeightChartChainIcon({ chain, isChartLoaded, isSmall = false }: Props) {
   const size = isSmall ? 25 : 45
 

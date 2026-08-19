@@ -43,6 +43,7 @@ export function useInitializePoolStep({
   const { chainId } = initPoolInput
   const rpcUrl = getRpcUrl(chainId)
   const { buildTenderlyUrl } = useTenderly({ chainId })
+
   const { isPoolInitialized, refetchIsPoolInitialized } = useIsPoolInitialized({
     chainId,
     poolAddress,

@@ -155,8 +155,10 @@ export function useHydrateLbpForm() {
 
     const lbpName = 'lbpName' in pool && typeof pool.lbpName === 'string' ? pool.lbpName : ''
     const lbpOwner = 'lbpOwner' in pool && typeof pool.lbpOwner === 'string' ? pool.lbpOwner : ''
+
     const description =
       'description' in pool && typeof pool.description === 'string' ? pool.description : ''
+
     const website = 'website' in pool && typeof pool.website === 'string' ? pool.website : ''
     const x = 'x' in pool && typeof pool.x === 'string' ? pool.x : ''
     const telegram = 'telegram' in pool && typeof pool.telegram === 'string' ? pool.telegram : ''
@@ -213,6 +215,7 @@ export function useHydrateLbpForm() {
       startWeights[projectTokenIndex],
       PERCENTAGE_DECIMALS
     )
+
     const projectTokenEndWeight = +formatUnits(endWeights[projectTokenIndex], PERCENTAGE_DECIMALS)
 
     let weightAdjustmentType: WeightAdjustmentType

@@ -18,16 +18,20 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function DynamicLbpTokenAmountInputs() {
   const { getToken } = useTokens()
+
   const {
     launchToken,
     saleStructureForm: { control },
     isSeedless,
   } = useLbpForm()
+
   useFormState({ control })
+
   const [collateralTokenAddress, selectedChain, startDateTime] = useWatch({
     control,
     name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'],
   })
+
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
   const saleStart = startDateTime
 
@@ -56,7 +60,9 @@ export function DynamicLbpTokenAmountInputs() {
                 status={saleStartsSoon(saleStart) ? 'warning' : 'info'}
                 variant="WideOnDesktop"
               >
-                <AlertIcon as={saleStartsSoon(saleStart) ? AlertTriangle : LightbulbIcon} />
+                <AlertIcon>
+                  {saleStartsSoon(saleStart) ? <AlertTriangle /> : <LightbulbIcon />}
+                </AlertIcon>
                 <AlertDescription color="#000" fontSize="sm">
                   {saleStartsSoon(saleStart) && 'This sale is scheduled to start soon. '}
                   The LBP will fail to launch unless you seed the initial liquidity before the
@@ -103,6 +109,7 @@ function CollateralTokenAmountInput({
     saleStructureForm: { clearErrors },
     isSeedless,
   } = useLbpForm()
+
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const balance = balanceFor(collateralTokenAddress)
 

@@ -29,6 +29,7 @@ export function usePoolTokensInWallet() {
       const { decimals, chain, symbol } = data
 
       const userBalanceHuman = userBalanceRaw ? formatUnits(userBalanceRaw.amount, decimals) : '0'
+
       const userBalanceUsd = usdValueForTokenAddress(
         address,
         chain,
