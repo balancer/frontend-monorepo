@@ -182,10 +182,10 @@ export function useAutoRangeConfigurationOptions(): ConfigOptionsGroupProps<Auto
   // auto-fill config with default values
   useEffect(() => {
     if (isInitialAutoRangeConfig) {
-      const currentPrice = targetPrice.options[1].rawValue
-      const priceRangePercentage = priceRangeBoundaries.options[1].rawValue
-      const centerednessMargin = marginBuffer.options[1].rawValue
-      const priceShiftDailyRate = dailyPriceReadjustmentRate.options[1].rawValue
+      const currentPrice = targetPrice.options[1]?.rawValue ?? ''
+      const priceRangePercentage = priceRangeBoundaries.options[1]?.rawValue ?? ''
+      const centerednessMargin = marginBuffer.options[1]?.rawValue ?? ''
+      const priceShiftDailyRate = dailyPriceReadjustmentRate.options[1]?.rawValue ?? ''
 
       autoRangeConfigForm.setValue('initialTargetPrice', currentPrice, { shouldValidate: true })
 

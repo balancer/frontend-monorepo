@@ -55,7 +55,7 @@ export function useGyroEclpInitAmountsRatio() {
   return amountTokenA / amountTokenB // the ratio for calculating token init amounts
 }
 
-function getTau(price: number, c: number, s: number, lambda: number) {
+function getTau(price: number, c: number, s: number, lambda: number): [number, number] {
   const dSq = c * c + s * s
   const d = Math.sqrt(dSq)
 

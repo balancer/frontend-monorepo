@@ -33,12 +33,12 @@ export function usePoolHooksWhitelist(network: GqlChain) {
       data
         ?.filter(hook => Object.keys(hook.addresses).includes(chainId.toString()))
         .map(hook => {
-          const hooksArray = hook.addresses[chainId.toString()]
-          return {
-            label: hook.name,
-            value: hooksArray[hooksArray.length - 1], // use the most recently deployed hook?
-          }
-        }) || []
+          const hooksArray = hook.addresses[chainId.toString()]!
+          const value = hooksArray[hooksArray.length - 1] // use the most recently deployed hook?
+          if (!value) return null
+          return { label: hook.name, value }
+        })
+        .filter((hook): hook is { label: string; value: Address } => hook !== null) || []
     )
   }, [data, chainId])
 

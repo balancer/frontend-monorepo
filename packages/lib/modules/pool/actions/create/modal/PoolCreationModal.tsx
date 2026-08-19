@@ -179,7 +179,7 @@ export function PoolCreationModal({
             setUsingBigBlocksError={setUsingBigBlocksError}
             shouldUseBigBlocks={shouldUseBigBlocks}
           />
-        ) : (
+        ) : transactionSteps.currentStep ? (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
             isSuccess={isPoolInitialized}
@@ -187,7 +187,7 @@ export function PoolCreationModal({
             returnLabel="View pool page"
             urlTxHash={urlTxHash}
           />
-        )}
+        ) : null}
       </ModalContent>
     </Modal>
   )

@@ -50,7 +50,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
   const usdWeights = tokenAmountToUsdWithWeights.map(t => t.usdWeight)
 
   const isAllWeightsCloseToTarget = targetWeights.every((weight, idx) => {
-    const usdWeight = usdWeights[idx]
+    const usdWeight = usdWeights[idx] ?? 0
     return Math.abs(weight - usdWeight) < WEIGHT_DEVIATION_TOLERANCE
   })
 

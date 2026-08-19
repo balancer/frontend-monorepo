@@ -6,6 +6,7 @@ import {
   INITIAL_POOL_CREATION_FORM,
   INITIAL_ECLP_CONFIG,
   INITIAL_AUTORANGE_CONFIG,
+  INITIAL_POOL_TOKENS,
 } from './constants'
 import { act, waitFor } from '@testing-library/react'
 
@@ -126,8 +127,8 @@ describe('usePoolFormLogic', () => {
     it('inverts alpha/beta/peakPrice, preserves lambda, and reverses poolTokens', async () => {
       const { result } = await renderPoolForm()
 
-      const tokenA = { ...INITIAL_POOL_CREATION_FORM.poolTokens[0], weight: '50' }
-      const tokenB = { ...INITIAL_POOL_CREATION_FORM.poolTokens[1], weight: '50' }
+      const tokenA = { ...INITIAL_POOL_TOKENS[0], weight: '50' }
+      const tokenB = { ...INITIAL_POOL_TOKENS[1], weight: '50' }
 
       act(() => {
         result.current.poolCreationForm.setValue('poolTokens', [tokenA, tokenB])
@@ -156,8 +157,8 @@ describe('usePoolFormLogic', () => {
     it('inverts target price, swaps min<->max with inversion, and reverses poolTokens', async () => {
       const { result } = await renderPoolForm()
 
-      const tokenA = { ...INITIAL_POOL_CREATION_FORM.poolTokens[0], weight: 'A' }
-      const tokenB = { ...INITIAL_POOL_CREATION_FORM.poolTokens[1], weight: 'B' }
+      const tokenA = { ...INITIAL_POOL_TOKENS[0], weight: 'A' }
+      const tokenB = { ...INITIAL_POOL_TOKENS[1], weight: 'B' }
 
       act(() => {
         result.current.poolCreationForm.setValue('poolTokens', [tokenA, tokenB])

@@ -237,7 +237,7 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
             width="full"
           />
         </VStack>
-      ) : isCustom ? (
+      ) : isCustom && options[1] ? (
         <NumberInput
           control={control}
           isPercentage={isPercentage}

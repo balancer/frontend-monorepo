@@ -39,7 +39,7 @@ export function useCoingeckoTokenPrice({ token, network }: Props) {
         throw new Error(`Failed to fetch CoinGecko price for ${token} on ${network}`)
       }
 
-      return token ? data[token.toLowerCase()].usd : undefined
+      return token ? data[token.toLowerCase()]?.usd : undefined
     },
     enabled: !apiPriceForToken && !!token && !!network && !!assetPlatform,
     retry: false, // helps to avoid rate limit when coingecko has no price for token?

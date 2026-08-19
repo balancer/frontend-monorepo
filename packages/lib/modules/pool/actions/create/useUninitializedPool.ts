@@ -184,9 +184,14 @@ export function useUninitializedPool() {
     for (let idx = 0; idx < tokenAddresses.length; idx += 1) {
       const address = tokenAddresses[idx]
       const config = tokenConfigs[idx]
+
+      if (!config || !address) {
+        return undefined
+      }
+
       const data = tokenData.find(token => token.address.toLowerCase() === address.toLowerCase())
 
-      if (!config || !data) {
+      if (!data) {
         return undefined
       }
 
@@ -195,7 +200,7 @@ export function useUninitializedPool() {
         rateProvider: config.rateProvider,
         paysYieldFees: config.paysYieldFees,
         amount: '',
-        weight: tokenWeights ? tokenWeights[idx] : '50',
+        weight: tokenWeights ? (tokenWeights[idx] ?? '50') : '50',
         data,
       })
     }

@@ -57,7 +57,7 @@ export function ConfigureTokenRateProvider({
 
     if (value === RateProviderOption.Verified) {
       rateProvider = verifiedRateProviderAddress as Address
-      paysYieldFees = !isMarketRateProvider(poolTokens[tokenIndex].data)
+      paysYieldFees = !isMarketRateProvider(poolTokens[tokenIndex]?.data)
     } else if (value === RateProviderOption.Custom) {
       rateProvider = '' // to be updated by user input
     }
