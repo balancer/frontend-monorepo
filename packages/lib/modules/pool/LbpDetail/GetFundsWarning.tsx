@@ -17,7 +17,9 @@ export function GetFundsWarning() {
 
   return (
     <Alert status="warning">
-      <AlertIcon as={AlertTriangle} />
+      <AlertIcon>
+        <AlertTriangle />
+      </AlertIcon>
 
       <HStack>
         <AlertTitle>Access the funds that you raised</AlertTitle>
