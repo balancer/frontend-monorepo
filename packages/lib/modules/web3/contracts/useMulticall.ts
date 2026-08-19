@@ -52,6 +52,7 @@ export function useMulticall(
           const idMappedResults = results
             .map((result, i) => ({ ...result, id: multicalls[i].id }))
             .reduce((o, { id, ...rest }) => set(o, id, rest), {})
+
           return idMappedResults
         },
         queryKey: multicalls,

@@ -45,30 +45,39 @@ export type DecodeContext = {
 function toJsonSafe(value: unknown): unknown {
   if (typeof value === 'bigint') return value.toString()
   if (Array.isArray(value)) return value.map(toJsonSafe)
+
   if (value && typeof value === 'object') {
     const out: Record<string, unknown> = {}
+
     for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
       out[k] = toJsonSafe(v)
     }
+
     return out
   }
+
   return value
 }
 
 function normalizeArgs(args: DecodedLog['args']): Record<string, string | number | boolean> {
   if (!args) return {}
+
   // viem returns named args as a Record when the ABI item has named params;
   // positional args land in an array. Our parseAbi signatures always name
   // everything, so the Record branch is the common case.
   if (Array.isArray(args)) {
     const out: Record<string, string | number | boolean> = {}
+
     args.forEach((v, i) => {
       const safe = toJsonSafe(v)
       out[`arg${i}`] = safe as string | number | boolean
     })
+
     return out
   }
+
   const out: Record<string, string | number | boolean> = {}
+
   for (const [k, v] of Object.entries(args)) {
     const safe = toJsonSafe(v)
     // Skip indexed `pool` echo — the row is already keyed on pool_address,
@@ -76,6 +85,7 @@ function normalizeArgs(args: DecodedLog['args']): Record<string, string | number
     if (k === 'pool') continue
     out[k] = safe as string | number | boolean
   }
+
   return out
 }
 
@@ -84,12 +94,16 @@ export function decodeLogsToRows(
   ctx: DecodeContext
 ): PoolParamEventRow[] {
   const rows: PoolParamEventRow[] = []
+
   for (const log of logs) {
     if (!log.eventName) continue
+
     if (log.blockNumber === null || log.logIndex === null || log.transactionHash === null) {
       continue
     }
+
     const ts = ctx.blockTimestamps.get(log.blockNumber)
+
     if (ts === undefined) {
       // Unresolved timestamp — skip rather than insert a row with a
       // garbage value. The sync resolves every block we got a log for, so
@@ -98,8 +112,10 @@ export function decodeLogsToRows(
         block: log.blockNumber.toString(),
         event: log.eventName,
       })
+
       continue
     }
+
     rows.push({
       chain: ctx.chain,
       poolAddress: ctx.poolAddress.toLowerCase(),
@@ -112,5 +128,6 @@ export function decodeLogsToRows(
       args: normalizeArgs(log.args),
     })
   }
+
   return rows
 }

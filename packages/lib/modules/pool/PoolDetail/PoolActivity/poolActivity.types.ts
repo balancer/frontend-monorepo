@@ -49,6 +49,7 @@ export function getPoolActivityTabsList({
       label: 'Removes',
     },
   ]
+
   if (poolType === GqlPoolTypeValues.LiquidityBootstrapping && variant === BaseVariant.v2) {
     return defaultTabs
   }

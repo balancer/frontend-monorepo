@@ -28,6 +28,7 @@ export function FooterCta() {
             clearInterval(interval!)
             return 100
           }
+
           return prev + 1 // Increment by 1 every 50ms for a total of 5 seconds
         })
       }, 15)

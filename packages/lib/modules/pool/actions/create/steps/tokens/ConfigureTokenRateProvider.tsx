@@ -28,10 +28,12 @@ export function ConfigureTokenRateProvider({
   verifiedRateProviderAddress,
 }: ConfigureTokenRateProviderProps) {
   const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'network'],
   })
+
   const formState = useFormState({ control: poolCreationForm.control })
 
   // Early return if token doesn't exist or has no address
@@ -40,9 +42,11 @@ export function ConfigureTokenRateProvider({
   const { rateProvider: currentRateProvider, paysYieldFees } = poolTokens[tokenIndex]
 
   let rateProviderRadioValue = RateProviderOption.Null
+
   if (currentRateProvider === verifiedRateProviderAddress) {
     rateProviderRadioValue = RateProviderOption.Verified
   }
+
   if (currentRateProvider !== zeroAddress && currentRateProvider !== verifiedRateProviderAddress) {
     rateProviderRadioValue = RateProviderOption.Custom
   }
@@ -59,6 +63,7 @@ export function ConfigureTokenRateProvider({
     }
 
     updatePoolToken(tokenIndex, { rateProvider, paysYieldFees })
+
     // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above)
     // Only trigger if token still exists
     if (poolTokens[tokenIndex]) {
@@ -157,20 +162,24 @@ function CustomRateProviderInput({
   const validateRateProvider = async (address: string) => {
     if (address === zeroAddress) return true
     if (address === '') return 'Rate provider address is required'
+
     try {
       if (!publicClient) return 'missing public client for rate provider validation'
+
       const rate = await publicClient.readContract({
         address: address as Address,
         abi: parseAbi(['function getRate() external view returns (uint256)']),
         functionName: 'getRate',
         args: [],
       })
+
       if (!rate) return 'invalid rate provider address'
       return true
     } catch (error) {
       if (error && typeof error === 'object' && 'shortMessage' in error) {
         return (error as any).shortMessage
       }
+
       return 'unexpected error validating rate provider address'
     }
   }

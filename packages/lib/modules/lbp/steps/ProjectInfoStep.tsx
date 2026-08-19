@@ -64,6 +64,7 @@ function NameInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { clearErrors, control },
   } = useLbpForm()
+
   const length = useWatch({ control, name: 'name' }).length
   const maxLength = 24
 

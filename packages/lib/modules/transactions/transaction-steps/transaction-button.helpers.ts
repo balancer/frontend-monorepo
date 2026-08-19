@@ -6,6 +6,7 @@ type Props = {
   isStepComplete?: () => boolean
   isSmartAccount?: boolean
 }
+
 export function getTransactionButtonLabel({
   transactionState,
   labels,
@@ -14,6 +15,7 @@ export function getTransactionButtonLabel({
 }: Props) {
   // sensible defaults for loading / confirm if not provided
   const relevantLabel = labels[transactionState as keyof typeof labels]
+
   if (!relevantLabel) {
     switch (transactionState) {
       case TransactionState.Preparing:

@@ -50,6 +50,7 @@ export function useGaugeRewards(address: string | null): UseGaugeRewardsResult {
     if (!address) return
     let cancelled = false
     const url = `/api/portfolio/${address}/gauge-rewards`
+
     dedupedLoad(url, TTL_MS, () =>
       fetch(url).then(async res => {
         if (!res.ok) throw new Error(`gauge-rewards ${res.status}`)
@@ -64,6 +65,7 @@ export function useGaugeRewards(address: string | null): UseGaugeRewardsResult {
         if (cancelled) return
         setAsyncState({ kind: 'error', address, error: err.message })
       })
+
     return () => {
       cancelled = true
     }
@@ -71,9 +73,11 @@ export function useGaugeRewards(address: string | null): UseGaugeRewardsResult {
 
   return useMemo<UseGaugeRewardsResult>(() => {
     if (!address) return { loading: false, error: null, payload: EMPTY }
+
     if (!asyncState || asyncState.address !== address) {
       return { loading: true, error: null, payload: null }
     }
+
     switch (asyncState.kind) {
       case 'pending':
         return { loading: true, error: null, payload: null }

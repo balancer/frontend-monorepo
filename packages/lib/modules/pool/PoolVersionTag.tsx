@@ -54,5 +54,6 @@ export function PoolVersionTag({ pool, size = 8 }: { pool: PoolListItem | Pool; 
       </BalBadge>
     )
   }
+
   return null
 }

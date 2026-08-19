@@ -90,6 +90,7 @@ export function TransactionBatchButton({
       executeAsync: noop,
       isSafeTxLoading: false,
     }
+
     receiptReceivedRef.current = true
     onTransactionChange(successFullTransaction)
   }, [chainId, onTransactionChange, transactionStatusQuery])
@@ -99,6 +100,7 @@ export function TransactionBatchButton({
   async function handleOnClick() {
     setSendCallsError(undefined)
     setIsLoading(true)
+
     try {
       const safeTx = await safeAppsSdk.txs.send({ txs: txBatch })
       setSafeTxHash(safeTx.safeTxHash as Hex)
@@ -112,6 +114,7 @@ export function TransactionBatchButton({
   }
 
   const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
+
   useInterval(() => {
     if (safeTxHash) {
       safeAppsSdk.txs.getBySafeTxHash(safeTxHash).then(tx => {
@@ -180,6 +183,7 @@ export function TransactionBatchButton({
 }
 
 type ErrorProps = { error: Error }
+
 export function TransactionError({ error }: ErrorProps) {
   if (error.message.includes('User rejected transaction')) return null
   return <GenericError error={error} />

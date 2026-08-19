@@ -96,6 +96,7 @@ describe('usePoolFormLogic', () => {
         ...INITIAL_POOL_CREATION_FORM,
         protocol: initialProtocol,
       })
+
       expect(result.current.autoRangeConfigForm.getValues()).toEqual(INITIAL_AUTORANGE_CONFIG)
       expect(result.current.eclpConfigForm.getValues()).toEqual(INITIAL_ECLP_CONFIG)
       expect(result.current.poolAddress).toBeUndefined()
@@ -107,12 +108,15 @@ describe('usePoolFormLogic', () => {
           protocol: initialProtocol,
         })
       })
+
       expect(
         JSON.parse(window.localStorage.getItem(LS_KEYS.PoolCreation.AutoRangeConfig) ?? '{}')
       ).toEqual(INITIAL_AUTORANGE_CONFIG)
+
       expect(
         JSON.parse(window.localStorage.getItem(LS_KEYS.PoolCreation.EclpConfig) ?? '{}')
       ).toEqual(INITIAL_ECLP_CONFIG)
+
       expect(window.localStorage.getItem(LS_KEYS.PoolCreation.Address)).toBeNull()
       expect(window.localStorage.getItem(LS_KEYS.PoolCreation.StepIndex)).toBe('0')
     })

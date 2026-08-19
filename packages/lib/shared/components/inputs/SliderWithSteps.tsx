@@ -23,6 +23,7 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
     if (typeof minValue === 'undefined' || typeof props.value === 'undefined') {
       return props.value ?? 0
     }
+
     return props.value >= minValue ? props.value : minValue
   }, [minValue, props.value])
 
@@ -31,6 +32,7 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
       props.onChange?.(value)
       return
     }
+
     props.onChange?.(value >= minValue ? value : minValue)
   }
 
@@ -38,6 +40,7 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
     if (typeof minValue === 'undefined') {
       return undefined
     }
+
     const min = props.min ?? 0
     const fixedValue = min + Math.sign(min || 1) * value
     const percentage = 100 - (100 * (fixedValue - minValue)) / fixedValue
@@ -47,9 +50,11 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
   const getSliderMarkColor = useCallback(
     (step: number) => {
       const defaultMarkColor = step <= value ? 'background.highlight' : 'background.level2'
+
       if (typeof minValue === 'undefined') {
         return defaultMarkColor
       }
+
       return step < minValue ? 'font.secondary' : defaultMarkColor
     },
     [value, minValue]
@@ -59,13 +64,17 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
   const filledTrack = useRef<HTMLDivElement>(null)
   const [disabledTooltip, setDisabledTooltip] = useState(false)
   const [filledTrackFocused, setFilledTrackFocused] = useState(false)
+
   useEffect(() => {
     const sliderRef = slider.current
     const filledTrackRef = filledTrack.current
+
     if (sliderRef && filledTrackRef) {
       const sliderWidthInPixels =
         sliderRef.getBoundingClientRect().right - sliderRef.getBoundingClientRect().left
+
       const minPercentage = (minValue || 0) / ((props.max || 0) - (props.min || 0))
+
       const minInPixels =
         sliderRef.getBoundingClientRect().left +
         window.pageXOffset +

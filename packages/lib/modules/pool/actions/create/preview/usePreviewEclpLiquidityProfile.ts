@@ -9,10 +9,12 @@ import { calculateRotationComponents } from '../steps/details/gyro.helpers'
 
 export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'poolType'],
   })
+
   const { spotPriceWithoutRate, rateTokenA, rateTokenB } = usePoolSpotPriceWithoutRate()
 
   const poolSpotPrice = spotPriceWithoutRate.toString()

@@ -16,6 +16,7 @@ export function useGetPoolTokensWithActualWeights(pool: Pool) {
   if (isSeedlessLBP) {
     const virtualToken = pool.poolTokens[pool.reserveTokenIndex].address
     const price = priceFor(virtualToken, pool.chain)
+
     totalLiquidity = bn(totalLiquidity)
       .plus(bn(pool.reserveTokenVirtualBalance).times(price))
       .toString()

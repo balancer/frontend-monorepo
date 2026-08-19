@@ -29,6 +29,7 @@ export function getGqlPoolType(poolType: PoolType): GqlPoolType {
 
 export function getSwapFeePercentageOptions(poolType: PoolType): { value: string; tip: string }[] {
   const isStablePool = poolType === PoolType.Stable || poolType === PoolType.StableSurge
+
   if (isStablePool) {
     return [
       { value: '0.01', tip: 'Best for super stable pairs' },

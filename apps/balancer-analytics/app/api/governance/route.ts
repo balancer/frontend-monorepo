@@ -100,6 +100,7 @@ async function buildPayload(): Promise<GovernancePayload> {
     { space: SPACE, first: LIMIT },
     { upstream: 'snapshot', label: 'latest-proposals', cache: 'no-store' }
   )
+
   const proposals = data?.proposals ?? []
   return {
     items: proposals.map(p => {
@@ -155,6 +156,7 @@ export async function GET() {
   } catch (err) {
     const now = Math.floor(Date.now() / 1000)
     const empty: GovernancePayload = { items: [], generatedAt: now, space: SPACE }
+
     // Same typed upstream-error mapping as /api/biggest-swaps and
     // /api/pool/[chain]/[id]/order-flow — a Snapshot.org rate limit now
     // surfaces as HTTP 429 with `error: 'rate_limited'` so the client UI
@@ -163,11 +165,13 @@ export async function GET() {
       const mapped = upstreamErrorToResponse(err, {
         includeDevDetail: process.env.NODE_ENV !== 'production',
       })
+
       return Response.json(
         { ...empty, ...mapped.body },
         { status: mapped.status, headers: mapped.headers }
       )
     }
+
     return Response.json(
       { ...empty, error: String(err) },
       { status: 502, headers: { 'Cache-Control': 'no-store' } }

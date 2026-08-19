@@ -16,6 +16,7 @@ type MultisigProps = {
   chainId: SupportedChainId
   currentStep?: TransactionStep
 }
+
 export function MultisigStatus({ chainId, details, currentStep }: MultisigProps) {
   if (details.detailedExecutionInfo?.type !== 'MULTISIG') return null
   const safeTxStatus = details.txStatus

@@ -40,6 +40,7 @@ export function ClaimModal({
   const router = useRouter()
 
   const { isDesktop, isMobile } = useBreakpoints()
+
   const { transactionSteps, claimTxHash, allClaimableRewards, totalClaimableUsd, isLoading } =
     useClaim()
 

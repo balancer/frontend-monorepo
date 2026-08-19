@@ -30,9 +30,11 @@ export function PoolHeader() {
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
     let url
+
     if (partner === RedirectPartner.Xave && pool?.address && pool.chain) {
       url = getXavePoolLink(pool.chain, pool.address)
     }
+
     setRedirectPartnerUrl(url)
     partnerRedirectDisclosure.onOpen()
   }

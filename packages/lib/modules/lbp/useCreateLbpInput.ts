@@ -17,6 +17,7 @@ import { dateTimeToUnixTimestampBigInt } from '@repo/lib/shared/utils/time'
 export function useCreateLbpInput(): CreatePoolInput {
   const { saleStructureForm, projectInfoForm, isCollateralNativeAsset, isFixedSale, isSeedless } =
     useLbpForm()
+
   const [
     launchTokenAddress,
     collateralTokenAddress,
@@ -41,15 +42,18 @@ export function useCreateLbpInput(): CreatePoolInput {
       'launchTokenRate',
     ],
   })
+
   const [name, owner, poolCreator] = useWatch({
     control: projectInfoForm.control,
     name: ['name', 'owner', 'poolCreator'],
   })
+
   const { userAddress } = useUserAccount()
   const { tokens, chainId } = getNetworkConfig(selectedChain)
 
   const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
   let reserveTokenAddress = collateralTokenAddress || ''
+
   if (isCollateralNativeAsset) {
     // pool must be created with wrapped native asset
     reserveTokenAddress = tokens.addresses.wNativeAsset
@@ -65,6 +69,7 @@ export function useCreateLbpInput(): CreatePoolInput {
   const blockProjectTokenSwapsIn = userActions === UserActions.BUY_ONLY
 
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress || '', chain)
+
   const { symbol: reserveTokenSymbol, decimals: reserveTokenDecimals } = useTokenMetadata(
     reserveTokenAddress,
     chain

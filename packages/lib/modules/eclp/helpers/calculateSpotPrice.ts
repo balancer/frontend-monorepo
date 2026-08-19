@@ -125,5 +125,6 @@ function calculateGyroESpotPrice(params: GyroEParams): bigint {
     const scalingFactor = divDownMagU(rate0, rate1)
     return mulDownMagU(newSpotPrice, scalingFactor)
   }
+
   return newSpotPrice
 }

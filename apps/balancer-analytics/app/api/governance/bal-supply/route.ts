@@ -76,11 +76,13 @@ function balAddress(chain: GqlChain): string | null {
 async function readSupply(chain: GqlChain, address: string): Promise<bigint | null> {
   try {
     const client = getPublicClient(chain)
+
     const supply = await client.readContract({
       address: address as Address,
       abi: ERC20_TOTAL_SUPPLY_ABI,
       functionName: 'totalSupply',
     })
+
     return supply
   } catch (err) {
     console.warn('[api/governance/bal-supply] read failed', {
@@ -88,6 +90,7 @@ async function readSupply(chain: GqlChain, address: string): Promise<bigint | nu
       address,
       ...scrubError(err),
     })
+
     return null
   }
 }
@@ -98,6 +101,7 @@ async function buildPayload(): Promise<BalSupplyPayload> {
   // don't have an RPC for (some testnets), so the panel doesn't display
   // rows we can never populate.
   const chains: { chain: GqlChain; address: string }[] = []
+
   for (const chain of PROJECT_CONFIG.supportedNetworks) {
     const address = balAddress(chain)
     if (!address) continue
@@ -113,6 +117,7 @@ async function buildPayload(): Promise<BalSupplyPayload> {
   )
 
   let totalHuman = 0
+
   const points: BalSupplyPoint[] = supplies.map(({ chain, address, raw }) => {
     const human = raw === null ? null : Number(raw) / 1e18
     if (human !== null && Number.isFinite(human)) totalHuman += human
@@ -154,6 +159,7 @@ export async function GET() {
       totalHuman: 0,
       generatedAt: Math.floor(Date.now() / 1000),
     }
+
     return Response.json(
       { ...empty, error: String(err) },
       { status: 502, headers: { 'Cache-Control': 'no-store' } }

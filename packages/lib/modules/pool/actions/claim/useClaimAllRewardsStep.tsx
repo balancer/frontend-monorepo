@@ -41,6 +41,7 @@ export function useClaimAllRewardsStep({
   const { balRewardsData: balRewards, refetchBalRewards } = balTokenRewardsQuery
 
   const pool = pools[0]
+
   if (!pool) {
     throw new Error('Pools should contain at least one element')
   }
@@ -111,5 +112,6 @@ export function useClaimAllRewardsStep({
     }),
     [transaction, labels, refetchClaimableRewards, refetchBalRewards, isConnected, props]
   )
+
   return { step, isLoading }
 }

@@ -16,6 +16,7 @@ async function testQuery(humanBptIn: HumanAmount) {
     aWjAuraWethPoolElementMock(),
     RemoveLiquidityType.Proportional
   )
+
   const { result } = testHook(
     () =>
       useRemoveLiquidityPriceImpactQuery({
@@ -29,6 +30,7 @@ async function testQuery(humanBptIn: HumanAmount) {
       wrapper: DefaultPoolTestProvider,
     }
   )
+
   return result
 }
 

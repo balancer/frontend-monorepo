@@ -11,6 +11,7 @@ import { DiscordLink } from '@repo/lib/shared/components/links/DiscordLink'
 type Props = {
   errorMessage?: string
 }
+
 export function SwapSimulationError({ errorMessage }: Props) {
   const { tokenIn, tokenOut, selectedChain } = useSwap()
 

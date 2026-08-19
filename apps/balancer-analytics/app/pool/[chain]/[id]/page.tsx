@@ -421,6 +421,7 @@ async function readPoolState(
 
   if (protocolVersion === 3) {
     const addr = contractAddress as Address
+
     // One read per lane, dispatched on pool type. At most one type-specific
     // read fires (others resolve to `null` synchronously); `stableSurge` is
     // additive on STABLE pools and self-nulls when the hook isn't attached.
@@ -443,6 +444,7 @@ async function readPoolState(
         ? rescue('readBufferStates', readBufferStates(chain, wrappedAddrs))
         : null,
     ])
+
     return {
       ...EMPTY_STATE,
       universal: u,
@@ -464,6 +466,7 @@ async function readPoolState(
         ? rescue('readV2StableTypeState', readV2StableTypeState(chain, contractAddress as Address))
         : null,
     ])
+
     return { ...EMPTY_STATE, v2Base: b, stable: s }
   }
 
@@ -520,13 +523,17 @@ export default async function Page({
   // backwards compat so old links keep working.
   type HistoryRange = '30d' | '90d' | '180d' | '1y' | 'all'
   const VALID_RANGES: ReadonlySet<HistoryRange> = new Set(['30d', '90d', '180d', '1y', 'all'])
+
   function parseRange(raw: unknown): HistoryRange {
     if (typeof raw === 'string' && VALID_RANGES.has(raw as HistoryRange)) {
       return raw as HistoryRange
     }
+
     return '90d'
   }
+
   const rawRange = Array.isArray(search.range) ? search.range[0] : search.range
+
   const range: HistoryRange =
     search.fullHistory !== undefined && search.range === undefined ? 'all' : parseRange(rawRange)
 
@@ -539,6 +546,7 @@ export default async function Page({
     '1y': 'ONE_YEAR',
     all: 'ALL_TIME',
   }
+
   // Any range > 90d triggers the one-time full-history event scan so the
   // chart's event markers can land anywhere on the visible x-axis. After
   // the first deep scan, `pool_sync_state.deep_synced` latches and all
@@ -547,23 +555,28 @@ export default async function Page({
   const fullHistory = range !== '30d' && range !== '90d'
 
   let chain: GqlChain
+
   try {
     chain = getChainSlug(chainSlug.toLowerCase() as ChainSlug)
   } catch {
     console.warn('[pool/page] 404: invalid chain slug', { chainSlug, id })
     notFound()
   }
+
   if (!(PROJECT_CONFIG.supportedNetworks as readonly GqlChain[]).includes(chain)) {
     console.warn('[pool/page] 404: chain not in PROJECT_CONFIG.supportedNetworks', {
       chain,
       supported: PROJECT_CONFIG.supportedNetworks,
     })
+
     notFound()
   }
+
   if (!isDrpcSupportedChain(chain)) {
     console.warn('[pool/page] 404: chain not drpc-supported', { chain })
     notFound()
   }
+
   // Accept either form:
   //  - 42-char address (0x + 40 hex) — canonical for V3 pools (where
   //    `pool.id === pool.address`) and also a usable shorthand for V2.
@@ -696,6 +709,7 @@ export default async function Page({
   // the indexer hasn't seen the pool before.
   let detailRes: DetailRes | null
   let snapshotsRes: SnapshotsRes | null
+
   try {
     ;[detailRes, snapshotsRes] = await Promise.all([
       gqlFetch<DetailRes>(POOL_DETAIL_QUERY, { id: apiV3Id, chain }, 'poolGetPool', {
@@ -712,6 +726,7 @@ export default async function Page({
     if (err instanceof UpstreamError) {
       return <PoolPageUpstreamNotice chainSlug={chainSlug} error={err} poolId={id} />
     }
+
     throw err
   }
 
@@ -725,6 +740,7 @@ export default async function Page({
           ? 'V3 pools use the 42-char address as id; V2/CowAmm pools require the 66-char poolId. If this is a V2 pool, retry with the full poolId.'
           : 'check api-v3 logs above (the gqlFetch wrapper logs HTTP errors and GraphQL errors).',
     })
+
     notFound()
   }
 
@@ -766,6 +782,7 @@ export default async function Page({
   // `?refresh` keeps its documented meaning — bypass every cache — by calling
   // the uncached reader directly rather than the memoized one.
   const readState = forceRefresh ? readPoolState : readPoolStateCached
+
   const {
     universal,
     stable,
@@ -804,6 +821,7 @@ export default async function Page({
     amounts: (s.amounts ?? []).map(Number),
     totalShares: Number(s.totalShares),
   }))
+
   // Drop any snapshot timestamped before the pool was deployed. api-v3
   // occasionally back-fills the snapshot series with a leading zero-TVL
   // bucket whose timestamp falls in the day *before* `createTime`, which
@@ -813,6 +831,7 @@ export default async function Page({
   let trimmedSnapshots = poolDetail.createTime
     ? rawSnapshots.filter(s => s.timestamp >= poolDetail.createTime)
     : rawSnapshots
+
   if (range === '30d' && trimmedSnapshots.length > 0) {
     let latest = 0
     for (const s of trimmedSnapshots) if (s.timestamp > latest) latest = s.timestamp
@@ -828,6 +847,7 @@ export default async function Page({
   // point in history); we keep those entries so the gap shows in the
   // chart rather than silently interpolating across.
   const rawWeightSnapshots = detailRes.poolGetPool.weightSnapshots
+
   const quantAmmHistory =
     poolDetail.type === 'QUANT_AMM_WEIGHTED'
       ? {

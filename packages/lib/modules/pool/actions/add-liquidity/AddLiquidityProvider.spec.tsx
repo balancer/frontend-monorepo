@@ -27,9 +27,11 @@ async function testUseAddLiquidity(pool: GqlPoolElement = aBalWethPoolElementMoc
       </PoolProvider>
     )
   }
+
   const { result } = testHook(() => useAddLiquidityLogic(), {
     wrapper: Providers,
   })
+
   return result
 }
 
@@ -51,11 +53,13 @@ test('returns amountsIn with empty input amount by default', async () => {
 test('uses custom add liquidity handler selector and forwards handler to custom steps hook', async () => {
   const pool = aBalWethPoolElementMock()
   const PoolProvider = buildDefaultPoolTestProvider(pool)
+
   const customHandler: AddLiquidityHandler = {
     simulate: vi.fn(),
     getPriceImpact: vi.fn(),
     buildCallData: vi.fn(),
   }
+
   const addLiquidityHandlerSelector = vi.fn(() => customHandler)
   const useAddLiquiditySteps = vi.fn(() => ({ steps: [], isLoadingSteps: false }))
 
@@ -76,6 +80,7 @@ test('uses custom add liquidity handler selector and forwards handler to custom 
 
   expect(result.current.handler).toBe(customHandler)
   expect(addLiquidityHandlerSelector).toHaveBeenCalledWith(pool, false, [false, false])
+
   expect(useAddLiquiditySteps).toHaveBeenCalledWith(
     expect.objectContaining({
       handler: customHandler,
@@ -87,8 +92,10 @@ test('returns valid tokens for a nested pool', async () => {
   const result = await testUseAddLiquidity(nestedPoolMock as GqlPoolElement)
 
   const validAddresses = result.current.validTokens.map(t => t.address)
+
   expect(validAddresses).toEqual(
     expect.arrayContaining([wETHAddress, daiAddress, usdtAddress, usdcAddress])
   )
+
   expect(validAddresses).toHaveLength(4)
 })

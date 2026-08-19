@@ -154,6 +154,7 @@ function BeforePoolDeployedWarning({
   const chainName = getChainName(network)
 
   let deleteProgressReason: string
+
   if (showCowAmmWarning) {
     deleteProgressReason = 'to begin creation of a new CoW AMM?'
   } else if (showBalancerWarning) {

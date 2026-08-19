@@ -100,6 +100,7 @@ export function useClaimableBalances(pools: ClaimablePool[]) {
       const { gaugeAddress, tokenAddress, chain, poolId } = rewardTokenRef
       const tokenPrice = priceFor(tokenAddress, chain)
       const decimals = getToken(tokenAddress, chain)?.decimals || BPT_DECIMALS
+
       const fiatBalance = tokenPrice
         ? bn(formatUnits(balance, decimals)).multipliedBy(tokenPrice)
         : bn(0)

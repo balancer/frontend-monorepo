@@ -24,6 +24,7 @@ export function WeightAdjustmentTypeInput({
   setValue: UseFormSetValue<SaleStructureForm>
 }) {
   const { errors } = useFormState({ control })
+
   const options = [
     {
       label: (

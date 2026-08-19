@@ -40,6 +40,7 @@ export async function fetchTxToAddresses(
   if (txHashes.length === 0) return out
 
   let client
+
   try {
     client = getPublicClient(chain)
   } catch (err) {
@@ -47,6 +48,7 @@ export async function fetchTxToAddresses(
       console.info(`[drpc/tx-info] no drpc endpoint for ${chain} — skipping enrichment`)
       return out
     }
+
     const msg = err instanceof Error ? err.message : String(err)
     console.warn('[drpc/tx-info] failed to acquire client:', scrubSecret(msg))
     return out

@@ -20,6 +20,7 @@ export function computeCenteredness(params: {
       isPoolAboveCenter: false,
     }
   }
+
   return { poolCenteredness: denominator / numerator, isPoolAboveCenter: true }
 }
 
@@ -31,10 +32,12 @@ export function calculateLowerMargin(params: {
 }) {
   const marginPercentage = params.margin / 100
   const b = params.virtualBalanceA + marginPercentage * params.virtualBalanceA
+
   const c =
     marginPercentage *
     (Math.pow(params.virtualBalanceA, 2) -
       (params.invariant * params.virtualBalanceA) / params.virtualBalanceB)
+
   return params.virtualBalanceA + (-b + Math.sqrt(Math.pow(b, 2) - 4 * c)) / 2
 }
 
@@ -46,6 +49,7 @@ export function calculateUpperMargin(params: {
 }) {
   const marginPercentage = params.margin / 100
   const b = (params.virtualBalanceA + marginPercentage * params.virtualBalanceA) / marginPercentage
+
   const c =
     (Math.pow(params.virtualBalanceA, 2) -
       (params.virtualBalanceA * params.invariant) / params.virtualBalanceB) /
@@ -104,6 +108,7 @@ export function calculateBalancesAfterSwapIn(params: {
   })
 
   const amountIn = Number(params.swapAmountIn)
+
   const amountOut = calculateOutGivenIn({
     balanceA: params.balanceA,
     balanceB: params.balanceB,
@@ -115,6 +120,7 @@ export function calculateBalancesAfterSwapIn(params: {
 
   let newBalanceA: number
   let newBalanceB: number
+
   if (params.swapTokenIn === 'Token A') {
     newBalanceA = params.balanceA + amountIn
     newBalanceB = params.balanceB - amountOut
@@ -225,6 +231,7 @@ export const recalculateVirtualBalances = (params: {
       const c = -params.balanceA * params.balanceA * poolCenteredness
 
       newVirtualBalanceA = (-b + Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a)
+
       newVirtualBalanceB =
         (params.balanceB * newVirtualBalanceA) / (params.balanceA * poolCenteredness)
     } else {
@@ -233,6 +240,7 @@ export const recalculateVirtualBalances = (params: {
       const c = -params.balanceB * params.balanceB * poolCenteredness
 
       newVirtualBalanceB = (-b + Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a)
+
       newVirtualBalanceA =
         (params.balanceA * newVirtualBalanceB) / (params.balanceB * poolCenteredness)
     }
@@ -243,11 +251,13 @@ export const recalculateVirtualBalances = (params: {
 
     if (isPoolAboveCenter) {
       newVirtualBalanceB = newVirtualBalanceB * Math.pow(1 - tau, fixedSecondsSinceLastInteraction)
+
       newVirtualBalanceA =
         (params.balanceA * (newVirtualBalanceB + params.balanceB)) /
         (newVirtualBalanceB * (Math.sqrt(newPriceRatio) - 1) - params.balanceB)
     } else {
       newVirtualBalanceA = newVirtualBalanceA * Math.pow(1 - tau, fixedSecondsSinceLastInteraction)
+
       newVirtualBalanceB =
         (params.balanceB * (newVirtualBalanceA + params.balanceA)) /
         (newVirtualBalanceA * (Math.sqrt(newPriceRatio) - 1) - params.balanceA)
@@ -288,6 +298,7 @@ export function calculateInitialBalances({
   const idealBalanceB =
     Math.sqrt(targetPrice * (defaultMaxBalanceA + idealVirtualBalanceA) * idealVirtualBalanceB) -
     idealVirtualBalanceB
+
   const idealBalanceA =
     (idealBalanceB + idealVirtualBalanceB - idealVirtualBalanceA * targetPrice) / targetPrice
 

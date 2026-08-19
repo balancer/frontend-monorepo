@@ -96,6 +96,7 @@ export function RemoveLiquidityForm() {
     setHumanBptInPercent,
     amountsOut,
   } = useRemoveLiquidity()
+
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)
@@ -113,9 +114,11 @@ export function RemoveLiquidityForm() {
 
   function toggleTab(option: ButtonGroupOption) {
     setActiveTab(option)
+
     if (option.value === 'proportional') {
       setProportionalType()
     }
+
     if (option.value === 'single') {
       setSingleTokenType()
     }

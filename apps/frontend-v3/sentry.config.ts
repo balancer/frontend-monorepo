@@ -32,6 +32,8 @@ export const sentryOptions: SentryBuildOptions = {
 
 const productionSentryDSN =
   'https://53df88eafd8f9a546b0e926b65553379@o574636.ingest.sentry.io/4506382607712256'
+
 const developmentSentryDSN =
   'https://28291a3b50d248e06f917aa5a98b8fea@o574636.ingest.us.sentry.io/4506944362053632'
+
 export const sentryDSN = isProd ? productionSentryDSN : developmentSentryDSN

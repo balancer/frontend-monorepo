@@ -46,6 +46,7 @@ export async function handleImageProxy(request: NextRequest) {
         'User-Agent': 'ImageProxy/1.0', // Identify your proxy
       },
     })
+
     clearTimeout(timeoutId)
 
     if (!response.ok) {

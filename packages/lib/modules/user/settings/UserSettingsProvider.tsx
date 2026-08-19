@@ -52,6 +52,7 @@ export function useUserSettingsLogic({
     LS_KEYS.UserSettings.Currency,
     initCurrency
   )
+
   const currency = isMounted ? _currency : initCurrency
 
   const [_slippage, setStoredSlippage] = useLocalStorage<string>(
@@ -63,6 +64,7 @@ export function useUserSettingsLogic({
     LS_KEYS.UserSettings.EnableSignatures,
     initEnableSignatures
   )
+
   const enableSignatures = isMounted ? _enableSignatures : initEnableSignatures
   const shouldUseSignatures = enableSignatures === 'yes'
 
@@ -70,6 +72,7 @@ export function useUserSettingsLogic({
     LS_KEYS.UserSettings.AllowSounds,
     initAllowSounds
   )
+
   const allowSounds = isMounted ? _allowSounds : initAllowSounds
 
   const fallbackSlippage = isValidSlippage(initSlippage) ? initSlippage : DEFAULT_SLIPPAGE
@@ -122,6 +125,7 @@ export function useUserSettingsLogic({
     LS_KEYS.UserSettings.EnableTxBundling,
     initEnableTxBundling
   )
+
   const enableTxBundling = isMounted ? _enableTxBundling : initEnableTxBundling
   const shouldUseTxBundling = enableTxBundling === 'yes'
 
@@ -179,6 +183,7 @@ export function UserSettingsProvider({
     initAllowSounds: _initAllowSounds,
     initEnableTxBundling: _initEnableTxBundling,
   })
+
   return <UserSettingsContext.Provider value={hook}>{children}</UserSettingsContext.Provider>
 }
 

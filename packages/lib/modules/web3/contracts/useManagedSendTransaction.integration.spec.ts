@@ -75,6 +75,7 @@ describe('weighted add flow', () => {
         hash: hash,
       })
     )
+
     expect(transactionReceipt.status).to.eq('success')
   })
 })

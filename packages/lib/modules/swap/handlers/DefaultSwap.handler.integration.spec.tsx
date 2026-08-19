@@ -12,6 +12,7 @@ const SWAP_SIMULATION_TEST_TIMEOUT_MS = 120_000
 
 describe('Pool Swap handler with v2 nested pool', async () => {
   const mainnetNestedPoolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0' // Balancer 50WETH-50-3pool
+
   const pool = await fetchPoolMock({
     poolId: mainnetNestedPoolId,
     chain: GqlChainValues.Mainnet,

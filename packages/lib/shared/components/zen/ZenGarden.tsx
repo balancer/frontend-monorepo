@@ -75,6 +75,7 @@ function getShapeTransform(variant: ZenGardenVariant, i: number) {
   if (variant === 'diamond') {
     return `scale(1.${i}) rotate(45deg) translateY(-50%)`
   }
+
   return `scale(1.${i}) translateY(-50%)`
 }
 
@@ -118,11 +119,13 @@ export function PoolZenGarden({
       <ZenGarden repetitions={repetitions} sizePx={sizePx} subdued={subdued} variant="circle" />
     )
   }
+
   if (isWeighted(poolType)) {
     return (
       <ZenGarden repetitions={repetitions} sizePx={sizePx} subdued={subdued} variant="circle" />
     )
   }
+
   if (isCowAmmPool(poolType)) {
     return (
       <Box height="100%" position="absolute" top="0" width="100%" zIndex="0">
@@ -130,11 +133,13 @@ export function PoolZenGarden({
       </Box>
     )
   }
+
   if (isStable(poolType)) {
     return (
       <ZenGarden repetitions={repetitions} sizePx={sizePx} subdued={subdued} variant="square" />
     )
   }
+
   if (isClp(poolType)) {
     return (
       <ZenGarden repetitions={repetitions} sizePx={sizePx} subdued={subdued} variant="diamond" />

@@ -37,10 +37,12 @@ const dayStart = (tsSeconds: number): number => Math.floor(tsSeconds / DAY) * DA
  *  missing bucket (token oracle gap) before giving up. */
 function priceAt(daily: Map<number, number>, tsSeconds: number): number | null {
   const start = dayStart(tsSeconds)
+
   for (let back = 0; back <= 14; back++) {
     const p = daily.get(start - back * DAY)
     if (p != null) return p
   }
+
   return null
 }
 
@@ -52,6 +54,7 @@ export function computeHodl(
   if (!series || series.length === 0 || hodlTokens.length === 0) return null
 
   const byAddr = new Map(series.map(s => [s.address, s.daily]))
+
   // Each token needs two price series: `wrapped` (values the pool's holding,
   // in the ERC4626 units `amounts` is denominated in) and `hodl` (values the
   // fixed alternative basket — the underlying for a wrapper). For non-wrapped
@@ -60,6 +63,7 @@ export function computeHodl(
     wrapped: byAddr.get(t.wrapped),
     hodl: byAddr.get(t.hodl),
   }))
+
   if (legs.some(l => l.wrapped == null || l.hodl == null)) return null
   const priced = legs as { wrapped: Map<number, number>; hodl: Map<number, number> }[]
 
@@ -75,6 +79,7 @@ export function computeHodl(
   // value equals sharePrice(t₀), so both lines start together.
   let baseIndex = -1
   let qty: number[] | null = null
+
   for (let i = 0; i < samples.length; i++) {
     const s = samples[i]
     if (!s.amounts || s.amounts.length !== hodlTokens.length || !(s.totalShares > 0)) continue
@@ -85,6 +90,7 @@ export function computeHodl(
     baseIndex = i
     break
   }
+
   if (!qty || baseIndex < 0) return null
 
   const values: (number | null)[] = samples.map((s, i) => {

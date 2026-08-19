@@ -32,6 +32,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
   )
 
   const totalBalance = bn(globalStats?.totalBalance || '0')
+
   const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
     level: isValidNumber(balance.level) ? bn(balance.level).plus(1) : bn(0),
     percentageOfTotal:

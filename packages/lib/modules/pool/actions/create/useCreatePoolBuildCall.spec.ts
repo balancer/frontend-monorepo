@@ -27,6 +27,7 @@ vi.mock('@repo/lib/modules/web3/UserAccountProvider', async () => {
   const actual = await vi.importActual<typeof import('@repo/lib/modules/web3/UserAccountProvider')>(
     '@repo/lib/modules/web3/UserAccountProvider'
   )
+
   return {
     ...actual,
     useUserAccount: vi.fn(),
@@ -37,6 +38,7 @@ vi.mock('@repo/lib/config/app.config', async () => {
   const actual = await vi.importActual<typeof import('@repo/lib/config/app.config')>(
     '@repo/lib/config/app.config'
   )
+
   return {
     ...actual,
     getGqlChain: vi.fn(),
@@ -62,12 +64,16 @@ describe('useCreatePoolBuildCall', () => {
       callData: '0xabcdef',
       to: '0x1234567890123456789012345678901234567890',
     }
+
     const mockInstance = { buildCall: vi.fn().mockReturnValue(mockBuildCall) }
+
     ;(CreatePool as ReturnType<typeof vi.fn>).mockImplementation(() => mockInstance)
+
     ;(useUserAccount as ReturnType<typeof vi.fn>).mockReturnValue({
       userAddress: defaultTestUserAccount,
       isConnected: true,
     })
+
     ;(useBlockNumber as ReturnType<typeof vi.fn>).mockReturnValue({ data: 12345n })
 
     return { mockInstance, mockBuildCall }
@@ -86,6 +92,7 @@ describe('useCreatePoolBuildCall', () => {
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
     expect(mockInstance.buildCall).toHaveBeenCalledWith(v3Input)
+
     expect(result.current.data).toEqual({
       chainId: 1,
       account: defaultTestUserAccount,
@@ -96,18 +103,22 @@ describe('useCreatePoolBuildCall', () => {
 
   it('builds v1 CoW AMM pool call with real bCoW calldata encoding', async () => {
     const { useUserAccount } = await import('@repo/lib/modules/web3/UserAccountProvider')
+
     ;(useUserAccount as ReturnType<typeof vi.fn>).mockReturnValue({
       userAddress: defaultTestUserAccount,
       isConnected: true,
     })
 
     const { useBlockNumber } = await import('wagmi')
+
     ;(useBlockNumber as ReturnType<typeof vi.fn>).mockReturnValue({ data: 100n })
 
     const { getGqlChain } = await import('@repo/lib/config/app.config')
+
     ;(getGqlChain as ReturnType<typeof vi.fn>).mockReturnValue('mainnet' as any)
 
     const { getNetworkConfig } = await import('@repo/lib/config/app.config')
+
     ;(getNetworkConfig as ReturnType<typeof vi.fn>).mockReturnValue({
       contracts: { balancer: { bCoWFactory: bCowFactory } },
     })
@@ -135,16 +146,20 @@ describe('useCreatePoolBuildCall', () => {
 
   it('does not execute query when disabled', async () => {
     const { CreatePool } = await import('@balancer/sdk')
+
     const mockInstance = { buildCall: vi.fn() }
+
     ;(CreatePool as ReturnType<typeof vi.fn>).mockImplementation(() => mockInstance)
 
     const { useUserAccount } = await import('@repo/lib/modules/web3/UserAccountProvider')
+
     ;(useUserAccount as ReturnType<typeof vi.fn>).mockReturnValue({
       userAddress: defaultTestUserAccount,
       isConnected: true,
     })
 
     const { useBlockNumber } = await import('wagmi')
+
     ;(useBlockNumber as ReturnType<typeof vi.fn>).mockReturnValue({ data: 100n })
 
     testHook(() =>
@@ -159,12 +174,14 @@ describe('useCreatePoolBuildCall', () => {
 
   it('returns error for unsupported protocol version', async () => {
     const { useUserAccount } = await import('@repo/lib/modules/web3/UserAccountProvider')
+
     ;(useUserAccount as ReturnType<typeof vi.fn>).mockReturnValue({
       userAddress: defaultTestUserAccount,
       isConnected: true,
     })
 
     const { useBlockNumber } = await import('wagmi')
+
     ;(useBlockNumber as ReturnType<typeof vi.fn>).mockReturnValue({ data: 100n })
 
     const { result } = testHook(() =>
@@ -175,6 +192,7 @@ describe('useCreatePoolBuildCall', () => {
     )
 
     await waitFor(() => expect(result.current.isError).toBeTruthy())
+
     expect(result.current.error?.message).toBe(
       'Unsupported protocol version for create pool build call'
     )
@@ -182,18 +200,22 @@ describe('useCreatePoolBuildCall', () => {
 
   it('returns error when bCoW factory address is missing', async () => {
     const { useUserAccount } = await import('@repo/lib/modules/web3/UserAccountProvider')
+
     ;(useUserAccount as ReturnType<typeof vi.fn>).mockReturnValue({
       userAddress: defaultTestUserAccount,
       isConnected: true,
     })
 
     const { useBlockNumber } = await import('wagmi')
+
     ;(useBlockNumber as ReturnType<typeof vi.fn>).mockReturnValue({ data: 100n })
 
     const { getGqlChain } = await import('@repo/lib/config/app.config')
+
     ;(getGqlChain as ReturnType<typeof vi.fn>).mockReturnValue('mainnet' as any)
 
     const { getNetworkConfig } = await import('@repo/lib/config/app.config')
+
     ;(getNetworkConfig as ReturnType<typeof vi.fn>).mockReturnValue({
       contracts: { balancer: { bCoWFactory: undefined } },
     })

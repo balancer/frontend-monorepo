@@ -74,28 +74,36 @@ export function PoolExplorer() {
   // URL state — shareable view. SearchInput debounces internally, so we point
   // it directly at the nuqs param rather than maintaining a separate draft.
   const [search, setSearch] = useQueryState('q', parseAsString.withDefault(''))
+
   const [chains, setChains] = useQueryState(
     'chain',
     parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChainValues))).withDefault([])
   )
+
   const [types, setTypes] = useQueryState(
     'type',
     parseAsArrayOf(parseAsStringEnum<GqlPoolType>(Object.values(GqlPoolTypeValues))).withDefault([])
   )
+
   const [protocolVersion, setProtocolVersion] = useQueryState('v', parseAsInteger)
+
   const [hookTypes, setHookTypes] = useQueryState(
     'hook',
     parseAsArrayOf(parseAsString).withDefault([])
   )
+
   const [minTvl, setMinTvl] = useQueryState('minTvl', parseAsInteger.withDefault(0))
+
   const [sortKey, setSortKey] = useQueryState(
     'sort',
     parseAsStringLiteral(SORT_KEYS).withDefault('TVL')
   )
+
   const [sortDir, setSortDir] = useQueryState(
     'dir',
     parseAsStringLiteral(['asc', 'desc'] as const).withDefault('desc')
   )
+
   const [pageIndex, setPageIndex] = useQueryState('page', parseAsInteger.withDefault(0))
   // Default 20 — must be one of the pagination dropdown's options
   // ([10, 20, 30, 40, 50]); a value outside that set (e.g. 25) leaves the
@@ -181,6 +189,7 @@ export function PoolExplorer() {
         setSortKey(key)
         setSortDir('desc')
       }
+
       resetPage()
     },
     [sortKey, sortDir, setSortDir, setSortKey, resetPage]
@@ -350,6 +359,7 @@ function TableRow({ pool, index }: { pool: EnrichedPool; index: number }) {
   const tvl = Number(pool.dynamicData.totalLiquidity ?? 0)
   const vol = Number(pool.dynamicData.volume24h ?? 0)
   const fees = Number(pool.dynamicData.fees24h ?? 0)
+
   const usageColor =
     pool._usage >= 0.5 ? 'green.400' : pool._usage >= 0.1 ? 'orange.300' : 'font.secondary'
 

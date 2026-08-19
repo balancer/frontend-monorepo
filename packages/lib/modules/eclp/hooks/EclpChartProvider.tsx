@@ -22,6 +22,7 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
     isLoading,
     poolTokens,
   } = eclpLiquidityProfile
+
   const theme = useChakraTheme()
   const selectColor = useSelectColor()
 
@@ -432,6 +433,7 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
 
   const outOfRangeText =
     'The current price is out of the set liquidity range for this Concentrated Liquidity Pool (CLP). When a CLP is not in range, liquidity is not routed through this pool and LPs do not earn swap fees.'
+
   const inRangeText =
     'The current price is between the liquidity upper and lower bounds for this Concentrated Liquidity Pool (CLP). In range pools earn high swap fees.'
 

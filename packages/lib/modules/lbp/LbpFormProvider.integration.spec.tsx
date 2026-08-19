@@ -30,10 +30,12 @@ afterAll(() => {
 
 async function renderLbpForm() {
   const rendered = testHook(() => useLbpFormLogic(), { wrapper: LbpTestWrapper })
+
   await waitFor(() => {
     expect(rendered.result.current.saleStructureForm.isHydrated).toBe(true)
     expect(rendered.result.current.projectInfoForm.isHydrated).toBe(true)
   })
+
   return rendered
 }
 
@@ -46,10 +48,12 @@ describe('useLbpFormLogic', () => {
 
       act(() => {
         result.current.saleStructureForm.setValue('saleTokenAmount', '250')
+
         result.current.saleStructureForm.setValue(
           'launchTokenAddress',
           '0xba100000625a3754423978a60c9317c58a424e3d'
         )
+
         result.current.projectInfoForm.setValue('name', 'Persisted project')
         result.current.projectInfoForm.setValue('description', 'Persisted description')
         result.current.setPoolAddress(dirtyPoolAddress)
@@ -59,6 +63,7 @@ describe('useLbpFormLogic', () => {
         const persisted = JSON.parse(
           window.localStorage.getItem(LS_KEYS.LbpConfig.SaleStructure) ?? '{}'
         )
+
         expect(persisted.saleTokenAmount).toBe('250')
       })
 
@@ -67,13 +72,17 @@ describe('useLbpFormLogic', () => {
       const { result: remounted } = await renderLbpForm()
 
       expect(remounted.current.saleStructureForm.getValues('saleTokenAmount')).toBe('250')
+
       expect(remounted.current.saleStructureForm.getValues('launchTokenAddress')).toBe(
         '0xba100000625a3754423978a60c9317c58a424e3d'
       )
+
       expect(remounted.current.projectInfoForm.getValues('name')).toBe('Persisted project')
+
       expect(remounted.current.projectInfoForm.getValues('description')).toBe(
         'Persisted description'
       )
+
       expect(remounted.current.poolAddress).toBe(dirtyPoolAddress)
     })
   })
@@ -95,6 +104,7 @@ describe('useLbpFormLogic', () => {
           'launchTokenAddress',
           '0xba100000625a3754423978a60c9317c58a424e3d'
         )
+
         result.current.saleStructureForm.setValue('saleTokenAmount', '100')
         result.current.projectInfoForm.setValue('name', 'The Phoenix Project')
         result.current.projectInfoForm.setValue('description', 'Rises from the ashes')
@@ -116,9 +126,11 @@ describe('useLbpFormLogic', () => {
           JSON.parse(window.localStorage.getItem(LS_KEYS.LbpConfig.SaleStructure) ?? '{}')
         ).toEqual(INITIAL_SALE_STRUCTURE)
       })
+
       expect(
         JSON.parse(window.localStorage.getItem(LS_KEYS.LbpConfig.ProjectInfo) ?? '{}')
       ).toEqual(INITIAL_PROJECT_INFO)
+
       expect(window.localStorage.getItem(LS_KEYS.LbpConfig.PoolAddress)).toBeNull()
       expect(window.localStorage.getItem(LS_KEYS.LbpConfig.StepIndex)).toBe('0')
       expect(window.localStorage.getItem(LS_KEYS.LbpConfig.IsMetadataSaved)).toBe('false')

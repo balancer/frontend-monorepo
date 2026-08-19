@@ -36,5 +36,6 @@ export async function resolveBlockTimestamps(
       })
     )
   )
+
   return new Map(results)
 }

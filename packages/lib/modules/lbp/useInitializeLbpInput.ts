@@ -9,6 +9,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useInitializeLbpInput() {
   const { saleStructureForm, isCollateralNativeAsset, isFixedSale, isSeeded } = useLbpForm()
+
   const [
     selectedChain,
     collateralTokenAddress,
@@ -32,6 +33,7 @@ export function useInitializeLbpInput() {
   const minBptAmountOut = 0n
 
   let reserveTokenAddress = collateralTokenAddress || ''
+
   if (isCollateralNativeAsset) {
     const { tokens } = getNetworkConfig(selectedChain)
     reserveTokenAddress = tokens.addresses.wNativeAsset
@@ -42,6 +44,7 @@ export function useInitializeLbpInput() {
     symbol: reserveTokenSymbol,
     isLoading: isLoadingCollateralToken,
   } = useTokenMetadata(reserveTokenAddress, chain)
+
   const {
     decimals: launchTokenDecimals,
     symbol: launchTokenSymbol,

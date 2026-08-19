@@ -17,10 +17,13 @@ export function hasValidPermit2(
 
   const approvalExpired = (tokenAddress: Address) =>
     expirations[tokenAddress] < getNowTimestampInSecs()
+
   const alreadyAllowed = (amountIn: TokenAmountIn) =>
     !approvalExpired(amountIn.address) && allowedAmounts[amountIn.address] >= amountIn.amount
+
   const amountInValid = (amountIn: TokenAmountIn) =>
     amountIn.amount === 0n || alreadyAllowed(amountIn)
+
   const isValid = tokenAmountsIn.every(amountInValid)
   /*
    // Delete after debug:
@@ -52,6 +55,7 @@ export function getTokenSymbolsForPermit2({
   if (!tokenAmountsIn) return []
 
   const chain = getGqlChain(chainId)
+
   const tokenSymbols = filterTokensForPermit2({
     wethIsEth,
     tokenAmountsIn,
@@ -62,6 +66,7 @@ export function getTokenSymbolsForPermit2({
       if (t.symbol) return t.symbol
       return getToken(t.address, chain)?.symbol ?? 'Unknown'
     })
+
   return tokenSymbols
 }
 
@@ -101,6 +106,7 @@ export function filterTokensForPermit2({
           // if wethIsEth the wrapped native asset token will be replaced with the native asset token so no required permit2 approval neither
           return !isWrappedNativeAsset(t.address, chain)
         }
+
         return true
       })
   )

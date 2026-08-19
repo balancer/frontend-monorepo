@@ -60,14 +60,17 @@ function tvlAt(snapshots: Snapshot[], ts: number): number {
   if (ts <= snapshots[0].timestamp) return snapshots[0].totalLiquidity
   const last = snapshots[snapshots.length - 1]
   if (ts >= last.timestamp) return last.totalLiquidity
+
   for (let i = 1; i < snapshots.length; i++) {
     const a = snapshots[i - 1]
     const b = snapshots[i]
+
     if (ts >= a.timestamp && ts <= b.timestamp) {
       const t = (ts - a.timestamp) / Math.max(1, b.timestamp - a.timestamp)
       return a.totalLiquidity + (b.totalLiquidity - a.totalLiquidity) * t
     }
   }
+
   return last.totalLiquidity
 }
 
@@ -116,6 +119,7 @@ export function PoolHistoryChart({
   // and out of the amp markArea so users can quickly isolate a specific
   // event family. Visible chip dim signals the disabled state.
   const [disabled, setDisabled] = useState<Set<string>>(new Set())
+
   const toggleEventName = useCallback((name: string) => {
     setDisabled(prev => {
       const next = new Set(prev)
@@ -124,16 +128,19 @@ export function PoolHistoryChart({
       return next
     })
   }, [])
+
   const resetEventNames = useCallback(() => setDisabled(new Set()), [])
 
   // Group event names by category for the legend's visual sectioning.
   const legendGroups = useMemo(() => {
     const byCategory = new Map<EventCategory, string[]>()
+
     for (const name of Object.keys(eventCounts)) {
       const cat = getEventStyle(name).category
       if (!byCategory.has(cat)) byCategory.set(cat, [])
       byCategory.get(cat)!.push(name)
     }
+
     // Stable alphabetic order within each group.
     for (const arr of byCategory.values()) arr.sort()
     return CATEGORY_ORDER.flatMap(cat => byCategory.get(cat) ?? [])
@@ -212,6 +219,7 @@ export function PoolHistoryChart({
     // event happens at the exact cursor instant. Amber chosen to stand
     // apart from both the blue TVL line and the orange fees bars.
     const cursorColor = CHART_COLORS.cursor
+
     if (cursors?.a != null) {
       markLines.push({
         xAxis: cursors.a * 1000,
@@ -229,6 +237,7 @@ export function PoolHistoryChart({
         },
       })
     }
+
     if (cursors?.b != null) {
       markLines.push({
         xAxis: cursors.b * 1000,
@@ -250,6 +259,7 @@ export function PoolHistoryChart({
     // Amp ramps → translucent markArea between AmpUpdateStarted.startTime
     // and endTime so the "ramp in progress" window is visible at a glance.
     const ampAreas: [{ xAxis: number; itemStyle: { color: string } }, { xAxis: number }][] = []
+
     for (const e of events) {
       if (e.eventName !== 'AmpUpdateStarted') continue
       // Hide the ramp area when the user has toggled AmpUpdateStarted off.
@@ -257,6 +267,7 @@ export function PoolHistoryChart({
       const startTime = Number(e.args.startTime ?? 0)
       const endTime = Number(e.args.endTime ?? 0)
       if (!startTime || !endTime || endTime <= startTime) continue
+
       ampAreas.push([
         { xAxis: startTime * 1000, itemStyle: { color: 'rgba(245, 158, 11, 0.14)' } },
         { xAxis: endTime * 1000 },
@@ -282,13 +293,16 @@ export function PoolHistoryChart({
             data: [number, number]
             color: unknown
           }>
+
           if (!params?.length) return ''
           const ts = params[0].data[0]
+
           const date = new Date(ts).toLocaleString(undefined, {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
           })
+
           // ECharts returns the original `itemStyle.color` for series in
           // tooltip params — strings pass through, but gradient objects
           // would render as "[object Object]" when interpolated. Map by
@@ -298,10 +312,12 @@ export function PoolHistoryChart({
             'Volume 24h': CHART_COLORS.volumeFrom,
             'Fees 24h': CHART_COLORS.fees,
           }
+
           const swatchFor = (p: { seriesName: string; color: unknown }): string =>
             typeof p.color === 'string'
               ? p.color
               : (TOOLTIP_SWATCH[p.seriesName] ?? CHART_COLORS.tvlLine)
+
           const lines = params
             .filter(p => p.seriesType !== undefined)
             .map(
@@ -311,6 +327,7 @@ export function PoolHistoryChart({
                   <span style="font-family:ui-monospace,monospace;color:#fff;font-weight:500;">${usdFull(p.data[1])}</span>
                 </div>`
             )
+
           return `<div><div style="color:${CHART_COLORS.tooltipHead};font-weight:600;margin-bottom:6px;font-size:11px;letter-spacing:0.02em;text-transform:uppercase;">${date}</div>${lines.join('')}</div>`
         },
       },
@@ -398,12 +415,14 @@ export function PoolHistoryChart({
                     const e = params.data?.meta?.event
                     if (!e) return ''
                     const style = getEventStyle(e.eventName)
+
                     const date = new Date(e.blockTimestamp * 1000).toLocaleString(undefined, {
                       month: 'short',
                       day: 'numeric',
                       hour: 'numeric',
                       minute: '2-digit',
                     })
+
                     const argRows = Object.entries(e.args)
                       .map(
                         ([k, v]) =>
@@ -413,6 +432,7 @@ export function PoolHistoryChart({
                           </div>`
                       )
                       .join('')
+
                     return `<div style="max-width:300px;">
                       <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
                         <span style="display:inline-block;width:8px;height:8px;background:${style.color};border-radius:50%;"></span>
@@ -488,10 +508,12 @@ export function PoolHistoryChart({
     convertFromPixel: (axis: { xAxisIndex: 0 }, x: number) => number
   }
   const chartRef = useRef<{ getEchartsInstance: () => ECharts } | null>(null)
+
   useEffect(() => {
     if (!onCursorClick) return
     const instance = chartRef.current?.getEchartsInstance() as EChartsLowLevel | undefined
     if (!instance) return
+
     const handler = (e: ZrEvent): void => {
       // Only trigger on clicks inside the plot grid — clicks on legend /
       // axes / outside should be no-ops so users can interact with chart
@@ -501,6 +523,7 @@ export function PoolHistoryChart({
       if (!Number.isFinite(tsMs)) return
       onCursorClick(Math.round(tsMs / 1000))
     }
+
     const zr = instance.getZr()
     zr.on('click', handler)
     return () => zr.off('click', handler)

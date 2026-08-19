@@ -160,6 +160,7 @@ function summarize7d(snapshots: readonly SnapshotLike[]): {
       surplusPrev: 0,
     }
   }
+
   const sorted = [...snapshots].sort((a, b) => a.timestamp - b.timestamp)
   const last = sorted[sorted.length - 1]
   const tvl = last.totalLiquidity
@@ -170,18 +171,23 @@ function summarize7d(snapshots: readonly SnapshotLike[]): {
   const last7 = sorted.filter(s => s.timestamp > sevenDayCutoff)
   const prev7 = sorted.filter(s => s.timestamp > fourteenDayCutoff && s.timestamp <= sevenDayCutoff)
   const sevenDaysAgoIdx = sorted.findIndex(s => s.timestamp > sevenDayCutoff)
+
   const tvlPrev =
     sevenDaysAgoIdx > 0 ? sorted[sevenDaysAgoIdx - 1].totalLiquidity : sorted[0].totalLiquidity
+
   const sum = (arr: SnapshotLike[], key: 'volume24h' | 'fees24h' | 'surplus24h') =>
     arr.reduce((acc, s) => acc + (s[key] || 0), 0)
+
   const volume = sum(last7, 'volume24h')
   const volumePrev = sum(prev7, 'volume24h')
   const fees = sum(last7, 'fees24h')
   const feesPrev = sum(prev7, 'fees24h')
   const surplus = sum(last7, 'surplus24h')
   const surplusPrev = sum(prev7, 'surplus24h')
+
   const ratio = (curr: number, prev: number): number | null =>
     prev > 0 && Number.isFinite(curr) && Number.isFinite(prev) ? ((curr - prev) / prev) * 100 : null
+
   return {
     tvl,
     tvlPrev,
@@ -214,7 +220,9 @@ function DeltaPct({
       </Text>
     )
   }
+
   const positive = value >= 0
+
   const color = positive
     ? positiveIsGood
       ? 'green.400'
@@ -222,6 +230,7 @@ function DeltaPct({
     : positiveIsGood
       ? 'red.400'
       : 'green.400'
+
   return (
     <Text color={color} fontFamily="mono" fontSize="2xs" fontWeight={500}>
       {positive ? '+' : ''}
@@ -578,6 +587,7 @@ function readSourceUniversal(state: PoolPageData['state']): {
   isInRecoveryMode: boolean | null
 } | null {
   const u: UniversalV3State | null = state.universal
+
   if (u) {
     return {
       swapFeePercentage: u.swapFeePercentage,
@@ -587,7 +597,9 @@ function readSourceUniversal(state: PoolPageData['state']): {
       isInRecoveryMode: u.isInRecoveryMode,
     }
   }
+
   const v2: V2BasePoolState | null = state.v2Base
+
   if (v2) {
     return {
       swapFeePercentage: v2.swapFeePercentage,
@@ -597,6 +609,7 @@ function readSourceUniversal(state: PoolPageData['state']): {
       isInRecoveryMode: v2.isInRecoveryMode ?? false,
     }
   }
+
   return null
 }
 

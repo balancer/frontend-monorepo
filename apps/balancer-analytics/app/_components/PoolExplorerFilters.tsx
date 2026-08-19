@@ -143,6 +143,7 @@ type Props = {
 
 export function PoolExplorerFilters(props: Props) {
   const { filters, setters, variant = 'full' } = props
+
   const totalFilterCount =
     filters.chains.length +
     filters.types.length +
@@ -312,6 +313,7 @@ function FilterPopover({
                       const next = filters.types.includes(t)
                         ? filters.types.filter(x => x !== t)
                         : [...filters.types, t]
+
                       setters.setTypes(next)
                     }}
                     selected={filters.types}
@@ -331,6 +333,7 @@ function FilterPopover({
                       const next = filters.hookTypes.includes(t)
                         ? filters.hookTypes.filter(x => x !== t)
                         : [...filters.hookTypes, t]
+
                       setters.setHookTypes(next)
                     }}
                     selected={filters.hookTypes}
@@ -483,13 +486,16 @@ const STEP_BUCKETS: { until: number; step: number }[] = [
 
 function snapStep(value: number): number {
   let prev = 0
+
   for (const { until, step } of STEP_BUCKETS) {
     if (value <= until) {
       const snapped = Math.round((value - prev) / step) * step + prev
       return Math.max(prev, Math.min(snapped, until))
     }
+
     prev = until
   }
+
   const last = STEP_BUCKETS.at(-1)!
   const baseIdx = STEP_BUCKETS.length - 2
   const base = STEP_BUCKETS[baseIdx].until

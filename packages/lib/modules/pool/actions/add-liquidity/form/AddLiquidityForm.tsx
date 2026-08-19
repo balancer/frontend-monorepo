@@ -110,11 +110,13 @@ function AddLiquidityMainForm() {
     setWantsProportional(false)
     setWantsUnbalanced(false)
   }
+
   const setProportionalTab = () => {
     setTabIndex(1)
     setWantsProportional(true)
     setWantsUnbalanced(false)
   }
+
   const setUnbalancedTab = () => {
     setTabIndex(isAutoRange(pool.type) ? 0 : 2)
     setWantsProportional(false)
@@ -142,6 +144,7 @@ function AddLiquidityMainForm() {
 
   const onModalOpen = async () => {
     previewModalDisclosure.onOpen()
+
     if (requiresProportionalInput(pool)) {
       // Edge-case refetch to avoid mismatches in proportional bptOut calculations
       await refetchQuote()
@@ -153,6 +156,7 @@ function AddLiquidityMainForm() {
     if (!isBalancesLoading && nativeAsset && wNativeAsset && supportsWethIsEth(pool)) {
       const nativeAssetBalance = balanceFor(nativeAsset.address)
       const wNativeAssetBalance = balanceFor(wNativeAsset.address)
+
       if (
         nativeAssetBalance &&
         wNativeAssetBalance &&
@@ -178,6 +182,7 @@ function AddLiquidityMainForm() {
 
   const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
   const isSafeAccount = useIsSafeAccount()
+
   const bufferBalanceWarning = useBufferBalanceWarning({
     amounts: humanAmountsIn,
     operation: 'add',

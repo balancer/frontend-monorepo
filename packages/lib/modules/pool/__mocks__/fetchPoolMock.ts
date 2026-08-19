@@ -153,6 +153,7 @@ type FetchPoolMockParams = {
   userAddress?: Address
   query?: string
 }
+
 export async function fetchPoolMock({
   poolId = nested50WETH_50_3poolId,
   chain = GqlChainValues.Mainnet,
@@ -181,6 +182,7 @@ export async function fetchPoolMock({
         body: JSON.stringify({ query: queryString, variables }),
         compress: false,
       } as RequestInit & { compress?: boolean })
+
       const responseBody = await response.text()
 
       if (!response.ok) {

@@ -130,6 +130,7 @@ async function gqlFetch<T>(query: string, variables: Record<string, unknown>): P
     body: JSON.stringify({ query, variables }),
     cache: 'no-store',
   })
+
   if (!res.ok) throw new Error(`api-v3 HTTP ${res.status}`)
   const json = (await res.json()) as { data?: T; errors?: unknown }
   if (json.errors) throw new Error(`api-v3 errors: ${JSON.stringify(json.errors)}`)
@@ -167,6 +168,7 @@ async function readChainRewards(
 ): Promise<{ rewardToken: Address; amount: bigint }[]> {
   if (pairs.length === 0) return []
   const client = getPublicClient(chain)
+
   // One multicall per chain — viem batches by Multicall3 internally.
   // Failures on a single pair (gauge missing `claimable_reward`, RPC
   // hiccup) degrade to `result === undefined` instead of throwing the
@@ -180,6 +182,7 @@ async function readChainRewards(
     })),
     allowFailure: true,
   })
+
   return pairs.map((p, i) => {
     const r = results[i]
     if (!r || r.status !== 'success') return { rewardToken: p.rewardToken, amount: 0n }
@@ -195,10 +198,12 @@ async function buildPayload(address: string): Promise<AnalyticsGaugeRewardsPaylo
     user: address,
     chains,
   })
+
   const pools = data.pools ?? []
 
   // Group claim queries per chain so we issue one multicall each.
   const pairsByChain = new Map<GqlChain, { gauge: Address; rewardToken: Address }[]>()
+
   for (const pool of pools) {
     const pairs = extractPairs(pool)
     if (pairs.length === 0) continue
@@ -213,16 +218,19 @@ async function buildPayload(address: string): Promise<AnalyticsGaugeRewardsPaylo
 
   // Token metadata + prices for the chains we touched. One round-trip.
   const touchedChains = Array.from(pairsByChain.keys())
+
   const tokenData = await gqlFetch<{
     tokenGetTokens: { chain: GqlChain; address: string; symbol: string; decimals: number }[]
     tokenGetCurrentPrices: { chain: GqlChain; address: string; price: number }[]
   }>(TOKEN_PRICES_QUERY, { chains: touchedChains })
 
   const tokenMap = new Map<string, TokenInfo>()
+
   for (const t of tokenData.tokenGetTokens ?? []) {
     const key = `${t.chain}:${t.address.toLowerCase()}`
     tokenMap.set(key, { ...t, address: t.address.toLowerCase(), price: null })
   }
+
   for (const p of tokenData.tokenGetCurrentPrices ?? []) {
     const key = `${p.chain}:${p.address.toLowerCase()}`
     const existing = tokenMap.get(key)
@@ -232,6 +240,7 @@ async function buildPayload(address: string): Promise<AnalyticsGaugeRewardsPaylo
   // Parallel per-chain multicalls. We `Promise.allSettled` so one bad
   // chain (RPC outage, viem chain config missing) doesn't kill the rest.
   const chainErrors: Record<string, string> = {}
+
   const settled = await Promise.allSettled(
     Array.from(pairsByChain.entries()).map(async ([chain, pairs]) => {
       try {
@@ -243,6 +252,7 @@ async function buildPayload(address: string): Promise<AnalyticsGaugeRewardsPaylo
           // for that chain. Empty results for it.
           return { chain, results: [] }
         }
+
         chainErrors[chain] = String(err)
         return { chain, results: [] }
       }
@@ -256,6 +266,7 @@ async function buildPayload(address: string): Promise<AnalyticsGaugeRewardsPaylo
   for (const settledResult of settled) {
     if (settledResult.status !== 'fulfilled') continue
     const { chain, results } = settledResult.value
+
     for (const r of results) {
       if (r.amount === 0n) continue
       const tokenAddrLower = r.rewardToken.toLowerCase()
@@ -263,6 +274,7 @@ async function buildPayload(address: string): Promise<AnalyticsGaugeRewardsPaylo
       const decimals = info?.decimals ?? 18
       const tokenUnits = Number(r.amount) / 10 ** decimals
       const key = `${chain}:${tokenAddrLower}`
+
       const existing = rewardsByKey.get(key) ?? {
         symbol: info?.symbol ?? tokenAddrLower.slice(0, 6),
         tokenAddress: r.rewardToken,
@@ -272,12 +284,15 @@ async function buildPayload(address: string): Promise<AnalyticsGaugeRewardsPaylo
         unclaimed: 0,
         unclaimedUsd: null,
       }
+
       existing.unclaimed += tokenUnits
+
       if (info?.price != null && Number.isFinite(info.price)) {
         const addUsd = tokenUnits * info.price
         existing.unclaimedUsd = (existing.unclaimedUsd ?? 0) + addUsd
         totalUnclaimedUsd += addUsd
       }
+
       rewardsByKey.set(key, existing)
     }
   }
@@ -292,6 +307,7 @@ async function buildPayload(address: string): Promise<AnalyticsGaugeRewardsPaylo
 }
 
 const CACHE_VERSION = 'v1'
+
 function makeCachedFetcher(address: string) {
   return unstable_cache(
     () => buildPayload(address),
@@ -308,10 +324,13 @@ export async function GET(
   ctx: { params: Promise<{ address: string }> }
 ): Promise<NextResponse<AnalyticsGaugeRewardsPayload | { error: string }>> {
   const { address: rawAddress } = await ctx.params
+
   if (!isAddress(rawAddress)) {
     return NextResponse.json({ error: 'invalid address' }, { status: 400 })
   }
+
   const address = rawAddress.toLowerCase()
+
   try {
     const payload = await makeCachedFetcher(address)()
     return NextResponse.json(payload, {

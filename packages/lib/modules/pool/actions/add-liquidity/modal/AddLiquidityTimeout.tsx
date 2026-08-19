@@ -29,6 +29,7 @@ function useAddLiquidityTimeout() {
       await refetchQuote()
       startCountdown()
     }
+
     if (secondsToRefetch === 0 && !shouldFreezeQuote) refetchQueries()
   }, [secondsToRefetch])
 

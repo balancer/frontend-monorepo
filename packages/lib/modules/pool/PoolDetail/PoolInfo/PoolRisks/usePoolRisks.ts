@@ -283,6 +283,7 @@ export function getPoolRisks(pool: GqlPoolElement): RiskCategoryGroup[] {
     title: RISK_TITLES[RiskKey.General] || 'General protocol risks',
     path: `/risks#${RiskKey.General}`,
   }
+
   grouped[RiskCategory.General].push(generalProtocolRisk)
 
   // Group applicable risks
@@ -291,6 +292,7 @@ export function getPoolRisks(pool: GqlPoolElement): RiskCategoryGroup[] {
       title: risk.title || 'Risk',
       path: risk.path,
     }
+
     grouped[risk.category].push(riskItem)
   })
 

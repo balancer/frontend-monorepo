@@ -25,6 +25,7 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
 
   const selectActiveToken = () => {
     const token = tokens[activeIndex]
+
     if (token) {
       onTokenSelect(token)
     }

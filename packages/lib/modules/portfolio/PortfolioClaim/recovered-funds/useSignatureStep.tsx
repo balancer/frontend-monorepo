@@ -34,6 +34,7 @@ export function useSignatureStep(signatureChain: number) {
   const signatureContract = getNetworkConfig(chain).contracts.signatureRegistry
 
   const [hasAcceptedDisclaimer, setHasAcceptedDisclaimer] = useState(false)
+
   const {
     hasAlreadySigned,
     isLoading: isSignatureLoading,
@@ -72,6 +73,7 @@ export function useSignatureStep(signatureChain: number) {
     } catch (err) {
       if (err instanceof BaseError) {
         const revertError = err.walk(err => err instanceof ContractFunctionRevertedError)
+
         if (revertError instanceof ContractFunctionRevertedError) {
           setStoreSignatureError(revertError.data?.errorName ?? err.shortMessage)
           setIsSigning(false)

@@ -36,8 +36,10 @@ export function FixedProjectedPrice({
   onPriceChange,
 }: Props) {
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
+
   const hoursDiff =
     differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
+
   const salePeriodText =
     startDateTime && endDateTime
       ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`

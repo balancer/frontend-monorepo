@@ -73,9 +73,11 @@ export async function POST(req: Request) {
 
   let execute = false
   let poolInputs: string[] = []
+
   try {
     const body = (await req.json()) as { execute?: unknown; pools?: unknown }
     execute = body?.execute === true
+
     if (Array.isArray(body?.pools)) {
       poolInputs = body.pools.filter((p): p is string => typeof p === 'string')
     }
@@ -87,17 +89,20 @@ export async function POST(req: Request) {
   // we never silently purge a wider-than-intended set.
   const addresses: string[] = []
   const invalid: string[] = []
+
   for (const p of poolInputs) {
     const addr = toPoolAddress(p)
     if (addr) addresses.push(addr)
     else invalid.push(p)
   }
+
   if (invalid.length > 0) {
     return Response.json(
       { error: 'invalid pool identifiers (need a 42-char address or 66-char poolId)', invalid },
       { status: 400 }
     )
   }
+
   // `scopeAll = true` when no pools were supplied → match every V2 pool. When
   // pools are supplied it's false and the `ANY(addresses)` filter applies.
   const scopeAll = addresses.length === 0

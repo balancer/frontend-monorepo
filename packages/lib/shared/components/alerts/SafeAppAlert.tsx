@@ -33,6 +33,7 @@ export function SafeAppAlert() {
   if (isSafeAccountViaWalletConnect && !isMobile) {
     return <BalAlert content={<Content content={content} />} status="info" />
   }
+
   return null
 }
 

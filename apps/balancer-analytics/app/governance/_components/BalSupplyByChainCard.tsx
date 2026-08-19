@@ -27,6 +27,7 @@ const compactFmt = new Intl.NumberFormat('en-US', {
   notation: 'compact',
   maximumFractionDigits: 1,
 })
+
 const intFmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 })
 
 /**

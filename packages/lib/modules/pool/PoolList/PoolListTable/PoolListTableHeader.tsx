@@ -17,6 +17,7 @@ export function PoolListTableHeader({ ...rest }) {
   const {
     queryState: { sorting, setSorting, joinablePools },
   } = usePoolList()
+
   const { orderBy } = usePoolOrderByState()
   const sortingObj = sorting[0]
 

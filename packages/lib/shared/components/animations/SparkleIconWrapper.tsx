@@ -25,12 +25,14 @@ export function SparkleIconWrapper({
 
   useEffect(() => {
     const svgElement = wrapperRef.current?.querySelector('svg')
+
     if (!svgElement) {
       console.warn('SparkleIconWrapper: SVG ref not found.')
       return
     }
 
     const goldGroup = svgElement.querySelector('.gold-texture') as SVGGElement | null
+
     if (!goldGroup) {
       console.warn('SparkleIconWrapper: .gold-texture group not found in SVG.')
       return

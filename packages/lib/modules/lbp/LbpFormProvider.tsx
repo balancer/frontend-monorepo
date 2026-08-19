@@ -64,6 +64,7 @@ export function useLbpFormLogic() {
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
+
   const isProjectInfoLocked = !!poolAddress
   const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
@@ -80,9 +81,11 @@ export function useLbpFormLogic() {
     if (formSteps.currentStepIndex === 0) {
       return validateSaleStructureStep(saleStructureForm)
     }
+
     if (formSteps.currentStepIndex === 1) {
       return validateProjectInfoStep(projectInfoForm)
     }
+
     const saleValid = await validateSaleStructureStep(saleStructureForm)
     const projectValid = await validateProjectInfoStep(projectInfoForm)
     return saleValid && projectValid
@@ -112,6 +115,7 @@ export function useLbpFormLogic() {
 
   const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
   const { tokens } = getNetworkConfig(selectedChain)
+
   const isCollateralNativeAsset =
     (collateralTokenAddress || '').toLowerCase() === tokens.nativeAsset.address.toLowerCase()
 

@@ -7,6 +7,7 @@ describe('updates config objects by lower-casing hexadecimal keys/values', () =>
         fxPoolVulnWarning: '0xA',
       },
     }
+
     expect(convertHexToLowerCase(input)).toEqual({
       issues: {
         fxPoolVulnWarning: '0xa',
@@ -20,6 +21,7 @@ describe('updates config objects by lower-casing hexadecimal keys/values', () =>
         fxPoolVulnWarning: ['0xB'],
       },
     }
+
     expect(convertHexToLowerCase(input)).toEqual({
       issues: {
         fxPoolVulnWarning: ['0xb'],
@@ -34,6 +36,7 @@ describe('updates config objects by lower-casing hexadecimal keys/values', () =>
         '0xD': 123,
       },
     }
+
     expect(convertHexToLowerCase(input)).toEqual({
       foo: { '0xc': [123], '0xd': 123 },
     })

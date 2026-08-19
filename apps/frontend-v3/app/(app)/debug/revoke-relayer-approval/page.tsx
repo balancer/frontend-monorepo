@@ -19,6 +19,7 @@ export default function Page() {
     confirmed: 'Relayer revoked!',
     tooltip: '',
   }
+
   const { chain, userAddress } = useUserAccount()
   const chainId = chain?.id || 1
   const config = getNetworkConfig(chainId)

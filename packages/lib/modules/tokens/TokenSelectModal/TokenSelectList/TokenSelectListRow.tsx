@@ -32,8 +32,10 @@ export function TokenSelectListRow({
 
   const tokenBalance =
     userBalance && !isBalancesLoading ? fNum('token', userBalance.formatted) : '-'
+
   const usdValue =
     userBalance && !isBalancesLoading ? usdValueForToken(token, userBalance.formatted) : '0'
+
   const fiatValue = userBalance && !isBalancesLoading ? toCurrency(usdValue) : '-'
 
   const boxStyles: BoxProps = {

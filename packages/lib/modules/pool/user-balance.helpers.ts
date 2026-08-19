@@ -91,9 +91,11 @@ export function getUserTotalBalanceInt(pool: Pool): bigint {
   // decimals and so it borked the whole pool page. toFixed(18) ensures the
   // value cannot be more than 18 decimals when passed into parseUnits.
   const totalBalanceStr = getUserTotalBalance(pool)
+
   const totalBalance = isBnParseable(totalBalanceStr)
     ? bn(totalBalanceStr).toFixed(BPT_DECIMALS)
     : '0'
+
   return parseUnits(totalBalance, BPT_DECIMALS)
 }
 
@@ -128,6 +130,7 @@ export function getStakedBalance(pool: Pool, stakingType: GqlPoolStakingType): S
 
   const stakingAddress =
     stakingType === GqlPoolStakingTypeValues.Gauge ? pool.staking?.gauge?.id : undefined
+
   const stakedBalance = userBalance.stakedBalances.find(
     balance =>
       balance.stakingType === stakingType &&

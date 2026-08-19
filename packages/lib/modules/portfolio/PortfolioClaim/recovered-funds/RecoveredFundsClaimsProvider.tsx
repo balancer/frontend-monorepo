@@ -15,8 +15,10 @@ function useRecoveredFundsClaimsLogic() {
 
   const signatureChain =
     claims.length > 0 ? claims[0].chainId : getChainId(PROJECT_CONFIG.defaultNetwork)
+
   const { signatureStep, hasAcceptedDisclaimer, setHasAcceptedDisclaimer } =
     useSignatureStep(signatureChain)
+
   const claimSteps = useClaimSteps(claims)
   const steps = useTransactionSteps([signatureStep, ...claimSteps])
 

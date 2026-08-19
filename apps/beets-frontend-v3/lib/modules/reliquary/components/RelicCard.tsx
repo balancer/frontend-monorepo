@@ -117,6 +117,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const baseApr = pool.dynamicData.aprItems.find(
     item => item.title === 'BEETS reward APR' && item.type === 'MABEETS_EMISSIONS'
   )
+
   const dynamicDataAprItems = pool.dynamicData.aprItems.map(item => {
     if (item.title === 'BEETS reward APR' && item.type === 'STAKING_BOOST') {
       return {
@@ -148,8 +149,10 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
     isValidNumber(relic.amount) && isValidNumber(allocationPoints)
       ? bn(relic.amount).times(allocationPoints)
       : bn(0)
+
   const relicShare =
     weightedTotalBalance > 0 ? weightedRelicAmount.div(weightedTotalBalance) : bn(0)
+
   const formattedShare = `${fNum('sharePercent', relicShare.toNumber())}`
 
   // Calculate Potential Daily Yield

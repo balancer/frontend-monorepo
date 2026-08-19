@@ -44,6 +44,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
     hasWalletTokenBalance,
     poolDisplayType,
   } = usePoolList()
+
   const { name } = usePoolMetadata(pool)
   const { toCurrency } = useCurrency()
 
@@ -173,6 +174,7 @@ function lbpTooltipText(pool: PoolListItem) {
 
   const startTime = secondsToMilliseconds(pool.lbpParams?.startTime || 0)
   const hasStarted = Boolean(startTime && isAfter(now(), startTime))
+
   if (!hasStarted) {
     return `Since the LBP has not started, this pool won't route swaps
     or allow interaction outside of the pool creator.`
@@ -180,6 +182,7 @@ function lbpTooltipText(pool: PoolListItem) {
 
   const endTime = secondsToMilliseconds(pool.lbpParams?.endTime || 0)
   const hasEnded = Boolean(endTime && isAfter(now(), endTime))
+
   if (hasEnded) {
     return `Since the LBP has ended, this pool won't route swaps
     or allow interaction outside of the pool creator.`

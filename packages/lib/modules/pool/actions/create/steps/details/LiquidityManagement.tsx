@@ -10,6 +10,7 @@ import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWi
 
 export function LiquidityManagement() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [poolType, enableDonation, disableUnbalancedLiquidity, poolHooksContract, network] =
     useWatch({
       control: poolCreationForm.control,
@@ -29,6 +30,7 @@ export function LiquidityManagement() {
     if (hookFlags?.enableHookAdjustedAmounts) {
       poolCreationForm.setValue('disableUnbalancedLiquidity', true)
     }
+
     // the stable surge pool factory only supports `disableUnbalancedLiquidity: false`
     if (isStableSurgePool(poolType)) {
       poolCreationForm.setValue('disableUnbalancedLiquidity', false)
@@ -37,6 +39,7 @@ export function LiquidityManagement() {
 
   const isUnbalancedToggleDisabled =
     isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
+
   const isDonationToggleDisabled = isAutoRangePool(poolType)
 
   const donationsToolTip = isDonationToggleDisabled

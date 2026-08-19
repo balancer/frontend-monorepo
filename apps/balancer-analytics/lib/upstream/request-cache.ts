@@ -61,6 +61,7 @@ export function dedupedLoad<T>(key: string, ttlMs: number, load: () => Promise<T
       cache.delete(key)
       throw err
     })
+
   cache.set(key, { state: 'inflight', promise })
   return promise
 }

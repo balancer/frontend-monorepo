@@ -225,9 +225,11 @@ function buildChartOption(
   const lowT = samples.map(s => (Number.isFinite(s.lowTargetPrice) ? s.lowTargetPrice : null))
   const highT = samples.map(s => (Number.isFinite(s.highTargetPrice) ? s.highTargetPrice : null))
   const spot = samples.map(s => (Number.isFinite(s.spotPrice) ? s.spotPrice : null))
+
   const centerednessPct = samples.map(s =>
     Number.isFinite(s.centeredness) ? s.centeredness * 100 : null
   )
+
   const marginPctLine = centerednessMarginFraction * 100
 
   // Stacked-band deltas. Each delta is `next - prev`; if either is null
@@ -240,6 +242,7 @@ function buildChartOption(
       const d = v - f
       return d >= 0 ? d : 0
     })
+
   const lowMinusMin = deltaOrNull(lowT, min)
   const highMinusLow = deltaOrNull(highT, lowT)
   const maxMinusHigh = deltaOrNull(max, highT)
@@ -247,6 +250,7 @@ function buildChartOption(
   // Sub-band tick density mirrors the frontend-v3 reCLAMM barometer for
   // this pool (`ReclAmmChartProvider`: 52 in-range ticks split by margin%).
   const { orangeCount, greenCount } = deriveSubBandCounts(centerednessMarginFraction)
+
   const lowerMarginBands = buildSubBandSeries(
     orangeCount,
     lowMinusMin,
@@ -255,6 +259,7 @@ function buildChartOption(
     COLORS.marginRgb,
     'margin-low'
   )
+
   const targetBands = buildSubBandSeries(
     greenCount,
     highMinusLow,
@@ -263,6 +268,7 @@ function buildChartOption(
     COLORS.targetRgb,
     'target'
   )
+
   const upperMarginBands = buildSubBandSeries(
     orangeCount,
     maxMinusHigh,
@@ -292,15 +298,19 @@ function buildChartOption(
         const i = params[0]?.dataIndex
         if (i === undefined) return ''
         const ts = new Date(samples[i].timestamp * 1000)
+
         const date = ts.toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
         })
+
         const dot = (color: string) =>
           `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:6px;vertical-align:middle"></span>`
+
         const row = (label: string, value: string, color?: string) =>
           `<div style="display:flex;justify-content:space-between;gap:18px;padding:1px 0"><span style="opacity:0.7">${color ? dot(color) : ''}${label}</span><span style="font-family:ui-monospace,monospace">${value}</span></div>`
+
         return [
           `<div style="font-weight:600;margin-bottom:6px">${date}</div>`,
           row('Max', priceFmt(samples[i].maxPrice), COLORS.marginBandEdge),
@@ -647,6 +657,7 @@ function Body({
       </Flex>
     )
   }
+
   if (error) {
     return (
       <Flex align="center" direction="column" gap="sm" h="full" justify="center">
@@ -659,6 +670,7 @@ function Body({
       </Flex>
     )
   }
+
   if (validSampleCount === 0) {
     return (
       <Flex align="center" direction="column" gap="sm" h="full" justify="center">
@@ -671,5 +683,6 @@ function Body({
       </Flex>
     )
   }
+
   return <ReactECharts notMerge option={option} style={{ width: '100%', height: '100%' }} />
 }

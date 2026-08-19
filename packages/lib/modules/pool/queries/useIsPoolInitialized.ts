@@ -40,6 +40,7 @@ export function useIsPoolInitialized({ chainId, poolAddress, poolType }: Params)
 
   const isPoolInitialized = isBalancerV1 ? !!isV1PoolInitialized : !!isV3PoolInitialized
   const isLoadingPoolInitialized = isBalancerV1 ? isLoadingV1 : isLoadingV3
+
   const refetchIsPoolInitialized = isBalancerV1
     ? refetchisV1PoolInitialized
     : refetchIsV3PoolInitialized

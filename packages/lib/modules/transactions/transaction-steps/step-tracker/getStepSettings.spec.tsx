@@ -18,6 +18,7 @@ describe('generates step props', () => {
       step,
       isLastStep: true,
     }
+
     const state = getStepSettings(props, transaction)
 
     expect(state).toMatchInlineSnapshot(`
@@ -41,6 +42,7 @@ describe('generates step props', () => {
       step,
       isLastStep: true,
     }
+
     const state = getStepSettings(props, transaction)
 
     expect(state).toMatchInlineSnapshot(`
@@ -62,6 +64,7 @@ describe('generates step props', () => {
       step,
       isLastStep: true,
     }
+
     const state = getStepSettings(props, transaction)
 
     expect(state).toMatchInlineSnapshot(`

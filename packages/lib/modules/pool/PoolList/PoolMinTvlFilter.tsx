@@ -74,14 +74,17 @@ const SLIDER_STEP_CONFIG: { until: number; step: number }[] = [
 
 function snapToStep(value: number): number {
   let prevUntil = 0
+
   for (const { until, step } of SLIDER_STEP_CONFIG) {
     if (value <= until) {
       const base = prevUntil
       const snapped = Math.round((value - base) / step) * step + base
       return Math.max(base, Math.min(snapped, until))
     }
+
     prevUntil = until
   }
+
   const { until, step } = SLIDER_STEP_CONFIG[SLIDER_STEP_CONFIG.length - 1]
   const base = SLIDER_STEP_CONFIG[SLIDER_STEP_CONFIG.length - 2].until
   const snapped = Math.round((value - base) / step) * step + base
@@ -90,6 +93,7 @@ function snapToStep(value: number): number {
 
 export function PoolMinTvlFilter() {
   const { toCurrency } = useCurrency()
+
   const {
     queryState: { minTvl, setMinTvl },
   } = usePoolList()

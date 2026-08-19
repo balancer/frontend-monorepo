@@ -38,6 +38,7 @@ describe('When proportionally removing liquidity for stable (non boosted) v3 poo
 
     expect(priceImpact).toBe(0)
   })
+
   test('queries amounts out', async () => {
     const handler = selectProportionalHandler(v3Pool)
 

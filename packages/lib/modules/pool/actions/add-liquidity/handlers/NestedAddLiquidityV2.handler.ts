@@ -31,11 +31,14 @@ export class NestedAddLiquidityV2Handler implements AddLiquidityHandler {
       // Avoid price impact calculation when there are no amounts in
       return 0
     }
+
     const input = this.constructSdkInput(humanAmountsIn)
+
     const priceImpactABA = await PriceImpact.addLiquidityNested(
       input,
       this.helpers.nestedPoolStateV2
     )
+
     return priceImpactABA.decimal
   }
 

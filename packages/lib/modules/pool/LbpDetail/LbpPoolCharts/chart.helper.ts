@@ -19,6 +19,7 @@ export function interpolatePrices(
   const startTimestamp = bn(startDate.getTime())
   const endTimestamp = bn(endDate.getTime())
   const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))
+
   const interpolateLaunchTokenWeight = (timestamp: BigNumber) =>
     bn(startWeight)
       .plus(slope.times(timestamp.minus(startTimestamp)))
@@ -27,6 +28,7 @@ export function interpolatePrices(
   const interpolatePrice = (timestamp: BigNumber) => {
     const launchTokenWeight = interpolateLaunchTokenWeight(timestamp)
     const collateralTokenWeight = 100 - launchTokenWeight
+
     const spotPrice = bn(collateralTokenSeed)
       .div(collateralTokenWeight)
       .div(bn(launchTokenSeed).div(launchTokenWeight))
@@ -37,6 +39,7 @@ export function interpolatePrices(
   const data = []
 
   let currentPoint = startDate
+
   while (addHours(currentPoint, 1) < endDate) {
     const currentTimestamp = bn(currentPoint.getTime())
     data.push({ timestamp: currentPoint, projectTokenPrice: interpolatePrice(currentTimestamp) })

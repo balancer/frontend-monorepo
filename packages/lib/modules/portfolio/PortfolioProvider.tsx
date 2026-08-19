@@ -112,6 +112,7 @@ export function usePortfolioLogic() {
       if (isStaked) {
         stakedPools.push(pool)
       }
+
       if (isUnstaked) {
         unstakedPools.push(pool)
       }
@@ -157,12 +158,15 @@ export function usePortfolioLogic() {
       }
 
       let totalFiatClaimableBalance = bn(0)
+
       if (balReward) {
         acc[pool.id].balReward = balReward
         totalFiatClaimableBalance = totalFiatClaimableBalance.plus(balReward.fiatBalance)
       }
+
       if (claimableReward) {
         acc[pool.id].claimableRewards = claimableReward
+
         claimableReward.forEach(
           r => (totalFiatClaimableBalance = totalFiatClaimableBalance.plus(r.fiatBalance))
         )

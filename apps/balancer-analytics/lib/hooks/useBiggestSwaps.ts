@@ -27,6 +27,7 @@ export function useBiggestSwaps() {
   useEffect(() => {
     let cancelled = false
     const controller = new AbortController()
+
     fetchWithRetry('/api/biggest-swaps', { signal: controller.signal })
       .then(r => {
         if (!r.ok) throw new Error(`biggest-swaps HTTP ${r.status}`)
@@ -34,6 +35,7 @@ export function useBiggestSwaps() {
       })
       .then(data => {
         if (cancelled) return
+
         setState({
           items: data.items,
           loading: false,
@@ -46,6 +48,7 @@ export function useBiggestSwaps() {
         if (error instanceof Error && error.name === 'AbortError') return
         setState({ items: [], loading: false, error: error as Error, generatedAt: null })
       })
+
     return () => {
       cancelled = true
       controller.abort()

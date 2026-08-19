@@ -19,6 +19,7 @@ export function StakingOptions() {
   const canBeNegative = isQuantAmmPool(pool.type)
 
   const canStake = getCanStake(pool)
+
   const stakePath = getPoolActionPath({
     id: pool.id,
     chain: pool.chain,

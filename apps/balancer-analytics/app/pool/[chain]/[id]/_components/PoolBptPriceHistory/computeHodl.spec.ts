@@ -27,11 +27,13 @@ describe('computeHodl', () => {
       { wrapped: 'weth', hodl: 'weth' },
       { wrapped: 'usdc', hodl: 'usdc' },
     ]
+
     const samples: Sample[] = [
       sample({ timestamp: day(0), amounts: [1, 2000], totalShares: 1000 }),
       sample({ timestamp: day(1), amounts: [1, 2000], totalShares: 1000 }),
       sample({ timestamp: day(2), amounts: [1, 2000], totalShares: 1000 }),
     ]
+
     const priceSeries = [
       series('weth', { [day(0)]: 2000, [day(1)]: 2500, [day(2)]: 1800 }),
       series('usdc', { [day(0)]: 1, [day(1)]: 1, [day(2)]: 1 }),
@@ -51,10 +53,12 @@ describe('computeHodl', () => {
   it('values a boosted (ERC4626) pool in underlying terms, anchored to sharePrice(t0)', () => {
     // Pool holds waWETH (wrapped); HODL basket is valued in WETH (underlying).
     const hodlTokens: HodlToken[] = [{ wrapped: 'waweth', hodl: 'weth' }]
+
     const samples: Sample[] = [
       sample({ timestamp: day(0), amounts: [10], totalShares: 100, sharePrice: 210 }),
       sample({ timestamp: day(1), amounts: [10], totalShares: 100 }),
     ]
+
     const priceSeries = [
       // waWETH trades above WETH, reflecting accrued wrapper yield.
       series('waweth', { [day(0)]: 2100, [day(1)]: 2145 }),
@@ -77,6 +81,7 @@ describe('computeHodl', () => {
       { wrapped: 'weth', hodl: 'weth' },
       { wrapped: 'nested-bpt', hodl: 'nested-bpt' },
     ]
+
     const samples: Sample[] = [sample({ timestamp: day(0), amounts: [1, 1], totalShares: 100 })]
     // Only one of the two tokens has a series — the other (e.g. a nested BPT
     // with no price feed) is missing entirely.
@@ -96,6 +101,7 @@ describe('computeHodl', () => {
 
   it('walks t0 forward when the pool is younger than the tokens price range', () => {
     const hodlTokens: HodlToken[] = [{ wrapped: 'weth', hodl: 'weth' }]
+
     const samples: Sample[] = [
       // Day 0-1: malformed amounts (pre-launch snapshots) — must be skipped.
       sample({ timestamp: day(0), amounts: [], totalShares: 0 }),
@@ -104,6 +110,7 @@ describe('computeHodl', () => {
       sample({ timestamp: day(2), amounts: [1], totalShares: 100 }),
       sample({ timestamp: day(3), amounts: [1], totalShares: 100 }),
     ]
+
     const priceSeries = [
       series('weth', { [day(0)]: 1900, [day(1)]: 1950, [day(2)]: 2000, [day(3)]: 2100 }),
     ]
@@ -120,12 +127,14 @@ describe('computeHodl', () => {
 
   it('bridges a missing daily price bucket by walking back up to 14 days', () => {
     const hodlTokens: HodlToken[] = [{ wrapped: 'weth', hodl: 'weth' }]
+
     const samples: Sample[] = [
       sample({ timestamp: day(0), amounts: [1], totalShares: 100 }),
       // Day 1's bucket is missing from the oracle feed (gap) — should resolve
       // to day 0's price rather than going null.
       sample({ timestamp: day(1), amounts: [1], totalShares: 100 }),
     ]
+
     const priceSeries = [series('weth', { [day(0)]: 2000 })]
 
     const result = computeHodl(samples, hodlTokens, priceSeries)

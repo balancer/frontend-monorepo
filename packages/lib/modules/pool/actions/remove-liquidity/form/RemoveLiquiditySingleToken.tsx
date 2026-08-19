@@ -31,6 +31,7 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
     } else {
       setWethIsEth(false)
     }
+
     setSingleTokenAddress(tokenAddress)
   }
 

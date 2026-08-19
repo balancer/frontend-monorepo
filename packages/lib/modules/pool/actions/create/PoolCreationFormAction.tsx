@@ -13,10 +13,12 @@ import { useFormState, useWatch } from 'react-hook-form'
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { poolAddress, poolCreationForm, goToNextStep, goToPreviousStep, isLastStep, isFirstStep } =
     usePoolCreationForm()
+
   const [poolTokens, poolType, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'poolType', 'network'],
   })
+
   const formState = useFormState({ control: poolCreationForm.control })
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()

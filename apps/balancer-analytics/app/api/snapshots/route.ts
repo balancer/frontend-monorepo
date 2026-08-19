@@ -158,6 +158,7 @@ function emptyPoint(ts: number): ProtocolSnapshotPoint {
 
 async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<DbRow[]> {
   const cutoff = Math.floor(Date.now() / 1000) - days * 24 * 60 * 60
+
   // Daily mode: DISTINCT ON returns one row per (chain, protocol, UTC day),
   // keeping the latest reading inside that day (ORDER BY ... ts DESC). The
   // kept `ts` differs across (chain, protocol) within a day — e.g. the
@@ -183,6 +184,7 @@ async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<D
       ORDER BY 1 ASC
     `) as DbRow[]
   }
+
   // Weekly mode: identical DISTINCT-ON collapse as daily, bucketed to the UTC
   // week (`ts / 604800`) and re-keyed to the week start. Used only for
   // multi-year ranges where even daily would exceed the 2MB cache limit
@@ -204,6 +206,7 @@ async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<D
       ORDER BY 1 ASC
     `) as DbRow[]
   }
+
   return (await sql`
     SELECT ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
            yield_capture_24h, surplus_24h, pool_count, num_lps, source
@@ -215,14 +218,18 @@ async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<D
 
 function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
   const byTs = new Map<number, ProtocolSnapshotPoint>()
+
   for (const r of rows) {
     const ts = Number(r.ts)
     let p = byTs.get(ts)
+
     if (!p) {
       p = emptyPoint(ts)
       byTs.set(ts, p)
     }
+
     const m = chainMetrics(r)
+
     if (r.protocol === PROTOCOL_CORE) {
       if (r.chain === AGGREGATE_KEY) {
         p.totalLiquidity = m.totalLiquidity
@@ -241,10 +248,12 @@ function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
       if (!key) continue
       if (!p.breakdowns) p.breakdowns = {}
       let b = p.breakdowns[key]
+
       if (!b) {
         b = emptyBreakdown()
         p.breakdowns[key] = b
       }
+
       if (r.chain === AGGREGATE_KEY) {
         b.totalLiquidity = m.totalLiquidity
         b.swapVolume24h = m.swapVolume24h
@@ -257,6 +266,7 @@ function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
       }
     }
   }
+
   const points = Array.from(byTs.values())
   return { points, generatedAt: points.at(-1)?.timestamp ?? null }
 }
@@ -284,15 +294,18 @@ async function fetchLatestVersionSeed(): Promise<VersionBreakdownSeed | null> {
 
   let v2: VersionBreakdownSeed['v2'] | null = null
   let v3: VersionBreakdownSeed['v3'] | null = null
+
   for (const r of rows) {
     const partial = {
       totalLiquidity: Number.parseFloat(r.total_liquidity) || 0,
       swapVolume24h: Number.parseFloat(r.swap_volume_24h) || 0,
       swapFee24h: Number.parseFloat(r.swap_fee_24h) || 0,
     }
+
     if (r.protocol === PROTOCOL_V2) v2 = partial
     if (r.protocol === PROTOCOL_V3) v3 = partial
   }
+
   if (!v2 || !v3) return null
   return { v2, v3 }
 }
@@ -339,12 +352,14 @@ const getSnapshotSeries = unstable_cache(
 export async function GET(req: Request) {
   const url = new URL(req.url)
   const days = snapDays(url.searchParams.get('days'))
+
   // Cap cadence by range so the cached payload stays under 2MB (see
   // `effectiveGranularity`), regardless of the requested granularity.
   const granularity = effectiveGranularity(
     days,
     parseGranularity(url.searchParams.get('granularity'))
   )
+
   // Daily/weekly payloads are small and bounded, so cache them. Hourly is only
   // ever the 24H/7D window, which over-fetches 30d (≈2.9MB serialized) — over
   // Next's 2MB `unstable_cache` entry limit, where a set would throw "failed
@@ -355,6 +370,7 @@ export async function GET(req: Request) {
     granularity === 'hourly'
       ? await buildSnapshotSeries(days, granularity)
       : await getSnapshotSeries(days, granularity)
+
   // Browser + CDN cache. `s-maxage=3600` lets the Vercel edge share-cache
   // the response across visitors for the full snapshot interval; without
   // it the CDN treats this as private and every visitor reaches the origin

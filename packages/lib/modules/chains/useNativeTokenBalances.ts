@@ -64,10 +64,12 @@ export function useNativeTokenBalancesValues(
           const chain = chains[index]
           const networkConfig = getNetworkConfig(chain)
           const tokenPrice = priceFor(networkConfig.tokens.nativeAsset.address, chain) ?? 0
+
           const value =
             data && data.value
               ? bn(data.value).shiftedBy(-data.decimals).times(tokenPrice).toNumber()
               : 0
+
           return [chain, value]
         })
       )

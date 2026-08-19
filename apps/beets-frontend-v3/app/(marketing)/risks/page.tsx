@@ -10,6 +10,7 @@ export default function Risks() {
   useEffect(() => {
     const handleHashChange = () => {
       const { hash } = window.location
+
       if (hash) {
         const id = hash.substring(1)
         const element = document.getElementById(id)

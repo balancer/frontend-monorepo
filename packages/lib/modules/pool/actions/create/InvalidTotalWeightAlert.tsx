@@ -6,6 +6,7 @@ import { useWatch } from 'react-hook-form'
 
 export function InvalidTotalWeightAlert() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'poolType'],

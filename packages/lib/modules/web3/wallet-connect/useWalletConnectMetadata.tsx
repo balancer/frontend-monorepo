@@ -8,8 +8,10 @@ export function useWalletConnectMetadata() {
   useEffect(() => {
     if (!connector?.getProvider) return
     if (connector.id !== 'walletConnect') return
+
     connector.getProvider().then(provider => {
       const walletConnectProvider = provider as any
+
       try {
         setWalletName(walletConnectProvider.session.peer.metadata.name)
       } catch {

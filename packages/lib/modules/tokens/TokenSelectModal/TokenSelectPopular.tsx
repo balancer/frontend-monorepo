@@ -27,6 +27,7 @@ export function TokenSelectPopular({
   const {
     tokens: { popularTokens },
   } = getNetworkConfig(chain)
+
   const { getToken } = useTokens()
 
   const tokens = useMemo(() => {

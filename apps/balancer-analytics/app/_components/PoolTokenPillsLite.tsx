@@ -26,6 +26,7 @@ export function PoolTokenPillsLite({ tokens, type }: { tokens: PillToken[]; type
   if (isStableLike(type as GqlPoolType)) {
     return <StablePills tokens={tokens} />
   }
+
   return <WeightedPills tokens={tokens} />
 }
 
@@ -116,6 +117,7 @@ function StablePills({ tokens }: { tokens: PillToken[] }) {
 function isValidImgSrc(src: string | null | undefined): src is string {
   if (!src) return false
   if (src.startsWith('/')) return true
+
   try {
     const u = new URL(src)
     return u.protocol === 'http:' || u.protocol === 'https:' || u.protocol === 'data:'

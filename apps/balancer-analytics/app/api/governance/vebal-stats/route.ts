@@ -64,6 +64,7 @@ async function buildPayload(): Promise<VeBalStatsPayload> {
   const cfg = getNetworkConfig(GqlChainValues.Mainnet)
   const veBal = cfg.contracts.veBAL
   const bpt = cfg.tokens.addresses.veBalBpt
+
   if (!veBal || !bpt) {
     return {
       veBalTotalSupply: null,
@@ -76,6 +77,7 @@ async function buildPayload(): Promise<VeBalStatsPayload> {
   }
 
   const client = getPublicClient(GqlChainValues.Mainnet)
+
   const results = await client.multicall({
     contracts: [
       {
@@ -100,6 +102,7 @@ async function buildPayload(): Promise<VeBalStatsPayload> {
 
   const human = (n: bigint | undefined): number | null =>
     n === undefined ? null : Number(n) / 1e18
+
   const veBalTotalSupply = results[0].status === 'success' ? human(results[0].result) : null
   const bptLocked = results[1].status === 'success' ? human(results[1].result) : null
   const bptTotalSupply = results[2].status === 'success' ? human(results[2].result) : null
@@ -110,9 +113,11 @@ async function buildPayload(): Promise<VeBalStatsPayload> {
   // it tells you whether holders typically lock for the max (close to 1)
   // or just dip in for the minimum (closer to 0).
   let averageLockMultiplier: number | null = null
+
   if (veBalTotalSupply !== null && bptLocked !== null && bptLocked > 0) {
     averageLockMultiplier = veBalTotalSupply / bptLocked
   }
+
   // veBAL max lock = 1 year (NOT 4 like veCRV — different from the Curve
   // template Balancer's contract is forked from). So the multiplier maps
   // directly to years.
@@ -163,6 +168,7 @@ export async function GET() {
       averageLockYears: null,
       generatedAt: Math.floor(Date.now() / 1000),
     }
+
     return Response.json(
       { ...empty, error: String(err) },
       { status: 502, headers: { 'Cache-Control': 'no-store' } }

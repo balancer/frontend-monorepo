@@ -98,6 +98,7 @@ export function useRecentTransactionsLogic() {
     )
 
     const updatePayload = { ...transactions }
+
     // we cannot use a wagmi hook here as useWaitForTransaction does not support a list of hashes
     // nor can we render multiple useWaitForTransaction hooks
     // so we use the underlying viem call to get the transactions confirmation status
@@ -108,11 +109,13 @@ export function useRecentTransactionsLogic() {
           chainId: getChainId(tx.chain),
           timeout: getWaitForReceiptTimeout(getChainId(tx.chain)),
         })
+
         if (receipt?.status === 'success') {
           updatePayload[tx.hash] = { ...tx, status: 'confirmed' }
         } else {
           updatePayload[tx.hash] = { ...tx, status: 'reverted' }
         }
+
         setTransactions(updatePayload)
       } catch (error) {
         console.error('Error in RecentTransactionsProvider: ', error)
@@ -128,11 +131,14 @@ export function useRecentTransactionsLogic() {
           'Error in waitForTransactionReceipt inside RecentTransactionsProvider',
           { txHash: tx.hash }
         )
+
         const isTimeoutError = ensureError(error).name === 'WaitForTransactionReceiptTimeoutError'
+
         updatePayload[tx.hash] = {
           ...tx,
           status: isTimeoutError ? 'timeout' : 'unknown',
         }
+
         setTransactions(updatePayload)
       }
     }
@@ -148,6 +154,7 @@ export function useRecentTransactionsLogic() {
     // on updates for the same transaction, we will modify the same toast
     // using updateTrackedTransaction.
     let toastId: ToastId | undefined = undefined
+
     // Edge case: if the transaction is confirmed we don't show the toast
     if (trackedTransaction.status !== 'confirmed' && showToast) {
       toastId = toast({
@@ -168,6 +175,7 @@ export function useRecentTransactionsLogic() {
     if (!trackedTransaction.hash) {
       throw new Error('Attempted to add a transaction to the cache without a hash.')
     }
+
     // Make sure to store a reference to the toast on this transaction
     const updatedTrackedTransactions = {
       ...transactions,
@@ -241,6 +249,7 @@ export function useRecentTransactionsLogic() {
   useEffect(() => {
     const fetchRecentTransactions = async () => {
       const _recentTransactions = localStorage.getItem(RECENT_TRANSACTIONS_KEY)
+
       if (_recentTransactions) {
         const recentTransactions = JSON.parse(_recentTransactions)
         setTransactions(recentTransactions)
@@ -249,6 +258,7 @@ export function useRecentTransactionsLogic() {
         waitForUnconfirmedTransactions(recentTransactions)
       }
     }
+
     fetchRecentTransactions()
   }, [])
 

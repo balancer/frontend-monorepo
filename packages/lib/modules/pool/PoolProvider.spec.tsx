@@ -26,6 +26,7 @@ async function testUsePool({
 }
 
 const poolId = 'test pool id'
+
 test('fetches v2 pool', async () => {
   const result = await testUsePool()
   expect(result.current.pool).toMatchObject(defaultPoolMock)

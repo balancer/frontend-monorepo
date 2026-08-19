@@ -24,6 +24,7 @@ export function useProtocolSearchParams({ poolType }: UseProtocolSearchParams) {
   const showBalancerWarning = isProtocolParamBalancer && isCowAmm && !isFirstStep
 
   const shouldSwitchToCowProtocol = isProtocolParamCow && !showCowAmmWarning && isFirstStep
+
   const shouldSwitchToBalancerProtocol =
     isProtocolParamBalancer && !showBalancerWarning && isFirstStep
 

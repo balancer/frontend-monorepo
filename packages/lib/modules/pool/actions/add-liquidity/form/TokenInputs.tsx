@@ -18,6 +18,7 @@ type Props = {
   // Given a token, returns a callback called when the token is toggled (or undefined if the token can't be toggled)
   getToggleTokenCallback: (token: ApiToken) => (() => void) | undefined
 }
+
 export function TokenInputs({ getToggleTokenCallback, customSetAmountIn }: Props) {
   const { pool } = usePool()
   const { tokens, humanAmountsIn, setHumanAmountIn } = useAddLiquidity()
@@ -28,6 +29,7 @@ export function TokenInputs({ getToggleTokenCallback, customSetAmountIn }: Props
     const amountIn = humanAmountsIn.find(amountIn =>
       isSameAddress(amountIn.tokenAddress, tokenAddress)
     )
+
     return amountIn ? amountIn.humanAmount : ''
   }
 

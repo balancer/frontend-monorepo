@@ -50,6 +50,7 @@ export function PortfolioTokenDonut({ tokens }: { tokens: TokenAggregate[] }) {
     // Count symbol occurrences in the visible head so we only suffix when
     // there's an actual collision.
     const symbolCounts = new Map<string, number>()
+
     for (const t of head) {
       symbolCounts.set(t.symbol, (symbolCounts.get(t.symbol) ?? 0) + 1)
     }
@@ -62,9 +63,11 @@ export function PortfolioTokenDonut({ tokens }: { tokens: TokenAggregate[] }) {
     }))
 
     const tailValue = tail.reduce((acc, t) => acc + t.valueUsd, 0)
+
     if (tailValue > 0) {
       out.push({ key: '__other__', name: `Other (${tail.length})`, value: tailValue })
     }
+
     return out
   }, [tokens])
 

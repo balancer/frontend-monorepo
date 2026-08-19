@@ -15,6 +15,7 @@ export function buildCowSwapUrlFromPool(pool: Pool): string {
 }
 
 type CowSwapParams = { chain: GqlChain; tokenInAddress: string; tokenOutAddress: string }
+
 export function buildCowSwapUrl({ chain, tokenInAddress, tokenOutAddress }: CowSwapParams): string {
   const cowSwapBaseUrl = 'https://swap.cow.fi/#/'
 

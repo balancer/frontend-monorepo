@@ -148,6 +148,7 @@ describe('LbpFundsRaisedChart', () => {
     const cutTimeSeries = latestOption.series.find(
       (series: { id?: string }) => series.id === 'cut-time'
     )
+
     const label = cutTimeSeries.label.formatter({
       data: [new Date('2026-03-17T11:00:00Z').getTime(), 10000 * 1.05],
     })

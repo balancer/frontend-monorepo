@@ -31,6 +31,7 @@ export function TransactionStepButton({ step }: Props) {
   const isSafeAccount = useIsSafeAccount()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const transactionState = getTransactionState(step)
+
   const isButtonLoading =
     transactionState === TransactionState.Loading ||
     transactionState === TransactionState.Confirming ||
@@ -40,8 +41,10 @@ export function TransactionStepButton({ step }: Props) {
   const isComplete = step.isComplete
     ? step.isComplete()
     : transactionState === TransactionState.Completed
+
   const hasSimulationError = simulation.isError
   const isIdle = isConnected && simulation.isStale && !simulation.data
+
   const isButtonDisabled =
     isButtonLoading || hasSimulationError || isIdle || isComplete || !executeAsync // no executeAsync is undefined while the txConfig is being built
 
@@ -50,6 +53,7 @@ export function TransactionStepButton({ step }: Props) {
   async function handleOnClick() {
     setExecutionError(undefined)
     toast.closeAll()
+
     try {
       if (!executeAsync) return
       return await executeAsync()
@@ -72,10 +76,12 @@ export function TransactionStepButton({ step }: Props) {
   const isSafeApp = useIsSafeApp()
   const safeTxHash = isSafeApp ? step.execution.data : undefined
   const safeAppsSdk = new SafeAppsSDK()
+
   useEffect(() => {
     if (safeTxHash) {
       safeAppsSdk.txs.getBySafeTxHash(safeTxHash).then(tx => {
         setSafeTxDetails(tx)
+
         if (!isTxTracked(safeTxHash)) {
           addTrackedTransaction(
             {
@@ -133,13 +139,16 @@ function TransactionError({ step }: Props) {
   if (executionError) return <GenericError error={executionError} />
 
   const resultError = step.result.error
+
   if (resultError) {
     const isTimeoutError = resultError.name === 'TimeoutError'
     const transactionHash = step.execution.data
+
     if (isTimeoutError && transactionHash) {
       const chain = getGqlChain(step.chainId)
       return <TransactionTimeoutError chain={chain} transactionHash={transactionHash} />
     }
+
     return <GenericError error={resultError} />
   }
 

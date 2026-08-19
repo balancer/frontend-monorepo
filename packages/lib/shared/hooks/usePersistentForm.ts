@@ -24,6 +24,7 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
   formOptions?: Omit<UseFormProps<TFieldValues>, 'defaultValues'>
 ): UseFormReturn<TFieldValues> & { resetToInitial: () => void; isHydrated: boolean } {
   const [isHydrated, setIsHydrated] = useState(false)
+
   const [persistedValues, setPersistedValues] = useLocalStorage<DefaultValues<TFieldValues>>(
     storageKey,
     initialDefaultValues
@@ -40,11 +41,14 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
       if (persistedValues !== initialDefaultValues) {
         form.reset(persistedValues, { keepDefaultValues: true })
       }
+
       if (formOptions?.mode !== 'onSubmit') {
         await form.trigger()
       }
+
       setIsHydrated(true)
     }
+
     initForm()
   }, [])
 

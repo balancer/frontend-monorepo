@@ -342,25 +342,31 @@ export const allFakeGqlTokens: GqlToken[] = [
 
 export function fakeTokenBySymbol(symbol: FakeTokenSymbol) {
   const token = allFakeGqlTokens.find(token => token.symbol === symbol)
+
   if (!token) {
     console.log(
       'Available fake tokens: ',
       allFakeGqlTokens.map(token => token.symbol)
     )
+
     throw new Error(`Invalid symbol for fake token: ${symbol}`)
   }
+
   return token
 }
 
 export function fakeTokenByAddress(address: Address) {
   const token = allFakeGqlTokens.find(token => isSameAddress(token.address, address))
+
   if (!token) {
     console.log(
       'Available fake tokens: ',
       allFakeGqlTokens.map(token => token.symbol)
     )
+
     throw new Error(`Invalid address for fake token: ${address}`)
   }
+
   return token
 }
 
@@ -368,13 +374,16 @@ export function fakeTokenByAddressAndChain(address: Address, chain: GqlChain) {
   const token = allFakeGqlTokens.find(
     token => isSameAddress(token.address, address) && token.chain === chain
   )
+
   if (!token) {
     console.log(
       'Available fake tokens: ',
       allFakeGqlTokens.map(token => token.symbol)
     )
+
     throw new Error(`Invalid address for fake token: ${address}, chain: ${chain}`)
   }
+
   return token
 }
 

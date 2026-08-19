@@ -48,8 +48,10 @@ import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWi
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
   const tokenSelectDisclosure = useDisclosure()
+
   const { updatePoolToken, addPoolToken, poolCreationForm, autoRangeConfigForm, eclpConfigForm } =
     usePoolCreationForm()
+
   const [network, poolTokens, weightedPoolStructure, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'poolTokens', 'weightedPoolStructure', 'poolType'],

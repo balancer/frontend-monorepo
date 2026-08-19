@@ -67,6 +67,7 @@ export function useUserAccountLogic() {
       }
 
       let isAuthorized = true
+
       if (isAddress(address)) {
         isAuthorized = await isAuthorizedAddress(address)
         if (!isAuthorized) disconnect.mutate()
@@ -111,6 +112,7 @@ export function useUserAccountLogic() {
       if (shouldUseAnvilFork) {
         clearImpersonatedAddressLS()
       }
+
       if (isConnectedToWC) {
         // When disconnecting from WC connector we need a full page reload to enforce a new WC connector instance created
         console.log('Full page reload on WC disconnection')

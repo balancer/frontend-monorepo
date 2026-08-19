@@ -58,6 +58,7 @@ function errorBlob(err: unknown): { msg: string; status?: number; causeName?: st
     status?: number
     cause?: { name?: string }
   }
+
   return {
     msg: `${e?.shortMessage ?? ''} ${e?.message ?? ''} ${e?.cause?.name ?? ''}`,
     status: e?.status,
@@ -81,6 +82,7 @@ function scrubAndThrow(err: unknown): never {
     url?: string
     status?: number
   }
+
   if (e?.message) e.message = scrubSecret(e.message) as string
   if (e?.shortMessage) e.shortMessage = scrubSecret(e.shortMessage) as string
   if (e?.url) e.url = scrubSecret(e.url) as string
@@ -134,6 +136,7 @@ export async function chunkedGetLogs(
   // Pre-build the list of chunk ranges. Each chunk is handled independently
   // (its own retry-with-split path), so the dispatch order doesn't matter.
   const ranges: Array<{ from: bigint; to: bigint }> = []
+
   for (let cursor = fromBlock; cursor <= toBlock; cursor += initialStride) {
     const end = cursor + initialStride - 1n < toBlock ? cursor + initialStride - 1n : toBlock
     ranges.push({ from: cursor, to: end })
@@ -147,6 +150,7 @@ export async function chunkedGetLogs(
     // out as soon as we get a non-transient response (success or hard
     // failure), keeping the wall-clock cost reasonable.
     let lastErr: unknown
+
     for (let attempt = 0; attempt <= TRANSIENT_RETRY_DELAYS.length; attempt++) {
       try {
         const logs = (await (client.getLogs as (p: unknown) => Promise<unknown>)({
@@ -154,6 +158,7 @@ export async function chunkedGetLogs(
           fromBlock: from,
           toBlock: to,
         })) as DecodedLog[]
+
         return logs
       } catch (err) {
         lastErr = err
@@ -187,6 +192,7 @@ export async function chunkedGetLogs(
         scrubAndThrow(err)
       }
     }
+
     scrubAndThrow(lastErr)
   }
 

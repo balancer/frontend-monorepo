@@ -33,10 +33,12 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
   // Must be before early returns to satisfy Rules of Hooks
   const maturityDuration = useMemo(() => {
     if (!addLiquidityMaturityImpact) return null
+
     const duration = intervalToDuration({
       start: 0,
       end: addLiquidityMaturityImpact.addLiquidityMaturityImpactTimeInMilliseconds,
     })
+
     return formatDuration(duration, { delimiter: ', ' })
   }, [addLiquidityMaturityImpact])
 

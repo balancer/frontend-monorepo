@@ -14,6 +14,7 @@ type Params = {
   fileName?: string
   isFrozen?: boolean
 }
+
 /**
  * Fetches a pool from the API and saves it as a mock file in the api-mocks directory.
  */

@@ -82,6 +82,7 @@ describe('pool helper', async () => {
 
   it('poolActionableTokens', async () => {
     const poolActionableTokens = getPoolActionableTokens(pool)
+
     expect(poolActionableTokens.map(t => t.address).sort()).toEqual([
       wethAddress,
       stataEthUSDCAddress,
@@ -129,6 +130,7 @@ describe('shouldBlockAddLiquidity', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.type = GqlPoolTypeValues.ComposableStable
       getPoolToken(pool, 0).priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
+
       getPoolToken(pool, 0).priceRateProviderData = {
         __typename: 'GqlPriceRateProviderData',
         address: '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f',
@@ -152,6 +154,7 @@ describe('shouldBlockAddLiquidity', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.type = GqlPoolTypeValues.MetaStable
       getPoolToken(pool, 0).priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
+
       getPoolToken(pool, 0).priceRateProviderData = {
         __typename: 'GqlPriceRateProviderData',
         address: '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f',
@@ -354,6 +357,7 @@ describe('getPoolActivityDateCaption', () => {
     expect(getPoolActivityDateCaption(daysAgo(7))).toBe('in last 7 days')
   })
 })
+
 function getPoolToken(pool: Pool, index: number) {
   const token = pool.poolTokens[index]
   if (!token) throw new Error(`Missing pool token at index ${index}`)

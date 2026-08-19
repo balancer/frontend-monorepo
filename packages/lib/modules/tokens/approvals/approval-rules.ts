@@ -70,9 +70,11 @@ export function getRequiredTokenApprovals({
         isPermit2,
         symbol: t.symbol,
       }
+
       // Prepend approval for ZERO amount
       return [zeroTokenAmountToApprove, t]
     }
+
     return t
   })
 }

@@ -34,6 +34,7 @@ export function PoolListLayout() {
       setProtocolVersion,
     },
   } = usePoolList()
+
   const isFilterVisible = useFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
 

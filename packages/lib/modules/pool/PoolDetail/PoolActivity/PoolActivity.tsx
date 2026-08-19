@@ -77,14 +77,17 @@ function Content() {
   }
 
   const { dataSize } = usePoolActivity()
+
   const title = isV3LBP(pool)
     ? `${dataSize} transaction${dataSize !== 1 ? 's' : ''}`
     : 'Pool activity'
 
   let subtitle = transactionsLabel
+
   if (isV3LBP(pool)) {
     const lbpPool = pool as LbpV3
     const currentTime = now()
+
     if (
       isWithinInterval(currentTime, {
         start: secondsToMilliseconds(lbpPool.startTime),
@@ -98,12 +101,14 @@ function Content() {
         secondsToMilliseconds(lbpPool.endTime),
         secondsToMilliseconds(lbpPool.startTime)
       )
+
       const hoursDiff =
         differenceInHours(
           secondsToMilliseconds(lbpPool.endTime),
           secondsToMilliseconds(lbpPool.startTime)
         ) -
         daysDiff * 24
+
       subtitle = `During ${daysDiff} days ${hoursDiff > 0 ? hoursDiff + ' hours' : ''} LBP period`
     }
   }

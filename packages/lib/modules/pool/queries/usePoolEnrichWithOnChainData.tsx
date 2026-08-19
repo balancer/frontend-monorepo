@@ -157,6 +157,7 @@ function useV2PoolOnchainData(pool: Pool) {
       } as const,
     ],
   })
+
   return {
     ...v2Query,
     poolTokenBalances: v2Query.data?.[0][1],

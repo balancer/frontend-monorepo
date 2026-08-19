@@ -18,6 +18,7 @@ describe('project configs', () => {
       expect(projectConfig.links).toBeDefined()
       expect(projectConfig.footer.linkSections.length).toBeGreaterThan(0)
     }
+
     expect(ProjectConfigBalancer.projectId).not.toBe(ProjectConfigBeets.projectId)
     expect(ProjectConfigBalancer.defaultNetwork).not.toBe(ProjectConfigBeets.defaultNetwork)
   })

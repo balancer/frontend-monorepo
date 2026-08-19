@@ -32,6 +32,7 @@ describe('useLbpPoolChartsLogic', () => {
     vi.setSystemTime(new Date('2026-03-17T12:00:00Z'))
 
     usePoolMock.mockReturnValue({ pool: makeFixedPool() })
+
     usePriceInfoMock.mockReturnValue({
       isLoading: false,
       hourlyData: [],
@@ -84,11 +85,13 @@ describe('useLbpPoolChartsLogic', () => {
       reserveTokenStartWeight: 0.2,
       isSeedless: false,
     }
+
     delete (
       dynamicPool as typeof dynamicPool & {
         projectTokenRate?: string
       }
     ).projectTokenRate
+
     usePoolMock.mockReturnValue({ pool: dynamicPool })
 
     const { result } = renderHook(() => useLbpPoolChartsLogic())

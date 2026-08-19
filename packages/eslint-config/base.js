@@ -10,6 +10,16 @@ import { resolve } from 'node:path'
 
 const project = resolve(process.cwd(), 'tsconfig.json')
 
+// Statement types considered "multiline" by `padding-line-between-statements`
+// below — anything whose declaration/body/expression spans more than one line.
+const MULTILINE_STATEMENT_TYPES = [
+  'multiline-block-like',
+  'multiline-expression',
+  'multiline-const',
+  'multiline-let',
+  'multiline-var',
+]
+
 /**
  * A shared ESLint configuration for the repository.
  * Based on the original library.js configuration, adapted for ESLint v9 flat config.
@@ -73,6 +83,26 @@ const baseConfig = [
       // Disable react-hooks/exhaustive-deps rule
       'react-hooks/exhaustive-deps': 'off',
       curly: ['error', 'multi-line'],
+      // Require a blank line before/after any statement that spans multiple
+      // lines, so multiline blocks visually stand out from surrounding code.
+      // Doesn't fire on the first/last statement in a block (no blank line
+      // forced right after `{` or before `}`) since the rule only pads
+      // between two consecutive statements.
+      'padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: '*', next: MULTILINE_STATEMENT_TYPES },
+        { blankLine: 'always', prev: MULTILINE_STATEMENT_TYPES, next: '*' },
+        // Leading `;` ASI-safety guards (e.g. `;[a, b] = foo()`, used to
+        // prevent the previous line from being parsed as a member/call
+        // expression) are their own EmptyStatement immediately before the
+        // real statement on the *same* source line. Without this exception,
+        // the rule above sees `empty -> multiline-expression` as adjacent
+        // statements and demands a blank line "before" a statement that's
+        // actually glued to its guard. `blankLine: 'any'` must come after
+        // the multiline entries so it wins for this specific pairing.
+        { blankLine: 'any', prev: 'empty', next: '*' },
+        { blankLine: 'any', prev: '*', next: 'empty' },
+      ],
       'react/react-in-jsx-scope': 'off',
       'no-console': 'off',
       'max-len': [

@@ -82,6 +82,7 @@ export async function gqlFetch<T>(
       : { next: { revalidate: options.cache.revalidate } }
 
   let res: Response
+
   try {
     res = await fetch(url, {
       method: 'POST',
@@ -102,10 +103,12 @@ export async function gqlFetch<T>(
 
   if (!res.ok) {
     const retryAfter = res.headers.get('retry-after')
+
     console.warn(`[${options.upstream}] ${options.label} HTTP ${res.status}`, {
       variables,
       retryAfter,
     })
+
     const kind: UpstreamErrorKind = isRateLimitStatus(res.status) ? 'rate_limit' : 'upstream_error'
     throw new UpstreamError(
       options.upstream,
@@ -117,11 +120,13 @@ export async function gqlFetch<T>(
   }
 
   const json = (await res.json()) as { data?: T; errors?: unknown }
+
   if (json.errors) {
     console.warn(`[${options.upstream}] ${options.label} GraphQL errors`, {
       variables,
       errors: json.errors,
     })
+
     // GraphQL-level errors with a 200 status are typically schema/query
     // problems, not capacity. Treat as upstream_error so the user sees
     // a "something's off" rather than a fake "rate limited".
@@ -133,6 +138,7 @@ export async function gqlFetch<T>(
       null
     )
   }
+
   return json.data ?? null
 }
 
@@ -161,14 +167,17 @@ export function upstreamErrorToResponse(
         : 'upstream_error'
 
   const body: Record<string, unknown> = { error: errorCode }
+
   if (isRateLimit) {
     body.message = `${err.upstream} API rate limit reached. Please wait a minute and try again.`
   }
+
   if (options.includeDevDetail) {
     body.detail = err.message
   }
 
   const headers: Record<string, string> = { 'Cache-Control': 'no-store' }
+
   if (isRateLimit) {
     // Forward the upstream's hint when present; otherwise default to 60s
     // (typical per-IP bucket refill).

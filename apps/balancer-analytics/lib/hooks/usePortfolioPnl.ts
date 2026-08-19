@@ -90,6 +90,7 @@ export function usePortfolioPnl(
   useEffect(() => {
     if (!address) return
     const controller = new AbortController()
+
     fetch(`/api/portfolio/${address}/pnl`, { signal: controller.signal })
       .then(async res => {
         if (!res.ok) throw new Error(`pnl ${res.status}`)
@@ -100,19 +101,23 @@ export function usePortfolioPnl(
         if (err.name === 'AbortError') return
         setAsyncState({ address, error: err.message })
       })
+
     return () => controller.abort()
   }, [address])
 
   return useMemo<UsePortfolioPnlResult>(() => {
     if (!address) return EMPTY
+
     // Loading state is derived: we're loading whenever the async slot
     // doesn't yet hold a result for the current address.
     if (!asyncState || asyncState.address !== address) {
       return { ...EMPTY, loading: true }
     }
+
     if ('error' in asyncState) {
       return { ...EMPTY, error: asyncState.error }
     }
+
     const { payload } = asyncState
     const byPoolKey: Record<string, PnlResult> = {}
 
@@ -120,6 +125,7 @@ export function usePortfolioPnl(
     // omit `cutoffsByChain` entirely. Treat that as "no cutoffs" rather
     // than crashing on undefined access.
     const cutoffsByChain = payload.cutoffsByChain ?? {}
+
     for (const position of positions) {
       const key = `${position.chain}:${position.pool.id.toLowerCase()}`
       // Cutoffs are per-chain: a heavy LP on Base doesn't taint pools on
@@ -151,6 +157,7 @@ function computePnl(
   removeCutoffTs: number | null
 ): PnlResult {
   const currentUsd = position.positionUsd
+
   const blank = {
     costBasisUsd: 0,
     currentUsd,
@@ -186,7 +193,9 @@ function computePnl(
     // mean we missed an add that preceded it.
     removeCutoffTs !== null && entry.removeCount > 0 ? removeCutoffTs : Number.POSITIVE_INFINITY
   )
+
   const cutoff = addCutoffTs ?? -Infinity
+
   // Within 1% margin (≈ a few minutes for unix timestamps) means events
   // at the cutoff were almost certainly clipped.
   if (cutoff > 0 && earliestEvent <= cutoff * 1.001) {
@@ -198,6 +207,7 @@ function computePnl(
   // realise the prior cycle's PnL (FIFO lots), which we don't track. Bail
   // rather than show a number that mixes two regimes.
   const netTokenAddrs = Object.keys(entry.netTokens)
+
   for (const addr of netTokenAddrs) {
     if (entry.netTokens[addr].amount < 0) {
       return { ...blank, status: 'exited_and_reentered' }
@@ -208,15 +218,18 @@ function computePnl(
   // current poolTokens snapshot. Fall back to 0 (i.e. ignore that token)
   // when api-v3 doesn't price one — better than NaN propagating into HODL.
   const priceByAddr = new Map<string, number>()
+
   for (const t of position.pool.poolTokens ?? []) {
     const bal = Number(t.balance ?? 0)
     const balUsd = Number(t.balanceUSD ?? 0)
+
     if (bal > 0 && balUsd > 0) {
       priceByAddr.set(t.address.toLowerCase(), balUsd / bal)
     }
   }
 
   let hodlUsd = 0
+
   for (const addr of netTokenAddrs) {
     const { amount } = entry.netTokens[addr]
     if (amount <= 0) continue

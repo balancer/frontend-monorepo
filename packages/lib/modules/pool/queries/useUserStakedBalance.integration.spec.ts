@@ -24,6 +24,7 @@ describe('fetches onchain user balances', async () => {
     const userStakedInNonPreferentialGauge = '0xF01Cc7154e255D20489E091a5aEA10Bc136696a8'
     await connectWith(userStakedInNonPreferentialGauge)
     const poolId = '0x1b65fe4881800b91d4277ba738b567cbb200a60d0002000000000000000002cc' // Pool with user staked in non preferential gauge
+
     const pool = await fetchPoolMock({
       poolId,
       chain: GqlChainValues.Mainnet,
@@ -37,6 +38,7 @@ describe('fetches onchain user balances', async () => {
 
     // Returns gauge staked balances by pool id
     const gaugeStakedBalances = result.current.stakedBalancesByPoolId[poolId]
+
     expect(gaugeStakedBalances).toMatchObject([
       {
         balance: '0',
@@ -58,12 +60,14 @@ describe('fetches onchain user balances', async () => {
   test('when the pool does not have staking info', async () => {
     const poolId = '0x05f21bacc4fd8590d1eaca9830a64b66a733316c00000000000000000000087e' // Pool with only preferential gauge
     const holder = userStakedInNonPreferentialGauge
+
     const pool = await fetchPoolMock({
       poolId,
       chain: GqlChainValues.Polygon,
       userAddress: holder,
       query: stakedBalanceQuery,
     })
+
     pool.staking = null
 
     const result = await testUseChainPoolBalances(pool)

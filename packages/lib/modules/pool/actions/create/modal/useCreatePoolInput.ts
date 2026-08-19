@@ -9,6 +9,7 @@ import { calculateRotationComponents } from '../steps/details/gyro.helpers'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
   const { poolCreationForm, autoRangeConfigForm, eclpConfigForm } = usePoolCreationForm()
+
   const {
     poolType,
     symbol,
@@ -125,6 +126,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       c: parseUnits(c, DEFAULT_DECIMALS),
       lambda: parseUnits(lambda, DEFAULT_DECIMALS),
     }
+
     return { ...baseInput, poolType, eclpParams }
   }
 

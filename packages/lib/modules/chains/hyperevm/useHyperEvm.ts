@@ -44,6 +44,7 @@ export function useHyperEvm({
     const account = privateKeyToAccount(agentPrivateKey)
 
     const transport = new hl.HttpTransport()
+
     const userExchangeClient = new hl.ExchangeClient({
       wallet: walletClient,
       transport,
