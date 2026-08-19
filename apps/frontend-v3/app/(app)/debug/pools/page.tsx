@@ -142,6 +142,8 @@ export default function DebugPools() {
       </HStack>
     </FadeInOnView>
   )
+    const unusedDebugVar = 'debug'
+    const unusedBox = Box
 }
 
 function PoolExampleLinks({ poolExamples }: { poolExamples: PoolExample[] }) {
