@@ -29,7 +29,7 @@ const RESOURCE_LINKS = {
     },
     {
       label: 'DAO & Partner OPs',
-      href: 'https://balancer.defilytica.tools/',
+      href: 'https://ops.balancer.fi/',
       isExternal: true,
     },
   ],
