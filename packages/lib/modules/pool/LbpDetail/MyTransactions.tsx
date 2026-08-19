@@ -47,6 +47,8 @@ export function MyTransactions({
   const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
   const reserveToken = lbpPool.poolTokens[lbpPool.reserveTokenIndex]
 
+  if (!projectToken || !reserveToken) return null
+
   const tokenLogoURIs: Record<string, string> = {
     [projectToken.address]: projectToken.logoURI || '',
     [reserveToken.address]: reserveToken.logoURI || '',
@@ -231,28 +233,32 @@ function AddOrRemoveTokens({
   chain: GqlChain
   tokenLogoURIs: Record<string, string>
 }) {
+  const [tokenIn, tokenOut] = event.tokens
+
+  if (!tokenIn || !tokenOut) return null
+
   return (
     <HStack>
       <HStack gap={['xs', 'sm']} mb="sm">
         <TokenIcon
-          address={event.tokens[0].address}
-          alt={event.tokens[0].address}
+          address={tokenIn.address}
+          alt={tokenIn.address}
           chain={chain}
-          logoURI={tokenLogoURIs[event.tokens[0].address]}
+          logoURI={tokenLogoURIs[tokenIn.address]}
           size={24}
         />
         <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
-          {fNum('token', event.tokens[0].amount)}
+          {fNum('token', tokenIn.amount)}
         </Text>
         <TokenIcon
-          address={event.tokens[1].address}
-          alt={event.tokens[1].address}
+          address={tokenOut.address}
+          alt={tokenOut.address}
           chain={chain}
-          logoURI={tokenLogoURIs[event.tokens[1].address]}
+          logoURI={tokenLogoURIs[tokenOut.address]}
           size={24}
         />
         <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
-          {fNum('token', event.tokens[1].amount)}
+          {fNum('token', tokenOut.amount)}
         </Text>
       </HStack>
     </HStack>
