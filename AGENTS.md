@@ -8,15 +8,6 @@ This file provides guidance to coding agents working in this repository.
 
 Before any Next.js work, find and read the relevant doc in `apps/frontend-v3/node_modules/next/dist/docs/`. Your training data is outdated — the docs are the source of truth.
 
-### Always verify lint before committing
-
-Cloud Agent git hooks override `core.hooksPath`, so Husky / `lint-staged` (eslint `--fix`, prettier, typecheck) do **not** run on commit here. Do not assume a green commit means lint passed.
-
-Before every commit:
-
-1. Run eslint on every touched file (e.g. `pnpm --filter @repo/lib exec eslint <path> --max-warnings 0`, or the matching app/package `lint` script). Fix `padding-line-between-statements` and other style errors — do not strip required blank lines around multiline statements.
-2. Review the full `git diff --staged` (not just the intended hunk). Odd stats like `1 insertion, 2 deletions` for a one-line edit usually mean an accidental whitespace/padding change.
-
 ### Never hardcode project-specific values in `packages/lib`
 
 Both apps share `packages/lib`; the active project is resolved from `NEXT_PUBLIC_PROJECT_ID` in `config/getProjectConfig.ts`, which exposes `PROJECT_CONFIG` and `isBalancer` / `isBeets`. Hardcoding breaks the other app silently.
