@@ -4,7 +4,6 @@ import { GqlChainValues, GqlPoolTypeValues } from '@repo/lib/shared/services/api
 import { isProd, isDev, isStaging } from '@repo/lib/config/app.config'
 
 const prodHiddenPoolTypes = [GqlPoolTypeValues.LiquidityBootstrapping] satisfies PoolFilterType[]
-
 const hiddenPoolTypes: PoolFilterType[] = [
   GqlPoolTypeValues.Fx,
   ...(isProd ? prodHiddenPoolTypes : []),
@@ -134,7 +133,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
             isExternal: true,
           },
           { label: 'Dune Analytics', href: 'https://dune.com/balancer', isExternal: true },
-          { label: 'Defilytica', href: 'https://balancer.defilytica.com', isExternal: true },
+          { label: 'Analytics', href: 'https://analytics.balancer.fi/', isExternal: true },
           {
             label: 'Brand assets',
             href: 'https://github.com/balancer/brand-assets',
