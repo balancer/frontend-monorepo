@@ -181,7 +181,7 @@ export function PoolCreationModal({
           />
         ) : (
           <ActionModalFooter
-            currentStep={transactionSteps.currentStep}
+            currentStep={transactionSteps.currentStep!}
             isSuccess={isPoolInitialized}
             returnAction={redirectToPoolPage}
             returnLabel="View pool page"

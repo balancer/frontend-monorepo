@@ -76,7 +76,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       poolCreator,
       tokens: baseInput.tokens.map((token, index) => ({
         ...token,
-        weight: parseUnits(poolTokens[index].weight, PERCENTAGE_DECIMALS),
+        weight: parseUnits(poolTokens[index]?.weight ?? '50', PERCENTAGE_DECIMALS),
       })),
     }
   }
