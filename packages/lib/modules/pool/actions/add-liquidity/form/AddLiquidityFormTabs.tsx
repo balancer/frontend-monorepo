@@ -78,7 +78,7 @@ function PoolWeightsInfo() {
                     token =>
                       `${token.symbol}: ${fNum(
                         'weight',
-                        poolTokensWithActualWeights[token.address],
+                        poolTokensWithActualWeights[token.address]!,
                         {
                           abbreviated: false,
                         }

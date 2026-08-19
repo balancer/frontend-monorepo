@@ -63,7 +63,7 @@ export function StakeModal({
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
+          currentStep={transactionSteps.currentStep!}
           isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
           returnLabel="Return to pool"

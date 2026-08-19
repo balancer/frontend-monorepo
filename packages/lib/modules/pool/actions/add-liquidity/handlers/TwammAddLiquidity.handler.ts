@@ -31,7 +31,7 @@ export class TwammAddLiquidityHandler implements AddLiquidityHandler {
 
   // TODO: This is a non-sense example implementation
   public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number> {
-    return Number(humanAmountsIn[0].humanAmount)
+    return Number(humanAmountsIn[0]!.humanAmount)
   }
 
   // TODO: This is a non-sense example implementation

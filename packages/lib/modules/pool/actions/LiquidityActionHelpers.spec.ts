@@ -743,11 +743,11 @@ it('returns NestedPoolState for nested pools', () => {
   const nestedPoolState = helpers.nestedPoolStateV2
 
   expect(nestedPoolState.pools).toHaveLength(2)
-  const firstPool = nestedPoolState.pools[0]
-  expect(firstPool.id).toBe(nestedPoolMock.id)
-  expect(firstPool.tokens.map(t => t.address)).toEqual([usdcDaiUsdtBptAddress, wETHAddress])
+  const firstPool = nestedPoolState.pools[0]!
+  expect(firstPool!.id).toBe(nestedPoolMock.id)
+  expect(firstPool!.tokens.map(t => t.address)).toEqual([usdcDaiUsdtBptAddress, wETHAddress])
 
-  const secondPool = nestedPoolState.pools[1]
+  const secondPool = nestedPoolState.pools[1]!
   expect(secondPool.id).toBe(threePoolId)
 
   expect(secondPool.tokens.sort().map(t => t.address)).toEqual([

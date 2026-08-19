@@ -19,7 +19,7 @@ export function PoolListTableHeader({ ...rest }) {
   } = usePoolList()
 
   const { orderBy } = usePoolOrderByState()
-  const sortingObj = sorting[0]
+  const sortingObj = sorting[0]!
 
   const handleSort = (newSortingBy: GqlPoolOrderBy) => {
     setSorting([
@@ -60,7 +60,7 @@ export function PoolListTableHeader({ ...rest }) {
           <SortableHeader
             isDisabled={joinablePools}
             isSorted={sortingObj.id === orderByItem}
-            label={orderByHash[orderByItem]}
+            label={orderByHash[orderByItem]!}
             onSort={() => handleSort(orderByItem)}
             sorting={sortingObj.desc ? Sorting.desc : Sorting.asc}
           />

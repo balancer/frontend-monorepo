@@ -84,7 +84,7 @@ export default function PoolMyLiquidity() {
   const isVeBal = isVebalPool(pool.id)
   const tabs = useMemo(() => getTabs(isVeBal), [isVeBal])
 
-  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(tabs[0])
+  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(tabs[0]!)
   const pathname = usePathname()
   const [height, setHeight] = useState(0)
   const poolMetadata = usePoolMetadata(pool)

@@ -78,7 +78,7 @@ export function RecoveryMode() {
 
         <CardFooter>
           <ActionFooter
-            currentStep={transactionSteps.currentStep}
+            currentStep={transactionSteps.currentStep!}
             isSuccess={isSuccess}
             returnAction={redirectToPoolPage}
             returnLabel="Return to pool"

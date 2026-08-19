@@ -43,7 +43,7 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       referenceAmountAddress &&
       inputAmounts.find(item => isSameAddress(item.address, referenceAmountAddress))
 
-    const referenceAmount = foundReferenceAmount || inputAmounts[0]
+    const referenceAmount = foundReferenceAmount || inputAmounts[0]!
 
     // Apply slippage tolerance to the reference amount by reducing the raw amount
     referenceAmount.rawAmount = BigInt(

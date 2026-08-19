@@ -9,9 +9,9 @@ import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 export function LbpPoolAttributes({ pool }: { pool: LbpV3 }) {
-  const token = pool.poolTokens[pool.projectTokenIndex]
+  const token = pool.poolTokens[pool.projectTokenIndex]!
   const { now: currentTime, currentPrice, hasSnapshots, snapshots } = useLbpPoolCharts()
-  const hasEnded = hasSnapshots && isAfter(currentTime, snapshots[snapshots.length - 1].timestamp)
+  const hasEnded = hasSnapshots && isAfter(currentTime, snapshots[snapshots.length - 1]!.timestamp)
 
   const attributes = [
     {

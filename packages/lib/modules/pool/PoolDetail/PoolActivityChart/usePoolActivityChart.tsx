@@ -108,7 +108,7 @@ const getDefaultPoolActivityChartOptions = (
       enterable: true,
       hideDelay: 300,
       position: function (point: number[]) {
-        return [point[0] + 5, point[1] - 5]
+        return [point[0]! + 5, point[1]! - 5]
       },
       extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container};pointer-events: auto!important`,
       formatter: (params: any) => {

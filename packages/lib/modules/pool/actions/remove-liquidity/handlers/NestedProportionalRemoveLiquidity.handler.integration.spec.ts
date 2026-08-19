@@ -42,7 +42,7 @@ describe('When proportionally removing liquidity for a nested pool', () => {
 
     expect(result.amountsOut).toHaveLength(4) // Nested pool has 4 tokens
 
-    const wethTokenAmountOut = result.amountsOut[0]
+    const wethTokenAmountOut = result.amountsOut[0]!
     expect(wethTokenAmountOut.token.address).toBe(wETHAddress)
     expect(wethTokenAmountOut.amount).toBeGreaterThan(0n)
   })

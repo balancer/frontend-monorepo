@@ -31,5 +31,5 @@ test('Returns pool list with a custom mocked GQL pool', async () => {
 
   const result = await renderUsePoolsList()
 
-  expect(result.current.pools[0].name).toEqual('FOO BAL')
+  expect(result.current.pools[0]!.name).toEqual('FOO BAL')
 })

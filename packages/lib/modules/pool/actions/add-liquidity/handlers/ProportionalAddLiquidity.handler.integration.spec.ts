@@ -41,8 +41,8 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(0n)
-    const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]
-    const wethAmountIn = result.sdkQueryOutput.amountsIn[1]
+    const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]!
+    const wethAmountIn = result.sdkQueryOutput.amountsIn[1]!
 
     expect(usdcAmountIn.token.address).toBe(usdcAddress)
     expect(usdcAmountIn.amount).toBeGreaterThan(0n)
@@ -96,8 +96,8 @@ describe('When adding proportional liquidity for a gyro pool', () => {
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(0n)
-    const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]
-    const daiAmountIn = result.sdkQueryOutput.amountsIn[1]
+    const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]!
+    const daiAmountIn = result.sdkQueryOutput.amountsIn[1]!
 
     expect(usdcAmountIn.token.address).toBe(polygonUsdcAddress)
     expect(usdcAmountIn.amount).toBeGreaterThan(0n)

@@ -62,7 +62,7 @@ export function PoolMigrationModal() {
         </ModalBody>
 
         <ActionModalFooter
-          currentStep={migrationSteps.currentStep}
+          currentStep={migrationSteps.currentStep!}
           isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
           returnLabel="Go to new pool"

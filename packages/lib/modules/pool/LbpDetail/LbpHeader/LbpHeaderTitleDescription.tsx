@@ -10,7 +10,7 @@ export function LbpHeaderTitleDescription() {
   const { pool } = usePool()
   const lbpPool = pool as LbpV3
 
-  const projectToken = pool.poolTokens[lbpPool.projectTokenIndex]
+  const projectToken = pool.poolTokens[lbpPool.projectTokenIndex]!
 
   const socialLinks = [
     {
