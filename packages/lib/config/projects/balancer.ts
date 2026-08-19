@@ -134,7 +134,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
             isExternal: true,
           },
           { label: 'Dune Analytics', href: 'https://dune.com/balancer', isExternal: true },
-          { label: 'Defilytica', href: 'https://balancer.defilytica.com', isExternal: true },
+          { label: 'Analytics', href: 'https://analytics.balancer.fi/', isExternal: true },
           {
             label: 'Brand assets',
             href: 'https://github.com/balancer/brand-assets',
