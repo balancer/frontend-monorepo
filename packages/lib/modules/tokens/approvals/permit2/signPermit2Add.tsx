@@ -111,7 +111,7 @@ async function sign({
     ...baseInput,
     client: sdkClient,
     owner: account,
-    nonces: filteredAmountsIn.map(a => nonces[a.token.address]),
+    nonces: filteredAmountsIn.map(a => nonces[a.token.address]!),
     amountsIn: maximizeAmountsInForPermit2(filteredAmountsIn),
     // Permit2 allowance expires in 24H
     expirations: filteredAmountsIn.map(() => get24HoursFromNowInSecs()),

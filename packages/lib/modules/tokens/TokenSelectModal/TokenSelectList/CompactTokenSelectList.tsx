@@ -44,8 +44,7 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
   const style = { height: `${tokens.length * 75}px` }
 
   function renderRow(index: number) {
-    const token = tokens[index]
-    const userBalance = isConnected ? balanceFor(token) : undefined
+    const token = tokens[index]!
 
     return (
       <TokenSelectListRow
@@ -54,7 +53,7 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
         key={keyFor(token, index)}
         onClick={() => onTokenSelect(token)}
         token={token}
-        userBalance={userBalance}
+        userBalance={isConnected ? balanceFor(token) : undefined}
       />
     )
   }

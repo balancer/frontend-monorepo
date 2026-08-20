@@ -12,7 +12,7 @@ test('fetches balance for native asset token', async () => {
 
   await waitFor(() => expect(result.current.balances.length).toBe(1))
 
-  const ethBalance = result.current.balances[0]
+  const ethBalance = result.current.balances[0]!
 
   expect(ethBalance).toMatchObject({
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -58,7 +58,7 @@ test('refetches balances', async () => {
   })
 
   expect(refetchResult.length).toBe(1)
-  expect(refetchResult[0].isSuccess).toBeTruthy()
+  expect(refetchResult[0]?.isSuccess).toBeTruthy()
 
   expect(result.current.balances).toMatchInlineSnapshot(`
     [

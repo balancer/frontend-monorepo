@@ -138,12 +138,12 @@ export function usePermit2ApprovalSteps({
 
     // Check if the token has been approved
     const isComplete = () => {
-      const isNotExpired = !!expirations && expirations[tokenAddress] > nowInSecs
+      const isNotExpired = !!expirations && (expirations[tokenAddress] ?? 0) > nowInSecs
       const isAllowed = allowanceFor(tokenAddress) >= requiredRawAmount
 
       // some expirations were set too far in the future so redo them
       // the expiration shouldn't be more than 3 days from now
-      const hasValidExpiry = !!expirations && expirations[tokenAddress] < permitExpiry
+      const hasValidExpiry = !!expirations && (expirations[tokenAddress] ?? 0) < permitExpiry
 
       const tx = getTransaction(id)
       const txSuccess = isTransactionSuccess(tx)
