@@ -75,7 +75,7 @@ describe('useBalTokenRewards', () => {
 
     await waitFor(() => expect(result.current.balRewardsData).toHaveLength(1))
 
-    const reward = result.current.balRewardsData[0]
+    const reward = result.current.balRewardsData[0]!
     expect(reward.gaugeAddress).toBe(GAUGE_ADDRESS)
     expect(reward.humanBalance).toBe('1')
     expect(reward.tokenAddress).toBe(mainnetBalAddress)

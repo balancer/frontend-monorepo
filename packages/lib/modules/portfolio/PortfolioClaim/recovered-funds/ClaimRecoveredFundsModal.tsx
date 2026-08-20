@@ -38,7 +38,9 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
   const [maxHeight, setMaxHeight] = useState(0)
 
   const { steps } = useRecoveredFundsClaims()
-  const isSuccess = steps.isLastStep(steps.currentStepIndex) && steps.currentStep.isComplete()
+
+  const isSuccess =
+    steps.isLastStep(steps.currentStepIndex) && (steps.currentStep?.isComplete() ?? false)
 
   const txHash =
     isSuccess && steps.currentTransaction
@@ -57,7 +59,7 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
     if (node !== null) {
       const observer = new ResizeObserver(entries => {
         if (entries[0]) {
-          setMaxHeight(entries[0].borderBoxSize[0].blockSize)
+          setMaxHeight(entries[0].borderBoxSize[0]?.blockSize ?? 0)
         }
       })
 
