@@ -9,14 +9,14 @@
 echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $(cat)" >> /tmp/cursor-lint-staged-hook.log
 
 if git diff --cached --quiet; then
-  echo '{"permission": "deny", "user_message": "Stage files in a separate Shell call before git commit."}'
-  exit 0
+  echo '{"permission": "deny", "user_message": "Stage files in a separate Shell call before git commit.", "agent_message": "Stage files in a separate Shell call before git commit. This hook runs before the command, so lint-staged cannot see files added in the same call."}'
+  exit 2
 fi
 
 if pnpm lint-staged >&2; then
   echo '{"permission": "allow"}'
   exit 0
 else
-  echo '{"permission": "deny", "user_message": "lint-staged failed. Fix the reported issues and retry the commit."}'
-  exit 0
+  echo '{"permission": "deny", "user_message": "lint-staged failed. Fix the reported issues and retry the commit.", "agent_message": "pnpm lint-staged failed. Fix the reported issues, re-stage, and retry git commit."}'
+  exit 2
 fi
