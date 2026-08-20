@@ -74,7 +74,7 @@ export function useImpersonateAccount() {
     })
 
     // if you don't pass chainId you will be prompted to switch chain (check if it uses mainnet by default)
-    await connectAsync({ connector: connectors[connectors.length - 1], chainId })
+    await connectAsync({ connector: connectors[connectors.length - 1]!, chainId })
   }
 
   async function reset() {

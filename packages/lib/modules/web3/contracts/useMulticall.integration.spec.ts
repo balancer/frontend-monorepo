@@ -82,7 +82,7 @@ describe('Performs multicall in multiple chains', () => {
 
     await waitForChainData(mainnet.id, 'mainnet')
 
-    expect(result.current.results[mainnet.id].data).toMatchInlineSnapshot(`
+    expect(result.current.results[mainnet.id]!.data).toMatchInlineSnapshot(`
       {
         "daiBalanceOnMainnet": {
           "result": 1n,
@@ -93,7 +93,7 @@ describe('Performs multicall in multiple chains', () => {
 
     await waitForChainData(base.id, 'base')
 
-    expect(result.current.results[base.id].data).toMatchInlineSnapshot(`
+    expect(result.current.results[base.id]!.data).toMatchInlineSnapshot(`
       {
         "ghoBalanceOnBase": {
           "result": 7702n,
@@ -104,7 +104,7 @@ describe('Performs multicall in multiple chains', () => {
 
     await waitForChainData(polygon.id, 'polygon')
 
-    expect(result.current.results[polygon.id].data).toMatchInlineSnapshot(`
+    expect(result.current.results[polygon.id]!.data).toMatchInlineSnapshot(`
     {
       "polBalanceOnPolygon": {
         "result": 721n,
