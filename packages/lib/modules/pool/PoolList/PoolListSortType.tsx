@@ -46,7 +46,7 @@ export function PoolListSortType() {
   }
 
   const _value = options.find(
-    option => option.value[0].id === sorting[0].id && option.value[0].desc === sorting[0].desc
+    option => option.value[0]?.id === sorting[0]?.id && option.value[0]?.desc === sorting[0]?.desc
   )
 
   if (!isMounted) return null

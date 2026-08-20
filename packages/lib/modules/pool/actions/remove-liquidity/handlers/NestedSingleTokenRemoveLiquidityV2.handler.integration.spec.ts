@@ -46,7 +46,7 @@ describe('When removing liquidity with single token in a nested pool', () => {
 
     expect(result.amountsOut).toHaveLength(1) // amountsOut only contains single token (DAI)
 
-    const daiTokenAmountOut = result.amountsOut[0]
+    const daiTokenAmountOut = result.amountsOut[0]!
     expect(daiTokenAmountOut.token.address).toBe(daiAddress)
     expect(daiTokenAmountOut.amount).toBeGreaterThan(0n)
   })

@@ -85,8 +85,9 @@ function snapToStep(value: number): number {
     prevUntil = until
   }
 
-  const { until, step } = SLIDER_STEP_CONFIG[SLIDER_STEP_CONFIG.length - 1]
-  const base = SLIDER_STEP_CONFIG[SLIDER_STEP_CONFIG.length - 2].until
+  const lastConfig = SLIDER_STEP_CONFIG[SLIDER_STEP_CONFIG.length - 1]!
+  const { until, step } = lastConfig
+  const base = SLIDER_STEP_CONFIG[SLIDER_STEP_CONFIG.length - 2]!.until
   const snapped = Math.round((value - base) / step) * step + base
   return Math.max(base, Math.min(snapped, until))
 }

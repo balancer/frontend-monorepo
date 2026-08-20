@@ -63,11 +63,11 @@ export function PriceInfo() {
       <Heading fontWeight="bold" size="h5">
         {`$${fNum('fiat', currentPrice, { forceThreeDecimals: true })}`}
       </Heading>
-      {hasSnapshots && isBefore(currentTime, snapshots[0].timestamp) ? (
+      {hasSnapshots && isBefore(currentTime, snapshots[0]!.timestamp) ? (
         <Text color="font.secondary" fontSize="12px">
           Start price
         </Text>
-      ) : hasSnapshots && isAfter(currentTime, snapshots[snapshots.length - 1].timestamp) ? (
+      ) : hasSnapshots && isAfter(currentTime, snapshots[snapshots.length - 1]!.timestamp) ? (
         <Text color="font.secondary" fontSize="12px">
           End price
         </Text>

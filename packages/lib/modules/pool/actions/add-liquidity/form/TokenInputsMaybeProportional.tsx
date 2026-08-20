@@ -283,7 +283,7 @@ export function TokenInputsMaybeProportional({ isProportional, wantsUnbalanced }
 
       {!!validTokens.length && (
         <NativeAssetSelectModal
-          chain={validTokens[0].chain}
+          chain={validTokens[0]!.chain}
           isOpen={nativeTokenSelectDisclosure.isOpen}
           nativeAssets={nativeAssets}
           onClose={nativeTokenSelectDisclosure.onClose}

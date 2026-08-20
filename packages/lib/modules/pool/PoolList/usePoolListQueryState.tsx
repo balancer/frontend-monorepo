@@ -209,10 +209,10 @@ export function usePoolListQueryState() {
   function setSorting(sortingState: SortingState) {
     if (sortingState.length > 0) {
       setSkip(0)
-      setOrderBy(sortingState[0].id)
+      setOrderBy(sortingState[0]!.id)
 
       setOrderDirection(
-        sortingState[0].desc ? GqlPoolOrderDirectionValues.Desc : GqlPoolOrderDirectionValues.Asc
+        sortingState[0]!.desc ? GqlPoolOrderDirectionValues.Desc : GqlPoolOrderDirectionValues.Asc
       )
     } else {
       setOrderBy(GqlPoolOrderByValues.TotalLiquidity)

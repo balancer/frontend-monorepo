@@ -186,13 +186,13 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
               options={TABS_LIST}
               size="xxs"
             />
-            {isQuantAmm && activeTab.value === 'weight-shifts' && (
+            {isQuantAmm && activeTab?.value === 'weight-shifts' && (
               <BTFTimeSelector chain={chain} pool={pool} />
             )}
           </HStack>
-          {activeTab.value === 'weight-shifts' && isQuantAmm ? (
+          {activeTab?.value === 'weight-shifts' && isQuantAmm ? (
             <PoolWeightShiftsChart />
-          ) : activeTab.value === 'weight-shifts' && isV3LBP(pool) ? (
+          ) : activeTab?.value === 'weight-shifts' && isV3LBP(pool) ? (
             <LBPWeightsChart pool={pool} />
           ) : (
             <CompositionView {...compositionViewProps} />
@@ -224,11 +224,11 @@ function LBPWeightsChart({ pool }: { pool: Pool }) {
 
   return (
     <WeightsChartContainer
-      collateralTokenSymbol={lbpPool.poolTokens[lbpPool.reserveTokenIndex].symbol}
+      collateralTokenSymbol={lbpPool.poolTokens[lbpPool.reserveTokenIndex]!.symbol}
       cutTime={now}
       endDateTime={endDateTime.toISOString()}
       endWeight={endWeight}
-      launchTokenSymbol={lbpPool.poolTokens[lbpPool.projectTokenIndex].symbol}
+      launchTokenSymbol={lbpPool.poolTokens[lbpPool.projectTokenIndex]!.symbol}
       salePeriodText={salePeriodText}
       startDateTime={startDateTime.toISOString()}
       startWeight={startWeight}

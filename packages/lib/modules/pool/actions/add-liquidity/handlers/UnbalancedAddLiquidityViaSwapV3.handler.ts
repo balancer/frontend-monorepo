@@ -125,6 +125,6 @@ export class UnbalancedAddLiquidityViaSwapV3Handler implements AddLiquidityHandl
     }
 
     const inputAmounts = this.helpers.toSdkInputAmounts(nonZeroAmounts)
-    return inputAmounts[0]
+    return inputAmounts[0]!
   }
 }

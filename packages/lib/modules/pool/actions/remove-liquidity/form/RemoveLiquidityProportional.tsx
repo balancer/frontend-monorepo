@@ -114,7 +114,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
       </Card>
       {!!validTokens.length && (
         <NativeAssetSelectModal
-          chain={validTokens[0].chain}
+          chain={validTokens[0]!.chain}
           isOpen={nativeTokenSelectDisclosure.isOpen}
           nativeAssets={nativeAssets}
           onClose={nativeTokenSelectDisclosure.onClose}
@@ -125,7 +125,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
 
       {!!validTokens.length && (
         <WrappedOrUnderlyingSelectModal
-          chain={validTokens[0].chain}
+          chain={validTokens[0]!.chain}
           isOpen={boostedTokenSelectDisclosure.isOpen && !!wrappedAndUnderlying}
           onClose={boostedTokenSelectDisclosure.onClose}
           onOpen={boostedTokenSelectDisclosure.onOpen}

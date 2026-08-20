@@ -101,7 +101,7 @@ export function useProportionalInputs() {
   function handleMaximizeProportionalAmounts() {
     if (!maxProportionalHumanAmountsIn?.length) return
 
-    setReferenceAmountAddress(maxProportionalHumanAmountsIn[0].tokenAddress)
+    setReferenceAmountAddress(maxProportionalHumanAmountsIn[0]!.tokenAddress)
     setHumanAmountsIn(maxProportionalHumanAmountsIn)
   }
 

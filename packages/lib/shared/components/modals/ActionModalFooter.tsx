@@ -65,7 +65,7 @@ export function SuccessActions({
 
 type Props = {
   isSuccess: boolean
-  currentStep: TransactionStep
+  currentStep?: TransactionStep
   returnLabel: string
   returnAction: () => void
   urlTxHash?: string

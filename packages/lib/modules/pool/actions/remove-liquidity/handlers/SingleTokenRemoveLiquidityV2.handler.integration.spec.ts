@@ -32,11 +32,11 @@ describe('When removing unbalanced liquidity for a weighted V2 pool', () => {
 
     const [balTokenAmountOut, wEthTokenAmountOut] = result.amountsOut
 
-    expect(balTokenAmountOut.token.address).toBe(balAddress)
-    expect(balTokenAmountOut.amount).toBeGreaterThan(2000000000000000000n)
+    expect(balTokenAmountOut!.token.address).toBe(balAddress)
+    expect(balTokenAmountOut!.amount).toBeGreaterThan(2000000000000000000n)
 
-    expect(wEthTokenAmountOut.token.address).toBe(wETHAddress)
-    expect(wEthTokenAmountOut.amount).toBe(0n)
+    expect(wEthTokenAmountOut!.token.address).toBe(wETHAddress)
+    expect(wEthTokenAmountOut!.amount).toBe(0n)
   })
 
   test('builds Tx Config', async () => {

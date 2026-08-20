@@ -148,7 +148,7 @@ export function PoolTypeTag({ pool }: PoolTypeTagProps) {
   const erc4626Metadata = getErc4626Metadata(pool)
   const boostedTooltipLabel = [...erc4626Metadata.map(m => m.name)].join(' & ')
 
-  const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
+  const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0]!)
   const formattedProtocolNames = formatStringsToSentenceList(protocolNames)
 
   const boostedWarningMsg = `This Boosted pool uses wrapped ${formattedProtocolNames} tokens to generate yield from lending on ${

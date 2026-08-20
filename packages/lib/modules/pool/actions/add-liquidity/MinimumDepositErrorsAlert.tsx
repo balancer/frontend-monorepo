@@ -18,7 +18,7 @@ export function MinimumDepositErrorsAlert({ errors }: Props) {
         <BalAlertContent title="Minimum deposit not met for the pool">
           <UnorderedList w="full">
             {Object.keys(errors).map(key => (
-              <MinimumDepositErrorAlert errorType={key} key={key} min={errors[key]} />
+              <MinimumDepositErrorAlert errorType={key} key={key} min={errors[key]!} />
             ))}
           </UnorderedList>
         </BalAlertContent>

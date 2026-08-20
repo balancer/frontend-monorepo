@@ -49,7 +49,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
   let virtualAmount = '0'
 
   if (isSeedlessLBP) {
-    const virtualToken = pool.poolTokens[pool.reserveTokenIndex].address
+    const virtualToken = pool.poolTokens[pool.reserveTokenIndex]!.address
     const price = priceFor(virtualToken, chain)
 
     virtualAmount =
@@ -85,7 +85,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
           const actualWeight = poolTokensWithActualWeights[poolToken.address]
 
           const isVirtualPairedToken =
-            isSeedlessLBP && pool.poolTokens[pool.reserveTokenIndex].address === poolToken.address
+            isSeedlessLBP && pool.poolTokens[pool.reserveTokenIndex]!.address === poolToken.address
 
           const tokenValue =
             isSeedlessLBP && isVirtualPairedToken
@@ -119,7 +119,9 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
 
                     return (
                       <TokenRow
-                        actualWeight={bn(actualWeight).times(calculatedWeight).toString()}
+                        actualWeight={bn(actualWeight ?? 0)
+                          .times(calculatedWeight)
+                          .toString()}
                         address={nestedPoolToken.address as Address}
                         chain={chain}
                         iconSize={35}
@@ -146,7 +148,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                     actualWeight={
                       isBnParseable(poolToken.balance) &&
                       isBnParseable(pool.reserveTokenVirtualBalance)
-                        ? bn(actualWeight)
+                        ? bn(actualWeight ?? 0)
                             .times(pool.reserveTokenVirtualBalance)
                             .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
                             .toString()
@@ -165,7 +167,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                     actualWeight={
                       isBnParseable(poolToken.balance) &&
                       isBnParseable(pool.reserveTokenVirtualBalance)
-                        ? bn(actualWeight)
+                        ? bn(actualWeight ?? 0)
                             .times(poolToken.balance)
                             .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
                             .toString()
@@ -204,7 +206,7 @@ export function PoolComposition() {
   const hasReadMoreURL = erc4626Metadata.some(metadata => metadata.readMoreURL)
   const filteredErc4626Metadata = erc4626Metadata.filter(metadata => metadata.readMoreURL)
 
-  const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
+  const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0]!)
   const formattedProtocolNames = formatStringsToSentenceList(protocolNames)
   const boostedWarningMsg = `This Boosted pool uses wrapped ${formattedProtocolNames} tokens to generate yield from lending on ${protocolNames.length === 1 ? 'that protocol' : 'those protocols'}. This results in continuous appreciation of the pool's total value over time.`
 

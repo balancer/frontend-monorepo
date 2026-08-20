@@ -72,9 +72,9 @@ export function RemoveLiquidityForm() {
     },
   ] as const
 
-  const [activeTab, setActiveTab] = useState(TABS[0])
-  const isProportionalTabSelected = activeTab.value === 'proportional'
-  const isSingleTabSelected = activeTab.value === 'single'
+  const [activeTab, setActiveTab] = useState(TABS[0]!)
+  const isProportionalTabSelected = activeTab?.value === 'proportional'
+  const isSingleTabSelected = activeTab?.value === 'single'
 
   const {
     transactionSteps,
@@ -125,7 +125,7 @@ export function RemoveLiquidityForm() {
   }
 
   function setProportionalTab() {
-    toggleTab(TABS[0])
+    toggleTab(TABS[0]!)
   }
 
   const onModalClose = () => {
