@@ -16,10 +16,11 @@ export function hasValidPermit2(
   if (!expirations || !allowedAmounts || !tokenAmountsIn) return false
 
   const approvalExpired = (tokenAddress: Address) =>
-    expirations[tokenAddress] < getNowTimestampInSecs()
+    (expirations[tokenAddress] ?? 0) < getNowTimestampInSecs()
 
   const alreadyAllowed = (amountIn: TokenAmountIn) =>
-    !approvalExpired(amountIn.address) && allowedAmounts[amountIn.address] >= amountIn.amount
+    !approvalExpired(amountIn.address) &&
+    (allowedAmounts[amountIn.address] ?? 0n) >= amountIn.amount
 
   const amountInValid = (amountIn: TokenAmountIn) =>
     amountIn.amount === 0n || alreadyAllowed(amountIn)

@@ -152,7 +152,7 @@ function renderTokenRow(
       isCurrentToken={isCurrentToken}
       isLoadingTokenPrices={isLoadingTokenPrices}
       onTokenSelect={onTokenSelect}
-      token={tokensToShow[index]}
+      token={tokensToShow[index]!}
     />
   )
 }
