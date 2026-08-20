@@ -23,12 +23,12 @@ function calculateMedian(percentages: number[]) {
   const sortedPercentages = [...percentages].sort((a, b) => a - b)
   const mid = Math.floor(sortedPercentages.length / 2)
   return sortedPercentages.length % 2 === 0
-    ? (sortedPercentages[mid - 1] + sortedPercentages[mid]) / 2
-    : sortedPercentages[mid]
+    ? (sortedPercentages[mid - 1]! + sortedPercentages[mid]!) / 2
+    : sortedPercentages[mid]!
 }
 
 function calculateTotalImbalance(percentages: number[]) {
   const median = calculateMedian(percentages)
 
-  return percentages.reduce((sum, percentage) => sum + Math.abs(percentage - median), 0)
+  return percentages.reduce((sum, percentage) => sum + Math.abs(percentage - median!), 0)
 }
