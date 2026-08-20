@@ -52,7 +52,7 @@ export function useRecoveredFunds() {
           .flatMap(chain => chain.rewards)
           .map(toRecoveredTokenClaim)
           .filter(claim =>
-            NORMALIZED_WRAPPER_TOKENS[claim.chainId].includes(
+            (NORMALIZED_WRAPPER_TOKENS[claim.chainId] ?? []).includes(
               claim.amount.tokenAddress.toLowerCase()
             )
           )
