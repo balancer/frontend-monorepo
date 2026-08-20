@@ -50,8 +50,8 @@ export function RoutesPopover({
   const { getToken, priceFor } = useTokens()
   const { toCurrency } = useCurrency()
 
-  const inputToken = getToken(paths[0].tokens[0].address, chain)!
-  const outputToken = getToken(paths[0].tokens[paths[0].tokens.length - 1].address, chain)!
+  const inputToken = getToken(paths[0]!.tokens[0]!.address, chain)!
+  const outputToken = getToken(paths[0]!.tokens[paths[0]!.tokens.length - 1]!.address, chain)!
 
   const inputValue = bn(totalInputAmount).times(priceFor(inputToken.address, chain))
   const outputValue = bn(totalOutputAmount).times(priceFor(outputToken.address, chain))
@@ -225,7 +225,7 @@ type PathRouteProps = {
 
 function PathRoute({ chain, path, totalAmount, colors }: PathRouteProps) {
   const amountShare = bn(path.inputAmountRaw)
-    .shiftedBy(-path.tokens[0].decimals)
+    .shiftedBy(-path.tokens[0]!.decimals)
     .div(totalAmount)
     .toNumber()
 
@@ -236,8 +236,8 @@ function PathRoute({ chain, path, totalAmount, colors }: PathRouteProps) {
       {path.pools.map((pool, i) => {
         const isBuffer = !path.isBuffer || path.isBuffer[i] === true
 
-        const inputTokenInfo = getToken(path.tokens[i].address, chain)!
-        const outputTokenInfo = getToken(path.tokens[i + 1].address, chain)!
+        const inputTokenInfo = getToken(path.tokens[i]!.address, chain)!
+        const outputTokenInfo = getToken(path.tokens[i + 1]!.address, chain)!
 
         const hops = path.isBuffer?.filter(buffer => !buffer).length || 0
 
@@ -426,15 +426,25 @@ function fixTokenColors(chain: GqlChain, paths: Path[]) {
 function sortTokens(tokens: PoolToken[], inputToken: ApiToken, outputToken: ApiToken) {
   const inputIndex = tokens.findIndex(token => token.address === inputToken.address)
   if (inputIndex === -1) return tokens
-  ;[tokens[0], tokens[inputIndex]] = [tokens[inputIndex], tokens[0]]
+  const firstToken = tokens[0]
+  const inputTokenAt = tokens[inputIndex]
+
+  if (firstToken && inputTokenAt) {
+    tokens[0] = inputTokenAt
+    tokens[inputIndex] = firstToken
+  }
 
   const outputIndex = tokens.findIndex(token => token.address === outputToken.address)
   if (outputIndex === -1) return tokens
 
-  ;[tokens[tokens.length - 1], tokens[outputIndex]] = [
-    tokens[outputIndex],
-    tokens[tokens.length - 1],
-  ]
+  const lastIndex = tokens.length - 1
+  const lastToken = tokens[lastIndex]
+  const outputTokenAt = tokens[outputIndex]
+
+  if (lastToken && outputTokenAt) {
+    tokens[lastIndex] = outputTokenAt
+    tokens[outputIndex] = lastToken
+  }
 
   return tokens
 }
