@@ -52,7 +52,7 @@ if (isBrowser()) {
   https://github.com/rainbow-me/rainbowkit/issues/2232
 */
   if (!isConnectedToWC()) {
-    const lastConnector = connectors[connectors.length - 1]
+    const lastConnector = connectors[connectors.length - 1]!
 
     if (lastConnector({} as any).id !== 'walletConnect') {
       connectors.push(

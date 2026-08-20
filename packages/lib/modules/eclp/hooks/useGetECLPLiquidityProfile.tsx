@@ -36,7 +36,7 @@ export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
   const tokenRateScalingFactorString = useMemo(() => {
     if (!tokenRates) return
 
-    return bn(tokenRates[0]).div(bn(tokenRates[1])).toString()
+    return bn(tokenRates[0]!).div(bn(tokenRates[1]!)).toString()
   }, [tokenRates])
 
   const liquidityData = useMemo(() => {
@@ -83,7 +83,7 @@ export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
         return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
       })
 
-    return transformedData.sort((a, b) => a[0] - b[0]) as [number, number][]
+    return transformedData.sort((a, b) => a[0]! - b[0]!) as [number, number][]
   }, [liquidityData, isReversed, priceRateRatio])
 
   const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])

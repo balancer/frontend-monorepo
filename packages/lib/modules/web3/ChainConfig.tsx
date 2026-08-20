@@ -98,5 +98,5 @@ export const chains: readonly [Chain, ...Chain[]] = [
 export const chainsByKey = keyBy(chains, 'id')
 
 export function getDefaultRpcUrl(chainId: number) {
-  return chainsByKey[chainId].rpcUrls.default.http[0]
+  return chainsByKey[chainId]!.rpcUrls.default.http[0]!
 }

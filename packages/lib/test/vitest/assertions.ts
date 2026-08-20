@@ -6,5 +6,5 @@ import { Mock } from 'vitest'
 export function firstMockCallParams<TArgs extends any[] = any[]>(
   mock: Mock<(...args: TArgs) => any>
 ): TArgs[0] {
-  return mock.mock.calls[0][0]
+  return mock.mock.calls[0]![0]!
 }

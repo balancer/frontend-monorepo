@@ -36,7 +36,7 @@ vi.mock('@repo/lib/modules/web3/transports', async importOriginal => {
   return {
     ...originalModule,
     getRpcUrl: (chainId: number) => {
-      const { rpcUrl } = getTestRpcSetup(chainsByKey[chainId].id as ChainIdWithFork)
+      const { rpcUrl } = getTestRpcSetup(chainsByKey[chainId]!.id as ChainIdWithFork)
       return rpcUrl
     },
   }

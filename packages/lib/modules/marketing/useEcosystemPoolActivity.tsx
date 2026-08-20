@@ -166,7 +166,7 @@ const getDefaultPoolActivityChartOptions = (
       enterable: true,
       hideDelay: 300,
       position: function (point: number[]) {
-        return [point[0] + 5, point[1] - 5]
+        return [point[0]! + 5, point[1]! - 5]
       },
       extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container};pointer-events: auto!important`,
       formatter: (params: any) => {
@@ -299,7 +299,7 @@ export function useEcosystemPoolActivityChart() {
   const { isMobile, is2xl } = useBreakpoints()
   const { getToken } = useTokens()
   const { toCurrency } = useCurrency()
-  const [activeTab, setActiveTab] = useState<PoolActivityChartTypeTab>(tabsList[0])
+  const [activeTab, setActiveTab] = useState<PoolActivityChartTypeTab>(tabsList[0]!)
   const [activeNetwork, setActiveNetwork] = useState<GqlChain | 'all'>('all')
   const theme = useChakraTheme()
   const now = useCurrentDate()
@@ -375,7 +375,7 @@ export function useEcosystemPoolActivityChart() {
     const elapsedMinutes = Math.floor(
       secondsToMinutes(
         millisecondsToSeconds(now.getTime()) -
-          response.poolEvents[response.poolEvents.length - 1].timestamp
+          response.poolEvents[response.poolEvents.length - 1]!.timestamp
       )
     )
 

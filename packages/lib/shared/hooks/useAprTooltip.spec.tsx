@@ -29,7 +29,7 @@ describe('useAprTooltip', () => {
     expect(result.current.swapFeesDisplayed.toFixed()).toBe('0.0007')
     expect(fNum('apr', result.current.swapFeesDisplayed)).toBe('0.07%')
 
-    const yieldBearingTokensApr = result.current.yieldBearingTokensDisplayed[0].apr
+    const yieldBearingTokensApr = result.current.yieldBearingTokensDisplayed[0]!.apr
     expect(yieldBearingTokensApr.toFixed()).toBe('0.0068')
     expect(fNum('apr', yieldBearingTokensApr)).toBe('0.68%')
 

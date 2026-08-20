@@ -16,13 +16,13 @@ const chain = CHAINS[chainId]
 
 const networkConfig: NetworkConfig = {
   chainId,
-  name: chain.name,
-  shortName: chain.name,
+  name: chain!.name,
+  shortName: chain!.name,
   chain: GqlChainValues.Plasma,
   iconPath: '/images/chains/PLASMA.svg',
   blockExplorer: {
-    baseUrl: chain.blockExplorers!.default.url,
-    name: chain.blockExplorers!.default.name,
+    baseUrl: chain!.blockExplorers!.default.url,
+    name: chain!.blockExplorers!.default.name,
   },
   tokens: {
     addresses: {

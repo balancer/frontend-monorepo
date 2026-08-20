@@ -27,7 +27,7 @@ Sentry.init({
 
 async function getSentryReport() {
   await waitFor(() => expect(testkit.reports()).toHaveLength(1))
-  return testkit.reports()[0]
+  return testkit.reports()[0]!
 }
 
 describe('Captures sentry error', () => {
