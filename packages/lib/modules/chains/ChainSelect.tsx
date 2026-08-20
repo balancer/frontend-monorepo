@@ -80,7 +80,7 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
   const connectedChain = chainId ? getGqlChain(chainId) : undefined
   const nativeBalances = useNativeTokenBalances(chains)
 
-  const sortedChains = [...chains].sort((a, b) => nativeBalances[b] - nativeBalances[a])
+  const sortedChains = [...chains].sort((a, b) => nativeBalances[b]! - nativeBalances[a]!)
   const firstChainWithoutBalance = sortedChains.find(chain => nativeBalances[chain] === 0)
   const hasChainsWithBalance = sortedChains.find(chain => nativeBalances[chain] !== 0) !== undefined
 
