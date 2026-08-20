@@ -12,6 +12,7 @@ import {
   isQuantAmmPool,
   isAutoRange,
   isV3LBP,
+  poolHasRateProviderExternalOracle,
 } from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -90,6 +91,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.QuantAmmWeighted]: 'BTF pool',
   [RiskKey.AutoRange]: 'AutoRange pool',
   [RiskKey.LiquidityBootstrappingPool]: 'Liquidity Bootstrapping pool',
+  [RiskKey.Oracle]: 'Oracle pools',
 }
 
 export type Risk = {
@@ -258,6 +260,13 @@ const RISK_CONDITIONS: RiskDefinition[] = [
     path: `/risks#${RiskKey.NestedPool}`,
     category: RiskCategory.PoolSpecific,
     condition: pool => hasNestedPools(pool),
+  },
+  {
+    key: RiskKey.Oracle,
+    title: RISK_TITLES[RiskKey.Oracle],
+    path: `/risks#${RiskKey.Oracle}`,
+    category: RiskCategory.PoolSpecific,
+    condition: pool => poolHasRateProviderExternalOracle(pool),
   },
   {
     key: RiskKey.Mutable,

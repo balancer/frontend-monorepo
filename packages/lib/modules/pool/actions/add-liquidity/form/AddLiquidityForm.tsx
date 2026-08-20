@@ -44,11 +44,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
-import {
-  isAutoRange,
-  poolHasRateProviderExternalOracle,
-  supportsWethIsEth,
-} from '../../../pool.helpers'
+import { isAutoRange, supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
 import { usePoolMetadata } from '../../../metadata/usePoolMetadata'
 import { useGetPoolRewards } from '../../../useGetPoolRewards'
@@ -204,12 +200,6 @@ function AddLiquidityMainForm() {
             <BalAlert
               content={poolMetadata.addLiquidityWarning.text}
               status={poolMetadata.addLiquidityWarning.type}
-            />
-          )}
-          {poolHasRateProviderExternalOracle(pool) && (
-            <BalAlert
-              content="This pool leverages an external oracle to price the underlying assets. It is highly experimental and should be used at your own risk."
-              status="error"
             />
           )}
           {hasNoLiquidity(pool) && (

@@ -874,8 +874,8 @@ export default function Risks() {
                     <p>
                       Oracles are data providers which supply external information to smart
                       contracts. Oracles, like Chainlink, may be used to source exchange rates
-                      between pool tokens for a rate provider in Balancer MetaStable pools. The
-                      risks of using Oracles to supply exchange rates include:
+                      between pool tokens for a rate provider in Balancer Stable Pools. The risks of
+                      using Oracles to supply exchange rates include:
                     </p>
                     <ul>
                       <li>

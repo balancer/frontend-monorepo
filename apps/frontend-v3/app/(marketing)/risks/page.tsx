@@ -1035,11 +1035,13 @@ export default function Privacy() {
                   </div>
 
                   <div>
-                    <h6>Oracle risk</h6>
+                    <h6 className="anchor" id="oracles">
+                      Oracle risk
+                    </h6>
                     <p>
                       Oracles are data providers which supply external information to smart
                       contracts. Oracles, like Chainlink, may be used to source exchange rates
-                      between pool tokens for a rate provider in Balancer MetaStable pools.
+                      between pool tokens for a rate provider in Balancer Stable Pools.
                     </p>
                     <p>
                       Arbitrageurs can exploit oracle latency by frontrunning oracle updates at

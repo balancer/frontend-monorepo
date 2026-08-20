@@ -12,7 +12,6 @@ import {
   hasReviewedHook,
   hasReviewedRateProvider,
   isV2Pool,
-  poolHasRateProviderExternalOracle,
 } from '../pool.helpers'
 import { shouldMigrateStake } from '../user-balance.helpers'
 import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
@@ -298,17 +297,6 @@ export function usePoolAlerts(pool: Pool) {
         identifier: 'poolWarning',
         content: poolMetadata.warning.text,
         status: poolMetadata.warning.type,
-        isSoftWarning: false,
-      })
-    }
-
-    // Warning for any tokens with an external oracle as the rate provider
-    if (poolHasRateProviderExternalOracle(pool)) {
-      alerts.push({
-        identifier: 'ExternalOracleRateProvider',
-        content:
-          'This pool leverages an external oracle to price the underlying assets. It is highly experimental and should be used at your own risk. The swap fee APR does NOT reflect expected returns. Please read through the "Pool risks" before adding liquidity to this pool.',
-        status: 'error',
         isSoftWarning: false,
       })
     }

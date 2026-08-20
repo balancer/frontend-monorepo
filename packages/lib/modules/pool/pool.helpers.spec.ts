@@ -16,6 +16,7 @@ import {
   shouldBlockAddLiquidity,
   getPoolActivityDateCaption,
   getPoolActivityTitle,
+  poolHasRateProviderExternalOracle,
 } from './pool.helpers'
 import {
   stableSurgeBoosted,
@@ -355,6 +356,31 @@ describe('getPoolActivityDateCaption', () => {
 
   it('returns "in last 7 days" for activity from a week ago', () => {
     expect(getPoolActivityDateCaption(daysAgo(7))).toBe('in last 7 days')
+  })
+})
+
+describe('poolHasRateProviderExternalOracle', () => {
+  it('returns true when a pool token rate provider has the market-rate warning', () => {
+    const pool = getApiPoolMock(sDAIWeighted)
+
+    getPoolToken(pool, 0).priceRateProviderData = {
+      __typename: 'GqlPriceRateProviderData',
+      address: '0x0000000000000000000000000000000000000001',
+      name: 'MarketRateProvider',
+      summary: 'safe',
+      reviewed: true,
+      warnings: ['market-rate'],
+      upgradeableComponents: [],
+      reviewFile: null,
+      factory: null,
+    }
+
+    expect(poolHasRateProviderExternalOracle(pool)).toBe(true)
+  })
+
+  it('returns false when no rate provider has the market-rate warning', () => {
+    const pool = getApiPoolMock(sDAIWeighted)
+    expect(poolHasRateProviderExternalOracle(pool)).toBe(false)
   })
 })
 
