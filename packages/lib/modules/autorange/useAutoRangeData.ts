@@ -84,8 +84,8 @@ export function useAutoRangeData(): AutoRangeData {
       .toNumber()
 
     // only scale back if token has rate but not an erc4626
-    const tokenA = pool.poolTokens[0]
-    const tokenB = pool.poolTokens[1]
+    const tokenA = pool.poolTokens[0]!
+    const tokenB = pool.poolTokens[1]!
     const tokenAHasRate = tokenA.priceRate !== DEFAULT_PRICE_RATE
     const tokenBHasRate = tokenB.priceRate !== DEFAULT_PRICE_RATE
     const shouldScaleBackTokenA = tokenAHasRate && !tokenA.isErc4626
