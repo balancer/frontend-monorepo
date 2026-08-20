@@ -59,7 +59,7 @@ export function FixedProjectedPrice({
       current = addHours(current, 24)
     }
 
-    if (data.length === 0 || !isEqual(data[data.length - 1].timestamp, end)) {
+    if (data.length === 0 || !isEqual(data[data.length - 1]!.timestamp, end)) {
       data.push({ timestamp: end, projectTokenPrice: Number(launchTokenPriceRaw) })
     }
 
