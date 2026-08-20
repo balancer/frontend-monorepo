@@ -4,7 +4,8 @@
     "beforeShellExecution": [
       {
         "command": ".cursor/hooks/lint-staged.sh",
-        "matcher": "git commit "
+        "matcher": "git commit ",
+        "failClosed": true
       }
     ]
   }
