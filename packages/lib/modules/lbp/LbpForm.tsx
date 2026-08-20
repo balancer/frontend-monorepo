@@ -14,7 +14,7 @@ export function LbpForm() {
   return (
     <VStack align="start" spacing="lg" w="full">
       <VStack spacing="lg" w="full">
-        {canRenderStep && <currentStep.Component />}
+        {canRenderStep && currentStep && <currentStep.Component />}
       </VStack>
     </VStack>
   )
