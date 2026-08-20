@@ -619,15 +619,15 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     setInitialChain(slugChain)
 
     if (isLbpSwap) {
-      setInitialTokenIn(lbpPool.poolTokens[lbpPool.reserveTokenIndex].address)
-      setInitialTokenOut(lbpPool.poolTokens[lbpPool.projectTokenIndex].address)
+      setInitialTokenIn(lbpPool.poolTokens[lbpPool.reserveTokenIndex]!.address)
+      setInitialTokenOut(lbpPool.poolTokens[lbpPool.projectTokenIndex]!.address)
     } else if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
 
       if (isStandardOrUnderlyingRootToken(pool, tokenIn as Address)) {
-        setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
+        setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0]?.address)
       } else {
-        setInitialTokenOut(getStandardRootTokens(pool, poolActionableTokens)[0].address)
+        setInitialTokenOut(getStandardRootTokens(pool, poolActionableTokens)[0]?.address)
       }
     } else {
       // Does not support nested actions:
