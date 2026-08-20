@@ -153,26 +153,28 @@ export function usePortfolioLogic() {
       const balReward = balRewardsData.find(r => r.pool.id === pool.id)
       const claimableReward = claimableRewardsByPoolMap[pool.id]
 
-      acc[pool.id] = {
+      const poolRewardsData: PoolRewardsData = {
         ...pool,
       }
+
+      acc[pool.id] = poolRewardsData
 
       let totalFiatClaimableBalance = bn(0)
 
       if (balReward) {
-        acc[pool.id].balReward = balReward
+        poolRewardsData.balReward = balReward
         totalFiatClaimableBalance = totalFiatClaimableBalance.plus(balReward.fiatBalance)
       }
 
       if (claimableReward) {
-        acc[pool.id].claimableRewards = claimableReward
+        poolRewardsData.claimableRewards = claimableReward
 
         claimableReward.forEach(
           r => (totalFiatClaimableBalance = totalFiatClaimableBalance.plus(r.fiatBalance))
         )
       }
 
-      acc[pool.id].totalFiatClaimBalance = totalFiatClaimableBalance
+      poolRewardsData.totalFiatClaimBalance = totalFiatClaimableBalance
       return acc
     }, {})
   }, [portfolioData.stakedPools, balRewardsData, claimableRewardsByPoolMap])
@@ -181,16 +183,16 @@ export function usePortfolioLogic() {
     return portfolioData.stakedPools?.reduce((acc: Record<string, PoolRewardsData[]>, pool) => {
       const poolReward = poolRewardsMap[pool.id]
       const poolRewards = poolReward ? [poolReward] : []
-      if (!acc[pool.chain]) acc[pool.chain] = []
-      acc[pool.chain].push(...poolRewards)
+      const chainRewards = acc[pool.chain] ?? []
+      acc[pool.chain] = [...chainRewards, ...poolRewards]
       return acc
     }, {})
   }, [portfolioData.stakedPools, poolRewardsMap])
 
   const poolsByChainMap = useMemo(() => {
     return portfolioData.stakedPools?.reduce((acc: Record<string, Pool[]>, pool) => {
-      if (!acc[pool.chain]) acc[pool.chain] = []
-      acc[pool.chain].push(pool)
+      const chainPools = acc[pool.chain] ?? []
+      acc[pool.chain] = [...chainPools, pool]
       return acc
     }, {})
   }, [portfolioData.stakedPools])
