@@ -11,7 +11,6 @@ import { LinkSection } from './footer.types'
 import { ReactNode } from 'react'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { SocialIcon } from './SocialIcon'
-import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 
 type CardContentProps = {
   linkSections: LinkSection[]
@@ -112,8 +111,6 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
 }
 
 function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
-  const { openNpsModal } = useAppzi()
-
   return (
     <HStack
       justify={{ base: 'start', lg: 'end' }}
@@ -122,36 +119,17 @@ function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
       w="full"
       wrap="wrap"
     >
-      {legalLinks.map(link => {
-        const key = link.href || link.label
-        const isFeedback = link.label === 'Feedback'
-
-        if (isFeedback) {
-          return (
-            <Link
-              color="font.secondary"
-              cursor="pointer"
-              fontSize={{ base: 'xs', md: 'sm' }}
-              key={key}
-              onClick={openNpsModal}
-            >
-              {link.label}
-            </Link>
-          )
-        }
-
-        return (
-          <Link
-            as={NextLink}
-            color="font.secondary"
-            fontSize={{ base: 'xs', md: 'sm' }}
-            href={link.href || '#'}
-            key={key}
-          >
-            {link.label}
-          </Link>
-        )
-      })}
+      {legalLinks.map(link => (
+        <Link
+          as={NextLink}
+          color="font.secondary"
+          fontSize={{ base: 'xs', md: 'sm' }}
+          href={link.href || '#'}
+          key={link.href || link.label}
+        >
+          {link.label}
+        </Link>
+      ))}
     </HStack>
   )
 }
