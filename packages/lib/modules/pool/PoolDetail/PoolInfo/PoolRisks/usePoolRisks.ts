@@ -91,7 +91,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.QuantAmmWeighted]: 'BTF pool',
   [RiskKey.AutoRange]: 'AutoRange pool',
   [RiskKey.LiquidityBootstrappingPool]: 'Liquidity Bootstrapping pool',
-  [RiskKey.Oracle]: 'Oracle pools',
+  [RiskKey.Oracle]: 'Oracle risk',
 }
 
 export type Risk = {

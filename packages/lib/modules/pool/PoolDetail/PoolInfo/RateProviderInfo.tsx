@@ -72,13 +72,7 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
               <VStack alignItems="flex-start" gap="0">
                 {hasMarketRateWarning && (
                   <Text fontSize="sm">
-                    Uses a market-rate oracle to price assets. See{' '}
-                    <Link href="/risks#oracles" target="_blank">
-                      <Box as="span" color="font.link">
-                        oracle risks
-                      </Box>
-                    </Link>
-                    .
+                    Uses an external oracle to price assets. See review details
                   </Text>
                 )}
                 {otherWarnings.length > 0 && <Text fontSize="sm">Yes, see review details</Text>}

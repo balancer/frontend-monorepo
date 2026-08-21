@@ -4,7 +4,7 @@ import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-deriv
 import { getPoolRisks, RiskCategory, RiskKey } from './usePoolRisks'
 
 describe('getPoolRisks', () => {
-  it('includes Oracle pools risk when a rate provider has the market-rate warning', () => {
+  it('includes Oracle risk when a rate provider has the market-rate warning', () => {
     const pool = getApiPoolMock(sDAIWeighted) as GqlPoolElement
 
     pool.poolTokens[0].priceRateProviderData = {
@@ -25,18 +25,18 @@ describe('getPoolRisks', () => {
     expect(poolSpecificRisks?.risks).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          title: 'Oracle pools',
+          title: 'Oracle risk',
           path: `/risks#${RiskKey.Oracle}`,
         }),
       ])
     )
   })
 
-  it('does not include Oracle pools risk without a market-rate warning', () => {
+  it('does not include Oracle risk without a market-rate warning', () => {
     const pool = getApiPoolMock(sDAIWeighted) as GqlPoolElement
     const riskGroups = getPoolRisks(pool)
     const poolSpecificRisks = riskGroups.find(group => group.category === RiskCategory.PoolSpecific)
 
-    expect(poolSpecificRisks?.risks.some(risk => risk.title === 'Oracle pools')).toBe(false)
+    expect(poolSpecificRisks?.risks.some(risk => risk.title === 'Oracle risk')).toBe(false)
   })
 })
