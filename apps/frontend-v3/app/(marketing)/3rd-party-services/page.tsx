@@ -17,11 +17,6 @@ export default function Cookies() {
       iconUrl: '/images/services/the-graph.svg',
     },
     {
-      name: 'Appzi',
-      description: 'Used to capture and store user feedback from optional surveys.',
-      iconUrl: '/images/services/appzi.svg',
-    },
-    {
       name: 'Hypernative',
       description:
         'Used to securely check wallet addresses and shares it with Hypernative Inc. for risk and compliance reasons.',

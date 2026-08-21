@@ -54,8 +54,8 @@ export default function Privacy() {
                   Balancer does not and has not stored personal information from users of the UI.
                   However, Balancer uses third party services including, without limitation,
                   Cloudflare, Hypernative, Sentry, RainbowKit, OpenZeppelin, Amazon Web Services,
-                  Vercel, Coingecko, Appzi and others who collect and store certain user information
-                  only for use in the provision of their services.
+                  Vercel, Coingecko and others who collect and store certain user information only
+                  for use in the provision of their services.
                 </li>
                 <li>
                   Balancer does not set any cookies. However, we use third party service providers

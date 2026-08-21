@@ -2,13 +2,11 @@
 
 import { Button, Divider, HStack, ModalFooter, VStack, Link } from '@chakra-ui/react'
 import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
-import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { AnimatePresence, motion } from 'motion/react'
 import { PropsWithChildren } from 'react'
-import { CornerDownLeft, MessageSquare, ThumbsUp } from 'lucide-react'
+import { CornerDownLeft, MessageSquare } from 'lucide-react'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
 import { getDiscordLink } from '../../utils/links'
-import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export function SuccessActions({
   returnLabel,
@@ -17,8 +15,6 @@ export function SuccessActions({
   returnLabel?: string
   returnAction?: () => void
 }) {
-  const { openNpsModal } = useAppzi()
-
   return (
     <VStack w="full">
       <Divider />
@@ -32,16 +28,6 @@ export function SuccessActions({
         >
           {returnLabel}
         </Button>
-        {isBalancer && (
-          <Button
-            leftIcon={<ThumbsUp size="14" />}
-            onClick={openNpsModal}
-            size="xs"
-            variant="ghost"
-          >
-            Give feedback
-          </Button>
-        )}
         <Button
           _hover={{
             color: 'font.maxContrast',
