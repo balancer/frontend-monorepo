@@ -18,7 +18,7 @@ import { useRemoveLiquidityReceipt } from '@repo/lib/modules/transactions/transa
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { ProtocolVersion } from '../../../pool.types'
-import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
 
 type Props = {

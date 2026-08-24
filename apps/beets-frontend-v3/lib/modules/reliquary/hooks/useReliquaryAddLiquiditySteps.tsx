@@ -4,7 +4,7 @@ import { getSpenderForAddLiquidity } from '@repo/lib/modules/tokens/token.helper
 import { useMemo } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
-import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import {
   ReliquaryAddLiquidityStepParams,

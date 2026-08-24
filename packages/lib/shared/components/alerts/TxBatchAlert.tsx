@@ -3,7 +3,7 @@ import { useBreakpoints } from '../../hooks/useBreakpoints'
 import { BalAlert } from './BalAlert'
 import { BalAlertContent } from './BalAlertContent'
 import { StepType, TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
+import { useStepWithTxBatch } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 type Props = AlertProps & { steps: TransactionStep[] }
 

@@ -15,7 +15,7 @@ import { isNativeAsset } from '../tokens/token.helpers'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { usePermit2ApprovalSteps } from '../tokens/approvals/permit2/usePermit2ApprovalSteps'
 import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
-import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 
 type Params = SwapStepParams & {
