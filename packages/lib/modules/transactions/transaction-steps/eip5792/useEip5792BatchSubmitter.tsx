@@ -2,7 +2,7 @@
 
 import { noop } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
-import { useCallsStatus, useSendCalls } from 'wagmi'
+import { useSendCalls, useWaitForCallsStatus } from 'wagmi'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { TransactionExecution, TransactionSimulation } from '../../../web3/contracts/contract.types'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
@@ -50,12 +50,10 @@ export function useEip5792BatchSubmitter({
 
   const { sendCallsAsync } = useSendCalls({})
 
-  const callsStatusQuery = useCallsStatus({
-    id: callsId ?? '',
+  const callsStatusQuery = useWaitForCallsStatus({
+    id: callsId,
     query: {
       enabled: !!callsId,
-      // Poll every 5s while the batch is pending; stop once it settles.
-      refetchInterval: query => (query.state.data?.status === 'pending' ? 5000 : false),
     },
   })
 
