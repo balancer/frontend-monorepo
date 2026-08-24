@@ -3,7 +3,6 @@ import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
 import NextTopLoader from 'nextjs-toploader'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import '@repo/lib/assets/css/global.css'
-import Script from 'next/script'
 import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
 import { NavBarContainer } from '@bal/lib/components/navs/NavBarContainer'
@@ -58,7 +57,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
               title="AMMs made easy"
             />
             <SpeedInsights />
-            <Script async src="https://w.appzi.io/w.js?token=8TY8k" />
           </Providers>
         </ThemeProvider>
       </body>

@@ -15,8 +15,6 @@ import { AppLink, useNav } from './useNav'
 import { clamp } from 'lodash'
 import { ArrowUpRight } from 'lucide-react'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
-import { isBalancer } from '@repo/lib/config/getProjectConfig'
-import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
 import { ApiOutageAlert } from '../alerts/ApiOutageAlert'
 import { useApiHealth } from '../../hooks/useApiHealth'
 
@@ -162,14 +160,6 @@ export function NavActions({
         el: <UserSettings />,
         display: { base: 'none', lg: 'block' },
       },
-      ...(isBalancer
-        ? [
-            {
-              el: <UserFeedback />,
-              display: { base: 'none', lg: 'block' },
-            },
-          ]
-        : []),
       {
         el: (
           <ConnectWallet
