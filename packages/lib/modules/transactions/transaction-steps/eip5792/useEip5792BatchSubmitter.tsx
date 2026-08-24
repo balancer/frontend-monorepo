@@ -54,6 +54,8 @@ export function useEip5792BatchSubmitter({
     id: callsId ?? '',
     query: {
       enabled: !!callsId,
+      // Poll every 5s while the batch is pending; stop once it settles.
+      refetchInterval: query => (query.state.data?.status === 'pending' ? 5000 : false),
     },
   })
 
