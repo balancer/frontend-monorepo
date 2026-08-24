@@ -128,11 +128,14 @@ export function ClaimNetworkPools() {
     const items = []
 
     poolsWithChain.forEach(([, pools]) => {
-      if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
+      const firstPool = pools[0]
+      const chainBalance = firstPool ? totalFiatClaimableBalanceByChain[firstPool.chain] : undefined
+
+      if (firstPool && chainBalance && chainBalance.toNumber() > 0) {
         items.push({
           type: 'chain',
-          chain: pools[0].chain,
-          amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
+          chain: firstPool.chain,
+          amount: chainBalance.toNumber(),
         })
       }
     })

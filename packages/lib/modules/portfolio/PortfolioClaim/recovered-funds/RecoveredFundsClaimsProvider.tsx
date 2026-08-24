@@ -13,8 +13,7 @@ const UseRecoveredFundsClaimsContext = createContext<UseRecoveredFundsClaimsResp
 function useRecoveredFundsClaimsLogic() {
   const { claims } = useRecoveredFunds()
 
-  const signatureChain =
-    claims.length > 0 ? claims[0].chainId : getChainId(PROJECT_CONFIG.defaultNetwork)
+  const signatureChain = claims[0]?.chainId ?? getChainId(PROJECT_CONFIG.defaultNetwork)
 
   const { signatureStep, hasAcceptedDisclaimer, setHasAcceptedDisclaimer } =
     useSignatureStep(signatureChain)

@@ -48,10 +48,9 @@ const WRAPPER_TOKENS: Record<number, string[]> = {
 
 const normalize = (address: string) => address.toLowerCase()
 
-export const NORMALIZED_WRAPPER_TOKENS: Record<number, string[]> = {
-  1: WRAPPER_TOKENS[1].map(normalize),
-  42161: WRAPPER_TOKENS[42161].map(normalize),
-  8453: WRAPPER_TOKENS[8453].map(normalize),
-  137: WRAPPER_TOKENS[137].map(normalize),
-  10: WRAPPER_TOKENS[10].map(normalize),
-}
+export const NORMALIZED_WRAPPER_TOKENS: Record<number, string[]> = Object.fromEntries(
+  Object.entries(WRAPPER_TOKENS).map(([chainId, addresses]) => [
+    Number(chainId),
+    addresses.map(normalize),
+  ])
+)
