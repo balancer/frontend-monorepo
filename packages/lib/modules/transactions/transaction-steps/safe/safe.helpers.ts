@@ -14,9 +14,9 @@ import {
   sepolia,
   sonic,
 } from 'viem/chains'
-import { SafeAppTx, TransactionState, TransactionStep, TxCall } from '../lib'
-import { TransactionStatus as BalancerTransactionStatus } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
+import { SafeAppTx, TransactionState, TxCall } from '../lib'
 import { Address } from 'viem'
+import { TransactionStatus as BalancerTransactionStatus } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 
 const SAFE_CHAIN_PREFIX: Record<SupportedChainId, string> = {
   [mainnet.id]: 'eth',
@@ -39,14 +39,6 @@ export function getSafeWebUrl(chainId: number, safeAddress: Address, safeTxId: s
 
 export function isMultisig(details: GatewayTransactionDetails): boolean {
   return details.detailedExecutionInfo?.type === 'MULTISIG'
-}
-
-export function getPendingNestedSteps(step: TransactionStep) {
-  return step?.nestedSteps?.filter(nestedStep => !nestedStep.isComplete())
-}
-
-export function hasSomePendingNestedTxInBatch(step: TransactionStep): boolean {
-  return step?.nestedSteps?.some(nestedStep => !nestedStep.isComplete()) ?? false
 }
 
 export function getSignConfirmationsLabel(details: GatewayTransactionDetails) {
@@ -76,20 +68,7 @@ export function getRemainingSignaturesLabel(
   return `${remainingSignatures} more signatures are required`
 }
 
-export function buildTxBatch(transactionStep: TransactionStep): SafeAppTx[] {
-  if (!transactionStep.nestedSteps) return [buildSafeTxCall(transactionStep.batchableTxCall!)]
-  return [
-    ...transactionStep.nestedSteps
-      // Comment the following line to test batching when tokens are already allowed
-      .filter(step => !step.isComplete())
-      .map(step => {
-        return buildSafeTxCall(step.batchableTxCall!)
-      }),
-    buildSafeTxCall(transactionStep.batchableTxCall!),
-  ]
-}
-
-function buildSafeTxCall(txCall: TxCall): SafeAppTx {
+export function buildSafeTxCall(txCall: TxCall): SafeAppTx {
   return { ...txCall, value: txCall?.value ? txCall.value.toString() : '0' }
 }
 

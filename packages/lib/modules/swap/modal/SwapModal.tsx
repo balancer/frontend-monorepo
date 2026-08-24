@@ -18,6 +18,8 @@ import { useSwapReceipt } from '../../transactions/transaction-steps/receipts/re
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useIsPoolSwapUrl } from '../useIsPoolSwapUrl'
+import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
+import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 
 type Props = {
   isOpen: boolean
@@ -33,6 +35,7 @@ export function SwapPreviewModal({
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
@@ -96,7 +99,11 @@ export function SwapPreviewModal({
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
         {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker chain={selectedChain} transactionSteps={transactionSteps} />
+          <DesktopStepTracker
+            chain={selectedChain}
+            isTxBatch={shouldBatchTransactions}
+            transactionSteps={transactionSteps}
+          />
         )}
         <TransactionModalHeader
           chain={selectedChain}
@@ -107,6 +114,7 @@ export function SwapPreviewModal({
         />
         <ModalCloseButton />
         <ModalBody>
+          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <SwapSummary {...swapReceipt} />
         </ModalBody>
         <ActionModalFooter

@@ -12,11 +12,11 @@ import { AddLiquidityStepParams, useAddLiquidityStep } from './useAddLiquiditySt
 import { useSignPermit2AddStep } from './useSignPermit2AddStep'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { UnbalancedAddLiquidityViaSwapV3Handler } from './handlers/UnbalancedAddLiquidityViaSwapV3.handler'
+import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
 
 export type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers

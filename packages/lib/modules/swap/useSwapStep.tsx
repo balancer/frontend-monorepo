@@ -18,6 +18,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { DisabledTransactionButton } from '../transactions/transaction-steps/TransactionStepButton'
 import { ApiToken } from '../tokens/token.types'
 import { isTransactionSuccess } from '../transactions/transaction-steps/transaction.helper'
+import { TransactionBatchButton } from '../transactions/transaction-steps/safe/TransactionBatchButton'
 
 const swapStepId = 'swap'
 
@@ -43,9 +44,10 @@ export function useSwapStep({
   const { isConnected } = useUserAccount()
   const [isBuildQueryEnabled, setIsBuildQueryEnabled] = useState(false)
   const { refetchBalances } = useTokenBalances()
+  const chainId = getChainId(swapState.selectedChain)
 
   const { buildTenderlyUrl } = useTenderly({
-    chainId: getChainId(swapState.selectedChain),
+    chainId,
   })
 
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
@@ -128,6 +130,26 @@ export function useSwapStep({
           </VStack>
         )
       },
+      // The following fields are only used within Safe App
+      renderBatchAction: (currentStep: TransactionStep) => {
+        return (
+          <TransactionBatchButton
+            chainId={chainId}
+            currentStep={currentStep}
+            labels={labels}
+            onTransactionChange={setTransaction}
+          />
+        )
+      },
+      // Last step in smart account batch
+      isBatchEnd: true,
+      batchableTxCall: buildSwapQuery.data
+        ? {
+            data: buildSwapQuery.data.data,
+            to: buildSwapQuery.data.to,
+            value: buildSwapQuery.data.value,
+          }
+        : undefined,
     }),
     [
       transaction,
@@ -137,6 +159,7 @@ export function useSwapStep({
       labels,
       gasEstimationMeta,
       isComplete,
+      chainId,
     ]
   )
 }
