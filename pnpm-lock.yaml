@@ -24,10 +24,10 @@ importers:
         version: 4.7.0(supports-color@10.2.2)(vite@7.3.6(@types/node@24.13.3)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0))
       '@vitest/coverage-v8':
         specifier: 3.2.7
-        version: 3.2.7(supports-color@10.2.2)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))
+        version: 3.2.7(supports-color@10.2.2)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))
       happy-dom:
-        specifier: 20.11.2
-        version: 20.11.2
+        specifier: 20.11.6
+        version: 20.11.6
       husky:
         specifier: 9.1.7
         version: 9.1.7
@@ -50,17 +50,17 @@ importers:
         specifier: 5.0.3
         version: 5.0.3(prettier@3.9.6)(stylelint@17.14.1(supports-color@10.2.2)(typescript@5.9.3))
       turbo:
-        specifier: 2.10.9
-        version: 2.10.9
+        specifier: 2.10.11
+        version: 2.10.11
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 3.2.7
-        version: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)
+        version: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)
       vitest-mock-extended:
         specifier: 3.1.1
-        version: 3.1.1(typescript@5.9.3)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))
+        version: 3.1.1(typescript@5.9.3)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))
 
   apps/balancer-analytics:
     dependencies:
@@ -127,7 +127,7 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+        version: 2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.20.1)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
         version: 2.12.0(react@19.2.8)
@@ -156,8 +156,8 @@ importers:
         specifier: '19.2'
         version: 19.2.4(@types/react@19.2.18)
       concurrently:
-        specifier: 10.0.4
-        version: 10.0.4
+        specifier: 10.0.5
+        version: 10.0.5
       eslint:
         specifier: 9.39.5
         version: 9.39.5(jiti@2.7.0)(supports-color@10.2.2)
@@ -242,7 +242,7 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+        version: 2.5.8(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
         version: 2.12.0(react@19.2.8)
@@ -283,8 +283,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0
       concurrently:
-        specifier: 10.0.4
-        version: 10.0.4
+        specifier: 10.0.5
+        version: 10.0.5
       cross-fetch:
         specifier: 4.1.0
         version: 4.1.0
@@ -390,7 +390,7 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+        version: 2.5.8(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
         version: 2.12.0(react@19.2.8)
@@ -437,8 +437,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0
       concurrently:
-        specifier: 10.0.4
-        version: 10.0.4
+        specifier: 10.0.5
+        version: 10.0.5
       cross-fetch:
         specifier: 4.1.0
         version: 4.1.0
@@ -513,10 +513,10 @@ importers:
         version: 7.1.1(eslint@9.39.5(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
       eslint-plugin-turbo:
         specifier: 2.10.9
-        version: 2.10.9(eslint@9.39.5(jiti@2.7.0)(supports-color@10.2.2))(turbo@2.10.9)
+        version: 2.10.9(eslint@9.39.5(jiti@2.7.0)(supports-color@10.2.2))(turbo@2.10.11)
       globals:
-        specifier: 17.9.0
-        version: 17.9.0
+        specifier: 17.11.0
+        version: 17.11.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -591,7 +591,7 @@ importers:
         version: 9.1.0(typescript@5.9.3)(zod@3.25.76)
       '@sentry/nextjs':
         specifier: 10.69.0
-        version: 10.69.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))(next@16.3.1(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26))
+        version: 10.69.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))(next@16.3.1(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.28.2)(postcss@8.5.26))
       '@tanstack/react-query':
         specifier: 5.101.4
         version: 5.101.4(react@19.2.8)
@@ -709,7 +709,7 @@ importers:
         version: 0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2))(@types/react@19.2.18)(graphql@16.14.2)(next@16.3.1(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+        version: 2.5.8(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
         version: 2.12.0(react@19.2.8)
@@ -751,7 +751,7 @@ importers:
         version: 10.69.0
       '@testing-library/jest-dom':
         specifier: 7.0.1
-        version: 7.0.1(@testing-library/dom@10.4.1)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))
+        version: 7.0.1(@testing-library/dom@10.4.1)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))
       '@testing-library/react':
         specifier: 16.3.2
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -843,7 +843,7 @@ importers:
         version: 2.51.3(typescript@5.9.3)(zod@3.25.76)
       wagmi:
         specifier: 3.6.16
-        version: 3.6.16(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.101.4)(@tanstack/react-query@5.101.4(react@19.2.8))(@types/react@19.2.18)(@walletconnect/ethereum-provider@2.23.10(@types/react@19.2.18)(@x402/core@2.21.0)(@x402/evm@2.21.0(typescript@5.9.3))(@x402/extensions@2.21.0(typescript@5.9.3))(@x402/svm@2.21.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(react@19.2.8)(typescript@5.9.3)(viem@2.51.3(typescript@5.9.3)(zod@3.25.76))
+        version: 3.6.16(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.101.4)(@tanstack/react-query@5.101.4(react@19.2.8))(@types/react@19.2.18)(@walletconnect/ethereum-provider@2.23.10(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(react@19.2.8)(typescript@5.9.3)(viem@2.51.3(typescript@5.9.3)(zod@3.25.76))
 
   packages/typescript-config: {}
 
@@ -4153,33 +4153,33 @@ packages:
   '@tokenizer/token@0.3.0':
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
 
-  '@turbo/darwin-64@2.10.9':
-    resolution: {integrity: sha512-Jh+pTGXLNz8+1tkUU13TI/f+ZOI+OvC4YbHi1H+57iSpLt5DR3xgptd+4sA07RdjdRR/RX/01uQQu2OkbzIefA==}
+  '@turbo/darwin-64@2.10.11':
+    resolution: {integrity: sha512-v3R+1R/Ysozyo+p7Ri8MCIbndOvYt3DgPFrGLhrhQHfvyvbxyH3WyJj+A/2JTNmNleuAlh3JUyCV0iSVHIONTA==}
     cpu: [x64]
     os: [darwin]
 
-  '@turbo/darwin-arm64@2.10.9':
-    resolution: {integrity: sha512-aqtpPkiIC4IUas8Vv27oJ3aDfTuP1d5wofd01dZ7gfhHRrIKuFdqQb4imvNnVFahcOViF9Jh8Oi7feDoz8/ciA==}
+  '@turbo/darwin-arm64@2.10.11':
+    resolution: {integrity: sha512-R0a0CvGAeYYsBgPIgFNB3agGXh6qukjduNhFlwVVX1Ss2IdBJLXmgjytNGmo084bLKS0B6UdLRwKhXMHKKaObQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@turbo/linux-64@2.10.9':
-    resolution: {integrity: sha512-XyAneUBsS5uNOUOjBSs81zyigMVwwhVUd3u7F2JFMKGQk6F7eNAiOEBASJ+aHLldjYsOEjhfW+5gWIqwziyFFw==}
+  '@turbo/linux-64@2.10.11':
+    resolution: {integrity: sha512-dGlY2vg7jpsLjGS1bf9sD/cw1sGMAYbeHGQKGRFxd5Zaj+Ufbj8cNXl/vIit8ueCU97zhL/znn60ZV5iSfZAxw==}
     cpu: [x64]
     os: [android, linux]
 
-  '@turbo/linux-arm64@2.10.9':
-    resolution: {integrity: sha512-5jAcldLnkuWIjujGhCn2MGIeUwW8IVNOq9Sce4EEzzgLcxmhTasbV0RiW6ZkaRdOjmOCGzeNXPLkDJEOIucOLw==}
+  '@turbo/linux-arm64@2.10.11':
+    resolution: {integrity: sha512-eSP9+jjsSCBs2x0QpJZlp49dSD1EIMwXH7PsMIhdWk7w6IThhuKJ+jL95JQ2IW7tRjRmdh8gKcKQtrHLD5R5lA==}
     cpu: [arm64]
     os: [android, linux]
 
-  '@turbo/windows-64@2.10.9':
-    resolution: {integrity: sha512-u1xGpGlefzuhBedbt/VR2nWdftfFVZwPeDg9e5uZl68sV1fL3HNYTNr5VyHkzgtPK2VTYg1x4OKZuGrh1Gvhtg==}
+  '@turbo/windows-64@2.10.11':
+    resolution: {integrity: sha512-4aD7edogJ8arK8DOyvjTI2KKwmchD5M/WM4BZgidrtFf7aSgn8Ce2rJnDwmriw980c2cKlHnhXtlGy38VtKB8g==}
     cpu: [x64]
     os: [win32]
 
-  '@turbo/windows-arm64@2.10.9':
-    resolution: {integrity: sha512-W2Ub165Qv0iMFljbYKxxbZN+2dVSngnzEjQNEFXtnz5oJVx9XSypmNmUvMtuYMeZ3kdVC1zI7yd/rtuX+SDnbg==}
+  '@turbo/windows-arm64@2.10.11':
+    resolution: {integrity: sha512-m8tJkIrTrbQ9O1uHxV0GUq623Zg1678xGna8eMsy4KbygUX/wVFgdZDYV/AxyoyaW/U7nyKoBvaDVwm22p9xqA==}
     cpu: [arm64]
     os: [win32]
 
@@ -5398,8 +5398,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  concurrently@10.0.4:
-    resolution: {integrity: sha512-trZql+7l/0+WRAsAnEdctr4+iiOS6ZrViI6H8QWcCF9MFS/LT0dKpe8vluB1to6it+OxSI4VospFTIFMW8DJRw==}
+  concurrently@10.0.5:
+    resolution: {integrity: sha512-JaP/CoftUrCcAFW/g//RbgEGwlelnEae6cfBLgH6ZdO6s8jPkn6p9SB9u6pdVxYXoiSnFqseOlHfrEfF82TVOg==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -6024,6 +6024,7 @@ packages:
   eslint@9.27.0:
     resolution: {integrity: sha512-ixRawFQuMB9DZ7fjU3iGGganFDp3+45bPOdaRurcFHSXO1e/sYwUX/FtQZpLZJR6SjMoJH8hR2pPEAfDyCoU2Q==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -6034,6 +6035,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -6389,8 +6391,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@17.9.0:
-    resolution: {integrity: sha512-m/MvAW61QVU5VDNF1Vj8axt016h8w7L5TU1e9zlab7XIttAT2YAlCwl75K1fOqvMM9apmD7lbCIRhpfkhmxhCg==}
+  globals@17.11.0:
+    resolution: {integrity: sha512-Z2I8hM+PbJDXQDq3Icgpzv+mPdwr68iZUU9d5WW4FuXfDUQfkZaZuvjMv42/5crNyw154+9+VWXbYrUgDXbxNw==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -6461,8 +6463,8 @@ packages:
   h3@1.15.11:
     resolution: {integrity: sha512-L3THSe2MPeBwgIZVSH5zLdBBU90TOxarvhK9d04IDY2AmVS8j2Jz2LIWtwsGOU3lu2I5jCN7FNvVfY2+XyF+mg==}
 
-  happy-dom@20.11.2:
-    resolution: {integrity: sha512-7MB+bJLkxu3SowAfBJbjW+c55kNz5tkR45gu2qzrxznezhLeN5YIlJbwUgSzlGc+qWoZ8Ykg71H5ezz69xixrw==}
+  happy-dom@20.11.6:
+    resolution: {integrity: sha512-Hldbg8AdAa5a5oDcZpjqnGitp7JB0hqWmfv/8qr+kft4vzSD8BHsbdRfzYvL/0QcbKcURC/yyoygbeDQarPvYg==}
     engines: {node: '>=20.0.0'}
 
   has-bigints@1.1.0:
@@ -8853,8 +8855,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  turbo@2.10.9:
-    resolution: {integrity: sha512-Yl9+ukxH+UmPtKidpDkjn82tvPoEvFNb9UACd9vUomN1Ft0cwl3rx0P8yC1D93W9EOsWRMjllvIDG8y25sFOog==}
+  turbo@2.10.11:
+    resolution: {integrity: sha512-yQfwQVoRXwOuyX1LxiJFBFNg6VfuYh+/RyZLd82+isgyLkBXw3S5XRRzvcck1FAjSCG5sVyLd+O1eDMvYa3J7g==}
     hasBin: true
 
   tweetnacl@1.0.3:
@@ -9891,11 +9893,58 @@ snapshots:
 
   '@chakra-ui/anatomy@2.3.6': {}
 
-  '@chakra-ui/cli@2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)':
+  '@chakra-ui/cli@2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.20.1)':
     dependencies:
       bundle-n-require: 1.1.2
       chokidar: 3.6.0
-      cli-welcome: 2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+      cli-welcome: 2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.20.1)
+      commander: 11.1.0
+      ora: 7.0.1
+      prettier: 3.9.6
+      update-notifier: 6.0.2
+    transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@libsql/client'
+      - '@libsql/client-wasm'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@planetscale/database'
+      - '@prisma/client'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
+      - '@types/pg'
+      - '@types/react'
+      - '@types/sql.js'
+      - '@upstash/redis'
+      - '@vercel/postgres'
+      - '@xata.io/client'
+      - babel-plugin-macros
+      - better-sqlite3
+      - bufferutil
+      - bun-types
+      - encoding
+      - expo-sqlite
+      - gel
+      - knex
+      - kysely
+      - mysql2
+      - pg
+      - prisma
+      - react
+      - react-devtools-core
+      - sql.js
+      - sqlite3
+      - supports-color
+      - utf-8-validate
+      - ws
+
+  '@chakra-ui/cli@2.5.8(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)':
+    dependencies:
+      bundle-n-require: 1.1.2
+      chokidar: 3.6.0
+      cli-welcome: 2.2.3(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
       commander: 11.1.0
       ora: 7.0.1
       prettier: 3.9.6
@@ -12649,22 +12698,6 @@ snapshots:
       - encoding
       - supports-color
 
-  '@sentry/bundler-plugins@10.70.0(rollup@4.62.4)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26))':
-    dependencies:
-      '@babel/core': 7.29.7(supports-color@10.2.2)
-      '@sentry/cli': 2.58.6(supports-color@10.2.2)
-      '@sentry/core': 10.70.0
-      dotenv: 17.4.2
-      find-up: 5.0.0
-      glob: 13.0.6
-      magic-string: 0.30.21
-    optionalDependencies:
-      rollup: 4.62.4
-      webpack: 5.109.2(esbuild@0.25.12)(postcss@8.5.26)
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-
   '@sentry/bundler-plugins@10.70.0(rollup@4.62.4)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.28.2)(postcss@8.5.26))':
     dependencies:
       '@babel/core': 7.29.7(supports-color@10.2.2)
@@ -12738,32 +12771,6 @@ snapshots:
   '@sentry/feedback@10.69.0':
     dependencies:
       '@sentry/core': 10.69.0
-
-  '@sentry/nextjs@10.69.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))(next@16.3.1(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26))':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
-      '@rollup/plugin-commonjs': 28.0.1(rollup@4.62.4)
-      '@sentry/browser-utils': 10.69.0
-      '@sentry/bundler-plugin-core': 5.3.0(supports-color@10.2.2)
-      '@sentry/conventions': 0.16.0
-      '@sentry/core': 10.69.0
-      '@sentry/node': 10.69.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.218.0(@opentelemetry/api@1.9.1))(supports-color@10.2.2)
-      '@sentry/opentelemetry': 10.69.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
-      '@sentry/react': 10.69.0(react@19.2.8)
-      '@sentry/server-utils': 10.69.0(supports-color@10.2.2)
-      '@sentry/vercel-edge': 10.69.0
-      '@sentry/webpack-plugin': 5.4.0(rollup@4.62.4)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26))
-      next: 16.3.1(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      rollup: 4.62.4
-      stacktrace-parser: 0.1.11
-    transitivePeerDependencies:
-      - '@opentelemetry/core'
-      - '@opentelemetry/exporter-trace-otlp-http'
-      - '@opentelemetry/sdk-trace-base'
-      - encoding
-      - react
-      - supports-color
-      - webpack
 
   '@sentry/nextjs@10.69.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))(next@16.3.1(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.28.2)(postcss@8.5.26))':
     dependencies:
@@ -12863,15 +12870,6 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@sentry/core': 10.69.0
-
-  '@sentry/webpack-plugin@5.4.0(rollup@4.62.4)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26))':
-    dependencies:
-      '@sentry/bundler-plugins': 10.70.0(rollup@4.62.4)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26))
-      webpack: 5.109.2(esbuild@0.25.12)(postcss@8.5.26)
-    transitivePeerDependencies:
-      - encoding
-      - rollup
-      - supports-color
 
   '@sentry/webpack-plugin@5.4.0(rollup@4.62.4)(supports-color@10.2.2)(webpack@5.109.2(esbuild@0.28.2)(postcss@8.5.26))':
     dependencies:
@@ -13397,7 +13395,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
-  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.1)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))':
+  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.1)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))':
     dependencies:
       '@adobe/css-tools': 4.5.0
       '@testing-library/dom': 10.4.1
@@ -13407,7 +13405,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
     optionalDependencies:
-      vitest: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)
+      vitest: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)
 
   '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
@@ -13428,22 +13426,22 @@ snapshots:
 
   '@tokenizer/token@0.3.0': {}
 
-  '@turbo/darwin-64@2.10.9':
+  '@turbo/darwin-64@2.10.11':
     optional: true
 
-  '@turbo/darwin-arm64@2.10.9':
+  '@turbo/darwin-arm64@2.10.11':
     optional: true
 
-  '@turbo/linux-64@2.10.9':
+  '@turbo/linux-64@2.10.11':
     optional: true
 
-  '@turbo/linux-arm64@2.10.9':
+  '@turbo/linux-arm64@2.10.11':
     optional: true
 
-  '@turbo/windows-64@2.10.9':
+  '@turbo/windows-64@2.10.11':
     optional: true
 
-  '@turbo/windows-arm64@2.10.9':
+  '@turbo/windows-arm64@2.10.11':
     optional: true
 
   '@types/aria-query@5.0.4': {}
@@ -13689,7 +13687,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@3.2.7(supports-color@10.2.2)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))':
+  '@vitest/coverage-v8@3.2.7(supports-color@10.2.2)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
@@ -13704,7 +13702,7 @@ snapshots:
       std-env: 3.10.0
       test-exclude: 7.0.2
       tinyrainbow: 2.0.0
-      vitest: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)
+      vitest: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -13829,7 +13827,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@wagmi/connectors@8.0.15(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@wagmi/core@3.5.0(@tanstack/query-core@5.101.4)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.51.3(typescript@5.9.3)(zod@3.25.76)))(@walletconnect/ethereum-provider@2.23.10(@types/react@19.2.18)(@x402/core@2.21.0)(@x402/evm@2.21.0(typescript@5.9.3))(@x402/extensions@2.21.0(typescript@5.9.3))(@x402/svm@2.21.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(typescript@5.9.3)(viem@2.51.3(typescript@5.9.3)(zod@3.25.76))':
+  '@wagmi/connectors@8.0.15(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@wagmi/core@3.5.0(@tanstack/query-core@5.101.4)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.51.3(typescript@5.9.3)(zod@3.25.76)))(@walletconnect/ethereum-provider@2.23.10(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(typescript@5.9.3)(viem@2.51.3(typescript@5.9.3)(zod@3.25.76))':
     dependencies:
       '@wagmi/core': 3.5.0(@tanstack/query-core@5.101.4)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.51.3(typescript@5.9.3)(zod@3.25.76))
       viem: 2.51.3(typescript@5.9.3)(zod@3.25.76)
@@ -15096,7 +15094,49 @@ snapshots:
 
   cjs-module-lexer@2.2.1: {}
 
-  clear-any-console@1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3):
+  clear-any-console@1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.20.1):
+    dependencies:
+      command-code: 1.26.0(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(supports-color@10.2.2)
+      langbase: 1.2.4(react@19.2.8)(ws@8.20.1)
+    transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@libsql/client'
+      - '@libsql/client-wasm'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@planetscale/database'
+      - '@prisma/client'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
+      - '@types/pg'
+      - '@types/react'
+      - '@types/sql.js'
+      - '@upstash/redis'
+      - '@vercel/postgres'
+      - '@xata.io/client'
+      - babel-plugin-macros
+      - better-sqlite3
+      - bufferutil
+      - bun-types
+      - encoding
+      - expo-sqlite
+      - gel
+      - knex
+      - kysely
+      - mysql2
+      - pg
+      - prisma
+      - react
+      - react-devtools-core
+      - sql.js
+      - sqlite3
+      - supports-color
+      - utf-8-validate
+      - ws
+
+  clear-any-console@1.16.4(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3):
     dependencies:
       command-code: 1.26.0(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(supports-color@10.2.2)
       langbase: 1.2.4(react@19.2.8)(ws@8.21.3)
@@ -15179,10 +15219,52 @@ snapshots:
       slice-ansi: 9.0.0
       string-width: 8.2.2
 
-  cli-welcome@2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3):
+  cli-welcome@2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.20.1):
     dependencies:
       chalk: 2.4.2
-      clear-any-console: 1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+      clear-any-console: 1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.20.1)
+    transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@libsql/client'
+      - '@libsql/client-wasm'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@planetscale/database'
+      - '@prisma/client'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
+      - '@types/pg'
+      - '@types/react'
+      - '@types/sql.js'
+      - '@upstash/redis'
+      - '@vercel/postgres'
+      - '@xata.io/client'
+      - babel-plugin-macros
+      - better-sqlite3
+      - bufferutil
+      - bun-types
+      - encoding
+      - expo-sqlite
+      - gel
+      - knex
+      - kysely
+      - mysql2
+      - pg
+      - prisma
+      - react
+      - react-devtools-core
+      - sql.js
+      - sqlite3
+      - supports-color
+      - utf-8-validate
+      - ws
+
+  cli-welcome@2.2.3(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3):
+    dependencies:
+      chalk: 2.4.2
+      clear-any-console: 1.16.4(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -15377,7 +15459,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  concurrently@10.0.4:
+  concurrently@10.0.5:
     dependencies:
       chalk: 5.6.2
       rxjs: 7.8.2
@@ -15951,11 +16033,11 @@ snapshots:
       string.prototype.matchall: 4.0.12
       string.prototype.repeat: 1.0.0
 
-  eslint-plugin-turbo@2.10.9(eslint@9.39.5(jiti@2.7.0)(supports-color@10.2.2))(turbo@2.10.9):
+  eslint-plugin-turbo@2.10.9(eslint@9.39.5(jiti@2.7.0)(supports-color@10.2.2))(turbo@2.10.11):
     dependencies:
       dotenv: 16.0.3
       eslint: 9.39.5(jiti@2.7.0)(supports-color@10.2.2)
-      turbo: 2.10.9
+      turbo: 2.10.11
 
   eslint-scope@5.1.1:
     dependencies:
@@ -16458,7 +16540,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@17.9.0: {}
+  globals@17.11.0: {}
 
   globalthis@1.0.4:
     dependencies:
@@ -16561,7 +16643,7 @@ snapshots:
       ufo: 1.6.4
       uncrypto: 0.1.3
 
-  happy-dom@20.11.2:
+  happy-dom@20.11.6:
     dependencies:
       '@types/node': 24.13.3
       '@types/whatwg-mimetype': 3.0.2
@@ -17138,6 +17220,18 @@ snapshots:
 
   kind-of@6.0.3: {}
 
+  langbase@1.2.4(react@19.2.8)(ws@8.20.1):
+    dependencies:
+      dotenv: 16.6.1
+      openai: 4.104.0(ws@8.20.1)(zod@3.25.76)
+      zod: 3.25.76
+      zod-validation-error: 3.5.4(zod@3.25.76)
+    optionalDependencies:
+      react: 19.2.8
+    transitivePeerDependencies:
+      - encoding
+      - ws
+
   langbase@1.2.4(react@19.2.8)(ws@8.21.3):
     dependencies:
       dotenv: 16.6.1
@@ -17371,17 +17465,6 @@ snapshots:
       brace-expansion: 2.1.4
 
   minimist@1.2.8: {}
-
-  minimizer-webpack-plugin@5.6.1(esbuild@0.25.12)(postcss@8.5.26)(webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26)):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.31
-      jest-worker: 27.5.1
-      schema-utils: 4.3.3
-      terser: 5.50.0
-      webpack: 5.109.2(esbuild@0.25.12)(postcss@8.5.26)
-    optionalDependencies:
-      esbuild: 0.25.12
-      postcss: 8.5.26
 
   minimizer-webpack-plugin@5.6.1(esbuild@0.28.2)(postcss@8.5.26)(webpack@5.109.2(esbuild@0.28.2)(postcss@8.5.26)):
     dependencies:
@@ -17651,6 +17734,21 @@ snapshots:
       define-lazy-prop: 3.0.0
       is-inside-container: 1.0.0
       wsl-utils: 0.1.0
+
+  openai@4.104.0(ws@8.20.1)(zod@3.25.76):
+    dependencies:
+      '@types/node': 18.19.130
+      '@types/node-fetch': 2.6.13
+      abort-controller: 3.0.0
+      agentkeepalive: 4.6.0
+      form-data-encoder: 1.7.2
+      formdata-node: 4.4.1
+      node-fetch: 2.7.0
+    optionalDependencies:
+      ws: 8.20.1
+      zod: 3.25.76
+    transitivePeerDependencies:
+      - encoding
 
   openai@4.104.0(ws@8.21.3)(zod@3.25.76):
     dependencies:
@@ -19000,14 +19098,14 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  turbo@2.10.9:
+  turbo@2.10.11:
     optionalDependencies:
-      '@turbo/darwin-64': 2.10.9
-      '@turbo/darwin-arm64': 2.10.9
-      '@turbo/linux-64': 2.10.9
-      '@turbo/linux-arm64': 2.10.9
-      '@turbo/windows-64': 2.10.9
-      '@turbo/windows-arm64': 2.10.9
+      '@turbo/darwin-64': 2.10.11
+      '@turbo/darwin-arm64': 2.10.11
+      '@turbo/linux-64': 2.10.11
+      '@turbo/linux-arm64': 2.10.11
+      '@turbo/windows-64': 2.10.11
+      '@turbo/windows-arm64': 2.10.11
 
   tweetnacl@1.0.3: {}
 
@@ -19294,13 +19392,13 @@ snapshots:
       terser: 5.50.0
       yaml: 2.9.0
 
-  vitest-mock-extended@3.1.1(typescript@5.9.3)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)):
+  vitest-mock-extended@3.1.1(typescript@5.9.3)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)):
     dependencies:
       ts-essentials: 10.2.1(typescript@5.9.3)
       typescript: 5.9.3
-      vitest: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)
+      vitest: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0)
 
-  vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.2)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0):
+  vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.3)(happy-dom@20.11.6)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.50.0)(yaml@2.9.0):
     dependencies:
       '@types/chai': 5.2.3
       '@vitest/expect': 3.2.7
@@ -19328,7 +19426,7 @@ snapshots:
     optionalDependencies:
       '@types/debug': 4.1.13
       '@types/node': 24.13.3
-      happy-dom: 20.11.2
+      happy-dom: 20.11.6
     transitivePeerDependencies:
       - jiti
       - less
@@ -19343,10 +19441,10 @@ snapshots:
       - tsx
       - yaml
 
-  wagmi@3.6.16(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.101.4)(@tanstack/react-query@5.101.4(react@19.2.8))(@types/react@19.2.18)(@walletconnect/ethereum-provider@2.23.10(@types/react@19.2.18)(@x402/core@2.21.0)(@x402/evm@2.21.0(typescript@5.9.3))(@x402/extensions@2.21.0(typescript@5.9.3))(@x402/svm@2.21.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(react@19.2.8)(typescript@5.9.3)(viem@2.51.3(typescript@5.9.3)(zod@3.25.76)):
+  wagmi@3.6.16(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.101.4)(@tanstack/react-query@5.101.4(react@19.2.8))(@types/react@19.2.18)(@walletconnect/ethereum-provider@2.23.10(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(react@19.2.8)(typescript@5.9.3)(viem@2.51.3(typescript@5.9.3)(zod@3.25.76)):
     dependencies:
       '@tanstack/react-query': 5.101.4(react@19.2.8)
-      '@wagmi/connectors': 8.0.15(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@wagmi/core@3.5.0(@tanstack/query-core@5.101.4)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.51.3(typescript@5.9.3)(zod@3.25.76)))(@walletconnect/ethereum-provider@2.23.10(@types/react@19.2.18)(@x402/core@2.21.0)(@x402/evm@2.21.0(typescript@5.9.3))(@x402/extensions@2.21.0(typescript@5.9.3))(@x402/svm@2.21.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(typescript@5.9.3)(viem@2.51.3(typescript@5.9.3)(zod@3.25.76))
+      '@wagmi/connectors': 8.0.15(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@wagmi/core@3.5.0(@tanstack/query-core@5.101.4)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.51.3(typescript@5.9.3)(zod@3.25.76)))(@walletconnect/ethereum-provider@2.23.10(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(typescript@5.9.3)(viem@2.51.3(typescript@5.9.3)(zod@3.25.76))
       '@wagmi/core': 3.5.0(@tanstack/query-core@5.101.4)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.51.3(typescript@5.9.3)(zod@3.25.76))
       react: 19.2.8
       use-sync-external-store: 1.4.0(react@19.2.8)
@@ -19410,42 +19508,6 @@ snapshots:
   webidl-conversions@3.0.1: {}
 
   webpack-sources@3.5.1: {}
-
-  webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26):
-    dependencies:
-      '@types/estree': 1.0.9
-      '@types/json-schema': 7.0.15
-      '@webassemblyjs/ast': 1.14.1
-      '@webassemblyjs/wasm-edit': 1.14.1
-      '@webassemblyjs/wasm-parser': 1.14.1
-      acorn: 8.18.0
-      browserslist: 4.28.8
-      chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.24.5
-      es-module-lexer: 2.3.1
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      graceful-fs: 4.2.11
-      mime-db: 1.54.0
-      minimizer-webpack-plugin: 5.6.1(esbuild@0.25.12)(postcss@8.5.26)(webpack@5.109.2(esbuild@0.25.12)(postcss@8.5.26))
-      neo-async: 2.6.2
-      schema-utils: 4.3.3
-      tapable: 2.3.3
-      watchpack: 2.5.2
-      webpack-sources: 3.5.1
-    transitivePeerDependencies:
-      - '@minify-html/node'
-      - '@swc/core'
-      - '@swc/css'
-      - '@swc/html'
-      - clean-css
-      - cssnano
-      - csso
-      - esbuild
-      - html-minifier-terser
-      - lightningcss
-      - postcss
-      - uglify-js
 
   webpack@5.109.2(esbuild@0.28.2)(postcss@8.5.26):
     dependencies:
