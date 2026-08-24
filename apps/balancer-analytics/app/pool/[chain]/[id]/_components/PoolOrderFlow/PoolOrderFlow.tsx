@@ -25,7 +25,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Sliders } from 'react-feather'
+import { Sliders } from 'lucide-react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import type { GqlChainValues } from '@repo/lib/config/networks'
@@ -115,10 +115,12 @@ function sliceByRange(data: OrderFlowResponse, range: OrderFlowRange, now: numbe
   const swaps = range === '30d' ? data.swaps : data.swaps.filter(s => s.timestamp >= cutoff)
   let volumeUsd = 0
   let labeledUsd = 0
+
   for (const s of swaps) {
     volumeUsd += s.valueUSD
     if (s.source.category !== 'unknown') labeledUsd += s.valueUSD
   }
+
   return {
     swaps,
     volumeUsd,
@@ -142,18 +144,23 @@ export function PoolOrderFlow({ chain, poolId, poolTokens, poolTvlUsd }: Props) 
     }),
     [poolTvlUsd]
   )
+
   const [minUsdPerSwap, setMinUsdPerSwap] = useState<number>(defaults.minUsdPerSwap)
+
   const [unknownSplitThresholdUsd, setUnknownSplitThresholdUsd] = useState<number>(
     defaults.unknownSplitThresholdUsd
   )
+
   const [unknownSplitMaxCount, setUnknownSplitMaxCount] = useState<number>(
     defaults.unknownSplitMaxCount
   )
+
   const resetFilters = () => {
     setMinUsdPerSwap(defaults.minUsdPerSwap)
     setUnknownSplitThresholdUsd(defaults.unknownSplitThresholdUsd)
     setUnknownSplitMaxCount(defaults.unknownSplitMaxCount)
   }
+
   const filtersDirty =
     minUsdPerSwap !== defaults.minUsdPerSwap ||
     unknownSplitThresholdUsd !== defaults.unknownSplitThresholdUsd ||
@@ -161,9 +168,11 @@ export function PoolOrderFlow({ chain, poolId, poolTokens, poolTvlUsd }: Props) 
 
   const tokenMap = useMemo<TokenMap>(() => {
     const m: TokenMap = {}
+
     for (const t of poolTokens) {
       m[t.address.toLowerCase()] = { symbol: t.symbol, logoURI: t.logoURI ?? null }
     }
+
     return m
   }, [poolTokens])
 
@@ -287,6 +296,7 @@ function Header({
     const swapCount = view.swaps.length.toLocaleString()
     const volume = formatUsdCompact(view.volumeUsd)
     const labeled = formatPct(view.labeledPct)
+
     // When the 30d data is capped (we hit HARD_CAP before the cutoff), the
     // fetched window is narrower than 30d. Surface that honestly so the
     // user knows the "30d" view is actually e.g. the last 7 days.
@@ -294,6 +304,7 @@ function Header({
       data.totals.capped && range === '30d'
         ? Math.max(1, Math.round((data.fetchedWindow.to - data.fetchedWindow.oldestSwapTs) / 86400))
         : RANGE_DAYS[range]
+
     const cappedNote = data.totals.capped && range === '30d' ? ` · last ${days}d (cap reached)` : ''
     return `${swapCount} swaps · ${volume} volume · ${labeled} labeled${cappedNote}`
   })()
@@ -460,12 +471,14 @@ function FilterSlider({
 }) {
   const [draft, setDraft] = useState<number>(value)
   const draggingRef = useRef<boolean>(false)
+
   // Reflect external changes (parent reset, TVL-derived default) into the
   // local draft. Skip when the user is actively dragging — otherwise the
   // sync would yank the thumb out from under their gesture.
   useEffect(() => {
     if (!draggingRef.current) setDraft(value)
   }, [value])
+
   return (
     <VStack align="stretch" spacing="xs" w="full">
       <HStack justify="space-between" w="full">
@@ -555,9 +568,11 @@ function Body({
       </CenteredMessage>
     )
   }
+
   if (error) {
     return <ErrorMessage error={error} />
   }
+
   if (!data || !view) {
     return (
       <CenteredMessage>
@@ -567,6 +582,7 @@ function Body({
       </CenteredMessage>
     )
   }
+
   if (view.swaps.length < MIN_SWAPS_FOR_RENDER) {
     return (
       <CenteredMessage>
@@ -579,6 +595,7 @@ function Body({
       </CenteredMessage>
     )
   }
+
   if (!graph || graph.nodes.length === 0) {
     return (
       <CenteredMessage>
@@ -588,6 +605,7 @@ function Body({
       </CenteredMessage>
     )
   }
+
   return (
     <PoolOrderFlowSankey
       graph={graph}

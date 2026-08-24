@@ -16,10 +16,12 @@ const usd = (n: number) =>
 
 export function TvlByChainBars() {
   const { data, loading } = useChainProtocolStats()
+
   const rows = (data ?? [])
     .map(d => ({ chain: d.chain, tvl: Number(d.totalLiquidity || 0) }))
     .filter(r => r.tvl > 0)
     .sort((a, b) => b.tvl - a.tvl)
+
   const total = rows.reduce((a, b) => a + b.tvl, 0) || 1
 
   return (

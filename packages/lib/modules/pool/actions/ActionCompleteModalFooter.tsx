@@ -1,5 +1,5 @@
 import { Button, Divider, HStack, VStack } from '@chakra-ui/react'
-import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
+import { CornerDownLeft, MessageSquare, ThumbsUp } from 'lucide-react'
 
 export function ActionCompleteModalFooter() {
   return (

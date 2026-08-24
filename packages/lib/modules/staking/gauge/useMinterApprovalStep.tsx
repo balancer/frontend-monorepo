@@ -13,6 +13,7 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { ManagedTransactionButton } from '../../transactions/transaction-steps/TransactionButton'
 
 const approveMinterStepId = 'approve-minter'
+
 export function useApproveMinterStep(
   chain: GqlChain,
   hasUnclaimedBalRewards: boolean

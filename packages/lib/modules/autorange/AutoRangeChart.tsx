@@ -10,6 +10,7 @@ export function AutoRangeChart() {
   useEffect(() => {
     if (chartRef.current && chartRef.current.getEchartsInstance) {
       const instance = chartRef.current.getEchartsInstance()
+
       if (instance) {
         setChartInstance(instance)
       }

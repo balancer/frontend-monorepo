@@ -4,7 +4,7 @@ import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
 import type { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { orderByHash, PoolsColumnSort } from '../../pool.types'
 import { usePoolOrderByState } from '../usePoolOrderByState'
-import { Globe } from 'react-feather'
+import { Globe } from 'lucide-react'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { usePoolList } from '../PoolListProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -17,8 +17,9 @@ export function PoolListTableHeader({ ...rest }) {
   const {
     queryState: { sorting, setSorting, joinablePools },
   } = usePoolList()
+
   const { orderBy } = usePoolOrderByState()
-  const sortingObj = sorting[0]
+  const sortingObj = sorting[0]!
 
   const handleSort = (newSortingBy: GqlPoolOrderBy) => {
     setSorting([
@@ -59,7 +60,7 @@ export function PoolListTableHeader({ ...rest }) {
           <SortableHeader
             isDisabled={joinablePools}
             isSorted={sortingObj.id === orderByItem}
-            label={orderByHash[orderByItem]}
+            label={orderByHash[orderByItem]!}
             onSort={() => handleSort(orderByItem)}
             sorting={sortingObj.desc ? Sorting.desc : Sorting.asc}
           />

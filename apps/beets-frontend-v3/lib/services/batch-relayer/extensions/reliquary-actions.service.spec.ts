@@ -119,6 +119,7 @@ describe('ReliquaryActionsService', () => {
       }
 
       const encoded = service.encodeHarvestAll(params)
+
       const decoded = decodeFunctionData({
         abi: beetsV2BatchRelayerLibraryAbi,
         data: encoded,
@@ -135,6 +136,7 @@ describe('ReliquaryActionsService', () => {
       }
 
       const encoded = service.encodeHarvestAll(params)
+
       const decoded = decodeFunctionData({
         abi: beetsV2BatchRelayerLibraryAbi,
         data: encoded,

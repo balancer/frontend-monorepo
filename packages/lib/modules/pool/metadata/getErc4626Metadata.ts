@@ -23,6 +23,7 @@ export async function getErc4626Metadata(): Promise<Erc4626Metadata[] | undefine
     const res = await fetch(ERC4626_METADATA_URL, {
       next: { revalidate: mins(15).toSecs() },
     })
+
     const metadata = (await res.json()) as Erc4626Metadata[]
 
     return metadata.map(metadata => {

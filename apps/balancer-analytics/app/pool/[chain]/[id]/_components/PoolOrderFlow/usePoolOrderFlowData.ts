@@ -85,6 +85,7 @@ export function usePoolOrderFlowData(chain: GqlChainValues, poolId: string): Res
     // calls; this version only re-fires when chain/pool change so the
     // abort is mostly for unmount cleanup.
     const controller = new AbortController()
+
     fetchWithRetry(url, { signal: controller.signal })
       .then(async r => {
         if (r.ok) return (await r.json()) as OrderFlowResponse
@@ -95,20 +96,24 @@ export function usePoolOrderFlowData(chain: GqlChainValues, poolId: string): Res
         let code: OrderFlowErrorCode = statusToErrorCode(r.status)
         let userMessage: string | null = null
         let detail = `order-flow HTTP ${r.status}`
+
         try {
           const body = (await r.json()) as {
             error?: string
             message?: string
             detail?: string
           }
+
           if (typeof body.error === 'string') {
             code = (body.error as OrderFlowErrorCode) ?? code
           }
+
           if (typeof body.message === 'string') userMessage = body.message
           if (typeof body.detail === 'string') detail = body.detail
         } catch {
           // Body wasn't JSON; keep status-derived code and message.
         }
+
         throw new OrderFlowError(code, detail, r.status, userMessage)
       })
       .then(data => {
@@ -118,6 +123,7 @@ export function usePoolOrderFlowData(chain: GqlChainValues, poolId: string): Res
       .catch(error => {
         if (controller.signal.aborted) return
         if (error instanceof Error && error.name === 'AbortError') return
+
         const wrapped =
           error instanceof OrderFlowError
             ? error
@@ -125,8 +131,10 @@ export function usePoolOrderFlowData(chain: GqlChainValues, poolId: string): Res
                 'network_error',
                 error instanceof Error ? error.message : String(error)
               )
+
         setState(prev => ({ data: prev.data, error: wrapped }))
       })
+
     return () => {
       controller.abort()
     }
@@ -139,6 +147,7 @@ export function usePoolOrderFlowData(chain: GqlChainValues, poolId: string): Res
       error: new OrderFlowError('internal_error', `no URL slug for ${chain}`),
     }
   }
+
   // Loading is derived: we're "loading" until there's data or an error.
   const loading = state.data == null && state.error == null
   return { data: state.data, error: state.error, loading }

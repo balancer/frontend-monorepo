@@ -13,7 +13,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { ReactNode, type JSX } from 'react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 interface CustomPopoverProps extends Omit<PopoverProps, 'children'> {
   children: ReactNode | ((props: { isOpen: boolean; content: JSX.Element }) => ReactNode)

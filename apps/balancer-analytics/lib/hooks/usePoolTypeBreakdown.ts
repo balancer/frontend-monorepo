@@ -35,10 +35,12 @@ export function usePoolTypeBreakdown(): { data: PoolBreakdownSlice[]; loading: b
 
   const slices = useMemo<PoolBreakdownSlice[]>(() => {
     const buckets = new Map<string, number>()
+
     for (const p of data?.pools ?? []) {
       const tvl = Number(p.dynamicData?.totalLiquidity ?? 0)
       buckets.set(p.type, (buckets.get(p.type) ?? 0) + tvl)
     }
+
     return [...buckets.entries()]
       .map(([name, tvl]) => ({ name, tvl }))
       .sort((a, b) => b.tvl - a.tvl)
@@ -62,10 +64,12 @@ export function useVersionTvlBreakdown(): { data: PoolBreakdownSlice[]; loading:
 
   const slices = useMemo<PoolBreakdownSlice[]>(() => {
     const buckets = new Map<number, number>()
+
     for (const p of data?.pools ?? []) {
       const tvl = Number(p.dynamicData?.totalLiquidity ?? 0)
       buckets.set(p.protocolVersion, (buckets.get(p.protocolVersion) ?? 0) + tvl)
     }
+
     return [...buckets.entries()]
       .map(([version, tvl]) => ({
         name: VERSION_LABEL[version] ?? `v${version}`,

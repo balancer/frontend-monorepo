@@ -6,6 +6,7 @@ import { getNetworkConfig } from './index'
 describe('getNetworkConfig', () => {
   it('resolves a config for every supported chain', () => {
     const chains = Object.values(GqlChainValues) as GqlChain[]
+
     for (const chain of chains) {
       const config = getNetworkConfig(chain)
       expect(config.chain).toBe(chain)

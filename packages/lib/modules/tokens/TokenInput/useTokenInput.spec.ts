@@ -32,6 +32,7 @@ describe('cleanAmountInput', () => {
 
   test('every non-empty result is parseable by BigNumber', () => {
     const inputs = ['.', ',', '.5', ',5', '1,5', '0.', '123', 'abc1.2']
+
     for (const input of inputs) {
       const cleaned = cleanAmountInput(input)
       if (cleaned !== '') expect(bn(cleaned).isNaN()).toBe(false)

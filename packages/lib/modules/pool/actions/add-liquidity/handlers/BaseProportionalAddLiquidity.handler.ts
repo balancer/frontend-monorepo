@@ -36,7 +36,8 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
     _referenceAmountAddress?: Address,
     slippage?: number
   ): Promise<SdkQueryAddLiquidityOutput> {
-    const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]
+    const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]!
+
     // Apply slippage tolerance to the reference amount by reducing the raw amount
     referenceAmount.rawAmount = BigInt(
       bn(bn(referenceAmount.rawAmount).times(100 - (slippage || 0)))

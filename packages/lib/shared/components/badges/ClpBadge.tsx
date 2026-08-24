@@ -1,7 +1,7 @@
 import { HStack, Text, Icon, Box } from '@chakra-ui/react'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
 import { ElementType } from 'react'
-import { Info } from 'react-feather'
+import { Info } from 'lucide-react'
 
 type ClpBadgeProps = {
   bodyText: string

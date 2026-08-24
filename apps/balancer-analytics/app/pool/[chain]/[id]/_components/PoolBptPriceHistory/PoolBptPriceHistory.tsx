@@ -192,6 +192,7 @@ function ModeToggle({
     { value: 'usd', label: 'USD' },
     { value: 'return', label: '% RETURN' },
   ]
+
   return (
     <Flex
       align="center"
@@ -240,10 +241,12 @@ function ModeToggle({
  *  React Compiler's manual-memoization preservation happy). */
 function lastSpread(hodl: HodlResult | null, samples: Sample[]): number | null {
   if (!hodl) return null
+
   for (let i = samples.length - 1; i >= hodl.baseIndex; i--) {
     const h = hodl.values[i]
     if (h != null && h > 0) return deltaPct(samples[i].sharePrice, h)
   }
+
   return null
 }
 
@@ -283,10 +286,12 @@ export function PoolBptPriceHistory({
       })),
     [tokens]
   )
+
   const anyBoosted = useMemo(() => tokens.some(t => t.isErc4626 && t.underlyingToken), [tokens])
   // Boosted pools compare against holding the *underlying* assets, so the
   // label says so; plain pools just hold the pool tokens.
   const hodlLabel = anyBoosted ? 'HODL underlying' : 'HODL basket'
+
   // Fetch the union of wrapped + underlying addresses (deduped). The wrapped
   // price anchors the pool's USD value at t₀; the underlying price values the
   // HODL basket forward.
@@ -313,6 +318,7 @@ export function PoolBptPriceHistory({
     range,
     hasData && inView
   )
+
   const hodl = useMemo(
     () => computeHodl(samples, hodlTokens, priceSeries),
     [samples, hodlTokens, priceSeries]
@@ -470,6 +476,7 @@ function buildOption(
   // lines start at 0% and the divergence reads directly off the y-axis.
   const asReturn = (value: number, base: number): number =>
     base > 0 ? (100 * (value - base)) / base : 0
+
   const lpY = (price: number): number => (mode === 'return' ? asReturn(price, lpBase) : price)
   const lpData = samples.map(s => [s.timestamp * 1000, lpY(s.sharePrice)] as const)
 
@@ -518,6 +525,7 @@ function buildOption(
       data: lpData,
     },
   ]
+
   if (hodlData) {
     series.push({
       name: hodlLabel,
@@ -551,11 +559,13 @@ function buildOption(
         const i = params[0]?.dataIndex
         if (i === undefined) return ''
         const s = samples[i]
+
         const date = new Date(s.timestamp * 1000).toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
         })
+
         // In % RETURN mode append each line's return-from-t₀ next to its USD
         // value, so the tooltip explains what the axis is showing.
         const pctSuffix = (value: number, base: number): string => {
@@ -563,20 +573,26 @@ function buildOption(
           const r = (100 * (value - base)) / base
           return ` <span style="opacity:0.6">(${r >= 0 ? '+' : ''}${r.toFixed(2)}%)</span>`
         }
+
         const lpUsd = formatUsdPrice(s.sharePrice)
         const hodlVal = hodl?.values[i] ?? null
+
         const rows: string[] = [
           `<div style="display:flex;justify-content:space-between;gap:18px;padding:1px 0"><span style="opacity:0.85">${dot(CHART_COLORS.lp)}BPT price (LP)</span><span style="font-family:ui-monospace,monospace">${lpUsd}${pctSuffix(s.sharePrice, lpBase)}</span></div>`,
         ]
+
         if (hodlVal != null) {
           rows.push(
             `<div style="display:flex;justify-content:space-between;gap:18px;padding:1px 0"><span style="opacity:0.85">${dot(CHART_COLORS.hodl)}${hodlLabel}</span><span style="font-family:ui-monospace,monospace">${formatUsdPrice(hodlVal)}${pctSuffix(hodlVal, hodl!.baseValue)}</span></div>`
           )
+
           const gap = hodlVal > 0 ? ((s.sharePrice - hodlVal) / hodlVal) * 100 : 0
+
           rows.push(
             `<div style="display:flex;justify-content:space-between;gap:18px;padding:1px 0;margin-top:2px;border-top:1px solid rgba(255,255,255,0.08)"><span style="opacity:0.7">LP vs HODL</span><span style="font-family:ui-monospace,monospace">${gap >= 0 ? '+' : ''}${gap.toFixed(2)}%</span></div>`
           )
         }
+
         return `<div style="font-weight:600;margin-bottom:6px;color:${CHART_COLORS.tooltipHead}">${date}</div>${rows.join('')}`
       },
     },

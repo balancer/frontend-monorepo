@@ -18,13 +18,16 @@ export function PreviewPoolCreationCard({
   isConnected = true,
 }: Props) {
   const { poolCreationForm, isBeforeStep, isStep } = usePoolCreationForm()
+
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'network'],
   })
+
   const { priceFor } = useTokens()
 
   const areAllTokensChosen = (poolTokens || []).every(token => token.address)
+
   const isAnyTokenWithoutPrice =
     areAllTokensChosen &&
     (poolTokens || []).some(token => {
@@ -40,6 +43,7 @@ export function PreviewPoolCreationCard({
   if (isStep(stepTitle)) {
     if (hasWarning && isConnected) {
       backgroundGradient = 'hsla(31, 97%, 72%, 0.12)'
+
       borderGradient =
         'linear-gradient(45deg, hsla(31, 97%, 72%, 0.05) 0%, hsla(31, 97%, 72%, 0.8) 100%)'
     } else if (isAnyTokenWithoutPrice && isConnected) {
@@ -48,6 +52,7 @@ export function PreviewPoolCreationCard({
     } else {
       backgroundGradient =
         'linear-gradient(45deg, hsla(245, 97%, 76%,0.08) 0%, hsla(266, 85%, 69%,0.12) 40%, hsla(9, 85%, 71%,0.25) 100%)'
+
       borderGradient =
         'linear-gradient(266.76deg, rgba(234, 168, 121, 0.75) -20.29%, rgba(179, 174, 245, 0.75) 45.08%, rgba(234, 168, 121, 0.05) 110.45%)'
     }

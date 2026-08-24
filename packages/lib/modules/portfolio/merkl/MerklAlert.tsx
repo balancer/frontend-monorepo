@@ -1,6 +1,6 @@
 import { Box, Text, Flex, Alert, Button, HStack, Link } from '@chakra-ui/react'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function MerklAlert() {

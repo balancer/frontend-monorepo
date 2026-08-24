@@ -41,6 +41,7 @@ export function useBufferBalanceWarning(params: UseBufferBalanceWarningParams) {
         t.wrappedToken &&
         t.useUnderlyingForAddRemove
     )
+
     if (!underlyingToken || !amount.humanAmount) return []
     return { ...underlyingToken, amount: bn(amount.humanAmount) }
   })
@@ -111,9 +112,11 @@ function checkAddViolation(params: ViolationCheckParams): UnderlyingTokenWithAmo
 
   // if buffer does not have enough wrapped balance, it will hit 100% underlying and need erc4626 max deposit to be sufficient to rebalance to 50% underlying / 50% wrapped
   const wrappedBalanceAsUnderlying = wrappedBalance.times(bn(wrappedToken.priceRate))
+
   const depositAmountToRebalance = halfTotalLiquidityAsUnderlying.plus(
     underlyingToken.amount.minus(wrappedBalanceAsUnderlying)
   )
+
   const exceedsMaxDeposit = depositAmountToRebalance.gt(maxDeposit)
 
   if (exceedsWrappedBalance && exceedsMaxDeposit) return underlyingToken
@@ -140,6 +143,7 @@ function checkRemoveViolation(params: ViolationCheckParams): UnderlyingTokenWith
   const withdrawAmountToRebalance = halfTotalLiquidityAsUnderlying.plus(
     underlyingToken.amount.minus(underlyingBalance)
   )
+
   const exceedsMaxWithdraw = withdrawAmountToRebalance.gt(maxWithdraw)
 
   if (exceedsBufferBalance && exceedsMaxWithdraw) return underlyingToken

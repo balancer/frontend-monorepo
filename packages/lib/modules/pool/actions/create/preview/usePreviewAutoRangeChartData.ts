@@ -11,6 +11,7 @@ import { useWatch } from 'react-hook-form'
 
 export function usePreviewAutoRangeChartData() {
   const { autoRangeConfigForm } = usePoolCreationForm()
+
   const [initialMinPrice, initialMaxPrice, initialTargetPrice, centerednessMargin] = useWatch({
     control: autoRangeConfigForm.control,
     name: ['initialMinPrice', 'initialMaxPrice', 'initialTargetPrice', 'centerednessMargin'],

@@ -14,6 +14,7 @@ test('Generates expected query keys', () => {
     slippage: '0.2',
     humanBptIn: '1',
   })
+
   expect(result).toMatchInlineSnapshot(`
     [
       "remove-liquidity",

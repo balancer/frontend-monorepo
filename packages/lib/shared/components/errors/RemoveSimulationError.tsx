@@ -18,6 +18,7 @@ type Props = {
   }
   goToProportionalRemoves: () => void
 }
+
 export function RemoveSimulationError({
   priceImpactQuery,
   simulationQuery,
@@ -34,8 +35,10 @@ export function RemoveSimulationError({
 
   if (isPoolSurgingError(error.message, hasSurgeHook(pool))) {
     const errorTitle = 'Pool is surging'
+
     const errorMessage =
       'Single token removes are disabled when a pool with stable surge hook is surging.'
+
     const goToProportionalLabel = 'Please use proportional remove.'
 
     return (

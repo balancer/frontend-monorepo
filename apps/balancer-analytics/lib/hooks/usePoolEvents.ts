@@ -64,6 +64,7 @@ export function usePoolEvents(
     const qs = fullHistory ? '?fullHistory' : ''
     const url = `/api/pool/${slug}/${poolId.toLowerCase()}/events${qs}`
     const controller = new AbortController()
+
     // We intentionally do NOT reset to loading=true on dep change. Once
     // events have loaded once, range toggles that trigger a server-side
     // re-scan are rare (one deep scan per pool, then warm forever) and
@@ -77,6 +78,7 @@ export function usePoolEvents(
       })
       .then(data => {
         if (controller.signal.aborted) return
+
         setState({
           events: data.events,
           loading: false,
@@ -89,6 +91,7 @@ export function usePoolEvents(
       .catch(error => {
         if (controller.signal.aborted) return
         if (error instanceof Error && error.name === 'AbortError') return
+
         setState(prev => ({
           events: prev.events,
           loading: false,

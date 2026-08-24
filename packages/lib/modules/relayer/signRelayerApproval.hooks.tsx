@@ -47,6 +47,7 @@ export function useSignRelayerApproval(chainId: SupportedChainId) {
 
       if (signature) {
         setSignRelayerState(SignatureState.Completed)
+
         toast({
           title: 'Relayer approval signed!',
           description: '',

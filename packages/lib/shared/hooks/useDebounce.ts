@@ -6,5 +6,6 @@ export function useDebounce(changeHandler: (...args: any) => any, debounceMillis
     () => debounce(changeHandler, debounceMilliseconds),
     [changeHandler, debounceMilliseconds]
   )
+
   return debouncedChangeHandler
 }

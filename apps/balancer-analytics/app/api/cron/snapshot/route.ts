@@ -41,6 +41,7 @@ const HOUR_S = 60 * 60
 // chainId → GqlChain enum name. Sourced from the canonical network configs
 // so new chains added to @repo/lib are picked up automatically.
 const CHAIN_BY_ID = new Map<number, GqlChain>()
+
 for (const [chain, cfg] of Object.entries(networkConfigs)) {
   if (cfg) CHAIN_BY_ID.set(cfg.chainId, chain as GqlChain)
 }
@@ -116,6 +117,7 @@ async function fetchMetrics(): Promise<RawResponse> {
     body: JSON.stringify({ query: QUERY, variables: { chains: ACTIVE_CHAINS } }),
     cache: 'no-store',
   })
+
   if (!res.ok) throw new Error(`api-v3 HTTP ${res.status}`)
   const json = (await res.json()) as { data?: RawResponse; errors?: unknown }
   if (json.errors) throw new Error(`api-v3 errors: ${JSON.stringify(json.errors)}`)
@@ -151,6 +153,7 @@ function aggregateCowAmm(pools: RawCowAmmPool[], ts: number): SnapshotRow[] {
     surplus24h: number
     poolCount: number
   }
+
   const empty = (): Bucket => ({
     totalLiquidity: 0,
     swapVolume24h: 0,
@@ -159,10 +162,13 @@ function aggregateCowAmm(pools: RawCowAmmPool[], ts: number): SnapshotRow[] {
     surplus24h: 0,
     poolCount: 0,
   })
+
   const all = empty()
   const byChain = new Map<GqlChain, Bucket>()
+
   for (const p of pools) {
     const dd = p.dynamicData
+
     const v = {
       totalLiquidity: Number.parseFloat(dd.totalLiquidity ?? '0') || 0,
       swapVolume24h: Number.parseFloat(dd.volume24h ?? '0') || 0,
@@ -170,6 +176,7 @@ function aggregateCowAmm(pools: RawCowAmmPool[], ts: number): SnapshotRow[] {
       yieldCapture24h: Number.parseFloat(dd.yieldCapture24h ?? '0') || 0,
       surplus24h: Number.parseFloat(dd.surplus24h ?? '0') || 0,
     }
+
     all.totalLiquidity += v.totalLiquidity
     all.swapVolume24h += v.swapVolume24h
     all.swapFee24h += v.swapFee24h
@@ -185,6 +192,7 @@ function aggregateCowAmm(pools: RawCowAmmPool[], ts: number): SnapshotRow[] {
     b.poolCount += 1
     byChain.set(p.chain, b)
   }
+
   const toRow = (b: Bucket, chain: string): SnapshotRow => ({
     ts,
     chain,
@@ -193,6 +201,7 @@ function aggregateCowAmm(pools: RawCowAmmPool[], ts: number): SnapshotRow[] {
     numLps: 0,
     source: SOURCE_API,
   })
+
   return [toRow(all, AGGREGATE_KEY), ...Array.from(byChain, ([c, b]) => toRow(b, c))]
 }
 
@@ -205,6 +214,7 @@ async function upsertRows(rows: SnapshotRow[]): Promise<void> {
   // mirrors `[db]` entries so the post-deploy verification trace shows one
   // write per cron tick and nothing else.
   const start = Date.now()
+
   await sql.transaction(
     rows.map(
       r => sql`
@@ -229,6 +239,7 @@ async function upsertRows(rows: SnapshotRow[]): Promise<void> {
       `
     )
   )
+
   console.info('[db]', {
     op: 'write',
     helper: `cron/snapshot/upsertRows[n=${rows.length}]`,
@@ -256,17 +267,21 @@ export async function GET(req: Request) {
     const data = await fetchMetrics()
     // CORE rows: aggregate + per-chain from protocolMetricsAggregated.
     rows.push(coreRow(data.core, ts, AGGREGATE_KEY))
+
     for (const c of data.core.chains) {
       const chainId = Number.parseInt(c.chainId, 10)
       const chain = Number.isFinite(chainId) ? CHAIN_BY_ID.get(chainId) : undefined
+
       if (!chain) {
         // Unknown chain id from api-v3 — don't silently fold it into the
         // aggregate by mislabelling. Logged so we can spot new chains.
         skipped.push(c.chainId)
         continue
       }
+
       rows.push(coreRow(c, ts, chain))
     }
+
     // COW_AMM rows: rolled up from the pool list.
     rows.push(...aggregateCowAmm(data.cowAmm, ts))
     await upsertRows(rows)

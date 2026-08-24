@@ -17,6 +17,7 @@ function selectProportionalHandler(pool: Pool) {
 
 describe('When adding proportional liquidity for a CoW AMM pool', async () => {
   const cowAMMPoolId = '0xf08d4dea369c456d26a3168ff0024b904f2d8b91'
+
   const cowAmmPool = await fetchPoolMock({
     poolId: cowAMMPoolId,
     chain: GqlChainValues.Mainnet,
@@ -40,8 +41,8 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(0n)
-    const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]
-    const wethAmountIn = result.sdkQueryOutput.amountsIn[1]
+    const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]!
+    const wethAmountIn = result.sdkQueryOutput.amountsIn[1]!
 
     expect(usdcAmountIn.token.address).toBe(usdcAddress)
     expect(usdcAmountIn.amount).toBeGreaterThan(0n)
@@ -95,8 +96,8 @@ describe('When adding proportional liquidity for a gyro pool', () => {
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(0n)
-    const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]
-    const daiAmountIn = result.sdkQueryOutput.amountsIn[1]
+    const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]!
+    const daiAmountIn = result.sdkQueryOutput.amountsIn[1]!
 
     expect(usdcAmountIn.token.address).toBe(polygonUsdcAddress)
     expect(usdcAmountIn.amount).toBeGreaterThan(0n)

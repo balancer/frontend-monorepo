@@ -27,12 +27,13 @@ type Vector2 = {
 // Functions
 
 export function calcSpotPrice0in1(
-  balances: bigint[],
+  balances: [bigint, bigint],
   params: GyroEParams,
   derived: DerivedGyroEParams,
   invariant: bigint
 ): bigint {
   const r: Vector2 = { x: invariant, y: invariant }
+
   const ab: Vector2 = {
     x: virtualOffset0(params, derived, r),
     y: virtualOffset1(params, derived, r),
@@ -69,6 +70,7 @@ function virtualOffset0(p: GyroEParams, d: DerivedGyroEParams, r: Vector2): bigi
 
 function virtualOffset1(p: GyroEParams, d: DerivedGyroEParams, r: Vector2): bigint {
   const termXp = divXpU(d.tauAlpha.x, d.dSq)
+
   let b =
     d.tauAlpha.x < 0n
       ? mulUpXpToNpU(mulUpMagU(mulUpMagU(r.x, p.lambda), p.s), -termXp)

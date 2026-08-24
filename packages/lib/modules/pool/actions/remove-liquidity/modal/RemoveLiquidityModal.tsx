@@ -36,8 +36,10 @@ export function RemoveLiquidityModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
+
   const { transactionSteps, removeLiquidityTxHash, urlTxHash, hasQuoteContext, lastTransaction } =
     useRemoveLiquidity()
+
   const { pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { redirectToPoolPage } = usePoolRedirect(pool)
@@ -105,7 +107,7 @@ export function RemoveLiquidityModal({
           <RemoveLiquiditySummary {...receiptProps} />
         </ModalBody>
         <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
+          currentStep={transactionSteps.currentStep!}
           isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
           returnLabel="Return to pool"

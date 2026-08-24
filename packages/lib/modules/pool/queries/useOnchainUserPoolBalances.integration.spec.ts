@@ -14,6 +14,7 @@ import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-deriv
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {
   const weightedPoolMock = toGqlWeighedPoolMock(pool)
+
   const { result } = testHook(() => {
     return useOnchainUserPoolBalances([weightedPoolMock])
   })
@@ -42,7 +43,7 @@ describe('fetches onchain and overrides user balances', async () => {
 
     const result = await testUseChainPoolBalances(poolMock)
 
-    await waitFor(() => expect(result.current.data[0].userBalance?.walletBalance).toBe('40'))
+    await waitFor(() => expect(result.current.data[0]!.userBalance?.walletBalance).toBe('40'))
   })
 
   test('when the pool does not have staking info', async () => {
@@ -60,11 +61,12 @@ describe('fetches onchain and overrides user balances', async () => {
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy())
 
-    expect(result.current.data[0].userBalance?.walletBalance).toBe('50')
+    expect(result.current.data[0]!.userBalance?.walletBalance).toBe('50')
   })
 
   test('when the pool has no gaugeAddress', async () => {
     const poolMockWithEmptyGaugeAddress = aBalWethPoolElementMock() // Provides 80BAL-20WETH pool by default
+
     // Empty staking address
     if (poolMockWithEmptyGaugeAddress.staking?.gauge?.gaugeAddress) {
       poolMockWithEmptyGaugeAddress.staking.gauge.gaugeAddress = ''
@@ -91,7 +93,7 @@ describe('fetches onchain and overrides user balances', async () => {
     const result = await testUseChainPoolBalances(poolMockWithEmptyGaugeAddress)
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy())
-    expect(result.current.data[0].userBalance?.walletBalance).toBe('60')
+    expect(result.current.data[0]!.userBalance?.walletBalance).toBe('60')
   })
 
   // TODO: Fix test, extremely flaky

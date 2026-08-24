@@ -128,11 +128,14 @@ async function fetchEventsPage(
     }),
     cache: 'no-store',
   })
+
   if (!res.ok) throw new Error(`api-v3 ${chain}/${type} HTTP ${res.status}`)
+
   const json = (await res.json()) as {
     data?: { poolEvents: RawAddRemoveEvent[] }
     errors?: unknown
   }
+
   if (json.errors) throw new Error(`api-v3 ${chain}/${type} errors: ${JSON.stringify(json.errors)}`)
   return json.data?.poolEvents ?? []
 }
@@ -149,11 +152,13 @@ async function fetchAllEvents(
   type: 'ADD' | 'REMOVE'
 ): Promise<{ events: RawAddRemoveEvent[]; complete: boolean }> {
   const all: RawAddRemoveEvent[] = []
+
   for (let page = 0; page < MAX_PAGES_PER_CHAIN; page++) {
     const events = await fetchEventsPage(address, chain, type, page * FETCH_LIMIT)
     all.push(...events)
     if (events.length < FETCH_LIMIT) return { events: all, complete: true }
   }
+
   return { events: all, complete: false }
 }
 
@@ -163,6 +168,7 @@ function applyEvent(
   sign: 1 | -1
 ): void {
   const key = `${event.chain}:${event.poolId.toLowerCase()}`
+
   const existing = entries[key] ?? {
     poolId: event.poolId.toLowerCase(),
     chain: event.chain,
@@ -174,8 +180,10 @@ function applyEvent(
   }
 
   existing.costBasisUsd += sign * Number(event.valueUSD ?? 0)
+
   if (sign === 1) {
     existing.addCount += 1
+
     if (existing.firstEventAt == null || event.timestamp < existing.firstEventAt) {
       existing.firstEventAt = event.timestamp
     }
@@ -206,13 +214,16 @@ async function buildPayload(address: string): Promise<PortfolioPnlPayload> {
       fetchAllEvents(address, chain, type).then(result => ({ chain, type, ...result }))
     )
   )
+
   const settled = await Promise.allSettled(tasks)
 
   const entries: Record<string, PortfolioPnlPoolEntry> = {}
   const cutoffsByChain: Record<string, { add: number | null; remove: number | null }> = {}
+
   for (const chain of chains) {
     cutoffsByChain[chain] = { add: null, remove: null }
   }
+
   let truncated = false
 
   for (const result of settled) {
@@ -223,6 +234,7 @@ async function buildPayload(address: string): Promise<PortfolioPnlPayload> {
     const { chain, type, events, complete } = result.value
     const sign = type === 'ADD' ? 1 : -1
     for (const e of events) applyEvent(entries, e, sign)
+
     // Cutoff only applies when we ran out of page budget *and* still got
     // a full last page — that's the case where older events almost
     // certainly exist beyond what we fetched.
@@ -246,6 +258,7 @@ async function buildPayload(address: string): Promise<PortfolioPnlPayload> {
 // (`v2`) must be bumped whenever the payload shape changes so old cached
 // blobs don't poison clients expecting the new schema.
 const CACHE_VERSION = 'v2'
+
 function makeCachedFetcher(address: string) {
   return unstable_cache(() => buildPayload(address), ['portfolio-pnl', CACHE_VERSION, address], {
     revalidate: 600,
@@ -258,10 +271,13 @@ export async function GET(
   ctx: { params: Promise<{ address: string }> }
 ): Promise<NextResponse<PortfolioPnlPayload | { error: string }>> {
   const { address: rawAddress } = await ctx.params
+
   if (!isAddress(rawAddress)) {
     return NextResponse.json({ error: 'invalid address' }, { status: 400 })
   }
+
   const address = rawAddress.toLowerCase()
+
   try {
     const payload = await makeCachedFetcher(address)()
     return NextResponse.json(payload, {

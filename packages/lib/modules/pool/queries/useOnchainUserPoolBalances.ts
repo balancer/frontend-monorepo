@@ -56,6 +56,7 @@ export function useOnchainUserPoolBalances(pools: Pool[] = []) {
     if (stakedPoolBalancesError) {
       captureStakedMulticallError(stakedPoolBalancesError)
     }
+
     if (unstakedPoolBalancesError) {
       captureUnstakedMulticallError(unstakedPoolBalancesError)
     }
@@ -80,6 +81,7 @@ function captureStakedMulticallError(stakedPoolBalancesError: ReadContractsError
     'Error in stake pool balances multicall in useOnchainUserPoolBalances',
     stakedPoolBalancesError
   )
+
   captureNonFatalError({
     error: stakedPoolBalancesError,
     errorName: 'UseOnchainUserPoolBalancesError',
@@ -92,6 +94,7 @@ function captureUnstakedMulticallError(unstakedPoolBalancesError: ReadContractsE
     'Error in  unstake pool balances multicall in useOnchainUserPoolBalances',
     unstakedPoolBalancesError
   )
+
   captureNonFatalError({
     error: unstakedPoolBalancesError,
     errorName: 'UseOnchainUserPoolBalancesError',
@@ -124,14 +127,17 @@ function overwriteOnchainPoolBalanceData(
 
     // Unstaked balances
     const onchainUnstakedBalances = ocUnstakedBalances[pool.id]
+
     if (!onchainUnstakedBalances) {
       return pool
     }
 
     const onchainUnstakedBalance = onchainUnstakedBalances.unstakedBalance as HumanAmount
+
     const safeOnchainUnstakedBalance = isBnParseable(onchainUnstakedBalance)
       ? onchainUnstakedBalance
       : ('0' as HumanAmount)
+
     const onchainUnstakedBalanceUsd = bn(safeOnchainUnstakedBalance).times(bptPrice).toNumber()
 
     // Staked balances
@@ -140,6 +146,7 @@ function overwriteOnchainPoolBalanceData(
     if (!onchainStakedBalances) {
       return pool
     }
+
     const onchainTotalStakedBalance = safeSum(
       onchainStakedBalances.map(stakedBalance =>
         isBnParseable(stakedBalance.balance) ? stakedBalance.balance : '0'
@@ -186,11 +193,13 @@ function overrideStakedBalances(
     const index = apiStakedBalances.findIndex(apiBalance =>
       isSameAddress(apiBalance.stakingId, onchainStakedBalance.stakingId)
     )
+
     if (index === -1) {
       apiStakedBalances.push(onchainStakedBalance)
     } else {
       apiStakedBalances[index] = onchainStakedBalance
     }
   })
+
   return apiStakedBalances
 }

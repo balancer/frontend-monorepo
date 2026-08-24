@@ -49,6 +49,7 @@ export function getVebalLockState({
   const hasExistingLock = bn(lockedAmount).gt(0)
   const lockedEndDateNormalised = toJsTimestamp(Number(lockedEndDate))
   const isExpired = hasExistingLock && currentTimestampMs > lockedEndDateNormalised
+
   const lockTooShort =
     hasExistingLock &&
     !isExpired &&

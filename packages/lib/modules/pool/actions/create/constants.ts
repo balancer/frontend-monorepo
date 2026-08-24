@@ -146,7 +146,10 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
   weight: '50',
 }
 
-export const INITIAL_POOL_TOKENS = [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG]
+export const INITIAL_POOL_TOKENS: [PoolCreationToken, PoolCreationToken] = [
+  INITIAL_TOKEN_CONFIG,
+  INITIAL_TOKEN_CONFIG,
+]
 
 export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   protocol: BALANCER_PROTOCOL_OPTIONS[0].name,

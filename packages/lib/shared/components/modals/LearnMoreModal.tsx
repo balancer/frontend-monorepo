@@ -16,7 +16,7 @@ import {
   useDisclosure,
   Link,
 } from '@chakra-ui/react'
-import { ArrowUpRight, HelpCircle } from 'react-feather'
+import { ArrowUpRight, HelpCircle } from 'lucide-react'
 import { getDiscordLink } from '@repo/lib/shared/utils/links'
 
 type LearnMoreModalProps = {

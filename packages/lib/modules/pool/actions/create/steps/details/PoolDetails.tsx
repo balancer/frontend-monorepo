@@ -12,6 +12,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PoolDetails() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'poolType'],
@@ -32,6 +33,7 @@ export function PoolDetails() {
       poolCreationForm.setValue('name', suggestedPoolName)
       poolCreationForm.trigger('name')
     }
+
     if (!currentSymbol) {
       poolCreationForm.setValue('symbol', suggestedPoolSymbol)
       poolCreationForm.trigger('symbol')
@@ -94,6 +96,7 @@ function getSuggestions(poolTokens: PoolCreationToken[], poolType: SupportedPool
     .join('-')
 
   const poolSymbol = poolTypePrefix ? `${poolTypePrefix}-${tokenSymbols}` : tokenSymbols
+
   const suggestedPoolSymbol =
     poolSymbol.length <= MAX_POOL_SYMBOL_LENGTH
       ? poolSymbol
@@ -103,6 +106,7 @@ function getSuggestions(poolTokens: PoolCreationToken[], poolType: SupportedPool
 
   const poolName = poolTypePrefix ? `${poolTypePrefix} ${tokenSymbols}` : tokenSymbols
   const poolNameWithProject = `${projectName} ${poolName}`
+
   const suggestedPoolName =
     poolNameWithProject.length <= MAX_POOL_NAME_LENGTH
       ? poolNameWithProject

@@ -22,16 +22,17 @@ export function VolTvlFeesInfo({ chartType }: { chartType: PoolChartTab }) {
     const now = getNowTimestampInSecs()
     let latestTVL = 0
     let latestTVLTimestamp = 0
+
     for (let i = hourlyData.length - 1; i >= 0; i--) {
-      if (hourlyData[i].timestamp <= now) {
-        latestTVL = hourlyData[i].tvl
-        latestTVLTimestamp = hourlyData[i].timestamp
+      if (hourlyData[i]!.timestamp <= now) {
+        latestTVL = hourlyData[i]!.tvl
+        latestTVLTimestamp = hourlyData[i]!.timestamp
         break
       }
     }
 
     const firstDataPoint = hourlyData[0]?.timestamp
-    const lastDataPoint = hourlyData[hourlyData.length - 1]?.timestamp
+    const lastDataPoint = hourlyData[hourlyData.length - 1]!.timestamp
     const isLastDataPointBeforeNow = isBefore(new Date(lastDataPoint), new Date(now))
 
     const daysFromStart = firstDataPoint

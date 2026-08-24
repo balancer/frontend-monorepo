@@ -44,6 +44,7 @@ export const rpcFallbacks: Partial<Record<GqlChain, string | undefined>> = {
 }
 
 const baseUrl = getBaseUrl()
+
 const getPrivateRpcUrl = (chain: GqlChain) => {
   // Use anvil fork for E2E dev tests
   if (shouldUseAnvilFork) return defaultAnvilForkRpcUrl
@@ -95,6 +96,7 @@ export const chains: readonly [Chain, ...Chain[]] = [
 ]
 
 export const chainsByKey = keyBy(chains, 'id')
+
 export function getDefaultRpcUrl(chainId: number) {
   return chainsByKey[chainId].rpcUrls.default.http[0]
 }

@@ -1,5 +1,5 @@
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
-import { Globe } from 'react-feather'
+import { Globe } from 'lucide-react'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { PortfolioSortingData, portfolioOrderByFn } from './usePortfolioSorting'
 
@@ -10,6 +10,7 @@ type Props = {
   currentSortingObj: PortfolioSortingData
   setCurrentSortingObj: (value: PortfolioSortingData) => void
 }
+
 export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, ...rest }: Props) {
   const portfolioOrderBy = portfolioOrderByFn()
 

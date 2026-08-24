@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useMerklRewards } from '@analytics/lib/hooks/useMerklRewards'
 import { useGaugeRewards } from '@analytics/lib/hooks/useGaugeRewards'
@@ -56,6 +56,7 @@ export function PortfolioMerklCard({ address }: { address: string }) {
     unclaimedUsd: r.unclaimedUsd,
     key: `merkl-${r.chainId}-${r.tokenAddress}`,
   }))
+
   const gaugeRows: Row[] = (gauge.payload?.rewards ?? []).map(r => ({
     symbol: r.symbol,
     source: 'gauge',
@@ -201,6 +202,7 @@ function TotalUnclaimedHeadline({ totalUsd, rowCount }: { totalUsd: number; rowC
       </Text>
     )
   }
+
   return (
     <Text color="font.maxContrast" fontSize="2xl" fontWeight="bold" letterSpacing="-0.4px">
       {usd(totalUsd)}
@@ -241,6 +243,7 @@ function RewardRow({ row }: { row: Row }) {
     row.unclaimedUsd != null && row.unclaimedUsd > 0
       ? usd(row.unclaimedUsd)
       : `${tokens(row.unclaimed)} ${row.symbol}`
+
   const sourceLabel = row.source === 'gauge' ? 'Gauge' : 'Merkl'
 
   return (

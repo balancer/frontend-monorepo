@@ -20,6 +20,7 @@ export function useVeBalStats(): State {
   useEffect(() => {
     let cancelled = false
     const controller = new AbortController()
+
     fetchWithRetry('/api/governance/vebal-stats', {
       cache: 'no-store',
       signal: controller.signal,
@@ -37,6 +38,7 @@ export function useVeBalStats(): State {
         if (error instanceof Error && error.name === 'AbortError') return
         setState({ data: null, loading: false, error: error as Error })
       })
+
     return () => {
       cancelled = true
       controller.abort()

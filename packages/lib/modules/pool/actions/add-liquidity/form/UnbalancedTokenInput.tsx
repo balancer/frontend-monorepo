@@ -31,10 +31,12 @@ export function UnbalancedTokenInput() {
 
   function handleTokenSelect(token: ApiToken) {
     setSelectedToken(token)
+
     setHumanAmountsIn(prev => {
       const filtered = prev.filter(
         amount => !validTokens.some(t => isSameAddress(t.address as Address, amount.tokenAddress))
       )
+
       return [
         ...filtered,
         {
@@ -55,6 +57,7 @@ export function UnbalancedTokenInput() {
       const filtered = prev.filter(
         amount => !isSameAddress(amount.tokenAddress, selectedToken.address as Address)
       )
+
       return [
         ...filtered,
         {

@@ -16,9 +16,11 @@ interface SortOption extends OptionBase {
 
 export function PoolListSortType() {
   const isMounted = useIsMounted()
+
   const {
     queryState: { sorting, setSorting },
   } = usePoolList()
+
   const { orderBy } = usePoolOrderByState()
   const chakraStyles = getSelectStyles<SortOption>()
 
@@ -44,7 +46,7 @@ export function PoolListSortType() {
   }
 
   const _value = options.find(
-    option => option.value[0].id === sorting[0].id && option.value[0].desc === sorting[0].desc
+    option => option.value[0]?.id === sorting[0]?.id && option.value[0]?.desc === sorting[0]?.desc
   )
 
   if (!isMounted) return null

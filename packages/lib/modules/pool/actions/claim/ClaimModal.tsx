@@ -40,6 +40,7 @@ export function ClaimModal({
   const router = useRouter()
 
   const { isDesktop, isMobile } = useBreakpoints()
+
   const { transactionSteps, claimTxHash, allClaimableRewards, totalClaimableUsd, isLoading } =
     useClaim()
 
@@ -97,7 +98,7 @@ export function ClaimModal({
         </ModalBody>
 
         <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
+          currentStep={transactionSteps.currentStep!}
           isSuccess={isSuccess}
           returnAction={() => {
             onClose(isSuccess)

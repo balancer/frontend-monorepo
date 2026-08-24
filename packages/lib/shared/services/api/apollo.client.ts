@@ -33,6 +33,7 @@ type PersistEnvelope = {
 
 function hydrateCache(cache: InMemoryCache, key: string): void {
   if (typeof window === 'undefined') return
+
   try {
     const raw = window.localStorage.getItem(key)
     if (!raw) return
@@ -51,11 +52,14 @@ function hydrateCache(cache: InMemoryCache, key: string): void {
 function attachCachePersistence(cache: InMemoryCache, key: string): void {
   if (typeof window === 'undefined') return
   let writing = false
+
   function write(): void {
     if (writing) return
     writing = true
+
     try {
       const data = cache.extract()
+
       // Don't overwrite a good prior entry with an empty fresh cache
       // (could happen if persist runs before the first queries land).
       if (data && Object.keys(data).length > 0) {
@@ -64,6 +68,7 @@ function attachCachePersistence(cache: InMemoryCache, key: string): void {
           ts: Date.now(),
           data,
         }
+
         window.localStorage.setItem(key, JSON.stringify(envelope))
       }
     } catch {
@@ -72,14 +77,17 @@ function attachCachePersistence(cache: InMemoryCache, key: string): void {
       writing = false
     }
   }
+
   // Snapshot the cache after the initial query batch settles so a user
   // who closes the tab quickly still benefits on next visit.
   window.setTimeout(write, PERSIST_INITIAL_WRITE_DELAY_MS)
+
   // Plus capture the cache when the tab becomes hidden or is unloaded —
   // these fire on tab close, hard refresh, and SPA navigation away.
   window.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') write()
   })
+
   window.addEventListener('pagehide', write)
 }
 

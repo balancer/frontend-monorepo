@@ -84,7 +84,7 @@ export default function PoolMyLiquidity() {
   const isVeBal = isVebalPool(pool.id)
   const tabs = useMemo(() => getTabs(isVeBal), [isVeBal])
 
-  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(tabs[0])
+  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(tabs[0]!)
   const pathname = usePathname()
   const [height, setHeight] = useState(0)
   const poolMetadata = usePoolMetadata(pool)
@@ -192,9 +192,11 @@ export default function PoolMyLiquidity() {
   const canStake = getCanStake(pool)
   const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
   const shareOfPool = calcUserShareOfPool(pool)
+
   const shareofPoolLabel = bn(shareOfPool).gt(0)
     ? fNum('sharePercent', shareOfPool)
     : ZERO_VALUE_DASH
+
   const options = useMemo(() => {
     return tabs.map(tab => ({
       ...tab,
@@ -205,9 +207,11 @@ export default function PoolMyLiquidity() {
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
     let url
+
     if (partner === RedirectPartner.Xave && pool?.address && pool.chain) {
       url = getXavePoolLink(pool.chain, pool.address)
     }
+
     setRedirectPartnerUrl(url)
     partnerRedirectDisclosure.onOpen()
   }

@@ -2,7 +2,7 @@ import { BoxProps, Card, Heading, Icon, Skeleton, useColorMode } from '@chakra-u
 import { usePortfolio } from './PortfolioProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
-import { BarChart } from 'react-feather'
+import { BarChart } from 'lucide-react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -24,8 +24,10 @@ const commonNoisyCardProps: { contentProps: BoxProps; cardProps: BoxProps } = {
     flex: 1,
   },
 }
+
 export function PortfolioSummary() {
   const { colorMode } = useColorMode()
+
   const {
     portfolioData,
     totalFiatClaimableBalance,
@@ -33,6 +35,7 @@ export function PortfolioSummary() {
     isLoadingPortfolio,
     isLoadingClaimableRewards,
   } = usePortfolio()
+
   const { toCurrency } = useCurrency()
 
   const totalBalance = portfolioData?.userTotalBalance?.toNumber()

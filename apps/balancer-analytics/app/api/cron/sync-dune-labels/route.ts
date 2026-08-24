@@ -47,12 +47,14 @@ async function run(): Promise<Response> {
 
     for (const row of result.rows) {
       const n = normalizeDuneRow(row)
+
       if (!n) {
         // Track WHY a row got dropped so the sync's response surfaces it.
         if (typeof row.blockchain === 'string') skipped.chain += 1
         else skipped.address += 1
         continue
       }
+
       normalized.push({
         chain: n.chain,
         address: n.address,
@@ -79,12 +81,14 @@ async function run(): Promise<Response> {
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
+
     console.error('[cron/sync-dune-labels] failed', {
       pages,
       raw,
       normalizedCount: normalized.length,
       message,
     })
+
     return Response.json(
       {
         ok: false,

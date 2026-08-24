@@ -24,6 +24,7 @@ export function cannotCalculatePriceImpactError(error: Error | null): boolean {
 
   // All ContractFunctionExecutionErrors are shown as unknown price impact
   if (error.name === 'ContractFunctionExecutionError') return true
+
   // All Swap PI errors are shown as unknown price impact
   if (
     error.message.startsWith('Unexpected error while calculating') &&
@@ -31,6 +32,7 @@ export function cannotCalculatePriceImpactError(error: Error | null): boolean {
   ) {
     return true
   }
+
   // Edge case errors for stable surge hook (with non surging pool)
   if (error.message.includes('addLiquidityUnbalancedBoosted PI at Delta add step')) {
     return true

@@ -1,7 +1,7 @@
 import { Control, Controller, UseFormSetValue, useFormState } from 'react-hook-form'
 import { SaleStructureForm, WeightAdjustmentType } from '../lbp.types'
 import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react'
-import { ArrowRight } from 'react-feather'
+import { ArrowRight } from 'lucide-react'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { SliderWithSteps } from '@repo/lib/shared/components/inputs/SliderWithSteps'
@@ -24,6 +24,7 @@ export function WeightAdjustmentTypeInput({
   setValue: UseFormSetValue<SaleStructureForm>
 }) {
   const { errors } = useFormState({ control })
+
   const options = [
     {
       label: (

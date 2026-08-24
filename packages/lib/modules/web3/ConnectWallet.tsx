@@ -25,6 +25,7 @@ export function ConnectWallet({
       }) => {
         const isReady = mounted && authenticationStatus !== 'loading'
         const isLoading = authenticationStatus === 'loading' || isLoadingAccount
+
         const isConnected =
           isReady &&
           account &&

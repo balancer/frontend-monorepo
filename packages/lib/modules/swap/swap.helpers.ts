@@ -62,9 +62,11 @@ export function isAuraBalSwap(
   ]
 
   const tokenInOrOutIsAuraBal = isSameAddress(tokenIn, auraBAL) || isSameAddress(tokenOut, auraBAL)
+
   const tokenInOrOutIsRelevantToken = relevantTokens.some(
     token => isSameAddress(tokenIn, token) || isSameAddress(tokenOut, token)
   )
+
   const isExactInSwap = swapType === GqlSorSwapTypeValues.ExactIn
 
   return tokenInOrOutIsAuraBal && tokenInOrOutIsRelevantToken && isExactInSwap && isMainnet(chain)
@@ -79,6 +81,7 @@ export function orderRouteVersion(simulationQuery: SwapSimulationQueryResult): n
   const orderRouteVersion = queryData ? queryData.protocolVersion : 2
   return orderRouteVersion
 }
+
 // Heals invalid persisted amounts (e.g. '.') that older versions could write
 // to localStorage, so affected users recover without clearing storage manually
 export function sanitizeSwapState(state: SwapState): SwapState {

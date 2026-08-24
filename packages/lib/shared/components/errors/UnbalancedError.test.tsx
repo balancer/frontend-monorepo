@@ -4,14 +4,17 @@ import { getErrorLabels } from './UnbalancedAddError'
 describe('getErrorLabels', () => {
   const invariantRatioAboveMaxError = new Error('InvariantRatioAboveMax')
   const invariantRatioAboveMinError = new Error('InvariantRatioBelowMin')
+
   const invariantRatioPIError = new Error(
     'addLiquidityUnbalanced operation will fail at SC level with user defined input.'
   )
+
   const unbalancedAddErrorV2 = new Error('BAL#304')
   const unbalancedAddErrorV3 = new Error('queryAddLiquidityUnbalanced')
 
   it('should return correct labels for isInvariantRatioAboveMaxSimulationErrorMessage', () => {
     const result = getErrorLabels(true, invariantRatioAboveMaxError)
+
     expect(result).toEqual({
       errorTitle: 'Amount exceeds pool limits',
       errorMessage: 'Your input(s) would cause an invariant error in the vault.',
@@ -21,6 +24,7 @@ describe('getErrorLabels', () => {
 
   it('should return correct labels for isInvariantRatioAboveMinSimulationErrorMessage', () => {
     const result = getErrorLabels(true, invariantRatioAboveMinError)
+
     expect(result).toEqual({
       errorTitle: 'Amount is below pool limits',
       errorMessage: 'Unexpected error. Please ask for support',
@@ -30,6 +34,7 @@ describe('getErrorLabels', () => {
 
   it('should return correct labels for isInvariantRatioPIErrorMessage when proportional is supported', () => {
     const result = getErrorLabels(true, invariantRatioPIError)
+
     expect(result).toEqual({
       errorTitle: 'Unknown price impact',
       errorMessage:
@@ -40,6 +45,7 @@ describe('getErrorLabels', () => {
 
   it('should return correct labels for isInvariantRatioPIErrorMessage when proportional is not supported', () => {
     const result = getErrorLabels(false, invariantRatioPIError)
+
     expect(result).toEqual({
       errorTitle: 'Unknown price impact',
       errorMessage:
@@ -50,6 +56,7 @@ describe('getErrorLabels', () => {
 
   it('should return correct labels for isUnbalancedAddErrorMessage (v2)', () => {
     const result = getErrorLabels(true, unbalancedAddErrorV2)
+
     expect(result).toEqual({
       errorTitle: 'Token amounts error',
       errorMessage: 'Your input(s) are either too large or would excessively unbalance the pool.',
@@ -59,6 +66,7 @@ describe('getErrorLabels', () => {
 
   it('should return correct labels for isUnbalancedAddErrorMessage (v3)', () => {
     const result = getErrorLabels(true, unbalancedAddErrorV3)
+
     expect(result).toEqual({
       errorTitle: 'Token amounts error',
       errorMessage: 'Your input(s) are either too large or would excessively unbalance the pool.',

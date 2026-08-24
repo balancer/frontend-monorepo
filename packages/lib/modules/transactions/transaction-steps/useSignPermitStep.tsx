@@ -70,6 +70,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
   const { signPermit, signPermitState, isLoading, isDisabled, buttonLabel, error } = useSignPermit({
     ...params,
   })
+
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(
     getChainId(params.pool.chain)
   )

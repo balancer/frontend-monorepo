@@ -85,6 +85,7 @@ export function useAutoRangeConfigurationOptions(): ConfigOptionsGroupProps<Auto
     tooltip: 'The initial target price of token A in terms of token B',
     updateFn: (rawValue: string) => {
       autoRangeConfigForm.setValue('initialTargetPrice', rawValue, { shouldValidate: true })
+
       if (priceRangePercentage) {
         updatePriceBounds(rawValue, priceRangePercentage)
       }
@@ -108,6 +109,7 @@ export function useAutoRangeConfigurationOptions(): ConfigOptionsGroupProps<Auto
     tooltip: 'The target concentration density of liquidity',
     updateFn: (rawValue: string) => {
       autoRangeConfigForm.setValue('priceRangePercentage', rawValue, { shouldValidate: true })
+
       if (rawValue) {
         updatePriceBounds(initialTargetPrice || '', rawValue)
       } else {
@@ -180,21 +182,25 @@ export function useAutoRangeConfigurationOptions(): ConfigOptionsGroupProps<Auto
   // auto-fill config with default values
   useEffect(() => {
     if (isInitialAutoRangeConfig) {
-      const currentPrice = targetPrice.options[1].rawValue
-      const priceRangePercentage = priceRangeBoundaries.options[1].rawValue
-      const centerednessMargin = marginBuffer.options[1].rawValue
-      const priceShiftDailyRate = dailyPriceReadjustmentRate.options[1].rawValue
+      const currentPrice = targetPrice.options[1]?.rawValue ?? ''
+      const priceRangePercentage = priceRangeBoundaries.options[1]?.rawValue ?? ''
+      const centerednessMargin = marginBuffer.options[1]?.rawValue ?? ''
+      const priceShiftDailyRate = dailyPriceReadjustmentRate.options[1]?.rawValue ?? ''
 
       autoRangeConfigForm.setValue('initialTargetPrice', currentPrice, { shouldValidate: true })
+
       autoRangeConfigForm.setValue('priceRangePercentage', priceRangePercentage, {
         shouldValidate: true,
       })
+
       autoRangeConfigForm.setValue('centerednessMargin', centerednessMargin, {
         shouldValidate: true,
       })
+
       autoRangeConfigForm.setValue('priceShiftDailyRate', priceShiftDailyRate, {
         shouldValidate: true,
       })
+
       updatePriceBounds(currentPrice, priceRangePercentage)
     }
   }, [isInitialAutoRangeConfig])

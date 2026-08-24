@@ -23,10 +23,12 @@ type Props = { variant?: string; displayAlert?: boolean }
 
 export function SeedAmountProportions({ variant = 'level3', displayAlert = false }: Props) {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'poolType'],
   })
+
   const { usdValueForTokenAddress } = useTokens()
 
   const tokenAmountToUsd = poolTokens.map(token => {
@@ -48,7 +50,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
   const usdWeights = tokenAmountToUsdWithWeights.map(t => t.usdWeight)
 
   const isAllWeightsCloseToTarget = targetWeights.every((weight, idx) => {
-    const usdWeight = usdWeights[idx]
+    const usdWeight = usdWeights[idx] ?? 0
     return Math.abs(weight - usdWeight) < WEIGHT_DEVIATION_TOLERANCE
   })
 

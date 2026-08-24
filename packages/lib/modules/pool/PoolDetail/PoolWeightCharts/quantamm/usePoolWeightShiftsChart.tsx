@@ -70,6 +70,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         trigger: 'axis',
         formatter: function (params: any) {
           const date = new Date(params[0].value[0])
+
           const formattedDate = date.toLocaleString(undefined, {
             month: 'short',
             day: 'numeric',
@@ -85,6 +86,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
             const color = param.color
             const seriesName = param.seriesName
             const value = param.value[1].toFixed(2)
+
             result += `<div style="display: flex; align-items: center; margin: 3px 0;">
               <span style="display: inline-block; width: 10px; height: 10px; background-color: ${color}; border-radius: 50%; margin-right: 5px;"></span>
               <span style="margin-right: 5px;">${seriesName}:</span>
@@ -118,12 +120,14 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         axisLabel: {
           formatter: function (value: number) {
             const date = new Date(value)
+
             if (date.getHours() === 0 && date.getMinutes() === 0) {
               return date.toLocaleString(undefined, {
                 month: 'short',
                 day: 'numeric',
               })
             }
+
             return ''
           },
           fontSize: 12,

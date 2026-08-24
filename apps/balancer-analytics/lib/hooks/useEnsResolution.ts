@@ -49,19 +49,24 @@ export function useEnsResolution(input: string, debounceMs = 400): EnsResolution
     if (!needsAsync) return
     if (hasFreshResult) return
     const controller = new AbortController()
+
     const id = setTimeout(async () => {
       try {
         const res = await fetch(`/api/ens/${encodeURIComponent(trimmed)}`, {
           signal: controller.signal,
         })
+
         if (!res.ok) {
           setAsyncResult({
             kind: res.status === 404 ? 'not_found' : 'error',
             input: trimmed,
           })
+
           return
         }
+
         const body = (await res.json()) as { address: string | null }
+
         if (body.address) {
           setAsyncResult({ kind: 'resolved', input: trimmed, address: body.address })
         } else {
@@ -81,17 +86,21 @@ export function useEnsResolution(input: string, debounceMs = 400): EnsResolution
 
   return useMemo<EnsResolution>(() => {
     if (!trimmed) return { status: 'idle', address: null, input: null }
+
     if (ADDRESS_RE.test(trimmed)) {
       return { status: 'resolved', address: trimmed, input: trimmed }
     }
+
     if (!isEnsCandidate(trimmed)) {
       return { status: 'invalid', address: null, input: trimmed }
     }
+
     // ENS branch — derive from async state, defaulting to 'loading' until
     // the first effect run lands.
     if (!asyncResult || asyncResult.input !== trimmed) {
       return { status: 'loading', address: null, input: trimmed }
     }
+
     switch (asyncResult.kind) {
       case 'pending':
         return { status: 'loading', address: null, input: trimmed }

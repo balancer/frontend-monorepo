@@ -29,11 +29,13 @@ export const MIN_CHART_VALUES = 2
 function groupValuesByDates(chartValues: ChartValueAcc) {
   return chartValues.reduce((acc: Record<string, number[]>, item) => {
     const [date, value] = item
+
     if (acc[date]) {
       acc[date].push(value)
     } else {
       acc[date] = [value]
     }
+
     return acc
   }, {})
 }
@@ -54,13 +56,16 @@ function formatDate(timestamp: number) {
 function createInterpolatedPoints(firstDay: number, lastDay: number, snapshot: LockSnapshot) {
   const daysDiff = differenceInDays(lastDay, firstDay)
   const interpolatedPoints = []
+
   if (daysDiff > 30) {
     let currentDay = addDays(firstDay, 7)
+
     while (isBefore(currentDay, lastDay)) {
       interpolatedPoints.push([
         format(currentDay, 'yyyy/MM/dd'),
         forecastBalance(snapshot, bn(millisecondsToSeconds(currentDay.getTime()))),
       ] as [string, number])
+
       currentDay = addDays(currentDay, 7)
     }
   }
@@ -102,6 +107,7 @@ function filterAndFlattenValues(valuesByDates: Record<string, number[]>) {
     filteredValues.forEach((val: number) => {
       acc.push([item, val])
     })
+
     return acc
   }, [])
 }
@@ -127,6 +133,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   const lockedUntil = mainnetLockedInfo.lockedEndDate
     ? differenceInDays(new Date(mainnetLockedInfo.lockedEndDate), new Date())
     : 0
+
   const hasExistingLock = mainnetLockedInfo.hasExistingLock
   const isExpired = mainnetLockedInfo.isExpired
 
@@ -147,6 +154,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
       })),
       currentTimestampMs
     )
+
     const valuesByDates = groupValuesByDates(processedValues)
 
     return filterAndFlattenValues(valuesByDates)

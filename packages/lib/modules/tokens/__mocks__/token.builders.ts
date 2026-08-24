@@ -52,6 +52,7 @@ export function aTokenAmountMock(options?: Partial<TokenAmount>): TokenAmount {
     decimals: 8,
     formatted: '0',
   }
+
   return Object.assign({}, defaultTokenAmount, options)
 }
 
@@ -72,6 +73,7 @@ export function someMinimalTokensMock(addresses?: Address[]): MinimalToken[] {
       index: 0,
     },
   ]
+
   if (!addresses) return defaultTokens
   return addresses.map((address, index) => ({ address, decimals: 18, index }))
 }
@@ -79,11 +81,13 @@ export function someMinimalTokensMock(addresses?: Address[]): MinimalToken[] {
 export function aGqlTokenMock(...options: Partial<GqlPoolTokenDetail>[]): GqlPoolTokenDetail {
   const symbol = options[0].symbol
   const defaultToken: TokenBase = fakeTokenBySymbol((symbol as FakeTokenSymbol) || 'BAL')
+
   const defaultOptions: GqlPoolTokenDetail = mock<GqlPoolTokenDetail>({
     ...defaultToken,
     __typename: 'GqlPoolTokenDetail',
     balance: '0',
   })
+
   return Object.assign({}, defaultOptions, ...options)
 }
 
@@ -105,6 +109,7 @@ export function aTokenPriceMock(...options: Partial<GqlTokenPrice>[]): GqlTokenP
     price: 2,
     updatedAt: 1,
   }
+
   return Object.assign({}, defaultPrice, ...options)
 }
 

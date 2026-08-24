@@ -39,6 +39,7 @@ describe('getTenderlyUrlFromError', () => {
       at async RemoveLiquidityWeighted.query (webpack-internal:///(app-pages-browser)/./node_modules/.pnpm/@balancer+sdk@0.25.0_bufferutil@4.0.8_typescript@5.4.5_utf-8-validate@5.0.10_zod@3.22.4/node_modules/@balancer/sdk/dist/index.mjs:17732:25)
       at async SingleTokenRemoveLiquidityHandler.simulate (webpack-internal:///(app-pages-browser)/./lib/modules/pool/actions/remove-liquidity/handlers/SingleTokenRemoveLiquidity.handler.ts:22:32)
     `
+
     const error = new Error(errorMessage)
 
     expect(getTenderlyUrlFromErrorMessage(error, queryMeta)).toBe(

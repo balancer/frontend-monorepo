@@ -171,20 +171,26 @@ export function getTransactionState(transactionBundle?: TransactionBundle): Tran
   if (simulation.isLoading || simulation.isPending) {
     return TransactionState.Preparing
   }
+
   if (execution.isPending) {
     return TransactionState.Loading
   }
+
   if (result.isSuccess) {
     return TransactionState.Completed
   }
+
   if (result.isLoading) {
     return TransactionState.Confirming
   }
+
   if (!simulation.isError && !execution.isError && !execution.data) {
     return TransactionState.Ready
   }
+
   if (simulation.isError || execution.isError || result.isError) {
     return TransactionState.Error
   }
+
   return TransactionState.Ready
 }

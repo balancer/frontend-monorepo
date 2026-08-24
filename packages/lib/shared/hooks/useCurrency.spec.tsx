@@ -9,6 +9,7 @@ export function MockFiatFxRatesProvider({ children }: PropsWithChildren) {
     hasFxRates: false,
     getFxRate: () => 1, // mock that always return 1 as Fx rate
   }
+
   return <FxRatesContext.Provider value={hook}>{children}</FxRatesContext.Provider>
 }
 
@@ -36,6 +37,7 @@ describe('toCurrency', () => {
   test('not abbreviated', () => {
     expect(result.current.toCurrency('0.001', { abbreviated: false })).toBe('$0.001')
     expect(result.current.toCurrency('56789.12345678', { abbreviated: false })).toBe('$56,789.12')
+
     expect(
       result.current.toCurrency('56789.12345678', { abbreviated: false, noDecimals: true })
     ).toBe('$56,789')
@@ -50,6 +52,7 @@ test('formatCurrency', () => {
   expect(result.current.formatCurrency('0.001')).toBe('$0.001')
   expect(result.current.formatCurrency('0.000001234')).toBe('$0.000001234')
 })
+
 test('formatCurrency', () => {
   const result = testUseCurrency()
 

@@ -16,7 +16,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { AlertTriangle, ExternalLink } from 'react-feather'
+import { AlertTriangle, ExternalLink } from 'lucide-react'
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { useVeBalHolders } from '@analytics/lib/hooks/useVeBalHolders'
@@ -27,6 +27,7 @@ const compactFmt = new Intl.NumberFormat('en-US', {
   notation: 'compact',
   maximumFractionDigits: 2,
 })
+
 const intFmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 })
 
 const DECOM_BIP_URL = 'https://forum.balancer.fi/search?q=BIP-921'
@@ -169,6 +170,7 @@ function TableRow({ row, day }: { row: VeBalHolderRow; day: string }) {
   const explorerHref = row.walletAddress
     ? getBlockExplorerAddressUrl(row.walletAddress, GqlChainValues.Mainnet)
     : null
+
   return (
     <Box
       _hover={{ bg: 'background.level0' }}

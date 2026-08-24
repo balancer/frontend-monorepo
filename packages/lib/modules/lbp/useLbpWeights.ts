@@ -11,6 +11,7 @@ type LbpWeights = {
 
 export function useLbpWeights(): LbpWeights {
   const { saleStructureForm } = useLbpForm()
+
   const { weightAdjustmentType, customStartWeight, customEndWeight } = useWatch({
     control: saleStructureForm.control,
   })
@@ -23,9 +24,12 @@ export function useLbpWeights(): LbpWeights {
 
   const projectTokenStartWeight =
     lbpWeightConfig[weightAdjustmentType || WeightAdjustmentType.LINEAR_90_10].start
+
   const reserveTokenStartWeight = 100 - (projectTokenStartWeight || 0)
+
   const projectTokenEndWeight =
     lbpWeightConfig[weightAdjustmentType || WeightAdjustmentType.LINEAR_90_10].end
+
   const reserveTokenEndWeight = 100 - (projectTokenEndWeight || 0)
 
   return {

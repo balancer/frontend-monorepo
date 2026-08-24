@@ -29,6 +29,7 @@ export function UnbalancedAddError({
   pool,
 }: Props) {
   const { clearAmountsIn } = useAddLiquidity()
+
   const goToProportionalMode = () => {
     clearAmountsIn()
     goToProportionalAdds()
@@ -82,9 +83,11 @@ export function getErrorLabels(
     errorTitle = 'Amount is below pool limits'
   } else if (isInvariantRatioPIErrorMessage(error.message)) {
     errorTitle = 'Unknown price impact'
+
     errorMessage = isProportionalSupported
       ? 'The price impact cannot be calculated. Proceed if you know exactly what you are doing or'
       : 'The price impact cannot be calculated. Proceed if you know exactly what you are doing.'
+
     proportionalLabel = 'try proportional mode.'
   } else if (isUnbalancedAddErrorMessage(error)) {
     errorMessage = 'Your input(s) are either too large or would excessively unbalance the pool.'

@@ -18,6 +18,7 @@ export type RemoveLiquidityParams = {
   tokensOut?: Address[] // only used by boosted removal type
   wethIsEth?: boolean // only used by single token removal type
 }
+
 function liquidityParams({
   handler,
   userAddress,
@@ -32,6 +33,7 @@ function liquidityParams({
     handler
   )}:${userAddress}:${poolId}:${slippage}:${humanBptIn}:${tokenOut}:${tokensOut ?? []}:${wethIsEth}`
 }
+
 export const removeLiquidityKeys = {
   priceImpact: (params: RemoveLiquidityParams) =>
     [removeLiquidity, 'price-impact', liquidityParams(params)] as const,

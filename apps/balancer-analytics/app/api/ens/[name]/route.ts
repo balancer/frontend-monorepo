@@ -32,20 +32,26 @@ export async function GET(
 ): Promise<NextResponse<Resolution>> {
   const { name: raw } = await ctx.params
   const decoded = decodeURIComponent(raw).trim().toLowerCase()
+
   if (!decoded.endsWith('.eth')) {
     return NextResponse.json({ address: null }, { status: 400 })
   }
+
   let normalized: string
+
   try {
     normalized = normalize(decoded)
   } catch {
     return NextResponse.json({ address: null }, { status: 400 })
   }
+
   try {
     const address = await client.getEnsAddress({ name: normalized })
+
     if (!address || !isAddress(address)) {
       return NextResponse.json({ address: null }, { status: 404 })
     }
+
     return NextResponse.json({ address })
   } catch {
     // Upstream RPC failure — surface as 502 so the client can prompt the

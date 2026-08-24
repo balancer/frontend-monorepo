@@ -9,6 +9,7 @@ import { calculateRotationComponents } from '../steps/details/gyro.helpers'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
   const { poolCreationForm, autoRangeConfigForm, eclpConfigForm } = usePoolCreationForm()
+
   const {
     poolType,
     symbol,
@@ -75,7 +76,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       poolCreator,
       tokens: baseInput.tokens.map((token, index) => ({
         ...token,
-        weight: parseUnits(poolTokens[index].weight, PERCENTAGE_DECIMALS),
+        weight: parseUnits(poolTokens[index]?.weight ?? '50', PERCENTAGE_DECIMALS),
       })),
     }
   }
@@ -125,6 +126,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       c: parseUnits(c, DEFAULT_DECIMALS),
       lambda: parseUnits(lambda, DEFAULT_DECIMALS),
     }
+
     return { ...baseInput, poolType, eclpParams }
   }
 

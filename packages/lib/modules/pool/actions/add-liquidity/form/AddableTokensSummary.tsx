@@ -46,8 +46,10 @@ export function AddableTokensSummary({
   const { toCurrency } = useCurrency()
 
   const isLoading = isBalancesLoading || isUserAccountLoading
+
   const showWarning =
     (!isProportional && isFlexibleWarning) || (isProportional && isProportionalWarning)
+
   const showValid = !isLoading && !showWarning
 
   const warningOverlayStyles = {

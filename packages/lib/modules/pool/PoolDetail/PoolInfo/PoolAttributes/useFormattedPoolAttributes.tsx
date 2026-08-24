@@ -152,9 +152,11 @@ export function useFormattedPoolAttributes() {
         value: toCurrency(usdValueForTokenAddress(pool.address, pool.chain, '1')),
       },
     ])
+
     if (shouldHideSwapFee(pool?.type)) {
       return attributes.filter(a => a?.title !== 'Swap fees')
     }
+
     return attributes
   }, [pool, poolOwnerData, isV2, toCurrency, usdValueForTokenAddress])
 

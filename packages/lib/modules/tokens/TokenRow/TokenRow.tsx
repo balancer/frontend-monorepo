@@ -23,7 +23,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Numberish, bn, fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/pool.types'
 import { TokenInfoPopover } from '../TokenInfoPopover'
-import { ChevronDown } from 'react-feather'
+import { ChevronDown } from 'lucide-react'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
@@ -182,14 +182,17 @@ export default function TokenRow({
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
+
   const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
     usePoolTokenPriceWarnings(pool)
 
   const token = customToken || (address ? getToken(address, chain) : undefined)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
+
   const poolToken = address
     ? userReferenceTokens.find(t => isSameAddress(t.address, address))
     : undefined
+
   const priceCheckAddress = token?.address ?? poolToken?.address ?? address
 
   const isTokenPriceMissing =

@@ -27,6 +27,7 @@ function testUseLockDuration() {
       },
     })
   )
+
   return result
 }
 

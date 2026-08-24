@@ -25,6 +25,7 @@ export function useImpersonateAccount() {
 
   useEffect(() => {
     const impersonatedAddress = getSavedImpersonatedAddressLS()
+
     if (impersonatedAddress) {
       storedImpersonatedAddress.current = impersonatedAddress
     }
@@ -80,12 +81,15 @@ export function useImpersonateAccount() {
     if (!storedImpersonatedAddress.current) {
       return console.log('Cannot reset cause there is no stored impersonated address')
     }
+
     // We don't pass jsonrpcUrl so it will reset to the initial used state
     await forkClient.reset()
+
     await setForkBalances({
       impersonatedAddress: storedImpersonatedAddress.current as Address,
       wagmiConfig,
     })
+
     queryClient.invalidateQueries()
   }
 
@@ -128,6 +132,7 @@ export function useImpersonateAccount() {
     await forkClient.setNextBlockTimestamp({
       timestamp,
     })
+
     await forkClient.mine({ blocks: 1 })
   }
 }

@@ -1,7 +1,7 @@
 import { Box, HStack, Link, Text, VStack, Flex } from '@chakra-ui/react'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
 import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIconCircular'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import NextLink from 'next/link'
 import {
@@ -29,7 +29,7 @@ const RESOURCE_LINKS = {
     },
     {
       label: 'DAO & Partner OPs',
-      href: 'https://balancer.defilytica.tools/',
+      href: 'https://ops.balancer.fi/',
       isExternal: true,
     },
   ],

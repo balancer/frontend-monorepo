@@ -38,10 +38,13 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
   ): Promise<SdkQueryAddLiquidityOutput> {
     // TODO: generalize to other handlers with referenceAmountAddress
     const inputAmounts = this.helpers.toSdkInputAmounts(humanAmountsIn)
+
     const foundReferenceAmount =
       referenceAmountAddress &&
       inputAmounts.find(item => isSameAddress(item.address, referenceAmountAddress))
-    const referenceAmount = foundReferenceAmount || inputAmounts[0]
+
+    const referenceAmount = foundReferenceAmount || inputAmounts[0]!
+
     // Apply slippage tolerance to the reference amount by reducing the raw amount
     referenceAmount.rawAmount = BigInt(
       bn(bn(referenceAmount.rawAmount).times(100 - (slippage || 0)))

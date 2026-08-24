@@ -15,6 +15,7 @@ const allPoolApiMocks: Pool[] = [
 export function getApiPoolMock(poolIdOrExample: string | PoolExample): Pool {
   const poolId: string =
     typeof poolIdOrExample === 'string' ? poolIdOrExample : poolIdOrExample.poolId
+
   const pool = allPoolApiMocks.find(pool => pool.id.toLowerCase() === poolId.toLowerCase())
 
   if (!pool) {
@@ -23,5 +24,6 @@ export function getApiPoolMock(poolIdOrExample: string | PoolExample): Pool {
       Double check that savePoolMock is creating your pool and that allApiMocks includes the pool you're looking for.`
     )
   }
+
   return structuredClone(pool) as Pool
 }

@@ -2,7 +2,7 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { RadioCardGroup, RadioCardOption } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 import { Control, Controller } from 'react-hook-form'
 import { SaleStructureForm, SaleTypeOptionValue } from '../../lbp.types'
-import { Minus, TrendingUp } from 'react-feather'
+import { Minus, TrendingUp } from 'lucide-react'
 import { ReactNode } from 'react'
 import { GqlPoolTypeValues } from '@repo/lib/shared/services/api/graphql-enums'
 

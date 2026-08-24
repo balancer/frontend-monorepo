@@ -32,6 +32,7 @@ vi.mock('@repo/lib/config/app.config', () => {
       },
     },
   }
+
   return {
     getNetworkConfig: vi.fn(() => mockNetworkConfig),
     getChainId: vi.fn(() => 1),
@@ -148,6 +149,7 @@ describe('BaseDefaultSwapHandler', () => {
         tokenInAddress: TEST_ADDRESSES.weth,
         tokenOutAddress: TEST_ADDRESSES.dai,
       })
+
       const tx = handler.build(inputs)
 
       expect(tx.account).toBe(inputs.account)
@@ -168,6 +170,7 @@ describe('BaseDefaultSwapHandler', () => {
 
     it('includes sender and recipient for v2 swaps', () => {
       const { mockBuildCall, simulateResponse } = createMockSdkSimulateSwapResponse()
+
       mockBuildCall.mockReturnValue({
         callData: '0xmock',
         value: BigInt(1e18),
@@ -211,6 +214,7 @@ describe('BaseDefaultSwapHandler', () => {
 
       expect(tx.to).toBe(TEST_ADDRESSES.vaultV2)
       expect(tx.data).toBe('0xpermit2_tx_data')
+
       expect(mockBuildCallWithPermit2).toHaveBeenCalledWith(
         expect.objectContaining({
           slippage: expect.anything(),

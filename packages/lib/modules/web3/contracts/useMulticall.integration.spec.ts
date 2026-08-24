@@ -35,6 +35,7 @@ describe('Performs multicall in multiple chains', () => {
       }),
     ])
   })
+
   const mainnetRequest: ChainContractConfig = {
     id: 'daiBalanceOnMainnet',
     chainId: mainnet.id,
@@ -70,14 +71,17 @@ describe('Performs multicall in multiple chains', () => {
     const waitForChainData = async (chainId: number, label: string) => {
       await waitFor(() => {
         const r = result.current.results[chainId]
+
         if (r?.error) {
           console.error(`useMulticall error for ${label} (chainId ${chainId}):`, r.error)
         }
+
         expect(r?.data).toBeDefined()
       })
     }
 
     await waitForChainData(mainnet.id, 'mainnet')
+
     expect(result.current.results[mainnet.id].data).toMatchInlineSnapshot(`
       {
         "daiBalanceOnMainnet": {
@@ -88,6 +92,7 @@ describe('Performs multicall in multiple chains', () => {
     `)
 
     await waitForChainData(base.id, 'base')
+
     expect(result.current.results[base.id].data).toMatchInlineSnapshot(`
       {
         "ghoBalanceOnBase": {
@@ -98,6 +103,7 @@ describe('Performs multicall in multiple chains', () => {
     `)
 
     await waitForChainData(polygon.id, 'polygon')
+
     expect(result.current.results[polygon.id].data).toMatchInlineSnapshot(`
     {
       "polBalanceOnPolygon": {

@@ -21,7 +21,7 @@ import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { Link } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import NextLink from 'next/link'
 import { useWatch } from 'react-hook-form'
@@ -30,10 +30,12 @@ export function SimilarPoolsModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { poolCreationForm, resetPoolCreationForm } = usePoolCreationForm()
+
   const [network, hasAcceptedSimilarPoolsWarning] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'hasAcceptedSimilarPoolsWarning'],
   })
+
   const { similarPools } = useCheckForSimilarPools()
 
   useEffect(() => {

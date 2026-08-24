@@ -47,6 +47,7 @@ describe('getSwapFeePercentageOptions', () => {
       { value: '0.01', tip: 'Best for super stable pairs' },
       { value: '0.05', tip: 'Best for stable-ish pairs' },
     ]
+
     expect(getSwapFeePercentageOptions(PoolType.Stable)).toEqual(expected)
     expect(getSwapFeePercentageOptions(PoolType.StableSurge)).toEqual(expected)
   })
@@ -56,6 +57,7 @@ describe('getSwapFeePercentageOptions', () => {
       { value: '0.30', tip: 'Best for most weighted pairs' },
       { value: '1.00', tip: 'Best for exotic pairs' },
     ]
+
     expect(getSwapFeePercentageOptions(PoolType.Weighted)).toEqual(expected)
   })
 
@@ -64,10 +66,12 @@ describe('getSwapFeePercentageOptions', () => {
       { value: '0.30', tip: 'Best for most Gyro E-CLP pairs' },
       { value: '1.00', tip: 'Best for exotic pairs' },
     ])
+
     expect(getSwapFeePercentageOptions(PoolType.ReClamm)).toEqual([
       { value: '0.30', tip: 'Best for most AutoRange pairs' },
       { value: '1.00', tip: 'Best for exotic pairs' },
     ])
+
     expect(getSwapFeePercentageOptions(PoolType.CowAmm)).toEqual([
       { value: '0.30', tip: 'Best for most AutoRange pairs' },
       { value: '1.00', tip: 'Best for exotic pairs' },

@@ -26,6 +26,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
+
   const {
     projectInfoForm,
     saleStructureForm,
@@ -34,6 +35,7 @@ export function ReviewStep() {
     isFixedSale,
     isSeeded,
   } = useLbpForm()
+
   const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl, telegramHandle] =
     useWatch({
       control: projectInfoForm.control,
@@ -47,6 +49,7 @@ export function ReviewStep() {
         'telegramHandle',
       ],
     })
+
   const [
     selectedChain,
     launchTokenAddress,
@@ -80,6 +83,7 @@ export function ReviewStep() {
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
 
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
+
   const hoursDiff =
     differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
 

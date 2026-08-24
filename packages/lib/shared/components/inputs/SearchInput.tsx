@@ -2,7 +2,7 @@ import { InputGroup, Input, InputRightElement, IconButton, InputProps } from '@c
 import { useForm } from 'react-hook-form'
 import { useDebounce } from '@repo/lib/shared/hooks/useDebounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
-import { Search, X } from 'react-feather'
+import { Search, X } from 'lucide-react'
 import { useEffect } from 'react'
 
 interface SearchInputProps {

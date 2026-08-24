@@ -103,6 +103,7 @@ export function RadioCardGroup<T extends string>({
     <SimpleGrid {...mergedLayoutProps} {...rootProps}>
       {options.map(option => {
         const radio = getRadioProps({ value: option.value })
+
         const mergedCardProps: RadioCardStyleProps = {
           ...radioCardProps,
           ...option.cardProps,

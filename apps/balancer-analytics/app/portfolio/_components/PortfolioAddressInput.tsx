@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useCallback, useState } from 'react'
-import { Search } from 'react-feather'
+import { Search } from 'lucide-react'
 import { useEnsResolution } from '@analytics/lib/hooks/useEnsResolution'
 
 const EXAMPLES = [
@@ -29,6 +29,7 @@ export function PortfolioAddressInput({ initialValue = '' }: { initialValue?: st
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault()
+
       if (resolution.status === 'resolved' && resolution.address) {
         router.push(`/portfolio/${resolution.address.toLowerCase()}`)
       }
@@ -121,6 +122,7 @@ function StatusLine({ resolution }: { resolution: ReturnType<typeof useEnsResolu
       </Text>
     )
   }
+
   if (resolution.status === 'resolved' && resolution.address) {
     const isEns = resolution.input?.toLowerCase().endsWith('.eth')
     return (
@@ -129,6 +131,7 @@ function StatusLine({ resolution }: { resolution: ReturnType<typeof useEnsResolu
       </Text>
     )
   }
+
   if (resolution.status === 'not_found') {
     return (
       <Text color="orange.300" fontSize="xs" mt="xs">
@@ -136,6 +139,7 @@ function StatusLine({ resolution }: { resolution: ReturnType<typeof useEnsResolu
       </Text>
     )
   }
+
   if (resolution.status === 'invalid') {
     return (
       <Text color="orange.300" fontSize="xs" mt="xs">
@@ -143,6 +147,7 @@ function StatusLine({ resolution }: { resolution: ReturnType<typeof useEnsResolu
       </Text>
     )
   }
+
   if (resolution.status === 'error') {
     return (
       <Text color="red.300" fontSize="xs" mt="xs">
@@ -150,5 +155,6 @@ function StatusLine({ resolution }: { resolution: ReturnType<typeof useEnsResolu
       </Text>
     )
   }
+
   return null
 }

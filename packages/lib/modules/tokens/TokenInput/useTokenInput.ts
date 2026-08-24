@@ -44,6 +44,7 @@ export function useTokenInput({
 
   function updateValue(value: string) {
     const safeValue = overflowProtected(value, token?.decimals || 18)
+
     if (parentOnChange) {
       parentOnChange({ currentTarget: { value: safeValue } })
     }
@@ -55,6 +56,7 @@ export function useTokenInput({
     const userBalance = balanceFor(tokenAddress)
 
     removeValidationErrors(tokenAddress, [EXCEEDS_BALANCE_ERROR])
+
     if (value && isBnParseable(value) && userBalance !== undefined && !disableBalanceValidation) {
       if (bn(value).gt(bn(userBalance.formatted))) {
         return setValidationError(tokenAddress, EXCEEDS_BALANCE_ERROR)

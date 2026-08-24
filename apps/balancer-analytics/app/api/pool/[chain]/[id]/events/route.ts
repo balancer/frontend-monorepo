@@ -66,12 +66,14 @@ async function handle(
 ): Promise<Response> {
   const raw = await ctx.params
   const parsed = z.object({ chain: ChainSchema, id: PoolIdSchema }).safeParse(raw)
+
   if (!parsed.success) {
     return Response.json(
       { error: 'invalid input', details: parsed.error.flatten() },
       { status: 400 }
     )
   }
+
   const { chain, id } = parsed.data
   const rawId = id.toLowerCase()
   // On-chain calls always use the 20-byte contract address. For V2 poolIds
@@ -83,6 +85,7 @@ async function handle(
 
   try {
     await ensureSchemaOnce()
+
     const result = await syncPoolEvents(chain, contractAddress, {
       force: options.force,
       fullHistory,
@@ -91,6 +94,7 @@ async function handle(
       // would 404 against api-v3 and poison the watermark).
       apiV3Id: rawId,
     })
+
     const payload: PoolEventsResponse = {
       pool: contractAddress,
       chain,
@@ -98,6 +102,7 @@ async function handle(
       lastBlock: result.lastBlock,
       cached: result.cached,
     }
+
     return Response.json(payload, {
       headers: {
         'Cache-Control': options.force ? 'no-store' : 's-maxage=30, stale-while-revalidate=300',

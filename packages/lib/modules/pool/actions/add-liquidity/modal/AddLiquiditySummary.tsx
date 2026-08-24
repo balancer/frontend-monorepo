@@ -43,6 +43,7 @@ export function AddLiquiditySummary({
     wantsProportional,
     wantsUnbalanced,
   } = useAddLiquidity()
+
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -85,9 +86,11 @@ export function AddLiquiditySummary({
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
   }
+
   if (shouldShowErrors && error) {
     return <BalAlert content="We were unable to find this transaction hash" status="warning" />
   }
+
   if (shouldShowErrors && !isLoadingReceipt && !sentTokens.length) {
     return (
       <BalAlert

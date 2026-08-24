@@ -61,6 +61,7 @@ export function useSetErc20Balance() {
       })
 
       const customPackedSlot = getPackedBalanceCustomSlot(balance.tokenAddress)
+
       if (customPackedSlot) {
         console.log('Using custom packed slot for ', {
           tokenAddress: balance.tokenAddress,
@@ -74,11 +75,13 @@ export function useSetErc20Balance() {
           value,
           storageSlot: customPackedSlot,
         })
+
         return
       }
 
       let slotFound = false
       let slotGuess = balance.slot || 0n
+
       while (slotFound !== true) {
         // if mapping, use keccak256(abi.encode(address(key), uint(slot)));
         const encodedData = encodeAbiParameters(parseAbiParameters('address, uint'), [
@@ -109,6 +112,7 @@ export function useSetErc20Balance() {
 
         if (guessIsCorrect) {
           slotFound = true
+
           await client.setStorageAt({
             address: balance.tokenAddress,
             index: keccak256(encodedData),
@@ -122,6 +126,7 @@ export function useSetErc20Balance() {
             index: keccak256(encodedData),
             value: pad(toHex(SLOT_VALUE_TO_CHECK + 1n)),
           })
+
           const newBalanceAgain = await client.readContract({
             abi: [balanceOfAbiItem],
             address: balance.tokenAddress,
@@ -132,11 +137,13 @@ export function useSetErc20Balance() {
           // the diff in balanceOf is the offset in value
           if (newBalanceAgain - newBalance === 1n) {
             slotFound = true
+
             await client.setStorageAt({
               address: balance.tokenAddress,
               index: keccak256(encodedData),
               value: pad(toHex(value)),
             })
+
             break
           }
 
@@ -149,10 +156,12 @@ export function useSetErc20Balance() {
 
           // loop
           slotGuess++
+
           if (slotGuess >= 10n) {
             console.log('Could not find storage slot to set balance of token ', {
               tokenAddress: balance.tokenAddress,
             })
+
             break
           }
         }

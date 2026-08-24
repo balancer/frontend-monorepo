@@ -10,7 +10,7 @@ import { GetPoolEventsQuery } from '@repo/lib/shared/services/api/generated/grap
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { secondsToMilliseconds } from 'date-fns'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { PoolEventItem } from '../../usePoolEvents'
 import { calcTotalStakedBalance, getUserTotalBalance } from '../../user-balance.helpers'
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
@@ -31,6 +31,7 @@ const GRID_COLUMNS = '100px 150px 100px 1fr'
 function Action({ poolEventType }: { poolEventType: 'Add' | 'Remove' | 'Swap' }) {
   const eventTypeColor =
     poolEventType === 'Add' ? 'green.500' : poolEventType === 'Remove' ? 'red.500' : 'blue.500'
+
   return (
     <HStack>
       <Box

@@ -45,9 +45,11 @@ export function useSwapStep({
   const [isBuildQueryEnabled, setIsBuildQueryEnabled] = useState(false)
   const { refetchBalances } = useTokenBalances()
   const chainId = getChainId(swapState.selectedChain)
+
   const { buildTenderlyUrl } = useTenderly({
     chainId,
   })
+
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const buildSwapQuery = useBuildSwapQuery({

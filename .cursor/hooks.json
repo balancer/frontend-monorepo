@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/lint-staged.sh",
+        "matcher": "git commit ",
+        "failClosed": true
+      }
+    ]
+  }
+}

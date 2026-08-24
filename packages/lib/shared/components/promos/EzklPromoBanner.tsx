@@ -3,7 +3,7 @@
 import { Button, Heading, Flex, Box, Center, Text, Stack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { EzklIcon } from '@repo/lib/shared/components/icons/logos/EzklIcon'
 
 export function EzklPromoBanner() {

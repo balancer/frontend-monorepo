@@ -42,6 +42,7 @@ export function PreviewPoolCreation() {
 
 function PreviewPoolHeader() {
   const { resetPoolCreationForm, poolCreationForm } = usePoolCreationForm()
+
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'poolType'],

@@ -24,6 +24,10 @@
  * data — it only keeps Neon warm and burns compute units. Different
  * `granularity` values get independent cache entries, so daily-for-90D
  * and hourly-for-7D coexist.
+ *
+ * When a window is missing V2/V3 DefiLlama rows, the response forward-fills
+ * those breakdowns from the latest ALL-chain V2/V3 seed so charts do not
+ * silently attribute everything to v2.
  */
 
 import 'server-only'
@@ -37,6 +41,7 @@ import {
   PROTOCOL_V3,
   PROTOCOL_COW_AMM,
 } from '@analytics/lib/db'
+import { forwardFillVersionBreakdowns } from '@analytics/lib/snapshots/forwardFillBreakdowns'
 import type {
   ChainSnapshotPoint,
   ProtocolBreakdown,
@@ -44,6 +49,7 @@ import type {
   ProtocolSnapshotPoint,
   ProtocolSnapshotSeries,
   SnapshotSource,
+  VersionBreakdownSeed,
 } from '@analytics/lib/snapshots/types'
 
 export const runtime = 'nodejs'
@@ -152,6 +158,7 @@ function emptyPoint(ts: number): ProtocolSnapshotPoint {
 
 async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<DbRow[]> {
   const cutoff = Math.floor(Date.now() / 1000) - days * 24 * 60 * 60
+
   // Daily mode: DISTINCT ON returns one row per (chain, protocol, UTC day),
   // keeping the latest reading inside that day (ORDER BY ... ts DESC). The
   // kept `ts` differs across (chain, protocol) within a day — e.g. the
@@ -177,6 +184,7 @@ async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<D
       ORDER BY 1 ASC
     `) as DbRow[]
   }
+
   // Weekly mode: identical DISTINCT-ON collapse as daily, bucketed to the UTC
   // week (`ts / 604800`) and re-keyed to the week start. Used only for
   // multi-year ranges where even daily would exceed the 2MB cache limit
@@ -198,6 +206,7 @@ async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<D
       ORDER BY 1 ASC
     `) as DbRow[]
   }
+
   return (await sql`
     SELECT ts, chain, protocol, total_liquidity, swap_volume_24h, swap_fee_24h,
            yield_capture_24h, surplus_24h, pool_count, num_lps, source
@@ -209,14 +218,18 @@ async function fetchRows(days: AllowedDays, granularity: Granularity): Promise<D
 
 function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
   const byTs = new Map<number, ProtocolSnapshotPoint>()
+
   for (const r of rows) {
     const ts = Number(r.ts)
     let p = byTs.get(ts)
+
     if (!p) {
       p = emptyPoint(ts)
       byTs.set(ts, p)
     }
+
     const m = chainMetrics(r)
+
     if (r.protocol === PROTOCOL_CORE) {
       if (r.chain === AGGREGATE_KEY) {
         p.totalLiquidity = m.totalLiquidity
@@ -235,10 +248,12 @@ function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
       if (!key) continue
       if (!p.breakdowns) p.breakdowns = {}
       let b = p.breakdowns[key]
+
       if (!b) {
         b = emptyBreakdown()
         p.breakdowns[key] = b
       }
+
       if (r.chain === AGGREGATE_KEY) {
         b.totalLiquidity = m.totalLiquidity
         b.swapVolume24h = m.swapVolume24h
@@ -251,8 +266,65 @@ function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
       }
     }
   }
+
   const points = Array.from(byTs.values())
   return { points, generatedAt: points.at(-1)?.timestamp ?? null }
+}
+
+/**
+ * Latest ALL-chain V2 + V3 rows, used as a ratio seed when the requested
+ * window has no DefiLlama breakdowns (e.g. backfill lagged and the 90D chart
+ * only sees api-v3 CORE+COW rows). Without this, the client defaults the
+ * stack to 100% v2 / 0% v3.
+ */
+async function fetchLatestVersionSeed(): Promise<VersionBreakdownSeed | null> {
+  const rows = (await sql`
+    SELECT DISTINCT ON (protocol)
+           protocol, total_liquidity, swap_volume_24h, swap_fee_24h
+    FROM protocol_snapshots
+    WHERE chain = ${AGGREGATE_KEY}
+      AND protocol = ANY(${[PROTOCOL_V2, PROTOCOL_V3]}::text[])
+    ORDER BY protocol, ts DESC
+  `) as {
+    protocol: string
+    total_liquidity: string
+    swap_volume_24h: string
+    swap_fee_24h: string
+  }[]
+
+  let v2: VersionBreakdownSeed['v2'] | null = null
+  let v3: VersionBreakdownSeed['v3'] | null = null
+
+  for (const r of rows) {
+    const partial = {
+      totalLiquidity: Number.parseFloat(r.total_liquidity) || 0,
+      swapVolume24h: Number.parseFloat(r.swap_volume_24h) || 0,
+      swapFee24h: Number.parseFloat(r.swap_fee_24h) || 0,
+    }
+
+    if (r.protocol === PROTOCOL_V2) v2 = partial
+    if (r.protocol === PROTOCOL_V3) v3 = partial
+  }
+
+  if (!v2 || !v3) return null
+  return { v2, v3 }
+}
+
+function seriesNeedsVersionSeed(series: ProtocolSnapshotSeries): boolean {
+  return series.points.some(p => !p.breakdowns?.V2 || !p.breakdowns?.V3)
+}
+
+async function buildSnapshotSeries(
+  days: AllowedDays,
+  granularity: Granularity
+): Promise<ProtocolSnapshotSeries> {
+  const rows = await fetchRows(days, granularity)
+  const series = foldRows(rows)
+  // Only hit the seed query when the window is missing V2/V3 somewhere —
+  // healthy DefiLlama-backed windows skip the extra round trip.
+  const seed = seriesNeedsVersionSeed(series) ? await fetchLatestVersionSeed() : null
+  forwardFillVersionBreakdowns(series.points, seed)
+  return series
 }
 
 // Cache the entire folded payload. Keyed on the validated (days, granularity)
@@ -263,10 +335,11 @@ function foldRows(rows: DbRow[]): ProtocolSnapshotSeries {
 // more than once per (days, granularity) per `revalidate` window.
 const getSnapshotSeries = unstable_cache(
   async (days: AllowedDays, granularity: Granularity): Promise<ProtocolSnapshotSeries> => {
-    const rows = await fetchRows(days, granularity)
-    return foldRows(rows)
+    return buildSnapshotSeries(days, granularity)
   },
-  ['protocol-snapshots'],
+  // Bump the key when the forward-fill seed lands so CDN/unstable_cache
+  // entries that predate V2/V3 attribution don't keep serving a zeroed stack.
+  ['protocol-snapshots-v2'],
   // 1-hour TTL matches the cron write cadence. Combined with the
   // `s-maxage=3600` Cache-Control below, the CDN serves between writes and
   // the function only re-fetches from Postgres once per (days, granularity)
@@ -279,12 +352,14 @@ const getSnapshotSeries = unstable_cache(
 export async function GET(req: Request) {
   const url = new URL(req.url)
   const days = snapDays(url.searchParams.get('days'))
+
   // Cap cadence by range so the cached payload stays under 2MB (see
   // `effectiveGranularity`), regardless of the requested granularity.
   const granularity = effectiveGranularity(
     days,
     parseGranularity(url.searchParams.get('granularity'))
   )
+
   // Daily/weekly payloads are small and bounded, so cache them. Hourly is only
   // ever the 24H/7D window, which over-fetches 30d (≈2.9MB serialized) — over
   // Next's 2MB `unstable_cache` entry limit, where a set would throw "failed
@@ -293,8 +368,9 @@ export async function GET(req: Request) {
   // below and the client's module-level cache, so origin load stays bounded.
   const series =
     granularity === 'hourly'
-      ? foldRows(await fetchRows(days, granularity))
+      ? await buildSnapshotSeries(days, granularity)
       : await getSnapshotSeries(days, granularity)
+
   // Browser + CDN cache. `s-maxage=3600` lets the Vercel edge share-cache
   // the response across visitors for the full snapshot interval; without
   // it the CDN treats this as private and every visitor reaches the origin

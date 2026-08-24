@@ -75,6 +75,7 @@ function lowerMarginBalance(marginPct: number, invariant: number, vA: number, vB
   const c = m * (vA * vA - (invariant * vA) / vB)
   return vA + (-b + Math.sqrt(b * b - 4 * c)) / 2
 }
+
 function upperMarginBalance(marginPct: number, invariant: number, vA: number, vB: number) {
   const m = marginPct / 100
   const b = (vA + m * vA) / m
@@ -195,12 +196,15 @@ export async function readAutoRangeHistory(
         const results = await client
           .multicall({ contracts: calls, allowFailure: true, blockNumber })
           .catch(() => null)
+
         if (!results || results[0].status !== 'success') return empty
         const [minRaw, maxRaw] = results[0].result as readonly [bigint, bigint]
+
         const vb =
           results[1].status === 'success'
             ? (results[1].result as readonly [bigint, bigint, boolean])
             : null
+
         const lb = results[2].status === 'success' ? (results[2].result as readonly bigint[]) : null
         const marginRaw = results[3].status === 'success' ? (results[3].result as bigint) : null
 
@@ -231,6 +235,7 @@ export async function readAutoRangeHistory(
         const lowTargetPrice = Number.isFinite(upperBal) ? invariant / (upperBal * upperBal) : NaN
 
         const centeredness = computeCenteredness(liveA, liveB, vA, vBval)
+
         const inTargetRange =
           Number.isFinite(spotPrice) &&
           Number.isFinite(lowTargetPrice) &&

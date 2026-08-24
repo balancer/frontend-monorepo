@@ -72,9 +72,9 @@ export function RemoveLiquidityForm() {
     },
   ] as const
 
-  const [activeTab, setActiveTab] = useState(TABS[0])
-  const isProportionalTabSelected = activeTab.value === 'proportional'
-  const isSingleTabSelected = activeTab.value === 'single'
+  const [activeTab, setActiveTab] = useState(TABS[0]!)
+  const isProportionalTabSelected = activeTab?.value === 'proportional'
+  const isSingleTabSelected = activeTab?.value === 'single'
 
   const {
     transactionSteps,
@@ -96,6 +96,7 @@ export function RemoveLiquidityForm() {
     setHumanBptInPercent,
     amountsOut,
   } = useRemoveLiquidity()
+
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)
@@ -113,16 +114,18 @@ export function RemoveLiquidityForm() {
 
   function toggleTab(option: ButtonGroupOption) {
     setActiveTab(option)
+
     if (option.value === 'proportional') {
       setProportionalType()
     }
+
     if (option.value === 'single') {
       setSingleTokenType()
     }
   }
 
   function setProportionalTab() {
-    toggleTab(TABS[0])
+    toggleTab(TABS[0]!)
   }
 
   const onModalClose = () => {

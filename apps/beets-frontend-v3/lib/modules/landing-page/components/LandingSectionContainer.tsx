@@ -2,7 +2,7 @@ import { Center, Heading, VStack, Text, Button, Flex, Link, Box, HStack } from '
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import React from 'react'
 import NextLink from 'next/link'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 export function LandingSectionContainer({
   children,

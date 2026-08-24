@@ -30,9 +30,11 @@ export function useTransactionSteps(
   const lastTransaction = lastStep?.transaction
 
   const lastTransactionState = getTransactionState(lastTransaction)
+
   const lastTransactionConfirmingOrConfirmed =
     lastTransactionState === TransactionState.Confirming ||
     lastTransactionState === TransactionState.Completed
+
   const lastTransactionConfirmed = lastTransactionState === TransactionState.Completed
 
   function isLastStep(index: number) {
@@ -41,6 +43,7 @@ export function useTransactionSteps(
 
   function resetTransactionSteps() {
     setOnSuccessCalled({})
+
     steps.forEach(step => {
       if (step.transaction) resetTransaction(step.transaction)
     })
@@ -50,17 +53,20 @@ export function useTransactionSteps(
   // when it's complete. e.g. so approvals can refetch to check correct
   // allowance has been given.
   const toast = useToast()
+
   useEffect(() => {
     if (!currentStep) return
 
     async function handleTransactionCompletion(currentStep: TransactionStep) {
       try {
         const onSuccessResult = await currentStep?.onSuccess?.()
+
         if (onSuccessResult !== Retry) {
           updateOnSuccessCalled(currentStep, true)
         }
       } catch (e) {
         const error = ensureError(e)
+
         if (error instanceof ErrorWithCauses) {
           error.causes.map((cause: ErrorCause) => {
             showErrorAsToast(toast, cause)
@@ -69,6 +75,7 @@ export function useTransactionSteps(
           const cause = { id: 'error-inside-onSuccess', title: 'Error', description: error.message }
           showErrorAsToast(toast, cause)
         }
+
         if (currentTransaction) resetTransaction(currentTransaction)
       }
     }

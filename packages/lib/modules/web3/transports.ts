@@ -12,6 +12,7 @@ export function getTransports(chain: Chain) {
   const gqlChain = getGqlChain(chain.id as SupportedChainId)
   const overrideRpcUrl = rpcOverrides[gqlChain]
   const fallbackRpcUrl = rpcFallbacks[gqlChain]
+
   if (shouldUseAnvilFork) {
     return fallback([
       /*
@@ -20,6 +21,7 @@ export function getTransports(chain: Chain) {
       http(overrideRpcUrl, { timeout: 20_000 }),
     ])
   }
+
   if (overrideRpcUrl) return fallback([http(overrideRpcUrl), http(fallbackRpcUrl), http()])
   return fallback([http(), http(fallbackRpcUrl)])
 }

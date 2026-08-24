@@ -23,12 +23,14 @@ test('swapWrappedWithNative', () => {
       symbol: 'WETH',
     },
   ]
+
   const result = swapWrappedWithNative(inputAmounts, GqlChainValues.Mainnet)
   expect(result).toEqual([{ humanAmount: '1', tokenAddress: ethAddress, symbol: 'WETH' }])
 })
 
 test('swapNativeWithWrapped', () => {
   const wethAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+
   const inputAmounts: InputAmount[] = [
     {
       address: ethAddress,
@@ -36,7 +38,9 @@ test('swapNativeWithWrapped', () => {
       decimals: 18,
     },
   ]
+
   const result = swapNativeWithWrapped(inputAmounts, GqlChainValues.Mainnet)
+
   expect(result).toEqual([
     {
       address: wethAddress,

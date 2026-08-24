@@ -40,22 +40,26 @@ const numFull = (n: number) =>
   new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n || 0)
 
 const dateLabelFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' })
+
 const dateLabelLongFmt = new Intl.DateTimeFormat('en-US', {
   month: 'short',
   day: 'numeric',
   year: 'numeric',
 })
+
 const hourLabelFmt = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
   minute: '2-digit',
   hour12: false,
 })
+
 const tooltipDateFmt = new Intl.DateTimeFormat('en-US', {
   weekday: 'short',
   month: 'short',
   day: 'numeric',
   year: 'numeric',
 })
+
 const tooltipHourFmt = new Intl.DateTimeFormat('en-US', {
   month: 'short',
   day: 'numeric',
@@ -189,11 +193,13 @@ function fmt(value: number, unit: 'USD' | 'COUNT', { full = false }: { full?: bo
 function downsampleDaily<T extends { t: number }>(points: T[]): T[] {
   if (points.length === 0) return points
   const byDay = new Map<string, T>()
+
   for (const p of points) {
     const d = new Date(p.t)
     const key = `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`
     byDay.set(key, p) // last write wins → latest sample of the day
   }
+
   return Array.from(byDay.values()).sort((a, b) => a.t - b.t)
 }
 
@@ -215,10 +221,12 @@ export function TvlOverviewChart() {
     if (!data) return null
     const pts = data.points
     const isIntraday = range === '24H'
+
     const fmtAxis = (val: number) =>
       isIntraday
         ? hourLabelFmt.format(new Date(val))
         : (showYearInAxis ? dateLabelLongFmt : dateLabelFmt).format(new Date(val))
+
     const fmtTooltipDate = (val: number) =>
       isIntraday ? tooltipHourFmt.format(new Date(val)) : tooltipDateFmt.format(new Date(val))
 
@@ -233,6 +241,7 @@ export function TvlOverviewChart() {
     // would show 24 near-identical overlapping windows — misleading and ugly.
     const isFlowMetric =
       metric === 'VOLUME' || metric === 'FEES' || metric === 'YIELD' || metric === 'SURPLUS'
+
     const isBar = isFlowMetric && !isIntraday
     // Bars are one-per-day across all non-24H ranges (the cron writes hourly
     // rolling windows; daily downsample undoes that without dropping history).
@@ -313,6 +322,7 @@ export function TvlOverviewChart() {
             if (!Array.isArray(params) || !params.length) return ''
             const ts = params[0].value?.[0] ?? params[0].axisValue
             const date = fmtTooltipDate(ts)
+
             const rows = params
               .slice()
               .reverse()
@@ -326,10 +336,12 @@ export function TvlOverviewChart() {
                   </div>`
               })
               .join('')
+
             const total = params.reduce((acc: number, p: any) => {
               const v = Array.isArray(p.value) ? Number(p.value[1]) : Number(p.value)
               return acc + (Number.isFinite(v) ? v : 0)
             }, 0)
+
             return `
               <div style="min-width:200px">
                 <div style="color:#E5D3BE;font-weight:600;margin-bottom:4px">${date}</div>
@@ -385,9 +397,11 @@ export function TvlOverviewChart() {
           if (!Array.isArray(params) || !params.length) return ''
           const ts = params[0].value?.[0] ?? params[0].axisValue
           const date = tooltipDateFmt.format(new Date(ts))
+
           const v = Array.isArray(params[0].value)
             ? Number(params[0].value[1])
             : Number(params[0].value)
+
           return `
             <div style="min-width:180px">
               <div style="color:#E5D3BE;font-weight:600;margin-bottom:4px">${date}</div>
@@ -408,9 +422,11 @@ export function TvlOverviewChart() {
   const totalNow = latest?.value ?? 0
   const hasAnyData = !!data && data.realPointCount > 0
   const canPlot = !!data && data.realPointCount >= 2
+
   const headlineValue = hasAnyData
     ? fmt(totalNow, active.unit, { full: active.unit === 'COUNT' })
     : '—'
+
   const firstDataLabel =
     data?.firstDataAt != null
       ? new Intl.DateTimeFormat('en-US', {
@@ -637,6 +653,7 @@ function RangeStat({
   // Drop zero/non-finite values so sparse metrics (1-2 real days surrounded by
   // backfill blanks) don't report `Low: 0` and a misleading deflated `Avg`.
   const values = data.points.map(p => p.value).filter(v => Number.isFinite(v) && v > 0)
+
   if (!values.length) {
     return (
       <Text color="font.secondary" fontSize="xs">
@@ -644,6 +661,7 @@ function RangeStat({
       </Text>
     )
   }
+
   const max = Math.max(...values)
   const min = Math.min(...values)
   const avg = values.reduce((a, b) => a + b, 0) / values.length

@@ -18,6 +18,7 @@ export function TooltipWithTouch({
 
   const handleMouseEnter = () => {
     if (isDisabled) return
+
     timeoutRef.current = setTimeout(() => {
       setIsLabelOpen(true)
     }, 100)
@@ -27,6 +28,7 @@ export function TooltipWithTouch({
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
+
     setIsLabelOpen(false)
   }
 

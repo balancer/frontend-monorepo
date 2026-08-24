@@ -8,7 +8,7 @@ import { motion, useInView } from 'motion/react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 import { useState } from 'react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { MotionButtonProps } from './types'
 
 const MotionButton = motion(Button) as React.FC<MotionButtonProps>
@@ -28,6 +28,7 @@ export function FooterCta() {
             clearInterval(interval!)
             return 100
           }
+
           return prev + 1 // Increment by 1 every 50ms for a total of 5 seconds
         })
       }, 15)

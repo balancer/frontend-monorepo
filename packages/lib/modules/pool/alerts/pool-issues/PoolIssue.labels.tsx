@@ -7,6 +7,7 @@ const vulnerabilityTitle =
 
 const eulerTitle =
   'Due to an exploit on Euler, this pool has been set to recovery mode by the Emergency multisig'
+
 const emergencyMultisigLink = 'https://docs.balancer.fi/concepts/governance/emergency.html'
 
 const vulnerabilityDisclosure = `This pool is affected by a disclosed vulnerability.`

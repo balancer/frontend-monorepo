@@ -20,6 +20,7 @@ import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSigna
 export default function ClaimNetworkPoolsLayoutWrapper() {
   const { toCurrency } = useCurrency()
   const { chain } = useParams()
+
   const {
     poolsByChainMap,
     poolRewardsMap,

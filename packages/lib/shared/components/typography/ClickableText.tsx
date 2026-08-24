@@ -10,5 +10,6 @@ export function ClickableText(props: ClickableTextProps) {
     ...props,
     color: (props.color ?? 'font.link') as string,
   })
+
   return <Text {...clickableProps} />
 }

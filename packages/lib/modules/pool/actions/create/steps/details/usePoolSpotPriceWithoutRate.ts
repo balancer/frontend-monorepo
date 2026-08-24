@@ -10,22 +10,25 @@ import { useWatch } from 'react-hook-form'
  */
 export function usePoolSpotPriceWithoutRate() {
   const { poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'network'],
   })
+
   const { priceFor } = useTokens()
 
   const tokenA = poolTokens[0]
   const tokenB = poolTokens[1]
 
-  const priceTokenA = tokenA.usdPrice || priceFor(tokenA?.address || '', network)
-  const priceTokenB = tokenB.usdPrice || priceFor(tokenB?.address || '', network)
+  const priceTokenA = tokenA?.usdPrice || priceFor(tokenA?.address || '', network)
+  const priceTokenB = tokenB?.usdPrice || priceFor(tokenB?.address || '', network)
 
   const { rate: rawRateTokenA, isRatePending: isRateAPending } = useRateProvider(
     tokenA?.rateProvider,
     network
   )
+
   const { rate: rawRateTokenB, isRatePending: isRateBPending } = useRateProvider(
     tokenB?.rateProvider,
     network

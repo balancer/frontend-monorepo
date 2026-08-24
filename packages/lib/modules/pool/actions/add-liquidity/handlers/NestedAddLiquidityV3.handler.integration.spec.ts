@@ -28,6 +28,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
     const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '100', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
     ]
+
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
     expect(priceImpact).toBeGreaterThan(0)
   })

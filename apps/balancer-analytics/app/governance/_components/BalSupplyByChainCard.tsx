@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { useMemo } from 'react'
-import { ExternalLink } from 'react-feather'
+import { ExternalLink } from 'lucide-react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { CHAIN_COLORS } from '@analytics/app/_components/chainColors'
@@ -27,6 +27,7 @@ const compactFmt = new Intl.NumberFormat('en-US', {
   notation: 'compact',
   maximumFractionDigits: 1,
 })
+
 const intFmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 })
 
 /**

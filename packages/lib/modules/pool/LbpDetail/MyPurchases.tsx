@@ -22,7 +22,7 @@ export function MyPurchases({
   const [height, setHeight] = useState(0)
 
   const lbpPool = pool as LbpV3
-  const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
+  const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]!
 
   const userProjectTokenBalance = calculateBalance(userPoolEvents, projectToken.address as Address)
   const shareOfSale = userProjectTokenBalance.div(projectToken.balance)
@@ -82,6 +82,7 @@ function calculateBalance(
 
     const swapEvent = event as GqlPoolSwapEventV3
     const eventType = swapEvent.tokenOut.address === projectTokenAddress ? 'Buy' : 'Sell'
+
     if (eventType === 'Buy') {
       return acc.plus(swapEvent.tokenOut.amount)
     } else {

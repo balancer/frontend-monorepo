@@ -6,6 +6,7 @@ import { BalancerV3BoostedPoolsSvg } from '../components/BalancerV3BoostedPoolsS
 import { BalancerV3CustomPoolsSvg } from '../components/BalancerV3CustomPoolsSvg'
 import { BalancerV3HooksSvg } from '../components/BalancerV3HooksSvg'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
+
 function Card({
   title,
   description,

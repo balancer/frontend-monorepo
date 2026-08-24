@@ -86,6 +86,7 @@ export function usePortfolioFiltersLogic() {
     for (const key in POOL_TYPE_MAP) {
       const filterTypeKey = key as PoolFilterType
       const gqlTypes = POOL_TYPE_MAP[filterTypeKey]
+
       gqlTypes.forEach(gqlType => {
         gqlTypeToFilterKeyMap.set(gqlType, filterTypeKey)
       })
@@ -96,6 +97,7 @@ export function usePortfolioFiltersLogic() {
     filteredBalancePools.forEach(pool => {
       if (pool.type) {
         const filterKey = gqlTypeToFilterKeyMap.get(pool.type)
+
         if (filterKey) {
           foundFilterKeys.add(filterKey)
         }

@@ -37,6 +37,7 @@ export function PoolDetail() {
     // Prefetch pool action pages.
     router.prefetch(`${pathname}/add-liquidity`)
     router.prefetch(`${pathname}/enable-recovery-mode`)
+
     if (userHasLiquidity) {
       router.prefetch(`${pathname}/remove-liquidity`)
       router.prefetch(`${pathname}/stake`)

@@ -60,6 +60,7 @@ export function useRemoveLiquidityBuildCallDataQuery({
 
   const queryFn = async () => {
     const queryOutput = ensureLastQueryResponse('Remove liquidity query', simulationQuery.data)
+
     const res = await handler.buildCallData({
       account: userAddress,
       slippagePercent: slippage,

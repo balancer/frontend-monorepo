@@ -22,6 +22,7 @@ export function customMock(
     // Add impersonated address to the list of accounts to allow non default anvil accounts to approve and run transactions
     if (options.impersonationAddress) {
       const originalGetAccounts = connector.getAccounts.bind(connector)
+
       connector.getAccounts = async () => {
         const originalAccounts = await originalGetAccounts()
         return [options.impersonationAddress, ...originalAccounts] as readonly Address[]

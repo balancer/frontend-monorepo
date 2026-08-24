@@ -34,12 +34,15 @@ export function useSignPermit2SwapStep({
 
   function getTokenInAmount(): bigint {
     if (!queryData?.queryOutput) return 0n
+
     if (queryData.queryOutput.swapKind === SwapKind.GivenIn) {
       return queryData.queryOutput.amountIn.amount
     }
+
     if (queryData.queryOutput.swapKind === SwapKind.GivenOut) {
       return queryData.queryOutput.expectedAmountIn.amount
     }
+
     return 0n
   }
 

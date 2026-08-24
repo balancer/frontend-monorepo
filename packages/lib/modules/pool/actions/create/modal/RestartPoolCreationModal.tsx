@@ -14,7 +14,7 @@ import {
   useDisclosure,
   Icon,
 } from '@chakra-ui/react'
-import { Trash2 } from 'react-feather'
+import { Trash2 } from 'lucide-react'
 import { getChainName } from '@repo/lib/config/app.config'
 import type { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
@@ -154,6 +154,7 @@ function BeforePoolDeployedWarning({
   const chainName = getChainName(network)
 
   let deleteProgressReason: string
+
   if (showCowAmmWarning) {
     deleteProgressReason = 'to begin creation of a new CoW AMM?'
   } else if (showBalancerWarning) {

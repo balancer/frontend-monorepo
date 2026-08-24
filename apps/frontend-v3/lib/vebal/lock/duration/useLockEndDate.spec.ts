@@ -15,6 +15,7 @@ function testUseLockEndDate(lockedEndDate: Date | undefined) {
       lockedEndDate,
     })
   )
+
   return result
 }
 
@@ -38,6 +39,7 @@ test('useLockEndDate with no current lock', () => {
       lockedEndDate: undefined,
     })
   )
+
   expect(result.current).toEqual({
     maxLockEndDate: new Date('2026-04-02T00:00:00.000Z'), // Previous Thursday after 1 year
     minLockEndDate: new Date('2025-04-17T00:00:00.000Z'), // Next Thursday

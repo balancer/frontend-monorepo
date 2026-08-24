@@ -82,6 +82,7 @@ describe('pool helper', async () => {
 
   it('poolActionableTokens', async () => {
     const poolActionableTokens = getPoolActionableTokens(pool)
+
     expect(poolActionableTokens.map(t => t.address).sort()).toEqual([
       wethAddress,
       stataEthUSDCAddress,
@@ -111,7 +112,7 @@ describe('shouldBlockAddLiquidity', () => {
   describe('v2 pool with ERC4626 token', () => {
     it('should block liquidity if one of the tokens is not allowed', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-      pool.poolTokens[0].isAllowed = false
+      getPoolToken(pool, 0).isAllowed = false
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -128,8 +129,9 @@ describe('shouldBlockAddLiquidity', () => {
     it('should block exploited V2 composable stable pools with rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.type = GqlPoolTypeValues.ComposableStable
-      pool.poolTokens[0].priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
-      pool.poolTokens[0].priceRateProviderData = {
+      getPoolToken(pool, 0).priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
+
+      getPoolToken(pool, 0).priceRateProviderData = {
         __typename: 'GqlPriceRateProviderData',
         address: '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f',
         reviewed: true,
@@ -143,7 +145,7 @@ describe('shouldBlockAddLiquidity', () => {
     it('should not block exploited V2 composable stable pools without rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.type = GqlPoolTypeValues.ComposableStable
-      pool.poolTokens[0].priceRateProvider = zeroAddress
+      getPoolToken(pool, 0).priceRateProvider = zeroAddress
 
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
@@ -151,8 +153,9 @@ describe('shouldBlockAddLiquidity', () => {
     it('should block exploited V2 metastable pools with rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.type = GqlPoolTypeValues.MetaStable
-      pool.poolTokens[0].priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
-      pool.poolTokens[0].priceRateProviderData = {
+      getPoolToken(pool, 0).priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
+
+      getPoolToken(pool, 0).priceRateProviderData = {
         __typename: 'GqlPriceRateProviderData',
         address: '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f',
         reviewed: true,
@@ -166,14 +169,14 @@ describe('shouldBlockAddLiquidity', () => {
     it('should not block exploited V2 metastable pools without rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.type = GqlPoolTypeValues.MetaStable
-      pool.poolTokens[0].priceRateProvider = zeroAddress
+      getPoolToken(pool, 0).priceRateProvider = zeroAddress
 
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
 
     it('should not block liquidity if all tokens are allowed', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-      pool.poolTokens[0].isAllowed = true
+      getPoolToken(pool, 0).isAllowed = true
 
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
@@ -182,21 +185,21 @@ describe('shouldBlockAddLiquidity', () => {
   describe('v3 pool with ERC4626 tokens', () => {
     it('Should not block liquidity if all tokenized vaults are reviewed and safe', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      expect(pool.poolTokens[0].erc4626ReviewData?.summary).toBe('safe')
-      expect(pool.poolTokens[1].erc4626ReviewData?.summary).toBe('safe')
+      expect(getPoolToken(pool, 0).erc4626ReviewData?.summary).toBe('safe')
+      expect(getPoolToken(pool, 1).erc4626ReviewData?.summary).toBe('safe')
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
 
     it('should block liquidity if the usdt tokenized vault is not reviewed', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.poolTokens[0].erc4626ReviewData = null
+      getPoolToken(pool, 0).erc4626ReviewData = null
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
     })
 
     it('Should block liquidity if the usdt tokenized vault is not reviewed as safe', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.poolTokens[0].erc4626ReviewData!.summary = 'unsafe'
+      getPoolToken(pool, 0).erc4626ReviewData!.summary = 'unsafe'
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
     })
@@ -243,7 +246,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should block if pool token is not reviewed', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.poolTokens[0].priceRateProviderData = null
+      getPoolToken(pool, 0).priceRateProviderData = null
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -251,7 +254,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should block if pool token is not safe', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.poolTokens[0].priceRateProviderData!.summary = 'unsafe'
+      getPoolToken(pool, 0).priceRateProviderData!.summary = 'unsafe'
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -259,7 +262,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should block if pool token is not allowed', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.poolTokens[0].isAllowed = false
+      getPoolToken(pool, 0).isAllowed = false
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
@@ -267,15 +270,15 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should not block if no reviewer', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.poolTokens[0].priceRateProvider = null
+      getPoolToken(pool, 0).priceRateProvider = null
 
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
 
     it('should not block if reviewer is zero address', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.poolTokens[0].priceRateProvider = zeroAddress
-      pool.poolTokens[0].priceRateProviderData!.summary = 'unsafe'
+      getPoolToken(pool, 0).priceRateProvider = zeroAddress
+      getPoolToken(pool, 0).priceRateProviderData!.summary = 'unsafe'
 
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
@@ -283,16 +286,16 @@ describe('shouldBlockAddLiquidity', () => {
     it('should not block if reviewer is the nested pool', () => {
       const pool = getApiPoolMock(v3SepoliaNestedBoosted)
       pool.chain = GqlChainValues.Mainnet // Sepolia pools are never blocked
-      pool.poolTokens[0].priceRateProvider = pool.poolTokens[0].nestedPool!.address
-      pool.poolTokens[0].priceRateProviderData = null
+      getPoolToken(pool, 0).priceRateProvider = getPoolToken(pool, 0).nestedPool!.address
+      getPoolToken(pool, 0).priceRateProviderData = null
 
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
 
     it('should return multiple reasons if present', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-      pool.poolTokens[0].erc4626ReviewData!.summary = 'unsafe'
-      pool.poolTokens[1].erc4626ReviewData!.summary = 'unsafe'
+      getPoolToken(pool, 0).erc4626ReviewData!.summary = 'unsafe'
+      getPoolToken(pool, 1).erc4626ReviewData!.summary = 'unsafe'
       expect(getPoolAddBlockedReason(pool)).toHaveLength(2)
     })
   })
@@ -354,3 +357,9 @@ describe('getPoolActivityDateCaption', () => {
     expect(getPoolActivityDateCaption(daysAgo(7))).toBe('in last 7 days')
   })
 })
+
+function getPoolToken(pool: Pool, index: number) {
+  const token = pool.poolTokens[index]
+  if (!token) throw new Error(`Missing pool token at index ${index}`)
+  return token
+}

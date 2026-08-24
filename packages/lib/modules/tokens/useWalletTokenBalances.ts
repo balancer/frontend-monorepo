@@ -39,6 +39,7 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
       const networkConfig = getNetworkConfig(chain)
       const chainTokens = getTokensByChain(chain)
       const nativeAddress = getNativeAssetAddress(chain)
+
       const erc20Tokens = chainTokens.filter(
         token => !includesAddress([nativeAddress], token.address)
       )
@@ -72,6 +73,7 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
           errorName: 'WalletTokenBalancesError',
           errorMessage: `Error fetching wallet balances for chain ${chain}`,
         })
+
         return { chain, success: false as const, error }
       }
     },
@@ -111,6 +113,7 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
       const wrappedNativeAddress = getWrappedNativeAssetAddress(chain)
 
       const nativePrice = priceFor(nativeAddress, chain)
+
       const nativeBalanceUsd = bn(formatUnits(nativeBalance.value, nativeBalance.decimals)).times(
         nativePrice
       )

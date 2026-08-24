@@ -23,6 +23,7 @@ export function PoolDetailsStep() {
   const autoRangeFormState = useFormState({ control: autoRangeConfigForm.control })
   const isAutoRangeFormInvalid = isAutoRangePool(poolType) && !autoRangeFormState.isValid
   const eclpFormState = useFormState({ control: eclpConfigForm.control })
+
   const isGyroEclpFormInvalid =
     isGyroEllipticPool(poolType) && (!eclpFormState.isValid || !isEclpParamsValid)
 

@@ -40,10 +40,12 @@ export function PoolCreationModal({
 }: PoolCreationModalProps & Omit<ModalProps, 'children'>) {
   const { poolCreationForm, resetPoolCreationForm, poolAddress, setPoolAddress } =
     usePoolCreationForm()
+
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'poolType'],
   })
+
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
@@ -177,7 +179,7 @@ export function PoolCreationModal({
             setUsingBigBlocksError={setUsingBigBlocksError}
             shouldUseBigBlocks={shouldUseBigBlocks}
           />
-        ) : (
+        ) : transactionSteps.currentStep ? (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
             isSuccess={isPoolInitialized}
@@ -185,7 +187,7 @@ export function PoolCreationModal({
             returnLabel="View pool page"
             urlTxHash={urlTxHash}
           />
-        )}
+        ) : null}
       </ModalContent>
     </Modal>
   )

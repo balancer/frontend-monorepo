@@ -69,6 +69,7 @@ export function useAddLiquiditySteps({
   // If the user has selected to not use signatures, we allow them to do permit2
   // approvals with transactions.
   const networkConfig = getNetworkConfig(chain)
+
   const defaultRouter = isBoosted(pool)
     ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted
     : networkConfig.contracts.balancer.router

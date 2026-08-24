@@ -39,6 +39,7 @@ const apiStakedBalances: GqlUserStakedBalance[] = [
 
 test('User balance helpers', () => {
   const pool = aWjAuraWethPoolElementMock()
+
   const userBalanceMock: GqlPoolUserBalance = {
     __typename: 'GqlPoolUserBalance',
     walletBalance: '100',
@@ -47,6 +48,7 @@ test('User balance helpers', () => {
     totalBalanceUsd: 300,
     stakedBalances: apiStakedBalances,
   }
+
   pool.userBalance = userBalanceMock
 
   expect(getUserTotalBalance(pool)).toBe('175.000000000000000000')
@@ -70,6 +72,7 @@ test('User balance helpers', () => {
 
 test('has tiny balance', () => {
   const pool = aWjAuraWethPoolElementMock()
+
   const userBalanceMock: GqlPoolUserBalance = {
     __typename: 'GqlPoolUserBalance',
     walletBalance: '0.1',
@@ -78,6 +81,7 @@ test('has tiny balance', () => {
     totalBalanceUsd: 0.0009,
     stakedBalances: [],
   }
+
   pool.userBalance = userBalanceMock
   expect(hasTinyBalance(pool)).toBeTruthy()
 })
@@ -85,6 +89,7 @@ test('has tiny balance', () => {
 describe('invalid balance fallbacks', () => {
   test('getUserTotalBalance returns 0 when totalBalance is invalid', () => {
     const pool = aWjAuraWethPoolElementMock()
+
     pool.userBalance = {
       __typename: 'GqlPoolUserBalance',
       walletBalance: '100',
@@ -93,11 +98,13 @@ describe('invalid balance fallbacks', () => {
       totalBalanceUsd: 300,
       stakedBalances: [],
     }
+
     expect(getUserTotalBalance(pool)).toBe('0')
   })
 
   test('getUserTotalBalanceInt returns 0n when totalBalance is invalid', () => {
     const pool = aWjAuraWethPoolElementMock()
+
     pool.userBalance = {
       __typename: 'GqlPoolUserBalance',
       walletBalance: '100',
@@ -106,11 +113,13 @@ describe('invalid balance fallbacks', () => {
       totalBalanceUsd: 300,
       stakedBalances: [],
     }
+
     expect(getUserTotalBalanceInt(pool)).toBe(0n)
   })
 
   test('calcStakedBalance handles invalid staked balances', () => {
     const pool = aWjAuraWethPoolElementMock()
+
     pool.userBalance = {
       __typename: 'GqlPoolUserBalance',
       walletBalance: '100',
@@ -134,12 +143,14 @@ describe('invalid balance fallbacks', () => {
         },
       ],
     }
+
     expect(calcTotalStakedBalance(pool)).toBe('52.123')
     expect(calcTotalStakedBalanceUsd(pool)).toBe(7.9)
   })
 
   test('handles scientific notation from API balances', () => {
     const pool = aWjAuraWethPoolElementMock()
+
     pool.userBalance = {
       __typename: 'GqlPoolUserBalance',
       walletBalance: '6.1713167421e-8',
@@ -156,6 +167,7 @@ describe('invalid balance fallbacks', () => {
         },
       ],
     }
+
     expect(getUserWalletBalanceInt(pool)).toBe(61713167421n)
     expect(getUserTotalBalanceInt(pool)).toBe(61713167421n)
     expect(calcTotalStakedBalanceInt(pool)).toBe(61713167421n)

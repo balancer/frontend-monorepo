@@ -32,6 +32,7 @@ export function usePoolListLogic({
   const { userAddress, isConnected } = useUserAccount()
   const apolloClient = useApolloClient()
   const { isLoadingTokens, isLoadingTokenPrices } = useTokens()
+
   const [poolDisplayType, setPoolDisplayType] = useState<PoolDisplayType>(
     PROJECT_CONFIG.options.poolDisplayType
   )

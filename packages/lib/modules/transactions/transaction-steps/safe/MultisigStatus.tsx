@@ -1,7 +1,7 @@
 import { Button, Card, HStack, Text, VStack, Link } from '@chakra-ui/react'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { GatewayTransactionDetails, TransactionStatus } from '@safe-global/safe-apps-sdk'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { TransactionStep } from '../lib'
 import { Address } from 'viem'
 import { hasSomePendingNestedTxInBatch } from '../tx-batch.helpers'
@@ -16,6 +16,7 @@ type MultisigProps = {
   chainId: SupportedChainId
   currentStep?: TransactionStep
 }
+
 export function MultisigStatus({ chainId, details, currentStep }: MultisigProps) {
   if (details.detailedExecutionInfo?.type !== 'MULTISIG') return null
   const safeTxStatus = details.txStatus

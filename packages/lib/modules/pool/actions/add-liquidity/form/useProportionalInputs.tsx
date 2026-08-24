@@ -24,6 +24,7 @@ import { usePoolStateWithBalancesQuery } from '../queries/usePoolStateWithBalanc
 
 export function useProportionalInputs() {
   const { isConnected } = useUserAccount()
+
   const {
     helpers,
     tokens,
@@ -42,6 +43,7 @@ export function useProportionalInputs() {
 
   function handleProportionalHumanInputChange(token: ApiToken, humanAmount: HumanAmount) {
     const tokenAddress = token.address as Address
+
     if (isEmptyHumanAmount(humanAmount)) {
       return clearAmountsIn({ tokenAddress, humanAmount, symbol: token.symbol })
     }
@@ -62,6 +64,7 @@ export function useProportionalInputs() {
         if (isSameAddress(amount.tokenAddress, tokenAddress)) {
           return { ...amount, humanAmount } // We don't want to change the user input with the result of the proportional calculation
         }
+
         return amount
       }
     )
@@ -98,7 +101,7 @@ export function useProportionalInputs() {
   function handleMaximizeProportionalAmounts() {
     if (!maxProportionalHumanAmountsIn?.length) return
 
-    setReferenceAmountAddress(maxProportionalHumanAmountsIn[0].tokenAddress)
+    setReferenceAmountAddress(maxProportionalHumanAmountsIn[0]!.tokenAddress)
     setHumanAmountsIn(maxProportionalHumanAmountsIn)
   }
 
@@ -122,6 +125,7 @@ type Params = {
   wrapUnderlying: boolean[]
   poolStateWithBalances?: PoolStateWithUnderlyingBalances | PoolStateWithBalances
 }
+
 export function _calculateProportionalHumanAmountsIn({
   token,
   humanAmount,
@@ -132,6 +136,7 @@ export function _calculateProportionalHumanAmountsIn({
 }: Params): HumanTokenAmountWithSymbol[] {
   const tokenAddress = token.address as Address
   const symbol = token.symbol
+
   const referenceAmount: InputAmount | undefined = helpers.toSdkInputAmounts([
     { tokenAddress, humanAmount, symbol },
   ])[0]

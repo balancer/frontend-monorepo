@@ -327,12 +327,15 @@ export async function readUniversalV3State(
 
   let poolCreatorSwap: string | null = null
   let poolCreatorYield: string | null = null
+
   if (feeControllerCalls.length) {
     const swapResult = results[explorerCalls.length]
     const yieldResult = results[explorerCalls.length + 1]
+
     if (swapResult?.status === 'success') {
       poolCreatorSwap = (swapResult.result as bigint).toString()
     }
+
     if (yieldResult?.status === 'success') {
       poolCreatorYield = (yieldResult.result as bigint).toString()
     }
@@ -354,6 +357,7 @@ export async function readStableTypeState(
   poolAddress: Address
 ): Promise<StableTypeState | null> {
   const client = getPublicClient(chain)
+
   // Five-slot multicall: amp params/state + the two swap-fee bounds + the
   // per-token tokenInfo tuple. `allowFailure` lets older pool variants
   // (which lack the bounds or tokenInfo getters) still surface the amp
@@ -392,21 +396,26 @@ export async function readStableTypeState(
   if (results[0].status !== 'success') return null
   const param = results[0].result as readonly [bigint, boolean, bigint]
   const stateOk = results[1].status === 'success'
+
   const stateTuple = stateOk
     ? (results[1].result as readonly [
         { startValue: bigint; endValue: bigint; startTime: number; endTime: number },
         bigint,
       ])
     : null
+
   const swapFeeMin =
     results[2].status === 'success' ? (results[2].result as bigint).toString() : null
+
   const swapFeeMax =
     results[3].status === 'success' ? (results[3].result as bigint).toString() : null
+
   // `getTokenInfo` returns `(IERC20[] tokens, TokenInfo[] tokenInfo,
   // uint256[] balancesRaw, uint256[] lastBalancesLiveScaled18)`. Only the
   // tokenInfo struct array is relevant here — we already have balances
   // from api-v3.
   let tokenInfo: StableTypeState['tokenInfo'] = null
+
   if (results[4].status === 'success') {
     const tuple = results[4].result as readonly [
       readonly string[],
@@ -418,6 +427,7 @@ export async function readStableTypeState(
       readonly bigint[],
       readonly bigint[],
     ]
+
     tokenInfo = tuple[1].map(t => ({
       tokenType: Number(t.tokenType),
       rateProvider: t.rateProvider,
@@ -466,6 +476,7 @@ export async function readV2BasePoolState(
   poolAddress: Address
 ): Promise<V2BasePoolState | null> {
   const client = getPublicClient(chain)
+
   const results = await client.multicall({
     contracts: [
       {
@@ -505,13 +516,17 @@ export async function readV2BasePoolState(
   if (results[0].status !== 'success') return null
 
   const swapFee = results[0].result as bigint
+
   const pausedTuple =
     results[1].status === 'success'
       ? (results[1].result as readonly [boolean, bigint, bigint])
       : null
+
   const recoveryRaw = results[2].status === 'success' ? (results[2].result as boolean) : null
+
   const protocolSwap =
     results[3].status === 'success' ? (results[3].result as bigint).toString() : null
+
   const protocolYield =
     results[4].status === 'success' ? (results[4].result as bigint).toString() : null
 
@@ -538,6 +553,7 @@ export async function readV2StableTypeState(
   poolAddress: Address
 ): Promise<StableTypeState | null> {
   const client = getPublicClient(chain)
+
   const results = await client.multicall({
     contracts: [
       {
@@ -588,12 +604,14 @@ export async function readWeightedTypeState(
   poolAddress: Address
 ): Promise<WeightedTypeState | null> {
   const client = getPublicClient(chain)
+
   try {
     const w = (await client.readContract({
       address: poolAddress,
       abi: V3_WEIGHTED_ABI,
       functionName: 'getNormalizedWeights',
     })) as readonly bigint[]
+
     return { normalizedWeights: toStrs(w) }
   } catch {
     return null
@@ -606,12 +624,14 @@ export async function readGyroEclpTypeState(
   poolAddress: Address
 ): Promise<GyroEclpTypeState | null> {
   const client = getPublicClient(chain)
+
   try {
     const res = (await client.readContract({
       address: poolAddress,
       abi: V3_GYRO_ECLP_ABI,
       functionName: 'getECLPParams',
     })) as readonly [{ alpha: bigint; beta: bigint; c: bigint; s: bigint; lambda: bigint }, unknown]
+
     const p = res[0]
     return {
       alpha: p.alpha.toString(),
@@ -637,6 +657,7 @@ export async function readReclammTypeState(
   poolAddress: Address
 ): Promise<ReclammTypeState | null> {
   const client = getPublicClient(chain)
+
   const results = await client.multicall({
     contracts: [
       { address: poolAddress, abi: V3_RECLAMM_ABI, functionName: 'computeCurrentPriceRatio' },
@@ -651,14 +672,19 @@ export async function readReclammTypeState(
     ],
     allowFailure: true,
   })
+
   if (results[0].status !== 'success') return null
+
   const range =
     results[1].status === 'success' ? (results[1].result as readonly [bigint, bigint]) : null
+
   const vb =
     results[2].status === 'success'
       ? (results[2].result as readonly [bigint, bigint, boolean])
       : null
+
   const lb = results[3].status === 'success' ? (results[3].result as readonly bigint[]) : null
+
   const prs =
     results[8].status === 'success'
       ? (results[8].result as {
@@ -668,6 +694,7 @@ export async function readReclammTypeState(
           priceRatioUpdateEndTime: number
         })
       : null
+
   return {
     currentPriceRatio: (results[0].result as bigint).toString(),
     minPrice: range ? range[0].toString() : '0',
@@ -699,6 +726,7 @@ export async function readLbpTypeState(
   poolAddress: Address
 ): Promise<LbpTypeState | null> {
   const client = getPublicClient(chain)
+
   const results = await client.multicall({
     contracts: [
       { address: poolAddress, abi: V3_LBP_ABI, functionName: 'getNormalizedWeights' },
@@ -707,11 +735,14 @@ export async function readLbpTypeState(
     ],
     allowFailure: true,
   })
+
   if (results[0].status !== 'success') return null
+
   const upd =
     results[2].status === 'success'
       ? (results[2].result as readonly [bigint, bigint, readonly bigint[], readonly bigint[]])
       : null
+
   return {
     normalizedWeights: toStrs(results[0].result as readonly bigint[]),
     swapEnabled: results[1].status === 'success' ? (results[1].result as boolean) : false,
@@ -732,6 +763,7 @@ export async function readQuantAmmTypeState(
   poolAddress: Address
 ): Promise<QuantAmmTypeState | null> {
   const client = getPublicClient(chain)
+
   const results = await client.multicall({
     contracts: [
       { address: poolAddress, abi: V3_QUANT_AMM_ABI, functionName: 'getNormalizedWeights' },
@@ -740,6 +772,7 @@ export async function readQuantAmmTypeState(
     ],
     allowFailure: true,
   })
+
   if (results[0].status !== 'success') return null
   return {
     normalizedWeights: toStrs(results[0].result as readonly bigint[]),
@@ -763,6 +796,7 @@ export async function readStableSurgeState(
   const helpers = getV3HelperAddresses(chain)
   if (!helpers?.stableSurgeHooks?.length) return null
   const client = getPublicClient(chain)
+
   const results = await client.multicall({
     contracts: helpers.stableSurgeHooks.flatMap(hook => [
       {
@@ -780,6 +814,7 @@ export async function readStableSurgeState(
     ]),
     allowFailure: true,
   })
+
   for (let i = 0; i < results.length; i += 2) {
     const threshold = results[i]
     const maxFee = results[i + 1]
@@ -797,6 +832,7 @@ export async function readStableSurgeState(
       maxSurgeFeePercentage: m,
     }
   }
+
   return null
 }
 
@@ -876,12 +912,15 @@ export async function readBufferStates(
 
     let underlyingBalanceRaw: string | null = null
     let wrappedBalanceRaw: string | null = null
+
     if (balResult?.status === 'success') {
       const [u, w] = balResult.result as readonly [bigint, bigint]
       underlyingBalanceRaw = u.toString()
       wrappedBalanceRaw = w.toString()
     }
+
     const isInitialized = initResult?.status === 'success' ? (initResult.result as boolean) : null
+
     const totalSharesRaw =
       sharesResult?.status === 'success' ? (sharesResult.result as bigint).toString() : null
 

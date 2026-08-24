@@ -8,7 +8,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { StepProps, getStepSettings } from './getStepSettings'
-import { ArrowUpRight, Check } from 'react-feather'
+import { ArrowUpRight, Check } from 'lucide-react'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
 import { indexToLetter } from '@repo/lib/shared/labels'
 import { useTransactionGasCost } from '../useTransactionGasCost'

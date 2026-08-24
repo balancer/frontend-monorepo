@@ -8,6 +8,7 @@ import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-s
 
 export function UnstakePreview() {
   const { pool } = usePool()
+
   const { unstakeTxHash, quoteAmountOut, rewardAmounts, totalClaimableUsd, transactionSteps } =
     useUnstake()
 

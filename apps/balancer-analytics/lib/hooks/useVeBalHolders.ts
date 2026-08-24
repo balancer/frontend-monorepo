@@ -21,6 +21,7 @@ export function useVeBalHolders(): State {
   useEffect(() => {
     let cancelled = false
     const controller = new AbortController()
+
     // `cache: 'no-store'` — see `useGovernance` for rationale. The server's
     // weekly `unstable_cache` is what keeps Dune credit-burn low.
     fetchWithRetry('/api/governance/vebal-holders', {
@@ -40,6 +41,7 @@ export function useVeBalHolders(): State {
         if (error instanceof Error && error.name === 'AbortError') return
         setState({ data: null, loading: false, error: error as Error })
       })
+
     return () => {
       cancelled = true
       controller.abort()

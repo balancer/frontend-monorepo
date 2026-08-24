@@ -57,9 +57,11 @@ function getColor(status: StepStatus, transaction?: ManagedResult) {
   if (status === 'active') {
     return getActiveColor(transaction)
   }
+
   if (status === 'complete') {
     return completeColor
   }
+
   if (status === 'incomplete') {
     return incompleteColor
   }
@@ -76,9 +78,11 @@ function isLoading(status: StepStatus, transaction?: ManagedResult): boolean {
   if (!transaction) return false
   if (status !== 'active') return false
   if (transaction.isSafeTxLoading) return true
+
   if (getTransactionState(transaction) === TransactionState.Loading) {
     return true
   }
+
   if (getTransactionState(transaction) === TransactionState.Confirming) {
     return true
   }

@@ -33,6 +33,7 @@ export function useInitializePoolBuildCall({
     if (!poolAddress) throw new Error('missing pool address for init pool build call')
 
     const initPoolDataProvider = new InitPoolDataProvider(initPoolInput.chainId, rpcUrl)
+
     const poolState = await initPoolDataProvider.getInitPoolData(
       poolAddress,
       poolType,

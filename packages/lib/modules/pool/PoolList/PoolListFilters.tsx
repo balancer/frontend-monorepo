@@ -34,7 +34,7 @@ import {
 } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useState } from 'react'
-import { Filter, Info, Plus } from 'react-feather'
+import { Filter, Info, Plus } from 'lucide-react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { motion, AnimatePresence } from 'motion/react'
@@ -85,6 +85,7 @@ function UserLiquidityFilters() {
   const {
     queryState: { userAddress, toggleUserAddress, joinablePools, toggleJoinablePools },
   } = usePoolList()
+
   const { userAddress: connectedUserAddress } = useUserAccount()
   const isMyPositionsChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
 
@@ -483,6 +484,7 @@ export function ProtocolVersionFilter({
 export function PoolListFilters() {
   const { isConnected } = useUserAccount()
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+
   const {
     isFixedPoolType,
     queryState: {
@@ -497,6 +499,7 @@ export function PoolListFilters() {
       protocolVersion,
     },
   } = usePoolList()
+
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
 

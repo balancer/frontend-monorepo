@@ -121,12 +121,6 @@ export default function DebugPools() {
           </Link>
           <Link
             as={NextLink}
-            href="/pools/fraxtal/v2/0x33251abecb0364df98a27a8d5d7b5ccddc774c42000000000000000000000008"
-          >
-            Frax with Merkl APR items
-          </Link>
-          <Link
-            as={NextLink}
             href="/pools/ethereum/v2/0x7b50775383d3d6f0215a8f290f2c9e2eebbeceb20000000000000000000000fe"
           >
             Old mainnet boosted pool with issues

@@ -6,6 +6,7 @@ describe('calculateInvariant', () => {
       balances: [100, 100],
       weights: [0.5, 0.5],
     })
+
     // 100^0.5 * 100^0.5 = 10 * 10 = 100
     expect(result).toBe(100)
   })
@@ -15,6 +16,7 @@ describe('calculateInvariant', () => {
       balances: [200, 50],
       weights: [0.8, 0.2],
     })
+
     expect(result).toBeCloseTo(151.57165665103986)
   })
 
@@ -23,6 +25,7 @@ describe('calculateInvariant', () => {
       balances: [0, 100],
       weights: [0.5, 0.5],
     })
+
     expect(result).toBe(0)
   })
 
@@ -31,6 +34,7 @@ describe('calculateInvariant', () => {
       balances: [100, 200, 300],
       weights: [0.4, 0.3, 0.3],
     })
+
     expect(result).toBeCloseTo(171.17698594097052)
   })
 })
@@ -44,6 +48,7 @@ describe('calculateOutGivenIn', () => {
       tokenInIndex: 0,
       tokenOutIndex: 1,
     })
+
     expect(result).toBe(0)
   })
 
@@ -55,6 +60,7 @@ describe('calculateOutGivenIn', () => {
       tokenInIndex: 0,
       tokenOutIndex: 0,
     })
+
     expect(result).toBe(0)
   })
 
@@ -66,6 +72,7 @@ describe('calculateOutGivenIn', () => {
       tokenInIndex: 0,
       tokenOutIndex: 1,
     })
+
     expect(result).toBeCloseTo(9.090909090909108)
   })
 
@@ -77,6 +84,7 @@ describe('calculateOutGivenIn', () => {
       tokenInIndex: 0,
       tokenOutIndex: 1,
     })
+
     expect(result).toBeCloseTo(90.90909090909122)
   })
 
@@ -88,6 +96,7 @@ describe('calculateOutGivenIn', () => {
       tokenInIndex: 0,
       tokenOutIndex: 1,
     })
+
     expect(result).toBeCloseTo(23.867398881551992)
   })
 

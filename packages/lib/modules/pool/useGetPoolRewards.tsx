@@ -41,10 +41,12 @@ export function useGetPoolRewards(pool: Pool) {
 
   function calculatePotentialYield(totalUSDValue: Numberish) {
     const potentialYield = calcPotentialYieldFor(pool, totalUSDValue)
+
     const weeklyYield =
       weeklyRewards && bn(potentialYield).gt(weeklyRewards)
         ? weeklyRewards.toString()
         : potentialYield
+
     return weeklyYield
   }
 

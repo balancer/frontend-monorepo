@@ -110,6 +110,7 @@ export function LbpVolumeTVLFeesCharts({
   }
 
   const chartData = getChartData()
+
   const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, theme, {
     useTimeRange: true,
   })

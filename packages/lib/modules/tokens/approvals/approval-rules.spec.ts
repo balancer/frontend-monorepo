@@ -169,6 +169,7 @@ describe('Approved amounts', () => {
     const tokenAllowance = testRawAmount('0')
     const requiredAmount = testRawAmount('10')
     const doubleApproval = true
+
     const nextToken = {
       isPermit2: false,
       tokenAddress: wETHAddress,
@@ -191,6 +192,7 @@ describe('Approved amounts', () => {
     const tokenAllowance = testRawAmount('20')
     const requiredAmount = testRawAmount('0')
     const doubleApproval = true
+
     const nextToken = {
       isPermit2: false,
       tokenAddress: wETHAddress,
@@ -213,6 +215,7 @@ describe('Approved amounts', () => {
     const tokenAllowance = testRawAmount('20')
     const requiredAmount = testRawAmount('0')
     const doubleApproval = true
+
     const nextToken = {
       isPermit2: false,
       tokenAddress: wETHAddress,

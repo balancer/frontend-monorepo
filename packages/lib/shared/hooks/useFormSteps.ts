@@ -53,14 +53,18 @@ export function useFormSteps(config: UseFormStepsConfig) {
 
   // On initial load without valid URL step, redirect to saved step from localStorage
   const hasRedirected = useRef(false)
+
   useEffect(() => {
     if (hasRedirected.current || !shouldRedirectToSavedStep) return
+
     if (stepIndexFromUrl === null) {
       const savedStep = steps[savedStepIndex]
+
       if (savedStep) {
         router.replace(`${basePath}/${savedStep.id}`)
       }
     }
+
     hasRedirected.current = true
   }, [stepIndexFromUrl, savedStepIndex, shouldRedirectToSavedStep, router, basePath, steps])
 
@@ -74,6 +78,7 @@ export function useFormSteps(config: UseFormStepsConfig) {
 
   const navigateToStep = (stepIndex: number) => {
     const step = steps[stepIndex]
+
     if (step) {
       router.push(`${basePath}/${step.id}`)
     }

@@ -119,6 +119,7 @@ export async function syncPoolEvents(
       inflight.delete(key)
     }
   })()
+
   inflight.set(key, promise)
   return promise
 }
@@ -151,6 +152,7 @@ async function runSync(
 
   if (!options.force && !needDeepScan && state) {
     const ageSeconds = (Date.now() - state.lastSyncedAt.getTime()) / 1000
+
     if (ageSeconds < ttl) {
       const rows = await readCleanEvents(chain, pool)
       const metadata = await fetchPoolMetadata(chain, apiV3Id).catch(() => null)
@@ -166,6 +168,7 @@ async function runSync(
 
   // ── Resolve pool metadata (cheap api-v3 hit, cached) ──
   const metadata = await fetchPoolMetadata(chain, apiV3Id)
+
   if (!metadata) {
     // Metadata lookup failed — could be a transient api-v3 hiccup
     // (Cloudflare rate limit, GraphQL schema drift, etc.) or a genuine
@@ -221,6 +224,7 @@ async function runSync(
   // signal that latches `deep_synced`. A full-history request that fell back
   // to the 90-day cap (unknown createTime) must NOT latch it.
   let scannedFullHistory = false
+
   if (state && !rescanFromCold) {
     // Warm — pick up where we left off.
     fromBlock = BigInt(state.lastBlock) + 1n
@@ -230,12 +234,14 @@ async function runSync(
     // creation block from api-v3, but the approximation is sufficient —
     // the chunked log walker tolerates empty ranges cheaply.
     let createBlock: bigint | null = null
+
     if (metadata.createTime) {
       const now = Math.floor(Date.now() / 1000)
       const ageSec = Math.max(0, now - metadata.createTime)
       const ageBlocks = BigInt(Math.ceil(ageSec * blocksPerSecond(chain)))
       createBlock = safeHead > ageBlocks ? safeHead - ageBlocks : 0n
     }
+
     // V2 pools (dynamic-fee / amp updates) are noisy — some pools fire
     // dozens of `SwapFeePercentageChanged` per quarter. Capping the cold
     // window to 30 days (vs 90 for V3) plus the post-decode 100-event
@@ -245,6 +251,7 @@ async function runSync(
       metadata.protocolVersion === 2
         ? thirtyDayFromBlock(chain, safeHead)
         : ninetyDayFromBlock(chain, safeHead)
+
     if (options.fullHistory && createBlock !== null) {
       // Full history — scan from the (approx) deployment block, no cap
       // floor. Requires a known `createTime`; without it we'd be scanning
@@ -280,6 +287,7 @@ async function runSync(
   // watermark only advances when BOTH succeed — partial failures get a
   // retry on the next visit (and ON CONFLICT keeps re-inserts idempotent).
   const filterBEvents = pickFilterBEvents(metadata)
+
   const filterAPromise: Promise<{
     logs: Awaited<ReturnType<typeof chunkedGetLogs>>
     err: unknown
@@ -288,12 +296,15 @@ async function runSync(
       ? (() => {
           const helpers = getV3HelperAddresses(chain)
           const filterAAddresses: Address[] = [V3_VAULT_ADDRESS]
+
           if (helpers?.protocolFeeController) {
             filterAAddresses.push(helpers.protocolFeeController)
           }
+
           if (helpers?.stableSurgeHooks) {
             filterAAddresses.push(...helpers.stableSurgeHooks)
           }
+
           return chunkedGetLogs(client, {
             address: filterAAddresses,
             events: V3_FILTER_A_EVENTS,
@@ -330,6 +341,7 @@ async function runSync(
       err: scrubError(filterAResult.err),
     })
   }
+
   if (filterBResult.err) {
     console.warn('[sync] Filter B (pool-emitted) failed; Filter A events will still be persisted', {
       chain,
@@ -363,9 +375,11 @@ async function runSync(
 
   // ── Resolve block timestamps for unique blocks only ──
   const uniqueBlocks = new Set<bigint>()
+
   for (const log of allLogs) {
     if (log.blockNumber !== null) uniqueBlocks.add(log.blockNumber)
   }
+
   const timestamps = await resolveBlockTimestamps(client, chain, uniqueBlocks)
 
   // ── Decode + persist ──
@@ -391,20 +405,25 @@ async function runSync(
   // deterministic insert order.
   let newRows = cleanedRows
   let v2Capped = 0
+
   if (metadata.protocolVersion === 2 && cleanedRows.length > V2_EVENT_HARD_CAP) {
     const sorted = [...cleanedRows].sort((a, b) =>
       a.blockNumber === b.blockNumber ? b.logIndex - a.logIndex : b.blockNumber - a.blockNumber
     )
+
     const kept = sorted.slice(0, V2_EVENT_HARD_CAP)
+
     kept.sort((a, b) =>
       a.blockNumber === b.blockNumber ? a.logIndex - b.logIndex : a.blockNumber - b.blockNumber
     )
+
     v2Capped = cleanedRows.length - kept.length
     newRows = kept
   }
 
   if (newRows.length > 0) {
     await insertPoolParamEvents(newRows)
+
     console.info('[sync] decoded + persisted events', {
       chain,
       pool,
@@ -442,6 +461,7 @@ async function runSync(
 
 function pickFilterBEvents(metadata: PoolMetadata): readonly unknown[] {
   const t = metadata.type.toUpperCase()
+
   if (metadata.protocolVersion === 3) {
     if (t === 'STABLE') return V3_STABLE_FILTER_B_EVENTS
     if (t === 'RECLAMM') return V3_RECLAMM_FILTER_B_EVENTS
@@ -449,10 +469,12 @@ function pickFilterBEvents(metadata: PoolMetadata): readonly unknown[] {
     // immutable; ECLP / LBP will be added in later phases).
     return []
   }
+
   if (metadata.protocolVersion === 2) {
     if (t === 'STABLE' || t === 'COMPOSABLE_STABLE') return V2_STABLE_FILTER_B_EVENTS
     return V2_NON_STABLE_FILTER_B_EVENTS
   }
+
   return []
 }
 
@@ -476,12 +498,14 @@ async function fetchPoolMetadata(chain: GqlChain, apiV3Id: string): Promise<Pool
       }
     }
   `
+
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables: { id, chain } }),
     cache: 'no-store',
   })
+
   // Mirror the page-side `gqlFetch` logging — silent `null` here would
   // hide a Cloudflare rate-limit (429) or a future api-v3 schema break
   // behind a generic "pool not found" path, which is what bit us earlier.
@@ -492,27 +516,34 @@ async function fetchPoolMetadata(chain: GqlChain, apiV3Id: string): Promise<Pool
       status: res.status,
       retryAfter: res.headers.get('retry-after'),
     })
+
     return null
   }
+
   const json = (await res.json()) as {
     data?: { poolGetPool?: { type: string; protocolVersion: number; createTime: number } }
     errors?: unknown
   }
+
   if (json.errors) {
     console.warn('[sync] api-v3 fetchPoolMetadata GraphQL errors', {
       chain,
       pool: id,
       errors: json.errors,
     })
+
     return null
   }
+
   const pool = json.data?.poolGetPool
   if (!pool) return null
+
   const value: PoolMetadata = {
     type: pool.type,
     protocolVersion: pool.protocolVersion as 1 | 2 | 3,
     createTime: pool.createTime ?? null,
   }
+
   metadataCache.set(key, { value, expiresAt: Date.now() + POOL_METADATA_TTL_MS })
   return value
 }

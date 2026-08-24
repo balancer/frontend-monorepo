@@ -80,6 +80,7 @@ export function useAddLiquidityLogic(
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithSymbol[]>(() =>
     mapTokensToEmptyHumanAmounts(tokens)
   )
+
   // only used by Proportional handlers that require a referenceAmount
   const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
@@ -126,6 +127,7 @@ export function useAddLiquidityLogic(
   function setHumanAmountIn(token: ApiToken, humanAmount: HumanAmount | '') {
     const tokenAddress = token.address as Address
     const amountsIn = filterHumanAmountsIn(humanAmountsIn, tokenAddress, chain)
+
     setHumanAmountsIn([
       ...amountsIn,
       {
@@ -134,6 +136,7 @@ export function useAddLiquidityLogic(
         symbol: token.symbol,
       },
     ])
+
     resetPriceImpact()
   }
 
@@ -152,6 +155,7 @@ export function useAddLiquidityLogic(
 
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
   const totalUSDValue = isLoadingTokenPrices ? '0' : usdValueFor(humanAmountsIn)
+
   const { isMinimumDepositMet, errors: minimumDepositErrors } = useIsMinimumDepositMet({
     humanAmountsIn,
     totalUSDValue,
@@ -184,6 +188,7 @@ export function useAddLiquidityLogic(
     simulationQuery,
     slippage,
   })
+
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
   const addLiquidityTxHash =
@@ -202,6 +207,7 @@ export function useAddLiquidityLogic(
       */
       await refetchPool()
     }
+
     await Promise.all([simulationQuery.refetch(), priceImpactQuery.refetch()])
   }
 
@@ -234,6 +240,7 @@ export function useAddLiquidityLogic(
     ...disabledConditions,
     [!acceptPoolRisks, 'Please accept the pool risks first'],
   ]
+
   const { isDisabled, disabledReason } = isDisabledWithReason(...allDisabledConditions)
 
   const previewModalDisclosure = useModalWithPoolRedirect(
@@ -306,6 +313,7 @@ export function AddLiquidityProvider({
     useAddLiquiditySteps,
     enablePoolRedirect
   )
+
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

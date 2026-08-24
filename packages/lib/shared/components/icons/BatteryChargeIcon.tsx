@@ -16,12 +16,15 @@ export function BatteryChargeIcon({ percentage, ...props }: Props) {
     if (percentage >= 90) {
       return 4
     }
+
     if (percentage >= 75) {
       return 3
     }
+
     if (percentage >= 50) {
       return 2
     }
+
     return 1
   }
 

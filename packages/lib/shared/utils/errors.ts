@@ -62,6 +62,7 @@ export function ensureError(value: unknown): Error & { shortMessage?: string; di
   if (value instanceof Error) return value
 
   let stringified = '[Unable to stringify thrown value]'
+
   try {
     stringified = JSON.stringify(value)
   } catch {
@@ -69,6 +70,7 @@ export function ensureError(value: unknown): Error & { shortMessage?: string; di
   }
 
   const shortMessage = stringified
+
   const error = new ErrorWithShortMessage(
     `This value was thrown as is, not through an Error: ${stringified}`,
     shortMessage
@@ -124,6 +126,7 @@ function parseRequestError(error: Error, chainId: number): TransactionConfig | u
   if (error.message.includes('Raw Call Arguments')) {
     return parseRawCallArgumentsError(error, chainId)
   }
+
   return
 }
 
@@ -138,6 +141,7 @@ function parseRpcRequestFailedError(error: Error, chainId: number): TransactionC
     try {
       const parsedBody = JSON.parse(jsonString)
       const rawCall = parsedBody?.params?.[0]
+
       if (rawCall) {
         const txConfig: TransactionConfig = {
           data: rawCall.data,
@@ -145,9 +149,11 @@ function parseRpcRequestFailedError(error: Error, chainId: number): TransactionC
           account: rawCall.from,
           chainId,
         }
+
         if (!txConfig.account) {
           txConfig.account = '0x0000000000000000000000000000000000000000' // Unknown account in tenderly
         }
+
         return txConfig
       }
     } catch {

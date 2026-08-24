@@ -34,6 +34,7 @@ export function NativeTokenBalance({ chain, applyOpacity, ...props }: NativeToke
   }
 
   const hasBalance = balance && !bn(balance.value).isZero()
+
   const formattedBalance = hasBalance
     ? fNum('token', formatUnits(balance.value, nativeAsset.decimals))
     : '–'

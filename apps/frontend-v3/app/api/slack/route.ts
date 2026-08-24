@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
   try {
     const url = `${API_URL}/chat.postMessage
 `
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest) {
     })
 
     const slackResponse = await response.json()
+
     if (!slackResponse.ok) {
       throw new Error(slackResponse.error, { cause: slackResponse.response_metadata.messages[0] })
     }

@@ -40,6 +40,7 @@ export function scrubError(err: unknown): Record<string, unknown> {
     body?: unknown
     cause?: { message?: string; name?: string }
   }
+
   return {
     name: e?.name,
     shortMessage: e?.shortMessage ? scrubSecret(e.shortMessage) : undefined,

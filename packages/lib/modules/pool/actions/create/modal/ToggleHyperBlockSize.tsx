@@ -3,7 +3,7 @@ import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/Lab
 
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
-import { ExternalLink } from 'react-feather'
+import { ExternalLink } from 'lucide-react'
 import { Text } from '@chakra-ui/react'
 
 interface ToggleHyperBlockSizeProps {

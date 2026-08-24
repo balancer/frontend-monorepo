@@ -2,7 +2,7 @@
 
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { Button, Flex, Box, Center, useColorModeValue, Link } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 export function CowPoolBanner() {
   const bgColor = useColorModeValue('#194D05', '#194D05')

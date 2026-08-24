@@ -39,11 +39,11 @@ describe('When proportionally removing liquidity for a BOOSTED v3 pool (with 1 u
 
     const [waUsdtTokenAmountOut, aUsdcTokenAmountOut] = result.amountsOut.sort()
 
-    expect(waUsdtTokenAmountOut.token.address).toBe(waUsdtAddress)
-    expect(waUsdtTokenAmountOut.amount).toBeGreaterThan(0n)
+    expect(waUsdtTokenAmountOut!.token.address).toBe(waUsdtAddress)
+    expect(waUsdtTokenAmountOut!.amount).toBeGreaterThan(0n)
 
-    expect(aUsdcTokenAmountOut.token.address).toBe(usdcAddress)
-    expect(aUsdcTokenAmountOut.amount).toBeGreaterThan(0n)
+    expect(aUsdcTokenAmountOut!.token.address).toBe(usdcAddress)
+    expect(aUsdcTokenAmountOut!.amount).toBeGreaterThan(0n)
   })
 
   test('builds Tx Config', async () => {

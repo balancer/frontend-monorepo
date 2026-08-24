@@ -22,7 +22,9 @@ const numberStringSchema = (requiredMessage: string) =>
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: requiredMessage })
         return
       }
+
       const result = isGreaterThanZeroValidation(value)
+
       if (result !== true) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: result })
       }
@@ -54,6 +56,7 @@ const optionalUrlSchema = z
   .superRefine((value, ctx: z.RefinementCtx) => {
     if (!value) return
     const result = validateUrlFormat(value)
+
     if (result !== true) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: result })
     }
@@ -67,6 +70,7 @@ const optionalHandleSchema = (validateFn: (value: string) => string | true) =>
     .superRefine((value, ctx: z.RefinementCtx) => {
       if (!value) return
       const result = validateFn(normalizeHandle(value))
+
       if (result !== true) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: result })
       }
@@ -84,6 +88,7 @@ const saleStructureStepBaseSchema = z.object({
     .min(1, 'Start date and time is required')
     .superRefine((value, ctx: z.RefinementCtx) => {
       const result = isSaleStartValid(value)
+
       if (result !== true) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: result })
       }
@@ -107,6 +112,7 @@ export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
         parseISO(values.endDateTime),
         addDays(parseISO(values.startDateTime), 1)
       )
+
       if (!isEndAfterStart) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -119,6 +125,7 @@ export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
     if (values.saleType === GqlPoolTypeValues.FixedLbp) {
       const launchTokenRateValidation = numberStringSchema('Token sale price is required')
       const launchTokenRateResult = launchTokenRateValidation.safeParse(values.launchTokenRate)
+
       if (!launchTokenRateResult.success) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -130,9 +137,11 @@ export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
       const collateralTokenAmountValidation = numberStringSchema(
         'Collateral token amount is required'
       )
+
       const collateralTokenAmountResult = collateralTokenAmountValidation.safeParse(
         values.collateralTokenAmount
       )
+
       if (!collateralTokenAmountResult.success) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -146,6 +155,7 @@ export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
       if (values.weightAdjustmentType === WeightAdjustmentType.CUSTOM) {
         const startWeight = values.customStartWeight
         const endWeight = values.customEndWeight
+
         if (startWeight === undefined || startWeight < 1 || startWeight > 99) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -153,6 +163,7 @@ export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
             path: ['customStartWeight'],
           })
         }
+
         if (endWeight === undefined || endWeight < 1 || endWeight > 99) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -165,6 +176,7 @@ export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
 
     const saleTokenAmountValidation = numberStringSchema('Sale token amount is required')
     const saleTokenAmountResult = saleTokenAmountValidation.safeParse(values.saleTokenAmount)
+
     if (!saleTokenAmountResult.success) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -186,6 +198,7 @@ export const projectInfoStepSchema = z.object({
     .min(1, 'Token icon URL is required')
     .superRefine(async (value, ctx: z.RefinementCtx) => {
       const result = await validateImageUrl(value)
+
       if (result !== true) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: result })
       }
@@ -195,6 +208,7 @@ export const projectInfoStepSchema = z.object({
     .min(1, 'Website URL is required')
     .superRefine((value, ctx: z.RefinementCtx) => {
       const result = validateUrlFormat(value)
+
       if (result !== true) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: result })
       }
@@ -207,6 +221,7 @@ export const projectInfoStepSchema = z.object({
     .or(z.literal(''))
     .superRefine((value, ctx: z.RefinementCtx) => {
       if (!value) return
+
       if (!isAddress(value)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Invalid address' })
       }
@@ -216,6 +231,7 @@ export const projectInfoStepSchema = z.object({
     .or(z.literal(''))
     .superRefine((value, ctx: z.RefinementCtx) => {
       if (!value) return
+
       if (!isAddress(value)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Invalid address' })
       }

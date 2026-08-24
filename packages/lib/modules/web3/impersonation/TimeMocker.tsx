@@ -7,8 +7,10 @@ import { useImpersonateAccount } from './useImpersonateAccount'
 type Props = {
   setIsFakeTime: (isFakeTime: boolean) => void
 }
+
 function TimeMocker({ setIsFakeTime }: Props) {
   const { mineBlockWithTimestamp, reset } = useImpersonateAccount()
+
   const mockTime = async (daysOffset: number) => {
     setIsFakeTime(true)
     const fakeDate = new Date(addDays(Date.now(), daysOffset))

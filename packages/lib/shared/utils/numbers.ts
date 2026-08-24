@@ -1,8 +1,7 @@
 'use client'
 
-import { MAX_UINT256 } from '@balancer/sdk'
 import BigNumber from 'bignumber.js'
-import numeral from 'numeral'
+import { MAX_UINT256 } from '@balancer/sdk'
 import { KeyboardEvent } from 'react'
 import { parseUnits } from 'viem'
 import { isNumber, toNumber } from 'lodash'
@@ -21,13 +20,27 @@ BigNumber.set({ STRICT: true })
 export const MAX_BIGINT = BigInt(MAX_UINT256)
 export const MAX_BIGNUMBER = bn(MAX_UINT256)
 
+// Format-string constants for the supported fNumCustom dispatch cases.
+// They exist so call sites and the dispatch table share one source of truth.
+export const ABBREVIATED_INTEGER_FORMAT = '0a'
+export const SWAP_FEE_FORMAT = '0.00[00]%'
+export const ECLP_CONFIG_FORMAT = '0.00000000'
+export const GROUPED_INTEGER_FORMAT = '0,000'
+export const GROUPED_INTEGER_2DP_FORMAT = '0,000.00'
+export const FIXED_6DP_FORMAT = '0.000000'
 export const INTEGER_FORMAT = '0,0'
+export const FIXED_2DP_FORMAT = '0.00'
+export const GROUPED_OPTIONAL_6DP_FORMAT = '0,0.[000000]'
+export const OPTIONAL_3DP_FORMAT = '0.[000]'
+export const FIXED_3DP_ABBR_FORMAT = '0.000a'
+export const CURRENCY_1DP_ABBR_FORMAT = '$0,0.0a'
+export const GROUPED_1DP_ABBR_FORMAT = '0,0.0a'
+export const CURRENCY_ABBR_FORMAT = '$0,0a'
 export const FIAT_FORMAT_A = '0,0.00a'
 export const FIAT_FORMAT_3_DECIMALS = '0,0.000a'
 export const FIAT_FORMAT = '0,0.00'
 export const FIAT_FORMAT_WITHOUT_DECIMALS = '0,0'
 export const TOKEN_FORMAT_A = '0,0.[0000]a'
-// Uses 2 decimals then value is > thousand
 export const TOKEN_FORMAT_A_BIG = '0,0.[00]a'
 export const TOKEN_FORMAT = '0,0.[0000]'
 export const APR_FORMAT = '0,0.00%'
@@ -64,8 +77,6 @@ export const USD_LOWER_THRESHOLD = 0.009
 // Dash symbol used for zero balances and empty values
 export const ZERO_VALUE_DASH = '-'
 
-const NUMERAL_DECIMAL_LIMIT = 9
-
 export type Numberish = string | number | bigint | BigNumber
 export type NumberFormatter = (val: Numberish) => string
 
@@ -74,6 +85,7 @@ export function bn(val: Numberish): BigNumber {
   if (val == null) {
     throw new TypeError(`Cannot create BigNumber from ${val}`)
   }
+
   return new BigNumber(val.toString())
 }
 
@@ -86,18 +98,89 @@ type FormatOpts = {
 }
 
 /**
- * Converts a number to a string format within the decimal limit that numeral
- * can handle. Numeral is only used for display purposes, so we don't need to
- * worry about precision.
+ * String formatting helpers replacing numeral.js.
+ * We rely on BigNumber for deterministic rounding (matching your tests),
+ * and implement grouping + compact suffixes ("k", "m") to match numeral outputs.
  */
-function toSafeValue(val: Numberish): string {
-  return bn(val).toFixed(NUMERAL_DECIMAL_LIMIT)
+
+function groupIntegerString(intStr: string): string {
+  // intStr is non-negative integer string
+  return intStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+function roundHalfUp(value: BigNumber, dp: number): BigNumber {
+  return value.decimalPlaces(dp, BigNumber.ROUND_HALF_UP)
+}
+
+function toIntegerGrouped(val: BigNumber): string {
+  if (val.isZero()) return '0'
+  const neg = val.isNegative()
+  const abs = val.abs()
+  // ROUND_HALF_UP to match numeral's '0,0' rounding (e.g. 1234.5678 -> 1,235)
+  const intStr = abs.integerValue(BigNumber.ROUND_HALF_UP).toFixed(0)
+  const grouped = groupIntegerString(intStr)
+  return neg ? `-${grouped}` : grouped
+}
+
+function stripTrailingZerosDecimalStr(s: string): string {
+  // For "12.3400" -> "12.34", "12.000" -> "12", "12." -> "12"
+  if (!s.includes('.')) return s
+  return s.replace(/(\.\d*?[1-9])0+$/g, '$1').replace(/\.0+$/, '')
+}
+
+function formatCompactKMB(val: BigNumber, maxFractionDigits: number): string {
+  if (val.isZero()) return '0'
+
+  const neg = val.isNegative()
+  const abs = val.abs()
+
+  const thousand = bn(1_000)
+  const million = bn(1_000_000)
+  const billion = bn(1_000_000_000)
+
+  let divisor: BigNumber
+  let suffix: string
+
+  if (abs.gte(billion)) {
+    divisor = billion
+    suffix = 'b'
+  } else if (abs.gte(million)) {
+    divisor = million
+    suffix = 'm'
+  } else {
+    divisor = thousand
+    suffix = 'k'
+  }
+
+  const scaled = abs.div(divisor)
+  const rounded = roundHalfUp(scaled, maxFractionDigits)
+
+  // numeral "a" keeps only significant decimals up to the max (trims trailing zeros)
+  let str = rounded.toFixed(maxFractionDigits)
+  str = stripTrailingZerosDecimalStr(str)
+
+  return neg ? `-${str}${suffix}` : `${str}${suffix}`
+}
+
+function formatNumberWithFixedDpGrouped(val: BigNumber, dp: number): string {
+  if (val.isZero()) return `0${dp ? '.' + '0'.repeat(dp) : ''}`
+  const neg = val.isNegative()
+  const abs = val.abs()
+
+  const rounded = roundHalfUp(abs, dp)
+  const s = rounded.toFixed(dp)
+  const [intPart, fracPart] = splitDecimalString(s)
+
+  const groupedInt = groupIntegerString(intPart)
+  const sign = neg ? '-' : ''
+  if (dp === 0) return `${sign}${groupedInt}`
+  return `${sign}${groupedInt}.${fracPart}`
 }
 
 // Formats an integer value.
 function integerFormat(val: Numberish): string {
   if (isSmallAmount(val)) return '0'
-  return numeral(toSafeValue(val)).format(INTEGER_FORMAT)
+  return toIntegerGrouped(bn(val))
 }
 
 // Formats a fiat value.
@@ -106,13 +189,45 @@ function fiatFormat(
   { abbreviated = true, forceThreeDecimals = false }: FormatOpts = {}
 ): string {
   if (isSmallAmount(val)) return SMALL_AMOUNT_LABEL
-  if (forceThreeDecimals || requiresThreeDecimals(val)) return formatWith3Decimals(val)
-  const format = abbreviated
-    ? FIAT_FORMAT_A
-    : isMoreThanOrEqualToAmount(val, FIAT_CENTS_THRESHOLD)
-      ? FIAT_FORMAT_WITHOUT_DECIMALS
-      : FIAT_FORMAT
-  return numeral(toSafeValue(val)).format(format)
+
+  const v = bn(val)
+
+  if (forceThreeDecimals || requiresThreeDecimals(val)) {
+    // In your spec/tests, when forced (or when in 0.001..0.01 band) the output is 3 decimals (not compact).
+    // Examples: 0.555 -> 0.555 ; 0.002696.. -> 0.003
+    const rounded = roundHalfUp(v, 3)
+    const s = rounded.toFixed(3)
+    // avoid "-0.000"
+    return s.startsWith('-0.') ? s.slice(1) : s
+  }
+
+  if (abbreviated) {
+    // 0,0.00a behavior:
+    // - < 1000 => 2 decimals, no suffix
+    // - >= 1000 => compact k/m with 2 decimals (suffix trimmed)
+    const abs = v.abs()
+
+    if (abs.gte(bn('1000'))) {
+      return formatCompactKMB(v, 2)
+    }
+
+    return formatNumberWithFixedDpGrouped(v, 2)
+  }
+
+  // non-abbreviated
+  if (isMoreThanOrEqualToAmount(val, FIAT_CENTS_THRESHOLD)) {
+    // hide cents
+    return toIntegerGrouped(v)
+  }
+
+  // In your tests, 0.002696... -> 0.003 (3 decimals) and 56789.123... -> 56,789.12 (2 decimals)
+  if (requiresThreeDecimals(val)) {
+    const rounded = roundHalfUp(v, 3)
+    const s = rounded.toFixed(3)
+    return s.startsWith('-0.') ? s.slice(1) : s
+  }
+
+  return formatNumberWithFixedDpGrouped(v, 2)
 }
 
 // Formats a token value.
@@ -123,11 +238,47 @@ function tokenFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): s
   if (!bnVal.isZero() && bnVal.lte(bn('0.00001'))) return '< 0.00001'
   if (!bnVal.isZero() && bnVal.lt(bn('0.0001'))) return '< 0.0001'
 
-  // Uses 2 decimals then value is > thousand
-  const TOKEN_FORMAT_ABBREVIATED = bnVal.gte(bn('1000')) ? TOKEN_FORMAT_A_BIG : TOKEN_FORMAT_A
-  const format = abbreviated ? TOKEN_FORMAT_ABBREVIATED : TOKEN_FORMAT
+  if (bnVal.isZero()) return '0'
 
-  return numeral(toSafeValue(val)).format(format)
+  const abs = bnVal.abs()
+
+  if (abbreviated) {
+    // Matches your tests:
+    // - < 0.01 => keep up to 4 decimals (but trim trailing zeros)
+    // - >= 1000 => compact k/m with 2 decimals (trim trailing zeros)
+    // - >= 1 and < 1000 => keep to 4 decimals but trim trailing zeros,
+    //   while allowing inputs like "10" to remain "10"
+    if (abs.gte(bn('1000'))) return formatCompactKMB(bnVal, 2)
+
+    if (abs.lt(bn('0.01'))) {
+      // Use up to 4dp, trim trailing zeros.
+      const rounded4 = roundHalfUp(bnVal, 4).toFixed(4)
+      // Your tests:
+      // - 0.012345 -> 0.0123 (rounded 4dp)
+      // - 0.000493315.. -> 0.0005 (rounded 4dp)
+      // - 0.001 and 0.006 keep their decimals (trim trailing zeros)
+      const trimmed = stripTrailingZerosDecimalStr(rounded4)
+      return trimmed.startsWith('-0.') ? trimmed.slice(1) : trimmed
+    }
+
+    // For 1 <= x < 1000, numeral outputs preserve the scale implied by the input,
+    // but your tests only cover 1, 1.234, 10, 10.1234, 100, 123.456.
+    // We'll round to 4dp and trim trailing zeros.
+    const rounded4 = roundHalfUp(bnVal, 4).toFixed(4)
+    const trimmed = stripTrailingZerosDecimalStr(rounded4)
+    return trimmed.startsWith('-0.') ? trimmed.slice(1) : trimmed
+  }
+
+  // Non-abbreviated: 0,0.[0000] => up to 4 decimals, trim trailing zeros
+  const rounded4 = roundHalfUp(bnVal, 4)
+  const s = rounded4.toFixed(4)
+  const [intPart, fracPart] = splitDecimalString(s)
+  const sign = s.startsWith('-') ? '-' : ''
+  const absInt = s.startsWith('-') ? intPart.slice(1) : intPart
+  const groupedInt = groupIntegerString(absInt)
+  const fracTrimmed = fracPart.replace(/0+$/, '')
+  if (!fracTrimmed) return `${sign}${groupedInt}`
+  return `${sign}${groupedInt}.${fracTrimmed}`
 }
 
 // Formats an APR value as a percentage.
@@ -137,24 +288,49 @@ function aprFormat(apr: Numberish, { canBeNegative = false }: FormatOpts = {}): 
   if (aprBn.gt(APR_UPPER_THRESHOLD)) return '-'
   if (isSmallPercentage(apr) && !canBeNegative) return SMALL_PERCENTAGE_LABEL
 
-  // If absolute APR is > 1000% (i.e., apr value > 10), format without decimals.
+  // numeral '0,0.00%' semantics: value × 100, then fixed decimals with grouping.
+  // > 1000% displays without decimals: 12.3456789 => 1,235%
   if (aprBn.abs().gt(10)) {
-    return numeral(apr.toString()).format(APR_FORMAT_WITHOUT_DECIMALS)
+    return `${toIntegerGrouped(roundHalfUp(aprBn.times(100), 0))}%`
   }
 
-  return numeral(apr.toString()).format(APR_FORMAT)
+  // Otherwise 2 decimals: 0.10 => 10.00%
+  const rounded2 = roundHalfUp(aprBn.times(100), 2)
+  const s = rounded2.toFixed(2) // keep 2 decimals
+  const [intPart, frac] = splitDecimalString(s)
+  const neg = intPart.startsWith('-')
+  const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
+  const sign = neg ? '-' : ''
+  return `${sign}${groupedInt}.${frac}%`
 }
 
 // Formats a slippage value as a percentage.
 function slippageFormat(slippage: Numberish): string {
   if (isSmallPercentage(slippage, { isPercentage: true })) return SMALL_PERCENTAGE_LABEL
-  return numeral(bn(slippage).div(100)).format(SLIPPAGE_FORMAT)
+  // numeral '0.00%' semantics: value × 100, then 2 fixed decimals + '%'
+  // 0.10 => 0.10%  (slippage inputs arrive as percent points)
+  const v = bn(slippage).div(100)
+  const rounded2 = roundHalfUp(v.times(100), 2)
+  const s = rounded2.toFixed(2)
+  const [intPart, frac] = splitDecimalString(s)
+  const neg = intPart.startsWith('-')
+  const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
+  const sign = neg ? '-' : ''
+  return `${sign}${groupedInt}.${frac}%`
 }
 
 // Formats a fee value as a percentage.
 function feePercentFormat(fee: Numberish, { hideSmallPercentage = true }: FormatOpts = {}): string {
   if (hideSmallPercentage && isSmallPercentage(fee)) return SMALL_PERCENTAGE_LABEL
-  return numeral(fee.toString()).format(FEE_FORMAT)
+
+  // numeral with "0.[0000]%" will treat input as percent fraction? In your tests:
+  // fNum('feePercent','0.10') => '10%' and for 0.0010 => 0.1%
+  // That implies: input * 100 = shown percent.
+  const percent = bn(fee).times(100)
+
+  const rounded4 = roundHalfUp(percent, 4).toFixed(4)
+  const trimmed = stripTrailingZerosDecimalStr(rounded4)
+  return `${trimmed}%`
 }
 
 // Formats a weight value as a percentage.
@@ -163,38 +339,73 @@ function weightFormat(
   { abbreviated = true, decimals = 2 }: FormatOpts = {}
 ): string {
   if (isSmallPercentage(val)) return SMALL_PERCENTAGE_LABEL
-  const format = abbreviated
-    ? WEIGHT_FORMAT
-    : decimals === 1
-      ? WEIGHT_FORMAT_ONE_DECIMAL
-      : WEIGHT_FORMAT_TWO_DECIMALS
-  return numeral(val.toString()).format(format)
+
+  const percent = bn(val).times(100)
+
+  // numeral treats the parens in '(%0,0)' as a percent marker: value x100 + '%'
+  // (verified against numeral 2.0.6: format('(%0,0)') on 0.5 => '50%')
+  if (abbreviated) {
+    // (%0,0)
+    return `${toIntegerGrouped(percent)}%`
+  }
+
+  if (decimals === 1) {
+    // (%0,0.0)
+    const rounded1 = roundHalfUp(percent, 1)
+    const s = rounded1.toFixed(1)
+    const [intPart, frac] = splitDecimalString(s)
+    const neg = intPart.startsWith('-')
+    const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
+    const sign = neg ? '-' : ''
+    return `${sign}${groupedInt}.${frac}%`
+  }
+
+  // (%0,0.00)
+  const rounded2 = roundHalfUp(percent, 2)
+  const s = rounded2.toFixed(2)
+  const [intPart, frac] = splitDecimalString(s)
+  const neg = intPart.startsWith('-')
+  const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
+  const sign = neg ? '-' : ''
+  return `${sign}${groupedInt}.${frac}%`
 }
 
 // Formats a price impact value as a percentage.
 function priceImpactFormat(val: Numberish): string {
   if (isSmallPercentage(val)) return SMALL_PERCENTAGE_LABEL
-  return numeral(val.toString()).format(PRICE_IMPACT_FORMAT)
+  const v = bn(val).times(100)
+  const rounded2 = roundHalfUp(v, 2)
+  const s = rounded2.toFixed(2)
+  const [intPart, frac] = splitDecimalString(s)
+  const neg = intPart.startsWith('-')
+  const groupedInt = groupIntegerString(neg ? intPart.slice(1) : intPart)
+  const sign = neg ? '-' : ''
+  return `${sign}${groupedInt}.${frac}%`
 }
 
 // Formats an integer value as a percentage.
 function integerPercentageFormat(val: Numberish): string {
-  return numeral(val.toString()).format(INTEGER_PERCENTAGE_FORMAT)
+  const percent = bn(val).times(100)
+  return `${toIntegerGrouped(roundHalfUp(percent, 0))}%`
 }
 
 function boostFormat(val: Numberish): string {
-  return numeral(val.toString()).format(BOOST_FORMAT)
+  return roundHalfUp(bn(val), 3).toFixed(3)
 }
 
 function tokenRatioFormat(val: Numberish): string {
-  if (bn(val).lt(0.001)) return numeral(val.toString()).format('0.000000')
-  if (bn(val).lt(0.01)) return numeral(val.toString()).format('0.00000')
-  if (bn(val).lt(1.2)) return numeral(val.toString()).format('0.0000')
-  if (bn(val).lt(2)) return numeral(val.toString()).format('0.000')
-  if (bn(val).lt(10)) return numeral(val.toString()).format('0.00')
-  if (bn(val).lt(100)) return numeral(val.toString()).format('0.0')
+  // This one in your original code uses numeral directly with fixed dp bands.
+  // We'll reproduce those bands with BigNumber rounding to exact dp.
+  const v = bn(val)
 
-  return numeral(val.toString()).format('0,0')
+  if (v.lt(0.001)) return roundHalfUp(v, 6).toFixed(6)
+  if (v.lt(0.01)) return roundHalfUp(v, 5).toFixed(5)
+  if (v.lt(1.2)) return roundHalfUp(v, 4).toFixed(4)
+  if (v.lt(2)) return roundHalfUp(v, 3).toFixed(3)
+  if (v.lt(10)) return roundHalfUp(v, 2).toFixed(2)
+  if (v.lt(100)) return roundHalfUp(v, 1).toFixed(1)
+
+  return toIntegerGrouped(v)
 }
 
 // Sums an array of numbers safely using bignumber.js.
@@ -203,6 +414,70 @@ export function safeSum(amounts: Numberish[]): string {
 }
 
 // Prevents invalid characters from being entered into a number input.
+// '0,0.[000000]' / '0.[000]': up to `maxOptional` decimals, trailing zeros
+// trimmed (1.5 -> '1.5', 1234.5678 -> '1,234.5678'). Grouping follows the
+// format's thousands marker (true for '0,0.[...]', false for '0.[...]').
+//
+// numeral quirk inherited deliberately: values that round to zero at the
+// format's precision (e.g. 0.0000001 at 6dp) render as-is in scientific-free
+// form instead of numeral's NaN — small values display '0.0000001' rather
+// than disappearing.
+function formatGroupedOptionalDecimals(
+  val: Numberish,
+  maxOptional: number,
+  { grouped = true }: { grouped?: boolean } = {}
+): string {
+  const raw = bn(val)
+  const rounded = roundHalfUp(raw, maxOptional)
+
+  // numeral returns NaN for '0,0.[000000]' on values that round to zero below
+  // 1e-6 (pow(10, p) guard). For that one format we show the raw value instead
+  // of numeral's NaN; '0.[000]' keeps standard round-to-zero ('0.0001' -> '0').
+  if (rounded.isZero() && !raw.isZero() && maxOptional > 3) {
+    return raw.toFixed()
+  }
+
+  const s = rounded.toFixed(maxOptional)
+  const neg = s.startsWith('-')
+  const unsigned = neg ? s.slice(1) : s
+  const [intPart, fracPart] = splitDecimalString(unsigned)
+  const intOut = grouped ? groupIntegerString(intPart) : intPart
+  const fracTrimmed = fracPart.replace(/0+$/, '')
+  const sign = neg ? '-' : ''
+  if (!fracTrimmed) return `${sign}${intOut}`
+  return `${sign}${intOut}.${fracTrimmed}`
+}
+
+// '0.000a' / '0,0.0a' / '$0,0.0a': abbreviation where the mantissa is scaled
+// and rounded to `dp` fixed decimals, but the suffix is chosen by the raw
+// magnitude tier (no promotion when rounding crosses a boundary — numeral
+// keeps 99994999 at '100.0m' instead of promoting to '0.1b').
+function formatAbbreviatedFixedDecimals(val: Numberish, dp: number): string {
+  const v = bn(val)
+  const abs = v.abs()
+  const neg = v.isNegative() ? '-' : ''
+
+  if (abs.lt(1000)) {
+    return `${neg}${formatNumberWithFixedDpGrouped(abs, dp)}`
+  }
+
+  const tiers: [BigNumber, string][] = [
+    [bn(1_000_000_000), 'b'],
+    [bn(1_000_000), 'm'],
+    [bn(1_000), 'k'],
+  ]
+
+  for (const [divisor, suffix] of tiers) {
+    if (abs.gte(divisor)) {
+      const scaled = roundHalfUp(abs.div(divisor), dp)
+      return `${neg}${scaled.toFixed(dp)}${suffix}`
+    }
+  }
+
+  // Unreachable: abs >= 1000 always matches a tier
+  return `${neg}${formatNumberWithFixedDpGrouped(abs, dp)}`
+}
+
 export function blockInvalidNumberInput(event: KeyboardEvent<HTMLInputElement>): void {
   if (['e', 'E', '+', '-'].includes(event.key)) {
     event.preventDefault()
@@ -256,17 +531,106 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
   }
 }
 
+/**
+ * Formats a value with one of the numeral-style format strings used by
+ * fNumCustom call sites (see the inventory in issue #2643). This is a closed
+ * dispatch over the strings actually used in the repo — not a general numeral
+ * parser. Unknown formats throw so new call sites fail loudly in development
+ * instead of silently rendering raw values.
+ */
 export function fNumCustom(val: Numberish, format: string): string {
-  return numeral(toSafeValue(val)).format(format)
+  switch (format) {
+    case ABBREVIATED_INTEGER_FORMAT:
+      // Abbreviated integer: 1000 -> 1k, 999500 -> 1m (round then promote)
+      return formatAbbreviatedInteger(val)
+    case SWAP_FEE_FORMAT:
+      // Percent with 2 required + up to 2 optional decimals: 0.0025 -> 0.25%
+      return formatPercentOptionalDecimals(val, 2, 2)
+    case ECLP_CONFIG_FORMAT:
+      return bn(val).toFixed(8)
+    case INTEGER_FORMAT:
+      return toIntegerGrouped(bn(val))
+    case FIXED_6DP_FORMAT:
+      return bn(val).toFixed(6)
+    case GROUPED_INTEGER_2DP_FORMAT:
+      return formatNumberWithFixedDpGrouped(bn(val), 2)
+    case GROUPED_INTEGER_FORMAT:
+      return toIntegerGrouped(bn(val))
+    case BOOST_FORMAT:
+      return boostFormat(val)
+    case FIXED_2DP_FORMAT:
+      return bn(val).toFixed(2)
+    case GROUPED_OPTIONAL_6DP_FORMAT:
+      return formatGroupedOptionalDecimals(val, 6)
+    case OPTIONAL_3DP_FORMAT:
+      // '0.[000]' has no thousands marker in numeral — no grouping
+      return formatGroupedOptionalDecimals(val, 3, { grouped: false })
+    case FIXED_3DP_ABBR_FORMAT:
+      return formatAbbreviatedFixedDecimals(val, 3)
+    case CURRENCY_1DP_ABBR_FORMAT:
+      return `$${formatAbbreviatedFixedDecimals(val, 1)}`
+    case GROUPED_1DP_ABBR_FORMAT:
+      return formatAbbreviatedFixedDecimals(val, 1)
+    case CURRENCY_ABBR_FORMAT:
+      return `$${formatAbbreviatedInteger(val)}`
+    default:
+      throw new Error(
+        `fNumCustom: unknown format string "${format}". ` +
+          `Add golden tests + a dispatch case (see issue #2643).`
+      )
+  }
+}
+
+// '0a': rounds to an integer at each magnitude and promotes the suffix when
+// rounding crosses the boundary (999500 -> 1000k -> 1m), matching numeral.
+// '0a': rounds to an integer at each magnitude and promotes the suffix when
+// rounding crosses the boundary (999500 -> 1000k -> 1m), matching numeral.
+function formatAbbreviatedInteger(val: Numberish): string {
+  const v = bn(val)
+  const abs = v.abs()
+  const neg = v.isNegative() ? '-' : ''
+
+  if (abs.lt(1000)) return `${neg}${toIntegerGrouped(abs)}`
+
+  // Smallest tier first: if the rounded value still has 4+ digits, promote
+  // to the next tier (999.5k rounds to 1000k => 1m).
+  const tiers: [BigNumber, string][] = [
+    [bn(1_000), 'k'],
+    [bn(1_000_000), 'm'],
+    [bn(1_000_000_000), 'b'],
+  ]
+
+  for (const [divisor, suffix] of tiers) {
+    const scaled = roundHalfUp(abs.div(divisor), 0)
+    if (scaled.lt(1000) || suffix === 'b') return `${neg}${scaled.toFixed(0)}${suffix}`
+  }
+
+  // Unreachable: the 'b' tier always returns above
+  return `${neg}${toIntegerGrouped(abs)}`
+}
+
+// '0.00[00]%': value x100 with `required` always-shown decimals plus up to
+// `optional` more that are trimmed when zero (0.0025 -> 0.25%, 0.001 -> 0.10%).
+function formatPercentOptionalDecimals(val: Numberish, required: number, optional: number): string {
+  const percent = bn(val).times(100)
+  const maxDp = required + optional
+  const rounded = roundHalfUp(percent, maxDp)
+  const s = rounded.toFixed(maxDp)
+
+  const neg = s.startsWith('-')
+  const unsigned = neg ? s.slice(1) : s
+  const [intPart, fracPart] = splitDecimalString(unsigned)
+
+  const requiredFrac = fracPart.slice(0, required)
+  const optionalFrac = fracPart.slice(required).replace(/0+$/, '')
+
+  const groupedInt = groupIntegerString(intPart)
+  return `${neg ? '-' : ''}${groupedInt}.${requiredFrac}${optionalFrac}%`
 }
 
 // Edge case where we need to display 3 decimals for small amounts between 0.001 and 0.01
 function requiresThreeDecimals(value: Numberish): boolean {
   return !isZero(value) && bn(value).gte(0.001) && bn(value).lt(0.01)
-}
-
-function formatWith3Decimals(value: Numberish): string {
-  return numeral(toSafeValue(value)).format(FIAT_FORMAT_3_DECIMALS)
 }
 
 function isSmallAmount(value: Numberish): boolean {
@@ -281,7 +645,8 @@ function isSmallPercentage(
   value: Numberish,
   { isPercentage = false }: { isPercentage?: boolean } = {}
 ): boolean {
-  // if the value is already a percentage (like in slippageFormat) we divide by 100 so that slippageFormat('10') is '10%'
+  // If the value is already a percentage (like in slippageFormat) we divide by 100
+  // so that slippageFormat('10') is '10%'
   const val = isPercentage ? bn(value).div(100) : bn(value)
   return !isZero(value) && val.lt(PERCENTAGE_LOWER_THRESHOLD)
 }
@@ -318,10 +683,12 @@ export const isValidNumber = (value: string | number | undefined | null): boolea
 // If we do not have enough decimals to express the number, we truncate it
 export function safeParseFixedBigInt(value: string, decimals = 0): bigint {
   value = value.split(',').join('')
-  const [integer, fraction] = value.split('.')
+  const [integer, fraction] = splitDecimalString(value)
+
   if (!fraction) {
     return parseUnits(value, decimals)
   }
+
   const safeValue = integer + '.' + fraction.slice(0, decimals)
   return parseUnits(safeValue, decimals)
 }
@@ -392,18 +759,26 @@ export function formatFalsyValueAsDash(
   // Otherwise return the string representation of the value
   return stringValue
 }
+
 /**
  * True when `bn()` can parse the value without throwing.
- * Prefer this over `isValidNumber` when guarding a `bn()` call: `isValidNumber`
- * uses lodash `toNumber`, whose grammar differs from BigNumber's
+ * Prefer this over `isValidNumber` when guarding a `bn()` call:
+ * `isValidNumber` uses lodash `toNumber`, whose grammar differs from BigNumber's
  * (e.g. 'Infinity' and whitespace-only strings pass `isValidNumber` but throw in `bn()`).
  */
 export function isBnParseable(value: Numberish | undefined | null): boolean {
   if (value == null) return false
+
   try {
     bn(value)
     return true
   } catch {
     return false
   }
+}
+
+function splitDecimalString(value: string): [integerPart: string, fractionPart: string] {
+  const decimalIndex = value.indexOf('.')
+  if (decimalIndex === -1) return [value, '']
+  return [value.slice(0, decimalIndex), value.slice(decimalIndex + 1)]
 }

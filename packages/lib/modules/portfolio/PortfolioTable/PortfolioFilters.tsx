@@ -28,7 +28,7 @@ import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
 import { AnimatePresence, motion } from 'motion/react'
 import Image from 'next/image'
 import { useState } from 'react'
-import { Filter } from 'react-feather'
+import { Filter } from 'lucide-react'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { PoolFilterType } from '../../pool/pool.types'
 import { poolTypeLabel } from '../../pool/pool.helpers'
@@ -242,6 +242,7 @@ export function PortfolioFilters({
   selectedPoolTypes?: PoolFilterType[]
 }) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+
   const {
     selectedNetworks: hookSelectedNetworks,
     setSelectedNetworks,

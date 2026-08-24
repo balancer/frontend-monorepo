@@ -40,6 +40,7 @@ export function RelicRemoveLiquidityProvider({
   const reliquaryHandlerSelector = useCallback(
     (pool: Pool, removalType: RemoveLiquidityType) => {
       const networkConfig = getNetworkConfig(pool.chain)
+
       const batchRelayer = BeetsBatchRelayerService.create(
         networkConfig.contracts.balancer.relayerV6
       )

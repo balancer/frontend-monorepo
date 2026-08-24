@@ -23,7 +23,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { blockInvalidNumberInput, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../TokenIcon'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
-import { ChevronDown } from 'react-feather'
+import { ChevronDown } from 'lucide-react'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { PriceImpactLevel } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useEffect } from 'react'
@@ -148,6 +148,7 @@ function TokenInputFooter({
 
   const balance = token ? balanceFor(token?.address) : undefined
   const userBalance = customUserBalance || bn(token ? balance?.formatted || '0' : '0')
+
   const usdValue =
     value && customUsdPrice
       ? bn(value).times(customUsdPrice).toString()

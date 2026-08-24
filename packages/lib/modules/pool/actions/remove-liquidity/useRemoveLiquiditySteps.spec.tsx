@@ -6,6 +6,7 @@ import { getApprovalAndRemoveSteps } from './useRemoveLiquiditySteps'
 
 const v2Pool = getApiPoolMock(balWeth8020)
 const v3Pool = getApiPoolMock(partialBoosted)
+
 const mockTransactionStep = (id: string, completed = false): TransactionStep =>
   ({
     id,
@@ -15,6 +16,7 @@ const mockTransactionStep = (id: string, completed = false): TransactionStep =>
 
 const removeLiquidityStep = mockTransactionStep('removeLiquidityStep')
 const signPermitStep = mockTransactionStep('signPermitStep')
+
 const tokenApprovalSteps = [
   mockTransactionStep('tokenApprovalStep1'),
   mockTransactionStep('tokenApprovalStep2'),

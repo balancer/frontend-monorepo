@@ -29,6 +29,7 @@ function useSwapTimeout() {
       await simulationQuery.refetch()
       startCountdown()
     }
+
     if (secondsToRefetch === 0 && !shouldFreezeQuote) refetchQueries()
   }, [secondsToRefetch])
 

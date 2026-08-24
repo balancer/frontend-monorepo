@@ -19,9 +19,8 @@ import { ApiToken, ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types
 import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
 import { TOKEN_BLACKLIST, WeightedPoolStructure } from '../../constants'
-import { PlusCircle, Trash2 } from 'react-feather'
+import { AlertTriangle, ArrowUpRight, PlusCircle, Trash2 } from 'lucide-react'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
-import { AlertTriangle } from 'react-feather'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
@@ -33,7 +32,6 @@ import {
 import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
-import { ArrowUpRight } from 'react-feather'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   isWeightedPool,
@@ -50,8 +48,10 @@ import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWi
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
   const tokenSelectDisclosure = useDisclosure()
+
   const { updatePoolToken, addPoolToken, poolCreationForm, autoRangeConfigForm, eclpConfigForm } =
     usePoolCreationForm()
+
   const [network, poolTokens, weightedPoolStructure, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['network', 'poolTokens', 'weightedPoolStructure', 'poolType'],

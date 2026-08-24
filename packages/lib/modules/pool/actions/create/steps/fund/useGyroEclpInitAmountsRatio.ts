@@ -7,6 +7,7 @@ import { calculateRotationComponents } from '../details/gyro.helpers'
 export function useGyroEclpInitAmountsRatio() {
   const { spotPriceWithoutRate, rateTokenA, rateTokenB, isRateLoading } =
     usePoolSpotPriceWithoutRate()
+
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const [poolType] = useWatch({ control: poolCreationForm.control, name: ['poolType'] })
   const eclpParams = useWatch({ control: eclpConfigForm.control })
@@ -54,14 +55,16 @@ export function useGyroEclpInitAmountsRatio() {
   return amountTokenA / amountTokenB // the ratio for calculating token init amounts
 }
 
-function getTau(price: number, c: number, s: number, lambda: number) {
+function getTau(price: number, c: number, s: number, lambda: number): [number, number] {
   const dSq = c * c + s * s
   const d = Math.sqrt(dSq)
+
   const dPrice =
     1 /
     Math.sqrt(
       Math.pow(c / d + (price * s) / d, 2) / (lambda * lambda) +
         Math.pow((price * c) / d - s / d, 2)
     )
+
   return [(price * c - s) * dPrice, ((c + s * price) * dPrice) / lambda]
 }

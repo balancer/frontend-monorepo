@@ -155,6 +155,7 @@ describe('getDisplayTokens for flat pools', () => {
       'dai-aave',
       'usdc-aave',
     ])
+
     expect(getUserReferenceTokenSymbols(v2SepoliaStableWithERC4626)).toEqual([
       'dai-aave',
       'usdc-aave',
@@ -198,6 +199,7 @@ describe('getDisplayTokens for NESTED pools', () => {
 
     const pool = getApiPoolMock(staBALv2Nested)
     const staBalBPT = pool.poolTokens.find(t => t.hasNestedPool)
+
     expect(getNestedPoolTokens(staBalBPT as PoolToken).map(t => t.symbol)).toMatchInlineSnapshot(`
       [
         "USDT",
@@ -257,6 +259,7 @@ describe('Partial boosted pool: returns getPoolActionableTokens based on wrapUnd
       'waGnoGNO',
       'sDAI',
     ])
+
     expect(getPoolActionableTokenSymbols(partialBoosted, [false, true])).toEqual([
       'waGnoGNO',
       'sDAI',
@@ -287,8 +290,8 @@ describe('Given a fully boosted pool', () => {
   it('underlying tokens are used as actionable by default', () => {
     const tokens = getPoolActionableTokens(pool)
 
-    const firstUnderlyingToken = tokens[0]
-    const firstWrappedToken = tokens[0].wrappedToken
+    const firstUnderlyingToken = requiredAt(tokens, 0)
+    const firstWrappedToken = firstUnderlyingToken.wrappedToken
 
     expect(firstUnderlyingToken.symbol).toEqual('USDT')
     expect(firstUnderlyingToken.wrappedToken?.symbol).toEqual('waEthUSDT')
@@ -300,8 +303,8 @@ describe('Given a fully boosted pool', () => {
     expect(firstWrappedToken.wrappedToken).toBeUndefined()
     expect(shouldUseUnderlyingToken(firstWrappedToken, pool)).toBe(true)
 
-    const secondUnderlyingToken = tokens[1]
-    const secondWrappedToken = tokens[1].wrappedToken
+    const secondUnderlyingToken = requiredAt(tokens, 1)
+    const secondWrappedToken = secondUnderlyingToken.wrappedToken
 
     expect(secondUnderlyingToken.symbol).toEqual('USDC')
     expect(secondUnderlyingToken.wrappedToken?.symbol).toEqual('waEthUSDC')
@@ -316,7 +319,7 @@ describe('Given a fully boosted pool', () => {
 
   it('wrapped/underlying pair is sorted with underlying first by default', () => {
     const tokens = getPoolActionableTokens(pool)
-    const firstUnderlyingToken = tokens[0]
+    const firstUnderlyingToken = requiredAt(tokens, 0)
 
     const pair = getWrappedAndUnderlyingTokenFn(firstUnderlyingToken, pool, balanceForMock)?.()
 
@@ -335,7 +338,7 @@ describe('Given a fully boosted pool', () => {
 
   it('wrapped/underlying pair is sorted with wrapped first when wrapped balance > underlying balance', () => {
     const tokens = getPoolActionableTokens(pool)
-    const firstUnderlyingToken = tokens[0]
+    const firstUnderlyingToken = requiredAt(tokens, 0)
 
     const balanceForMock: BalanceForFn = (token: TokenBase | string) => {
       if (typeof token === 'string') return aTokenAmount(token)
@@ -364,7 +367,7 @@ describe('Given a fully boosted pool', () => {
   it(`when useWrappedForAddRemove is not true in the wrapped token
     getWrappedAndUnderlyingTokenFn should return an empty function to avoid the wrapped/underlying selector the UI`, () => {
     const tokens = getPoolActionableTokens(pool)
-    const firstUnderlyingToken = tokens[0]
+    const firstUnderlyingToken = requiredAt(tokens, 0)
 
     // Set useWrappedForAddRemove to false as we don't have a real pool example with in this scenario yet
     if (firstUnderlyingToken.wrappedToken?.useWrappedForAddRemove) {
@@ -391,7 +394,7 @@ describe('getBoostedActionableTokens', () => {
 
     const boostedTokens = getBoostedActionableTokens(pool)
 
-    const firstUnderlyingToken = boostedTokens[0]
+    const firstUnderlyingToken = requiredAt(boostedTokens, 0)
     expect(firstUnderlyingToken.symbol).toBe('USDC')
     expect(firstUnderlyingToken.underlyingToken).toBeUndefined()
 
@@ -399,7 +402,7 @@ describe('getBoostedActionableTokens', () => {
     expect(firstWrappedToken?.symbol).toBe('csUSDC')
     expect(firstWrappedToken?.underlyingToken?.symbol).toBe('USDC')
 
-    const secondUnderlyingToken = boostedTokens[1]
+    const secondUnderlyingToken = requiredAt(boostedTokens, 1)
     expect(secondUnderlyingToken.symbol).toBe('wUSDL')
     expect(secondUnderlyingToken.underlyingToken).toBeUndefined()
 
@@ -408,3 +411,9 @@ describe('getBoostedActionableTokens', () => {
     expect(secondWrappedToken?.underlyingToken?.symbol).toBe('wUSDL')
   })
 })
+
+function requiredAt<T>(items: readonly T[], index: number): T {
+  const item = items[index]
+  if (!item) throw new Error(`Missing item at index ${index}`)
+  return item
+}

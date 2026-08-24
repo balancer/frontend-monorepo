@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { ChevronRight } from 'react-feather'
+import { ChevronRight } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { parseAsStringEnum, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -81,10 +81,12 @@ export function PortfolioPositionsTable({ positions }: { positions: PortfolioPos
     'chain',
     parseAsStringEnum<GqlChain>(Object.values(GqlChainValues))
   )
+
   const [sortKey, setSortKey] = useQueryState(
     'sort',
     parseAsStringLiteral(SORT_KEYS).withDefault('POSITION')
   )
+
   const [sortDir, setSortDir] = useState<SortDir>('desc')
 
   const filtered = useMemo(
@@ -95,6 +97,7 @@ export function PortfolioPositionsTable({ positions }: { positions: PortfolioPos
   const sorted = useMemo(() => {
     const arr = [...filtered]
     const dir = sortDir === 'asc' ? 1 : -1
+
     arr.sort((a, b) => {
       switch (sortKey) {
         case 'APR':
@@ -114,6 +117,7 @@ export function PortfolioPositionsTable({ positions }: { positions: PortfolioPos
           return (a.positionUsd - b.positionUsd) * dir
       }
     })
+
     return arr
   }, [filtered, sortKey, sortDir])
 
@@ -300,9 +304,11 @@ function TableHeader({
 
 function TableRow({ position, index }: { position: PortfolioPosition; index: number }) {
   const dailyTotal = position.dailyFeesUsd + position.dailyYieldUsd + position.dailyRewardsUsd
+
   const stakingLabel = position.stakingType
     ? (STAKING_LABELS[position.stakingType] ?? position.stakingType)
     : null
+
   const stakedPct = position.positionUsd > 0 ? position.stakedUsd / position.positionUsd : 0
 
   const dailyTooltip = `Fees ${usd(position.dailyFeesUsd)}/d · Yield ${usd(position.dailyYieldUsd)}/d · Rewards ${usd(position.dailyRewardsUsd)}/d`

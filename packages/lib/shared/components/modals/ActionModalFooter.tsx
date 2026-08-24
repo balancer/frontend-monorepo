@@ -5,7 +5,7 @@ import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
 import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { AnimatePresence, motion } from 'motion/react'
 import { PropsWithChildren } from 'react'
-import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
+import { CornerDownLeft, MessageSquare, ThumbsUp } from 'lucide-react'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
 import { getDiscordLink } from '../../utils/links'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
@@ -65,7 +65,7 @@ export function SuccessActions({
 
 type Props = {
   isSuccess: boolean
-  currentStep: TransactionStep
+  currentStep?: TransactionStep
   returnLabel: string
   returnAction: () => void
   urlTxHash?: string

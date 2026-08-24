@@ -21,6 +21,7 @@ export function ReceiptBptOut({
   const { pool } = usePool()
   const { simulationQuery } = useAddLiquidity()
   const expectedBptOutInt = simulationQuery?.data?.bptOut
+
   const expectedBptOut = expectedBptOutInt
     ? formatUnits(expectedBptOutInt.amount, BPT_DECIMALS)
     : '0'
@@ -59,6 +60,7 @@ export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLo
   const { pool } = usePool()
 
   const [selectedSlippage, setSelectedSlippage] = useState(0)
+
   const bptOutWithSlippage = bn(bptOutUnits)
     .times(1 - selectedSlippage)
     .toString()

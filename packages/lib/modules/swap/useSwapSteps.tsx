@@ -50,6 +50,7 @@ export function useSwapSteps({
   )
 
   const signRelayerStep = useSignRelayerStep(swapState.selectedChain)
+
   const swapRequiresRelayer =
     relayerMode !== 'no-relayer-needed' && handler.name === 'AuraBalSwapHandler'
 
@@ -84,11 +85,13 @@ export function useSwapSteps({
     simulationQuery,
     isPermit2,
   })
+
   const isSignPermit2Loading = isPermit2 && !signPermit2Step
 
   // If the user has selected to not use signatures, we allow them to do permit2
   // approvals with transactions.
   const queryData = simulationQuery.data as SdkSimulateSwapResponse
+
   const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
     usePermit2ApprovalSteps({
       chain,
@@ -163,6 +166,7 @@ function approvalActionType(isLBP: boolean, swapAction: SwapAction) {
 
   return 'Swapping'
 }
+
 export function getApprovalAndSwapSteps({
   swapRequiresRelayer,
   relayerMode,

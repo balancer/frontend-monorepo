@@ -38,6 +38,7 @@ describe('When proportionally removing liquidity for stable (non boosted) v3 poo
 
     expect(priceImpact).toBe(0)
   })
+
   test('queries amounts out', async () => {
     const handler = selectProportionalHandler(v3Pool)
 
@@ -45,11 +46,11 @@ describe('When proportionally removing liquidity for stable (non boosted) v3 poo
 
     const [rstEthTokenAmountOut, hgEthTokenAmountOut] = result.amountsOut
 
-    expect(rstEthTokenAmountOut.token.address).toBe(rstEthAddress)
-    expect(rstEthTokenAmountOut.amount).toBeGreaterThan(100000000000000n)
+    expect(rstEthTokenAmountOut!.token.address).toBe(rstEthAddress)
+    expect(rstEthTokenAmountOut!.amount).toBeGreaterThan(100000000000000n)
 
-    expect(hgEthTokenAmountOut.token.address).toBe(hgETH)
-    expect(hgEthTokenAmountOut.amount).toBeGreaterThan(200000000000000n)
+    expect(hgEthTokenAmountOut!.token.address).toBe(hgETH)
+    expect(hgEthTokenAmountOut!.amount).toBeGreaterThan(200000000000000n)
   })
 
   test('builds Tx Config', async () => {

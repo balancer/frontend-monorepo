@@ -1,6 +1,6 @@
 import { Badge, HStack, Text, Box } from '@chakra-ui/react'
 import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { Repeat } from 'react-feather'
+import { Repeat } from 'lucide-react'
 import { Pool } from '../../pool.types'
 import { shouldCallComputeDynamicSwapFee } from '../../pool.utils'
 import { FluidIcon } from '@repo/lib/shared/components/icons/FluidIcon'
@@ -55,6 +55,7 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
   const feePercentage = fNumCustom(pool.dynamicData.swapFee, '0.00[00]%')
 
   let headerText: string
+
   if (hasStableSurgeHook) {
     headerText = 'Dynamic Stable Surge swap fee'
   } else if (pool.swapFeeManager === zeroAddress && !isV3) {

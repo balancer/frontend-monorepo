@@ -1,5 +1,5 @@
 import { HStack, Heading, Tooltip } from '@chakra-ui/react'
-import { AlertTriangle } from 'react-feather'
+import { AlertTriangle } from 'lucide-react'
 import { usePoolTokenPriceWarnings } from '../usePoolTokenPriceWarnings'
 
 export function PoolTotalLiquidityDisplay({

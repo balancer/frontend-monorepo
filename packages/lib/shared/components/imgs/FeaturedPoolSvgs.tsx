@@ -6,10 +6,12 @@ export function usePoolTextures() {
     '/images/textures/marble-square.avif',
     '/images/textures/marble-square-dark.avif'
   )
+
   const rockTexture = useColorModeValue(
     '/images/textures/slate-square-small.avif',
     '/images/textures/slate-square-small-dark.avif'
   )
+
   const blendMode: CSSProperties['mixBlendMode'] = useColorModeValue('multiply', 'plus-lighter')
   return { marbleTexture, rockTexture, blendMode }
 }

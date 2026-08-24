@@ -24,6 +24,7 @@ export function getUnstakeQuote(pool: Pool): UnstakeQuote {
   if (hasNonPreferentialStakedBalance(pool)) {
     const { nonPreferentialGaugeAddress, nonPreferentialStakedBalance } =
       findFirstNonPreferentialStaking(pool)
+
     return {
       gaugeAddress: nonPreferentialGaugeAddress as Address,
       amountOut: nonPreferentialStakedBalance as HumanAmount,
@@ -67,6 +68,7 @@ type StakingData = {
   nonPreferentialStakedBalance: HumanAmount
   isClaimable: boolean
 }
+
 export function findFirstNonPreferentialStaking(pool: Pool): StakingData {
   const nonPreferentialStaking = findFirstNonPreferentialStakedWithBalance(pool)
 
@@ -113,5 +115,6 @@ function filterNonPreferentialStakingWithBalance(pool: Pool): GqlUserStakedBalan
       isBnParseable(stakedBalance.balance) &&
       bn(stakedBalance.balance).gt(0)
   )
+
   return found
 }

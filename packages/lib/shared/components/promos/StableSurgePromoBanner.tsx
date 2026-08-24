@@ -3,7 +3,7 @@
 import { Button, Heading, Flex, Box, Center, Text, Stack, Link } from '@chakra-ui/react'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { Picture } from '../other/Picture'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 export function StableSurgePromoBanner() {
   return (

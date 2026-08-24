@@ -3,7 +3,7 @@
 import React from 'react'
 import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 
 export function CowGalxeQuestPromoBanner() {
   return (

@@ -17,6 +17,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     if (variant && variant === 'cow') {
       return `/images/opengraph/og-cow-pool.png`
     }
+
     return `/images/opengraph/og-balancer-pool.jpg`
   }
 

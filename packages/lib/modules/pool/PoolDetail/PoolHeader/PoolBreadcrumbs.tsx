@@ -1,6 +1,6 @@
 import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
-import { ChevronRight, Home } from 'react-feather'
+import { ChevronRight, Home } from 'lucide-react'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isCowAmmPool } from '../../pool.helpers'
 

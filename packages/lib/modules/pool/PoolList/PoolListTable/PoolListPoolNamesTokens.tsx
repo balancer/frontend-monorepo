@@ -19,7 +19,7 @@ export function PoolListPoolNamesTokens() {
     [poolDisplayType]
   )
 
-  const [option, setOption] = useState<ButtonGroupOption>(initialOption)
+  const [option, setOption] = useState<ButtonGroupOption>(initialOption!)
 
   const handleOptionChange = useCallback(
     (selectedOption: ButtonGroupOption) => {

@@ -13,7 +13,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { ExternalLink, MessageSquare, Users } from 'react-feather'
+import { ExternalLink, MessageSquare, Users } from 'lucide-react'
 import { useGovernance, type GovernanceProposal } from '@analytics/lib/hooks/useGovernance'
 
 const STATE_COLOR: Record<GovernanceProposal['state'], string> = {
@@ -55,6 +55,7 @@ function relativeFromNow(unixSec: number): string {
 }
 
 const intFmt = new Intl.NumberFormat('en-US')
+
 const compactFmt = new Intl.NumberFormat('en-US', {
   notation: 'compact',
   maximumFractionDigits: 1,
@@ -242,6 +243,7 @@ function ProposalRow({ proposal, isLast }: { proposal: GovernanceProposal; isLas
 function ChoiceBars({ proposal }: { proposal: GovernanceProposal }) {
   if (!proposal.choices.length || !proposal.scores.length) return null
   const total = proposal.scoresTotal
+
   if (total <= 0) {
     return (
       <Text color="font.secondary" fontSize="xs" mt="sm">
@@ -253,6 +255,7 @@ function ChoiceBars({ proposal }: { proposal: GovernanceProposal }) {
   const ranked = proposal.choices
     .map((label, i) => ({ label, score: proposal.scores[i] ?? 0 }))
     .sort((a, b) => b.score - a.score)
+
   const shown = ranked.slice(0, 3)
   const hidden = ranked.length - shown.length
 

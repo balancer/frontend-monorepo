@@ -62,13 +62,16 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
   tooltip,
 }: ConfigOptionsGroupProps<T>) {
   const { autoRangeConfigForm } = usePoolCreationForm()
+
   const [initialMinPrice, initialTargetPrice, initialMaxPrice] = useWatch({
     control: autoRangeConfigForm.control,
     name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'],
   })
+
   const [forceCustom, setForceCustom] = useState(false)
   const formValue = useWatch({ control, name })
   const normalizedFormValue = formValue?.toString?.() ?? ''
+
   const matchedOption = options.find(option => {
     if (option.rawValue === normalizedFormValue) return true
     if (normalizedFormValue === '') return false
@@ -91,6 +94,7 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
   const isCustomPriceRange = isCustom && ispriceRangePercentage
   const isPercentage = name === 'centerednessMargin' || name === 'priceShiftDailyRate'
   const cardOptions = options
+
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     value: selectedValue,
@@ -99,7 +103,9 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
       updateFn(value)
     },
   })
+
   const radioGroupProps = getRootProps()
+
   const cardContainerProps = {
     alignItems: 'center',
     bg: 'background.level2',
@@ -188,12 +194,15 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
             }
             validate={value => {
               if (!isBnParseable(value)) return true
+
               if (hasParseableTargetPrice && bn(value).gte(bn(initialTargetPrice))) {
                 return 'Range low price must be less than target price'
               }
+
               if (hasParseableMaxPrice && bn(value).gte(bn(initialMaxPrice))) {
                 return 'Range low price must be less than range high price'
               }
+
               return true
             }}
             width="full"
@@ -214,18 +223,21 @@ export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
             }
             validate={value => {
               if (!isBnParseable(value)) return true
+
               if (hasParseableTargetPrice && bn(value).lte(bn(initialTargetPrice))) {
                 return 'Range high price must be greater than target price'
               }
+
               if (hasParseableMinPrice && bn(value).lte(bn(initialMinPrice))) {
                 return 'Range high price must be greater than range low price'
               }
+
               return true
             }}
             width="full"
           />
         </VStack>
-      ) : isCustom ? (
+      ) : isCustom && options[1] ? (
         <NumberInput
           control={control}
           isPercentage={isPercentage}

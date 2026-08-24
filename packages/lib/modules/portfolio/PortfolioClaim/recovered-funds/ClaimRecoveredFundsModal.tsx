@@ -39,6 +39,7 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
 
   const { steps } = useRecoveredFundsClaims()
   const isSuccess = steps.isLastStep(steps.currentStepIndex) && steps.currentStep.isComplete()
+
   const txHash =
     isSuccess && steps.currentTransaction
       ? steps.lastTransaction?.result?.data?.transactionHash

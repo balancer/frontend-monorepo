@@ -10,7 +10,7 @@ import {
   Box,
 } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { RefreshCcw } from 'react-feather'
+import { RefreshCcw } from 'lucide-react'
 import { formatNumber } from '../helpers'
 import ReactECharts from 'echarts-for-react'
 import { useAutoRangeChart } from '@repo/lib/modules/autorange/AutoRangeChartProvider'
@@ -28,12 +28,15 @@ export function PreviewAutoRangeConfig({
   upperMarginValue,
 }: Props) {
   const { options } = useAutoRangeChart()
+
   const { autoRangeConfigForm, poolCreationForm, invertAutoRangePriceParams } =
     usePoolCreationForm()
+
   const [initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate] = useWatch({
     control: autoRangeConfigForm.control,
     name: ['initialTargetPrice', 'initialMinPrice', 'initialMaxPrice', 'priceShiftDailyRate'],
   })
+
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const autoRangeConfigCards = [

@@ -23,6 +23,7 @@ export function calculateOutGivenIn(params: {
     if (index === params.tokenOutIndex) {
       return acc
     }
+
     return acc * Math.pow(balance, params.weights[index])
   }, 1)
 

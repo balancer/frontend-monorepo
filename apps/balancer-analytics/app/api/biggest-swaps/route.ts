@@ -73,6 +73,7 @@ function buildAliasedQuery(chains: GqlChain[]): string {
   `
     )
     .join('\n')
+
   return /* GraphQL */ `
     query BiggestSwaps($first: Int!) {
       ${subqueries}
@@ -114,6 +115,7 @@ const FETCH_PER_CHAIN = 200
 
 async function fetchSwaps(): Promise<RawEvent[]> {
   const chains = PROJECT_CONFIG.supportedNetworks as GqlChain[]
+
   // Rely on Next.js' route-segment cache (`revalidate = 3600`) rather than
   // fetch's own cache — the latter is keyed on URL+body and would silently
   // share state across deployments / preview branches.
@@ -123,13 +125,16 @@ async function fetchSwaps(): Promise<RawEvent[]> {
     { first: FETCH_PER_CHAIN },
     { upstream: 'api-v3', label: 'biggest-swaps', cache: 'no-store' }
   )
+
   if (!data) return []
   // Flatten the aliased response. Order doesn't matter — buildPayload sorts
   // by valueUSD before slicing.
   const out: RawEvent[] = []
+
   for (const events of Object.values(data)) {
     if (Array.isArray(events)) out.push(...events)
   }
+
   return out
 }
 
@@ -141,16 +146,20 @@ type TokenInfo = { chain: GqlChain; address: string; symbol: string | null; logo
 // window as the swaps fetch.
 async function fetchTokenMap(chains: GqlChain[]): Promise<Map<string, TokenInfo>> {
   if (chains.length === 0) return new Map()
+
   const data = await gqlFetch<{ tokenGetTokens: TokenInfo[] }>(
     API_URL,
     TOKENS_QUERY,
     { chains },
     { upstream: 'api-v3', label: 'biggest-swaps-tokens', cache: 'no-store' }
   )
+
   const out = new Map<string, TokenInfo>()
+
   for (const t of data?.tokenGetTokens ?? []) {
     out.set(`${t.chain}:${t.address.toLowerCase()}`, t)
   }
+
   return out
 }
 
@@ -228,6 +237,7 @@ export async function GET() {
     })
   } catch (err) {
     const now = Math.floor(Date.now() / 1000)
+
     // Rate-limit and other upstream failures get a structured response so
     // the client can render an honest "the API is throttled, wait and
     // retry" message instead of a generic "something broke". The payload
@@ -237,11 +247,13 @@ export async function GET() {
       const mapped = upstreamErrorToResponse(err, {
         includeDevDetail: process.env.NODE_ENV !== 'production',
       })
+
       return Response.json(
         { items: [], generatedAt: now, windowSeconds: WINDOW_SECONDS, ...mapped.body },
         { status: mapped.status, headers: mapped.headers }
       )
     }
+
     return Response.json(
       { items: [], generatedAt: now, windowSeconds: WINDOW_SECONDS, error: String(err) },
       { status: 502, headers: { 'Cache-Control': 'no-store' } }

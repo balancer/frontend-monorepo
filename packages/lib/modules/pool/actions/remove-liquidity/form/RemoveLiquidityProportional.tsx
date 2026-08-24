@@ -17,6 +17,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { isSameAddress } from '@balancer/sdk'
 
 type Props = { tokens: ApiToken[]; pool: Pool }
+
 export function RemoveLiquidityProportional({ tokens, pool }: Props) {
   const {
     amountOutForToken,
@@ -26,6 +27,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
     priceImpactQuery,
     setWrapUnderlyingByIndex,
   } = useRemoveLiquidity()
+
   // Array with the underlying and wrapped tokens to be selected in WrappedOrUnderlyingSelectModal
   const [wrappedAndUnderlying, setWrappedAndUnderlying] = useState<ApiToken[] | undefined>()
   const nativeTokenSelectDisclosure = useDisclosure()
@@ -76,6 +78,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
         return boostedTokenSelectDisclosure.onOpen()
       }
     }
+
     return undefined
   }
 
@@ -111,7 +114,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
       </Card>
       {!!validTokens.length && (
         <NativeAssetSelectModal
-          chain={validTokens[0].chain}
+          chain={validTokens[0]!.chain}
           isOpen={nativeTokenSelectDisclosure.isOpen}
           nativeAssets={nativeAssets}
           onClose={nativeTokenSelectDisclosure.onClose}
@@ -122,7 +125,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
 
       {!!validTokens.length && (
         <WrappedOrUnderlyingSelectModal
-          chain={validTokens[0].chain}
+          chain={validTokens[0]!.chain}
           isOpen={boostedTokenSelectDisclosure.isOpen && !!wrappedAndUnderlying}
           onClose={boostedTokenSelectDisclosure.onClose}
           onOpen={boostedTokenSelectDisclosure.onOpen}

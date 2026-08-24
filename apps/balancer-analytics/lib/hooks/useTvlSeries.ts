@@ -11,12 +11,10 @@ export type Range = '24H' | '7D' | '30D' | '90D' | '1Y' | 'ALL'
 export type MetricKey = 'TVL' | 'VOLUME' | 'FEES' | 'YIELD' | 'SURPLUS' | 'LPS' | 'POOLS'
 
 // Maps the visible range to the number of days the snapshot endpoint should
-// return. Short ranges (24H, 7D) deliberately over-fetch so the v2/v3 ratio
-// warmup in `buildSeries` can find a DefiLlama backfill row — only those rows
-// carry explicit V2/V3 splits, the hourly api-v3 cron does not. Without the
-// warmup, 24H mode renders the entire stack as v2 (and v3 silently vanishes).
-// Bonus: 24H/7D/30D now share a snapshot fetch, so switching between them
-// hits the cache instead of re-fetching.
+// return. Short ranges (24H, 7D) over-fetch to share a snapshot fetch with
+// 30D, so switching between them hits the cache instead of re-fetching.
+// V2/V3 attribution is filled server-side (`/api/snapshots`), so the client
+// no longer needs a pre-window ratio warmup.
 const RANGE_DAYS: Record<Range, number> = {
   '24H': 30,
   '7D': 30,
@@ -128,13 +126,16 @@ function buildSeries(
   // metric. For sparse metrics this is what we use as the lower bound; for
   // dense metrics (TVL/Volume/Fees) it's just used to populate `firstDataAt`.
   let firstDataIdx = -1
+
   for (let i = 0; i < snapshots.length; i++) {
     const v = pickMetric(snapshots[i], metric)
+
     if (Number.isFinite(v) && v > 0) {
       firstDataIdx = i
       break
     }
   }
+
   const firstDataAt = firstDataIdx >= 0 ? snapshots[firstDataIdx].timestamp * 1000 : null
 
   const anchor = snapshots.at(-1)!.timestamp
@@ -145,12 +146,14 @@ function buildSeries(
   // For sparse metrics, clamp the lower bound to the first day we have real
   // data. For dense metrics, honor the requested range as-is.
   const sparse = SPARSE_METRICS.has(metric)
+
   const effectiveCutoff =
     sparse && firstDataIdx >= 0
       ? Math.max(rangeCutoff, snapshots[firstDataIdx].timestamp)
       : rangeCutoff
 
   const sliced = snapshots.filter(p => p.timestamp >= effectiveCutoff)
+
   if (!sliced.length) {
     return {
       points: [],
@@ -163,32 +166,11 @@ function buildSeries(
   }
 
   const stacked = isStackedMetric(metric)
-  // Forward-fill V2/V3 share from explicit breakdowns. Initial ratio assumes
-  // 100% v2 (pre-v3 era) so points before the first explicit split don't
-  // accidentally show v3 attribution.
+  // `/api/snapshots` already forward-fills V2/V3 onto api-v3 points. Keep a
+  // thin in-slice fallback for the rare case a point still lacks the pair
+  // (e.g. empty DB / no DefiLlama seed yet). Default is 100% v2 so pre-v3
+  // points don't invent a v3 share.
   const ratio = { v2: 1, v3: 0, known: false }
-
-  // Warm the ratio from snapshots *before* the visible window. Only the
-  // DefiLlama backfill rows carry explicit V2/V3 splits — the hourly api-v3
-  // cron rows do not. Short ranges (24H, 7D) often see only cron rows inside
-  // their visible slice, so without this preheat the ratio stays at the
-  // {v2:1, v3:0} default and v3 silently disappears from the stack. We walk
-  // ascending so the final value reflects the *most recent* known split.
-  if (stacked) {
-    for (const p of snapshots) {
-      if (p.timestamp >= effectiveCutoff) break
-      const v2 = pickBreakdownMetric(p.breakdowns?.V2, metric)
-      const v3 = pickBreakdownMetric(p.breakdowns?.V3, metric)
-      if (v2 !== undefined && v3 !== undefined) {
-        const sum = v2 + v3
-        if (sum > 0) {
-          ratio.v2 = v2 / sum
-          ratio.v3 = v3 / sum
-          ratio.known = true
-        }
-      }
-    }
-  }
 
   const points: SeriesPoint[] = []
   let realPointCount = 0
@@ -199,14 +181,17 @@ function buildSeries(
     let v2 = 0
     let v3 = 0
     let cow = 0
+
     if (stacked) {
       cow = pickBreakdownMetric(p.breakdowns?.COW_AMM, metric) ?? 0
       const v2Explicit = pickBreakdownMetric(p.breakdowns?.V2, metric)
       const v3Explicit = pickBreakdownMetric(p.breakdowns?.V3, metric)
+
       if (v2Explicit !== undefined && v3Explicit !== undefined) {
         v2 = v2Explicit
         v3 = v3Explicit
         const sum = v2 + v3
+
         if (sum > 0) {
           ratio.v2 = v2 / sum
           ratio.v3 = v3 / sum
@@ -214,6 +199,7 @@ function buildSeries(
         }
       } else {
         const nonCow = Math.max(total - cow, 0)
+
         if (ratio.known) {
           v2 = nonCow * ratio.v2
           v3 = nonCow * ratio.v3
@@ -236,19 +222,21 @@ function buildSeries(
   // 24h change is only meaningful when both endpoints carry real values. For
   // sparse metrics with a single real day, suppress the delta.
   let change24h: number | null = null
+
   if (points.length >= 2) {
     const a = points.at(-1)!.value
     const b = points.at(-2)!.value
     if (b > 0 && Number.isFinite(a)) change24h = (a - b) / b
   }
+
   return { points, change24h, stacked, sparse, firstDataAt, realPointCount }
 }
 
 /**
  * Reads protocol metric history from the cron-driven snapshotter. For TVL and
- * Volume, returns a v2/v3/CoW AMM stack (forward-filling the ratio between
- * explicit breakdown rows). For fees / yield / surplus / LPs / pools, returns
- * the headline aggregate as a single series.
+ * Volume, returns a v2/v3/CoW AMM stack from the breakdowns `/api/snapshots`
+ * already filled. For fees / yield / surplus / LPs / pools, returns the
+ * headline aggregate as a single series.
  *
  * For "sparse" metrics (those introduced recently — YIELD, SURPLUS, LPS,
  * POOLS) the series is auto-trimmed to start at the first day we recorded a

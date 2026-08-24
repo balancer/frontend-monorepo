@@ -9,10 +9,12 @@ import { calculateRotationComponents } from '../steps/details/gyro.helpers'
 
 export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
+
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'poolType'],
   })
+
   const { spotPriceWithoutRate, rateTokenA, rateTokenB } = usePoolSpotPriceWithoutRate()
 
   const poolSpotPrice = spotPriceWithoutRate.toString()
@@ -43,13 +45,13 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
   )
 
   const data = liquidityData
-    ? (liquidityData
+    ? liquidityData
         .filter(([price]) => price !== 0) // filter out zero price to prevent infinity on reverse
-        .map(([price, liquidity]) => {
+        .map(([price, liquidity]): [number, number] => {
           const displayedPrice = bn(price).div(priceRateRatio).toNumber()
           return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
         })
-        .sort((a, b) => a[0] - b[0]) as [number, number][])
+        .sort((a, b) => a[0] - b[0])
     : null
 
   const xMin = data ? Math.min(...data.map(([x]) => x)) : 0

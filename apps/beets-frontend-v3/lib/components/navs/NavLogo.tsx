@@ -6,6 +6,7 @@ import { motion } from 'motion/react'
 import NextLink from 'next/link'
 import { BeetsLogo } from '../imgs/BeetsLogo'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
+
 export function NavLogo() {
   return (
     <Box as={motion.div} variants={fadeIn}>

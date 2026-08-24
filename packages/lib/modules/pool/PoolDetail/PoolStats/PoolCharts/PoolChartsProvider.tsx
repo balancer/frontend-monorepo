@@ -16,6 +16,7 @@ import { isCowAmmPool } from '../../../pool.helpers'
 import { PoolChartTab, usePoolChartTabs } from './PoolChartTabsProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { alignUtcWithLocalDay } from '@repo/lib/shared/utils/time'
+type NonEmptyPoolChartPeriods = [PoolChartPeriod, ...PoolChartPeriod[]]
 
 const MIN_DISPLAY_PERIOD_DAYS = 30
 
@@ -24,7 +25,7 @@ export type PoolChartPeriod = {
   label: string
 }
 
-export const poolChartPeriods: PoolChartPeriod[] = [
+export const poolChartPeriods: NonEmptyPoolChartPeriods = [
   {
     value: GqlPoolSnapshotDataRangeValues.ThirtyDays,
     label: '30d',
@@ -253,6 +254,7 @@ export function usePoolChartsLogic() {
     if (!snapshots) return []
 
     let chartArr: [number, string][] = []
+
     if (activeTab.value === PoolChartTab.TVL) {
       chartArr = snapshots.map(snapshot => {
         return [snapshot.timestamp, snapshot.totalLiquidity]
@@ -293,6 +295,7 @@ export function usePoolChartsLogic() {
 
     const minDataDate = firstChartDataEl ? Number(firstChartDataEl[0]) * 1000 : today.getTime()
     const daysSinceMinDataDate = differenceInDays(today, new Date(minDataDate))
+
     const initialTotalLiquidity = isSelectedTabTVL
       ? firstChartDataEl
         ? firstChartDataEl[1]

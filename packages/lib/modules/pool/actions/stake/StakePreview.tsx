@@ -10,8 +10,10 @@ import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-s
 
 export function StakePreview() {
   const { pool } = usePool()
+
   const { stakeTxHash, quoteAmountIn, quoteAmountInUsd, stakedBalance, transactionSteps } =
     useStake()
+
   const { weeklyRewards } = useGetPoolRewards(pool)
   const isSuccess = !!stakeTxHash
 

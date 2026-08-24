@@ -9,7 +9,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { MouseEventHandler, ReactNode } from 'react'
-import { AlertTriangle, Check, Loader, XOctagon } from 'react-feather'
+import { AlertTriangle, Check, Loader, XOctagon } from 'lucide-react'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
 import { LightbulbIcon } from '../icons/LightbulbIcon'
 
@@ -41,9 +41,14 @@ export function BalAlert({
     h: '24px',
     w: '24px',
   }
+
   return (
     <Alert rounded={isNavAlert ? 'none' : 'default'} status={status} {...rest}>
-      {ssr ? <AlertIcon {...iconSize} /> : <AlertIcon as={getAlertIcon(status)} {...iconSize} />}
+      {ssr ? (
+        <AlertIcon {...iconSize} />
+      ) : (
+        <AlertIcon {...iconSize}>{getAlertIcon(status)}</AlertIcon>
+      )}
 
       {title ? (
         <VStack align="start" gap="0.5" w="full">
@@ -101,16 +106,16 @@ export function BalAlert({
 function getAlertIcon(status: AlertStatus) {
   switch (status) {
     case 'info':
-      return LightbulbIcon
+      return <LightbulbIcon />
     case 'warning':
-      return AlertTriangle
+      return <AlertTriangle />
     case 'success':
-      return Check
+      return <Check />
     case 'error':
-      return XOctagon
+      return <XOctagon />
     case 'loading':
-      return Loader
+      return <Loader />
     default:
-      return LightbulbIcon
+      return <LightbulbIcon />
   }
 }

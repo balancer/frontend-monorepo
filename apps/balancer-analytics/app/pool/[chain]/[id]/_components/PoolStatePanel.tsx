@@ -16,7 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { AlertTriangle, ArrowUpRight, CheckCircle, HelpCircle } from 'react-feather'
+import { AlertTriangle, ArrowUpRight, CheckCircle, HelpCircle } from 'lucide-react'
 import type {
   BufferState,
   GyroEclpTypeState,
@@ -63,6 +63,7 @@ function AddressLink({
       </Text>
     )
   }
+
   // `chain` reaches here as the raw `GqlChain` string from `poolDetail.chain`.
   // Cast back at the call to the shared helper — `getBlockExplorerAddressUrl`
   // tolerates unknown chains by falling through to its mainnet fallback,
@@ -173,23 +174,28 @@ function classifyRateProvider(
   if (!provider || provider.toLowerCase() === ZERO_ADDR) {
     return { kind: 'none', label: 'No rate provider — Vault treats this token as 1:1.' }
   }
+
   if (!data) {
     return {
       kind: 'unreviewed',
       label: 'No security review on file for this rate provider.',
     }
   }
+
   const warnings = (data.warnings ?? []).filter(Boolean)
   const isSafe = data.reviewed && data.summary === 'safe'
+
   if (isSafe && warnings.length === 0) {
     return { kind: 'safe', label: 'Reviewed and marked safe.' }
   }
+
   if (isSafe && warnings.length > 0) {
     return {
       kind: 'warning',
       label: `Reviewed safe with warnings: ${warnings.join(', ')}`,
     }
   }
+
   return {
     kind: 'unsafe',
     label: data.summary
@@ -212,6 +218,7 @@ function RateProviderStatusIcon({ status }: { status: RateProviderStatus }): Rea
       </Tooltip>
     )
   }
+
   if (status.kind === 'warning' || status.kind === 'unreviewed') {
     return (
       <Tooltip hasArrow label={status.label} openDelay={250} placement="top">
@@ -221,6 +228,7 @@ function RateProviderStatusIcon({ status }: { status: RateProviderStatus }): Rea
       </Tooltip>
     )
   }
+
   if (status.kind === 'unsafe') {
     return (
       <Tooltip hasArrow label={status.label} openDelay={250} placement="top">
@@ -230,6 +238,7 @@ function RateProviderStatusIcon({ status }: { status: RateProviderStatus }): Rea
       </Tooltip>
     )
   }
+
   return (
     <Tooltip hasArrow label={status.label} openDelay={250} placement="top">
       <Box as="span" color="font.secondary" cursor="help" display="inline-flex" opacity={0.6}>
@@ -451,6 +460,7 @@ function autoRangeLowerMarginBalance(
   const c = m * (vA * vA - (invariant * vA) / vB)
   return vA + (-b + Math.sqrt(b * b - 4 * c)) / 2
 }
+
 function autoRangeUpperMarginBalance(
   marginPercentage: number,
   invariant: number,
@@ -502,6 +512,7 @@ function AutoRangeDistroBar({
   isInRange: boolean
 }): React.JSX.Element {
   const range = maxPrice - minPrice
+
   const hasData =
     Number.isFinite(minPrice) &&
     Number.isFinite(maxPrice) &&
@@ -517,6 +528,7 @@ function AutoRangeDistroBar({
   const rightOrangeW = hasData ? ((maxPrice - highTarget) / range) * 100 : 100 / 3
 
   const spotInside = Number.isFinite(spotPrice) && spotPrice >= minPrice && spotPrice <= maxPrice
+
   const spotPct = !Number.isFinite(spotPrice)
     ? null
     : spotPrice < minPrice
@@ -604,6 +616,7 @@ function BoundaryChip({
         : emphasis === 'out-of-range'
           ? 'orange.300'
           : undefined
+
   return (
     <VStack align="flex-start" spacing="2xs">
       <Text color="font.secondary" fontSize="xs">
@@ -630,6 +643,7 @@ function getMarketPriceBPerA(tokens: PoolDetailToken[]): number | null {
   const balanceB = Number(tokenB.balance)
   const balanceUsdA = Number(tokenA.balanceUSD)
   const balanceUsdB = Number(tokenB.balanceUSD)
+
   if (
     !Number.isFinite(balanceA) ||
     !Number.isFinite(balanceB) ||
@@ -682,19 +696,23 @@ function AutoRangeSection({
   const spotPrice = totalA > 0 ? totalB / totalA : NaN
 
   const invariant = (liveA + vA) * (liveB + vB)
+
   const lowerMarginBal =
     Number.isFinite(invariant) && vA > 0 && vB > 0 && marginPct > 0
       ? autoRangeLowerMarginBalance(marginPct, invariant, vA, vB)
       : NaN
+
   const upperMarginBal =
     Number.isFinite(invariant) && vA > 0 && vB > 0 && marginPct > 0
       ? autoRangeUpperMarginBalance(marginPct, invariant, vA, vB)
       : NaN
+
   // Lower balance of A → higher price ("High target", upper edge of green
   // band). Upper balance of A → lower price ("Low target", lower edge).
   const highTargetPrice = Number.isFinite(lowerMarginBal)
     ? invariant / (lowerMarginBal * lowerMarginBal)
     : NaN
+
   const lowTargetPrice = Number.isFinite(upperMarginBal)
     ? invariant / (upperMarginBal * upperMarginBal)
     : NaN
@@ -709,6 +727,7 @@ function AutoRangeSection({
     Number.isFinite(maxPrice) &&
     spotPrice >= minPrice &&
     spotPrice <= maxPrice
+
   const spotEmphasis: Parameters<typeof BoundaryChip>[0]['emphasis'] = !spotInside
     ? 'out-of-bounds'
     : rc.isWithinTargetRange
@@ -900,22 +919,26 @@ type SurgeMetrics = {
 
 function computeSurgeMetrics(ss: StableSurgeState, tokens: PoolDetailToken[]): SurgeMetrics {
   let tvl = 0
+
   const balancesUsd = tokens.map(t => {
     const b = Number(t.balanceUSD) || 0
     tvl += b
     return b
   })
+
   const tokenPercentages = balancesUsd.map((b, i) => ({
     symbol: tokens[i].symbol,
     pct: tvl > 0 ? (b / tvl) * 100 : 0,
   }))
 
   let median: number
+
   if (tokens.length === 2) {
     median = 50
   } else {
     const sorted = tokenPercentages.map(t => t.pct).sort((a, b) => a - b)
     const mid = Math.floor(sorted.length / 2)
+
     median =
       sorted.length === 0
         ? 0
@@ -930,6 +953,7 @@ function computeSurgeMetrics(ss: StableSurgeState, tokens: PoolDetailToken[]): S
   const isInSurgeMode = totalImbalance > surgeThresholdPct
 
   let estimatedSurgeFeePct = 0
+
   if (isInSurgeMode && surgeThresholdPct > 0) {
     const intensity = Math.min((totalImbalance - surgeThresholdPct) / surgeThresholdPct, 1)
     estimatedSurgeFeePct = intensity * maxSurgeFeePct
@@ -1091,6 +1115,7 @@ function StableSurgeSection({
           {m.tokenPercentages.map((t, i) => {
             const dev = t.pct - m.median
             const devAbs = Math.abs(dev)
+
             // Color the deviation if it's a meaningful contributor to imbalance.
             // Use the threshold as the "this matters" yardstick — a deviation
             // larger than the threshold is by definition pushing the pool
@@ -1101,6 +1126,7 @@ function StableSurgeSection({
                 : devAbs >= 1
                   ? 'orange.300'
                   : 'font.secondary'
+
             return (
               <HStack justify="space-between" key={i} spacing="sm" w="full">
                 <Text fontFamily="mono" fontSize="sm">
@@ -1159,6 +1185,7 @@ function parseNum(s: string | null | undefined): number {
  *  pool buffers, ETH-likes) live well below that ceiling. */
 function rawToHuman(raw: string | null, decimals: number): number {
   if (!raw || decimals < 0 || !Number.isFinite(decimals)) return NaN
+
   try {
     return Number(BigInt(raw)) / 10 ** decimals
   } catch {
@@ -1184,6 +1211,7 @@ function CapacityBar({
 }): React.JSX.Element {
   const hasData = Number.isFinite(position) && Number.isFinite(cap) && cap >= 0
   const overflow = hasData && cap > 0 ? position > cap : false
+
   const pct = !hasData
     ? 0
     : cap <= 0
@@ -1191,6 +1219,7 @@ function CapacityBar({
         ? 100
         : 0
       : Math.min((position / cap) * 100, 100)
+
   return (
     <VStack align="stretch" spacing="2xs" w="full">
       <Flex align="center" justify="space-between">
@@ -1236,6 +1265,7 @@ function BufferSplitBar({
   const underlyingPct = hasData ? (underlyingAmount / total) * 100 : 0
   const wrappedPct = hasData ? 100 - underlyingPct : 0
   const imbalance = hasData ? Math.abs(underlyingPct - 50) : null
+
   const imbalanceColor =
     imbalance == null
       ? 'font.secondary'
@@ -1244,6 +1274,7 @@ function BufferSplitBar({
         : imbalance >= 10
           ? 'yellow.400'
           : 'green.400'
+
   return (
     <VStack align="stretch" spacing="2xs" w="full">
       <Flex align="center" justify="space-between">
@@ -1289,8 +1320,10 @@ function BufferSection({
 }): React.JSX.Element {
   const priceRate = parseNum(token.priceRate)
   const balanceWrapped = parseNum(token.balance)
+
   const positionInUnderlying =
     Number.isFinite(balanceWrapped) && Number.isFinite(priceRate) ? balanceWrapped * priceRate : NaN
+
   const maxDeposit = parseNum(token.maxDeposit ?? '')
   const maxWithdraw = parseNum(token.maxWithdraw ?? '')
   const underlyingSymbol = token.underlyingToken?.symbol ?? '—'
@@ -1299,11 +1332,14 @@ function BufferSection({
   const bufferUnderlying = buffer
     ? rawToHuman(buffer.underlyingBalanceRaw, underlyingDecimals)
     : NaN
+
   const bufferWrapped = buffer ? rawToHuman(buffer.wrappedBalanceRaw, token.decimals) : NaN
+
   const bufferWrappedAsUnderlying =
     Number.isFinite(bufferWrapped) && Number.isFinite(priceRate) ? bufferWrapped * priceRate : NaN
 
   const review = (token.erc4626ReviewData?.summary ?? '').toLowerCase()
+
   const reviewBadge =
     review === 'safe' ? (
       <Badge colorScheme="green" size="sm">
@@ -1320,6 +1356,7 @@ function BufferSection({
     ) : null
 
   const uninitialized = buffer?.isInitialized === false
+
   const initBadge = uninitialized ? (
     <Badge colorScheme="red" size="sm">
       uninitialized
@@ -1467,6 +1504,7 @@ function AmpFactorRows({ stable: s }: { stable: StableTypeState }): React.JSX.El
   const showRamp =
     s.amplificationState.endTime > 0 &&
     s.amplificationState.startValue !== s.amplificationState.endValue
+
   const precision = s.amplificationParameter.precision
   return (
     <>
@@ -1623,6 +1661,7 @@ function PoolBalancesSection({ tokens }: { tokens: PoolDetailToken[] }): React.J
   const shares = tokens
     .map(t => ({ token: t, balanceUSD: Number(t.balanceUSD) }))
     .filter(s => Number.isFinite(s.balanceUSD))
+
   const total = shares.reduce((acc, s) => acc + s.balanceUSD, 0)
   if (total <= 0 || shares.length === 0) return null
 
@@ -1632,9 +1671,11 @@ function PoolBalancesSection({ tokens }: { tokens: PoolDetailToken[] }): React.J
   // safer to fall through to equal-share than to compute against partial
   // weights.
   const parsedWeights = shares.map(s => Number(s.token.weight ?? ''))
+
   const hasExplicitWeights =
     parsedWeights.every(w => Number.isFinite(w) && w > 0) &&
     Math.abs(parsedWeights.reduce((a, b) => a + b, 0) - 1) < 0.02
+
   const fallbackWeight = 1 / shares.length
 
   const enriched = shares.map((s, i) => {
@@ -1645,6 +1686,7 @@ function PoolBalancesSection({ tokens }: { tokens: PoolDetailToken[] }): React.J
     const ratioToTarget = targetWeight > 0 ? share / targetWeight : NaN
     return { ...s, share, targetWeight, ratioToTarget }
   })
+
   const validRatios = enriched.map(e => e.ratioToTarget).filter(r => Number.isFinite(r) && r > 0)
   const ratio = validRatios.length >= 2 ? Math.max(...validRatios) / Math.min(...validRatios) : NaN
 
@@ -1676,11 +1718,13 @@ function PoolBalancesSection({ tokens }: { tokens: PoolDetailToken[] }): React.J
           // weighted and stable pools because the metric is normalized.
           const deviation = Number.isFinite(ratioToTarget) ? Math.abs(ratioToTarget - 1) : 0
           const barColor = deviation > 0.25 ? 'orange.300' : 'green.300'
+
           // For weighted pools we surface the target weight inline so the
           // operator can read "actual 81% / target 80%" at a glance.
           const targetText = hasExplicitWeights
             ? `target ${(targetWeight * 100).toFixed(0)}%`
             : null
+
           return (
             <Box key={token.address}>
               <HStack justify="space-between" mb="2xs">
@@ -1768,6 +1812,7 @@ export function PoolStatePanel({
   // params to preload the target pool. Keep this consistent across every
   // ManageButton so users land on the correct pool's form, not an empty one.
   const opsQuery = `?network=${opsNetwork}&pool=${poolDetail.address}`
+
   const feeSetterButton = (
     <ManageButton
       link={
@@ -1785,6 +1830,7 @@ export function PoolStatePanel({
       }
     />
   )
+
   const surgeManageButton = state.stableSurge ? (
     <ManageButton
       link={{
@@ -1794,6 +1840,7 @@ export function PoolStatePanel({
       }}
     />
   ) : null
+
   const autoRangeManageButton = state.reclamm ? (
     <ManageButton
       link={{
@@ -1803,6 +1850,7 @@ export function PoolStatePanel({
       }}
     />
   ) : null
+
   // Amp-factor update is V3 STABLE-only.
   const ampUpdateButton =
     isV3 && s ? (
@@ -1821,9 +1869,11 @@ export function PoolStatePanel({
   // that case so users still see maxDeposit/maxWithdraw context.
   const wrappedTokens = isV3 ? poolDetail.tokens.filter(t => t.isErc4626) : []
   const buffersByAddress = new Map<string, BufferState>()
+
   if (state.bufferStates) {
     for (const b of state.bufferStates) buffersByAddress.set(b.wrappedToken.toLowerCase(), b)
   }
+
   const bufferSections = wrappedTokens.map(token => (
     <BufferSection
       buffer={buffersByAddress.get(token.address.toLowerCase()) ?? null}
@@ -1845,6 +1895,7 @@ export function PoolStatePanel({
   // type-specific Card to render in the grid as a single ReactNode so
   // the grid composition stays declarative below.
   let typeSpecificCard: React.ReactNode = null
+
   if (state.weighted) {
     typeSpecificCard = <WeightedSection tokens={poolDetail.tokens} weighted={state.weighted} />
   } else if (state.gyroEclp) {

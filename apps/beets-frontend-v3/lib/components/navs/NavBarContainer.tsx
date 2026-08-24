@@ -14,6 +14,7 @@ export function NavBarContainer() {
     links: { appLinks, ecosystemLinks, socialLinks },
     options: { allowCreateWallet },
   } = PROJECT_CONFIG
+
   const { defaultAppLinks } = useNav()
 
   const allAppLinks = [

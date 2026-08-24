@@ -89,6 +89,7 @@ export function useVebalLockLogic() {
   const { hasValidationErrors, resetValidationErrors } = useTokenInputsValidation()
 
   const [lpToken, setLpToken] = useState<HumanAmount>()
+
   const resetLpToken = () => {
     setLpToken(undefined)
     resetValidationErrors()
@@ -104,12 +105,14 @@ export function useVebalLockLogic() {
     if (lockedAmount) {
       return bn(lockedAmount).plus(lpTokenAmount)
     }
+
     return lpTokenAmount
   }, [lpTokenAmount, lockedAmount])
 
   const previousLockEnd = mainnetLockedInfo.lockedEndDate
     ? new Date(mainnetLockedInfo.lockedEndDate)
     : undefined
+
   const lockDuration = useLockDuration({
     lockedEndDate: previousLockEnd,
     mainnetLockedInfo,

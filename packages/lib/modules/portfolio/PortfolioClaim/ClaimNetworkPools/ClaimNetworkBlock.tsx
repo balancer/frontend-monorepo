@@ -15,7 +15,7 @@ import { chainToSlugMap } from '../../../pool/pool.utils'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { AlertTriangle, ChevronRight } from 'react-feather'
+import { AlertTriangle, ChevronRight } from 'lucide-react'
 import { isChainDeprecated } from '@repo/lib/modules/chains/chain.utils'
 
 type Props = {

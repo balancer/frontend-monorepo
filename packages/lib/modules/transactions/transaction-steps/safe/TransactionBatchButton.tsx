@@ -60,6 +60,7 @@ export function TransactionBatchButton({
 }
 
 type ErrorProps = { error: Error }
+
 export function TransactionError({ error }: ErrorProps) {
   if (error.message.includes('User rejected transaction')) return null
   return <GenericError error={error} />

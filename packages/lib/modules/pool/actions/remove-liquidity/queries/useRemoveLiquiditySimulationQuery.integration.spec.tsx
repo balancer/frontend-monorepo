@@ -16,7 +16,9 @@ async function testQuery(humanBptIn: HumanAmount) {
     aWjAuraWethPoolElementMock(),
     RemoveLiquidityType.Proportional
   )
+
   const emptyTokenOut = '' as Address // We don't use it but it is required to simplify TS checks
+
   const { result } = testHook(
     () =>
       useRemoveLiquiditySimulationQuery({
@@ -31,6 +33,7 @@ async function testQuery(humanBptIn: HumanAmount) {
       wrapper: DefaultPoolTestProvider,
     }
   )
+
   return result
 }
 

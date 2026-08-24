@@ -39,6 +39,7 @@ export function stringifyHumanAmountsIn(
   humanAmountsIn: HumanTokenAmountWithSymbol[]
 ): string {
   if (humanAmountsIn.length === 0) return ''
+
   if (requiresProportionalInput(pool)) {
     /*
     This is an edge-case where we only use the first human amount in the array to avoid triggering queries when the other human amounts change automatically

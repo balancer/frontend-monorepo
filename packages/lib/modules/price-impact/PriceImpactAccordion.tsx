@@ -47,6 +47,7 @@ export function PriceImpactAccordion({
   cowLink,
 }: PriceImpactAccordionProps) {
   const acceptHighImpactDisclosure = useDisclosure()
+
   const {
     priceImpactLevel,
     priceImpactColor,

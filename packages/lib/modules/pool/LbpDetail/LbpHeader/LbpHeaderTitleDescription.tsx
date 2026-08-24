@@ -1,7 +1,7 @@
 import { HStack, VStack, Heading, Text, Button, IconButton, Link, Stack } from '@chakra-ui/react'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { IconType, SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'lucide-react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePool } from '../../PoolProvider'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
@@ -10,7 +10,7 @@ export function LbpHeaderTitleDescription() {
   const { pool } = usePool()
   const lbpPool = pool as LbpV3
 
-  const projectToken = pool.poolTokens[lbpPool.projectTokenIndex]
+  const projectToken = pool.poolTokens[lbpPool.projectTokenIndex]!
 
   const socialLinks = [
     {

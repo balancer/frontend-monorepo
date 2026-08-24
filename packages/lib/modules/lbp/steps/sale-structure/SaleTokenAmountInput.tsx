@@ -27,10 +27,12 @@ export function SaleTokenAmountInput({
   const {
     saleStructureForm: { clearErrors },
   } = useLbpForm()
+
   const { balanceData, isLoading } = useUserBalance({
     chainId: getChainId(selectedChain),
     token: launchToken.address,
   })
+
   const hasNoBalance = isLoading ? false : !balanceData || balanceData.value === 0n
 
   const priceMessage = isEmpty(launchToken.symbol)

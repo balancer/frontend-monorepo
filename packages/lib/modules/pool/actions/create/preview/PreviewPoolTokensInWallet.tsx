@@ -5,7 +5,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingPriceWarning'
 import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
-import { AlertTriangle } from 'react-feather'
+import { AlertTriangle } from 'lucide-react'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { usePoolTokensInWallet, SelectedPoolToken } from './usePoolTokensInWallet'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
@@ -74,6 +74,7 @@ function PoolTokensInWalletContent({
   if (!hasSelectedTokens) return <DefaultCardContent />
 
   const tokensWithBalance = selectedPoolTokens.filter(token => !token.hasZeroBalance)
+
   const totalLiquidityUsd = tokensWithBalance.reduce((acc, token) => {
     return acc + Number(token.userBalanceUsd || 0)
   }, 0)

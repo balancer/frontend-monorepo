@@ -48,9 +48,11 @@ function getPoolTokens(pool: PoolCore | GqlNestedPool | FeaturedPool): PoolToken
   if (isPool(pool)) {
     return pool.poolTokens as PoolToken[]
   }
+
   if (isGqlNestedPool(pool)) {
     return pool.tokens as PoolToken[]
   }
+
   throw new Error('Invalid pool type: poolTokens or tokens must be defined')
 }
 
@@ -112,6 +114,7 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     if (shouldUseUnderlyingToken(token, pool)) {
       return [{ ...token.underlyingToken, index: token.index } as TokenCore]
     }
+
     return []
   }
 
@@ -188,6 +191,7 @@ export function shouldUseUnderlyingToken(token: ApiToken, pool: Pool | GqlPoolBa
       `Underlying token is missing for ERC4626 token with address ${token.address} in chain ${pool.chain}`
     )
   }
+
   // AutoRange pools do not support adding with underlying tokens
   if (isAutoRange(pool.type)) return false
   // Only v3 pools should underlying tokens
@@ -236,6 +240,7 @@ export function getChildTokens(pool: Pool, poolActionableTokens?: ApiToken[]): A
 
 export function getActionableTokenSymbol(tokenAddress: Address, pool: Pool): string {
   const token = allPoolTokens(pool).find(token => isSameAddress(token.address, tokenAddress))
+
   if (!token) {
     console.log('Token symbol not found for address ', tokenAddress)
     return ''
@@ -255,10 +260,12 @@ export function getPoolActionableTokens(pool: Pool, wrapUnderlying?: boolean[]):
   if (!wrapUnderlying) {
     return getPoolActionableTokensWithoutWrapUnderlying(pool)
   }
+
   return getPoolActionableTokensWithoutWrapUnderlying(pool).map((token, index) => {
     if (wrapUnderlying[index]) {
       return token
     }
+
     return { ...token, ...token.wrappedToken, wrappedToken: undefined }
   })
 }
@@ -306,6 +313,7 @@ export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddre
       isSameAddress(nestedToken.address, childTokenAddress)
     )
   )
+
   if (!nestedBptToken) {
     throw new Error(
       `Provided nestedTokenAddress ${childTokenAddress} does not belong to any underlying token amongst the nested pool/s (${getNestedBptTokens(
@@ -322,11 +330,13 @@ export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddre
 // Returns true if the given token address belongs to a top level standard/underlying token that is not a nestedBpt
 export function isStandardOrUnderlyingRootToken(pool?: Pool, tokenAddress?: Address): boolean {
   if (!pool || !tokenAddress) return true
+
   const token = pool.poolTokens.find(
     token =>
       isSameAddress(token.address, tokenAddress) ||
       isSameAddress(token.underlyingToken?.address || '', tokenAddress)
   )
+
   return token?.hasNestedPool === false
 }
 
@@ -348,6 +358,7 @@ export function getPriceRateRatio(pool: Pool) {
   const priceRates = getPoolActionableTokens(pool).map((token: ApiToken) => {
     return token.useUnderlyingForAddRemove ? token.priceRate : '1'
   })
+
   return bn(priceRates[0] || '1').div(priceRates[1] || '1')
 }
 
@@ -372,8 +383,10 @@ export function getWrappedAndUnderlyingTokenFn(
       return sortTokenPairByBalance([underlyingToken, wrappedToken], balanceFor)
     }
   }
+
   if (token.wrappedToken && !!token.wrappedToken.useWrappedForAddRemove) {
     const wrappedToken = token.wrappedToken
+
     return () => {
       const underlyingToken = token
       return sortTokenPairByBalance([underlyingToken, wrappedToken], balanceFor)
