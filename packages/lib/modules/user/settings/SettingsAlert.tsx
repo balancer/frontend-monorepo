@@ -1,18 +1,18 @@
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { useIsSafeApp } from '../../web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 export function SettingsAlert() {
   const { shouldUseSignatures, shouldUseTxBundling } = useUserSettings()
-  const isSafeApp = useIsSafeApp()
-  const isTxBundlingDisabled = isSafeApp && !shouldUseTxBundling
+  const canBatch = useShouldBatchTransactions()
+  const isTxBundlingDisabled = canBatch && !shouldUseTxBundling
 
   function getTitle() {
     if (isTxBundlingDisabled && !shouldUseSignatures) {
-      return 'Safe transaction bundling and signatures disabled'
+      return 'Transaction bundling and signatures disabled'
     }
 
-    if (isTxBundlingDisabled) return 'Safe transaction bundling disabled'
+    if (isTxBundlingDisabled) return 'Transaction bundling disabled'
     if (!shouldUseSignatures) return 'Signatures disabled'
   }
 

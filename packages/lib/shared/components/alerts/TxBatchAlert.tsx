@@ -39,7 +39,7 @@ function Content({ stepType }: ContentProps) {
       <BalAlertContent
         description={description}
         forceColumnMode
-        title="Token approval bundling in Safe App"
+        title="Token approval bundling"
         wrapText
       />
     </HStack>
