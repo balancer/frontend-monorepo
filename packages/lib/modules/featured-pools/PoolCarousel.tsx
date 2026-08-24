@@ -36,7 +36,7 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
     setCurrentIndex(index)
   }
 
-  const currentPool = featuredPools[currentIndex].pool as Pool
+  const currentPool = featuredPools[currentIndex]!.pool as Pool
 
   return (
     <Box {...swipeHandlers} {...rest} zIndex={9999}>
@@ -70,7 +70,7 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
           carouselDirection={direction}
           carouselIndex={currentIndex}
           chain={currentPool.chain}
-          featuredReason={featuredPools[currentIndex].description}
+          featuredReason={featuredPools[currentIndex]!.description}
           graphic={getGraphic(currentIndex)}
           isCarousel
           isSmall

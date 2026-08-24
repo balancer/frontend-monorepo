@@ -61,7 +61,7 @@ export function useNativeTokenBalancesValues(
     ? {}
     : Object.fromEntries(
         balanceQueries.map(({ data }, index) => {
-          const chain = chains[index]
+          const chain = chains[index]!
           const networkConfig = getNetworkConfig(chain)
           const tokenPrice = priceFor(networkConfig.tokens.nativeAsset.address, chain) ?? 0
 

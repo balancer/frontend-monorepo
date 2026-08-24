@@ -4,8 +4,8 @@ import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function buildCowSwapUrlFromPool(pool: Pool): string {
   // All CoW AMM pools have 2 tokens
-  const tokenInAddress = pool.poolTokens[0].address
-  const tokenOutAddress = pool.poolTokens[1].address
+  const tokenInAddress = pool.poolTokens[0]!.address
+  const tokenOutAddress = pool.poolTokens[1]!.address
 
   return buildCowSwapUrl({
     chain: pool.chain,

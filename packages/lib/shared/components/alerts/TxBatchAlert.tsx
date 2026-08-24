@@ -9,7 +9,7 @@ type Props = AlertProps & { steps: TransactionStep[] }
 
 export function TxBatchAlert({ steps, ...alertProps }: Props) {
   const { isMobile } = useBreakpoints()
-  const lastStep = steps[steps.length - 1]
+  const lastStep = steps[steps.length - 1]!
   const { isStepWithTxBatch } = useStepWithTxBatch(lastStep)
 
   if (isStepWithTxBatch && !isMobile) {

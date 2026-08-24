@@ -39,7 +39,7 @@ export function useMulticall(
 
   const multicallResults = useQueries({
     queries: suppliedChains.map(chain => {
-      const multicalls = multicallsPerChain[chain]
+      const multicalls = multicallsPerChain[chain]!
       return {
         queryFn: async () => {
           const results = await multicall(config, {
@@ -50,7 +50,7 @@ export function useMulticall(
 
           // map the result to its id based on the call index
           const idMappedResults = results
-            .map((result, i) => ({ ...result, id: multicalls[i].id }))
+            .map((result, i) => ({ ...result, id: multicalls[i]!.id }))
             .reduce((o, { id, ...rest }) => set(o, id, rest), {})
 
           return idMappedResults
