@@ -38,7 +38,7 @@ export function useTokenBalancesLogic(
   const tokens = extTokens || _tokens
 
   const NO_TOKENS_CHAIN_ID = 1 // this should never be used as the multicall is disabled when no tokens
-  const chainId = tokens.length ? tokens[0].chainId : NO_TOKENS_CHAIN_ID
+  const chainId = tokens.length ? tokens[0]!.chainId : NO_TOKENS_CHAIN_ID
   const networkConfig = getNetworkConfig(chainId)
   const includesNativeAsset = tokens.some(nativeAssetFilter(chainId))
   const tokensExclNativeAsset = tokens.filter(exclNativeAssetFilter(chainId))

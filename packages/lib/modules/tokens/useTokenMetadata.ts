@@ -114,7 +114,8 @@ export function useTokenMetadata(maybeAddress: string, chain: GqlChain): TokenMe
     contracts: address ? buildTokenMetadataContracts(address, chain) : [],
   })
 
-  const [name, symbol, decimals, totalSupply] = tokenData ?? []
+  const [name, symbol, decimals, totalSupply] =
+    tokenData ?? ([undefined, undefined, undefined, undefined] as const)
 
   return parseTokenMetadata(name, symbol, decimals, totalSupply, isLoading)
 }
@@ -148,7 +149,7 @@ export function useTokenMetadataAcrossChains(
       const metadata = parseTokenMetadata(name, symbol, decimals, totalSupply, isLoading)
 
       if (metadata.symbol) {
-        match = { chain: chains[index], metadata }
+        match = { chain: chains[index]!, metadata }
         break
       }
     }

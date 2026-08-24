@@ -39,7 +39,7 @@ export function useTokenInputsValidationLogic() {
   // only removing the errors being rechecked that, although probably more complicated
   // than it should be, should work for now.
   function removeValidationErrors(tokenAddress: Address, errors: string[]) {
-    if (errors.includes(validationErrors[tokenAddress])) setValidationError(tokenAddress, '')
+    if (errors.includes(validationErrors[tokenAddress] ?? '')) setValidationError(tokenAddress, '')
   }
 
   return {
