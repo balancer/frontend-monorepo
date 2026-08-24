@@ -588,11 +588,7 @@ export function poolTypeLabel(poolType: PoolFilterType) {
   }
 }
 
-export function poolHasRateProviderExternalOracle(pool: {
-  poolTokens: Array<{
-    priceRateProviderData?: { warnings?: string[] | null } | null
-  }>
-}): boolean {
+export function poolHasRateProviderExternalOracle(pool: Pool): boolean {
   return pool.poolTokens.some(token =>
     token.priceRateProviderData?.warnings?.includes('market-rate')
   )
