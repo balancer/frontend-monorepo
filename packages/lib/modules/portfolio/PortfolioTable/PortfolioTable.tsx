@@ -35,6 +35,7 @@ import { MigrationAlert } from '../../pool/migrations/MigrationAlert'
 import { isChainDeprecated } from '../../chains/chain.utils'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { memo, useMemo } from 'react'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 const rowProps = (needsLastColumnWider: boolean) => ({
   px: [0, 4],
@@ -218,13 +219,15 @@ export function PortfolioTable() {
             </Text>
           </Checkbox>
         )}
-        <Text color="font.secondary" fontSize="sm">
-          Any positions for legacy chains can be found on{' '}
-          <Link href="https://legacy.balancer.fi" isExternal textDecoration="underline">
-            legacy.balancer.fi
-          </Link>
-          .
-        </Text>
+        {isBalancer && (
+          <Text color="font.secondary" fontSize="sm">
+            Any positions for legacy chains can be found on{' '}
+            <Link href="https://legacy.balancer.fi" isExternal textDecoration="underline">
+              legacy.balancer.fi
+            </Link>
+            .
+          </Text>
+        )}
       </VStack>
     </FadeInOnView>
   )
