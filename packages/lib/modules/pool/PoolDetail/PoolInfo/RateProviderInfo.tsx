@@ -32,6 +32,9 @@ type PopoverInfoBodyProps = {
 
 function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
   const warnings = getWarnings(data.warnings || [])
+  const hasMarketRateWarning = warnings.includes('market-rate')
+  const otherWarnings = warnings.filter(warning => warning !== 'market-rate')
+
   return (
     <>
       {level === 0 && (
@@ -65,8 +68,15 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
             <Text color="grayText" fontSize="sm">
               Warnings:
             </Text>
-            {warnings.length > 0 ? (
-              <Text fontSize="sm">Yes, see review details</Text>
+            {hasMarketRateWarning || otherWarnings.length > 0 ? (
+              <VStack alignItems="flex-start" gap="0">
+                {hasMarketRateWarning && (
+                  <Text fontSize="sm">
+                    Uses an external oracle to price assets. See review details
+                  </Text>
+                )}
+                {otherWarnings.length > 0 && <Text fontSize="sm">Yes, see review details</Text>}
+              </VStack>
             ) : (
               <Text fontSize="sm">
                 None except{' '}

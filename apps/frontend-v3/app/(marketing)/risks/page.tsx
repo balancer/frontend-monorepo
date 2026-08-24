@@ -91,9 +91,6 @@ export default function Privacy() {
                         <Link href="risks#stable-pools">Stable Pools</Link>
                       </li>
                       <li>
-                        <Link href="risks#composable-pools">Composable Stable Pools</Link>
-                      </li>
-                      <li>
                         <Link href="risks#lbp">LBP - Liquidity Bootstrapping Pools</Link>
                       </li>
                       <li>
@@ -942,6 +939,23 @@ export default function Privacy() {
                   <h4 className="anchor" id="stable-pools">
                     Stable Pools
                   </h4>
+                  <p>
+                    Stable Pools are designed for assets that are either expected to consistently
+                    trade at near parity, or at a known exchange rate. Stable Pools use Stable Math
+                    (based on StableSwap, popularized by Curve) which allows for trades of
+                    significant size before encountering substantial price impact, vastly increasing
+                    capital efficiency for like-kind and correlated-kind swaps. They are ideal for:
+                  </p>
+                  <ul>
+                    <li>
+                      Pegged Tokens: Tokens that trade near 1:1, such as two stablecoins of the same
+                      currency (eg: DAI, USDC, USDT), or synthetic assets (eg: renBTC, sBTC, WBTC)
+                    </li>
+                    <li>
+                      Correlated Tokens: Tokens that trade near each other with some slowly changing
+                      exchange rate, like derivatives (eg: wstETH, wETH)
+                    </li>
+                  </ul>
                   <h5>Loss of stablecoin peg</h5>
                   <p>
                     Stablecoins are tokens whose value is intended to be pegged or tied to that of
@@ -982,42 +996,6 @@ export default function Privacy() {
                     pool will sell any pegged assets and accumulate the asset which has lost
                     it&rsquo;s peg, leading to an overall loss of funds for LPs.
                   </p>
-                </div>
-              </FadeInOnView>
-              <FadeInOnView>
-                <div className="subsection">
-                  <h4 className="anchor" id="composable-pools">
-                    Composable Stable Pools &amp; MetaStable Pools
-                  </h4>
-                  <p>
-                    Composable Stable Pools are designed for assets that are either expected to
-                    consistently trade at near parity, or at a known exchange rate. Composable
-                    Stable Pools use Stable Math (based on StableSwap, popularized by Curve) which
-                    allows for trades of significant size before encountering substantial price
-                    impact, vastly increasing capital efficiency for like-kind and correlated-kind
-                    swaps. They are ideal for:
-                  </p>
-                  <ul>
-                    <li>
-                      Pegged Tokens: Tokens that trade near 1:1, such as two stablecoins of the same
-                      currency (eg: DAI, USDC, USDT), or synthetic assets (eg: renBTC, sBTC, WBTC)
-                    </li>
-                    <li>
-                      Correlated Tokens: Tokens that trade near each other with some slowly changing
-                      exchange rate, like derivatives (eg: wstETH, wETH)
-                    </li>
-                  </ul>
-                  <p>
-                    Note: Composable Stable Pools are a superset of all previous Stable-type pools
-                    (Stable Pools, MetaStable Pools, StablePhantom Pools, and StablePool v2) and
-                    therefore obsolete all previous pools.
-                  </p>
-                  <p>
-                    Composable Stable Pools (including MetaStable Pools) carry the all of the same
-                    risks as stable pools, including the potential depegging of constituent
-                    stablecoin tokens. In addition, there are risks associated with the involvement
-                    of rate providers.
-                  </p>
 
                   <div>
                     <h5 className="anchor" id="rate-provider-risk">
@@ -1035,11 +1013,13 @@ export default function Privacy() {
                   </div>
 
                   <div>
-                    <h6>Oracle risk</h6>
+                    <h6 className="anchor" id="oracles">
+                      Oracle risk
+                    </h6>
                     <p>
                       Oracles are data providers which supply external information to smart
                       contracts. Oracles, like Chainlink, may be used to source exchange rates
-                      between pool tokens for a rate provider in Balancer MetaStable pools.
+                      between pool tokens for a rate provider in Balancer Stable Pools.
                     </p>
                     <p>
                       Arbitrageurs can exploit oracle latency by frontrunning oracle updates at
@@ -1094,7 +1074,9 @@ export default function Privacy() {
                     </ul>
                   </div>
                   <div>
-                    <h6>Rate provider cross-chain bridge risk</h6>
+                    <h6 className="anchor" id="rate-provider-bridges">
+                      Rate provider cross-chain bridge risk
+                    </h6>
                     <p>
                       Pools may use rate providers that are bridged between blockchain networks.
                     </p>
@@ -1336,8 +1318,8 @@ export default function Privacy() {
                     pools can leak real value (permanent loss) and the APR shown in calculations is
                     not an accurate reflection of the real return. Learn more about oracle and path
                     dependency risks in the{' '}
-                    <Link href="risks#composable-pools">
-                      <span>Composable Stable Pools</span>
+                    <Link href="risks#stable-pools">
+                      <span>Stable Pools</span>
                     </Link>{' '}
                     risk section.
                   </p>
@@ -1364,8 +1346,8 @@ export default function Privacy() {
                       unexpected fee adjustments and potential losses. Rate provider failures or
                       manipulation are inherent risks in decentralized finance. Learn more about
                       rate provider and oracle risks in the{' '}
-                      <Link href="risks#composable-pools">
-                        <span>Composable Stable Pools</span>
+                      <Link href="risks#stable-pools">
+                        <span>Stable Pools</span>
                       </Link>{' '}
                       risk section.
                     </li>
