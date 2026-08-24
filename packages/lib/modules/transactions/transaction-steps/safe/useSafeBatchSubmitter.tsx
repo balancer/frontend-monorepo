@@ -103,6 +103,7 @@ export function useSafeBatchSubmitter({
       executeAsync: noop,
       isSafeTxLoading: false,
     }
+
     receiptReceivedRef.current = true
     onTransactionChange(successFullTransaction)
   }, [chainId, onTransactionChange, transactionStatusQuery])
@@ -112,6 +113,7 @@ export function useSafeBatchSubmitter({
   async function submit() {
     setSendCallsError(undefined)
     setIsLoading(true)
+
     try {
       const safeTx = await safeAppsSdk.txs.send({ txs: txBatch })
       setSafeTxHash(safeTx.safeTxHash as Hex)
@@ -125,6 +127,7 @@ export function useSafeBatchSubmitter({
   }
 
   const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
+
   useInterval(() => {
     if (safeTxHash) {
       safeAppsSdk.txs.getBySafeTxHash(safeTxHash).then(tx => {

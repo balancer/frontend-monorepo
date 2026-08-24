@@ -13,10 +13,12 @@ const swapStep = mockTransactionStep('swapStep')
 const signPermit2Step = mockTransactionStep('signPermit2Step')
 const approveRelayerStep = mockTransactionStep('approveRelayerStep')
 const signRelayerStep = mockTransactionStep('signRelayerStep')
+
 const tokenApprovalSteps = [
   mockTransactionStep('tokenApprovalStep1'),
   mockTransactionStep('tokenApprovalStep2'),
 ]
+
 const permit2ApprovalSteps = [
   mockTransactionStep('permit2ApprovalStep1'),
   mockTransactionStep('permit2ApprovalStep2'),

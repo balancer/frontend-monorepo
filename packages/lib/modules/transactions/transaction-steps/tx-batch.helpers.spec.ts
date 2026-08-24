@@ -24,6 +24,7 @@ describe('buildTxBatch', () => {
       ],
       batchableTxCall: { to: '0xaaa' },
     } as any
+
     expect(buildTxBatch(step)).toEqual([{ to: '0xbbb' }, { to: '0xaaa' }])
   })
 })
