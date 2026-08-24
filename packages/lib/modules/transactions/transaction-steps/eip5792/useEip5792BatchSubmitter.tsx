@@ -155,7 +155,7 @@ export function useEip5792BatchSubmitter({
 const USER_REJECTED_UPGRADE_CODE = 5750
 const ATOMICITY_UNSUPPORTED_CODE = 5760
 
-function getEip5792ErrorMessage(error: Error): Error {
+export function getEip5792ErrorMessage(error: Error): Error {
   const code = (error as Error & { code?: number }).code
 
   if (code === USER_REJECTED_UPGRADE_CODE) {
