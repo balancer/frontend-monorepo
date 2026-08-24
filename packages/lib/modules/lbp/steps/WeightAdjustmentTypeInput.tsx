@@ -78,13 +78,13 @@ export function WeightAdjustmentTypeInput({
         name="weightAdjustmentType"
         render={({ field }) => (
           <SelectInput
-            defaultValue={options[0].value}
+            defaultValue={options[0]!.value}
             id="weight-adjustment-type"
             onChange={newValue => {
               field.onChange(newValue as GqlChain)
             }}
             options={options}
-            value={field.value ?? options[0].value}
+            value={field.value ?? options[0]!.value}
           />
         )}
       />

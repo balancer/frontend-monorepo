@@ -121,20 +121,25 @@ function getCurrentSnapshotValue(
   if (snapshots.length === 0) return 0
 
   const currentTime = now()
-  if (isBefore(currentTime, snapshots[0].timestamp)) return selector(snapshots[0])
+  const firstSnapshot = snapshots[0]!
+  const lastSnapshot = snapshots[snapshots.length - 1]!
 
-  if (isAfter(currentTime, snapshots[snapshots.length - 1].timestamp)) {
-    return selector(snapshots[snapshots.length - 1])
+  if (isBefore(currentTime, firstSnapshot.timestamp)) return selector(firstSnapshot)
+
+  if (isAfter(currentTime, lastSnapshot.timestamp)) {
+    return selector(lastSnapshot)
   }
 
   // Find the last snapshot before or at current time
   for (let i = snapshots.length - 1; i >= 0; i--) {
-    if (!isAfter(snapshots[i].timestamp, currentTime)) {
-      return selector(snapshots[i])
+    const snapshot = snapshots[i]
+
+    if (snapshot && !isAfter(snapshot.timestamp, currentTime)) {
+      return selector(snapshot)
     }
   }
 
-  return selector(snapshots[0])
+  return selector(firstSnapshot)
 }
 
 export function min(prices: LbpPrice[]) {

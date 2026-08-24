@@ -212,11 +212,11 @@ export function useHydrateLbpForm() {
     const { startWeights, endWeights, projectTokenIndex } = lbpImmutableData.result
 
     const projectTokenStartWeight = +formatUnits(
-      startWeights[projectTokenIndex],
+      startWeights[projectTokenIndex]!,
       PERCENTAGE_DECIMALS
     )
 
-    const projectTokenEndWeight = +formatUnits(endWeights[projectTokenIndex], PERCENTAGE_DECIMALS)
+    const projectTokenEndWeight = +formatUnits(endWeights[projectTokenIndex]!, PERCENTAGE_DECIMALS)
 
     let weightAdjustmentType: WeightAdjustmentType
     let customStartWeight = 90
