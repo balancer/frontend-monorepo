@@ -90,6 +90,14 @@ export function useEip5792BatchSubmitter({
     const isSuccess = callsStatus === 'success'
     const isError = callsStatus === 'failure'
 
+    const receipts = callsStatusQuery.data?.receipts ?? []
+    // The last receipt corresponds to the final call in the batch (e.g. the swap).
+    // Its transactionHash is what the UI uses for swapTxHash, and its logs (plus
+    // those of earlier receipts) are what the receipt parser reads for Transfer events.
+    const lastReceipt = receipts[receipts.length - 1]
+    const allLogs = receipts.flatMap(r => r.logs ?? [])
+    const mergedReceipt = lastReceipt ? { ...lastReceipt, logs: allLogs } : null
+
     const successFullTransaction: ManagedResult = {
       chainId,
       simulation: { data: null, status: 'success' } as unknown as TransactionSimulation,
@@ -103,7 +111,7 @@ export function useEip5792BatchSubmitter({
         isSuccess,
         isError,
         isLoading: !isSuccess && !isError,
-        data: callsStatusQuery.data?.receipts?.[0] ?? null,
+        data: mergedReceipt,
       } as unknown as ManagedResult['result'],
       executeAsync: noop,
       isSafeTxLoading: false,
