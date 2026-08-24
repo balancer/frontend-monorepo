@@ -2,7 +2,7 @@
 
 import { noop } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
-import { useSendCalls, useWaitForCallsStatus } from 'wagmi'
+import { useCallsStatus, useSendCalls } from 'wagmi'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { TransactionExecution, TransactionSimulation } from '../../../web3/contracts/contract.types'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
@@ -50,10 +50,11 @@ export function useEip5792BatchSubmitter({
 
   const { sendCallsAsync } = useSendCalls({})
 
-  const callsStatusQuery = useWaitForCallsStatus({
-    id: callsId,
+  const callsStatusQuery = useCallsStatus({
+    id: callsId ?? '',
     query: {
       enabled: !!callsId,
+      refetchInterval: query => (query.state.data?.status === 'pending' ? 5000 : false),
     },
   })
 
@@ -72,6 +73,7 @@ export function useEip5792BatchSubmitter({
       })
 
       setCallsId(id)
+      setIsLoading(false)
     } catch (e: unknown) {
       setIsLoading(false)
       setError(getEip5792ErrorMessage(ensureError(e)))
