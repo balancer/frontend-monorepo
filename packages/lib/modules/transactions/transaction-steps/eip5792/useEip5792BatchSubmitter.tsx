@@ -2,8 +2,9 @@
 
 import { noop } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
-import { useSendCalls, useWaitForCallsStatus } from 'wagmi'
+import { useSendCalls, useWaitForCallsStatus, useWaitForTransactionReceipt } from 'wagmi'
 import { ensureError } from '@repo/lib/shared/utils/errors'
+import { getWaitForReceiptTimeout } from '../../../web3/contracts/wagmi-helpers'
 import { TransactionExecution, TransactionSimulation } from '../../../web3/contracts/contract.types'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
 import { useRecentTransactions } from '../../RecentTransactionsProvider'
@@ -48,12 +49,27 @@ export function useEip5792BatchSubmitter({
   const [error, setError] = useState<Error>()
   const lastStatusRef = useRef<string | undefined>(undefined)
 
-  const { sendCallsAsync } = useSendCalls({})
+  const { mutateAsync } = useSendCalls({})
 
   const callsStatusQuery = useWaitForCallsStatus({
     id: callsId,
     query: {
       enabled: !!callsId,
+    },
+  })
+
+  // The EIP-5792 receipt from wallet_getCallsStatus has empty logs, so we fetch the
+  // real on-chain receipt (which contains the ERC-20 Transfer events) using the
+  // transactionHash from the last call in the batch.
+  const txHash =
+    callsStatusQuery.data?.receipts?.[callsStatusQuery.data.receipts.length - 1]?.transactionHash
+
+  const transactionReceiptQuery = useWaitForTransactionReceipt({
+    chainId,
+    hash: txHash,
+    timeout: getWaitForReceiptTimeout(chainId),
+    query: {
+      enabled: !!txHash,
     },
   })
 
@@ -64,7 +80,7 @@ export function useEip5792BatchSubmitter({
     setIsLoading(true)
 
     try {
-      const { id } = await sendCallsAsync({
+      const { id } = await mutateAsync({
         account: userAddress,
         chainId,
         calls: txBatch,
@@ -91,13 +107,10 @@ export function useEip5792BatchSubmitter({
     const isSuccess = callsStatus === 'success'
     const isError = callsStatus === 'failure'
 
-    const receipts = callsStatusQuery.data?.receipts ?? []
-    // The last receipt corresponds to the final call in the batch (e.g. the swap).
-    // Its transactionHash is what the UI uses for swapTxHash, and its logs (plus
-    // those of earlier receipts) are what the receipt parser reads for Transfer events.
-    const lastReceipt = receipts[receipts.length - 1]
-    const allLogs = receipts.flatMap(r => r.logs ?? [])
-    const mergedReceipt = lastReceipt ? { ...lastReceipt, logs: allLogs } : null
+    // Use the real on-chain receipt (fetched via useWaitForTransactionReceipt) so the
+    // receipt parser gets the actual ERC-20 Transfer logs. The EIP-5792 receipt's logs
+    // are empty, so we can't rely on them.
+    const realReceipt = transactionReceiptQuery.data
 
     const successFullTransaction: ManagedResult = {
       chainId,
@@ -112,14 +125,21 @@ export function useEip5792BatchSubmitter({
         isSuccess,
         isError,
         isLoading: !isSuccess && !isError,
-        data: mergedReceipt,
+        data: realReceipt ?? null,
       } as unknown as ManagedResult['result'],
       executeAsync: noop,
       isSafeTxLoading: false,
     }
 
     onTransactionChange(successFullTransaction)
-  }, [callsId, callsStatus, callsStatusQuery.data, chainId, onTransactionChange])
+  }, [
+    callsId,
+    callsStatus,
+    callsStatusQuery.data,
+    transactionReceiptQuery.data,
+    chainId,
+    onTransactionChange,
+  ])
 
   const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
 
