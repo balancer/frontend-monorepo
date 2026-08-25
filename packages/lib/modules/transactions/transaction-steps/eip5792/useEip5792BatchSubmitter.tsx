@@ -144,7 +144,7 @@ export function useEip5792BatchSubmitter({
     onTransactionChange,
   ])
 
-  const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
+  const { isTxTracked, addTrackedTransaction, updateTrackedTransaction } = useRecentTransactions()
 
   // Track the real on-chain transaction (once its hash is known) so the user gets a
   // status toast like the regular flow. The batch id (callsId) is not a real tx hash.
@@ -166,6 +166,24 @@ export function useEip5792BatchSubmitter({
       true
     )
   }, [txHash, chainId, labels, isTxTracked, addTrackedTransaction])
+
+  // Mark the tracked transaction as confirmed/reverted once the batch settles, so it
+  // stops spinning in recent activity (matching the regular flow's useOnTransactionConfirmation).
+  useEffect(() => {
+    if (!txHash) return
+
+    if (callsStatus === 'success') {
+      updateTrackedTransaction(txHash, {
+        label: labels.confirmed,
+        status: 'confirmed',
+      })
+    } else if (callsStatus === 'failure') {
+      updateTrackedTransaction(txHash, {
+        label: labels.reverted,
+        status: 'reverted',
+      })
+    }
+  }, [txHash, callsStatus, labels, updateTrackedTransaction])
 
   // Keep the button visible (disabled) while the batch is pending so the user sees
   // a "Confirming..." state, matching the regular flow. Hide it once settled.
