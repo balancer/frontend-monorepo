@@ -19,6 +19,8 @@ import { ClaimableBalancesResult } from '@repo/lib/modules/portfolio/PortfolioCl
 import { ClaimablePool } from './ClaimProvider'
 import { Address } from 'viem'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionBatchButton'
+import { buildBatchableTxCall } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
 
 const claimAllRewardsStepId = 'claim-all-rewards'
 
@@ -47,6 +49,7 @@ export function useClaimAllRewardsStep({
   }
 
   const chain = pool.chain as GqlChain
+  const chainId = getChainId(chain)
   const stakingType = pool.staking?.type || GqlPoolStakingTypeValues.Gauge
 
   const claimRewardGauges = nonBalRewards.map(r => r.gaugeAddress)
@@ -85,7 +88,7 @@ export function useClaimAllRewardsStep({
 
   const props: ManagedTransactionInput = {
     labels,
-    chainId: getChainId(chain),
+    chainId,
     contractId: 'balancer.relayerV6',
     contractAddress: getNetworkConfig(chain).contracts.balancer.relayerV6,
     functionName: 'multicall',
@@ -109,8 +112,36 @@ export function useClaimAllRewardsStep({
         refetchBalRewards()
       },
       renderAction: () => <ManagedTransactionButton id={claimAllRewardsStepId} {...props} />,
+      renderBatchAction: (currentStep: TransactionStep) => (
+        <TransactionBatchButton
+          chainId={chainId}
+          currentStep={currentStep}
+          labels={labels}
+          onTransactionChange={setTransaction}
+        />
+      ),
+      // Last step in the batch: the multicall is preceded by the minter/relayer approvals
+      isBatchEnd: true,
+      batchableTxCall: claimData?.length
+        ? buildBatchableTxCall(
+            'balancer.relayerV6',
+            getNetworkConfig(chain).contracts.balancer.relayerV6,
+            'multicall',
+            [claimData]
+          )
+        : undefined,
     }),
-    [transaction, labels, refetchClaimableRewards, refetchBalRewards, isConnected, props]
+    [
+      transaction,
+      labels,
+      refetchClaimableRewards,
+      refetchBalRewards,
+      isConnected,
+      props,
+      claimData,
+      chainId,
+      chain,
+    ]
   )
 
   return { step, isLoading }

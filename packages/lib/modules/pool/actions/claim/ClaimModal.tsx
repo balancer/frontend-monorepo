@@ -24,6 +24,8 @@ import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
+import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 type Props = {
   isOpen: boolean
@@ -43,6 +45,8 @@ export function ClaimModal({
 
   const { transactionSteps, claimTxHash, allClaimableRewards, totalClaimableUsd, isLoading } =
     useClaim()
+
+  const shouldBatchTransactions = useShouldBatchTransactions()
 
   const rewards = useMemo(
     () =>
@@ -71,10 +75,17 @@ export function ClaimModal({
       <SuccessOverlay startAnimation={!!claimTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
+        {isDesktop && (
+          <DesktopStepTracker
+            chain={chain}
+            isTxBatch={shouldBatchTransactions}
+            transactionSteps={transactionSteps}
+          />
+        )}
         <TransactionModalHeader chain={chain} label="Claim incentives" txHash={claimTxHash} />
         <ModalCloseButton />
         <ModalBody>
+          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <AnimateHeightChange spacing="sm">
             {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
             {isLoading ? (
