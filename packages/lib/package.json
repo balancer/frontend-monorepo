@@ -36,7 +36,7 @@
     "@dicebear/core": "9.4.3",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "@hookform/resolvers": "5.7.1",
+    "@hookform/resolvers": "5.9.1",
     "@metamask/connect-evm": "2.1.1",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@nktkas/hyperliquid": "0.23.1",
