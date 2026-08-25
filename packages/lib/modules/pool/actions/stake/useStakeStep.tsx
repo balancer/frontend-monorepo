@@ -11,10 +11,16 @@ import { usePool } from '../../PoolProvider'
 import { Pool } from '../../pool.types'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionBatchButton'
+import { buildBatchableTxCall } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
 
 const stakeStepId = 'stake'
 
-export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionStep {
+export function useStakeStep(
+  pool: Pool,
+  rawDepositAmount: bigint,
+  nestedSteps: TransactionStep[] = []
+): TransactionStep {
   const [isStakeEnabled, setIsStakeEnabled] = useState(false)
 
   const { refetch: refetchPool, chainId } = usePool()
@@ -72,13 +78,39 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
         type: 'Gas transaction',
       },
       transaction,
+      // Approvals that can be batched with the deposit are attached as nested steps
+      nestedSteps,
       isComplete: () => isTransactionSuccess(transaction),
       onActivated: () => setIsStakeEnabled(true),
       onDeactivated: () => setIsStakeEnabled(false),
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={stakeStepId} {...props} />,
+      renderBatchAction: (currentStep: TransactionStep) => (
+        <TransactionBatchButton
+          chainId={chainId}
+          currentStep={currentStep}
+          labels={labels}
+          onTransactionChange={setTransaction}
+        />
+      ),
+      // Last step in the batch: the gauge deposit is preceded by the token approvals
+      isBatchEnd: true,
+      batchableTxCall: buildBatchableTxCall(
+        'balancer.gaugeV5',
+        pool.staking?.gauge?.gaugeAddress,
+        'deposit',
+        [rawDepositAmount || 0n]
+      ),
     }),
-    [labels, onSuccess, transaction?.result.isSuccess, props]
+    [
+      chainId,
+      labels,
+      nestedSteps,
+      onSuccess,
+      rawDepositAmount,
+      transaction?.result.isSuccess,
+      props,
+    ]
   )
 
   return step
