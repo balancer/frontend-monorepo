@@ -47,7 +47,8 @@ export function useEip5792BatchSubmitter({
   const [callsId, setCallsId] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error>()
-  const lastStatusRef = useRef<string | undefined>(undefined)
+  const lastReportedKeyRef = useRef<string | undefined>(undefined)
+  const updatedTxHashRef = useRef<string | undefined>(undefined)
 
   const { mutateAsync } = useSendCalls({})
 
@@ -98,22 +99,9 @@ export function useEip5792BatchSubmitter({
 
   const callsStatus = callsStatusQuery.data?.status
 
-  // TEMP DEBUG: remove after confirming the status resolves
-  console.log('[eip5792] callsStatusQuery', {
-    status: callsStatus,
-    statusCode: callsStatusQuery.data?.statusCode,
-    receipts: callsStatusQuery.data?.receipts,
-    isError: callsStatusQuery.isError,
-    error: callsStatusQuery.error?.message,
-  })
-
   useEffect(() => {
     if (!callsId) return
     if (!callsStatus) return
-    if (lastStatusRef.current === callsStatus) return
-
-    lastStatusRef.current = callsStatus
-
     const isError = callsStatus === 'failure'
 
     // Use the real on-chain receipt (fetched via useWaitForTransactionReceipt) so the
@@ -125,6 +113,14 @@ export function useEip5792BatchSubmitter({
     // Marking success before that would trigger updateOnSuccessCalled with a missing
     // transaction hash and throw.
     const isSuccess = callsStatus === 'success' && !!realReceipt
+
+    // Re-run only when the reported state actually changes. The receipt can arrive
+    // after the status has already flipped to 'success', so key on the full state
+    // (status + receipt presence), not the status alone. This also absorbs the
+    // re-fires from the polling query and unstable onTransactionChange identity.
+    const reportKey = `${callsStatus}:${isSuccess}`
+    if (lastReportedKeyRef.current === reportKey) return
+    lastReportedKeyRef.current = reportKey
 
     const successFullTransaction: ManagedResult = {
       chainId,
@@ -146,54 +142,67 @@ export function useEip5792BatchSubmitter({
     }
 
     onTransactionChange(successFullTransaction)
-  }, [
-    callsId,
-    callsStatus,
-    callsStatusQuery.data,
-    transactionReceiptQuery.data,
-    chainId,
-    onTransactionChange,
-  ])
+  }, [callsId, callsStatus, transactionReceiptQuery.data, chainId, onTransactionChange])
 
   const { isTxTracked, addTrackedTransaction, updateTrackedTransaction } = useRecentTransactions()
 
   // Track the real on-chain transaction (once its hash is known) so the user gets a
   // status toast like the regular flow. The batch id (callsId) is not a real tx hash.
   // Always add as 'confirming' so the toast shows, then update to confirmed/reverted
-  // once the batch settles. The update is deferred with setTimeout(0) so the add's
-  // setState propagates before we update (avoids the add/update race).
+  // once the batch settles.
   useEffect(() => {
     if (!txHash) return
+    if (isTxTracked(txHash)) return
 
-    if (!isTxTracked(txHash)) {
-      addTrackedTransaction(
-        {
-          hash: txHash,
-          type: 'standard',
-          status: 'confirming',
-          chain: getGqlChain(chainId),
-          init: labels.init,
-          label: labels.confirming || 'Confirming transaction',
-          description: labels.description,
-          timestamp: Date.now(),
-        },
-        true
-      )
-    }
+    addTrackedTransaction(
+      {
+        hash: txHash,
+        type: 'standard',
+        status: 'confirming',
+        chain: getGqlChain(chainId),
+        init: labels.init,
+        label: labels.confirming || 'Confirming transaction',
+        description: labels.description,
+        timestamp: Date.now(),
+      },
+      true
+    )
+  }, [
+    txHash,
+    isTxTracked,
+    addTrackedTransaction,
+    chainId,
+    labels.init,
+    labels.confirming,
+    labels.description,
+  ])
 
-    if (callsStatus === 'success' || callsStatus === 'failure') {
-      const isSuccess = callsStatus === 'success'
+  // Update to confirmed/reverted once the batch settles. This is a separate effect
+  // keyed on isTxTracked: when the status settles in the same render the tx hash
+  // first appears, the add's setState has not propagated yet, so this effect re-runs
+  // after the add commits — by then the tx is in the cache and the closures are
+  // fresh, so the update lands on the tracked tx and its toast.
+  useEffect(() => {
+    if (!txHash) return
+    if (!isTxTracked(txHash)) return
+    if (updatedTxHashRef.current === txHash) return
 
-      setTimeout(() => {
-        if (isTxTracked(txHash)) {
-          updateTrackedTransaction(txHash, {
-            label: isSuccess ? labels.confirmed : labels.reverted,
-            status: isSuccess ? 'confirmed' : 'reverted',
-          })
-        }
-      }, 0)
-    }
-  }, [txHash, callsStatus])
+    if (callsStatus !== 'success' && callsStatus !== 'failure') return
+
+    updatedTxHashRef.current = txHash
+
+    updateTrackedTransaction(txHash, {
+      label: callsStatus === 'success' ? labels.confirmed : labels.reverted,
+      status: callsStatus === 'success' ? 'confirmed' : 'reverted',
+    })
+  }, [
+    txHash,
+    callsStatus,
+    isTxTracked,
+    updateTrackedTransaction,
+    labels.confirmed,
+    labels.reverted,
+  ])
 
   // Keep the button visible (disabled) while the batch is pending so the user sees
   // a "Confirming..." state, matching the regular flow. Hide it once settled.
