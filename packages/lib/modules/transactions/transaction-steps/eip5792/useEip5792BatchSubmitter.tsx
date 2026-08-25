@@ -2,7 +2,7 @@
 
 import { noop } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
-import { useSendCalls, useWaitForCallsStatus, useWaitForTransactionReceipt } from 'wagmi'
+import { useCallsStatus, useSendCalls, useWaitForTransactionReceipt } from 'wagmi'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { getWaitForReceiptTimeout } from '../../../web3/contracts/wagmi-helpers'
 import { TransactionExecution, TransactionSimulation } from '../../../web3/contracts/contract.types'
@@ -51,10 +51,12 @@ export function useEip5792BatchSubmitter({
 
   const { mutateAsync } = useSendCalls({})
 
-  const callsStatusQuery = useWaitForCallsStatus({
-    id: callsId,
+  const callsStatusQuery = useCallsStatus({
+    id: callsId ?? '',
     query: {
       enabled: !!callsId,
+      // Poll every 5s while the batch is pending; stop once it settles.
+      refetchInterval: query => (query.state.data?.status === 'pending' ? 5000 : false),
     },
   })
 
@@ -95,6 +97,15 @@ export function useEip5792BatchSubmitter({
   }
 
   const callsStatus = callsStatusQuery.data?.status
+
+  // TEMP DEBUG: remove after confirming the status resolves
+  console.log('[eip5792] callsStatusQuery', {
+    status: callsStatus,
+    statusCode: callsStatusQuery.data?.statusCode,
+    receipts: callsStatusQuery.data?.receipts,
+    isError: callsStatusQuery.isError,
+    error: callsStatusQuery.error?.message,
+  })
 
   useEffect(() => {
     if (!callsId) return
@@ -182,7 +193,6 @@ export function useEip5792BatchSubmitter({
         }
       }, 0)
     }
-     
   }, [txHash, callsStatus])
 
   // Keep the button visible (disabled) while the batch is pending so the user sees
