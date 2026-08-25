@@ -88,7 +88,6 @@ export function useEip5792BatchSubmitter({
       })
 
       setCallsId(id)
-      setIsLoading(false)
     } catch (e: unknown) {
       setIsLoading(false)
       setError(getEip5792ErrorMessage(ensureError(e)))
@@ -147,26 +146,33 @@ export function useEip5792BatchSubmitter({
 
   const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
 
+  // Track the real on-chain transaction (once its hash is known) so the user gets a
+  // status toast like the regular flow. The batch id (callsId) is not a real tx hash.
   useEffect(() => {
-    if (!callsId) return
-    if (isTxTracked(callsId as `0x${string}`)) return
+    if (!txHash) return
+    if (isTxTracked(txHash)) return
 
     addTrackedTransaction(
       {
-        hash: callsId as `0x${string}`,
+        hash: txHash,
         type: 'standard',
         status: 'confirming',
         chain: getGqlChain(chainId),
         init: labels.init,
-        label: labels.init,
+        label: labels.confirming || 'Confirming transaction',
         description: labels.description,
         timestamp: Date.now(),
       },
-      false
+      true
     )
-  }, [callsId, chainId, labels, isTxTracked, addTrackedTransaction])
+  }, [txHash, chainId, labels, isTxTracked, addTrackedTransaction])
 
-  const canSubmit = !callsId && !isLoading
+  // Keep the button visible (disabled) while the batch is pending so the user sees
+  // a "Confirming..." state, matching the regular flow. Hide it once settled.
+  const isSettled = callsStatus === 'success' || callsStatus === 'failure'
+  const canSubmit = !isSettled
+  // Show the loading state while the wallet is signing or the batch is pending.
+  const isPending = isLoading || (!!callsId && !isSettled)
 
   const label = (() => {
     if (error) return labels.init
@@ -181,7 +187,7 @@ export function useEip5792BatchSubmitter({
     )
   })()
 
-  return { submit, isLoading, error, label, canSubmit }
+  return { submit, isLoading: isPending, error, label, canSubmit }
 }
 
 // EIP-5792 error codes surfaced by the wallet during an `atomic: ready` upgrade flow
