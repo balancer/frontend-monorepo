@@ -148,38 +148,39 @@ export function useEip5792BatchSubmitter({
 
   // Track the real on-chain transaction (once its hash is known) so the user gets a
   // status toast like the regular flow. The batch id (callsId) is not a real tx hash.
-  // Add it as confirming, then update to confirmed/reverted once the batch settles.
-  // Both add and update live in one effect keyed on txHash so there is no race between
-  // them (a separate update effect could run before the add propagated and get stuck).
+  // Always add as 'confirming' so the toast shows, then update to confirmed/reverted
+  // once the batch settles. The update is deferred with setTimeout(0) so the add's
+  // setState propagates before we update (avoids the add/update race).
   useEffect(() => {
     if (!txHash) return
-
-    const settledStatus =
-      callsStatus === 'success'
-        ? { status: 'confirmed' as const, label: labels.confirmed }
-        : callsStatus === 'failure'
-          ? { status: 'reverted' as const, label: labels.reverted }
-          : undefined
 
     if (!isTxTracked(txHash)) {
       addTrackedTransaction(
         {
           hash: txHash,
           type: 'standard',
-          status: settledStatus?.status ?? 'confirming',
+          status: 'confirming',
           chain: getGqlChain(chainId),
           init: labels.init,
-          label: settledStatus?.label ?? (labels.confirming || 'Confirming transaction'),
+          label: labels.confirming || 'Confirming transaction',
           description: labels.description,
           timestamp: Date.now(),
         },
         true
       )
-    } else if (settledStatus) {
-      updateTrackedTransaction(txHash, {
-        label: settledStatus.label,
-        status: settledStatus.status,
-      })
+    }
+
+    if (callsStatus === 'success' || callsStatus === 'failure') {
+      const isSuccess = callsStatus === 'success'
+
+      setTimeout(() => {
+        if (isTxTracked(txHash)) {
+          updateTrackedTransaction(txHash, {
+            label: isSuccess ? labels.confirmed : labels.reverted,
+            status: isSuccess ? 'confirmed' : 'reverted',
+          })
+        }
+      }, 0)
     }
      
   }, [txHash, callsStatus])
