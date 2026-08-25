@@ -48,7 +48,6 @@ export function useEip5792BatchSubmitter({
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error>()
   const lastStatusRef = useRef<string | undefined>(undefined)
-  const settledRef = useRef(false)
 
   const { mutateAsync } = useSendCalls({})
 
@@ -149,48 +148,37 @@ export function useEip5792BatchSubmitter({
 
   // Track the real on-chain transaction (once its hash is known) so the user gets a
   // status toast like the regular flow. The batch id (callsId) is not a real tx hash.
+  // Add it as confirming, then update to confirmed/reverted once the batch settles.
+  // Both add and update live in one effect keyed on txHash so there is no race between
+  // them (a separate update effect could run before the add propagated and get stuck).
   useEffect(() => {
     if (!txHash) return
-    if (isTxTracked(txHash)) return
 
-    addTrackedTransaction(
-      {
-        hash: txHash,
-        type: 'standard',
-        status: 'confirming',
-        chain: getGqlChain(chainId),
-        init: labels.init,
-        label: labels.confirming || 'Confirming transaction',
-        description: labels.description,
-        timestamp: Date.now(),
-      },
-      true
-    )
-  }, [txHash, chainId, labels, isTxTracked, addTrackedTransaction])
+    const settledStatus =
+      callsStatus === 'success'
+        ? { status: 'confirmed' as const, label: labels.confirmed }
+        : callsStatus === 'failure'
+          ? { status: 'reverted' as const, label: labels.reverted }
+          : undefined
 
-  // Mark the tracked transaction as confirmed/reverted once the batch settles, so it
-  // stops spinning in recent activity (matching the regular flow's useOnTransactionConfirmation).
-  // Deps are intentionally stable (txHash, callsStatus) — updateTrackedTransaction and
-  // isTxTracked are recreated each render and would re-run this effect. The settledRef
-  // guard ensures we only update once.
-  useEffect(() => {
-    if (!txHash) return
-    if (!isTxTracked(txHash)) return
-    if (settledRef.current) return
-
-    if (callsStatus === 'success') {
-      settledRef.current = true
-
+    if (!isTxTracked(txHash)) {
+      addTrackedTransaction(
+        {
+          hash: txHash,
+          type: 'standard',
+          status: settledStatus?.status ?? 'confirming',
+          chain: getGqlChain(chainId),
+          init: labels.init,
+          label: settledStatus?.label ?? (labels.confirming || 'Confirming transaction'),
+          description: labels.description,
+          timestamp: Date.now(),
+        },
+        true
+      )
+    } else if (settledStatus) {
       updateTrackedTransaction(txHash, {
-        label: labels.confirmed,
-        status: 'confirmed',
-      })
-    } else if (callsStatus === 'failure') {
-      settledRef.current = true
-
-      updateTrackedTransaction(txHash, {
-        label: labels.reverted,
-        status: 'reverted',
+        label: settledStatus.label,
+        status: settledStatus.status,
       })
     }
      
