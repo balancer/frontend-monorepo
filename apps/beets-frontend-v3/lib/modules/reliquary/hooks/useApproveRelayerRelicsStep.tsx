@@ -10,6 +10,7 @@ import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transac
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReliquary } from '../ReliquaryProvider'
+import { buildBatchableTxCall } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
 
 const approveRelayerRelicsStepId = 'approve-relayer-for-relics'
 
@@ -55,6 +56,12 @@ export function useApproveRelayerRelicsStep(): {
     labels,
     isComplete: () => isConnected && hasApprovedRelayerForAllRelics,
     renderAction: () => <ManagedTransactionButton id={approveRelayerRelicsStepId} {...props} />,
+    batchableTxCall: buildBatchableTxCall(
+      'beets.reliquary',
+      reliquaryAddress,
+      'setApprovalForAll',
+      [relayerAddress, true]
+    ),
     onSuccess: () => refetch(),
     transaction,
   }
