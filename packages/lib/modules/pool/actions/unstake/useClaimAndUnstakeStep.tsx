@@ -21,6 +21,8 @@ import { useHasApprovedRelayer } from '@repo/lib/modules/relayer/useHasApprovedR
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { HumanAmount } from '@balancer/sdk'
 import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionBatchButton'
+import { buildBatchableTxCall } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
 
 const claimAndUnstakeStepId = 'claim-and-unstake'
 
@@ -112,8 +114,24 @@ export function useClaimAndUnstakeStep({
       isComplete: () => isTransactionSuccess(transaction),
       onSuccess: () => refetchPoolBalances(),
       renderAction: () => <ManagedTransactionButton id={claimAndUnstakeStepId} {...props} />,
+      renderBatchAction: (currentStep: TransactionStep) => (
+        <TransactionBatchButton
+          chainId={chainId}
+          currentStep={currentStep}
+          labels={labels}
+          onTransactionChange={setTransaction}
+        />
+      ),
+      // Last step in the batch: the multicall is preceded by the minter/relayer approvals
+      isBatchEnd: true,
+      batchableTxCall:
+        data.length > 0
+          ? buildBatchableTxCall('balancer.relayerV6', contracts.balancer.relayerV6, 'multicall', [
+              data,
+            ])
+          : undefined,
     }),
-    [transaction, props, refetchPoolBalances]
+    [transaction, props, refetchPoolBalances, data, chainId, labels, contracts]
   )
 
   return {

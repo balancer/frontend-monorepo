@@ -17,6 +17,8 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { getChainId } from '@repo/lib/config/app.config'
 import { usePoolMigrations } from '../../migrations/PoolMigrationsProvider'
 import { MigrationAlert } from './MigrationAlert'
+import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 type Props = {
   isOpen: boolean
@@ -34,6 +36,7 @@ export function UnstakeModal({
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { transactionSteps, unstakeTxHash } = useUnstake()
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { redirectToPoolPage } = usePoolRedirect(pool)
@@ -55,7 +58,13 @@ export function UnstakeModal({
       <SuccessOverlay startAnimation={!!unstakeTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
+        {isDesktop && (
+          <DesktopStepTracker
+            chain={pool.chain}
+            isTxBatch={shouldBatchTransactions}
+            transactionSteps={transactionSteps}
+          />
+        )}
         <TransactionModalHeader
           chain={pool.chain}
           label="Unstake LP tokens"
@@ -63,6 +72,7 @@ export function UnstakeModal({
         />
         <ModalCloseButton />
         <ModalBody>
+          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <AnimateHeightChange spacing="sm" w="full">
             {isMobile && (
               <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
