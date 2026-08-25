@@ -12,6 +12,7 @@ import { useHasApprovedRelayer } from './useHasApprovedRelayer'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useState } from 'react'
 import { RelayerMode } from './useRelayerMode'
+import { buildBatchableTxCall } from '../transactions/transaction-steps/tx-batch.helpers'
 
 const approveRelayerStepId = 'approve-relayer'
 
@@ -78,6 +79,13 @@ export function useApproveRelayerStep(
     isComplete: () =>
       (isConnected && hasApprovedRelayer) || (transaction?.result.isSuccess ?? false),
     renderAction: () => <ManagedTransactionButton id={approveRelayerStepId} {...props} />,
+    batchableTxCall: userAddress
+      ? buildBatchableTxCall('balancer.vaultV2', vaultAddress, 'setRelayerApproval', [
+          userAddress,
+          relayerAddress,
+          true,
+        ])
+      : undefined,
     onSuccess: () => refetch(),
     transaction,
   }

@@ -31,7 +31,13 @@ function Content({ stepType }: ContentProps) {
       ? 'add liquidity'
       : stepType === 'removeLiquidity'
         ? 'remove liquidity'
-        : 'swap'
+        : stepType === 'stakingDeposit'
+          ? 'stake'
+          : stepType === 'claimAndUnstake'
+            ? 'claim and unstake'
+            : stepType === 'claim'
+              ? 'claim'
+              : 'swap'
 
   const description = `For a better experience, token approvals and the ${operationName} operation will be bundled into a single transaction.`
   return (
