@@ -127,10 +127,12 @@ export function getReliquaryAddLiquiditySteps({
   if (shouldBatchTransactions) {
     // The relayer approvals are executed inside the same atomic batch as the token
     // approvals and the multicall, so they are hidden from the step list too.
+    // setRelayerApproval runs first, then setApprovalForAll, then the token
+    // approvals, all before the multicall (createRelic + joinPool + add liquidity)
     multicallStep.nestedSteps = [
-      ...(multicallStep.nestedSteps ?? []),
-      approveRelayerRelicsStep,
       approveRelayerStep,
+      approveRelayerRelicsStep,
+      ...(multicallStep.nestedSteps ?? []),
     ]
 
     return [multicallStep]
