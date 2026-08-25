@@ -8,7 +8,7 @@ import { ensureError } from '@repo/lib/shared/utils/errors'
 import { captureFatalError } from '@repo/lib/shared/utils/query-errors'
 import { secs } from '@repo/lib/shared/utils/time'
 import { AlertStatus, ToastId, useToast } from '@chakra-ui/react'
-import { keyBy, orderBy, take } from 'lodash'
+import { keyBy, orderBy, take, omit } from 'lodash'
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { Hash } from 'viem'
 import { useConfig } from 'wagmi'
@@ -38,7 +38,7 @@ export type TransactionStatus =
 
 export type SafeTransactionStatus = SafeTxStatus
 
-export type TransactionType = 'standard' | 'safe'
+export type TransactionType = 'standard' | 'safe' | 'eip5792'
 
 export type TrackedTransaction = {
   hash: Hash
@@ -59,7 +59,7 @@ export type TrackedTransaction = {
 type UpdateTrackedTransaction = Pick<
   TrackedTransaction,
   'label' | 'description' | 'status' | 'duration' | 'safeTxId' | 'safeTxAddress'
->
+> & { hash?: Hash }
 
 const TransactionStatusToastStatusMapping: Record<TransactionStatus, AlertStatus> = {
   confirmed: 'success',
@@ -209,9 +209,14 @@ export function useRecentTransactionsLogic() {
       ...updatePayload,
     }
 
+    // EIP-5792 batches are tracked by their calls id until the real on-chain
+    // transaction hash is known; re-key the entry when it arrives so the toast
+    // and recent activity entry point at the actual transaction.
+    const newHash = updatePayload.hash ?? hash
+
     const updatedCache = {
-      ...transactions,
-      [hash]: updatedCachedTransaction,
+      ...omit(transactions, hash),
+      [newHash]: updatedCachedTransaction,
     }
 
     setTransactions(updatedCache)

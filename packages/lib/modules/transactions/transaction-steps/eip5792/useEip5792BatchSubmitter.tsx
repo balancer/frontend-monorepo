@@ -18,6 +18,7 @@ import {
 } from '../lib'
 import { buildTxBatch } from '../tx-batch.helpers'
 import { getTransactionButtonLabel } from '../transaction-button.helpers'
+import { Hash } from 'viem'
 
 type Props = {
   labels: TransactionLabels
@@ -146,18 +147,22 @@ export function useEip5792BatchSubmitter({
 
   const { isTxTracked, addTrackedTransaction, updateTrackedTransaction } = useRecentTransactions()
 
-  // Track the real on-chain transaction (once its hash is known) so the user gets a
-  // status toast like the regular flow. The batch id (callsId) is not a real tx hash.
-  // Always add as 'confirming' so the toast shows, then update to confirmed/reverted
-  // once the batch settles.
+  // Track the batch by its calls id from the moment it is submitted so the user gets
+  // a 'confirming' toast immediately, like the regular flow. The calls id is not a
+  // real transaction hash; when the real hash becomes available (batch settled) the
+  // entry is re-keyed to it, preserving the toast and the recent activity entry.
+  const addedCallsIdRef = useRef<string | undefined>(undefined)
+
   useEffect(() => {
-    if (!txHash) return
-    if (isTxTracked(txHash)) return
+    if (!callsId) return
+    if (addedCallsIdRef.current === callsId) return
+
+    addedCallsIdRef.current = callsId
 
     addTrackedTransaction(
       {
-        hash: txHash,
-        type: 'standard',
+        hash: callsId as Hash,
+        type: 'eip5792',
         status: 'confirming',
         chain: getGqlChain(chainId),
         init: labels.init,
@@ -167,35 +172,30 @@ export function useEip5792BatchSubmitter({
       },
       true
     )
-  }, [
-    txHash,
-    isTxTracked,
-    addTrackedTransaction,
-    chainId,
-    labels.init,
-    labels.confirming,
-    labels.description,
-  ])
+  }, [callsId, addTrackedTransaction, chainId, labels.init, labels.confirming, labels.description])
 
-  // Update to confirmed/reverted once the batch settles. This is a separate effect
-  // keyed on isTxTracked: when the status settles in the same render the tx hash
-  // first appears, the add's setState has not propagated yet, so this effect re-runs
-  // after the add commits — by then the tx is in the cache and the closures are
-  // fresh, so the update lands on the tracked tx and its toast.
+  // Update to confirmed/reverted once the batch settles, re-keying the entry from
+  // the calls id to the real transaction hash. Keyed on isTxTracked: when the
+  // status settles in the same render the calls id first appears, the add's
+  // setState has not propagated yet, so this effect re-runs after the add commits
+  // — by then the entry is in the cache and the closures are fresh.
+  // updatedTxHashRef guards against repeat updates.
   useEffect(() => {
-    if (!txHash) return
-    if (!isTxTracked(txHash)) return
+    if (!callsId || !txHash) return
+    if (!isTxTracked(callsId as Hash)) return
     if (updatedTxHashRef.current === txHash) return
 
     if (callsStatus !== 'success' && callsStatus !== 'failure') return
 
     updatedTxHashRef.current = txHash
 
-    updateTrackedTransaction(txHash, {
+    updateTrackedTransaction(callsId as Hash, {
+      hash: txHash,
       label: callsStatus === 'success' ? labels.confirmed : labels.reverted,
       status: callsStatus === 'success' ? 'confirmed' : 'reverted',
     })
   }, [
+    callsId,
     txHash,
     callsStatus,
     isTxTracked,
