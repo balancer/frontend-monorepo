@@ -138,5 +138,5 @@ export function getReliquaryAddLiquiditySteps({
     return [multicallStep]
   }
 
-  return [approveRelayerRelicsStep, approveRelayerStep, ...steps]
+  return [approveRelayerStep, approveRelayerRelicsStep, ...steps]
 }
