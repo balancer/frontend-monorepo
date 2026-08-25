@@ -170,9 +170,9 @@ export function useEip5792BatchSubmitter({
 
   // Mark the tracked transaction as confirmed/reverted once the batch settles, so it
   // stops spinning in recent activity (matching the regular flow's useOnTransactionConfirmation).
-  // Guard on isTxTracked so we never update a tx that hasn't been added yet, and on a
-  // settledRef so we only update once (updateTrackedTransaction triggers a re-render that
-  // would otherwise re-run this effect and cause an infinite loop).
+  // Deps are intentionally stable (txHash, callsStatus) — updateTrackedTransaction and
+  // isTxTracked are recreated each render and would re-run this effect. The settledRef
+  // guard ensures we only update once.
   useEffect(() => {
     if (!txHash) return
     if (!isTxTracked(txHash)) return
@@ -193,7 +193,8 @@ export function useEip5792BatchSubmitter({
         status: 'reverted',
       })
     }
-  }, [txHash, callsStatus, labels, isTxTracked, updateTrackedTransaction])
+     
+  }, [txHash, callsStatus])
 
   // Keep the button visible (disabled) while the batch is pending so the user sees
   // a "Confirming..." state, matching the regular flow. Hide it once settled.
