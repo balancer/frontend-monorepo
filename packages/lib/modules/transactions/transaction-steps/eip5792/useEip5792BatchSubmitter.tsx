@@ -48,6 +48,7 @@ export function useEip5792BatchSubmitter({
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error>()
   const lastStatusRef = useRef<string | undefined>(undefined)
+  const settledRef = useRef(false)
 
   const { mutateAsync } = useSendCalls({})
 
@@ -169,17 +170,24 @@ export function useEip5792BatchSubmitter({
 
   // Mark the tracked transaction as confirmed/reverted once the batch settles, so it
   // stops spinning in recent activity (matching the regular flow's useOnTransactionConfirmation).
-  // Guard on isTxTracked so we never update a tx that hasn't been added yet.
+  // Guard on isTxTracked so we never update a tx that hasn't been added yet, and on a
+  // settledRef so we only update once (updateTrackedTransaction triggers a re-render that
+  // would otherwise re-run this effect and cause an infinite loop).
   useEffect(() => {
     if (!txHash) return
     if (!isTxTracked(txHash)) return
+    if (settledRef.current) return
 
     if (callsStatus === 'success') {
+      settledRef.current = true
+
       updateTrackedTransaction(txHash, {
         label: labels.confirmed,
         status: 'confirmed',
       })
     } else if (callsStatus === 'failure') {
+      settledRef.current = true
+
       updateTrackedTransaction(txHash, {
         label: labels.reverted,
         status: 'reverted',
