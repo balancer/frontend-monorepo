@@ -104,13 +104,17 @@ export function useEip5792BatchSubmitter({
 
     lastStatusRef.current = callsStatus
 
-    const isSuccess = callsStatus === 'success'
     const isError = callsStatus === 'failure'
 
     // Use the real on-chain receipt (fetched via useWaitForTransactionReceipt) so the
     // receipt parser gets the actual ERC-20 Transfer logs. The EIP-5792 receipt's logs
     // are empty, so we can't rely on them.
     const realReceipt = transactionReceiptQuery.data
+
+    // Only mark success once the real receipt (with its transactionHash) is available.
+    // Marking success before that would trigger updateOnSuccessCalled with a missing
+    // transaction hash and throw.
+    const isSuccess = callsStatus === 'success' && !!realReceipt
 
     const successFullTransaction: ManagedResult = {
       chainId,
