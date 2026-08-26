@@ -63,7 +63,7 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
     },
   ] as const
 
-  const [activeTab, setActiveTab] = useState(TABS[0])
+  const [activeTab, setActiveTab] = useState(TABS[0]!)
   const isProportionalTabSelected = activeTab.value === 'proportional'
   const nextBtn = useRef(null)
 
