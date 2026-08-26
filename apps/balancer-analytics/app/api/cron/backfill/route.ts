@@ -414,11 +414,11 @@ export async function GET(req: Request) {
     const slugPivots: DayMap[] = SLUGS.map(() => new Map())
 
     for (let i = 0; i < SLUGS.length; i++) {
-      foldTvl(slugPivots[i], protocols[i], ctx)
-      foldBreakdown(slugPivots[i], dexes[i], ctx, 'volume')
-      foldBreakdown(slugPivots[i], fees[i], ctx, 'fees')
-      const protocol = SLUG_TO_PROTOCOL[SLUGS[i]]
-      rowsByProtocol[protocol] = pivotToRows(slugPivots[i], protocol)
+      foldTvl(slugPivots[i]!, protocols[i]!, ctx)
+      foldBreakdown(slugPivots[i]!, dexes[i]!, ctx, 'volume')
+      foldBreakdown(slugPivots[i]!, fees[i]!, ctx, 'fees')
+      const protocol = SLUG_TO_PROTOCOL[SLUGS[i]!]!
+      rowsByProtocol[protocol] = pivotToRows(slugPivots[i]!, protocol)
     }
 
     // CORE = V2 + V3 + COW_AMM. Build by merging the three slug pivots.

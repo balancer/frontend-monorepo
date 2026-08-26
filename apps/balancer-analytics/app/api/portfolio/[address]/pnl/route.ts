@@ -239,7 +239,9 @@ async function buildPayload(address: string): Promise<PortfolioPnlPayload> {
     // a full last page — that's the case where older events almost
     // certainly exist beyond what we fetched.
     if (!complete && events.length > 0) {
-      cutoffsByChain[chain][type === 'ADD' ? 'add' : 'remove'] = events[events.length - 1].timestamp
+      cutoffsByChain[chain]![type === 'ADD' ? 'add' : 'remove'] =
+        events[events.length - 1]!.timestamp
+
       truncated = true
     }
   }
