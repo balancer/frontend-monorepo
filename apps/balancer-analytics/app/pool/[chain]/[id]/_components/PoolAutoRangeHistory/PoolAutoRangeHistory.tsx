@@ -237,7 +237,7 @@ function buildChartOption(
   // worse than no bounds at that x position).
   const deltaOrNull = (series: (number | null)[], floor: (number | null)[]): (number | null)[] =>
     series.map((v, i) => {
-      const f = floor[i]
+      const f = floor[i]!
       if (v === null || f === null) return null
       const d = v - f
       return d >= 0 ? d : 0
@@ -297,7 +297,7 @@ function buildChartOption(
       formatter: (params: { dataIndex: number }[]) => {
         const i = params[0]?.dataIndex
         if (i === undefined) return ''
-        const ts = new Date(samples[i].timestamp * 1000)
+        const ts = new Date(samples[i]!.timestamp * 1000)
 
         const date = ts.toLocaleDateString(undefined, {
           year: 'numeric',
@@ -313,13 +313,13 @@ function buildChartOption(
 
         return [
           `<div style="font-weight:600;margin-bottom:6px">${date}</div>`,
-          row('Max', priceFmt(samples[i].maxPrice), COLORS.marginBandEdge),
-          row('High target', priceFmt(samples[i].highTargetPrice), COLORS.targetBandEdge),
-          row('Spot', priceFmt(samples[i].spotPrice), COLORS.spot),
-          row('Low target', priceFmt(samples[i].lowTargetPrice), COLORS.targetBandEdge),
-          row('Min', priceFmt(samples[i].minPrice), COLORS.marginBandEdge),
+          row('Max', priceFmt(samples[i]!.maxPrice), COLORS.marginBandEdge),
+          row('High target', priceFmt(samples[i]!.highTargetPrice), COLORS.targetBandEdge),
+          row('Spot', priceFmt(samples[i]!.spotPrice), COLORS.spot),
+          row('Low target', priceFmt(samples[i]!.lowTargetPrice), COLORS.targetBandEdge),
+          row('Min', priceFmt(samples[i]!.minPrice), COLORS.marginBandEdge),
           `<div style="height:1px;background:${COLORS.tooltipBorder};margin:6px 0"></div>`,
-          row('Centeredness', pctFmt(samples[i].centeredness), COLORS.centeredness),
+          row('Centeredness', pctFmt(samples[i]!.centeredness), COLORS.centeredness),
         ].join('')
       },
     },
