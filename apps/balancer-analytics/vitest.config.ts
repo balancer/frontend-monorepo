@@ -13,6 +13,9 @@ export default defineConfig({
     alias: {
       ...(baseConfig.resolve?.alias as Record<string, string>),
       '~': resolve(__dirname, './lib'),
+      // Mirrors the `@analytics/*` path mapping in tsconfig.json so specs
+      // can import app modules the same way the source does.
+      '@analytics': resolve(__dirname, '.'),
     },
   },
   test: {
