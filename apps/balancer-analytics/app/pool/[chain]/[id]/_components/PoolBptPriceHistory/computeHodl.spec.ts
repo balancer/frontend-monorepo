@@ -71,7 +71,7 @@ describe('computeHodl', () => {
     // qty (underlying WETH per BPT) = (10/100) * (2100/2000) = 0.105
     // baseValue = 0.105 * 2000(underlying px at t0) = 210 == sharePrice(t0)
     expect(result!.baseValue).toBeCloseTo(210, 10)
-    expect(result!.values[0]).toBeCloseTo(samples[0].sharePrice, 10)
+    expect(result!.values[0]).toBeCloseTo(samples[0]!.sharePrice, 10)
     // Day 1 is valued using only the underlying price (2200), not the wrapper's.
     expect(result!.values[1]).toBeCloseTo(0.105 * 2200, 10) // 231
   })
