@@ -18,5 +18,11 @@ export default defineConfig({
   test: {
     ...baseConfig.test,
     passWithNoTests: true,
+    // `@repo/lib/config/app.config.ts` throws at import when this is unset,
+    // which breaks every spec that transitively imports `@repo/lib`. Provide
+    // it here so the suite runs without a local `.env.local`.
+    env: {
+      NEXT_PUBLIC_BALANCER_API_URL: 'https://api-v3.balancer.fi/graphql',
+    },
   },
 })
