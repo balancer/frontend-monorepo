@@ -57,13 +57,13 @@ type Ev = PoolPageData['events'][number]
  */
 function tvlAt(snapshots: Snapshot[], ts: number): number {
   if (snapshots.length === 0) return 0
-  if (ts <= snapshots[0].timestamp) return snapshots[0].totalLiquidity
-  const last = snapshots[snapshots.length - 1]
+  if (ts <= snapshots[0]!.timestamp) return snapshots[0]!.totalLiquidity
+  const last = snapshots[snapshots.length - 1]!
   if (ts >= last.timestamp) return last.totalLiquidity
 
   for (let i = 1; i < snapshots.length; i++) {
-    const a = snapshots[i - 1]
-    const b = snapshots[i]
+    const a = snapshots[i - 1]!
+    const b = snapshots[i]!
 
     if (ts >= a.timestamp && ts <= b.timestamp) {
       const t = (ts - a.timestamp) / Math.max(1, b.timestamp - a.timestamp)
@@ -295,7 +295,7 @@ export function PoolHistoryChart({
           }>
 
           if (!params?.length) return ''
-          const ts = params[0].data[0]
+          const ts = params[0]!.data[0]
 
           const date = new Date(ts).toLocaleString(undefined, {
             month: 'short',
