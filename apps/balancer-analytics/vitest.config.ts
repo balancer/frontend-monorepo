@@ -16,6 +16,9 @@ export default defineConfig({
       // Mirrors the `@analytics/*` path mapping in tsconfig.json so specs
       // can import app modules the same way the source does.
       '@analytics': resolve(__dirname, '.'),
+      // Next.js's `server-only` is a build-time virtual module; alias it to
+      // a no-op stub so server-only modules are testable under vitest.
+      'server-only': resolve(__dirname, './test/stubs/server-only.ts'),
     },
   },
   test: {
