@@ -47,16 +47,16 @@ describe('forwardFillVersionBreakdowns', () => {
 
     const filled = forwardFillVersionBreakdowns(points, seed)
     expect(filled).toBe(1)
-    expect(points[0].breakdowns?.V2?.totalLiquidity).toBeCloseTo(40)
-    expect(points[0].breakdowns?.V3?.totalLiquidity).toBeCloseTo(60)
-    expect(points[0].breakdowns?.V2?.swapVolume24h).toBeCloseTo(10)
-    expect(points[0].breakdowns?.V3?.swapVolume24h).toBeCloseTo(30)
+    expect(points[0]!.breakdowns?.V2?.totalLiquidity).toBeCloseTo(40)
+    expect(points[0]!.breakdowns?.V3?.totalLiquidity).toBeCloseTo(60)
+    expect(points[0]!.breakdowns?.V2?.swapVolume24h).toBeCloseTo(10)
+    expect(points[0]!.breakdowns?.V3?.swapVolume24h).toBeCloseTo(30)
 
     // Stack still equals CORE
     const stack =
-      (points[0].breakdowns?.V2?.totalLiquidity ?? 0) +
-      (points[0].breakdowns?.V3?.totalLiquidity ?? 0) +
-      (points[0].breakdowns?.COW_AMM?.totalLiquidity ?? 0)
+      (points[0]!.breakdowns?.V2?.totalLiquidity ?? 0) +
+      (points[0]!.breakdowns?.V3?.totalLiquidity ?? 0) +
+      (points[0]!.breakdowns?.COW_AMM?.totalLiquidity ?? 0)
 
     expect(stack).toBeCloseTo(110)
   })
@@ -106,17 +106,17 @@ describe('forwardFillVersionBreakdowns', () => {
 
     const filled = forwardFillVersionBreakdowns(points, null)
     expect(filled).toBe(1)
-    expect(points[0].breakdowns?.V2?.totalLiquidity).toBe(25)
-    expect(points[0].breakdowns?.V3?.totalLiquidity).toBe(75)
-    expect(points[1].breakdowns?.V2?.totalLiquidity).toBeCloseTo(50)
-    expect(points[1].breakdowns?.V3?.totalLiquidity).toBeCloseTo(150)
+    expect(points[0]!.breakdowns?.V2?.totalLiquidity).toBe(25)
+    expect(points[0]!.breakdowns?.V3?.totalLiquidity).toBe(75)
+    expect(points[1]!.breakdowns?.V2?.totalLiquidity).toBeCloseTo(50)
+    expect(points[1]!.breakdowns?.V3?.totalLiquidity).toBeCloseTo(150)
   })
 
   it('does nothing when there is no seed and no in-window pair', () => {
     const points = [point({ timestamp: 1, totalLiquidity: 100 })]
     const filled = forwardFillVersionBreakdowns(points, null)
     expect(filled).toBe(0)
-    expect(points[0].breakdowns?.V2).toBeUndefined()
-    expect(points[0].breakdowns?.V3).toBeUndefined()
+    expect(points[0]!.breakdowns?.V2).toBeUndefined()
+    expect(points[0]!.breakdowns?.V3).toBeUndefined()
   })
 })

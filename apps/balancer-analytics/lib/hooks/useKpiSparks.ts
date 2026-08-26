@@ -76,8 +76,8 @@ function deriveSpark(
   const target = latestSample.t - DAY_SECONDS
 
   for (let i = samples.length - 2; i >= 0; i--) {
-    if (samples[i].t <= target) {
-      prev = samples[i].v
+    if (samples[i]!.t <= target) {
+      prev = samples[i]!.v
       break
     }
   }

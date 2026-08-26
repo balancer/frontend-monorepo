@@ -209,7 +209,7 @@ function computePnl(
   const netTokenAddrs = Object.keys(entry.netTokens)
 
   for (const addr of netTokenAddrs) {
-    if (entry.netTokens[addr].amount < 0) {
+    if (entry.netTokens[addr]!.amount < 0) {
       return { ...blank, status: 'exited_and_reentered' }
     }
   }
@@ -231,7 +231,7 @@ function computePnl(
   let hodlUsd = 0
 
   for (const addr of netTokenAddrs) {
-    const { amount } = entry.netTokens[addr]
+    const { amount } = entry.netTokens[addr]!
     if (amount <= 0) continue
     const price = priceByAddr.get(addr)
     if (price == null) continue // token no longer in pool snapshot — skip

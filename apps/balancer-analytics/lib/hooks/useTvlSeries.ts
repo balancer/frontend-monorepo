@@ -128,7 +128,7 @@ function buildSeries(
   let firstDataIdx = -1
 
   for (let i = 0; i < snapshots.length; i++) {
-    const v = pickMetric(snapshots[i], metric)
+    const v = pickMetric(snapshots[i]!, metric)
 
     if (Number.isFinite(v) && v > 0) {
       firstDataIdx = i
@@ -136,7 +136,7 @@ function buildSeries(
     }
   }
 
-  const firstDataAt = firstDataIdx >= 0 ? snapshots[firstDataIdx].timestamp * 1000 : null
+  const firstDataAt = firstDataIdx >= 0 ? snapshots[firstDataIdx]!.timestamp * 1000 : null
 
   const anchor = snapshots.at(-1)!.timestamp
   const days = RANGE_DAYS[range]
@@ -149,7 +149,7 @@ function buildSeries(
 
   const effectiveCutoff =
     sparse && firstDataIdx >= 0
-      ? Math.max(rangeCutoff, snapshots[firstDataIdx].timestamp)
+      ? Math.max(rangeCutoff, snapshots[firstDataIdx]!.timestamp)
       : rangeCutoff
 
   const sliced = snapshots.filter(p => p.timestamp >= effectiveCutoff)

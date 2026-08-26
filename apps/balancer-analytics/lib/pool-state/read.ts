@@ -316,14 +316,14 @@ export async function readUniversalV3State(
   // Bail if the core VaultExplorer reads failed — the pool likely isn't
   // registered on V3 (could be a V2 address that the caller passed by
   // mistake).
-  if (results[0].status !== 'success') return null
+  if (results[0]!.status !== 'success') return null
 
-  const swapFee = results[0].result as bigint
-  const aggregate = results[1].result as readonly [bigint, bigint] | undefined
+  const swapFee = results[0]!.result as bigint
+  const aggregate = results[1]!.result as readonly [bigint, bigint] | undefined
   const aggregateSwap = aggregate?.[0] ?? 0n
   const aggregateYield = aggregate?.[1] ?? 0n
-  const paused = (results[2].result as boolean | undefined) ?? false
-  const recovery = (results[3].result as boolean | undefined) ?? false
+  const paused = (results[2]!.result as boolean | undefined) ?? false
+  const recovery = (results[3]!.result as boolean | undefined) ?? false
 
   let poolCreatorSwap: string | null = null
   let poolCreatorYield: string | null = null
@@ -701,8 +701,8 @@ export async function readReclammTypeState(
     maxPrice: range ? range[1].toString() : '0',
     virtualBalanceA: vb ? vb[0].toString() : '0',
     virtualBalanceB: vb ? vb[1].toString() : '0',
-    liveBalanceA: lb && lb.length >= 2 ? lb[0].toString() : '0',
-    liveBalanceB: lb && lb.length >= 2 ? lb[1].toString() : '0',
+    liveBalanceA: lb && lb.length >= 2 ? lb[0]!.toString() : '0',
+    liveBalanceB: lb && lb.length >= 2 ? lb[1]!.toString() : '0',
     centerednessMargin:
       results[4].status === 'success' ? (results[4].result as bigint).toString() : '0',
     dailyPriceShiftExponent:
@@ -816,8 +816,8 @@ export async function readStableSurgeState(
   })
 
   for (let i = 0; i < results.length; i += 2) {
-    const threshold = results[i]
-    const maxFee = results[i + 1]
+    const threshold = results[i]!
+    const maxFee = results[i + 1]!
     if (threshold.status !== 'success') continue
     const t = (threshold.result as bigint).toString()
     const m = maxFee.status === 'success' ? (maxFee.result as bigint).toString() : '0'
