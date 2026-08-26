@@ -23,16 +23,16 @@ export function useGetRelicPositionsOfOwner(chain: GqlChain) {
   return {
     ...query,
     relics: query.data
-      ? query.data[0].map(
-          (relicId, index) =>
-            ({
-              relicId: relicId.toString(),
-              amount: formatUnits(query.data[1][index].amount, 18),
-              entry: Number(query.data[1][index].entry.toString()),
-              poolId: query.data[1][index].poolId.toString(),
-              level: Number(query.data[1][index].level.toString()),
-            }) as ReliquaryPosition
-        )
+      ? query.data[0].map((relicId, index) => {
+          const position = query.data[1][index]!
+          return {
+            relicId: relicId.toString(),
+            amount: formatUnits(position.amount, 18),
+            entry: Number(position.entry.toString()),
+            poolId: position.poolId.toString(),
+            level: Number(position.level.toString()),
+          } as ReliquaryPosition
+        })
       : [],
   }
 }

@@ -31,19 +31,19 @@ export function relicGetMaturityProgress(
     1 -
     maturitiesReversed.findIndex(maturity => bn(timeElapsedSinceStart).gte(bn(maturity)))
 
-  const isMaxMaturity = bn(timeElapsedSinceStart).gt(bn(maturities[maturities.length - 1]))
+  const isMaxMaturity = bn(timeElapsedSinceStart).gt(bn(maturities[maturities.length - 1]!))
   const canUpgradeTo = isMaxMaturity ? maturities.length : nextLevelMaturityIndex + 1
 
   const canUpgrade =
     (isMaxMaturity && relic.level < maturities.length - 1) ||
     (nextLevelMaturityIndex > 0 && nextLevelMaturityIndex > relic.level)
 
-  const currentLevelMaturity = bn(maturities[relic.level]).toNumber()
+  const currentLevelMaturity = bn(maturities[relic.level]!).toNumber()
   const timeElapsedSinceCurrentLevel = Date.now() / 1000 - (currentLevelMaturity + relic.entry)
 
   const timeBetweenEntryAndNextLevel = isMaxMaturity
     ? 3600
-    : bn(maturities[relic.level + 1]).toNumber()
+    : bn(maturities[relic.level + 1]!).toNumber()
 
   const progressToNextLevel = canUpgrade
     ? 100
