@@ -78,5 +78,5 @@ const PALETTE = [
 function colorFromAddress(addr: string): string {
   let h = 0
   for (let i = 2; i < Math.min(addr.length, 10); i++) h = (h * 31 + addr.charCodeAt(i)) >>> 0
-  return PALETTE[h % PALETTE.length]
+  return PALETTE[h % PALETTE.length]!
 }

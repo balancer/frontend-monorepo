@@ -36,18 +36,18 @@ export function Sparkline({
       height - ((v - min) / range) * (height - 4) - 2,
     ])
 
-    let d = `M ${pts[0][0]} ${pts[0][1]}`
+    let d = `M ${pts[0]![0]} ${pts[0]![1]}`
 
     if (smooth) {
       for (let i = 1; i < pts.length; i++) {
-        const [x0, y0] = pts[i - 1],
-          [x1, y1] = pts[i]
+        const [x0, y0] = pts[i - 1]!
+        const [x1, y1] = pts[i]!
 
         const cx = (x0 + x1) / 2
         d += ` Q ${cx} ${y0} ${cx} ${(y0 + y1) / 2} T ${x1} ${y1}`
       }
     } else {
-      for (let i = 1; i < pts.length; i++) d += ` L ${pts[i][0]} ${pts[i][1]}`
+      for (let i = 1; i < pts.length; i++) d += ` L ${pts[i]![0]} ${pts[i]![1]}`
     }
 
     const area = d + ` L ${width} ${height} L 0 ${height} Z`

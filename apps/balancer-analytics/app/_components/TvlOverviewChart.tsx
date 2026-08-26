@@ -212,7 +212,7 @@ export function TvlOverviewChart() {
   // When the range spans multiple years, axis labels include the year.
   const showYearInAxis = useMemo(() => {
     if (!data?.points.length) return false
-    const first = data.points[0].t
+    const first = data.points[0]!.t
     const last = data.points.at(-1)!.t
     return new Date(first).getUTCFullYear() !== new Date(last).getUTCFullYear()
   }, [data])
