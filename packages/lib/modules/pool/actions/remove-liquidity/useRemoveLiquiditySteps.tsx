@@ -21,7 +21,11 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { slippage } = useUserSettings()
   const relayerMode = useRelayerMode(pool)
-  const { shouldUseSignatures } = useUserSettings()
+  const { shouldUseSignatures: userShouldUseSignatures } = useUserSettings()
+
+  // When batching, force gas-tx approvals so the whole flow (approvals + remove
+  // liquidity) is one atomic batch instead of a free signature + a separate gas batch.
+  const shouldUseSignatures = shouldBatchTransactions ? false : userShouldUseSignatures
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
   const signRelayerStep = useSignRelayerStep(chain)
   const isSafeAccount = useIsSafeAccount()

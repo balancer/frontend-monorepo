@@ -54,7 +54,13 @@ export function useSwapSteps({
   const swapRequiresRelayer =
     relayerMode !== 'no-relayer-needed' && handler.name === 'AuraBalSwapHandler'
 
-  const { shouldUseSignatures } = useUserSettings()
+  const { shouldUseSignatures: userShouldUseSignatures } = useUserSettings()
+
+  const shouldBatchTransactions = useShouldBatchTransactions()
+
+  // When batching, force gas-tx approvals so the whole flow (approvals + swap) is
+  // one atomic batch instead of a free signature + a separate gas batch.
+  const shouldUseSignatures = shouldBatchTransactions ? false : userShouldUseSignatures
 
   const tokenInAmounts = useMemo(() => {
     if (!tokenInInfo) return [] as RawAmount[]
@@ -115,8 +121,6 @@ export function useSwapSteps({
 
   // native tokenIn does not require permit2 signature
   const isNativeTokenIn = tokenInInfo && isNativeAsset(tokenInInfo?.address, chain)
-
-  const shouldBatchTransactions = useShouldBatchTransactions()
 
   const steps = useMemo(
     () =>
