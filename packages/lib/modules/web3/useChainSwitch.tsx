@@ -44,17 +44,28 @@ export function NetworkSwitchButton({ chainId }: Props) {
 
   if (isSafeApp) return <SwitchNetworkAlert chainName={getChainShortName(chainId)} />
 
+  return <RegularSwitchNetworkButton {...networkSwitchButtonProps} />
+}
+
+/*
+  Programmatic network switch button for wallets that support wallet_switchEthereumChain.
+  Safe Apps cannot switch programmatically and must use SwitchNetworkAlert instead.
+*/
+export function RegularSwitchNetworkButton({
+  name,
+  switchChain,
+  chainId,
+  isPending,
+}: NetworkSwitchButtonProps) {
   return (
     <Button
-      isLoading={networkSwitchButtonProps.isPending}
-      onClick={() =>
-        networkSwitchButtonProps.switchChain?.({ chainId: networkSwitchButtonProps.chainId })
-      }
+      isLoading={isPending}
+      onClick={() => switchChain?.({ chainId })}
       size="lg"
       variant="secondary"
       w="full"
     >
-      Switch network to {networkSwitchButtonProps.name}
+      Switch network to {name}
     </Button>
   )
 }

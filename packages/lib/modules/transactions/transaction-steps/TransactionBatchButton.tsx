@@ -3,7 +3,7 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { ManagedResult, TransactionLabels, TransactionStep } from './lib'
-import { SwitchNetworkAlert, useChainSwitch } from '../../web3/useChainSwitch'
+import { RegularSwitchNetworkButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { useBatchSubmitter } from './useBatchSubmitter'
 
 type Props = {
@@ -40,7 +40,8 @@ export function TransactionBatchButton({
   return (
     <VStack width="full">
       {submitter.error && <TransactionError error={submitter.error} />}
-      {shouldChangeNetwork && <SwitchNetworkAlert chainName={networkSwitchButtonProps.name} />}
+      {/* Safe Apps cannot switch network programmatically, other wallets get the regular switch button */}
+      {shouldChangeNetwork && <RegularSwitchNetworkButton {...networkSwitchButtonProps} />}
       {submitter.statusContent}
 
       {!shouldChangeNetwork && submitter.canSubmit && (
