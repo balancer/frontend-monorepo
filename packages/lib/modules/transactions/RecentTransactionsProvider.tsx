@@ -8,6 +8,7 @@ import { ensureError } from '@repo/lib/shared/utils/errors'
 import { captureFatalError } from '@repo/lib/shared/utils/query-errors'
 import { secs } from '@repo/lib/shared/utils/time'
 import { AlertStatus, ToastId, useToast } from '@chakra-ui/react'
+import { milliseconds } from 'date-fns'
 import { keyBy, orderBy, take, omit } from 'lodash'
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { Hash } from 'viem'
@@ -28,7 +29,7 @@ import { safeStatusToBalancerStatus } from './transaction-steps/safe/safe.helper
 import { useInterval } from 'usehooks-ts'
 
 // How long a persisted EIP-5792 batch can stay 'confirming' before it is considered lost
-const EIP5792_STALE_BATCH_MS = secs(10).toMs()
+const EIP5792_STALE_BATCH_MS = milliseconds({ minutes: 10 })
 
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain
