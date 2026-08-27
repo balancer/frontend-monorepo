@@ -236,6 +236,16 @@
         "NEXT_E2E_DEV"
       ]
     },
+    "test:e2e:dev:bal:3": {
+      "dependsOn": [
+        "frontend-v3#build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "NEXT_E2E_DEV"
+      ]
+    },
     "test:e2e:dev:ui:bal": {
       "cache": false,
       "persistent": true,

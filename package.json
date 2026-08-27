@@ -28,6 +28,7 @@
     "test:e2e:dev:bal": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:bal --ui=stream --log-order=stream --",
     "test:e2e:dev:bal:1": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:bal:1 --ui=stream --log-order=stream --",
     "test:e2e:dev:bal:2": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:bal:2 --ui=stream --log-order=stream --",
+    "test:e2e:dev:bal:3": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:bal:3 --ui=stream --log-order=stream --",
     "test:e2e:dev:ui:bal": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:ui:bal --ui=stream --log-order=stream --",
     "test:e2e:dev:beets": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:beets --ui=stream --log-order=stream --",
     "test:e2e:dev:ui:beets": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:ui:beets --ui=stream --log-order=stream --",
