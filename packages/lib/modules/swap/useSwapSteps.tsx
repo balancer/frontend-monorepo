@@ -92,7 +92,8 @@ export function useSwapSteps({
     isPermit2,
   })
 
-  const isSignPermit2Loading = isPermit2 && !signPermit2Step
+  // Only relevant when the flow requires the gasless permit2 signature step
+  const isSignPermit2Loading = shouldUseSignatures && isPermit2 && !signPermit2Step
 
   // If the user has selected to not use signatures, we allow them to do permit2
   // approvals with transactions.
@@ -205,11 +206,17 @@ export function getApprovalAndSwapSteps({
     else stepList.push(signRelayerStep)
   }
 
-  const isPermit2WithStep = isPermit2 && signPermit2Step && !isNativeTokenIn
+  /*
+  The approval branch depends only on the route (permit2 vs vault) and the token in,
+  never on the presence of the signature step: when batching (or when signatures are
+  disabled) the Permit2 allowances are submitted as transactions regardless of whether
+  a signature step object exists.
+*/
+  const isPermit2ApprovalRoute = isPermit2 && !isNativeTokenIn
 
   // Approvals that can be batched with the swap are attached as nested steps,
   // mirroring how add/remove liquidity bundle approvals for smart accounts.
-  swapStep.nestedSteps = isPermit2WithStep
+  swapStep.nestedSteps = isPermit2ApprovalRoute
     ? shouldUseSignatures
       ? tokenApprovalSteps
       : [...tokenApprovalSteps, ...permit2ApprovalSteps]
@@ -220,16 +227,22 @@ export function getApprovalAndSwapSteps({
   if (shouldDisplayBatch) {
     // Hide approvals when batching (they are executed in the same atomic tx as the swap).
     // The permit2 signature step stays visible: it is a gasless signature, not a batched call.
-    if (isPermit2WithStep && shouldUseSignatures) stepList.push(signPermit2Step)
+    if (isPermit2ApprovalRoute && shouldUseSignatures && signPermit2Step) {
+      stepList.push(signPermit2Step)
+    }
+
     stepList.push(swapStep)
     return stepList
   }
 
   stepList.push(...tokenApprovalSteps)
 
-  if (isPermit2WithStep) {
-    if (shouldUseSignatures) stepList.push(signPermit2Step)
-    else stepList.push(...permit2ApprovalSteps)
+  if (isPermit2ApprovalRoute) {
+    if (shouldUseSignatures) {
+      if (signPermit2Step) stepList.push(signPermit2Step)
+    } else {
+      stepList.push(...permit2ApprovalSteps)
+    }
   }
 
   stepList.push(swapStep)
