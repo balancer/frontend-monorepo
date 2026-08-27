@@ -150,7 +150,7 @@ export function usePortfolioPnl(
  * cutoff is potentially missing older events. Pools strictly after the
  * cutoff are unaffected.
  */
-function computePnl(
+export function computePnl(
   position: PortfolioPosition,
   entry: PortfolioPnlPoolEntry | null,
   addCutoffTs: number | null,
