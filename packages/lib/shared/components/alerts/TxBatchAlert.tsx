@@ -25,6 +25,10 @@ type ContentProps = {
   stepType: StepType
 }
 
+// Claim-type batches bundle contract permissions (relayer/minter approvals), not
+// ERC-20 token allowances, so the copy must not mention "token approvals"
+const NON_TOKEN_APPROVAL_STEP_TYPES: StepType[] = ['claim', 'claimAndUnstake']
+
 function Content({ stepType }: ContentProps) {
   const operationName =
     stepType === 'addLiquidity'
@@ -39,15 +43,19 @@ function Content({ stepType }: ContentProps) {
               ? 'claim'
               : 'swap'
 
-  const description = `For a better experience, token approvals and the ${operationName} operation will be bundled into a single transaction.`
+  const approvalsPhrase = NON_TOKEN_APPROVAL_STEP_TYPES.includes(stepType)
+    ? 'the required approvals'
+    : 'token approvals'
+
+  const description = `For a better experience, ${approvalsPhrase} and the ${operationName} operation will be bundled into a single transaction.`
+
+  const title = NON_TOKEN_APPROVAL_STEP_TYPES.includes(stepType)
+    ? 'Transaction bundling'
+    : 'Token approval bundling'
+
   return (
     <HStack flexWrap={{ base: 'wrap', md: 'nowrap' }}>
-      <BalAlertContent
-        description={description}
-        forceColumnMode
-        title="Token approval bundling"
-        wrapText
-      />
+      <BalAlertContent description={description} forceColumnMode title={title} wrapText />
     </HStack>
   )
 }
