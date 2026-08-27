@@ -52,7 +52,7 @@ describe('decodeLogsToRows', () => {
   it('decodes a log into a row with JSON-safe args', () => {
     const rows = decode(log())
     expect(rows).toHaveLength(1)
-    const row = rows[0]
+    const row = rows[0]!
     expect(row.chain).toBe('MAINNET')
     expect(row.poolAddress).toBe('0xpool') // lowercased
     expect(row.protocolVersion).toBe(3)
@@ -83,8 +83,8 @@ describe('decodeLogsToRows', () => {
 
   it('drops the indexed pool echo from args', () => {
     const rows = decode(log({ args: { pool: '0xpool', swapFeePercentage: 100n } }))
-    expect(rows[0].args.pool).toBeUndefined()
-    expect(rows[0].args.swapFeePercentage).toBe('100')
+    expect(rows[0]!.args.pool).toBeUndefined()
+    expect(rows[0]!.args.swapFeePercentage).toBe('100')
   })
 
   it('serializes nested arrays and objects', () => {
@@ -97,13 +97,13 @@ describe('decodeLogsToRows', () => {
       })
     )
 
-    expect(rows[0].args.amounts).toEqual(['1', '2'])
-    expect(rows[0].args.nested).toEqual({ a: '3', b: 'x' })
+    expect(rows[0]!.args.amounts).toEqual(['1', '2'])
+    expect(rows[0]!.args.nested).toEqual({ a: '3', b: 'x' })
   })
 
   it('handles positional (array) args by keying arg0, arg1...', () => {
     const rows = decode(log({ args: [10n, 'y'] }))
-    expect(rows[0].args.arg0).toBe('10')
-    expect(rows[0].args.arg1).toBe('y')
+    expect(rows[0]!.args.arg0).toBe('10')
+    expect(rows[0]!.args.arg1).toBe('y')
   })
 })

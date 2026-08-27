@@ -208,15 +208,15 @@ describe('diffSnapshots', () => {
     )
 
     expect(changes).toHaveLength(1)
-    expect(changes[0].key).toBe('swapFeePercentage')
-    expect(changes[0].before).toBe('100')
-    expect(changes[0].after).toBe('200')
+    expect(changes[0]!.key).toBe('swapFeePercentage')
+    expect(changes[0]!.before).toBe('100')
+    expect(changes[0]!.after).toBe('200')
   })
 
   it('treats unset → set as a change', () => {
     const changes = diffSnapshots({}, { swapFeePercentage: '100' })
     expect(changes).toHaveLength(1)
-    expect(changes[0].key).toBe('swapFeePercentage')
+    expect(changes[0]!.key).toBe('swapFeePercentage')
   })
 
   it('ignores params undefined on both sides', () => {
