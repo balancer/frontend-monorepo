@@ -32,10 +32,10 @@ const rangeOptions: ButtonGroupOption[] = [
 
 export function ReliquaryDetailsCharts() {
   const [selectedChartOption, setSelectedChartOption] = useState<ButtonGroupOption>(
-    chartTypeOptions[0]
+    chartTypeOptions[0]!
   )
 
-  const [selectedRangeOption, setRangeOption] = useState<ButtonGroupOption>(rangeOptions[0])
+  const [selectedRangeOption, setRangeOption] = useState<ButtonGroupOption>(rangeOptions[0]!)
   const networkConfig = useNetworkConfig()
 
   const { data } = useQuery(GetReliquaryFarmSnapshotsDocument, {

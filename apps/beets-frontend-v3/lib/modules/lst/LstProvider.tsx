@@ -44,7 +44,7 @@ const TABS: ButtonGroupOption[] = [
 ]
 
 export function useLstLogic() {
-  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(TABS[0])
+  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(TABS[0]!)
   const [amountAssets, setAmountAssets] = useState('')
   const [amountShares, setAmountShares] = useState('')
   const [amountWithdraw, setAmountWithdraw] = useState(0n)

@@ -56,7 +56,7 @@ export function Title({ ...rest }: BoxProps) {
         <AnimatePresence mode="wait">
           <motion.div
             animate={{
-              width: widths[words[currentWordIndex].word] || 'auto',
+              width: widths[words[currentWordIndex]!.word] || 'auto',
             }}
             key="width"
             transition={{
@@ -68,7 +68,7 @@ export function Title({ ...rest }: BoxProps) {
           >
             {words.map(
               ({ word, color }) =>
-                words[currentWordIndex].word === word && (
+                words[currentWordIndex]!.word === word && (
                   <LettersPullUp
                     finalColorDark="#ffffff"
                     finalColorLight="#ffffff"

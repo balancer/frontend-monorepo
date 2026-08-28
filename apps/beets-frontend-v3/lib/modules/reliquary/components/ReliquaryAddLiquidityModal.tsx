@@ -95,7 +95,7 @@ export function ReliquaryAddLiquidityModal({
     return relicPositions.reduce((maxRelicId, relic) => {
       const currentId = Number(relic.relicId)
       return currentId > Number(maxRelicId) ? relic.relicId : maxRelicId
-    }, relicPositions[0].relicId)
+    }, relicPositions[0]!.relicId)
   }, [createNew, relicId, relicPositions])
 
   function baseOnClose() {

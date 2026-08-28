@@ -67,7 +67,7 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
 
       return {
         id: position?.farmId,
-        relicId: position?.relicId,
+        relicId: position!.relicId,
         address: beetsAddress,
         amount,
         fBEETSBalance: position?.amount ?? '0',
