@@ -206,10 +206,8 @@ export function computePnl(
   // least once before topping up. A correct cost-basis calc would need to
   // realise the prior cycle's PnL (FIFO lots), which we don't track. Bail
   // rather than show a number that mixes two regimes.
-  const netTokenAddrs = Object.keys(entry.netTokens)
-
-  for (const addr of netTokenAddrs) {
-    if (entry.netTokens[addr]!.amount < 0) {
+  for (const { amount } of Object.values(entry.netTokens)) {
+    if (amount < 0) {
       return { ...blank, status: 'exited_and_reentered' }
     }
   }
@@ -230,8 +228,7 @@ export function computePnl(
 
   let hodlUsd = 0
 
-  for (const addr of netTokenAddrs) {
-    const { amount } = entry.netTokens[addr]!
+  for (const [addr, { amount }] of Object.entries(entry.netTokens)) {
     if (amount <= 0) continue
     const price = priceByAddr.get(addr)
     if (price == null) continue // token no longer in pool snapshot — skip
