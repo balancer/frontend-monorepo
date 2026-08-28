@@ -80,8 +80,7 @@ export function computeHodl(
   let baseIndex = -1
   let qty: number[] | null = null
 
-  for (let i = 0; i < samples.length; i++) {
-    const s = samples[i]!
+  for (const [i, s] of samples.entries()) {
     if (!s.amounts || s.amounts.length !== hodlTokens.length || !(s.totalShares > 0)) continue
     const wpx = priced.map(l => priceAt(l.wrapped, s.timestamp))
     const hpx = priced.map(l => priceAt(l.hodl, s.timestamp))
