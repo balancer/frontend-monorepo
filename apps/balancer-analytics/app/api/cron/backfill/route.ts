@@ -413,12 +413,13 @@ export async function GET(req: Request) {
     // Per-slug pivot — directly maps to V2 / V3 / COW_AMM rows.
     const slugPivots: DayMap[] = SLUGS.map(() => new Map())
 
-    for (let i = 0; i < SLUGS.length; i++) {
-      foldTvl(slugPivots[i]!, protocols[i]!, ctx)
-      foldBreakdown(slugPivots[i]!, dexes[i]!, ctx, 'volume')
-      foldBreakdown(slugPivots[i]!, fees[i]!, ctx, 'fees')
-      const protocol = SLUG_TO_PROTOCOL[SLUGS[i]!]!
-      rowsByProtocol[protocol] = pivotToRows(slugPivots[i]!, protocol)
+    for (const [i, slug] of SLUGS.entries()) {
+      const pivot = slugPivots[i]!
+      foldTvl(pivot, protocols[i]!, ctx)
+      foldBreakdown(pivot, dexes[i]!, ctx, 'volume')
+      foldBreakdown(pivot, fees[i]!, ctx, 'fees')
+      const protocol = SLUG_TO_PROTOCOL[slug]
+      rowsByProtocol[protocol] = pivotToRows(pivot, protocol)
     }
 
     // CORE = V2 + V3 + COW_AMM. Build by merging the three slug pivots.
