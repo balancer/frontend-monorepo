@@ -37,6 +37,7 @@ export async function setSliderPercent(page: Page, percent: number, scope?: Loca
   const root = scope ?? page
   const slider = root.locator('.chakra-slider')
   const box = await slider.boundingBox()
+  if (!box) throw new Error('Slider is not visible, cannot calculate click position')
   await slider.click({
     position: { x: (box.width * percent) / 100, y: box.height / 2 },
   })

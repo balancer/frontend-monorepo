@@ -10,15 +10,16 @@ import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/
 import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'
 import { PoolType } from '@balancer/sdk'
 import { isPoolCreatorEnabled } from '@repo/lib/modules/pool/actions/create/helpers'
+import { SupportedPoolTypes } from '@repo/lib/modules/pool/actions/create/types'
 
 const BASE_URL = 'http://localhost:3000/create'
 
 export type PoolCreationConfig = {
-  type: PoolType
+  type: SupportedPoolTypes
   tokens: { symbol: string; amount: string | undefined }[]
 }
 
-export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
+export const POOL_CREATION_CONFIGS: [PoolCreationConfig, ...PoolCreationConfig[]] = [
   {
     type: PoolType.Stable,
     tokens: [
@@ -64,13 +65,19 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
   },
 ]
 
+function stepUrl(index: number) {
+  const step = POOL_CREATION_FORM_STEPS[index]
+  if (!step) throw new Error(`Missing pool creation form step at index ${index}`)
+  return `${BASE_URL}/${step.id}`
+}
+
 export class CreatePoolPage {
   readonly urls = {
     base: BASE_URL,
-    type: `${BASE_URL}/${POOL_CREATION_FORM_STEPS[0].id}`,
-    tokens: `${BASE_URL}/${POOL_CREATION_FORM_STEPS[1].id}`,
-    details: `${BASE_URL}/${POOL_CREATION_FORM_STEPS[2].id}`,
-    fund: `${BASE_URL}/${POOL_CREATION_FORM_STEPS[3].id}`,
+    type: stepUrl(0),
+    tokens: stepUrl(1),
+    details: stepUrl(2),
+    fund: stepUrl(3),
     buildCow: `${BASE_URL}?protocol=cow`,
   }
 
@@ -121,20 +128,19 @@ export class CreatePoolPage {
     await this.page.getByText(network).click()
   }
 
-  async choosePoolType(poolType: PoolType) {
+  async choosePoolType(poolType: SupportedPoolTypes) {
     await clickRadio(this.page, 'Choose a pool type', POOL_TYPES[poolType].label)
   }
 
   async fillTokenAmounts() {
     const shouldOnlyFillOneAmount = this.isAutoRange || this.isGyroEclp
+    const tokens = shouldOnlyFillOneAmount ? this.config.tokens.slice(0, 1) : this.config.tokens
 
-    if (shouldOnlyFillOneAmount) {
-      await this.page.getByLabel('Token 1').fill(this.config.tokens[0].amount)
-    } else {
-      for (let i = 0; i < this.config.tokens.length; i++) {
-        const tokenAmount = this.config.tokens[i].amount
-        await this.page.getByLabel(`Token ${i + 1}`).fill(tokenAmount)
+    for (const [index, token] of tokens.entries()) {
+      if (token.amount === undefined) {
+        throw new Error(`Missing amount in the pool creation config for Token ${index + 1}`)
       }
+      await this.page.getByLabel(`Token ${index + 1}`).fill(token.amount)
     }
   }
 
