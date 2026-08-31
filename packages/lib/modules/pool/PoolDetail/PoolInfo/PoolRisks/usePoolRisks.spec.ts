@@ -7,7 +7,7 @@ describe('getPoolRisks', () => {
   it('includes Oracle risk when a rate provider has the market-rate warning', () => {
     const pool = getApiPoolMock(sDAIWeighted) as GqlPoolElement
 
-    pool.poolTokens[0].priceRateProviderData = {
+    pool.poolTokens[0]!.priceRateProviderData = {
       __typename: 'GqlPriceRateProviderData',
       address: '0x0000000000000000000000000000000000000001',
       name: 'MarketRateProvider',
