@@ -12,7 +12,7 @@ export type LbpConfig = {
   }
 }
 
-export const LBP_CONFIGS: LbpConfig[] = [
+export const LBP_CONFIGS: [LbpConfig, ...LbpConfig[]] = [
   {
     saleType: 'seedless',
     saleToken: {
@@ -37,7 +37,11 @@ export const LBP_CONFIGS: LbpConfig[] = [
 ]
 
 export const BASE_URL = 'http://localhost:3000/lbp/create'
-export const stepUrl = (index: number) => `${BASE_URL}/${LBP_FORM_STEPS[index].id}`
+export const stepUrl = (index: number) => {
+  const step = LBP_FORM_STEPS[index]
+  if (!step) throw new Error(`Missing LBP form step at index ${index}`)
+  return `${BASE_URL}/${step.id}`
+}
 
 export async function mockCreateLbpMetadata(page: Page) {
   await page.route('**/graphql', async route => {

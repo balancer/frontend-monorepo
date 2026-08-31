@@ -111,6 +111,8 @@
         "^transit"
       ],
       "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../packages/lib/global.d.ts",
         "shared/services/api/generated/**"
       ],
       "outputs": [

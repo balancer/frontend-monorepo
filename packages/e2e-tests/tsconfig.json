@@ -1,9 +1,18 @@
 {
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "module": "es2022",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "types": ["node"],
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "paths": {
       "@/*": ["./*"],
       "@repo/*": ["../../packages/*"]
     }
-  }
+  },
+  "include": ["**/*.ts", "../../packages/lib/global.d.ts"],
+  "exclude": ["node_modules"]
 }

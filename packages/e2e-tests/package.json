@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "playwright:install": "playwright install --with-deps",
+    "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "playwright:install:chromium": "playwright install --with-deps chromium",
     "test:e2e:build:bal": "NEXT_PUBLIC_PROJECT_ID=balancer start-server-and-test 'cd ../../ && pnpm start --filter frontend-v3' 'http://localhost:3000' 'pnpm exec playwright test tests/build/balancer'",
     "test:e2e:build:ui:bal": "NEXT_PUBLIC_PROJECT_ID=balancer pnpm exec playwright test tests/build/balancer --ui",
