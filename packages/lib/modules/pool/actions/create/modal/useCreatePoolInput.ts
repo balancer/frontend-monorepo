@@ -1,9 +1,9 @@
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { TokenType, CreatePoolV3BaseInput, PoolType } from '@balancer/sdk'
-import { parseUnits, zeroAddress } from 'viem'
+import { zeroAddress } from 'viem'
 import { PERCENTAGE_DECIMALS, DEFAULT_DECIMALS } from '../constants'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
-import { invertNumber } from '@repo/lib/shared/utils/numbers'
+import { invertNumber, parseAmount } from '@repo/lib/shared/utils/numbers'
 import { CreatePoolInput } from '../types'
 import { calculateRotationComponents } from '../steps/details/gyro.helpers'
 
@@ -42,7 +42,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     protocolVersion: 3 as const,
     name,
     symbol,
-    swapFeePercentage: parseUnits(swapFeePercentage, PERCENTAGE_DECIMALS),
+    swapFeePercentage: parseAmount(swapFeePercentage, PERCENTAGE_DECIMALS),
     swapFeeManager: swapFeeManager ? swapFeeManager : zeroAddress,
     pauseManager: pauseManager ? pauseManager : zeroAddress,
     enableDonation,
@@ -76,7 +76,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       poolCreator,
       tokens: baseInput.tokens.map((token, index) => ({
         ...token,
-        weight: parseUnits(poolTokens[index]?.weight ?? '50', PERCENTAGE_DECIMALS),
+        weight: parseAmount(poolTokens[index]?.weight ?? '50', PERCENTAGE_DECIMALS),
       })),
     }
   }
@@ -96,9 +96,9 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     const targetPrice = areTokensInOrder ? initialTargetPrice : invertNumber(initialTargetPrice)
 
     const priceParams = {
-      initialMinPrice: parseUnits(minPrice, DEFAULT_DECIMALS),
-      initialMaxPrice: parseUnits(maxPrice, DEFAULT_DECIMALS),
-      initialTargetPrice: parseUnits(targetPrice, DEFAULT_DECIMALS),
+      initialMinPrice: parseAmount(minPrice, DEFAULT_DECIMALS),
+      initialMaxPrice: parseAmount(maxPrice, DEFAULT_DECIMALS),
+      initialTargetPrice: parseAmount(targetPrice, DEFAULT_DECIMALS),
       // hardcoded prices to not include rate until new AutoRange deployments.
       // without rate means boosted must be priced in terms of underlying
       tokenAPriceIncludesRate: false,
@@ -109,8 +109,8 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       ...baseInput,
       poolType,
       priceParams,
-      priceShiftDailyRate: parseUnits(priceShiftDailyRate, PERCENTAGE_DECIMALS),
-      centerednessMargin: parseUnits(centerednessMargin, PERCENTAGE_DECIMALS),
+      priceShiftDailyRate: parseAmount(priceShiftDailyRate, PERCENTAGE_DECIMALS),
+      centerednessMargin: parseAmount(centerednessMargin, PERCENTAGE_DECIMALS),
     }
   }
 
@@ -120,11 +120,11 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
 
     // The SDK's normalizeEclpParamsAndTokens handles token sorting and param inversion
     const eclpParams = {
-      alpha: parseUnits(alpha, DEFAULT_DECIMALS),
-      beta: parseUnits(beta, DEFAULT_DECIMALS),
-      s: parseUnits(s, DEFAULT_DECIMALS),
-      c: parseUnits(c, DEFAULT_DECIMALS),
-      lambda: parseUnits(lambda, DEFAULT_DECIMALS),
+      alpha: parseAmount(alpha, DEFAULT_DECIMALS),
+      beta: parseAmount(beta, DEFAULT_DECIMALS),
+      s: parseAmount(s, DEFAULT_DECIMALS),
+      c: parseAmount(c, DEFAULT_DECIMALS),
+      lambda: parseAmount(lambda, DEFAULT_DECIMALS),
     }
 
     return { ...baseInput, poolType, eclpParams }

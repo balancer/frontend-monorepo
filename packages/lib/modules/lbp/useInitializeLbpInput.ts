@@ -1,4 +1,4 @@
-import { Address, parseUnits } from 'viem'
+import { Address } from 'viem'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { useLbpForm } from './LbpFormProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
@@ -6,6 +6,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { type InitPoolInputAmount } from '@repo/lib/modules/pool/actions/create/types'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export function useInitializeLbpInput() {
   const { saleStructureForm, isCollateralNativeAsset, isFixedSale, isSeeded } = useLbpForm()
@@ -62,7 +63,7 @@ export function useInitializeLbpInput() {
   const launchTokenAmountIn: InitPoolInputAmount = {
     address: launchTokenAddress as Address,
     decimals: launchTokenDecimals,
-    rawAmount: parseUnits(saleTokenAmount, launchTokenDecimals),
+    rawAmount: parseAmount(saleTokenAmount, launchTokenDecimals),
     symbol: launchTokenSymbol,
   }
 
@@ -70,7 +71,7 @@ export function useInitializeLbpInput() {
     address: reserveTokenAddress as Address,
     decimals: reserveTokenDecimals,
     // sdk requires reserve token amount to be zero for fixed sale
-    rawAmount: isFixedSale ? 0n : parseUnits(collateralTokenAmount, reserveTokenDecimals),
+    rawAmount: isFixedSale ? 0n : parseAmount(collateralTokenAmount, reserveTokenDecimals),
     symbol: reserveTokenSymbol,
   }
 

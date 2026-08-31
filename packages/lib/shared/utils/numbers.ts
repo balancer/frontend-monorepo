@@ -782,3 +782,19 @@ function splitDecimalString(value: string): [integerPart: string, fractionPart: 
   if (decimalIndex === -1) return [value, '']
   return [value.slice(0, decimalIndex), value.slice(decimalIndex + 1)]
 }
+
+// Parses a user-entered amount into a scaled bigint, returning 0n when the input is not a
+// number yet. Empty and half-typed inputs ('', '.', '-') are normal transient states for an
+// amount field: viem <2.56 coerced them to 0n, 2.56 made parseUnits throw. Callers that must
+// reject bad input should validate with isBnParseable first, not rely on this.
+// Parses a user-entered amount into a scaled bigint, returning 0n while the input is not a
+// number yet. '', '.' and '-' are normal transient states for an amount field: viem <2.56
+// coerced them to 0n, and 2.56 rewrote parseUnits on top of ox's Value.from, which rejects
+// them with InvalidDecimalNumberError. Valid input is handed straight to parseUnits so
+// rounding behaviour is unchanged. Callers that must reject bad input should validate with
+// isBnParseable first, not rely on this.
+export function parseAmount(value: string, decimals: number): bigint {
+  if (!/^-?(?:\d+(?:\.\d*)?|\.\d+)$/.test(value.trim())) return 0n
+
+  return parseUnits(value.trim(), decimals)
+}
