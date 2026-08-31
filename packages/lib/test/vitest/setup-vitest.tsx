@@ -1,17 +1,9 @@
 import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
-import fetch from 'cross-fetch'
 import { apolloTestClient } from '../../../test/utils/apollo-test-client'
 
 // Set timezone to GMT for consistent date handling in tests
 process.env.TZ = 'Europe/Madrid'
-
-/*
-Using the default node-fetch in node 18 causes a viem exception in integration tests
-(Expected signal to be an instanceof AbortSignal)
-Replacing fetch with cross-fetch implementation solves the issue
-*/
-global.fetch = fetch
 
 // Avoid using next/image in tests
 vi.mock('next/image', () => ({
