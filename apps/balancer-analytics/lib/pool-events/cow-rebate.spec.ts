@@ -51,7 +51,7 @@ describe('stripFeeRebates', () => {
     const { rows: out, stripped } = stripFeeRebates(rows)
     expect(stripped).toBe(0)
     expect(out).toHaveLength(1)
-    expect(out[0].args.swapFeePercentage).toBe('100')
+    expect(out[0]!.args.swapFeePercentage).toBe('100')
   })
 
   it('collapses a multi-step genuine move to its final write', () => {
@@ -66,8 +66,8 @@ describe('stripFeeRebates', () => {
     const { rows: out, stripped } = stripFeeRebates(rows)
     expect(stripped).toBe(1)
     expect(out).toHaveLength(2)
-    expect(out[0].args.swapFeePercentage).toBe('100')
-    expect(out[1].args.swapFeePercentage).toBe('60')
+    expect(out[0]!.args.swapFeePercentage).toBe('100')
+    expect(out[1]!.args.swapFeePercentage).toBe('60')
   })
 
   it('treats a ≥2 group at window start as a rebate (running fee unknown)', () => {
@@ -92,8 +92,8 @@ describe('stripFeeRebates', () => {
     // First tx: single move, kept. Second tx: 50 → 80, final != running (100), kept as 80.
     expect(stripped).toBe(1)
     expect(out).toHaveLength(2)
-    expect(out[0].args.swapFeePercentage).toBe('100')
-    expect(out[1].args.swapFeePercentage).toBe('80')
+    expect(out[0]!.args.swapFeePercentage).toBe('100')
+    expect(out[1]!.args.swapFeePercentage).toBe('80')
   })
 
   it('passes non-fee events through untouched', () => {

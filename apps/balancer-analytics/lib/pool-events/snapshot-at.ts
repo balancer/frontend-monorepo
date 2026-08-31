@@ -235,13 +235,13 @@ export type MetricSnapshot = {
  *  the same number on the y-axis. */
 export function interpolateTvl(snapshots: readonly MetricSnapshot[], t: number): number {
   if (snapshots.length === 0) return 0
-  if (t <= snapshots[0].timestamp) return snapshots[0].totalLiquidity
-  const last = snapshots[snapshots.length - 1]
+  if (t <= snapshots[0]!.timestamp) return snapshots[0]!.totalLiquidity
+  const last = snapshots[snapshots.length - 1]!
   if (t >= last.timestamp) return last.totalLiquidity
 
   for (let i = 1; i < snapshots.length; i++) {
-    const lo = snapshots[i - 1]
-    const hi = snapshots[i]
+    const lo = snapshots[i - 1]!
+    const hi = snapshots[i]!
 
     if (t >= lo.timestamp && t <= hi.timestamp) {
       const f = (t - lo.timestamp) / Math.max(1, hi.timestamp - lo.timestamp)

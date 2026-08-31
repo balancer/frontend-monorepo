@@ -50,8 +50,8 @@ async function run(): Promise<Response> {
 
       if (!n) {
         // Track WHY a row got dropped so the sync's response surfaces it.
-        if (typeof row.blockchain === 'string') skipped.chain += 1
-        else skipped.address += 1
+        if (typeof row.blockchain === 'string') skipped.chain = (skipped.chain ?? 0) + 1
+        else skipped.address = (skipped.address ?? 0) + 1
         continue
       }
 

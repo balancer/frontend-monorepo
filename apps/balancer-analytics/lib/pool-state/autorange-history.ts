@@ -197,16 +197,18 @@ export async function readAutoRangeHistory(
           .multicall({ contracts: calls, allowFailure: true, blockNumber })
           .catch(() => null)
 
-        if (!results || results[0].status !== 'success') return empty
-        const [minRaw, maxRaw] = results[0].result as readonly [bigint, bigint]
+        if (!results || results[0]!.status !== 'success') return empty
+        const [minRaw, maxRaw] = results[0]!.result as readonly [bigint, bigint]
 
         const vb =
-          results[1].status === 'success'
-            ? (results[1].result as readonly [bigint, bigint, boolean])
+          results[1]!.status === 'success'
+            ? (results[1]!.result as readonly [bigint, bigint, boolean])
             : null
 
-        const lb = results[2].status === 'success' ? (results[2].result as readonly bigint[]) : null
-        const marginRaw = results[3].status === 'success' ? (results[3].result as bigint) : null
+        const lb =
+          results[2]!.status === 'success' ? (results[2]!.result as readonly bigint[]) : null
+
+        const marginRaw = results[3]!.status === 'success' ? (results[3]!.result as bigint) : null
 
         if (!vb || !lb || lb.length < 2 || marginRaw === null) {
           // Insufficient supporting data to compute derived values — surface

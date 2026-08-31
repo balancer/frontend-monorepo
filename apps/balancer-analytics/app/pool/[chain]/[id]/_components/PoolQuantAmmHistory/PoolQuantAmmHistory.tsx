@@ -139,7 +139,7 @@ export function PoolQuantAmmHistory({ range, tokens, weightSnapshots, params }: 
     ) as { timestamp: number; weights: number[] }[]
 
     if (range === 'all' || valid.length === 0) return valid
-    const latest = valid[valid.length - 1].timestamp
+    const latest = valid[valid.length - 1]!.timestamp
     const cutoff = latest - RANGE_SECONDS[range]
     return valid.filter(s => s.timestamp >= cutoff)
   }, [weightSnapshots, tokens.length, range])
@@ -175,7 +175,7 @@ export function PoolQuantAmmHistory({ range, tokens, weightSnapshots, params }: 
               <HStack color="font.secondary" flexWrap="wrap" fontSize="xs" rowGap="xs" spacing="md">
                 {tokens.map((t, i) => (
                   <LegendChip
-                    color={TOKEN_COLORS[i % TOKEN_COLORS.length]}
+                    color={TOKEN_COLORS[i % TOKEN_COLORS.length]!}
                     key={t.address}
                     label={t.symbol}
                   />
@@ -231,8 +231,8 @@ function computeDrift(
     }))
   }
 
-  const first = samples[0]
-  const last = samples[samples.length - 1]
+  const first = samples[0]!
+  const last = samples[samples.length - 1]!
   const days = Math.max((last.timestamp - first.timestamp) / 86400, 1 / 24) // 1h floor
   return Array.from({ length: tokenCount }, (_, i) => {
     const start = first.weights[i] ?? NaN
@@ -241,8 +241,8 @@ function computeDrift(
     let maxStepPp = 0
 
     for (let k = 1; k < samples.length; k++) {
-      const prev = samples[k - 1].weights[i]
-      const curr = samples[k].weights[i]
+      const prev = samples[k - 1]!.weights[i]
+      const curr = samples[k]!.weights[i]
       if (typeof prev !== 'number' || typeof curr !== 'number') continue
       const step = Math.abs(curr - prev)
       if (step > maxStepPp) maxStepPp = step
@@ -280,7 +280,7 @@ function DriftGrid({
         }}
       >
         {tokens.map((t, i) => {
-          const d = drift[i]
+          const d = drift[i]!
 
           const dirColor =
             !Number.isFinite(d.deltaPp) || Math.abs(d.deltaPp) < 0.0001
@@ -529,7 +529,7 @@ function buildChartOption(samples: { timestamp: number; weights: number[] }[], t
       formatter: (params: { dataIndex: number; data: [number, number | null] }[]) => {
         const i = params[0]?.dataIndex
         if (i === undefined) return ''
-        const ts = new Date(samples[i].timestamp * 1000)
+        const ts = new Date(samples[i]!.timestamp * 1000)
 
         const date = ts.toLocaleDateString(undefined, {
           year: 'numeric',
@@ -542,9 +542,9 @@ function buildChartOption(samples: { timestamp: number; weights: number[] }[], t
 
         const rows = tokens
           .map((t, k) => {
-            const w = samples[i].weights[k]
+            const w = samples[i]!.weights[k]
             const value = typeof w === 'number' ? `${(w * 100).toFixed(2)}%` : '—'
-            return `<div style="display:flex;justify-content:space-between;gap:18px;padding:1px 0"><span style="opacity:0.85">${dot(TOKEN_COLORS[k % TOKEN_COLORS.length])}${t.symbol}</span><span style="font-family:ui-monospace,monospace">${value}</span></div>`
+            return `<div style="display:flex;justify-content:space-between;gap:18px;padding:1px 0"><span style="opacity:0.85">${dot(TOKEN_COLORS[k % TOKEN_COLORS.length]!)}${t.symbol}</span><span style="font-family:ui-monospace,monospace">${value}</span></div>`
           })
           .join('')
 

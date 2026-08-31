@@ -927,7 +927,7 @@ function computeSurgeMetrics(ss: StableSurgeState, tokens: PoolDetailToken[]): S
   })
 
   const tokenPercentages = balancesUsd.map((b, i) => ({
-    symbol: tokens[i].symbol,
+    symbol: tokens[i]!.symbol,
     pct: tvl > 0 ? (b / tvl) * 100 : 0,
   }))
 
@@ -943,8 +943,8 @@ function computeSurgeMetrics(ss: StableSurgeState, tokens: PoolDetailToken[]): S
       sorted.length === 0
         ? 0
         : sorted.length % 2 === 0
-          ? (sorted[mid - 1] + sorted[mid]) / 2
-          : sorted[mid]
+          ? (sorted[mid - 1]! + sorted[mid]!) / 2
+          : sorted[mid]!
   }
 
   const totalImbalance = tokenPercentages.reduce((acc, t) => acc + Math.abs(t.pct - median), 0)
@@ -1680,7 +1680,7 @@ function PoolBalancesSection({ tokens }: { tokens: PoolDetailToken[] }): React.J
 
   const enriched = shares.map((s, i) => {
     const share = s.balanceUSD / total
-    const targetWeight = hasExplicitWeights ? parsedWeights[i] : fallbackWeight
+    const targetWeight = hasExplicitWeights ? parsedWeights[i]! : fallbackWeight
     // `actual / target` — 1.0 means the token sits on its design weight,
     // <1 means depleted vs design, >1 means accumulated vs design.
     const ratioToTarget = targetWeight > 0 ? share / targetWeight : NaN

@@ -60,7 +60,7 @@ const usd = (n: number) =>
 
 const PAGE_SIZE = 50
 
-const VERSION_TABS: ButtonGroupOption[] = [
+const VERSION_TABS: [ButtonGroupOption, ButtonGroupOption, ButtonGroupOption, ButtonGroupOption] = [
   { value: 'all', label: 'All' },
   { value: 'v2', label: 'v2' },
   { value: 'v3', label: 'v3' },

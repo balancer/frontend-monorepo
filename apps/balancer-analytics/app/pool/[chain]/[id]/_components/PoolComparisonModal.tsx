@@ -162,7 +162,7 @@ function summarize7d(snapshots: readonly SnapshotLike[]): {
   }
 
   const sorted = [...snapshots].sort((a, b) => a.timestamp - b.timestamp)
-  const last = sorted[sorted.length - 1]
+  const last = sorted[sorted.length - 1]!
   const tvl = last.totalLiquidity
   // Anchor cutoffs on the latest snapshot's timestamp so a 30d series with
   // a delayed tail still produces sane windows.
@@ -173,7 +173,7 @@ function summarize7d(snapshots: readonly SnapshotLike[]): {
   const sevenDaysAgoIdx = sorted.findIndex(s => s.timestamp > sevenDayCutoff)
 
   const tvlPrev =
-    sevenDaysAgoIdx > 0 ? sorted[sevenDaysAgoIdx - 1].totalLiquidity : sorted[0].totalLiquidity
+    sevenDaysAgoIdx > 0 ? sorted[sevenDaysAgoIdx - 1]!.totalLiquidity : sorted[0]!.totalLiquidity
 
   const sum = (arr: SnapshotLike[], key: 'volume24h' | 'fees24h' | 'surplus24h') =>
     arr.reduce((acc, s) => acc + (s[key] || 0), 0)

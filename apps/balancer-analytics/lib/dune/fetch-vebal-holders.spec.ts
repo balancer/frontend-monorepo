@@ -57,9 +57,9 @@ describe('fetchVeBalHoldersSnapshot', () => {
     const snap = await fetchVeBalHoldersSnapshot()
     expect(snap.day).toBe('2026-06-05 00:00:00')
     expect(snap.rows).toHaveLength(2)
-    expect(snap.rows[0].provider).toBe('Humpy')
-    expect(snap.rows[0].pct).toBe(0.5)
-    expect(snap.rows[1].provider).toBe('0xccc')
+    expect(snap.rows[0]!.provider).toBe('Humpy')
+    expect(snap.rows[0]!.pct).toBe(0.5)
+    expect(snap.rows[1]!.provider).toBe('0xccc')
   })
 
   it('lowercases wallet addresses and coerces numeric strings', async () => {
@@ -76,9 +76,9 @@ describe('fetchVeBalHoldersSnapshot', () => {
     )
 
     const snap = await fetchVeBalHoldersSnapshot()
-    expect(snap.rows[0].walletAddress).toBe('0xabc')
-    expect(snap.rows[0].veBalBalance).toBe(100)
-    expect(snap.rows[0].pct).toBe(0.1)
+    expect(snap.rows[0]!.walletAddress).toBe('0xabc')
+    expect(snap.rows[0]!.veBalBalance).toBe(100)
+    expect(snap.rows[0]!.pct).toBe(0.1)
   })
 
   it('returns empty rows when the result set is empty', async () => {

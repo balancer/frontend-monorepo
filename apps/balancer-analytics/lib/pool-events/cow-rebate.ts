@@ -84,7 +84,7 @@ export function stripFeeRebates(rows: readonly PoolParamEventRow[]): RebateStrip
     if (group[0] !== r) continue // each group processed once, at its head
 
     const feeBefore = runningFee
-    const finalVal = feeValue(group[group.length - 1])
+    const finalVal = feeValue(group[group.length - 1]!)
     const isRoundTrip = group.length >= 2 && (feeBefore === undefined || finalVal === feeBefore)
 
     if (isRoundTrip) {
@@ -92,7 +92,7 @@ export function stripFeeRebates(rows: readonly PoolParamEventRow[]): RebateStrip
       // running fee unchanged — the config returned to `feeBefore`
     } else {
       // Genuine fee move: keep only the final write, collapse intra-tx steps.
-      for (let i = 0; i < group.length - 1; i++) dropped.add(group[i])
+      for (let i = 0; i < group.length - 1; i++) dropped.add(group[i]!)
       if (finalVal !== undefined) runningFee = finalVal
     }
   }

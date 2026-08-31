@@ -43,7 +43,7 @@ import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 
-const VERSION_TABS: ButtonGroupOption[] = [
+const VERSION_TABS: [ButtonGroupOption, ButtonGroupOption, ButtonGroupOption, ButtonGroupOption] = [
   { value: 'all', label: 'All' },
   { value: 'v2', label: 'v2' },
   { value: 'v3', label: 'v3' },
@@ -498,7 +498,7 @@ function snapStep(value: number): number {
 
   const last = STEP_BUCKETS.at(-1)!
   const baseIdx = STEP_BUCKETS.length - 2
-  const base = STEP_BUCKETS[baseIdx].until
+  const base = STEP_BUCKETS[baseIdx]!.until
   const snapped = Math.round((value - base) / last.step) * last.step + base
   return Math.max(base, Math.min(snapped, last.until))
 }

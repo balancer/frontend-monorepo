@@ -244,7 +244,7 @@ function lastSpread(hodl: HodlResult | null, samples: Sample[]): number | null {
 
   for (let i = samples.length - 1; i >= hodl.baseIndex; i--) {
     const h = hodl.values[i]
-    if (h != null && h > 0) return deltaPct(samples[i].sharePrice, h)
+    if (h != null && h > 0) return deltaPct(samples[i]!.sharePrice, h)
   }
 
   return null
@@ -382,7 +382,7 @@ export function PoolBptPriceHistory({
                     {hasData
                       ? `${samples.length} snapshots · ${RANGE_LABEL[range]} · ${
                           mode === 'return'
-                            ? `0% = ${fmtDateShort(samples[anchorIndex].timestamp * 1000)}`
+                            ? `0% = ${fmtDateShort(samples[anchorIndex]!.timestamp * 1000)}`
                             : RANGE_DELTA_HINT[range]
                         }`
                       : 'Not enough price snapshots in range to chart yet.'}
@@ -433,7 +433,7 @@ export function PoolBptPriceHistory({
                   <HStack spacing="xs">
                     <Text color="font.secondary" fontSize="xs" opacity={0.7}>
                       {anyBoosted ? 'vs holding underlying' : 'vs holding tokens'} since{' '}
-                      {fmtDateShort(samples[hodl.baseIndex].timestamp * 1000)}
+                      {fmtDateShort(samples[hodl.baseIndex]!.timestamp * 1000)}
                     </Text>
                     <DeltaBadge pct={spread} />
                     <Text color="font.secondary" fontSize="xs">
@@ -558,7 +558,7 @@ function buildOption(
       formatter: (params: { dataIndex: number }[]) => {
         const i = params[0]?.dataIndex
         if (i === undefined) return ''
-        const s = samples[i]
+        const s = samples[i]!
 
         const date = new Date(s.timestamp * 1000).toLocaleDateString(undefined, {
           year: 'numeric',
