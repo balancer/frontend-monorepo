@@ -829,9 +829,6 @@ importers:
       '@types/node':
         specifier: 24.0.3
         version: 24.0.3
-      cross-fetch:
-        specifier: 4.1.0
-        version: 4.1.0
       eslint:
         specifier: 9.27.0
         version: 9.27.0(jiti@2.7.0)(supports-color@10.2.2)
