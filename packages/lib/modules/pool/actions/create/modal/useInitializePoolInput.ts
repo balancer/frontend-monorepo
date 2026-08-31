@@ -2,10 +2,11 @@ import {
   type InitPoolInputAmount,
   type ExtendedInitPoolInput,
 } from '@repo/lib/modules/pool/actions/create/types'
-import { parseUnits } from 'viem'
+
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
 import { useWatch } from 'react-hook-form'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export function useInitializePoolInput(chainId: number): ExtendedInitPoolInput {
   const { poolCreationForm } = usePoolCreationForm()
@@ -27,7 +28,7 @@ export function useInitializePoolInput(chainId: number): ExtendedInitPoolInput {
     if (!address) throw new Error('token address missing for amountsIn of pool creation')
     if (!decimals) throw new Error('token decimals missing for amountsIn of pool creation')
     if (!symbol) throw new Error('token symbol missing for amountsIn of pool creation')
-    const rawAmount = parseUnits(token.amount, decimals)
+    const rawAmount = parseAmount(token.amount, decimals)
     return {
       address: address === nativeAsset ? wNativeAsset : address,
       decimals,

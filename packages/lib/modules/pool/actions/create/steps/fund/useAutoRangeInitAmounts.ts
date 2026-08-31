@@ -1,6 +1,7 @@
-import { Address, parseAbi, parseUnits } from 'viem'
+import { Address, parseAbi } from 'viem'
 import { PoolCreationToken } from '../../types'
 import { useReadContract } from 'wagmi'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export const useAutoRangeInitAmounts = (
   isAutoRange: boolean,
@@ -9,7 +10,7 @@ export const useAutoRangeInitAmounts = (
 ) => {
   const { address: tokenAddress, amount: tokenAmount, data } = token
   const tokenDecimals = data?.decimals
-  const rawAmount = parseUnits(tokenAmount!, tokenDecimals!)
+  const rawAmount = parseAmount(tokenAmount!, tokenDecimals!)
   const enabled = !!poolAddress && !!tokenAddress && !!tokenAmount && !!tokenDecimals && isAutoRange
 
   const { data: autoRangeInitAmounts } = useReadContract({
