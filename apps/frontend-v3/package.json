@@ -63,7 +63,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@testing-library/react": "16.3.2",
+    "@testing-library/react": "16.3.3",
     "@types/js-cookie": "3.0.6",
     "@types/lodash": "4.17.25",
     "@types/node": "24.13.3",
