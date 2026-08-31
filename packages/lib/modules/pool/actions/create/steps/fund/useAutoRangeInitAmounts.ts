@@ -10,7 +10,9 @@ export const useAutoRangeInitAmounts = (
 ) => {
   const { address: tokenAddress, amount: tokenAmount, data } = token
   const tokenDecimals = data?.decimals
-  const rawAmount = parseAmount(tokenAmount!, tokenDecimals!)
+  // tokenAmount/tokenDecimals are undefined while the token metadata is loading; parseAmount
+  // would mask that as 0n, so short-circuit and let `enabled` gate the query.
+  const rawAmount = tokenAmount && tokenDecimals ? parseAmount(tokenAmount, tokenDecimals) : 0n
   const enabled = !!poolAddress && !!tokenAddress && !!tokenAmount && !!tokenDecimals && isAutoRange
 
   const { data: autoRangeInitAmounts } = useReadContract({
