@@ -9,7 +9,7 @@ import {
 } from '@balancer/sdk'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
-import { Address, Hex, parseEther } from 'viem'
+import { Address, Hex } from 'viem'
 import { Pool } from '../../../pool.types'
 import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {
@@ -18,6 +18,7 @@ import {
   QueryRemoveLiquidityOutput,
 } from '../remove-liquidity.types'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export interface NestedProportionalQueryRemoveLiquidityOutput extends QueryRemoveLiquidityOutput {
   sdkQueryOutput: RemoveLiquidityNestedQueryOutput
@@ -96,7 +97,7 @@ export class NestedProportionalRemoveLiquidityV3Handler implements RemoveLiquidi
     userAddress: Address
   ): RemoveLiquidityNestedProportionalInputV3 {
     const result: RemoveLiquidityNestedProportionalInputV3 = {
-      bptAmountIn: parseEther(humanBptIn),
+      bptAmountIn: parseAmount(humanBptIn, 18),
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
       sender: getSender(userAddress),

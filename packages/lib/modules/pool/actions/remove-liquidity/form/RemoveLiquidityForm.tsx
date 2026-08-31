@@ -5,7 +5,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { fNum, parseAmount } from '@repo/lib/shared/utils/numbers'
 import {
   Box,
   Button,
@@ -33,7 +33,7 @@ import { requiresProportionalInput } from '../../LiquidityActionHelpers'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
-import { parseUnits } from 'viem'
+
 import { RemoveSimulationError } from '@repo/lib/shared/components/errors/RemoveSimulationError'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
@@ -274,7 +274,7 @@ export function RemoveLiquidityForm() {
                   }
                   accordionPanelComponent={
                     <PoolActionsPriceImpactDetails
-                      bptAmount={BigInt(parseUnits(humanBptIn, 18))}
+                      bptAmount={parseAmount(humanBptIn, 18)}
                       isLoading={isFetching}
                       slippage={slippage}
                       totalUSDValue={totalUSDValue}

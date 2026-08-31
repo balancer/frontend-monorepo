@@ -9,7 +9,7 @@ import {
   PriceImpact,
   RemoveLiquidityNestedCallInputV2,
 } from '@balancer/sdk'
-import { Address, parseEther } from 'viem'
+import { Address } from 'viem'
 import { Pool } from '../../../pool.types'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {
@@ -19,6 +19,7 @@ import {
 } from '../remove-liquidity.types'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export interface NestedSingleTokenQueryRemoveLiquidityOutput extends QueryRemoveLiquidityOutput {
   sdkQueryOutput: RemoveLiquidityNestedQueryOutput
@@ -104,7 +105,7 @@ export class NestedSingleTokenRemoveLiquidityV2Handler implements RemoveLiquidit
     tokenOut: Address
   ): RemoveLiquidityNestedSingleTokenInputV2 {
     const result: RemoveLiquidityNestedSingleTokenInputV2 = {
-      bptAmountIn: parseEther(humanBptIn),
+      bptAmountIn: parseAmount(humanBptIn, 18),
       tokenOut,
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),

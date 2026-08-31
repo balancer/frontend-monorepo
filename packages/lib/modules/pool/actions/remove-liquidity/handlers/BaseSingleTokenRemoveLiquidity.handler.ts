@@ -9,7 +9,7 @@ import {
   RemoveLiquidityKind,
   RemoveLiquiditySingleTokenExactInInput,
 } from '@balancer/sdk'
-import { Address, parseEther } from 'viem'
+import { Address } from 'viem'
 import { Pool } from '../../../pool.types'
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { LiquidityActionHelpers, getSender, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
@@ -20,6 +20,7 @@ import {
 } from '../remove-liquidity.types'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiquidityHandler {
   protected helpers: LiquidityActionHelpers
@@ -75,7 +76,7 @@ export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiq
     userAddress?: Address
   ): RemoveLiquiditySingleTokenExactInInput {
     const bptInInputAmount: InputAmount = {
-      rawAmount: parseEther(humanBptIn),
+      rawAmount: parseAmount(humanBptIn, 18),
       decimals: BPT_DECIMALS,
       address: this.helpers.pool.address as Address,
     }
