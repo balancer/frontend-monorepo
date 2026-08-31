@@ -10,8 +10,8 @@ import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
-import { formatUnits, parseUnits } from 'viem'
+import { bn, parseAmount } from '@repo/lib/shared/utils/numbers'
+import { formatUnits } from 'viem'
 import { useLoopsGetRate } from './hooks/useLoopsGetRate'
 import { useLoopsWithdrawSteps } from './hooks/useLoopsWithdrawSteps'
 
@@ -81,7 +81,7 @@ export function useLoopsLogic() {
   function getAmountShares(amountAssets: string) {
     if (amountAssets === '') return '0'
 
-    const amountShares = (parseUnits(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
+    const amountShares = (parseAmount(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
 
     return formatUnits(amountShares, 18)
   }
@@ -89,7 +89,7 @@ export function useLoopsLogic() {
   function getAmountAssets(amountShares: string) {
     if (amountShares === '') return '0'
 
-    const amountAssets = (parseUnits(amountShares, 18) * (rate || 1n)) / 10n ** 18n
+    const amountAssets = (parseAmount(amountShares, 18) * (rate || 1n)) / 10n ** 18n
 
     return formatUnits(amountAssets, 18)
   }

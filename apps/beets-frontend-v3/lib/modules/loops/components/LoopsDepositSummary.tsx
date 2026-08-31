@@ -6,7 +6,8 @@ import { LoopsDepositReceiptResult } from '@repo/lib/modules/transactions/transa
 import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { useLoops } from '../LoopsProvider'
 import { useLoopsGetConvertToShares } from '../hooks/useLoopsGetConvertToShares'
-import { formatUnits, parseUnits } from 'viem'
+import { formatUnits } from 'viem'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export function LoopsDepositSummary({
   isLoading: isLoadingReceipt,
@@ -24,7 +25,7 @@ export function LoopsDepositSummary({
   } = useLoops()
 
   const { sharesAmount, isLoading: isLoadingSharesAmount } = useLoopsGetConvertToShares(
-    amountAssets && nativeAsset?.decimals ? parseUnits(amountAssets, nativeAsset.decimals) : 0n,
+    amountAssets && nativeAsset?.decimals ? parseAmount(amountAssets, nativeAsset.decimals) : 0n,
     chain
   )
 
