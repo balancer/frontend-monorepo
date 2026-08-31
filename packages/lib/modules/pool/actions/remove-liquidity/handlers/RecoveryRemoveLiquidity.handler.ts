@@ -15,7 +15,6 @@ import {
   SdkQueryRemoveLiquidityOutput,
 } from '../remove-liquidity.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
-
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'

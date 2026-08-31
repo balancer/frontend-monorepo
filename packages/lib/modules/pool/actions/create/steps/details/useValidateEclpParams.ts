@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { GyroECLPMath } from '@balancer-labs/balancer-maths'
 import { computeDerivedEclpParams, PoolType } from '@balancer/sdk'
-
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { DEFAULT_DECIMALS } from '../../constants'
 import { useWatch } from 'react-hook-form'

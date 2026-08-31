@@ -7,7 +7,6 @@ import {
   RemoveLiquidityNestedQueryOutput,
   Slippage,
 } from '@balancer/sdk'
-
 import { Pool } from '../../../pool.types'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {

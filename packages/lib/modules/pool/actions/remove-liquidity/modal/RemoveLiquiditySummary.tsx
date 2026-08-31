@@ -4,7 +4,6 @@ import { Card, VStack } from '@chakra-ui/react'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
-
 import { BptRow } from '@repo/lib/modules/tokens/TokenRow/BptRow'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { bn, parseAmount } from '@repo/lib/shared/utils/numbers'
