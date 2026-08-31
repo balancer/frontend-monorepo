@@ -2,7 +2,7 @@ import { useGetAmountDelegatedPerValidator } from '@/lib/modules/lst/hooks/useGe
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@tanstack/react-query'
 import { minutesToMilliseconds } from 'date-fns'
-import { parseUnits } from 'viem'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 interface ApiValidatorResponse {
   data: Array<{
@@ -30,7 +30,7 @@ export function useGetUnstakeValidators(
         return []
       }
 
-      const amountScaled = parseUnits(sharesAmount, 18)
+      const amountScaled = parseAmount(sharesAmount, 18)
       const apiUrl = `https://sts-helper.beets-ftm-node.com/api/unstake-recommendation?amount=${amountScaled.toString()}`
       const response = await fetch(apiUrl)
 
@@ -59,7 +59,7 @@ export function useGetUnstakeValidators(
 
   // If query failed and we have no data, use fallback
   if (queryResult.isError && validators.length === 0 && sharesAmount && unstakeEnabled) {
-    const amountScaled = parseUnits(sharesAmount, 18)
+    const amountScaled = parseAmount(sharesAmount, 18)
     const fallbackValidators = chooseValidatorsForUnstakeAmount(amountScaled)
     return {
       validators: fallbackValidators,

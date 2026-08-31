@@ -6,7 +6,8 @@ import { useLst } from '../LstProvider'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { useGetConvertToShares } from '../hooks/useGetConvertToShares'
-import { formatUnits, parseUnits } from 'viem'
+import { formatUnits } from 'viem'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export function LstStakeSummary({
   isLoading: isLoadingReceipt,
@@ -18,7 +19,7 @@ export function LstStakeSummary({
     useLst()
 
   const { sharesAmount, isLoading: isLoadingSharesAmount } = useGetConvertToShares(
-    parseUnits(amountAssets, 18),
+    parseAmount(amountAssets, 18),
     chain
   )
 
