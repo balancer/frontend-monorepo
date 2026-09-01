@@ -61,7 +61,7 @@ export function useLstUnstakeStep(
       validators.map(validator => BigInt(validator.validatorId)),
       validators.map(validator => validator.unstakeAmountShares),
     ],
-    enabled: isConnected && !!sharesAmount && enabled,
+    enabled: isConnected && !!sharesAmount && validators.length > 0 && enabled,
     onTransactionChange: setTransaction,
   }
 

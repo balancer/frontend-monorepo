@@ -7,7 +7,6 @@ import {
   RemoveLiquidityNestedQueryOutput,
   Slippage,
 } from '@balancer/sdk'
-import { parseEther } from 'viem'
 import { Pool } from '../../../pool.types'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {
@@ -17,6 +16,7 @@ import {
 } from '../remove-liquidity.types'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export interface NestedProportionalQueryRemoveLiquidityOutput extends QueryRemoveLiquidityOutput {
   sdkQueryOutput: RemoveLiquidityNestedQueryOutput
@@ -83,7 +83,7 @@ export class NestedProportionalRemoveLiquidityHandler implements RemoveLiquidity
    */
   private constructSdkInput(humanBptIn: HumanAmount): RemoveLiquidityNestedProportionalInputV2 {
     const result: RemoveLiquidityNestedProportionalInputV2 = {
-      bptAmountIn: parseEther(humanBptIn),
+      bptAmountIn: parseAmount(humanBptIn, 18),
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
     }

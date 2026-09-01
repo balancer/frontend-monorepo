@@ -15,6 +15,19 @@ export function createIntegrationVitestConfig(monorepoRoot: string): ViteUserCon
 
   const integrationTestOptions: Partial<InlineConfig> = {
     include: ['./**/*.integration.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    // Integration tests call third-party endpoints (Balancer API, raw.githubusercontent.com)
+    // that do not answer a browser preflight. happy-dom's fetch enforces the same-origin
+    // policy, which blocks those responses and doubles every cross-origin POST with an
+    // OPTIONS request. This is the setting happy-dom exposes for exactly that case.
+    environmentOptions: {
+      happyDOM: {
+        settings: {
+          fetch: {
+            disableSameOriginPolicy: true,
+          },
+        },
+      },
+    },
     // Avoid msw in integration tests
     setupFiles: [
       ...setupFilesWithoutMswSetup(),

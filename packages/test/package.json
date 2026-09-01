@@ -5,18 +5,17 @@
   "type": "module",
   "devDependencies": {
     "@apollo/client": "catalog:",
-    "@balancer/sdk": "6.1.1",
+    "@balancer/sdk": "6.2.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@types/node": "24.0.3",
-    "cross-fetch": "4.1.0",
     "eslint": "9.27.0",
     "prool": "0.2.4",
-    "viem": "2.51.3",
-    "wagmi": "3.6.16"
+    "viem": "2.56.0",
+    "wagmi": "3.7.7"
   },
   "publishConfig": {
     "access": "public"

@@ -10,6 +10,7 @@ import {
   isValidNumber,
   sum,
   ZERO_VALUE_DASH,
+  parseAmount,
 } from './numbers'
 
 test('Stringifies bigints', () => {
@@ -597,5 +598,34 @@ describe('isBnParseable', () => {
     expect(isBnParseable('0.')).toBe(true)
     expect(isBnParseable('.5')).toBe(true)
     expect(isBnParseable('0.0000000000000035')).toBe(true)
+  })
+})
+
+describe('parseAmount', () => {
+  test('returns 0n for transient, half-typed amount inputs', () => {
+    // viem >=2.56 throws InvalidDecimalNumberError on these; amount fields legitimately
+    // hold them while the user types or when a form resets.
+    expect(parseAmount('', 18)).toBe(0n)
+    expect(parseAmount('.', 18)).toBe(0n)
+    expect(parseAmount('-', 18)).toBe(0n)
+    expect(parseAmount('  ', 18)).toBe(0n)
+  })
+
+  test('parses valid decimal strings', () => {
+    expect(parseAmount('1', 18)).toBe(1000000000000000000n)
+    expect(parseAmount('0.5', 18)).toBe(500000000000000000n)
+    expect(parseAmount('.5', 18)).toBe(500000000000000000n)
+    expect(parseAmount('1.', 18)).toBe(1000000000000000000n)
+    expect(parseAmount('1', 6)).toBe(1000000n)
+  })
+
+  test('throws on input that is not a number, matching parseUnits', () => {
+    // Coercing these to 0n would turn a bad form value into a zero-value transaction.
+    expect(() => parseAmount('abc', 18)).toThrow()
+    expect(() => parseAmount('1.2.3', 18)).toThrow()
+    // bn().toString() emits exponential notation outside 1e-7..1e21, which parseUnits rejects
+    // on both 2.51.3 and 2.56.0. Call sites must not feed it here.
+    expect(() => parseAmount('1e-7', 18)).toThrow()
+    expect(() => parseAmount('5e-8', 18)).toThrow()
   })
 })

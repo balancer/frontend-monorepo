@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { GyroECLPMath } from '@balancer-labs/balancer-maths'
 import { computeDerivedEclpParams, PoolType } from '@balancer/sdk'
-import { parseUnits } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { DEFAULT_DECIMALS } from '../../constants'
 import { useWatch } from 'react-hook-form'
 import { calculateRotationComponents } from './gyro.helpers'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export function useValidateEclpParams() {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
@@ -23,11 +23,11 @@ export function useValidateEclpParams() {
     if (!alpha || !beta || !c || !s || !lambda) return null
 
     const rawEclpParams = {
-      alpha: parseUnits(alpha, DEFAULT_DECIMALS),
-      beta: parseUnits(beta, DEFAULT_DECIMALS),
-      c: parseUnits(c, DEFAULT_DECIMALS),
-      s: parseUnits(s, DEFAULT_DECIMALS),
-      lambda: parseUnits(lambda, DEFAULT_DECIMALS),
+      alpha: parseAmount(alpha, DEFAULT_DECIMALS),
+      beta: parseAmount(beta, DEFAULT_DECIMALS),
+      c: parseAmount(c, DEFAULT_DECIMALS),
+      s: parseAmount(s, DEFAULT_DECIMALS),
+      lambda: parseAmount(lambda, DEFAULT_DECIMALS),
     }
 
     try {

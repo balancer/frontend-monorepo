@@ -14,10 +14,10 @@ import { GqlSorSwapTypeValues } from '@repo/lib/shared/services/api/graphql-enum
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { bn, isBnParseable } from '@repo/lib/shared/utils/numbers'
+import { bn, isBnParseable, parseAmount } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
 import { PropsWithChildren, createContext, useEffect, useMemo, useRef, useState } from 'react'
-import { Address, Hash, isAddress, parseUnits } from 'viem'
+import { Address, Hash, isAddress } from 'viem'
 import { ChainSlug, chainToSlugMap, getChainSlug } from '../pool/pool.utils'
 import { getWalletChainSyncAction } from './useWalletChainSync'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
@@ -489,8 +489,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function scaleTokenAmount(amount: string, token: ApiToken): bigint {
-    if (amount === '') return parseUnits('0', 18)
-    return parseUnits(amount, token.decimals)
+    return parseAmount(amount, token.decimals)
   }
 
   function calcPriceImpact() {

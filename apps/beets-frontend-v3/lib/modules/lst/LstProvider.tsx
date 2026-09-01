@@ -10,13 +10,13 @@ import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { useLstUnstakeStep } from './hooks/useLstUnstakeStep'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, parseAmount } from '@repo/lib/shared/utils/numbers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useLstWithdrawStep } from './hooks/useLstWithdrawStep'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { formatUnits, parseUnits } from 'viem'
+import { formatUnits } from 'viem'
 import { useGetRate } from './hooks/useGetRate'
 
 const CHAIN = GqlChainValues.Sonic
@@ -109,7 +109,7 @@ export function useLstLogic() {
   function getAmountShares(amountAssets: string) {
     if (amountAssets === '') return '0'
 
-    const amountShares = (parseUnits(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
+    const amountShares = (parseAmount(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
 
     return formatUnits(amountShares, 18)
   }
@@ -117,7 +117,7 @@ export function useLstLogic() {
   function getAmountAssets(amountShares: string) {
     if (amountShares === '') return '0'
 
-    const amountAssets = (parseUnits(amountShares, 18) * (rate || 1n)) / 10n ** 18n
+    const amountAssets = (parseAmount(amountShares, 18) * (rate || 1n)) / 10n ** 18n
 
     return formatUnits(amountAssets, 18)
   }

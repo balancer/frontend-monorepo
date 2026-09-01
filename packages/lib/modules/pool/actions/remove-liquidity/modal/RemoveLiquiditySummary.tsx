@@ -4,10 +4,9 @@ import { Card, VStack } from '@chakra-ui/react'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
-import { parseUnits } from 'viem'
 import { BptRow } from '@repo/lib/modules/tokens/TokenRow/BptRow'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, parseAmount } from '@repo/lib/shared/utils/numbers'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { RemoveLiquidityReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
@@ -114,7 +113,7 @@ export function RemoveLiquiditySummary({
           <Card variant="modalSubSection">
             <VStack align="start" spacing="sm">
               <PoolActionsPriceImpactDetails
-                bptAmount={BigInt(parseUnits(humanBptIn, 18))}
+                bptAmount={parseAmount(humanBptIn, 18)}
                 slippage={slippage}
                 totalUSDValue={totalUSDValue}
               />

@@ -35,4 +35,4 @@ publicHoistPattern:
   - '@reown/*' # Fix for @reown/appkit resolution in Next + pnpm
 
 minimumReleaseAgeExclude:
-  - '@balancer/sdk@6.1.1'
+  - '@balancer/sdk@6.2.0'

@@ -1,6 +1,6 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import { useMemo } from 'react'
-import { Address, parseUnits } from 'viem'
+import { Address } from 'viem'
 import { useApproveRelayerStep } from '../relayer/useApproveRelayerStep'
 import { useRelayerMode, RelayerMode } from '../relayer/useRelayerMode'
 import { RawAmount } from '../tokens/approvals/approval-rules'
@@ -17,6 +17,7 @@ import { usePermit2ApprovalSteps } from '../tokens/approvals/permit2/usePermit2A
 import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 type Params = SwapStepParams & {
   vaultAddress: Address
@@ -61,7 +62,7 @@ export function useSwapSteps({
     return [
       {
         address: tokenInInfo.address as Address,
-        rawAmount: parseUnits(swapState.tokenIn.amount, tokenInInfo.decimals),
+        rawAmount: parseAmount(swapState.tokenIn.amount, tokenInInfo.decimals),
         symbol: tokenInInfo.symbol,
       },
     ]

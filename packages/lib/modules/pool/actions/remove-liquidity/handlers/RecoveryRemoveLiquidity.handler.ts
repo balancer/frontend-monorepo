@@ -15,10 +15,10 @@ import {
   SdkQueryRemoveLiquidityOutput,
 } from '../remove-liquidity.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
-import { parseEther } from 'viem'
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 /*
  A recovery exit is just a Proportional one but with Recovery kind
@@ -95,7 +95,7 @@ export class RecoveryRemoveLiquidityHandler {
     userAddress: Address
   ): RemoveLiquidityRecoveryInput {
     const bptIn: InputAmount = {
-      rawAmount: parseEther(humanBptIn),
+      rawAmount: parseAmount(humanBptIn, 18),
       decimals: BPT_DECIMALS,
       address: this.helpers.pool.address as Address,
     }

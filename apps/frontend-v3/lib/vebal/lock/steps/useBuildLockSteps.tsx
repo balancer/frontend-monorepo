@@ -18,7 +18,9 @@ export function useBuildLockSteps({ lockDuration, totalAmount }: UseBuildLockSte
 
   const { steps } = useLockSteps({
     lockAmount: {
-      rawAmount: parseUnits(totalAmount.toString(), vebalBptToken.decimals),
+      // toFixed, not toString: BigNumber.toString() emits exponential notation outside
+      // 1e-7..1e21, which parseUnits rejects.
+      rawAmount: parseUnits(totalAmount.toFixed(), vebalBptToken.decimals),
       address: vebalBptToken.address as Address,
     },
     lockActionTypes,

@@ -11,10 +11,9 @@ import {
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { parseUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { noop } from 'lodash'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, parseAmount } from '@repo/lib/shared/utils/numbers'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
@@ -39,7 +38,7 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: b
     contractAddress: getNetworkConfig(chain).contracts.beets?.lstStakingProxy || '',
     functionName: 'deposit',
     args: [],
-    value: parseUnits(humanAmount, BPT_DECIMALS),
+    value: parseAmount(humanAmount, BPT_DECIMALS),
     enabled: humanAmount !== '' && bn(humanAmount).gte(0.01) && isConnected && enabled,
     onTransactionChange: setTransaction,
   }

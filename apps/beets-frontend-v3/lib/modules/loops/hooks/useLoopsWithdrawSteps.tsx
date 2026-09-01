@@ -1,9 +1,10 @@
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { useLoopsWithdrawStep } from './useLoopsWithdrawStep'
-import { Address, parseUnits } from 'viem'
+import { Address } from 'viem'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
 export function useLoopsWithdrawSteps({
   amountShares,
@@ -27,7 +28,7 @@ export function useLoopsWithdrawSteps({
       approvalAmounts: [
         {
           address: loopedAsset?.address as Address,
-          rawAmount: parseUnits(amountShares, 18),
+          rawAmount: parseAmount(amountShares, 18),
         },
       ],
       actionType: 'Withdrawing',
