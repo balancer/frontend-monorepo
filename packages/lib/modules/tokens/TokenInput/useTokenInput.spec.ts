@@ -23,6 +23,15 @@ describe('cleanAmountInput', () => {
     expect(cleanAmountInput('1e5')).toBe('15')
   })
 
+  test('collapses repeated decimal separators', () => {
+    // Regression: only the first '.' was deduplicated, so typing '1.2' then '.' produced '1.2.',
+    // which both parseAmount and bn() reject and which crashed the LST page during render.
+    expect(cleanAmountInput('1.2.')).toBe('1.2')
+    expect(cleanAmountInput('1.2.3')).toBe('1.23')
+    expect(cleanAmountInput('1..2')).toBe('1.2')
+    expect(cleanAmountInput('1,2,3')).toBe('1.23')
+  })
+
   test('keeps valid amounts untouched', () => {
     expect(cleanAmountInput('')).toBe('')
     expect(cleanAmountInput('0')).toBe('0')
