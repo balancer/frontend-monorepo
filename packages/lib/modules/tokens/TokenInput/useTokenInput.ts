@@ -18,8 +18,8 @@ export function overflowProtected(value: Numberish, decimalLimit: number): strin
 export function cleanAmountInput(newValue: string): string {
   let cleanValue = newValue.replace(',', '.')
   cleanValue = cleanValue.replace(/[^\d.]/g, '')
-  let separators = 0 // Remove all non decimal chars except the first decimal separator
-  cleanValue = cleanValue.replace('.', () => (separators++ === 0 ? '.' : ''))
+  let separators = 0 // Keep only the first decimal separator, drop any extras (e.g. pasted '1.2.3')
+  cleanValue = cleanValue.replace(/\./g, () => (separators++ === 0 ? '.' : ''))
   // A bare leading separator ('.') is not parseable by BigNumber and would crash downstream
   if (cleanValue.startsWith('.')) cleanValue = '0' + cleanValue
 
