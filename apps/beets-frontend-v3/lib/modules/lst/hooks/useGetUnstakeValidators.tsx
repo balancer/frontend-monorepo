@@ -16,6 +16,18 @@ export interface ValidatorUnstakeData {
   unstakeAmountShares: bigint
 }
 
+// Amount fields hold transient states ('', '.', '-') and pasted junk that parseAmount rejects.
+// Neither is a real unstake, so return null and let callers skip the request instead of asking
+// the API for amount=0 or letting a parse error escape into render.
+function parseSharesAmount(sharesAmount: string): bigint | null {
+  try {
+    const amountScaled = parseAmount(sharesAmount, 18)
+    return amountScaled > 0n ? amountScaled : null
+  } catch {
+    return null
+  }
+}
+
 export function useGetUnstakeValidators(
   sharesAmount: string,
   chain: GqlChain,
@@ -23,14 +35,15 @@ export function useGetUnstakeValidators(
 ) {
   const { chooseValidatorsForUnstakeAmount } = useGetAmountDelegatedPerValidator(chain)
 
+  const amountScaled = parseSharesAmount(sharesAmount)
+
   const queryResult = useQuery({
     queryKey: ['unstake-validators', sharesAmount, chain],
     queryFn: async () => {
-      if (!sharesAmount) {
+      if (amountScaled === null) {
         return []
       }
 
-      const amountScaled = parseAmount(sharesAmount, 18)
       const apiUrl = `https://sts-helper.beets-ftm-node.com/api/unstake-recommendation?amount=${amountScaled.toString()}`
       const response = await fetch(apiUrl)
 
@@ -49,7 +62,7 @@ export function useGetUnstakeValidators(
         unstakeAmountShares: item.withdrawalAmount,
       }))
     },
-    enabled: !!sharesAmount && unstakeEnabled,
+    enabled: amountScaled !== null && unstakeEnabled,
     staleTime: minutesToMilliseconds(5),
     retry: 1,
   })
@@ -58,8 +71,7 @@ export function useGetUnstakeValidators(
   const validators = queryResult.data ?? []
 
   // If query failed and we have no data, use fallback
-  if (queryResult.isError && validators.length === 0 && sharesAmount && unstakeEnabled) {
-    const amountScaled = parseAmount(sharesAmount, 18)
+  if (queryResult.isError && validators.length === 0 && amountScaled !== null && unstakeEnabled) {
     const fallbackValidators = chooseValidatorsForUnstakeAmount(amountScaled)
     return {
       validators: fallbackValidators,
