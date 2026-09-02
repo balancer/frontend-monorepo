@@ -10,6 +10,7 @@ import {
   differenceInHours,
   differenceInMinutes,
   differenceInSeconds,
+  fromUnixTime,
 } from 'date-fns'
 
 const DATETIME_LOCAL_FORMAT = "yyyy-MM-dd'T'HH:mm"
@@ -72,7 +73,7 @@ export function dateTimeToUnixTimestampBigInt(value?: string): bigint {
  * in the user's local timezone.
  */
 export function unixTimestampToDateTimeLocalString(unixTimestampSeconds: number | bigint): string {
-  return format(new Date(toJsTimestamp(Number(unixTimestampSeconds))), DATETIME_LOCAL_FORMAT)
+  return format(fromUnixTime(Number(unixTimestampSeconds)), DATETIME_LOCAL_FORMAT)
 }
 
 export function dateTimeLabelFor(date: Date): string {
