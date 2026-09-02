@@ -6,7 +6,9 @@ import {
 
 describe('unixTimestampToDateTimeLocalString', () => {
   it('formats a unix timestamp for datetime-local inputs in the local timezone', () => {
-    // 2026-09-01T18:00:00Z — tests run with TZ=Europe/Madrid (CEST, UTC+2)
+    // 2026-09-01T18:00:00Z. The expected value is CEST (UTC+2) because
+    // setup-vitest.tsx pins process.env.TZ to Europe/Madrid — if that pin changes,
+    // this assertion must change with it. The round-trip test below is TZ-agnostic.
     expect(unixTimestampToDateTimeLocalString(1788285600)).toBe('2026-09-01T20:00')
   })
 
