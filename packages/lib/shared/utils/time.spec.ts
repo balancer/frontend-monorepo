@@ -1,4 +1,24 @@
-import { formatDistanceToNowAbbr } from './time'
+import {
+  dateTimeToUnixTimestampBigInt,
+  formatDistanceToNowAbbr,
+  unixTimestampToDateTimeLocalString,
+} from './time'
+
+describe('unixTimestampToDateTimeLocalString', () => {
+  it('formats a unix timestamp for datetime-local inputs in the local timezone', () => {
+    // 2026-09-01T18:00:00Z. The expected value is CEST (UTC+2) because
+    // setup-vitest.tsx pins process.env.TZ to Europe/Madrid — if that pin changes,
+    // this assertion must change with it. The round-trip test below is TZ-agnostic.
+    expect(unixTimestampToDateTimeLocalString(1788285600)).toBe('2026-09-01T20:00')
+  })
+
+  it('round-trips with dateTimeToUnixTimestampBigInt', () => {
+    const unixTimestamp = 1788285600
+    const dateTimeLocal = unixTimestampToDateTimeLocalString(unixTimestamp)
+
+    expect(dateTimeToUnixTimestampBigInt(dateTimeLocal)).toBe(BigInt(unixTimestamp))
+  })
+})
 
 describe('Time distance abbreviated', () => {
   beforeAll(() => {

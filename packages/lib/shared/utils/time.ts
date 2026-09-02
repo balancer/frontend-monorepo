@@ -10,7 +10,10 @@ import {
   differenceInHours,
   differenceInMinutes,
   differenceInSeconds,
+  fromUnixTime,
 } from 'date-fns'
+
+const DATETIME_LOCAL_FORMAT = "yyyy-MM-dd'T'HH:mm"
 
 export const oneSecondInMs = 1000
 export const oneMinInMs = 60 * oneSecondInMs
@@ -63,6 +66,14 @@ export function dateTimeToUnixTimestampBigInt(value?: string): bigint {
   if (!Number.isFinite(milliseconds)) return 0n
 
   return BigInt(millisecondsToSeconds(milliseconds))
+}
+
+/**
+ * Converts a unix timestamp (seconds) into a `datetime-local` input value
+ * in the user's local timezone.
+ */
+export function unixTimestampToDateTimeLocalString(unixTimestampSeconds: number | bigint): string {
+  return format(fromUnixTime(Number(unixTimestampSeconds)), DATETIME_LOCAL_FORMAT)
 }
 
 export function dateTimeLabelFor(date: Date): string {
@@ -176,10 +187,6 @@ export function startOfDayUtc(dateUTC: Date) {
   return new Date(
     Date.UTC(dateUTC.getUTCFullYear(), dateUTC.getUTCMonth(), dateUTC.getUTCDate(), 0, 0, 0, 0)
   )
-}
-
-export function toISOString(timestamp: number): string {
-  return new Date(timestamp).toISOString()
 }
 
 /**

@@ -14,7 +14,7 @@ import {
   WeightAdjustmentType,
 } from './lbp.types'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
-import { toJsTimestamp, toISOString } from '@repo/lib/shared/utils/time'
+import { unixTimestampToDateTimeLocalString } from '@repo/lib/shared/utils/time'
 import { FixedPriceLBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/FixedPriceLBPoolAbi'
 import { LBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/LBPoolAbi'
 import type { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/graphql-derived-types'
@@ -72,10 +72,6 @@ type FixedPriceLbpDataResponse = [
 ]
 
 type ContractDataResponse = LbpDataResponse | FixedPriceLbpDataResponse
-
-function formatLbpTimestamp(timestamp: bigint): string {
-  return toISOString(toJsTimestamp(Number(timestamp))).slice(0, 16)
-}
 
 export function useHydrateLbpForm() {
   const { slug } = useParams()
@@ -247,8 +243,8 @@ export function useHydrateLbpForm() {
       customStartWeight,
       customEndWeight,
       fee: +formatUnits(staticSwapFeePercentage.result, PERCENTAGE_DECIMALS),
-      startDateTime: formatLbpTimestamp(lbpImmutableData.result.startTime),
-      endDateTime: formatLbpTimestamp(lbpImmutableData.result.endTime),
+      startDateTime: unixTimestampToDateTimeLocalString(lbpImmutableData.result.startTime),
+      endDateTime: unixTimestampToDateTimeLocalString(lbpImmutableData.result.endTime),
     }
 
     saleStructureForm.reset(saleStructureFormValues)
@@ -297,8 +293,8 @@ export function useHydrateLbpForm() {
       collateralTokenAmount: '',
       userActions,
       fee: +formatUnits(staticSwapFeePercentage.result, PERCENTAGE_DECIMALS),
-      startDateTime: formatLbpTimestamp(startTime),
-      endDateTime: formatLbpTimestamp(endTime),
+      startDateTime: unixTimestampToDateTimeLocalString(startTime),
+      endDateTime: unixTimestampToDateTimeLocalString(endTime),
       launchTokenRate: formatUnits(fixedPriceImmutableData.result.projectTokenRate, 18), // Assuming 18 decimals
     }
 
