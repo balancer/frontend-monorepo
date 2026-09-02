@@ -1,7 +1,12 @@
 import { clickButton, button, clickRadio, checkbox } from '@/helpers/user.helpers'
 import { expect, type Page } from '@playwright/test'
 import { LBP_FORM_STEPS } from '@repo/lib/modules/lbp/constants.lbp'
-import { oneDayInMs, oneWeekInMs, toISOString } from '@repo/lib/shared/utils/time'
+import {
+  oneDayInMs,
+  oneWeekInMs,
+  unixTimestampToDateTimeLocalString,
+  oneSecondInMs,
+} from '@repo/lib/shared/utils/time'
 
 export type LbpSaleType = 'seedless' | 'seeded' | 'fixed-price'
 export type LbpConfig = {
@@ -91,8 +96,12 @@ export async function doSaleStructureStep(
 
   await expect(page.getByRole('heading', { name: 'Sale period' })).toBeVisible()
   const dateInputs = page.locator('input[type="datetime-local"]')
-  await dateInputs.first().fill(toISOString(Date.now() + oneDayInMs).slice(0, 16))
-  await dateInputs.last().fill(toISOString(Date.now() + oneWeekInMs).slice(0, 16))
+  await dateInputs
+    .first()
+    .fill(unixTimestampToDateTimeLocalString((Date.now() + oneDayInMs) / oneSecondInMs))
+  await dateInputs
+    .last()
+    .fill(unixTimestampToDateTimeLocalString((Date.now() + oneWeekInMs) / oneSecondInMs))
 
   if (lbpConfig.saleType === 'seedless') {
     await expect(

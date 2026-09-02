@@ -2,7 +2,11 @@ import { impersonate } from '@/helpers/e2e.helpers'
 import { clickButton } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
-import { oneDayInMs, toISOString } from '@repo/lib/shared/utils/time'
+import {
+  oneDayInMs,
+  oneSecondInMs,
+  unixTimestampToDateTimeLocalString,
+} from '@repo/lib/shared/utils/time'
 import {
   doProjectInfoStep,
   doReviewStep,
@@ -46,7 +50,9 @@ test.describe('LBP creation page', () => {
       await doSaleStructureStep(page)
 
       const dateInputs = page.locator('input[type="datetime-local"]')
-      const invalidEndTime = toISOString(Date.now() + oneDayInMs + 60 * 60 * 1000).slice(0, 16)
+      const invalidEndTime = unixTimestampToDateTimeLocalString(
+        (Date.now() + oneDayInMs + 60 * 60 * 1000) / oneSecondInMs,
+      )
       await dateInputs.last().fill(invalidEndTime)
 
       await clickButton(page, 'Next')
