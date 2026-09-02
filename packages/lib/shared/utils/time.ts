@@ -189,10 +189,6 @@ export function startOfDayUtc(dateUTC: Date) {
   )
 }
 
-export function toISOString(timestamp: number): string {
-  return new Date(timestamp).toISOString()
-}
-
 /**
  * Fixes date shown on pool charts
  *
