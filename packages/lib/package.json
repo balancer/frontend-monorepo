@@ -114,6 +114,6 @@
     "eslint": "9.39.5",
     "msw": "2.15.0",
     "prool": "0.2.14",
-    "sentry-testkit": "7.4.0"
+    "sentry-testkit": "7.5.0"
   }
 }
