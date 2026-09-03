@@ -43,7 +43,12 @@ test.describe('Boosted stable pool v3 - batched transactions', () => {
     await expect(page.getByText('Transaction confirmed')).toBeVisible()
   })
 
-  test('remove liquidity batches approvals and action into a single call', async ({ page }) => {
+  // Skipped: this test only passes if the account already holds pool BPT, which is never
+  // seeded for the fork — it relies on the add liquidity test above minting it on the shared
+  // anvil process. Re-enable once the BPT balance is seeded independently of test order.
+  test.skip('remove liquidity batches approvals and action into a single call', async ({
+    page,
+  }) => {
     await clickButton(page, 'Remove')
     await setSliderPercent(page, 50)
     await clickButton(page, 'Next')
