@@ -11,6 +11,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { ManagedTransactionButton } from '../../transactions/transaction-steps/TransactionButton'
+import { buildBatchableTxCall } from '../../transactions/transaction-steps/tx-batch.helpers'
 
 const approveMinterStepId = 'approve-minter'
 
@@ -66,6 +67,12 @@ export function useApproveMinterStep(
     },
     isComplete: () => isConnected && hasMinterApproval,
     renderAction: () => <ManagedTransactionButton id={approveMinterStepId} {...props} />,
+    batchableTxCall: buildBatchableTxCall(
+      'balancer.minter',
+      contracts.balancer.minter,
+      'setMinterApproval',
+      [contracts.balancer.relayerV6, true]
+    ),
     onSuccess: () => refetch(),
     transaction,
   }

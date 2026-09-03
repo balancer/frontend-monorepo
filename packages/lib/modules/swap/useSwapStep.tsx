@@ -18,7 +18,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { DisabledTransactionButton } from '../transactions/transaction-steps/TransactionStepButton'
 import { ApiToken } from '../tokens/token.types'
 import { isTransactionSuccess } from '../transactions/transaction-steps/transaction.helper'
-import { TransactionBatchButton } from '../transactions/transaction-steps/safe/TransactionBatchButton'
+import { TransactionBatchButton } from '../transactions/transaction-steps/TransactionBatchButton'
 
 const swapStepId = 'swap'
 

@@ -8,10 +8,10 @@ import { ensureError } from '@repo/lib/shared/utils/errors'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import SafeAppsSDK, { GatewayTransactionDetails } from '@safe-global/safe-apps-sdk'
 import { noop } from 'lodash'
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { TransactionExecution, TransactionSimulation } from '../../../web3/contracts/contract.types'
 import { useRecentTransactions } from '../../RecentTransactionsProvider'
-import { ManagedResult, TransactionLabels, TransactionStep } from '../lib'
+import { ManagedResult, TransactionLabels, TransactionStep, BatchSubmitter } from '../lib'
 import { buildTxBatch } from '../tx-batch.helpers'
 import { getTransactionButtonLabel } from '../transaction-button.helpers'
 import { MultisigStatus } from './MultisigStatus'
@@ -35,17 +35,6 @@ type Props = {
   Common contract implemented by every batch submitter.
   Phase 2 (EIP-5792) will add an Eip5792BatchSubmitter with the same shape.
 */
-export type BatchSubmitter = {
-  // Sends the batch; resolves once the batch has been submitted
-  submit: () => Promise<void>
-  isLoading: boolean
-  error?: Error
-  label: string
-  // Whether the submit button should be shown (e.g. hidden once the tx is done)
-  canSubmit: boolean
-  // Extra status UI rendered above the button (e.g. MultisigStatus card)
-  statusContent?: ReactNode
-}
 
 export function useSafeBatchSubmitter({
   labels,

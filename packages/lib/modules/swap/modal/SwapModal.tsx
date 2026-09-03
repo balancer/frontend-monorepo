@@ -19,7 +19,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useIsPoolSwapUrl } from '../useIsPoolSwapUrl'
 import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
-import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 type Props = {
   isOpen: boolean

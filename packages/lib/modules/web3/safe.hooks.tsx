@@ -1,16 +1,10 @@
 import { Hex } from 'viem'
-import { TransactionStep, TxBatch } from '../transactions/transaction-steps/lib'
 import { useUserAccount } from './UserAccountProvider'
 import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTxQuery'
 import { useWalletConnectMetadata } from './wallet-connect/useWalletConnectMetadata'
-import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import {
-  buildTxBatch,
-  hasSomePendingNestedTxInBatch,
-} from '../transactions/transaction-steps/tx-batch.helpers'
 
 // Returns true when using a Safe Smart account:
 // - app running as a Safe App
@@ -25,39 +19,6 @@ export function useIsSafeAccount(): boolean {
 export function useIsSafeApp(): boolean {
   const { connector } = useUserAccount()
   return connector?.id === 'safe'
-}
-
-/*
- Returns true when running as a Safe App and settings allow batched tx
- (that excludes Safe accounts connected via WalletConnect)
-*/
-export function useShouldBatchTransactions(): boolean {
-  const { shouldUseTxBundling } = useUserSettings()
-  const isSafeApp = useIsSafeApp()
-  return shouldUseTxBundling && isSafeApp
-}
-
-/* isStepWithTxBatch is true if:
-  1. running as a Safe App
-  2. the current step has nested batchable transactions
-  3. some of the nested transactions is not completed
-*/
-export function useStepWithTxBatch(currentStep: TransactionStep): {
-  isStepWithTxBatch: boolean
-  txBatch?: TxBatch
-} {
-  const noBatchStep = { isStepWithTxBatch: false }
-  const shouldBatchTx = useShouldBatchTransactions()
-
-  if (!shouldBatchTx) return noBatchStep
-  if (!currentStep.isBatchEnd) return noBatchStep
-
-  const txBatch: TxBatch = buildTxBatch(currentStep)
-  if (txBatch.length === 1) return noBatchStep
-
-  if (!hasSomePendingNestedTxInBatch(currentStep)) return noBatchStep
-
-  return { isStepWithTxBatch: true, txBatch }
 }
 
 /*

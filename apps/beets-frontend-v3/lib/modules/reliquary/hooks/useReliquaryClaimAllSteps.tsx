@@ -16,6 +16,9 @@ import { reliquaryActionsService } from '@/lib/services/batch-relayer/extensions
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
 import { useReliquary } from '@/lib/modules/reliquary/ReliquaryProvider'
 import { Address } from 'viem'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionBatchButton'
+import { buildBatchableTxCall } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 const claimAllStepId = 'reliquary-claim-all-rewards'
 
@@ -78,14 +81,66 @@ export function useReliquaryClaimAllSteps() {
       transaction,
       isComplete: () => isTransactionSuccess(transaction),
       renderAction: () => <ManagedTransactionButton id={claimAllStepId} {...props} />,
+      renderBatchAction: (currentStep: TransactionStep) => (
+        <TransactionBatchButton
+          chainId={chainId}
+          currentStep={currentStep}
+          labels={labels}
+          onTransactionChange={setTransaction}
+        />
+      ),
+      // Last step in the batch: the multicall is preceded by the relayer approvals
+      isBatchEnd: true,
+      batchableTxCall: harvestAllCalldata
+        ? buildBatchableTxCall('balancer.relayerV6', contracts.balancer.relayerV6, 'multicall', [
+            [harvestAllCalldata],
+          ])
+        : undefined,
     }),
-    [transaction, labels, isTransactionSuccess, props]
+    [transaction, labels, isTransactionSuccess, props, harvestAllCalldata, chainId, contracts]
   )
 
-  const steps: TransactionStep[] = [approveRelayerStep, approveRelayerRelicsStep, claimAllStep]
+  const shouldBatchTransactions = useShouldBatchTransactions()
+
+  const steps = useMemo(
+    () =>
+      getReliquaryClaimAllSteps({
+        shouldBatchTransactions,
+        claimAllStep,
+        approveRelayerRelicsStep,
+        approveRelayerStep,
+      }),
+    [shouldBatchTransactions, claimAllStep, approveRelayerRelicsStep, approveRelayerStep]
+  )
 
   return {
     isLoadingSteps: isLoadingRelayerApproval || isLoadingRelayerRelicsApproval,
     steps,
   }
+}
+
+/*
+  Composes the reliquary claim-all step list. When batching, the relayer approvals
+  (relayer + relayer-for-relics) are appended to the nested steps of the claim
+  multicall so the whole flow runs as one atomic batch; otherwise they are shown
+  as separate steps ahead of the multicall.
+*/
+export function getReliquaryClaimAllSteps({
+  shouldBatchTransactions,
+  claimAllStep,
+  approveRelayerRelicsStep,
+  approveRelayerStep,
+}: {
+  shouldBatchTransactions: boolean
+  claimAllStep: TransactionStep
+  approveRelayerRelicsStep: TransactionStep
+  approveRelayerStep: TransactionStep
+}): TransactionStep[] {
+  if (shouldBatchTransactions) {
+    // setRelayerApproval runs first, then setApprovalForAll, then the claim multicall
+    claimAllStep.nestedSteps = [approveRelayerStep, approveRelayerRelicsStep]
+    return [claimAllStep]
+  }
+
+  return [approveRelayerStep, approveRelayerRelicsStep, claimAllStep]
 }

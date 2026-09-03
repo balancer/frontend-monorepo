@@ -33,7 +33,7 @@ export function Step(props: StepProps) {
       </Box>
       <VStack alignItems="start" spacing="0">
         <Text fontWeight="bold" lineHeight="1.05" variant={variant}>
-          {shouldDisplayAsTxBatch ? 'Safe transaction bundle' : title}
+          {shouldDisplayAsTxBatch ? 'Transaction bundle' : title}
         </Text>
         {!shouldDisplayAsTxBatch && (
           <NestedInfo

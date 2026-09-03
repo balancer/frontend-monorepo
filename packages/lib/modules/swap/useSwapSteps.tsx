@@ -15,7 +15,7 @@ import { isNativeAsset } from '../tokens/token.helpers'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { usePermit2ApprovalSteps } from '../tokens/approvals/permit2/usePermit2ApprovalSteps'
 import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.helpers'
-import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { parseAmount } from '@repo/lib/shared/utils/numbers'
 
@@ -55,7 +55,13 @@ export function useSwapSteps({
   const swapRequiresRelayer =
     relayerMode !== 'no-relayer-needed' && handler.name === 'AuraBalSwapHandler'
 
-  const { shouldUseSignatures } = useUserSettings()
+  const { shouldUseSignatures: userShouldUseSignatures } = useUserSettings()
+
+  const shouldBatchTransactions = useShouldBatchTransactions()
+
+  // When batching, force gas-tx approvals so the whole flow (approvals + swap) is
+  // one atomic batch instead of a free signature + a separate gas batch.
+  const shouldUseSignatures = shouldBatchTransactions ? false : userShouldUseSignatures
 
   const tokenInAmounts = useMemo(() => {
     if (!tokenInInfo) return [] as RawAmount[]
@@ -87,7 +93,8 @@ export function useSwapSteps({
     isPermit2,
   })
 
-  const isSignPermit2Loading = isPermit2 && !signPermit2Step
+  // Only relevant when the flow requires the gasless permit2 signature step
+  const isSignPermit2Loading = shouldUseSignatures && isPermit2 && !signPermit2Step
 
   // If the user has selected to not use signatures, we allow them to do permit2
   // approvals with transactions.
@@ -116,8 +123,6 @@ export function useSwapSteps({
 
   // native tokenIn does not require permit2 signature
   const isNativeTokenIn = tokenInInfo && isNativeAsset(tokenInInfo?.address, chain)
-
-  const shouldBatchTransactions = useShouldBatchTransactions()
 
   const steps = useMemo(
     () =>
@@ -202,11 +207,17 @@ export function getApprovalAndSwapSteps({
     else stepList.push(signRelayerStep)
   }
 
-  const isPermit2WithStep = isPermit2 && signPermit2Step && !isNativeTokenIn
+  /*
+  The approval branch depends only on the route (permit2 vs vault) and the token in,
+  never on the presence of the signature step: when batching (or when signatures are
+  disabled) the Permit2 allowances are submitted as transactions regardless of whether
+  a signature step object exists.
+*/
+  const isPermit2ApprovalRoute = isPermit2 && !isNativeTokenIn
 
   // Approvals that can be batched with the swap are attached as nested steps,
   // mirroring how add/remove liquidity bundle approvals for smart accounts.
-  swapStep.nestedSteps = isPermit2WithStep
+  swapStep.nestedSteps = isPermit2ApprovalRoute
     ? shouldUseSignatures
       ? tokenApprovalSteps
       : [...tokenApprovalSteps, ...permit2ApprovalSteps]
@@ -217,16 +228,22 @@ export function getApprovalAndSwapSteps({
   if (shouldDisplayBatch) {
     // Hide approvals when batching (they are executed in the same atomic tx as the swap).
     // The permit2 signature step stays visible: it is a gasless signature, not a batched call.
-    if (isPermit2WithStep && shouldUseSignatures) stepList.push(signPermit2Step)
+    if (isPermit2ApprovalRoute && shouldUseSignatures && signPermit2Step) {
+      stepList.push(signPermit2Step)
+    }
+
     stepList.push(swapStep)
     return stepList
   }
 
   stepList.push(...tokenApprovalSteps)
 
-  if (isPermit2WithStep) {
-    if (shouldUseSignatures) stepList.push(signPermit2Step)
-    else stepList.push(...permit2ApprovalSteps)
+  if (isPermit2ApprovalRoute) {
+    if (shouldUseSignatures) {
+      if (signPermit2Step) stepList.push(signPermit2Step)
+    } else {
+      stepList.push(...permit2ApprovalSteps)
+    }
   }
 
   stepList.push(swapStep)

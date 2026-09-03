@@ -11,6 +11,8 @@ import { TransactionModalHeader } from '@repo/lib/shared/components/modals/Trans
 import { ReliquaryClaimAllSummary } from './ReliquaryClaimAllSummary'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useReliquary } from '../ReliquaryProvider'
+import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 type Props = {
   isOpen: boolean
@@ -29,6 +31,7 @@ export function ReliquaryClaimAllRewardsModal({
   const initialFocusRef = useRef(null)
   const { pool } = usePool()
   const { isLoadingSteps, steps } = useReliquaryClaimAllSteps()
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
   const { refetchPendingRewards } = useReliquary()
 
@@ -54,10 +57,17 @@ export function ReliquaryClaimAllRewardsModal({
     >
       <SuccessOverlay startAnimation={!!claimTxHash} />
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
+        {isDesktop && (
+          <DesktopStepTracker
+            chain={pool.chain}
+            isTxBatch={shouldBatchTransactions}
+            transactionSteps={transactionSteps}
+          />
+        )}
         <TransactionModalHeader chain={pool.chain} label="Claim all rewards" txHash={claimTxHash} />
         <ModalCloseButton />
         <ModalBody>
+          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <ReliquaryClaimAllSummary
             claimTxHash={claimTxHash}
             isLoadingSteps={isLoadingSteps}

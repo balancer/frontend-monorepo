@@ -2,7 +2,7 @@
 
 import { Box, Heading, Switch, Text } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
-import { useIsSafeApp } from '../../web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 function EnableTxBundleSelect() {
   const { enableTxBundling, setEnableTxBundling } = useUserSettings()
@@ -15,7 +15,7 @@ function EnableTxBundleSelect() {
 }
 
 export function EnableTxBundleSetting() {
-  const shouldBeVisible = useIsSafeApp()
+  const shouldBeVisible = useShouldBatchTransactions()
 
   if (shouldBeVisible) {
     return (

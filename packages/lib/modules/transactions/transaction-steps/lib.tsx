@@ -194,3 +194,15 @@ export function getTransactionState(transactionBundle?: TransactionBundle): Tran
 
   return TransactionState.Ready
 }
+
+export type BatchSubmitter = {
+  // Sends the batch; resolves once the batch has been submitted
+  submit: () => Promise<void>
+  isLoading: boolean
+  error?: Error
+  label: string
+  // Whether the submit button should be shown (e.g. hidden once the tx is done)
+  canSubmit: boolean
+  // Extra status UI rendered above the button (e.g. MultisigStatus card)
+  statusContent?: ReactNode
+}

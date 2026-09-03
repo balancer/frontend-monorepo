@@ -7,6 +7,7 @@ import { BPT_DECIMALS } from '../../pool.constants'
 import { useMemo } from 'react'
 import { useStakeStep } from './useStakeStep'
 import { getUserWalletBalance } from '../../user-balance.helpers'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 export function useStakeSteps(pool: Pool, stakeAmount = getUserWalletBalance(pool)) {
   const rawAmount = parseUnits(bn(stakeAmount || '0').toFixed(), BPT_DECIMALS)
@@ -25,11 +26,15 @@ export function useStakeSteps(pool: Pool, stakeAmount = getUserWalletBalance(poo
       bptSymbol: 'LP token',
     })
 
-  const stakingStep = useStakeStep(pool, rawAmount)
+  const shouldBatchTransactions = useShouldBatchTransactions()
+
+  // Approvals are executed inside the same atomic batch as the deposit, so they
+  // are hidden from the step list when batching (mirrors remove-liquidity).
+  const stakingStep = useStakeStep(pool, rawAmount, tokenApprovalSteps)
 
   const steps = useMemo(
-    () => [...tokenApprovalSteps, stakingStep],
-    [tokenApprovalSteps, stakingStep]
+    () => (shouldBatchTransactions ? [stakingStep] : [...tokenApprovalSteps, stakingStep]),
+    [shouldBatchTransactions, tokenApprovalSteps, stakingStep]
   )
 
   return {

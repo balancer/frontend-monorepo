@@ -1,8 +1,10 @@
+'use client'
+
 import { Button, VStack } from '@chakra-ui/react'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
-import { ManagedResult, TransactionLabels, TransactionStep } from '../lib'
-import { SwitchNetworkAlert, useChainSwitch } from '../../../web3/useChainSwitch'
-import { useSafeBatchSubmitter } from './useSafeBatchSubmitter'
+import { ManagedResult, TransactionLabels, TransactionStep } from './lib'
+import { RegularSwitchNetworkButton, useChainSwitch } from '../../web3/useChainSwitch'
+import { useBatchSubmitter } from './useBatchSubmitter'
 
 type Props = {
   labels: TransactionLabels
@@ -13,8 +15,8 @@ type Props = {
 
 /*
   Generic button that submits a batch of transactions through a wallet-specific
-  submitter. Safe is the only submitter today; EIP-5792 (EIP-7702 wallets) will
-  plug in through the same BatchSubmitter interface in a follow-up.
+  submitter (Safe or EIP-5792 / EIP-7702). The submitter is chosen by
+  useBatchSubmitter based on the connected wallet.
 */
 export function TransactionBatchButton({
   labels,
@@ -24,8 +26,7 @@ export function TransactionBatchButton({
 }: Props) {
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
 
-  // Until a second submitter exists (EIP-5792), Safe is the only implementation.
-  const submitter = useSafeBatchSubmitter({
+  const submitter = useBatchSubmitter({
     labels,
     chainId,
     currentStep,
@@ -39,7 +40,8 @@ export function TransactionBatchButton({
   return (
     <VStack width="full">
       {submitter.error && <TransactionError error={submitter.error} />}
-      {shouldChangeNetwork && <SwitchNetworkAlert chainName={networkSwitchButtonProps.name} />}
+      {/* Safe Apps cannot switch network programmatically, other wallets get the regular switch button */}
+      {shouldChangeNetwork && <RegularSwitchNetworkButton {...networkSwitchButtonProps} />}
       {submitter.statusContent}
 
       {!shouldChangeNetwork && submitter.canSubmit && (

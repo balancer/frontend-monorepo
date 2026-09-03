@@ -14,6 +14,8 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { usePoolRedirect } from '../../pool.hooks'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
+import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 type Props = {
   isOpen: boolean
@@ -31,6 +33,7 @@ export function StakeModal({
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { transactionSteps, stakeTxHash } = useStake()
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const { pool } = usePool()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const { isMobile } = useBreakpoints()
@@ -51,10 +54,17 @@ export function StakeModal({
       <SuccessOverlay startAnimation={!!stakeTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
+        {isDesktop && (
+          <DesktopStepTracker
+            chain={pool.chain}
+            isTxBatch={shouldBatchTransactions}
+            transactionSteps={transactionSteps}
+          />
+        )}
         <TransactionModalHeader chain={pool.chain} label="Stake LP tokens" txHash={stakeTxHash} />
         <ModalCloseButton />
         <ModalBody>
+          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <AnimateHeightChange spacing="sm">
             {isMobile && (
               <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />

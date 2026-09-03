@@ -1,4 +1,6 @@
 import { TransactionStep, TxCall } from './lib'
+import { Address, Abi, encodeFunctionData } from 'viem'
+import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 
 /*
   Builds the list of calls to be executed inside a single batched transaction.
@@ -26,4 +28,33 @@ export function hasSomePendingNestedTxInBatch(step: TransactionStep): boolean {
 
 export function getPendingNestedSteps(step: TransactionStep) {
   return step?.nestedSteps?.filter(nestedStep => !nestedStep.isComplete())
+}
+
+/*
+  Encodes a contract call for a step that uses useManagedTransaction, so the same
+  txConfig that feeds the managed transaction can also be sent inside a batch.
+  Returns undefined until the inputs are ready (mirrors the batchableTxCall of the
+  add/remove liquidity steps, which derive from their buildCallDataQuery).
+*/
+export function buildBatchableTxCall(
+  contractId: keyof typeof AbiMap,
+  contractAddress: string | undefined,
+  functionName: string,
+  args: readonly unknown[] | null | undefined
+): TxCall | undefined {
+  if (!contractAddress || !args || args.some(arg => arg === undefined || arg === null)) {
+    return undefined
+  }
+
+  try {
+    const data = encodeFunctionData({
+      abi: AbiMap[contractId] as Abi,
+      functionName,
+      args,
+    })
+
+    return { to: contractAddress as Address, data }
+  } catch {
+    return undefined
+  }
 }

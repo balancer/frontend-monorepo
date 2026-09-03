@@ -4,7 +4,7 @@ import { getSpenderForAddLiquidity } from '@repo/lib/modules/tokens/token.helper
 import { useMemo } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
-import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import {
   ReliquaryAddLiquidityStepParams,
@@ -71,31 +71,72 @@ export function useReliquaryAddLiquiditySteps({
     relicId,
   })
 
-  const allSteps = useMemo<TransactionStep[]>(() => {
-    // 1. Get token approval + add liquidity steps
-    let steps = getApprovalAndAddSteps({
-      isPermit2: false,
-      shouldUseSignatures: false, // V2 doesn't use permit2 signatures
+  const allSteps = useMemo<TransactionStep[]>(
+    () =>
+      getReliquaryAddLiquiditySteps({
+        shouldBatchTransactions,
+        tokenApprovalSteps,
+        multicallStep,
+        approveRelayerRelicsStep,
+        approveRelayerStep,
+      }),
+    [
       shouldBatchTransactions,
-      permit2ApprovalSteps: [],
       tokenApprovalSteps,
-      addLiquidityStep: multicallStep,
-    })
-
-    steps = [approveRelayerRelicsStep, approveRelayerStep, ...steps]
-
-    return steps
-  }, [
-    shouldBatchTransactions,
-    tokenApprovalSteps,
-    multicallStep,
-    approveRelayerRelicsStep,
-    approveRelayerStep,
-  ])
+      multicallStep,
+      approveRelayerRelicsStep,
+      approveRelayerStep,
+    ]
+  )
 
   return {
     isLoadingSteps:
       isLoadingTokenApprovalSteps || isLoadingRelayerApproval || isLoadingRelayerRelicsApproval,
     steps: allSteps,
   }
+}
+
+/*
+  Composes the reliquary add-liquidity step list. When batching, the relayer
+  approvals (relayer + relayer-for-relics) are appended to the nested steps of the
+  multicall (createRelic + joinPool + add liquidity) so the whole flow runs as one
+  atomic batch; otherwise they are shown as separate steps ahead of the multicall.
+*/
+export function getReliquaryAddLiquiditySteps({
+  shouldBatchTransactions,
+  tokenApprovalSteps,
+  multicallStep,
+  approveRelayerRelicsStep,
+  approveRelayerStep,
+}: {
+  shouldBatchTransactions: boolean
+  tokenApprovalSteps: TransactionStep[]
+  multicallStep: TransactionStep
+  approveRelayerRelicsStep: TransactionStep
+  approveRelayerStep: TransactionStep
+}): TransactionStep[] {
+  const steps = getApprovalAndAddSteps({
+    isPermit2: false,
+    shouldUseSignatures: false, // V2 doesn't use permit2 signatures
+    shouldBatchTransactions,
+    permit2ApprovalSteps: [],
+    tokenApprovalSteps,
+    addLiquidityStep: multicallStep,
+  })
+
+  if (shouldBatchTransactions) {
+    // The relayer approvals are executed inside the same atomic batch as the token
+    // approvals and the multicall, so they are hidden from the step list too.
+    // setRelayerApproval runs first, then setApprovalForAll, then the token
+    // approvals, all before the multicall (createRelic + joinPool + add liquidity)
+    multicallStep.nestedSteps = [
+      approveRelayerStep,
+      approveRelayerRelicsStep,
+      ...(multicallStep.nestedSteps ?? []),
+    ]
+
+    return [multicallStep]
+  }
+
+  return [approveRelayerStep, approveRelayerRelicsStep, ...steps]
 }

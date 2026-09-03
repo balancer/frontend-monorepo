@@ -13,7 +13,7 @@ import {
 } from './queries/useRemoveLiquidityBuildCallDataQuery'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
-import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionBatchButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 const removeLiquidityStepId = 'remove-liquidity'

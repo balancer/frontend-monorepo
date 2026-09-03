@@ -148,6 +148,32 @@ describe('getApprovalAndSwapSteps', () => {
       expect(steps).toEqual([swapStep])
       expect(swapStep.nestedSteps).toEqual(tokenApprovalSteps)
     })
+
+    it('permit2 swap without a signature step still attaches permit2 approvals when signatures are disabled', () => {
+      // Regression: the approval branch must not depend on the signature step object
+      const steps = getApprovalAndSwapSteps({
+        ...baseProps,
+        isPermit2: true,
+        signPermit2Step: undefined,
+        shouldUseSignatures: false,
+      })
+
+      expect(steps).toEqual([...tokenApprovalSteps, ...permit2ApprovalSteps, swapStep])
+      expect(swapStep.nestedSteps).toEqual([...tokenApprovalSteps, ...permit2ApprovalSteps])
+    })
+
+    it('batched permit2 swap without a signature step still batches permit2 approvals', () => {
+      const steps = getApprovalAndSwapSteps({
+        ...baseProps,
+        isPermit2: true,
+        signPermit2Step: undefined,
+        shouldUseSignatures: false,
+        shouldBatchTransactions: true,
+      })
+
+      expect(steps).toEqual([swapStep])
+      expect(swapStep.nestedSteps).toEqual([...tokenApprovalSteps, ...permit2ApprovalSteps])
+    })
   })
 
   describe('batch edge cases', () => {

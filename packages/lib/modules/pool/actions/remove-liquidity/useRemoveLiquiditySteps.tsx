@@ -5,7 +5,8 @@ import { TransactionStep } from '@repo/lib/modules/transactions/transaction-step
 import { useSignPermitStep } from '@repo/lib/modules/transactions/transaction-steps/useSignPermitStep'
 import { useSignRelayerStep } from '@repo/lib/modules/transactions/transaction-steps/useSignRelayerStep'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-import { useIsSafeAccount, useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
 import { isV3Pool } from '../../pool.helpers'
@@ -20,7 +21,11 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { slippage } = useUserSettings()
   const relayerMode = useRelayerMode(pool)
-  const { shouldUseSignatures } = useUserSettings()
+  const { shouldUseSignatures: userShouldUseSignatures } = useUserSettings()
+
+  // When batching, force gas-tx approvals so the whole flow (approvals + remove
+  // liquidity) is one atomic batch instead of a free signature + a separate gas batch.
+  const shouldUseSignatures = shouldBatchTransactions ? false : userShouldUseSignatures
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
   const signRelayerStep = useSignRelayerStep(chain)
   const isSafeAccount = useIsSafeAccount()

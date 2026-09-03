@@ -13,7 +13,7 @@ import { useRemoveLiquidityReceipt } from '@repo/lib/modules/transactions/transa
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
-import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 import { ReliquaryRemoveLiquiditySummary } from './ReliquaryRemoveLiquiditySummary'
 import { useRouter } from 'next/navigation'

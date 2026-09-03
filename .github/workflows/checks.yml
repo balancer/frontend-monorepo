@@ -193,6 +193,32 @@ jobs:
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
 
+  E2E-Dev-Test-Balancer-3:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
+    env:
+      NEXT_PUBLIC_PROJECT_ID: balancer
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Set up foundry (includes anvil)
+        uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
+      - name: Start anvil fork in mainnet
+        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+      - name: Run Playwright dev tests (Balancer part 3)
+        run: pnpm test:e2e:dev:bal:3
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-dev-report-bal-3
+          path: |
+            ./packages/e2e-tests/playwright-report/
+          retention-days: 30
+
   E2E-Dev-Test-Beets:
     timeout-minutes: 15
     runs-on: ubuntu-latest

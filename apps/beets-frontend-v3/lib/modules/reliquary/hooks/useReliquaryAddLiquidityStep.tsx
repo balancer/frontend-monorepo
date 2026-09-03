@@ -4,7 +4,7 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionBatchButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'

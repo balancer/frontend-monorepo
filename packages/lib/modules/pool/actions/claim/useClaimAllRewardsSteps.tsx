@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { ClaimAllRewardsStepParams, useClaimAllRewardsStep } from './useClaimAllRewardsStep'
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
 import { getChainId } from '@repo/lib/config/app.config'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 
 export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
   const pool = params.pools[0]
@@ -27,21 +28,60 @@ export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
   const { step: claimAllRewardsStep, isLoading: isLoadingClaimAllRewards } =
     useClaimAllRewardsStep(params)
 
-  const steps = useMemo((): TransactionStep[] => {
-    const steps: TransactionStep[] = []
+  const shouldBatchTransactions = useShouldBatchTransactions()
 
-    if (hasUnclaimedBalRewards) {
-      steps.push(minterApprovalStep)
-    }
-
-    steps.push(...[relayerApprovalStep, claimAllRewardsStep])
-
-    return steps
-  }, [relayerApprovalStep, claimAllRewardsStep, minterApprovalStep, hasUnclaimedBalRewards])
+  // Approvals are executed inside the same atomic batch as the multicall, so they
+  // are hidden from the step list when batching (mirrors remove-liquidity).
+  const steps = useMemo(
+    () =>
+      getApprovalAndClaimSteps({
+        claimAllRewardsStep,
+        minterApprovalStep,
+        relayerApprovalStep,
+        hasUnclaimedBalRewards,
+        shouldBatchTransactions,
+      }),
+    [
+      claimAllRewardsStep,
+      minterApprovalStep,
+      relayerApprovalStep,
+      hasUnclaimedBalRewards,
+      shouldBatchTransactions,
+    ]
+  )
 
   return {
     isLoading:
       isLoadingRelayerApprovalStep || isLoadingMinterApprovalStep || isLoadingClaimAllRewards,
     steps,
   }
+}
+
+export function getApprovalAndClaimSteps({
+  claimAllRewardsStep,
+  minterApprovalStep,
+  relayerApprovalStep,
+  hasUnclaimedBalRewards,
+  shouldBatchTransactions,
+}: {
+  claimAllRewardsStep: TransactionStep
+  minterApprovalStep: TransactionStep
+  relayerApprovalStep: TransactionStep
+  hasUnclaimedBalRewards: boolean
+  shouldBatchTransactions: boolean
+}): TransactionStep[] {
+  const approvalSteps: TransactionStep[] = []
+
+  if (hasUnclaimedBalRewards) {
+    approvalSteps.push(minterApprovalStep)
+  }
+
+  approvalSteps.push(relayerApprovalStep)
+
+  // Approvals that can be batched with the multicall are attached as nested steps
+  claimAllRewardsStep.nestedSteps = approvalSteps
+
+  // When batching, the approvals are hidden from the step list (they run inside
+  // the same atomic transaction as the claim multicall)
+  return shouldBatchTransactions ? [claimAllRewardsStep] : [...approvalSteps, claimAllRewardsStep]
 }

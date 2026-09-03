@@ -8,11 +8,12 @@ import { ensureError } from '@repo/lib/shared/utils/errors'
 import { captureFatalError } from '@repo/lib/shared/utils/query-errors'
 import { secs } from '@repo/lib/shared/utils/time'
 import { AlertStatus, ToastId, useToast } from '@chakra-ui/react'
-import { keyBy, orderBy, take } from 'lodash'
+import { milliseconds } from 'date-fns'
+import { keyBy, orderBy, take, omit } from 'lodash'
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { Hash } from 'viem'
 import { useConfig } from 'wagmi'
-import { waitForTransactionReceipt } from 'wagmi/actions'
+import { waitForTransactionReceipt, getCallsStatus } from 'wagmi/actions'
 import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
 import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -27,6 +28,9 @@ import SafeAppsSDK from '@safe-global/safe-apps-sdk'
 import { safeStatusToBalancerStatus } from './transaction-steps/safe/safe.helpers'
 import { useInterval } from 'usehooks-ts'
 
+// How long a persisted EIP-5792 batch can stay 'confirming' before it is considered lost
+const EIP5792_STALE_BATCH_MS = milliseconds({ minutes: 10 })
+
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain
 // reverted = transaction has been mined and is present on chain - but the execution was reverted
@@ -38,7 +42,7 @@ export type TransactionStatus =
 
 export type SafeTransactionStatus = SafeTxStatus
 
-export type TransactionType = 'standard' | 'safe'
+export type TransactionType = 'standard' | 'safe' | 'eip5792'
 
 export type TrackedTransaction = {
   hash: Hash
@@ -59,7 +63,7 @@ export type TrackedTransaction = {
 type UpdateTrackedTransaction = Pick<
   TrackedTransaction,
   'label' | 'description' | 'status' | 'duration' | 'safeTxId' | 'safeTxAddress'
->
+> & { hash?: Hash }
 
 const TransactionStatusToastStatusMapping: Record<TransactionStatus, AlertStatus> = {
   confirmed: 'success',
@@ -209,9 +213,14 @@ export function useRecentTransactionsLogic() {
       ...updatePayload,
     }
 
+    // EIP-5792 batches are tracked by their calls id until the real on-chain
+    // transaction hash is known; re-key the entry when it arrives so the toast
+    // and recent activity entry point at the actual transaction.
+    const newHash = updatePayload.hash ?? hash
+
     const updatedCache = {
-      ...transactions,
-      [hash]: updatedCachedTransaction,
+      ...omit(transactions, hash),
+      [newHash]: updatedCachedTransaction,
     }
 
     setTransactions(updatedCache)
@@ -266,10 +275,18 @@ export function useRecentTransactionsLogic() {
     const safeAppsSdk = new SafeAppsSDK()
 
     const unconfirmedTransactions = Object.values(transactions).filter(
-      tx => tx.type === 'safe' && tx.status === 'confirming'
+      tx => (tx.type === 'safe' || tx.type === 'eip5792') && tx.status === 'confirming'
+    )
+
+    reconcileEip5792Transactions(
+      config,
+      unconfirmedTransactions.filter(tx => tx.type === 'eip5792'),
+      updateTrackedTransaction
     )
 
     unconfirmedTransactions.forEach(safeTrackedTx => {
+      if (safeTrackedTx.type !== 'safe') return
+
       safeAppsSdk.txs.getBySafeTxHash(safeTrackedTx.hash).then(tx => {
         updateTrackedTransaction(safeTrackedTx.hash, {
           status: safeStatusToBalancerStatus(tx.txStatus),
@@ -315,3 +332,49 @@ export function RecentTransactionsProvider({ children }: { children: ReactNode }
 
 export const useRecentTransactions = () =>
   useMandatoryContext(TransactionsContext, 'RecentTransactionsProvider')
+
+/*
+  Reconciles persisted EIP-5792 batches (tracked by their calls id) after a reload:
+  polls wallet_getCallsStatus and maps the result into the tracked transaction.
+  A batch that settles is re-keyed to its real on-chain transaction hash. A batch
+  that stays pending for too long (or keeps erroring) is moved to a terminal
+  'unknown' status so the entry does not spin forever.
+*/
+async function reconcileEip5792Transactions(
+  config: ReturnType<typeof useConfig>,
+  unconfirmedBatches: TrackedTransaction[],
+  update: (hash: Hash, payload: UpdateTrackedTransaction) => void
+): Promise<void> {
+  const now = Date.now()
+
+  for (const batch of unconfirmedBatches) {
+    try {
+      const callsStatus = await getCallsStatus(config, { id: batch.hash })
+
+      if (callsStatus.status === 'pending') {
+        // Wallet still reports the batch as pending; give up only when stale
+        if (now - batch.timestamp > EIP5792_STALE_BATCH_MS) {
+          update(batch.hash, { status: 'unknown' })
+        }
+
+        continue
+      }
+
+      const lastReceipt = callsStatus.receipts?.[callsStatus.receipts.length - 1]
+      const txHash = lastReceipt?.transactionHash as Hash | undefined
+
+      update(batch.hash, {
+        status: callsStatus.status === 'success' ? 'confirmed' : 'reverted',
+        ...(txHash ? { hash: txHash } : {}),
+      })
+    } catch (error) {
+      console.error('Error reconciling an EIP-5792 batch in RecentTransactionsProvider: ', error)
+
+      // The wallet may not know the id (e.g. after reconnecting to another wallet):
+      // only mark it terminal once the entry is stale, not on the first failure
+      if (now - batch.timestamp > EIP5792_STALE_BATCH_MS) {
+        update(batch.hash, { status: 'unknown' })
+      }
+    }
+  }
+}

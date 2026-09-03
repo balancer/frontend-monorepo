@@ -10,7 +10,7 @@ import { isBoosted, requiresPermit2Approval } from '../../pool.helpers'
 import { LiquidityActionHelpers } from '../LiquidityActionHelpers'
 import { AddLiquidityStepParams, useAddLiquidityStep } from './useAddLiquidityStep'
 import { useSignPermit2AddStep } from './useSignPermit2AddStep'
-import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useShouldBatchTransactions } from '@repo/lib/modules/transactions/transaction-steps/tx-batch.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
@@ -33,7 +33,11 @@ export function useAddLiquiditySteps({
   const shouldBatchTransactions = useShouldBatchTransactions()
   const relayerMode = useRelayerMode(pool)
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
-  const { shouldUseSignatures } = useUserSettings()
+  const { shouldUseSignatures: userShouldUseSignatures } = useUserSettings()
+
+  // When batching, force gas-tx approvals so the whole flow (approvals + add
+  // liquidity) is one atomic batch instead of a free signature + a separate gas batch.
+  const shouldUseSignatures = shouldBatchTransactions ? false : userShouldUseSignatures
 
   const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } = useApproveRelayerStep(
     chainId,
