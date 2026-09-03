@@ -1,5 +1,5 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { button, checkbox, clickButton, setSliderPercent } from '@/helpers/user.helpers'
+import { button, checkbox, clickButton } from '@/helpers/user.helpers'
 import { expect, test, Page } from '@playwright/test'
 import { aave_GHO_USDT_USDCMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aave_GHO_USDT_USDCMock'
 import { EIP5792_EMULATION_LS_KEY } from '@repo/lib/modules/web3/impersonation/customMock'
@@ -39,26 +39,6 @@ test.describe('Boosted stable pool v3 - batched transactions', () => {
     await expect(page.getByRole('button', { name: /(Approve|Sign)/i })).toHaveCount(0)
 
     await clickButton(page, 'Add liquidity')
-
-    await expect(page.getByText('Transaction confirmed')).toBeVisible()
-  })
-
-  // Skipped: this test only passes if the account already holds pool BPT, which is never
-  // seeded for the fork — it relies on the add liquidity test above minting it on the shared
-  // anvil process. Re-enable once the BPT balance is seeded independently of test order.
-  test.skip('remove liquidity batches approvals and action into a single call', async ({
-    page,
-  }) => {
-    await clickButton(page, 'Remove')
-    await setSliderPercent(page, 50)
-    await clickButton(page, 'Next')
-
-    await expect(page.getByText('Token approval bundling')).toBeVisible()
-
-    // Without batching this pool shows a separate 'Sign approval' step
-    await expect(page.getByRole('button', { name: /(Approve|Sign)/i })).toHaveCount(0)
-
-    await clickButton(page, 'Remove liquidity')
 
     await expect(page.getByText('Transaction confirmed')).toBeVisible()
   })
