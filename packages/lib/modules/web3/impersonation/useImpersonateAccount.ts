@@ -7,7 +7,7 @@ import {
   setImpersonatedAddressLS,
   setTokenBalances,
 } from '@repo/lib/test/utils/wagmi/fork.helpers'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { Address } from 'viem'
 import { useConnect } from 'wagmi'
 import { impersonateWagmiConfig, WagmiConfig } from '../WagmiConfig'
@@ -19,28 +19,18 @@ export function useImpersonateAccount() {
   const { wagmiConfig } = useWagmiConfig()
   const setBalance = useSetErc20Balance()
 
-  // Tracks current impersonated address stored in local storage (used to auto-reconnect)
-  const storedImpersonatedAddress = useRef<Address | undefined>(undefined)
-  const isReconnected = useRef(false)
-
+  // Reconnects with the address stored in localStorage so that E2E tests impersonate by seeding
+  // that key before the first navigation instead of driving the dev tools drawer.
   useEffect(() => {
     const impersonatedAddress = getSavedImpersonatedAddressLS()
 
-    if (impersonatedAddress) {
-      storedImpersonatedAddress.current = impersonatedAddress
-    }
+    if (!impersonatedAddress) return
+
+    impersonateAccount({
+      impersonatedAddress,
+      isReconnecting: true,
+    })
   }, [])
-
-  useEffect(() => {
-    if (storedImpersonatedAddress.current && !isReconnected.current) {
-      isReconnected.current = true
-
-      impersonateAccount({
-        impersonatedAddress: storedImpersonatedAddress.current,
-        isReconnecting: true,
-      })
-    }
-  }, [storedImpersonatedAddress])
 
   return { impersonateAccount, reset, mineBlockWithTimestamp }
 
@@ -78,7 +68,9 @@ export function useImpersonateAccount() {
   }
 
   async function reset() {
-    if (!storedImpersonatedAddress.current) {
+    const impersonatedAddress = getSavedImpersonatedAddressLS()
+
+    if (!impersonatedAddress) {
       return console.log('Cannot reset cause there is no stored impersonated address')
     }
 
@@ -86,7 +78,7 @@ export function useImpersonateAccount() {
     await forkClient.reset()
 
     await setForkBalances({
-      impersonatedAddress: storedImpersonatedAddress.current as Address,
+      impersonatedAddress,
       wagmiConfig,
     })
 

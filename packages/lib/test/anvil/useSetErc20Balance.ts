@@ -34,13 +34,134 @@ const SLOT_VALUE_TO_CHECK = 1337_1337_1337_1337_1337_1337_1337_1337_1337n
 
 export type SetBalanceMutation = ReturnType<typeof useSetErc20Balance>
 
-/**
- * Hack to be able to set the storage of the balanceOf mapping
- * other than hardcoding the storage slot per address or reading source
- * we can guess the mapping slot and test against `balanceOf` result
- * by looping from 0. so check slot 0, calculate the slot via keccak
- * and verify that the value of the storage slot is the same as the balanceOf call
- */
+export async function setErc20Balance({
+  client,
+  address,
+  balance,
+}: {
+  client: TestClient
+  address: Address
+  balance: TokenBalance
+}) {
+  const value = parseUnits(balance.value, balance.decimals ?? 18)
+
+  const anvilClient = client.extend(publicActions)
+
+  console.log('Setting balance for address', {
+    address,
+    tokenAddress: balance.tokenAddress,
+    slot: balance.slot,
+    value: balance.value,
+  })
+
+  const customPackedSlot = getPackedBalanceCustomSlot(balance.tokenAddress)
+
+  if (customPackedSlot) {
+    console.log('Using custom packed slot for ', {
+      tokenAddress: balance.tokenAddress,
+      customPackedSlot,
+    })
+
+    await setPackedBalance({
+      client,
+      tokenAddress: balance.tokenAddress,
+      userAddress: address,
+      value,
+      storageSlot: customPackedSlot,
+    })
+
+    return
+  }
+
+  let slotFound = false
+  let slotGuess = balance.slot || 0n
+
+  while (slotFound !== true) {
+    // if mapping, use keccak256(abi.encode(address(key), uint(slot)));
+    const encodedData = encodeAbiParameters(parseAbiParameters('address, uint'), [
+      address,
+      slotGuess,
+    ])
+
+    const oldSlotValue = await anvilClient.getStorageAt({
+      address: balance.tokenAddress,
+      slot: keccak256(encodedData),
+    })
+
+    // user value might be something that might have collision (like 0)
+    await client.setStorageAt({
+      address: balance.tokenAddress,
+      index: keccak256(encodedData),
+      value: pad(toHex(SLOT_VALUE_TO_CHECK)),
+    })
+
+    const newBalance = await anvilClient.readContract({
+      abi: [balanceOfAbiItem],
+      address: balance.tokenAddress,
+      functionName: 'balanceOf',
+      args: [address],
+    })
+
+    const guessIsCorrect = newBalance === BigInt(SLOT_VALUE_TO_CHECK)
+
+    if (guessIsCorrect) {
+      slotFound = true
+
+      await client.setStorageAt({
+        address: balance.tokenAddress,
+        index: keccak256(encodedData),
+        value: pad(toHex(value)),
+      })
+    } else {
+      // check for a rebasing token (stETH)
+      // by setting storage value again with an offset
+      await client.setStorageAt({
+        address: balance.tokenAddress,
+        index: keccak256(encodedData),
+        value: pad(toHex(SLOT_VALUE_TO_CHECK + 1n)),
+      })
+
+      const newBalanceAgain = await anvilClient.readContract({
+        abi: [balanceOfAbiItem],
+        address: balance.tokenAddress,
+        functionName: 'balanceOf',
+        args: [address],
+      })
+
+      // the diff in balanceOf is the offset in value
+      if (newBalanceAgain - newBalance === 1n) {
+        slotFound = true
+
+        await client.setStorageAt({
+          address: balance.tokenAddress,
+          index: keccak256(encodedData),
+          value: pad(toHex(value)),
+        })
+
+        break
+      }
+
+      // reset storage slot
+      await client.setStorageAt({
+        address: balance.tokenAddress,
+        index: keccak256(encodedData),
+        value: oldSlotValue || pad('0x0'),
+      })
+
+      // loop
+      slotGuess++
+
+      if (slotGuess >= 10n) {
+        console.log('Could not find storage slot to set balance of token ', {
+          tokenAddress: balance.tokenAddress,
+        })
+
+        break
+      }
+    }
+  }
+}
+
 export function useSetErc20Balance() {
   return useMutation({
     async mutationFn({ address, balance, wagmiConfig, chainId }: SetErcBalanceParameters) {
@@ -50,122 +171,7 @@ export function useSetErc20Balance() {
         .extend(publicActions)
         .extend(testActions({ mode: 'anvil' }))
 
-      const value = parseUnits(balance.value, balance.decimals ?? 18)
-
-      console.log('Setting balance for address', {
-        address,
-        tokenAddress: balance.tokenAddress,
-        slot: balance.slot,
-        value: balance.value,
-        chainId,
-      })
-
-      const customPackedSlot = getPackedBalanceCustomSlot(balance.tokenAddress)
-
-      if (customPackedSlot) {
-        console.log('Using custom packed slot for ', {
-          tokenAddress: balance.tokenAddress,
-          customPackedSlot,
-        })
-
-        await setPackedBalance({
-          client,
-          tokenAddress: balance.tokenAddress,
-          userAddress: address,
-          value,
-          storageSlot: customPackedSlot,
-        })
-
-        return
-      }
-
-      let slotFound = false
-      let slotGuess = balance.slot || 0n
-
-      while (slotFound !== true) {
-        // if mapping, use keccak256(abi.encode(address(key), uint(slot)));
-        const encodedData = encodeAbiParameters(parseAbiParameters('address, uint'), [
-          address,
-          slotGuess,
-        ])
-
-        const oldSlotValue = await client.getStorageAt({
-          address: balance.tokenAddress,
-          slot: keccak256(encodedData),
-        })
-
-        // user value might be something that might have collision (like 0)
-        await client.setStorageAt({
-          address: balance.tokenAddress,
-          index: keccak256(encodedData),
-          value: pad(toHex(SLOT_VALUE_TO_CHECK)),
-        })
-
-        const newBalance = await client.readContract({
-          abi: [balanceOfAbiItem],
-          address: balance.tokenAddress,
-          functionName: 'balanceOf',
-          args: [address],
-        })
-
-        const guessIsCorrect = newBalance === BigInt(SLOT_VALUE_TO_CHECK)
-
-        if (guessIsCorrect) {
-          slotFound = true
-
-          await client.setStorageAt({
-            address: balance.tokenAddress,
-            index: keccak256(encodedData),
-            value: pad(toHex(value)),
-          })
-        } else {
-          // check for a rebasing token (stETH)
-          // by setting storage value again with an offset
-          await client.setStorageAt({
-            address: balance.tokenAddress,
-            index: keccak256(encodedData),
-            value: pad(toHex(SLOT_VALUE_TO_CHECK + 1n)),
-          })
-
-          const newBalanceAgain = await client.readContract({
-            abi: [balanceOfAbiItem],
-            address: balance.tokenAddress,
-            functionName: 'balanceOf',
-            args: [address],
-          })
-
-          // the diff in balanceOf is the offset in value
-          if (newBalanceAgain - newBalance === 1n) {
-            slotFound = true
-
-            await client.setStorageAt({
-              address: balance.tokenAddress,
-              index: keccak256(encodedData),
-              value: pad(toHex(value)),
-            })
-
-            break
-          }
-
-          // reset storage slot
-          await client.setStorageAt({
-            address: balance.tokenAddress,
-            index: keccak256(encodedData),
-            value: oldSlotValue || pad('0x0'),
-          })
-
-          // loop
-          slotGuess++
-
-          if (slotGuess >= 10n) {
-            console.log('Could not find storage slot to set balance of token ', {
-              tokenAddress: balance.tokenAddress,
-            })
-
-            break
-          }
-        }
-      }
+      await setErc20Balance({ client, address, balance })
     },
   })
 }

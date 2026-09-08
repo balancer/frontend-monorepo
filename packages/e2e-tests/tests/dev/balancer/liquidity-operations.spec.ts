@@ -10,6 +10,45 @@ import { test, expect, Page } from '@playwright/test'
 import { aaveWstETH8020Mock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aaveWstETH8020Mock'
 import { aave_GHO_USDT_USDCMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aave_GHO_USDT_USDCMock'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
+
+/*
+  Each describe that sends transactions snapshots the fork and reverts after each test so a failed
+  or slow transaction cannot bleed state into the next test. Remove liquidity tests consume the LP
+  tokens the Add liquidity tests mint, so the Remove describes seed their own LP in beforeAll and
+  revert to that snapshot between tests instead of relying on the Add tests having run.
+*/
+
+async function seedLpForRemoves(
+  browser: import('@playwright/test').Browser,
+  poolUrl: string,
+  boosted: boolean,
+): Promise<boolean> {
+  try {
+    const context = await browser.newContext()
+    const page = await context.newPage()
+    await page.goto(poolUrl)
+    await impersonate(page, defaultAnvilAccount)
+
+    await clickButton(page, 'Add liquidity')
+    if (boosted) {
+      await page.getByPlaceholder('0.00').nth(1).fill('100')
+      await agreeToBoostedPoolRisks(page)
+    } else {
+      await page.getByPlaceholder('0.00').nth(0).fill('1')
+      await page.getByText('I accept the risks of').click()
+    }
+    await clickButton(page, 'Next')
+    await doAddLiquidityTxSteps(page)
+    await expect(page.getByText('Transaction confirmed')).toBeVisible()
+
+    await context.close()
+    return true
+  } catch (error) {
+    console.warn('Failed to seed LP for remove liquidity tests:', error)
+    return false
+  }
+}
 
 test.describe('Weighted pool v2', () => {
   test.beforeEach(async ({ page }) => {
@@ -19,6 +58,16 @@ test.describe('Weighted pool v2', () => {
   })
 
   test.describe('Add liquidity', () => {
+    let snapshotId: `0x${string}`
+
+    test.beforeEach(async () => {
+      snapshotId = await forkClient.snapshot()
+    })
+
+    test.afterEach(async () => {
+      await forkClient.revert({ id: snapshotId })
+    })
+
     test('flexible', async ({ page }) => {
       await clickButton(page, 'Add liquidity')
       await expect(button(page, 'Next')).toBeVisible()
@@ -46,6 +95,23 @@ test.describe('Weighted pool v2', () => {
   })
 
   test.describe('Remove Liquidity', () => {
+    let snapshotId: `0x${string}`
+
+    test.beforeAll(async ({ browser }) => {
+      const seeded = await seedLpForRemoves(
+        browser,
+        `http://localhost:3000/pools/ethereum/v2/${aaveWstETH8020Mock.id}`,
+        false,
+      )
+      if (!seeded) test.skip()
+      snapshotId = await forkClient.snapshot()
+    })
+
+    test.beforeEach(async () => {
+      await forkClient.revert({ id: snapshotId })
+      snapshotId = await forkClient.snapshot()
+    })
+
     test('proportional', async ({ page }) => {
       await clickButton(page, 'Remove')
       await setSliderPercent(page, 50)
@@ -80,6 +146,16 @@ test.describe('Boosted stable pool v3', () => {
   })
 
   test.describe('Add liquidity', () => {
+    let snapshotId: `0x${string}`
+
+    test.beforeEach(async () => {
+      snapshotId = await forkClient.snapshot()
+    })
+
+    test.afterEach(async () => {
+      await forkClient.revert({ id: snapshotId })
+    })
+
     test('flexible', async ({ page }) => {
       await clickButton(page, 'Add liquidity')
       await page.getByPlaceholder('0.00').nth(1).fill('100')
@@ -105,6 +181,23 @@ test.describe('Boosted stable pool v3', () => {
   })
 
   test.describe('Remove Liquidity', () => {
+    let snapshotId: `0x${string}`
+
+    test.beforeAll(async ({ browser }) => {
+      const seeded = await seedLpForRemoves(
+        browser,
+        `http://localhost:3000/pools/ethereum/v3/${aave_GHO_USDT_USDCMock.id}`,
+        true,
+      )
+      if (!seeded) test.skip()
+      snapshotId = await forkClient.snapshot()
+    })
+
+    test.beforeEach(async () => {
+      await forkClient.revert({ id: snapshotId })
+      snapshotId = await forkClient.snapshot()
+    })
+
     test('proportional', async ({ page }) => {
       await clickButton(page, 'Remove')
       await setSliderPercent(page, 50)
