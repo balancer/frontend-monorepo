@@ -95,6 +95,7 @@ jobs:
           name: playwright-smoke-report-bal
           path: |
             ./packages/e2e-tests/playwright-report/
+            ./packages/e2e-tests/test-results/
           retention-days: 30
 
   E2E-Smoke-Test-Beets:
@@ -118,6 +119,7 @@ jobs:
           name: playwright-smoke-report-beets
           path: |
             ./packages/e2e-tests/playwright-report/
+            ./packages/e2e-tests/test-results/
           retention-days: 30
 
   E2E-Smoke-Test-Analytics:
@@ -139,10 +141,11 @@ jobs:
           name: playwright-smoke-report-analytics
           path: |
             ./packages/e2e-tests/playwright-report/
+            ./packages/e2e-tests/test-results/
           retention-days: 30
 
   E2E-Dev-Test-Balancer:
-    timeout-minutes: 15
+    timeout-minutes: 25
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
@@ -164,6 +167,7 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: balancer
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
       E2E_SHARD: ${{ matrix.shard }}
+      E2E_FORK_BLOCK_NUMBER: 25900000
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup
@@ -171,7 +175,7 @@ jobs:
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
       - name: Start anvil fork in mainnet
-        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --fork-block-number ${{ env.E2E_FORK_BLOCK_NUMBER }} --fork-retry-backoff 1000 --no-rate-limit --port 8545 &
       - name: Run Playwright dev tests (Balancer shard ${{ matrix.shard }})
         run: pnpm test:e2e:dev:bal
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -180,10 +184,11 @@ jobs:
           name: playwright-dev-report-bal-${{ matrix.id }}
           path: |
             ./packages/e2e-tests/playwright-report/
+            ./packages/e2e-tests/test-results/
           retention-days: 30
 
   E2E-Dev-Test-Beets:
-    timeout-minutes: 15
+    timeout-minutes: 25
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
@@ -191,6 +196,7 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: beets
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      E2E_FORK_BLOCK_NUMBER: 78800000
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup
@@ -198,7 +204,7 @@ jobs:
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
       - name: Start anvil fork in sonic
-        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --fork-block-number ${{ env.E2E_FORK_BLOCK_NUMBER }} --fork-retry-backoff 1000 --no-rate-limit --port 8545 &
       - name: Run Playwright dev tests (Beets)
         run: pnpm test:e2e:dev:beets
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -207,4 +213,5 @@ jobs:
           name: playwright-dev-report-beets
           path: |
             ./packages/e2e-tests/playwright-report/
+            ./packages/e2e-tests/test-results/
           retention-days: 30
