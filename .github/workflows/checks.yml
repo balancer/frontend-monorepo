@@ -149,9 +149,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Playwright shards the whole tests/dev/balancer suite, so adding a spec
-        # no longer means rebalancing hardcoded file lists. `id` is only used to
-        # name artifacts (shard values contain a slash).
+        # tests/dev/balancer is split by whole spec files (see
+        # packages/e2e-tests/scripts/shard-specs.mjs), so adding a spec no longer
+        # means rebalancing hardcoded file lists. `id` only names artifacts —
+        # shard values contain a slash.
         include:
           - id: 1
             shard: 1/3
