@@ -40,6 +40,12 @@ pnpm run test:e2e:dev
 This tests use an anvil fork so that we can impersonate accounts and run complete transaction flows
 (using wagmi connector mock to avoid playwright interacting with a real wallet).
 
+In CI the Balancer dev suite is split across three jobs by `scripts/shard-specs.mjs`, which assigns
+whole spec files to each job. Keep that granularity: the specs share fork state within a file
+(`liquidity-operations` removes the LP tokens its own earlier tests minted), so Playwright's
+test-level `--shard` cuts those groups apart and the later half fails. Add a spec and it is picked
+up automatically — no list to rebalance.
+
 ## Local E2E tests
 
 ### Install playwright locally
