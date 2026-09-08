@@ -109,7 +109,7 @@
     "@types/tinycolor2": "1.4.6",
     "@vitejs/plugin-react": "4.7.0",
     "@wagmi/cli": "2.10.0",
-    "autoprefixer": "10.5.4",
+    "autoprefixer": "10.5.5",
     "cross-fetch": "4.1.0",
     "eslint": "9.39.5",
     "msw": "2.15.0",
