@@ -7,7 +7,6 @@ export default [
       '.*.js',
       '.next/**',
       '.turbo/**',
-      'lib/generated/**',
       'next-env.d.ts',
       'next.config.js',
       'node_modules/**',

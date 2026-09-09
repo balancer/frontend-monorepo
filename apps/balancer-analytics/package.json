@@ -6,10 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "next start -p 3002",
-    "build": "pnpm --filter @repo/lib graphql:gen && pnpm graphql:gen && next build",
-    "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"pnpm graphql:gen --watch\" \"next dev -p 3002\"",
+    "build": "pnpm --filter @repo/lib graphql:gen && next build",
+    "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3002\"",
     "dev:no-gen": "next dev -p 3002",
-    "graphql:gen": "graphql-codegen -c ./codegen.ts",
     "lint": "eslint . --max-warnings 0 --cache",
     "lint:fix": "eslint . --fix --max-warnings 0 --cache",
     "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level warn",
@@ -45,8 +44,6 @@
   "devDependencies": {
     "@chakra-ui/cli": "2.5.8",
     "@chakra-ui/styled-system": "2.12.0",
-    "@graphql-codegen/cli": "7.3.1",
-    "@graphql-codegen/client-preset": "6.1.3",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -54,8 +51,7 @@
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
     "concurrently": "10.0.5",
-    "eslint": "9.39.5",
-    "graphql": "16.14.2"
+    "eslint": "9.39.5"
   },
   "engines": {
     "node": "24.x"

@@ -18,7 +18,7 @@ From the monorepo root:
 
 ```bash
 cp apps/balancer-analytics/.env.template apps/balancer-analytics/.env.local
-cp apps/balancer-analytics/.env.local packages/lib/.env.local   # codegen reads from here
+cp apps/balancer-analytics/.env.local packages/lib/.env.local   # api-v3 codegen reads from here
 pnpm install
 pnpm dev:analytics
 ```
