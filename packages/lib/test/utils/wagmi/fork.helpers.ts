@@ -84,22 +84,22 @@ export function resetFork(chainId: number = mainnet.id) {
   })
 }
 
-const storageKey = 'impersonated-address'
+export const impersonatedAddressStorageKey = 'impersonated-address'
 
 export function setImpersonatedAddressLS(impersonatedAddress: string) {
   if (!isLocalStorageAvailable()) return
-  localStorage.setItem(storageKey, impersonatedAddress)
+  localStorage.setItem(impersonatedAddressStorageKey, impersonatedAddress)
 }
 
 export function getSavedImpersonatedAddressLS(): Address | undefined {
   if (!isLocalStorageAvailable()) return undefined
-  const result = localStorage.getItem(storageKey)
+  const result = localStorage.getItem(impersonatedAddressStorageKey)
   return result && isAddress(result) ? result : undefined
 }
 
 export function clearImpersonatedAddressLS() {
   if (!isLocalStorageAvailable()) return
-  localStorage.removeItem(storageKey)
+  localStorage.removeItem(impersonatedAddressStorageKey)
 }
 
 function isLocalStorageAvailable() {

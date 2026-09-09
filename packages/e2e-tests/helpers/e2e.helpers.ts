@@ -1,65 +1,36 @@
-import { Page } from '@playwright/test'
-import { TokenBalancesByChain, ForkOptions } from '@repo/lib/test/utils/wagmi/fork-options'
-import { button, clickButton, forceClickButton } from './user.helpers'
+import { Page, expect } from '@playwright/test'
+import { setErc20Balance } from '@repo/lib/test/anvil/useSetErc20Balance'
+import { defaultManualForkOptions } from '@repo/lib/test/utils/wagmi/fork-options'
+import { forkClient, impersonatedAddressStorageKey } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
-declare global {
-  interface Window {
-    forkOptions?: ForkOptions
-  }
-}
-
-export async function impersonate(page: Page, impersonationAddress: string) {
-  await clickButton(page, 'Dev tools button')
-  await page.getByLabel('Mock address').fill(impersonationAddress)
-  await clickButton(page, 'Impersonate button')
-  await forceClickButton(page, 'Dev tools close button')
-  await page.getByTestId('dev-tools-drawer').waitFor({ state: 'hidden' })
-  await button(page, 'Connect Wallet').first().waitFor({ state: 'hidden' })
-}
+type Address = `0x${string}`
 
 /*
-  Helper to initialize anvil fork options though global interface window.forkOptions
+  Replaces the dev-tools drawer flow. Token balances are set node-side against the anvil fork and
+  the address is written to localStorage via an init script; the app then auto-reconnects from
+  that key on boot (see useImpersonateAccount). Reloaded so the init script runs before the app
+  boots, letting specs keep calling this after page.goto.
 */
-export async function setForkBalances(page: Page, forkOptions?: ForkOptions) {
-  const defaultForkBalances: TokenBalancesByChain = {
-    [1]: [
-      {
-        tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // WETH
-        value: '100',
-      },
-      {
-        tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d', // BAL
-        value: '4000',
-      },
-    ],
-    [146]: [
-      {
-        tokenAddress: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38', // wS
-        value: '100',
-      },
-    ],
-  }
+export async function impersonate(page: Page, impersonationAddress: Address) {
+  await fundImpersonatedAccount(impersonationAddress)
 
-  const defaultChainId = 1
+  await page.addInitScript(({ key, address }) => window.localStorage.setItem(key, address), {
+    key: impersonatedAddressStorageKey,
+    address: impersonationAddress,
+  })
 
-  const defaultForkOptions: ForkOptions = {
-    chainId: defaultChainId,
-    forkBalances: defaultForkBalances,
-  }
-
-  await page.addInitScript(forkOptions => {
-    window.forkOptions = {
-      chainId: forkOptions.chainId || 1,
-      forkBalances: forkOptions.forkBalances,
-    }
-  }, forkOptions || defaultForkOptions)
+  await page.reload({ waitUntil: 'commit' })
+  await waitForConnected(page)
 }
 
-export async function acceptPolicies(page: Page) {
-  await page
-    .getByRole('dialog', { name: 'Accept Balancer policies' })
-    .locator('span')
-    .first()
-    .check()
-  await page.getByRole('button', { name: 'Proceed' }).click()
+export async function waitForConnected(page: Page) {
+  await page.locator('img[alt="Avatar"]').first().waitFor({ state: 'visible' })
+}
+
+async function fundImpersonatedAccount(address: Address) {
+  const tokenBalances = defaultManualForkOptions.forkBalances[forkClient.chain.id] || []
+
+  for (const balance of tokenBalances) {
+    await setErc20Balance({ client: forkClient, address, balance })
+  }
 }

@@ -46,6 +46,9 @@ whole spec files to each job. Keep that granularity: the specs share fork state 
 test-level `--shard` cuts those groups apart and the later half fails. Add a spec and it is picked
 up automatically — no list to rebalance.
 
+CI forks mainnet and sonic at a pinned block (the anvil steps in `.github/workflows/checks.yml`) so
+runs are reproducible. Bump it to a recent block if specs start failing on stale pool state.
+
 ## Local E2E tests
 
 ### Install playwright locally
