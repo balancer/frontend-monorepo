@@ -1,10 +1,9 @@
 /**
  * Event signatures consumed by the pool param sync — single source of truth.
  *
- * `lib/abis/*.ts` holds the full deployed ABIs (functions + events + errors)
- * for helper-contract reads in the `/state` route. For `eth_getLogs` we only
- * need event entries, and we want them as a known-narrow tuple so viem's
- * `getLogs({ events })` can discriminate the result type by `eventName`.
+ * For `eth_getLogs` we only need event entries, and we want them as a
+ * known-narrow tuple so viem's `getLogs({ events })` can discriminate the
+ * result type by `eventName`.
  *
  * Defined via `parseAbi` rather than re-extracting from the JSON ABI so:
  *   1. The set of *tracked* events is explicit in one file (the JSON ABIs

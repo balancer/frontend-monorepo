@@ -38,8 +38,7 @@ import { blocksPerSecond } from '@analytics/lib/networks/chain-info'
 import { chunkedGetLogs } from '@analytics/lib/drpc/get-logs'
 import { resolveBlockTimestamps } from '@analytics/lib/drpc/block-timestamps'
 import { scrubError } from '@analytics/lib/drpc/scrub'
-import { getV3HelperAddresses } from '@analytics/lib/contracts/v3-addresses'
-import { V3_VAULT_ADDRESS } from '@analytics/lib/abis/v3-vault'
+import { getV3HelperAddresses, V3_VAULT_ADDRESS } from '@analytics/lib/contracts/v3-addresses'
 import {
   V3_FILTER_A_EVENTS,
   V3_STABLE_FILTER_B_EVENTS,
