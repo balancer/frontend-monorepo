@@ -7,6 +7,9 @@ export default [
       '.*.js',
       '.next/**',
       '.turbo/**',
+      // Leftover local app-codegen output (gitignored `generated/`); ignore so
+      // stale checkouts do not fail `lint` with unused eslint-disable warnings.
+      'lib/generated/**',
       'next-env.d.ts',
       'next.config.js',
       'node_modules/**',
