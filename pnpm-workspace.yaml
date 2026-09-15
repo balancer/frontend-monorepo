@@ -1,11 +1,11 @@
 packages:
-  - 'apps/*'
-  - 'packages/*'
+  - "apps/*"
+  - "packages/*"
 
 allowBuilds:
-  '@parcel/watcher': true
-  '@sentry/cli': true
-  '@reown/appkit': true
+  "@parcel/watcher": true
+  "@sentry/cli": true
+  "@reown/appkit": true
   bufferutil: true
   esbuild: true
   msw: true
@@ -14,25 +14,38 @@ allowBuilds:
   utf-8-validate: true
 
 catalog:
-  '@apollo/client': '4.2.12'
+  "@apollo/client": "4.2.12"
 
 peerDependencyRules:
   allowedVersions:
-    '@types/react': ^19.0.0
-    '@types/react-dom': ^19.0.0
+    "@types/react": ^19.0.0
+    "@types/react-dom": ^19.0.0
     react: ^19.0.0
     react-dom: ^19.0.0
 
 overrides:
-  '@types/react': '19.2'
-  '@types/react-dom': '19.2'
+  "@types/react": "19.2"
+  "@types/react-dom": "19.2"
   # @reown/appkit-wallet pins zod@3.22.4 (no v4/ subpath), but @hookform/resolvers
   # imports zod/v4/core as a phantom dep. Force 3.25.76 so both resolve correctly.
-  'zod': '3.25.76'
+  "zod": "3.25.76"
 
 publicHoistPattern:
-  - '*graphql*' # https://github.com/vercel/next.js/issues/68805
-  - '@reown/*' # Fix for @reown/appkit resolution in Next + pnpm
+  - "*graphql*" # https://github.com/vercel/next.js/issues/68805
+  - "@reown/*" # Fix for @reown/appkit resolution in Next + pnpm
 
 minimumReleaseAgeExclude:
-  - '@balancer/sdk@6.2.0'
+  - "@balancer/sdk@6.2.0"
+  - "@eslint-react/ast@5.19.1"
+  - "@eslint-react/core@5.19.1"
+  - "@eslint-react/eslint-plugin@5.19.1"
+  - "@eslint-react/eslint@5.19.1"
+  - "@eslint-react/jsx@5.19.1"
+  - "@eslint-react/shared@5.19.1"
+  - "@eslint-react/var@5.19.1"
+  - eslint-plugin-react-dom@5.19.1
+  - eslint-plugin-react-jsx@5.19.1
+  - eslint-plugin-react-naming-convention@5.19.1
+  - eslint-plugin-react-rsc@5.19.1
+  - eslint-plugin-react-web-api@5.19.1
+  - eslint-plugin-react-x@5.19.1

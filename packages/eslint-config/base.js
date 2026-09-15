@@ -3,10 +3,10 @@ import eslintConfigPrettier from 'eslint-config-prettier'
 import turboPlugin from 'eslint-plugin-turbo'
 import tseslint from 'typescript-eslint'
 import onlyWarn from 'eslint-plugin-only-warn'
-import reactPlugin from 'eslint-plugin-react'
-import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import { resolve } from 'node:path'
+import eslintReactPlugin from '@eslint-react/eslint-plugin'
+import stylisticJsx from '@stylistic/eslint-plugin-jsx'
 
 const project = resolve(process.cwd(), 'tsconfig.json')
 
@@ -32,7 +32,7 @@ const baseConfig = [
   ...tseslint.configs.recommended,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
-    ...reactPlugin.configs.flat.recommended,
+    ...eslintReactPlugin.configs.recommended,
     ignores: [
       // Ignore dotfiles
       '.*.js',
@@ -47,7 +47,6 @@ const baseConfig = [
       'next.config.js',
     ],
     languageOptions: {
-      ...reactPlugin.configs.flat.recommended.languageOptions,
       globals: {
         ...globals.node,
         React: true,
@@ -61,10 +60,11 @@ const baseConfig = [
     plugins: {
       'only-warn': onlyWarn,
       turbo: turboPlugin,
-      react: reactPlugin,
-      'react-hooks': reactHooksPlugin,
+      '@eslint-react': eslintReactPlugin,
+      '@stylistic': stylisticJsx,
     },
     settings: {
+      ...eslintReactPlugin.configs.recommended.settings,
       'import/resolver': {
         typescript: {
           project,
@@ -76,12 +76,11 @@ const baseConfig = [
     },
     rules: {
       'turbo/no-undeclared-env-vars': 'warn',
-      ...reactHooksPlugin.configs.recommended.rules,
       // Disable the 'no-explicit-any' rule to prevent warnings about using 'any' type
       '@typescript-eslint/no-explicit-any': 'off',
-      'react/jsx-sort-props': ['error', { ignoreCase: true }],
-      // Disable react-hooks/exhaustive-deps rule
-      'react-hooks/exhaustive-deps': 'off',
+      '@stylistic/jsx-sort-props': ['error', { ignoreCase: true }],
+      // Disable @eslint-react/exhaustive-deps rule (replacement for react-hooks/exhaustive-deps)
+      '@eslint-react/exhaustive-deps': 'off',
       curly: ['error', 'multi-line'],
       // Require a blank line before/after any statement that spans multiple
       // lines, so multiline blocks visually stand out from surrounding code.
@@ -103,7 +102,6 @@ const baseConfig = [
         { blankLine: 'any', prev: 'empty', next: '*' },
         { blankLine: 'any', prev: '*', next: 'empty' },
       ],
-      'react/react-in-jsx-scope': 'off',
       'no-console': 'off',
       'max-len': [
         'warn',
