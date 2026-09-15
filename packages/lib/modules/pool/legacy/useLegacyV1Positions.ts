@@ -164,7 +164,7 @@ export function useLegacyV1Positions() {
   const [storedHasV1Pools, setStoredHasV1Pools] = useState<boolean | null>(null)
 
   useEffect(() => {
-    setStoredHasV1Pools(userAddress ? readHasV1Pools(userAddress) : null)
+    setStoredHasV1Pools(isBalancer && userAddress ? readHasV1Pools(userAddress) : null)
   }, [isMounted, userAddress])
 
   useEffect(() => {

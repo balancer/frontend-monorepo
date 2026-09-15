@@ -31,11 +31,19 @@ const HAS_V1_POOLS_ADDRESS_KEY = `${LS_KEYS.HasV1Pools}:address`
 type CallResult = { status: 'success'; result: bigint } | { status: 'failure'; error: Error }
 
 let mockUser = { userAddress: USER, isConnected: true }
+let mockIsBalancer = true
 let mockClient: MulticallClient | undefined
 let multicallImpl: (contracts: { address: string }[]) => CallResult[]
 
 vi.mock('@repo/lib/modules/web3/UserAccountProvider', () => ({
   useUserAccount: () => mockUser,
+}))
+
+// A getter so the flag can be flipped per test: the hook reads it at render, not at import.
+vi.mock('@repo/lib/config/getProjectConfig', () => ({
+  get isBalancer() {
+    return mockIsBalancer
+  },
 }))
 
 vi.mock('wagmi', () => ({
@@ -76,6 +84,7 @@ describe('useLegacyV1Positions', () => {
   beforeEach(() => {
     window.localStorage.clear()
     mockUser = { userAddress: USER, isConnected: true }
+    mockIsBalancer = true
     multicallImpl = balancesFor({})
 
     mockClient = {
@@ -167,6 +176,16 @@ describe('useLegacyV1Positions', () => {
     await waitFor(() =>
       expect(window.localStorage.getItem(HAS_V1_POOLS_ADDRESS_KEY)).toBe(OTHER_USER)
     )
+  })
+
+  test('does not scan in the Beets app, which shares this package', async () => {
+    mockIsBalancer = false
+
+    renderHook(() => useLegacyV1Positions(), { wrapper: createWrapper() })
+
+    await new Promise(resolve => setTimeout(resolve, 20))
+
+    expect(mockClient?.multicall).not.toHaveBeenCalled()
   })
 
   test('does not scan while disconnected', async () => {
