@@ -143,8 +143,7 @@ deployer lookups.
 - [x] **1.1** Add `sender` to the `GqlPoolSwapEventV3` fragment in
       `packages/lib/shared/services/api/pool.graphql:231`
 - [x] **1.2** Add `sender` to the `GqlPoolSwapEventCowAmm` fragment same file `:241`
-- [x] **1.3** Re-run codegen:
-      `pnpm --filter @repo/lib graphql:gen && pnpm --filter balancer-analytics graphql:gen`
+- [x] **1.3** Re-run codegen: `pnpm --filter @repo/lib graphql:gen`
 - [x] **1.4** Verify `GetPoolEventsQuery['poolEvents'][n]` (V3 variant) now exposes `sender: string`
       in `packages/lib/shared/services/api/generated/graphql.ts` (confirmed at line 3022)
 - [x] **1.5** Add `swap_source_metadata` table to `ensureSchema()` in
