@@ -1,5 +1,6 @@
 export const LS_KEYS = {
   UserAddress: 'userAddress',
+  HasV1Pools: 'hasV1Pools',
   UserSettings: {
     ColorMode: 'chakra-ui-color-mode', // Has to be this string to match Chakra's default
     Currency: 'userSettings.Currency',
