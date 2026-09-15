@@ -32,7 +32,7 @@ const baseConfig = [
   ...tseslint.configs.recommended,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
-    ...eslintReactPlugin.configs.recommended,
+    ...eslintReactPlugin.configs['recommended-typescript'],
     ignores: [
       // Ignore dotfiles
       '.*.js',
@@ -64,7 +64,7 @@ const baseConfig = [
       '@stylistic': stylisticJsx,
     },
     settings: {
-      ...eslintReactPlugin.configs.recommended.settings,
+      ...eslintReactPlugin.configs['recommended-typescript'].settings,
       'import/resolver': {
         typescript: {
           project,
