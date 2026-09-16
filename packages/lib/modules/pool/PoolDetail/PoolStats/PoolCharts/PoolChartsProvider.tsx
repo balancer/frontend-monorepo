@@ -230,19 +230,19 @@ export function usePoolChartsLogic() {
 
     if (activeTab.value === PoolChartTab.FEES) {
       val = data?.snapshots.reduce((acc, snapshot) => {
-        return (acc += Number(snapshot.fees24h))
+        return acc + Number(snapshot.fees24h)
       }, 0)
     }
 
     if (activeTab.value === PoolChartTab.SURPLUS) {
       val = data?.snapshots.reduce((acc, snapshot) => {
-        return (acc += Number(snapshot.surplus24h))
+        return acc + Number(snapshot.surplus24h)
       }, 0)
     }
 
     if (activeTab.value === PoolChartTab.VOLUME) {
       val = data?.snapshots.reduce((acc, snapshot) => {
-        return (acc += Number(snapshot.volume24h))
+        return acc + Number(snapshot.volume24h)
       }, 0)
     }
 

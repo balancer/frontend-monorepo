@@ -130,8 +130,6 @@ export async function setErc20Balance({
 
       // the diff in balanceOf is the offset in value
       if (newBalanceAgain - newBalance === 1n) {
-        slotFound = true
-
         await client.setStorageAt({
           address: balance.tokenAddress,
           index: keccak256(encodedData),

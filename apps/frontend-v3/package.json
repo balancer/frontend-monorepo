@@ -66,7 +66,7 @@
     "@testing-library/react": "16.3.3",
     "@types/js-cookie": "3.0.6",
     "@types/lodash": "4.17.25",
-    "@types/node": "24.13.3",
+    "@types/node": "24.13.4",
     "@types/prismjs": "1.26.6",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
@@ -76,7 +76,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "concurrently": "10.0.5",
     "cross-fetch": "4.1.0",
-    "eslint": "9.39.5",
+    "eslint": "10.10.0",
     "prool": "0.2.15"
   },
   "engines": {

@@ -43,7 +43,7 @@ export type ChainEndpoints = {
 
 export function getChainEndpoints(chain: GqlChain): ChainEndpoints {
   const key = process.env.NEXT_PRIVATE_DRPC_KEY ?? ''
-  let primary: string | null = null
+  let primary: string | null
 
   try {
     primary = key ? drpcUrl(chain, key) : null

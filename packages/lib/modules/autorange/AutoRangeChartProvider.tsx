@@ -155,7 +155,7 @@ export function useAutoRangeChartLogic(chartData: AutoRangeData | undefined) {
       const { poolCenteredness = 0, isPoolAboveCenter = false } = chartData || {}
 
       const totalGreenAndOrangeBars = 2 * baseOrangeBarCount + baseGreenBarCount
-      let barIndex = 0
+      let barIndex: number
 
       if (isPoolAboveCenter) {
         barIndex = Math.floor((poolCenteredness / 2) * totalGreenAndOrangeBars)
