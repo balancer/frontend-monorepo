@@ -85,9 +85,16 @@
       "matchManagers": ["github-actions"]
     },
     {
-      "description": "Keep the @playwright/test npm package and the mcr.microsoft.com/playwright Docker image in sync so the test runner and browser container stay aligned.",
+      "description": "Keep the @playwright/test npm package and the mcr.microsoft.com/playwright Docker image in sync so the test runner and browser container stay aligned. Limited to version bumps: a tag bump always carries its own new digest, so npm and the container move in one PR.",
       "groupName": "Playwright",
-      "matchPackageNames": ["@playwright/test", "mcr.microsoft.com/playwright"]
+      "matchPackageNames": ["@playwright/test", "mcr.microsoft.com/playwright"],
+      "matchUpdateTypes": ["major", "minor", "patch"]
+    },
+    {
+      "description": "Playwright image digest changes that come without a version bump (Microsoft republishes an existing tag). Kept out of the Playwright group so a pinDigest cannot collide with a pending tag bump on the same branch.",
+      "groupName": "Playwright image digest",
+      "matchPackageNames": ["mcr.microsoft.com/playwright"],
+      "matchUpdateTypes": ["pinDigest", "digest"]
     },
     {
       "description": "Keep Next server external workaround packages pinned to the transitive versions required by the current WalletConnect/pino stack.",
