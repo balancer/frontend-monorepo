@@ -7,7 +7,7 @@
     "declarationMap": false,
     "plugins": [{ "name": "next" }],
     "module": "es2022",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "jsx": "preserve",
     "noEmit": true

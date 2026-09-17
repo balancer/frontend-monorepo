@@ -1,4 +1,4 @@
-import { createPublicClient } from 'viem'
+import { createPublicClient, PublicClient } from 'viem'
 import type { GqlChain } from '../api/generated/graphql'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { chains, chainsByKey } from '@repo/lib/modules/web3/ChainConfig'
@@ -11,7 +11,7 @@ function getViemChain(chainId: number): Chain {
   return chain
 }
 
-export function getViemClient(chain: GqlChain) {
+export function getViemClient(chain: GqlChain): PublicClient {
   const { chainId } = getNetworkConfig(chain)
 
   if (!chainsByKey[chainId]) throw new Error(`Bad configuration for chain: ${chainId}`)
