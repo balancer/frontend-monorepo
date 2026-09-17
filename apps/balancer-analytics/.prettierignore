@@ -1,4 +1,2 @@
 .next/
 next-env.d.ts
-pnpm-lock.yaml
-lib/generated/

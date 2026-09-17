@@ -115,3 +115,6 @@ export const V3_HELPER_ADDRESSES: Partial<Record<GqlChain, V3HelperAddresses>> =
 export function getV3HelperAddresses(chain: GqlChain): V3HelperAddresses | null {
   return V3_HELPER_ADDRESSES[chain] ?? null
 }
+
+/** V3 Vault — CREATE2 address, identical on every chain. */
+export const V3_VAULT_ADDRESS = '0xbA1333333333a1BA1108E8412f11850A5C319bA9' as const
