@@ -11,8 +11,8 @@ catalogs:
       version: 4.2.12
 
 overrides:
-  '@types/react': '19.2'
-  '@types/react-dom': '19.2'
+  '@types/react': '19.3'
+  '@types/react-dom': '19.3'
   zod: 3.25.76
 
 importers:
@@ -66,16 +66,16 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 'catalog:'
-        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.0))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
+        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.0))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
       '@chakra-ui/icons':
         specifier: 2.2.4
-        version: 2.2.4(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 2.2.4(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       '@chakra-ui/react':
         specifier: 2.10.10
-        version: 2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@chakra-ui/theme-tools':
         specifier: 2.2.6
-        version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.8))(react@19.2.8)
+        version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.3.0))(react@19.3.0)
       '@neondatabase/serverless':
         specifier: 1.1.0
         version: 1.1.0
@@ -84,40 +84,40 @@ importers:
         version: link:../../packages/lib
       '@sentry/nextjs':
         specifier: 10.73.0
-        version: 10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))
+        version: 10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))
       '@tanstack/react-query':
         specifier: 5.102.8
-        version: 5.102.8(react@19.2.8)
+        version: 5.102.8(react@19.3.0)
       echarts:
         specifier: 6.1.0
         version: 6.1.0
       echarts-for-react:
         specifier: 3.0.6
-        version: 3.0.6(echarts@6.1.0)(react@19.2.8)
+        version: 3.0.6(echarts@6.1.0)(react@19.3.0)
       lucide-react:
         specifier: 1.43.0
-        version: 1.43.0(react@19.2.8)
+        version: 1.43.0(react@19.3.0)
       motion:
         specifier: 13.2.0
-        version: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       next:
         specifier: 16.3.5
-        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       nextjs-toploader:
         specifier: 3.9.17
-        version: 3.9.17(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 3.9.17(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       nuqs:
         specifier: 2.10.1
-        version: 2.10.1(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 2.10.1(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       p-limit:
         specifier: 7.3.2
         version: 7.3.2
       react:
-        specifier: 19.2.8
-        version: 19.2.8
+        specifier: 19.3.0
+        version: 19.3.0
       react-dom:
-        specifier: 19.2.8
-        version: 19.2.8(react@19.2.8)
+        specifier: 19.3.0
+        version: 19.3.0(react@19.3.0)
       viem:
         specifier: 2.56.0
         version: 2.56.0(typescript@5.9.3)(zod@3.25.76)
@@ -127,10 +127,10 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.0)
+        version: 2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.0)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
-        version: 2.12.0(react@19.2.8)
+        version: 2.12.0(react@19.3.0)
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -144,11 +144,11 @@ importers:
         specifier: 24.13.4
         version: 24.13.4
       '@types/react':
-        specifier: '19.2'
-        version: 19.2.18
+        specifier: '19.3'
+        version: 19.3.0
       '@types/react-dom':
-        specifier: '19.2'
-        version: 19.2.7(@types/react@19.2.18)
+        specifier: '19.3'
+        version: 19.3.0(@types/react@19.3.0)
       concurrently:
         specifier: 10.0.5
         version: 10.0.5
@@ -160,28 +160,28 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 'catalog:'
-        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
+        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
       '@balancer/sdk':
         specifier: 6.2.0
         version: 6.2.0(typescript@5.9.3)(zod@3.25.76)
       '@chakra-ui/hooks':
         specifier: 2.4.2
-        version: 2.4.2(react@19.2.8)
+        version: 2.4.2(react@19.3.0)
       '@chakra-ui/react':
         specifier: 2.10.10
-        version: 2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@chakra-ui/theme-tools':
         specifier: 2.2.6
-        version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.8))(react@19.2.8)
+        version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.3.0))(react@19.3.0)
       '@nikolovlazar/chakra-ui-prose':
         specifier: ^1.2.1
-        version: 1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(react@19.2.8))(react@19.2.8)
+        version: 1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0))(react@19.3.0)
       '@repo/lib':
         specifier: workspace:*
         version: link:../../packages/lib
       '@tanstack/react-query':
         specifier: 5.102.8
-        version: 5.102.8(react@19.2.8)
+        version: 5.102.8(react@19.3.0)
       date-fns:
         specifier: 4.4.0
         version: 4.4.0
@@ -190,34 +190,34 @@ importers:
         version: 6.1.0
       echarts-for-react:
         specifier: 3.0.6
-        version: 3.0.6(echarts@6.1.0)(react@19.2.8)
+        version: 3.0.6(echarts@6.1.0)(react@19.3.0)
       lodash:
         specifier: 4.18.1
         version: 4.18.1
       lucide-react:
         specifier: 1.43.0
-        version: 1.43.0(react@19.2.8)
+        version: 1.43.0(react@19.3.0)
       motion:
         specifier: 13.2.0
-        version: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       next:
         specifier: 16.3.5
-        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       nextjs-toploader:
         specifier: 3.9.17
-        version: 3.9.17(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 3.9.17(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react:
-        specifier: 19.2.8
-        version: 19.2.8
+        specifier: 19.3.0
+        version: 19.3.0
       react-countdown:
         specifier: ^2.3.6
-        version: 2.3.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.3.6(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react-dom:
-        specifier: 19.2.8
-        version: 19.2.8(react@19.2.8)
+        specifier: 19.3.0
+        version: 19.3.0(react@19.3.0)
       react-use-measure:
         specifier: ^2.1.7
-        version: 2.1.7(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.1.7(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       real-require:
         specifier: 0.1.0
         version: 0.1.0
@@ -233,10 +233,10 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+        version: 2.5.8(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.3)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
-        version: 2.12.0(react@19.2.8)
+        version: 2.12.0(react@19.3.0)
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -256,11 +256,11 @@ importers:
         specifier: 24.13.4
         version: 24.13.4
       '@types/react':
-        specifier: '19.2'
-        version: 19.2.18
+        specifier: '19.3'
+        version: 19.3.0
       '@types/react-dom':
-        specifier: '19.2'
-        version: 19.2.7(@types/react@19.2.18)
+        specifier: '19.3'
+        version: 19.3.0(@types/react@19.3.0)
       '@types/tinycolor2':
         specifier: 1.4.6
         version: 1.4.6
@@ -287,28 +287,28 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 'catalog:'
-        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
+        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
       '@balancer/sdk':
         specifier: 6.2.0
         version: 6.2.0(typescript@5.9.3)(zod@3.25.76)
       '@chakra-ui/clickable':
         specifier: ^2.1.0
-        version: 2.1.0(react@19.2.8)
+        version: 2.1.0(react@19.3.0)
       '@chakra-ui/hooks':
         specifier: 2.4.2
-        version: 2.4.2(react@19.2.8)
+        version: 2.4.2(react@19.3.0)
       '@chakra-ui/icons':
         specifier: 2.2.4
-        version: 2.2.4(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 2.2.4(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       '@chakra-ui/react':
         specifier: 2.10.10
-        version: 2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@chakra-ui/theme-tools':
         specifier: 2.2.6
-        version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.8))(react@19.2.8)
+        version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.3.0))(react@19.3.0)
       '@nikolovlazar/chakra-ui-prose':
         specifier: ^1.2.1
-        version: 1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(react@19.2.8))(react@19.2.8)
+        version: 1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0))(react@19.3.0)
       '@repo/lib':
         specifier: workspace:*
         version: link:../../packages/lib
@@ -317,13 +317,13 @@ importers:
         version: link:../../packages/test
       '@sentry/nextjs':
         specifier: 10.73.0
-        version: 10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))
+        version: 10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))
       '@tanstack/react-query':
         specifier: 5.102.8
-        version: 5.102.8(react@19.2.8)
+        version: 5.102.8(react@19.3.0)
       '@vercel/speed-insights':
         specifier: 2.0.0
-        version: 2.0.0(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 2.0.0(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       bignumber.js:
         specifier: 11.1.5
         version: 11.1.5
@@ -335,34 +335,34 @@ importers:
         version: 6.1.0
       echarts-for-react:
         specifier: 3.0.6
-        version: 3.0.6(echarts@6.1.0)(react@19.2.8)
+        version: 3.0.6(echarts@6.1.0)(react@19.3.0)
       lodash:
         specifier: 4.18.1
         version: 4.18.1
       lucide-react:
         specifier: 1.43.0
-        version: 1.43.0(react@19.2.8)
+        version: 1.43.0(react@19.3.0)
       motion:
         specifier: 13.2.0
-        version: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       next:
         specifier: 16.3.5
-        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       nextjs-toploader:
         specifier: 3.9.17
-        version: 3.9.17(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 3.9.17(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       prismjs:
         specifier: 1.30.0
         version: 1.30.0
       react:
-        specifier: 19.2.8
-        version: 19.2.8
+        specifier: 19.3.0
+        version: 19.3.0
       react-dom:
-        specifier: 19.2.8
-        version: 19.2.8(react@19.2.8)
+        specifier: 19.3.0
+        version: 19.3.0(react@19.3.0)
       react-use-measure:
         specifier: ^2.1.7
-        version: 2.1.7(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.1.7(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       real-require:
         specifier: 0.1.0
         version: 0.1.0
@@ -374,17 +374,17 @@ importers:
         version: 1.6.0
       usehooks-ts:
         specifier: 3.1.1
-        version: 3.1.1(react@19.2.8)
+        version: 3.1.1(react@19.3.0)
       viem:
         specifier: 2.56.0
         version: 2.56.0(typescript@5.9.3)(zod@3.25.76)
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+        version: 2.5.8(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.3)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
-        version: 2.12.0(react@19.2.8)
+        version: 2.12.0(react@19.3.0)
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -396,7 +396,7 @@ importers:
         version: link:../../packages/typescript-config
       '@testing-library/react':
         specifier: 16.3.3
-        version: 16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@types/js-cookie':
         specifier: 3.0.6
         version: 3.0.6
@@ -410,11 +410,11 @@ importers:
         specifier: 1.26.6
         version: 1.26.6
       '@types/react':
-        specifier: '19.2'
-        version: 19.2.18
+        specifier: '19.3'
+        version: 19.3.0
       '@types/react-dom':
-        specifier: '19.2'
-        version: 19.2.7(@types/react@19.2.18)
+        specifier: '19.3'
+        version: 19.3.0(@types/react@19.3.0)
       '@types/tinycolor2':
         specifier: 1.4.6
         version: 1.4.6
@@ -519,7 +519,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 'catalog:'
-        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
+        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
       '@balancer-labs/balancer-maths':
         specifier: 0.0.41
         version: 0.0.41
@@ -531,19 +531,19 @@ importers:
         version: 2.3.4
       '@chakra-ui/clickable':
         specifier: ^2.1.0
-        version: 2.1.0(react@19.2.8)
+        version: 2.1.0(react@19.3.0)
       '@chakra-ui/hooks':
         specifier: 2.4.2
-        version: 2.4.2(react@19.2.8)
+        version: 2.4.2(react@19.3.0)
       '@chakra-ui/icons':
         specifier: 2.2.4
-        version: 2.2.4(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 2.2.4(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       '@chakra-ui/react':
         specifier: 2.10.10
-        version: 2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@chakra-ui/theme-tools':
         specifier: 2.2.6
-        version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.8))(react@19.2.8)
+        version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.3.0))(react@19.3.0)
       '@coinbase/wallet-sdk':
         specifier: 4.3.7
         version: 4.3.7(typescript@5.9.3)(zod@3.25.76)
@@ -555,25 +555,25 @@ importers:
         version: 9.4.3
       '@emotion/react':
         specifier: 11.14.0
-        version: 11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
+        version: 11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
       '@emotion/styled':
         specifier: 11.14.1
-        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
+        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
       '@hookform/resolvers':
         specifier: 5.9.1
-        version: 5.9.1(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@18.2.8)(react-hook-form@7.87.0(react@19.2.8))(zod@3.25.76)
+        version: 5.9.1(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@18.2.8)(react-hook-form@7.87.0(react@19.3.0))(zod@3.25.76)
       '@metamask/connect-evm':
         specifier: 2.1.1
         version: 2.1.1(supports-color@10.2.2)
       '@nikolovlazar/chakra-ui-prose':
         specifier: ^1.2.1
-        version: 1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(react@19.2.8))(react@19.2.8)
+        version: 1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0))(react@19.3.0)
       '@nktkas/hyperliquid':
         specifier: 0.23.1
         version: 0.23.1
       '@rainbow-me/rainbowkit':
         specifier: 2.2.11
-        version: 2.2.11(d1acb39ca84b986d5d1f709183e802ae)
+        version: 2.2.11(54ea1259eac83e1547808a06da6a04e9)
       '@safe-global/safe-apps-provider':
         specifier: 0.18.6
         version: 0.18.6(typescript@5.9.3)(zod@3.25.76)
@@ -582,16 +582,16 @@ importers:
         version: 9.1.0(typescript@5.9.3)(zod@3.25.76)
       '@sentry/nextjs':
         specifier: 10.73.0
-        version: 10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))
+        version: 10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))
       '@tanstack/react-query':
         specifier: 5.102.8
-        version: 5.102.8(react@19.2.8)
+        version: 5.102.8(react@19.3.0)
       '@tanstack/react-query-devtools':
         specifier: 5.102.8
-        version: 5.102.8(@tanstack/react-query@5.102.8(react@19.2.8))(react@19.2.8)
+        version: 5.102.8(@tanstack/react-query@5.102.8(react@19.3.0))(react@19.3.0)
       '@walletconnect/ethereum-provider':
         specifier: 2.24.0
-        version: 2.24.0(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)
+        version: 2.24.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@x402/core':
         specifier: 2.25.0
         version: 2.25.0
@@ -609,7 +609,7 @@ importers:
         version: 11.1.5
       chakra-react-select:
         specifier: 5.1.1
-        version: 5.1.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)
+        version: 5.1.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@10.2.2)
       date-fns:
         specifier: 4.4.0
         version: 4.4.0
@@ -618,7 +618,7 @@ importers:
         version: 6.1.0
       echarts-for-react:
         specifier: 3.0.6
-        version: 3.0.6(echarts@6.1.0)(react@19.2.8)
+        version: 3.0.6(echarts@6.1.0)(react@19.3.0)
       graphql:
         specifier: 16.14.2
         version: 16.14.2
@@ -630,80 +630,80 @@ importers:
         version: 4.18.1
       lucide-react:
         specifier: 1.43.0
-        version: 1.43.0(react@19.2.8)
+        version: 1.43.0(react@19.3.0)
       mockdate:
         specifier: 3.0.5
         version: 3.0.5
       motion:
         specifier: 13.2.0
-        version: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       next:
         specifier: 16.3.5
-        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       numeral:
         specifier: ^2.0.6
         version: 2.0.6
       nuqs:
         specifier: 2.10.1
-        version: 2.10.1(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 2.10.1(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       pluralize:
         specifier: ^8.0.0
         version: 8.0.0
       react:
-        specifier: 19.2.8
-        version: 19.2.8
+        specifier: 19.3.0
+        version: 19.3.0
       react-dom:
-        specifier: 19.2.8
-        version: 19.2.8(react@19.2.8)
+        specifier: 19.3.0
+        version: 19.3.0(react@19.3.0)
       react-error-boundary:
         specifier: 6.1.5
-        version: 6.1.5(@types/react@19.2.18)(react@19.2.8)
+        version: 6.1.5(@types/react@19.3.0)(react@19.3.0)
       react-hook-form:
         specifier: 7.87.0
-        version: 7.87.0(react@19.2.8)
+        version: 7.87.0(react@19.3.0)
       react-hotkeys-hook:
         specifier: 5.3.3
-        version: 5.3.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 5.3.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react-swipeable:
         specifier: 7.0.2
-        version: 7.0.2(react@19.2.8)
+        version: 7.0.2(react@19.3.0)
       react-use-measure:
         specifier: ^2.1.7
-        version: 2.1.7(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.1.7(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react-virtuoso:
         specifier: 4.18.13
-        version: 4.18.13(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 4.18.13(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
       use-debounce:
         specifier: 10.1.1
-        version: 10.1.1(react@19.2.8)
+        version: 10.1.1(react@19.3.0)
       use-sound:
         specifier: 5.0.0
-        version: 5.0.0(react@19.2.8)
+        version: 5.0.0(react@19.3.0)
       usehooks-ts:
         specifier: 3.1.1
-        version: 3.1.1(react@19.2.8)
+        version: 3.1.1(react@19.3.0)
       viem:
         specifier: 2.56.0
         version: 2.56.0(typescript@5.9.3)(zod@3.25.76)
       wagmi:
         specifier: 3.7.7
-        version: 3.7.7(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.102.8)(@tanstack/react-query@5.102.8(react@19.2.8))(@types/react@19.2.18)(@walletconnect/ethereum-provider@2.24.0(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(react@19.2.8)(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
+        version: 3.7.7(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.102.8)(@tanstack/react-query@5.102.8(react@19.3.0))(@types/react@19.3.0)(@walletconnect/ethereum-provider@2.24.0(@types/react@19.3.0)(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76))(react@19.3.0)(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
       zod:
         specifier: 3.25.76
         version: 3.25.76
     devDependencies:
       '@apollo/client-integration-nextjs':
         specifier: 0.14.5
-        version: 0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2))(@types/react@19.2.18)(graphql@16.14.2)(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
+        version: 0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2))(@types/react@19.3.0)(graphql@16.14.2)(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+        version: 2.5.8(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.3)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
-        version: 2.12.0(react@19.2.8)
+        version: 2.12.0(react@19.3.0)
       '@graphql-codegen/cli':
         specifier: 7.4.1
         version: 7.4.1(@parcel/watcher@2.6.0)(@types/node@24.13.4)(crossws@0.3.5)(graphql@16.14.2)(supports-color@10.2.2)(typescript@5.9.3)
@@ -745,7 +745,7 @@ importers:
         version: 7.0.1(@testing-library/dom@10.4.1)(vitest@3.2.7(@types/debug@4.1.13)(@types/node@24.13.4)(happy-dom@20.14.5)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.4)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.51.2)(yaml@2.9.0))
       '@testing-library/react':
         specifier: 16.3.3
-        version: 16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@types/js-cookie':
         specifier: 3.0.6
         version: 3.0.6
@@ -759,11 +759,11 @@ importers:
         specifier: 0.0.33
         version: 0.0.33
       '@types/react':
-        specifier: '19.2'
-        version: 19.2.18
+        specifier: '19.3'
+        version: 19.3.0
       '@types/react-dom':
-        specifier: '19.2'
-        version: 19.2.7(@types/react@19.2.18)
+        specifier: '19.3'
+        version: 19.3.0(@types/react@19.3.0)
       '@types/tinycolor2':
         specifier: 1.4.6
         version: 1.4.6
@@ -798,7 +798,7 @@ importers:
     devDependencies:
       '@apollo/client':
         specifier: 'catalog:'
-        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
+        version: 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
       '@balancer/sdk':
         specifier: 6.2.0
         version: 6.2.0(typescript@5.9.3)(zod@3.25.76)
@@ -816,7 +816,7 @@ importers:
         version: 6.9.1
       '@testing-library/react':
         specifier: 16.3.2
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@types/node':
         specifier: 24.0.3
         version: 24.0.3
@@ -831,7 +831,7 @@ importers:
         version: 2.56.0(typescript@5.9.3)(zod@3.25.76)
       wagmi:
         specifier: 3.7.7
-        version: 3.7.7(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.102.8)(@tanstack/react-query@5.102.8(react@19.2.8))(@types/react@19.2.18)(@walletconnect/ethereum-provider@2.24.0(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(react@19.2.8)(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
+        version: 3.7.7(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.102.8)(@tanstack/react-query@5.102.8(react@19.3.0))(@types/react@19.3.0)(@walletconnect/ethereum-provider@2.24.0(@types/react@19.3.0)(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76))(react@19.3.0)(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
 
   packages/typescript-config: {}
 
@@ -2821,7 +2821,7 @@ packages:
   '@lit/react@1.0.8':
     resolution: {integrity: sha512-p2+YcF+JE67SRX3mMlJ1TKCSTsgyOVdAwd/nxp3NuV1+Cb6MWALbN6nT7Ld4tpmYofcE5kcaSY1YBB9erY+6fw==}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
 
   '@lit/reactive-element@2.1.2':
     resolution: {integrity: sha512-pbCDiVMnne1lYUIaYNN5wrwQXDtHaYtg7YEFPeW+hws6U47WeFvISGUWekPGKWOP1ygrs0ef0o1VJMk1exos5A==}
@@ -4143,8 +4143,8 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       '@testing-library/dom': ^10.0.0
-      '@types/react': '19.2'
-      '@types/react-dom': '19.2'
+      '@types/react': '19.3'
+      '@types/react-dom': '19.3'
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
@@ -4158,8 +4158,8 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       '@testing-library/dom': ^10.0.0
-      '@types/react': '19.2'
-      '@types/react-dom': '19.2'
+      '@types/react': '19.3'
+      '@types/react-dom': '19.3'
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
@@ -4280,18 +4280,18 @@ packages:
   '@types/prismjs@1.26.6':
     resolution: {integrity: sha512-vqlvI7qlMvcCBbVe0AKAb4f97//Hy0EBTaiW8AalRnG/xAN5zOiWWyrNqNXeq8+KAuvRewjCVY1+IPxk4RdNYw==}
 
-  '@types/react-dom@19.2.7':
-    resolution: {integrity: sha512-I8bPpDLcHBv1qiIiXDCy71Rt8eQDKJP0sMSWJphDdAcdqiJ1sGpZamavoEIRZmYzjia9LuEb2HlYdDpmoENpvQ==}
+  '@types/react-dom@19.3.0':
+    resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
 
   '@types/react-transition-group@4.4.12':
     resolution: {integrity: sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
 
-  '@types/react@19.2.18':
-    resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
+  '@types/react@19.3.0':
+    resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
 
   '@types/set-cookie-parser@2.4.10':
     resolution: {integrity: sha512-GGmQVGpQWUe5qglJozEjZV/5dyxbOOZ0LHe/lqyWssB88Y4svNfst0uqBVscdDeIKl5Jy5+aPSvy7mI9tYRguw==}
@@ -6501,7 +6501,7 @@ packages:
     resolution: {integrity: sha512-VWE6/yeLtFCJBNLflyI2OSylyXK1Rc24LuXup8Qt+icwkmmycFNdbn8IkSp6Frc0h1iA0NOvvi1ajW44U/w3Qg==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: '>=19.2.0'
       react-devtools-core: '>=6.1.2'
     peerDependenciesMeta:
@@ -7761,15 +7761,15 @@ packages:
       react: '>= 15'
       react-dom: '>= 15'
 
-  react-dom@19.2.8:
-    resolution: {integrity: sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==}
+  react-dom@19.3.0:
+    resolution: {integrity: sha512-JDk8dgif51OjFoDE70+OT9ICyYr+69HlmihNwp1+Nsfbna3t5sIiCa9ZJktDmQ4/1b/rn26hIAR2uYXDMr5r0Q==}
     peerDependencies:
-      react: ^19.2.8
+      react: ^19.3.0
 
   react-error-boundary@6.1.5:
     resolution: {integrity: sha512-l2nk+KhgM6e79tAiHEs3tXTdiTW4ARniKYMQN+cLY5vQFpDOkxuXKIC4uIwYuIKoMpFQ6jEbQz9wBArUmq7GWA==}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
       '@types/react':
@@ -7781,7 +7781,7 @@ packages:
   react-focus-lock@2.13.7:
     resolution: {integrity: sha512-20lpZHEQrXPb+pp1tzd4ULL6DyO5D2KnR0G69tTDdydrmNhU7pdFmbQUYVyHUgp+xN29IuFR0PVuhOmvaZL9Og==}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
@@ -7819,7 +7819,7 @@ packages:
     resolution: {integrity: sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==}
     engines: {node: '>=10'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
       '@types/react':
@@ -7829,7 +7829,7 @@ packages:
     resolution: {integrity: sha512-Iqb9NjCCTt6Hf+vOdNIZGdTiH1QSqr27H/Ek9sv/a97gfueI/5h1s3yRi1nngzMUaOOToin5dI1dXKdXiF+u0Q==}
     engines: {node: '>=10'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
@@ -7845,7 +7845,7 @@ packages:
     resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
     engines: {node: '>=10'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
@@ -7877,8 +7877,8 @@ packages:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
 
-  react@19.2.8:
-    resolution: {integrity: sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==}
+  react@19.3.0:
+    resolution: {integrity: sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog==}
     engines: {node: '>=0.10.0'}
 
   readable-stream@3.6.2:
@@ -8013,6 +8013,9 @@ packages:
 
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+
+  scheduler@0.28.0:
+    resolution: {integrity: sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==}
 
   schema-utils@4.3.3:
     resolution: {integrity: sha512-eflK8wEtyOE6+hsaRVPxvUKYCpRgzLqDTb8krvAsRIwOGlHoSgYLgBXoubGgLd2fT41/OUYdb48v4k4WWHQurA==}
@@ -8699,7 +8702,7 @@ packages:
     resolution: {integrity: sha512-jQL3lRnocaFtu3V00JToYz/4QkNWswxijDaCVNZRiRTO3HQDLsdu1ZtmIUvV4yPp+rvWm5j0y0TG/S61cuijTg==}
     engines: {node: '>=10'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
@@ -8724,7 +8727,7 @@ packages:
     resolution: {integrity: sha512-Fedw0aZvkhynoPYlA5WXrMCAMm+nSWdZt6lzJQ7Ok8S6Q+VsHmHpRWndVRJ8Be0ZbkfPc5LRYH+5XrzXcEeLRQ==}
     engines: {node: '>=10'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
@@ -8773,7 +8776,7 @@ packages:
     resolution: {integrity: sha512-DwJhCDpujuQuKdJ2H84VbTjEJJteaSmqsuUltsfbfdbotVfNeTE4K/qc/Wi57I9x8/2ed4JNdjEna7O6PfavRg==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       react: '>=18.0.0'
     peerDependenciesMeta:
       '@types/react':
@@ -9129,7 +9132,7 @@ packages:
     resolution: {integrity: sha512-LE+VcmbartOPM+auOjCCLQOsQ05zUTp8RkgwRzefUk+2jISdMMFnxvyTjA4YNWr5ZGXYbVsEMZosttuxUBkojQ==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       immer: '>=9.0.6'
       react: '>=18.0.0'
       use-sync-external-store: '>=1.2.0'
@@ -9147,7 +9150,7 @@ packages:
     resolution: {integrity: sha512-14fwWQtU3pH4dE0dOpdMiWjddcH+QzKIgk1cl8epwSE7yag43k/AD/m4L6+K7DytAOr9gGBe3/EXj9g7cdostg==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
-      '@types/react': '19.2'
+      '@types/react': '19.3'
       immer: '>=9.0.6'
       react: '>=18.0.0'
       use-sync-external-store: '>=1.2.0'
@@ -9214,31 +9217,31 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
 
-  '@apollo/client-integration-nextjs@0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2))(@types/react@19.2.18)(graphql@16.14.2)(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)':
+  '@apollo/client-integration-nextjs@0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2))(@types/react@19.3.0)(graphql@16.14.2)(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)':
     dependencies:
-      '@apollo/client': 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
-      '@apollo/client-react-streaming': 0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2))(@types/react@19.2.18)(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
-      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      react: 19.2.8
+      '@apollo/client': 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
+      '@apollo/client-react-streaming': 0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2))(@types/react@19.3.0)(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
+      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react: 19.3.0
       rxjs: 7.8.2
     transitivePeerDependencies:
       - '@types/react'
       - graphql
       - react-dom
 
-  '@apollo/client-react-streaming@0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2))(@types/react@19.2.18)(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)':
+  '@apollo/client-react-streaming@0.14.5(@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2))(@types/react@19.3.0)(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)':
     dependencies:
-      '@apollo/client': 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
-      '@types/react-dom': 19.2.7(@types/react@19.2.18)
+      '@apollo/client': 4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
+      '@types/react-dom': 19.3.0(@types/react@19.3.0)
       '@wry/equality': 0.5.7
       graphql: 16.14.2
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
       rxjs: 7.8.2
     transitivePeerDependencies:
       - '@types/react'
 
-  '@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.0))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)':
+  '@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.0))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.14.2)
       '@wry/caches': 1.0.1
@@ -9251,10 +9254,10 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       graphql-ws: 6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.0)
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
-  '@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)':
+  '@apollo/client@4.2.12(graphql-ws@6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.14.2)
       '@wry/caches': 1.0.1
@@ -9267,8 +9270,8 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       graphql-ws: 6.2.1(crossws@0.3.5)(graphql@16.14.2)(ws@8.21.3)
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
   '@ardatan/relay-compiler@13.0.2(graphql@16.14.2)':
     dependencies:
@@ -9407,7 +9410,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@base-org/account@2.4.0(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)':
+  '@base-org/account@2.4.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@coinbase/cdp-sdk': 1.55.0(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(typescript@5.9.3)
       '@noble/hashes': 1.4.0
@@ -9417,7 +9420,7 @@ snapshots:
       ox: 0.6.9(typescript@5.9.3)(zod@3.25.76)
       preact: 10.24.2
       viem: 2.56.0(typescript@5.9.3)(zod@3.25.76)
-      zustand: 5.0.3(@types/react@19.2.18)(react@19.2.8)(use-sync-external-store@1.4.0(react@19.2.8))
+      zustand: 5.0.3(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.4.0(react@19.3.0))
     transitivePeerDependencies:
       - '@types/react'
       - '@x402/core'
@@ -9457,11 +9460,11 @@ snapshots:
 
   '@chakra-ui/anatomy@2.3.6': {}
 
-  '@chakra-ui/cli@2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.0)':
+  '@chakra-ui/cli@2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.0)':
     dependencies:
       bundle-n-require: 1.1.2
       chokidar: 3.6.0
-      cli-welcome: 2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.0)
+      cli-welcome: 2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.0)
       commander: 11.1.0
       ora: 7.0.1
       prettier: 3.9.6
@@ -9504,11 +9507,11 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@chakra-ui/cli@2.5.8(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)':
+  '@chakra-ui/cli@2.5.8(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.3)':
     dependencies:
       bundle-n-require: 1.1.2
       chokidar: 3.6.0
-      cli-welcome: 2.2.3(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+      cli-welcome: 2.2.3(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.3)
       commander: 11.1.0
       ora: 7.0.1
       prettier: 3.9.6
@@ -9551,85 +9554,85 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@chakra-ui/clickable@2.1.0(react@19.2.8)':
+  '@chakra-ui/clickable@2.1.0(react@19.3.0)':
     dependencies:
-      '@chakra-ui/react-use-merge-refs': 2.1.0(react@19.2.8)
+      '@chakra-ui/react-use-merge-refs': 2.1.0(react@19.3.0)
       '@chakra-ui/shared-utils': 2.0.5
-      react: 19.2.8
+      react: 19.3.0
 
-  '@chakra-ui/color-mode@2.2.0(react@19.2.8)':
+  '@chakra-ui/color-mode@2.2.0(react@19.3.0)':
     dependencies:
-      '@chakra-ui/react-use-safe-layout-effect': 2.1.0(react@19.2.8)
-      react: 19.2.8
+      '@chakra-ui/react-use-safe-layout-effect': 2.1.0(react@19.3.0)
+      react: 19.3.0
 
-  '@chakra-ui/hooks@2.4.2(react@19.2.8)':
+  '@chakra-ui/hooks@2.4.2(react@19.3.0)':
     dependencies:
-      '@chakra-ui/utils': 2.2.2(react@19.2.8)
+      '@chakra-ui/utils': 2.2.2(react@19.3.0)
       '@zag-js/element-size': 0.31.1
       copy-to-clipboard: 3.3.3
       framesync: 6.1.2
-      react: 19.2.8
+      react: 19.3.0
 
-  '@chakra-ui/hooks@2.4.6(react@19.2.8)':
+  '@chakra-ui/hooks@2.4.6(react@19.3.0)':
     dependencies:
-      '@chakra-ui/utils': 2.2.6(react@19.2.8)
+      '@chakra-ui/utils': 2.2.6(react@19.3.0)
       '@zag-js/element-size': 0.31.1
       copy-to-clipboard: 3.3.3
       framesync: 6.1.2
-      react: 19.2.8
+      react: 19.3.0
 
-  '@chakra-ui/icons@2.2.4(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)':
+  '@chakra-ui/icons@2.2.4(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)':
     dependencies:
-      '@chakra-ui/react': 2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      react: 19.2.8
+      '@chakra-ui/react': 2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react: 19.3.0
 
   '@chakra-ui/object-utils@2.1.0': {}
 
-  '@chakra-ui/react-use-merge-refs@2.1.0(react@19.2.8)':
+  '@chakra-ui/react-use-merge-refs@2.1.0(react@19.3.0)':
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
 
-  '@chakra-ui/react-use-safe-layout-effect@2.1.0(react@19.2.8)':
+  '@chakra-ui/react-use-safe-layout-effect@2.1.0(react@19.3.0)':
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
 
-  '@chakra-ui/react-utils@2.0.12(react@19.2.8)':
+  '@chakra-ui/react-utils@2.0.12(react@19.3.0)':
     dependencies:
       '@chakra-ui/utils': 2.0.15
-      react: 19.2.8
+      react: 19.3.0
 
-  '@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
-      '@chakra-ui/hooks': 2.4.6(react@19.2.8)
-      '@chakra-ui/styled-system': 2.12.5(react@19.2.8)
-      '@chakra-ui/theme': 3.4.10(@chakra-ui/styled-system@2.12.5(react@19.2.8))(react@19.2.8)
-      '@chakra-ui/utils': 2.2.6(react@19.2.8)
-      '@emotion/react': 11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
-      '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
+      '@chakra-ui/hooks': 2.4.6(react@19.3.0)
+      '@chakra-ui/styled-system': 2.12.5(react@19.3.0)
+      '@chakra-ui/theme': 3.4.10(@chakra-ui/styled-system@2.12.5(react@19.3.0))(react@19.3.0)
+      '@chakra-ui/utils': 2.2.6(react@19.3.0)
+      '@emotion/react': 11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
+      '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
       '@popperjs/core': 2.11.8
       '@zag-js/focus-visible': 0.31.1
       aria-hidden: 1.2.6
-      framer-motion: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      framer-motion: 13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
       react-fast-compare: 3.2.2
-      react-focus-lock: 2.13.7(@types/react@19.2.18)(react@19.2.8)
-      react-remove-scroll: 2.7.2(@types/react@19.2.18)(react@19.2.8)
+      react-focus-lock: 2.13.7(@types/react@19.3.0)(react@19.3.0)
+      react-remove-scroll: 2.7.2(@types/react@19.3.0)(react@19.3.0)
     transitivePeerDependencies:
       - '@types/react'
 
   '@chakra-ui/shared-utils@2.0.5': {}
 
-  '@chakra-ui/styled-system@2.12.0(react@19.2.8)':
+  '@chakra-ui/styled-system@2.12.0(react@19.3.0)':
     dependencies:
-      '@chakra-ui/utils': 2.2.2(react@19.2.8)
+      '@chakra-ui/utils': 2.2.2(react@19.3.0)
       csstype: 3.2.3
     transitivePeerDependencies:
       - react
 
-  '@chakra-ui/styled-system@2.12.5(react@19.2.8)':
+  '@chakra-ui/styled-system@2.12.5(react@19.3.0)':
     dependencies:
-      '@chakra-ui/utils': 2.2.6(react@19.2.8)
+      '@chakra-ui/utils': 2.2.6(react@19.3.0)
       csstype: 3.2.3
     transitivePeerDependencies:
       - react
@@ -9640,17 +9643,17 @@ snapshots:
       csstype: 3.2.3
       lodash.mergewith: 4.6.2
 
-  '@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(react@19.2.8)':
+  '@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0)':
     dependencies:
-      '@chakra-ui/color-mode': 2.2.0(react@19.2.8)
+      '@chakra-ui/color-mode': 2.2.0(react@19.3.0)
       '@chakra-ui/object-utils': 2.1.0
-      '@chakra-ui/react-utils': 2.0.12(react@19.2.8)
+      '@chakra-ui/react-utils': 2.0.12(react@19.3.0)
       '@chakra-ui/styled-system': 2.9.2
       '@chakra-ui/theme-utils': 2.0.21
       '@chakra-ui/utils': 2.0.15
-      '@emotion/react': 11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
-      '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
-      react: 19.2.8
+      '@emotion/react': 11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
+      '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
+      react: 19.3.0
       react-fast-compare: 3.2.2
 
   '@chakra-ui/theme-tools@2.1.2(@chakra-ui/styled-system@2.9.2)':
@@ -9660,20 +9663,20 @@ snapshots:
       '@chakra-ui/styled-system': 2.9.2
       color2k: 2.0.4
 
-  '@chakra-ui/theme-tools@2.2.10(@chakra-ui/styled-system@2.12.5(react@19.2.8))(react@19.2.8)':
+  '@chakra-ui/theme-tools@2.2.10(@chakra-ui/styled-system@2.12.5(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@chakra-ui/anatomy': 2.3.6
-      '@chakra-ui/styled-system': 2.12.5(react@19.2.8)
-      '@chakra-ui/utils': 2.2.6(react@19.2.8)
+      '@chakra-ui/styled-system': 2.12.5(react@19.3.0)
+      '@chakra-ui/utils': 2.2.6(react@19.3.0)
       color2k: 2.0.4
     transitivePeerDependencies:
       - react
 
-  '@chakra-ui/theme-tools@2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.8))(react@19.2.8)':
+  '@chakra-ui/theme-tools@2.2.6(@chakra-ui/styled-system@2.12.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@chakra-ui/anatomy': 2.3.4
-      '@chakra-ui/styled-system': 2.12.0(react@19.2.8)
-      '@chakra-ui/utils': 2.2.2(react@19.2.8)
+      '@chakra-ui/styled-system': 2.12.0(react@19.3.0)
+      '@chakra-ui/utils': 2.2.2(react@19.3.0)
       color2k: 2.0.4
     transitivePeerDependencies:
       - react
@@ -9692,12 +9695,12 @@ snapshots:
       '@chakra-ui/styled-system': 2.9.2
       '@chakra-ui/theme-tools': 2.1.2(@chakra-ui/styled-system@2.9.2)
 
-  '@chakra-ui/theme@3.4.10(@chakra-ui/styled-system@2.12.5(react@19.2.8))(react@19.2.8)':
+  '@chakra-ui/theme@3.4.10(@chakra-ui/styled-system@2.12.5(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@chakra-ui/anatomy': 2.3.6
-      '@chakra-ui/styled-system': 2.12.5(react@19.2.8)
-      '@chakra-ui/theme-tools': 2.2.10(@chakra-ui/styled-system@2.12.5(react@19.2.8))(react@19.2.8)
-      '@chakra-ui/utils': 2.2.6(react@19.2.8)
+      '@chakra-ui/styled-system': 2.12.5(react@19.3.0)
+      '@chakra-ui/theme-tools': 2.2.10(@chakra-ui/styled-system@2.12.5(react@19.3.0))(react@19.3.0)
+      '@chakra-ui/utils': 2.2.6(react@19.3.0)
     transitivePeerDependencies:
       - react
 
@@ -9708,17 +9711,17 @@ snapshots:
       framesync: 6.1.2
       lodash.mergewith: 4.6.2
 
-  '@chakra-ui/utils@2.2.2(react@19.2.8)':
+  '@chakra-ui/utils@2.2.2(react@19.3.0)':
     dependencies:
       '@types/lodash.mergewith': 4.6.9
       lodash.mergewith: 4.6.2
-      react: 19.2.8
+      react: 19.3.0
 
-  '@chakra-ui/utils@2.2.6(react@19.2.8)':
+  '@chakra-ui/utils@2.2.6(react@19.3.0)':
     dependencies:
       '@types/lodash.mergewith': 4.6.9
       lodash.mergewith: 4.6.2
-      react: 19.2.8
+      react: 19.3.0
 
   '@clack/core@1.5.0':
     dependencies:
@@ -10043,19 +10046,19 @@ snapshots:
 
   '@emotion/memoize@0.9.0': {}
 
-  '@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)':
+  '@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@emotion/babel-plugin': 11.13.5(supports-color@10.2.2)
       '@emotion/cache': 11.14.0
       '@emotion/serialize': 1.3.3
-      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.2.8)
+      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.3.0)
       '@emotion/utils': 1.4.2
       '@emotion/weak-memoize': 0.4.0
       hoist-non-react-statics: 3.3.2
-      react: 19.2.8
+      react: 19.3.0
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
     transitivePeerDependencies:
       - supports-color
 
@@ -10069,26 +10072,26 @@ snapshots:
 
   '@emotion/sheet@1.4.0': {}
 
-  '@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)':
+  '@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@emotion/babel-plugin': 11.13.5(supports-color@10.2.2)
       '@emotion/is-prop-valid': 1.4.0
-      '@emotion/react': 11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
+      '@emotion/react': 11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
       '@emotion/serialize': 1.3.3
-      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.2.8)
+      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.3.0)
       '@emotion/utils': 1.4.2
-      react: 19.2.8
+      react: 19.3.0
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
     transitivePeerDependencies:
       - supports-color
 
   '@emotion/unitless@0.10.0': {}
 
-  '@emotion/use-insertion-effect-with-fallbacks@1.2.0(react@19.2.8)':
+  '@emotion/use-insertion-effect-with-fallbacks@1.2.0(react@19.3.0)':
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
 
   '@emotion/utils@1.4.2': {}
 
@@ -10848,10 +10851,10 @@ snapshots:
     dependencies:
       '@hapi/hoek': 11.0.7
 
-  '@hookform/resolvers@5.9.1(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@18.2.8)(react-hook-form@7.87.0(react@19.2.8))(zod@3.25.76)':
+  '@hookform/resolvers@5.9.1(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@18.2.8)(react-hook-form@7.87.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.87.0(react@19.2.8)
+      react-hook-form: 7.87.0(react@19.3.0)
     optionalDependencies:
       '@standard-schema/spec': 1.1.0
       ajv: 8.20.0
@@ -11372,9 +11375,9 @@ snapshots:
 
   '@lit-labs/ssr-dom-shim@1.6.0': {}
 
-  '@lit/react@1.0.8(@types/react@19.2.18)':
+  '@lit/react@1.0.8(@types/react@19.3.0)':
     dependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
     optional: true
 
   '@lit/reactive-element@2.1.2':
@@ -11543,11 +11546,11 @@ snapshots:
   '@next/swc-win32-x64-msvc@16.3.5':
     optional: true
 
-  '@nikolovlazar/chakra-ui-prose@1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(react@19.2.8))(react@19.2.8)':
+  '@nikolovlazar/chakra-ui-prose@1.2.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0))(react@19.3.0)':
     dependencies:
-      '@chakra-ui/react': 2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@chakra-ui/system': 2.6.2(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(react@19.2.8)
-      react: 19.2.8
+      '@chakra-ui/react': 2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@chakra-ui/system': 2.6.2(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0)
+      react: 19.3.0
 
   '@nktkas/hyperliquid@0.23.1':
     dependencies:
@@ -11823,20 +11826,20 @@ snapshots:
 
   '@protobufjs/utf8@1.1.2': {}
 
-  '@rainbow-me/rainbowkit@2.2.11(d1acb39ca84b986d5d1f709183e802ae)':
+  '@rainbow-me/rainbowkit@2.2.11(54ea1259eac83e1547808a06da6a04e9)':
     dependencies:
-      '@tanstack/react-query': 5.102.8(react@19.2.8)
+      '@tanstack/react-query': 5.102.8(react@19.3.0)
       '@vanilla-extract/css': 1.20.1(babel-plugin-macros@3.1.0)
       '@vanilla-extract/dynamic': 2.1.5
       '@vanilla-extract/sprinkles': 1.6.5(@vanilla-extract/css@1.20.1(babel-plugin-macros@3.1.0))
       clsx: 2.1.1
-      cuer: 0.0.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@5.9.3)
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
-      react-remove-scroll: 2.7.2(@types/react@19.2.18)(react@19.2.8)
+      cuer: 0.0.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@5.9.3)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
+      react-remove-scroll: 2.7.2(@types/react@19.3.0)(react@19.3.0)
       ua-parser-js: 2.0.10
       viem: 2.56.0(typescript@5.9.3)(zod@3.25.76)
-      wagmi: 3.7.7(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.102.8)(@tanstack/react-query@5.102.8(react@19.2.8))(@types/react@19.2.18)(@walletconnect/ethereum-provider@2.24.0(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(react@19.2.8)(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
+      wagmi: 3.7.7(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.102.8)(@tanstack/react-query@5.102.8(react@19.3.0))(@types/react@19.3.0)(@walletconnect/ethereum-provider@2.24.0(@types/react@19.3.0)(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76))(react@19.3.0)(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
     transitivePeerDependencies:
       - '@types/react'
       - babel-plugin-macros
@@ -11853,12 +11856,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-controllers@1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)':
+  '@reown/appkit-controllers@1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@5.9.3)(zod@3.25.76)
       '@reown/appkit-wallet': 1.8.19(typescript@5.9.3)
       '@walletconnect/universal-provider': 2.23.7(typescript@5.9.3)(zod@3.25.76)
-      valtio: 2.1.7(@types/react@19.2.18)(react@19.2.8)
+      valtio: 2.1.7(@types/react@19.3.0)(react@19.3.0)
       viem: 2.56.0(typescript@5.9.3)(zod@3.25.76)
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -11888,14 +11891,14 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-pay@1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)':
+  '@reown/appkit-pay@1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-ui': 1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-utils': 1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(valtio@2.1.7(@types/react@19.2.18)(react@19.2.8))(zod@3.25.76)
+      '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)
+      '@reown/appkit-ui': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)
+      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
       lit: 3.3.0
-      valtio: 2.1.7(@types/react@19.2.18)(react@19.2.8)
+      valtio: 2.1.7(@types/react@19.3.0)(react@19.3.0)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -11936,13 +11939,13 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@reown/appkit-scaffold-ui@1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(valtio@2.1.7(@types/react@19.2.18)(react@19.2.8))(zod@3.25.76)':
+  '@reown/appkit-scaffold-ui@1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-pay': 1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)
-      '@reown/appkit-ui': 1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-utils': 1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(valtio@2.1.7(@types/react@19.2.18)(react@19.2.8))(zod@3.25.76)
+      '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)
+      '@reown/appkit-pay': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit-ui': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)
+      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
       '@reown/appkit-wallet': 1.8.19(typescript@5.9.3)
       lit: 3.3.0
     transitivePeerDependencies:
@@ -11982,11 +11985,11 @@ snapshots:
       - valtio
       - zod
 
-  '@reown/appkit-ui@1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)':
+  '@reown/appkit-ui@1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)':
     dependencies:
       '@phosphor-icons/webcomponents': 2.1.5
       '@reown/appkit-common': 1.8.19(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)
+      '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)
       '@reown/appkit-wallet': 1.8.19(typescript@5.9.3)
       lit: 3.3.0
       qrcode: 1.5.3
@@ -12018,19 +12021,19 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-utils@1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(valtio@2.1.7(@types/react@19.2.18)(react@19.2.8))(zod@3.25.76)':
+  '@reown/appkit-utils@1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)
+      '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)
       '@reown/appkit-polyfills': 1.8.19
       '@reown/appkit-wallet': 1.8.19(typescript@5.9.3)
       '@wallet-standard/wallet': 1.1.0
       '@walletconnect/logger': 3.0.2
       '@walletconnect/universal-provider': 2.23.7(typescript@5.9.3)(zod@3.25.76)
-      valtio: 2.1.7(@types/react@19.2.18)(react@19.2.8)
+      valtio: 2.1.7(@types/react@19.3.0)(react@19.3.0)
       viem: 2.56.0(typescript@5.9.3)(zod@3.25.76)
     optionalDependencies:
-      '@base-org/account': 2.4.0(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)
+      '@base-org/account': 2.4.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@safe-global/safe-apps-provider': 0.18.6(typescript@5.9.3)(zod@3.25.76)
       '@safe-global/safe-apps-sdk': 9.1.0(typescript@5.9.3)(zod@3.25.76)
     transitivePeerDependencies:
@@ -12080,23 +12083,23 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@reown/appkit@1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)':
+  '@reown/appkit@1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-pay': 1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)
+      '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)
+      '@reown/appkit-pay': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@reown/appkit-polyfills': 1.8.19
-      '@reown/appkit-scaffold-ui': 1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(valtio@2.1.7(@types/react@19.2.18)(react@19.2.8))(zod@3.25.76)
-      '@reown/appkit-ui': 1.8.19(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(zod@3.25.76)
-      '@reown/appkit-utils': 1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(valtio@2.1.7(@types/react@19.2.18)(react@19.2.8))(zod@3.25.76)
+      '@reown/appkit-scaffold-ui': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit-ui': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(zod@3.25.76)
+      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
       '@reown/appkit-wallet': 1.8.19(typescript@5.9.3)
       '@walletconnect/universal-provider': 2.23.7(typescript@5.9.3)(zod@3.25.76)
       bs58: 6.0.0
       semver: 7.7.2
-      valtio: 2.1.7(@types/react@19.2.18)(react@19.2.8)
+      valtio: 2.1.7(@types/react@19.3.0)(react@19.3.0)
       viem: 2.56.0(typescript@5.9.3)(zod@3.25.76)
     optionalDependencies:
-      '@lit/react': 1.0.8(@types/react@19.2.18)
+      '@lit/react': 1.0.8(@types/react@19.3.0)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -12381,7 +12384,7 @@ snapshots:
     dependencies:
       '@sentry/core': 10.73.0
 
-  '@sentry/nextjs@10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))':
+  '@sentry/nextjs@10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@rollup/plugin-commonjs': 28.0.1(rollup@4.63.1)
@@ -12391,11 +12394,11 @@ snapshots:
       '@sentry/core': 10.73.0
       '@sentry/node': 10.73.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/exporter-trace-otlp-http@0.221.0(@opentelemetry/api@1.9.1))(supports-color@10.2.2)
       '@sentry/opentelemetry': 10.73.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))
-      '@sentry/react': 10.73.0(react@19.2.8)
+      '@sentry/react': 10.73.0(react@19.3.0)
       '@sentry/server-utils': 10.73.0
       '@sentry/vercel-edge': 10.73.0
       '@sentry/webpack-plugin': 5.4.0(rollup@4.63.1)(supports-color@10.2.2)(webpack@5.110.3(esbuild@0.28.2)(postcss@8.5.28)(sharp@0.35.4(@types/node@24.13.4)))
-      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       rollup: 4.63.1
       stacktrace-parser: 0.1.11
     transitivePeerDependencies:
@@ -12444,12 +12447,12 @@ snapshots:
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.73.0
 
-  '@sentry/react@10.73.0(react@19.2.8)':
+  '@sentry/react@10.73.0(react@19.3.0)':
     dependencies:
       '@sentry/browser': 10.73.0
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.73.0
-      react: 19.2.8
+      react: 19.3.0
 
   '@sentry/replay-canvas@10.73.0':
     dependencies:
@@ -12976,16 +12979,16 @@ snapshots:
 
   '@tanstack/query-devtools@5.102.8': {}
 
-  '@tanstack/react-query-devtools@5.102.8(@tanstack/react-query@5.102.8(react@19.2.8))(react@19.2.8)':
+  '@tanstack/react-query-devtools@5.102.8(@tanstack/react-query@5.102.8(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@tanstack/query-devtools': 5.102.8
-      '@tanstack/react-query': 5.102.8(react@19.2.8)
-      react: 19.2.8
+      '@tanstack/react-query': 5.102.8(react@19.3.0)
+      react: 19.3.0
 
-  '@tanstack/react-query@5.102.8(react@19.2.8)':
+  '@tanstack/react-query@5.102.8(react@19.3.0)':
     dependencies:
       '@tanstack/query-core': 5.102.8
-      react: 19.2.8
+      react: 19.3.0
 
   '@testing-library/dom@10.4.1':
     dependencies:
@@ -13019,25 +13022,25 @@ snapshots:
     optionalDependencies:
       vitest: 3.2.7(@types/debug@4.1.13)(@types/node@24.13.4)(happy-dom@20.14.5)(jiti@2.7.0)(msw@2.15.0(@types/node@24.13.4)(typescript@5.9.3))(supports-color@10.2.2)(terser@5.51.2)(yaml@2.9.0)
 
-  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@testing-library/dom': 10.4.1
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
     optionalDependencies:
-      '@types/react': 19.2.18
-      '@types/react-dom': 19.2.7(@types/react@19.2.18)
+      '@types/react': 19.3.0
+      '@types/react-dom': 19.3.0(@types/react@19.3.0)
 
-  '@testing-library/react@16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@testing-library/react@16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@testing-library/dom': 10.4.1
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
     optionalDependencies:
-      '@types/react': 19.2.18
-      '@types/react-dom': 19.2.7(@types/react@19.2.18)
+      '@types/react': 19.3.0
+      '@types/react-dom': 19.3.0(@types/react@19.3.0)
 
   '@tokenizer/inflate@0.4.1(supports-color@10.2.2)':
     dependencies:
@@ -13147,15 +13150,15 @@ snapshots:
 
   '@types/prismjs@1.26.6': {}
 
-  '@types/react-dom@19.2.7(@types/react@19.2.18)':
+  '@types/react-dom@19.3.0(@types/react@19.3.0)':
     dependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  '@types/react-transition-group@4.4.12(@types/react@19.2.18)':
+  '@types/react-transition-group@4.4.12(@types/react@19.3.0)':
     dependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  '@types/react@19.2.18':
+  '@types/react@19.3.0':
     dependencies:
       csstype: 3.2.3
 
@@ -13294,10 +13297,10 @@ snapshots:
 
   '@vercel/oidc@3.2.0': {}
 
-  '@vercel/speed-insights@2.0.0(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)':
+  '@vercel/speed-insights@2.0.0(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)':
     optionalDependencies:
-      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      react: 19.2.8
+      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react: 19.3.0
 
   '@vitejs/plugin-react@4.7.0(supports-color@10.2.2)(vite@7.3.6(@types/node@24.13.4)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0))':
     dependencies:
@@ -13451,24 +13454,24 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@wagmi/connectors@8.2.0(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@wagmi/core@3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76)))(@walletconnect/ethereum-provider@2.24.0(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))':
+  '@wagmi/connectors@8.2.0(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@wagmi/core@3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76)))(@walletconnect/ethereum-provider@2.24.0(@types/react@19.3.0)(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76))(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))':
     dependencies:
-      '@wagmi/core': 3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
+      '@wagmi/core': 3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
       viem: 2.56.0(typescript@5.9.3)(zod@3.25.76)
     optionalDependencies:
       '@coinbase/wallet-sdk': 4.3.7(typescript@5.9.3)(zod@3.25.76)
       '@metamask/connect-evm': 2.1.1(supports-color@10.2.2)
       '@safe-global/safe-apps-provider': 0.18.6(typescript@5.9.3)(zod@3.25.76)
       '@safe-global/safe-apps-sdk': 9.1.0(typescript@5.9.3)(zod@3.25.76)
-      '@walletconnect/ethereum-provider': 2.24.0(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)
+      '@walletconnect/ethereum-provider': 2.24.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       typescript: 5.9.3
 
-  '@wagmi/core@3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))':
+  '@wagmi/core@3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))':
     dependencies:
       eventemitter3: 5.0.1
       mipd: 0.0.7(typescript@5.9.3)
       viem: 2.56.0(typescript@5.9.3)(zod@3.25.76)
-      zustand: 5.0.0(@types/react@19.2.18)(react@19.2.8)(use-sync-external-store@1.4.0(react@19.2.8))
+      zustand: 5.0.0(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.4.0(react@19.3.0))
     optionalDependencies:
       '@tanstack/query-core': 5.102.8
       typescript: 5.9.3
@@ -13576,9 +13579,9 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/ethereum-provider@2.24.0(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)':
+  '@walletconnect/ethereum-provider@2.24.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
-      '@reown/appkit': 1.8.19(@types/react@19.2.18)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76)
+      '@reown/appkit': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@5.9.3))(@x402/extensions@2.25.0(typescript@5.9.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@5.9.3))(@solana/sysvars@5.5.1(typescript@5.9.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/keyvaluestorage': 1.1.1
       '@walletconnect/types': 2.24.0
@@ -14542,13 +14545,13 @@ snapshots:
       loupe: 3.2.1
       pathval: 2.0.1
 
-  chakra-react-select@5.1.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@10.2.2):
+  chakra-react-select@5.1.1(@chakra-ui/react@2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@10.2.2):
     dependencies:
-      '@chakra-ui/react': 2.10.10(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2))(@types/react@19.2.18)(framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@emotion/react': 11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
-      react-select: 5.10.2(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)
+      '@chakra-ui/react': 2.10.10(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(@types/react@19.3.0)(framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@emotion/react': 11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
+      react-select: 5.10.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
@@ -14614,10 +14617,10 @@ snapshots:
 
   cjs-module-lexer@2.2.1: {}
 
-  clear-any-console@1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.0):
+  clear-any-console@1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.0):
     dependencies:
-      command-code: 1.50.1(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(supports-color@10.2.2)
-      langbase: 1.2.4(react@19.2.8)(ws@8.21.0)
+      command-code: 1.50.1(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(supports-color@10.2.2)
+      langbase: 1.2.4(react@19.3.0)(ws@8.21.0)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -14656,10 +14659,10 @@ snapshots:
       - utf-8-validate
       - ws
 
-  clear-any-console@1.16.4(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3):
+  clear-any-console@1.16.4(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.3):
     dependencies:
-      command-code: 1.50.1(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(supports-color@10.2.2)
-      langbase: 1.2.4(react@19.2.8)(ws@8.21.3)
+      command-code: 1.50.1(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(supports-color@10.2.2)
+      langbase: 1.2.4(react@19.3.0)(ws@8.21.3)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -14739,10 +14742,10 @@ snapshots:
       slice-ansi: 9.0.0
       string-width: 8.2.2
 
-  cli-welcome@2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.0):
+  cli-welcome@2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.0):
     dependencies:
       chalk: 2.4.2
-      clear-any-console: 1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.0)
+      clear-any-console: 1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.0)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -14781,10 +14784,10 @@ snapshots:
       - utf-8-validate
       - ws
 
-  cli-welcome@2.2.3(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3):
+  cli-welcome@2.2.3(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.3):
     dependencies:
       chalk: 2.4.2
-      clear-any-console: 1.16.4(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(react@19.2.8)(supports-color@10.2.2)(ws@8.21.3)
+      clear-any-console: 1.16.4(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@10.2.2)(ws@8.21.3)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -14879,7 +14882,7 @@ snapshots:
     dependencies:
       delayed-stream: 1.0.0
 
-  command-code@1.50.1(@neondatabase/serverless@1.1.0)(@types/react@19.2.18)(babel-plugin-macros@3.1.0)(supports-color@10.2.2):
+  command-code@1.50.1(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(supports-color@10.2.2):
     dependencies:
       '@ai-sdk/anthropic': 3.0.116(zod@3.25.76)
       '@ai-sdk/openai': 3.0.109(zod@3.25.76)
@@ -14906,8 +14909,8 @@ snapshots:
       giget: 3.3.1
       glob: 13.0.6
       ignore: 7.0.8
-      ink: 7.1.0(@types/react@19.2.18)(react@19.2.8)
-      ink-spinner: 5.0.0(ink@7.1.0(@types/react@19.2.18)(react@19.2.8))(react@19.2.8)
+      ink: 7.1.0(@types/react@19.3.0)(react@19.3.0)
+      ink-spinner: 5.0.0(ink@7.1.0(@types/react@19.3.0)(react@19.3.0))(react@19.3.0)
       is-unicode-supported: 2.1.0
       jimp: 1.6.1(supports-color@10.2.2)
       jiti: 2.7.0
@@ -14920,7 +14923,7 @@ snapshots:
       ora: 9.4.1
       picocolors: 1.1.1
       postgres: 3.4.9
-      react: 19.2.8
+      react: 19.3.0
       semver: 7.8.5
       shell-quote: 1.10.0
       string-width: 8.2.2
@@ -15105,11 +15108,11 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  cuer@0.0.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@5.9.3):
+  cuer@0.0.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@5.9.3):
     dependencies:
       qr: 0.7.0
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
     optionalDependencies:
       typescript: 5.9.3
 
@@ -15235,11 +15238,11 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  echarts-for-react@3.0.6(echarts@6.1.0)(react@19.2.8):
+  echarts-for-react@3.0.6(echarts@6.1.0)(react@19.3.0):
     dependencies:
       echarts: 6.1.0
       fast-deep-equal: 3.1.3
-      react: 19.2.8
+      react: 19.3.0
       size-sensor: 1.0.3
 
   echarts@6.1.0:
@@ -15807,14 +15810,14 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  framer-motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  framer-motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       motion-dom: 13.2.0
       motion-utils: 13.0.0
       tslib: 2.8.1
     optionalDependencies:
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
   framesync@6.1.2:
     dependencies:
@@ -16155,13 +16158,13 @@ snapshots:
 
   ini@2.0.0: {}
 
-  ink-spinner@5.0.0(ink@7.1.0(@types/react@19.2.18)(react@19.2.8))(react@19.2.8):
+  ink-spinner@5.0.0(ink@7.1.0(@types/react@19.3.0)(react@19.3.0))(react@19.3.0):
     dependencies:
       cli-spinners: 2.9.2
-      ink: 7.1.0(@types/react@19.2.18)(react@19.2.8)
-      react: 19.2.8
+      ink: 7.1.0(@types/react@19.3.0)(react@19.3.0)
+      react: 19.3.0
 
-  ink@7.1.0(@types/react@19.2.18)(react@19.2.8):
+  ink@7.1.0(@types/react@19.3.0)(react@19.3.0):
     dependencies:
       '@alcalzone/ansi-tokenize': 0.3.0
       ansi-escapes: 7.3.0
@@ -16176,8 +16179,8 @@ snapshots:
       indent-string: 5.0.0
       is-in-ci: 2.0.0
       patch-console: 2.0.0
-      react: 19.2.8
-      react-reconciler: 0.33.0(react@19.2.8)
+      react: 19.3.0
+      react-reconciler: 0.33.0(react@19.3.0)
       scheduler: 0.27.0
       signal-exit: 3.0.7
       slice-ansi: 9.0.0
@@ -16190,7 +16193,7 @@ snapshots:
       ws: 8.21.3
       yoga-layout: 3.2.1
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -16442,26 +16445,26 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  langbase@1.2.4(react@19.2.8)(ws@8.21.0):
+  langbase@1.2.4(react@19.3.0)(ws@8.21.0):
     dependencies:
       dotenv: 16.6.1
       openai: 4.104.0(ws@8.21.0)(zod@3.25.76)
       zod: 3.25.76
       zod-validation-error: 3.5.4(zod@3.25.76)
     optionalDependencies:
-      react: 19.2.8
+      react: 19.3.0
     transitivePeerDependencies:
       - encoding
       - ws
 
-  langbase@1.2.4(react@19.2.8)(ws@8.21.3):
+  langbase@1.2.4(react@19.3.0)(ws@8.21.3):
     dependencies:
       dotenv: 16.6.1
       openai: 4.104.0(ws@8.21.3)(zod@3.25.76)
       zod: 3.25.76
       zod-validation-error: 3.5.4(zod@3.25.76)
     optionalDependencies:
-      react: 19.2.8
+      react: 19.3.0
     transitivePeerDependencies:
       - encoding
       - ws
@@ -16569,9 +16572,9 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@1.43.0(react@19.2.8):
+  lucide-react@1.43.0(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
 
   lz-string@1.5.0: {}
 
@@ -16714,13 +16717,13 @@ snapshots:
 
   motion-utils@13.0.0: {}
 
-  motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  motion@13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
-      framer-motion: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      framer-motion: 13.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       tslib: 2.8.1
     optionalDependencies:
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
   ms@2.0.0: {}
 
@@ -16773,16 +16776,16 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       '@next/env': 16.3.5
       '@swc/helpers': 0.5.23
       baseline-browser-mapping: 2.11.21
       caniuse-lite: 1.0.30001810
       postcss: 8.5.23
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
-      styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@10.2.2))(babel-plugin-macros@3.1.0)(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
+      styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@10.2.2))(babel-plugin-macros@3.1.0)(react@19.3.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.3.5
       '@next/swc-darwin-x64': 16.3.5
@@ -16801,13 +16804,13 @@ snapshots:
       - '@types/node'
       - babel-plugin-macros
 
-  nextjs-toploader@3.9.17(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  nextjs-toploader@3.9.17(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
-      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       nprogress: 0.2.0
       prop-types: 15.8.1
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
   node-addon-api@7.1.1: {}
 
@@ -16861,12 +16864,12 @@ snapshots:
 
   numeral@2.0.6: {}
 
-  nuqs@2.10.1(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8):
+  nuqs@2.10.1(next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0):
     dependencies:
       '@standard-schema/spec': 1.1.0
-      react: 19.2.8
+      react: 19.3.0
     optionalDependencies:
-      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@24.13.4)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
 
   object-assign@4.1.1: {}
 
@@ -17356,131 +17359,131 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-clientside-effect@1.2.8(react@19.2.8):
+  react-clientside-effect@1.2.8(react@19.3.0):
     dependencies:
       '@babel/runtime': 7.29.7
-      react: 19.2.8
+      react: 19.3.0
 
-  react-countdown@2.3.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-countdown@2.3.6(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       prop-types: 15.8.1
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
-  react-dom@19.2.8(react@19.2.8):
+  react-dom@19.3.0(react@19.3.0):
     dependencies:
-      react: 19.2.8
-      scheduler: 0.27.0
+      react: 19.3.0
+      scheduler: 0.28.0
 
-  react-error-boundary@6.1.5(@types/react@19.2.18)(react@19.2.8):
+  react-error-boundary@6.1.5(@types/react@19.3.0)(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
   react-fast-compare@3.2.2: {}
 
-  react-focus-lock@2.13.7(@types/react@19.2.18)(react@19.2.8):
+  react-focus-lock@2.13.7(@types/react@19.3.0)(react@19.3.0):
     dependencies:
       '@babel/runtime': 7.29.7
       focus-lock: 1.3.6
       prop-types: 15.8.1
-      react: 19.2.8
-      react-clientside-effect: 1.2.8(react@19.2.8)
-      use-callback-ref: 1.3.3(@types/react@19.2.18)(react@19.2.8)
-      use-sidecar: 1.1.3(@types/react@19.2.18)(react@19.2.8)
+      react: 19.3.0
+      react-clientside-effect: 1.2.8(react@19.3.0)
+      use-callback-ref: 1.3.3(@types/react@19.3.0)(react@19.3.0)
+      use-sidecar: 1.1.3(@types/react@19.3.0)(react@19.3.0)
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  react-hook-form@7.87.0(react@19.2.8):
+  react-hook-form@7.87.0(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
 
-  react-hotkeys-hook@5.3.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-hotkeys-hook@5.3.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
   react-is@16.13.1: {}
 
   react-is@17.0.2: {}
 
-  react-reconciler@0.33.0(react@19.2.8):
+  react-reconciler@0.33.0(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
       scheduler: 0.27.0
 
   react-refresh@0.17.0: {}
 
-  react-remove-scroll-bar@2.3.8(@types/react@19.2.18)(react@19.2.8):
+  react-remove-scroll-bar@2.3.8(@types/react@19.3.0)(react@19.3.0):
     dependencies:
-      react: 19.2.8
-      react-style-singleton: 2.2.3(@types/react@19.2.18)(react@19.2.8)
+      react: 19.3.0
+      react-style-singleton: 2.2.3(@types/react@19.3.0)(react@19.3.0)
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  react-remove-scroll@2.7.2(@types/react@19.2.18)(react@19.2.8):
+  react-remove-scroll@2.7.2(@types/react@19.3.0)(react@19.3.0):
     dependencies:
-      react: 19.2.8
-      react-remove-scroll-bar: 2.3.8(@types/react@19.2.18)(react@19.2.8)
-      react-style-singleton: 2.2.3(@types/react@19.2.18)(react@19.2.8)
+      react: 19.3.0
+      react-remove-scroll-bar: 2.3.8(@types/react@19.3.0)(react@19.3.0)
+      react-style-singleton: 2.2.3(@types/react@19.3.0)(react@19.3.0)
       tslib: 2.8.1
-      use-callback-ref: 1.3.3(@types/react@19.2.18)(react@19.2.8)
-      use-sidecar: 1.1.3(@types/react@19.2.18)(react@19.2.8)
+      use-callback-ref: 1.3.3(@types/react@19.3.0)(react@19.3.0)
+      use-sidecar: 1.1.3(@types/react@19.3.0)(react@19.3.0)
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  react-select@5.10.2(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@10.2.2):
+  react-select@5.10.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@10.2.2):
     dependencies:
       '@babel/runtime': 7.29.7
       '@emotion/cache': 11.14.0
-      '@emotion/react': 11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@10.2.2)
+      '@emotion/react': 11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
       '@floating-ui/dom': 1.8.0
-      '@types/react-transition-group': 4.4.12(@types/react@19.2.18)
+      '@types/react-transition-group': 4.4.12(@types/react@19.3.0)
       memoize-one: 6.0.0
       prop-types: 15.8.1
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
-      react-transition-group: 4.4.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      use-isomorphic-layout-effect: 1.2.1(@types/react@19.2.18)(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
+      react-transition-group: 4.4.5(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      use-isomorphic-layout-effect: 1.2.1(@types/react@19.3.0)(react@19.3.0)
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
 
-  react-style-singleton@2.2.3(@types/react@19.2.18)(react@19.2.8):
+  react-style-singleton@2.2.3(@types/react@19.3.0)(react@19.3.0):
     dependencies:
       get-nonce: 1.0.1
-      react: 19.2.8
+      react: 19.3.0
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  react-swipeable@7.0.2(react@19.2.8):
+  react-swipeable@7.0.2(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
 
-  react-transition-group@4.4.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-transition-group@4.4.5(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       '@babel/runtime': 7.29.7
       dom-helpers: 5.2.1
       loose-envify: 1.4.0
       prop-types: 15.8.1
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
-  react-use-measure@2.1.7(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-use-measure@2.1.7(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
     optionalDependencies:
-      react-dom: 19.2.8(react@19.2.8)
+      react-dom: 19.3.0(react@19.3.0)
 
-  react-virtuoso@4.18.13(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-virtuoso@4.18.13(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
 
-  react@19.2.8: {}
+  react@19.3.0: {}
 
   readable-stream@3.6.2:
     dependencies:
@@ -17618,6 +17621,8 @@ snapshots:
   sax@1.6.1: {}
 
   scheduler@0.27.0: {}
+
+  scheduler@0.28.0: {}
 
   schema-utils@4.3.3:
     dependencies:
@@ -17908,10 +17913,10 @@ snapshots:
     dependencies:
       '@tokenizer/token': 0.3.0
 
-  styled-jsx@5.1.6(@babel/core@7.29.7(supports-color@10.2.2))(babel-plugin-macros@3.1.0)(react@19.2.8):
+  styled-jsx@5.1.6(@babel/core@7.29.7(supports-color@10.2.2))(babel-plugin-macros@3.1.0)(react@19.3.0):
     dependencies:
       client-only: 0.0.1
-      react: 19.2.8
+      react: 19.3.0
     optionalDependencies:
       '@babel/core': 7.29.7(supports-color@10.2.2)
       babel-plugin-macros: 3.1.0
@@ -18281,44 +18286,44 @@ snapshots:
 
   urlpattern-polyfill@10.1.0: {}
 
-  use-callback-ref@1.3.3(@types/react@19.2.18)(react@19.2.8):
+  use-callback-ref@1.3.3(@types/react@19.3.0)(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  use-debounce@10.1.1(react@19.2.8):
+  use-debounce@10.1.1(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
 
-  use-isomorphic-layout-effect@1.2.1(@types/react@19.2.18)(react@19.2.8):
+  use-isomorphic-layout-effect@1.2.1(@types/react@19.3.0)(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  use-sidecar@1.1.3(@types/react@19.2.18)(react@19.2.8):
+  use-sidecar@1.1.3(@types/react@19.3.0)(react@19.3.0):
     dependencies:
       detect-node-es: 1.1.0
-      react: 19.2.8
+      react: 19.3.0
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.2.18
+      '@types/react': 19.3.0
 
-  use-sound@5.0.0(react@19.2.8):
+  use-sound@5.0.0(react@19.3.0):
     dependencies:
       howler: 2.2.4
-      react: 19.2.8
+      react: 19.3.0
 
-  use-sync-external-store@1.4.0(react@19.2.8):
+  use-sync-external-store@1.4.0(react@19.3.0):
     dependencies:
-      react: 19.2.8
+      react: 19.3.0
 
-  usehooks-ts@3.1.1(react@19.2.8):
+  usehooks-ts@3.1.1(react@19.3.0):
     dependencies:
       lodash.debounce: 4.0.8
-      react: 19.2.8
+      react: 19.3.0
 
   utif2@4.1.0:
     dependencies:
@@ -18334,12 +18339,12 @@ snapshots:
 
   uuid@9.0.1: {}
 
-  valtio@2.1.7(@types/react@19.2.18)(react@19.2.8):
+  valtio@2.1.7(@types/react@19.3.0)(react@19.3.0):
     dependencies:
       proxy-compare: 3.0.1
     optionalDependencies:
-      '@types/react': 19.2.18
-      react: 19.2.8
+      '@types/react': 19.3.0
+      react: 19.3.0
 
   vary@1.1.2: {}
 
@@ -18445,13 +18450,13 @@ snapshots:
       - tsx
       - yaml
 
-  wagmi@3.7.7(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.102.8)(@tanstack/react-query@5.102.8(react@19.2.8))(@types/react@19.2.18)(@walletconnect/ethereum-provider@2.24.0(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(react@19.2.8)(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76)):
+  wagmi@3.7.7(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@tanstack/query-core@5.102.8)(@tanstack/react-query@5.102.8(react@19.3.0))(@types/react@19.3.0)(@walletconnect/ethereum-provider@2.24.0(@types/react@19.3.0)(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76))(react@19.3.0)(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76)):
     dependencies:
-      '@tanstack/react-query': 5.102.8(react@19.2.8)
-      '@wagmi/connectors': 8.2.0(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@wagmi/core@3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76)))(@walletconnect/ethereum-provider@2.24.0(@types/react@19.2.18)(debug@4.4.3(supports-color@10.2.2))(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(zod@3.25.76))(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
-      '@wagmi/core': 3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.2.18)(react@19.2.8)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.8))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
-      react: 19.2.8
-      use-sync-external-store: 1.4.0(react@19.2.8)
+      '@tanstack/react-query': 5.102.8(react@19.3.0)
+      '@wagmi/connectors': 8.2.0(@coinbase/wallet-sdk@4.3.7(typescript@5.9.3)(zod@3.25.76))(@metamask/connect-evm@2.1.1(supports-color@10.2.2))(@safe-global/safe-apps-provider@0.18.6(typescript@5.9.3)(zod@3.25.76))(@safe-global/safe-apps-sdk@9.1.0(typescript@5.9.3)(zod@3.25.76))(@wagmi/core@3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76)))(@walletconnect/ethereum-provider@2.24.0(@types/react@19.3.0)(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76))(typescript@5.9.3)(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
+      '@wagmi/core': 3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.3.0)(react@19.3.0)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.3.0))(viem@2.56.0(typescript@5.9.3)(zod@3.25.76))
+      react: 19.3.0
+      use-sync-external-store: 1.4.0(react@19.3.0)
       viem: 2.56.0(typescript@5.9.3)(zod@3.25.76)
     optionalDependencies:
       typescript: 5.9.3
@@ -18717,15 +18722,15 @@ snapshots:
     dependencies:
       tslib: 2.3.0
 
-  zustand@5.0.0(@types/react@19.2.18)(react@19.2.8)(use-sync-external-store@1.4.0(react@19.2.8)):
+  zustand@5.0.0(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.4.0(react@19.3.0)):
     optionalDependencies:
-      '@types/react': 19.2.18
-      react: 19.2.8
-      use-sync-external-store: 1.4.0(react@19.2.8)
+      '@types/react': 19.3.0
+      react: 19.3.0
+      use-sync-external-store: 1.4.0(react@19.3.0)
 
-  zustand@5.0.3(@types/react@19.2.18)(react@19.2.8)(use-sync-external-store@1.4.0(react@19.2.8)):
+  zustand@5.0.3(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.4.0(react@19.3.0)):
     optionalDependencies:
-      '@types/react': 19.2.18
-      react: 19.2.8
-      use-sync-external-store: 1.4.0(react@19.2.8)
+      '@types/react': 19.3.0
+      react: 19.3.0
+      use-sync-external-store: 1.4.0(react@19.3.0)
     optional: true

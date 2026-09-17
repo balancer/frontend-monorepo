@@ -36,8 +36,8 @@
     "nextjs-toploader": "3.9.17",
     "nuqs": "2.10.1",
     "p-limit": "7.3.2",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "viem": "2.56.0",
     "zod": "3.25.76"
   },
@@ -48,8 +48,8 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "24.13.4",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.7",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "concurrently": "10.0.5",
     "eslint": "10.10.0"
   },
