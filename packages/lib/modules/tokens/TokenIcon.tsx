@@ -8,7 +8,7 @@ import { SmartCircularImage } from '@repo/lib/shared/components/image/SmartCircu
 import { getTokenColor } from '@repo/lib/styles/token-colors'
 import { proxyExternalImageUrl } from '../pool/utils/image-proxy'
 import { Avatar, Style } from '@dicebear/core'
-import identicon from '@dicebear/styles/identicon.json' with { type: 'json' }
+import identicon from '@dicebear/styles/identicon.json'
 
 const identiconStyle = new Style(identicon)
 

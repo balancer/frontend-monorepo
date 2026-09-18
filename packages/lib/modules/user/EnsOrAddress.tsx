@@ -5,7 +5,7 @@ import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useEnsAvatar, useEnsName } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
 import { Avatar, Style } from '@dicebear/core'
-import identicon from '@dicebear/styles/identicon.json' with { type: 'json' }
+import identicon from '@dicebear/styles/identicon.json'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { HStack, Image, Link, Text } from '@chakra-ui/react'
 import { ArrowUpRight } from 'lucide-react'
