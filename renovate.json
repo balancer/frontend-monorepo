@@ -126,12 +126,6 @@
       "enabled": false
     },
     {
-      "description": "Block Vitest v4 until we are ready to migrate the test tooling.",
-      "matchPackageNames": ["vitest", "@vitest/**"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    },
-    {
       "description": "Block zod v4 until we are ready for that migration.",
       "matchPackageNames": ["zod"],
       "matchUpdateTypes": ["major"],
@@ -146,12 +140,6 @@
     {
       "description": "Block @vitejs/plugin-react major upgrades \u2014 v5 is not compatible with 'moduleResolution': 'node'",
       "matchPackageNames": ["@vitejs/plugin-react"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    },
-    {
-      "description": "Block vitest-mock-extended major upgrades \u2014 v4 requires vitest 4 which is not yet in the project.",
-      "matchPackageNames": ["vitest-mock-extended"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
