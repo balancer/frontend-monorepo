@@ -18,6 +18,9 @@ function setupFilesWithoutMswSetup() {
 
 const scriptTestOptions: Partial<InlineConfig> = {
   include: ['./**/*.script.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+  // The base config excludes script specs from the unit run; this config selects
+  // them, so it must not inherit that exclusion.
+  exclude: ['**/node_modules/**'],
   setupFiles: [...setupFilesWithoutMswSetup()],
   testTimeout: 30_000,
 }

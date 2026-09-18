@@ -96,18 +96,20 @@ vi.mock('@balancer/sdk', () => ({
     GivenIn: 'GIVEN_IN',
     GivenOut: 'GIVEN_OUT',
   },
-  Swap: vi.fn().mockImplementation(() => ({
-    buildCall: vi.fn().mockReturnValue({
-      callData: '0xdefault_tx_data',
-      value: BigInt(0),
-      to: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-    }),
-    buildCallWithPermit2: vi.fn().mockReturnValue({
-      callData: '0xpermit2_tx_data',
-      value: BigInt(0),
-      to: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-    }),
-  })),
+  Swap: vi.fn().mockImplementation(function () {
+    return {
+      buildCall: vi.fn().mockReturnValue({
+        callData: '0xdefault_tx_data',
+        value: BigInt(0),
+        to: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      }),
+      buildCallWithPermit2: vi.fn().mockReturnValue({
+        callData: '0xpermit2_tx_data',
+        value: BigInt(0),
+        to: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      }),
+    }
+  }),
   Path: vi.fn(),
   TokenAmount: vi.fn(),
 }))

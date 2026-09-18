@@ -67,17 +67,19 @@ vi.mock('@balancer/sdk', async importOriginal => {
     TokenAmount: {
       fromHumanAmount: vi.fn(() => ({ amount: BigInt(1e18), token: { decimals: 18 } })),
     },
-    AuraBalSwap: vi.fn().mockImplementation(() => ({
-      isAuraBalSwap: vi.fn(() => true),
-      query: vi.fn().mockResolvedValue({
-        expectedAmountOut: { amount: BigInt(1e18), token: { decimals: 18 } },
-      }),
-      buildCall: vi.fn().mockReturnValue({
-        callData: '0xmock',
-        value: BigInt(0),
-        to: '0x' + '5'.repeat(40),
-      }),
-    })),
+    AuraBalSwap: vi.fn().mockImplementation(function () {
+      return {
+        isAuraBalSwap: vi.fn(() => true),
+        query: vi.fn().mockResolvedValue({
+          expectedAmountOut: { amount: BigInt(1e18), token: { decimals: 18 } },
+        }),
+        buildCall: vi.fn().mockReturnValue({
+          callData: '0xmock',
+          value: BigInt(0),
+          to: '0x' + '5'.repeat(40),
+        }),
+      }
+    }),
   }
 })
 
