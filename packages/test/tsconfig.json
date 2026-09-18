@@ -3,7 +3,6 @@
   "compilerOptions": {
     "module": "esnext",
     "types": ["node", "vitest/globals"],
-    "baseUrl": ".",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "paths": {
       "@repo/*": ["../*"]

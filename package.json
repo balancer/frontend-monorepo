@@ -51,7 +51,7 @@
     "stylelint-config-standard": "40.0.0",
     "stylelint-prettier": "5.0.3",
     "turbo": "2.10.12",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "vitest": "4.1.11",
     "vitest-mock-extended": "4.0.0"
   },
