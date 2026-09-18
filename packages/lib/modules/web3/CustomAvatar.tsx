@@ -1,5 +1,5 @@
 import { Image, ImageProps } from '@chakra-ui/react'
-import { AvatarComponentProps } from '@rainbow-me/rainbowkit/dist/components/RainbowKitProvider/AvatarContext'
+import { EmojiAvatarProps } from '@rainbow-me/rainbowkit/components'
 
 export function CustomAvatar({
   address,
@@ -7,7 +7,7 @@ export function CustomAvatar({
   size,
   alt,
   ...props
-}: ImageProps & AvatarComponentProps) {
+}: ImageProps & EmojiAvatarProps) {
   const avatarUrl = ensImage ? ensImage : `https://api.dicebear.com/7.x/thumbs/svg?seed=${address}`
 
   return <Image alt={alt} height={size} src={avatarUrl} width={size} {...props} />

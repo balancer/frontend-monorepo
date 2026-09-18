@@ -1,10 +1,13 @@
-import { RainbowKitDetails } from '@rainbow-me/rainbowkit/dist/wallets/Wallet'
+import { WalletDetailsParams } from '@rainbow-me/rainbowkit'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { Address } from 'viem'
 import { CreateConnectorFn } from 'wagmi'
 import { customMock } from './customMock'
 
 type Params = { index: number; impersonationAddress?: Address }
+
+// RainbowKitDetails is not publicly exported; derive it from the public WalletDetailsParams type
+type RainbowKitDetails = WalletDetailsParams['rkDetails']
 
 export function createMockConnector({ index, impersonationAddress }: Params) {
   // Default WC RkDetails

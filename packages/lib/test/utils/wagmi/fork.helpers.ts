@@ -1,4 +1,4 @@
-import { Address, createPublicClient, createTestClient, http, isAddress } from 'viem'
+import { Address, createPublicClient, createTestClient, http, isAddress, PublicClient } from 'viem'
 import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
 import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
@@ -30,7 +30,7 @@ export const forkClient = createTestClient({
 })
 
 // Only used to get the running fork chainId
-export const publicForkClient = createPublicClient({
+export const publicForkClient: PublicClient = createPublicClient({
   transport: http(defaultAnvilForkRpcUrl),
 })
 

@@ -177,7 +177,7 @@ function useTxReceipt({
     historicReceiptQuery.isLoading ||
     transactionQuery.isLoading
 
-  const error = historicReceiptQuery.error || transactionQuery.error
+  const error: Error | null = historicReceiptQuery.error || transactionQuery.error
 
   const data =
     !isLoading && !error

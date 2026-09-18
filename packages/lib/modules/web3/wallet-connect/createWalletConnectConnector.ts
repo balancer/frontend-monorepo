@@ -1,9 +1,12 @@
-import { RainbowKitDetails } from '@rainbow-me/rainbowkit/dist/wallets/Wallet'
+import { WalletDetailsParams } from '@rainbow-me/rainbowkit'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { walletConnect, WalletConnectParameters } from 'wagmi/connectors'
 import { CreateConnectorFn } from 'wagmi'
 
 type Params = { index: number; walletConnectProjectId: string }
+
+// RainbowKitDetails is not publicly exported; derive it from the public WalletDetailsParams type
+type RainbowKitDetails = WalletDetailsParams['rkDetails']
 
 export function createWalletConnectConnector({ index, walletConnectProjectId }: Params) {
   // Default WC RkDetails
