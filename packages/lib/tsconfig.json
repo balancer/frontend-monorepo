@@ -3,7 +3,6 @@
   "compilerOptions": {
     "module": "esnext",
     "types": ["vitest/globals"],
-    "baseUrl": ".",
     "paths": {
       "@repo/lib/*": ["../../packages/lib/*"],
       "@repo/test/*": ["../../packages/test/*"]
