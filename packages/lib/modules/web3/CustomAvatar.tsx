@@ -8,7 +8,7 @@ export function CustomAvatar({
   alt,
   ...props
 }: ImageProps & EmojiAvatarProps) {
-  const avatarUrl = ensImage ? ensImage : `https://api.dicebear.com/7.x/thumbs/svg?seed=${address}`
+  const avatarUrl = ensImage ? ensImage : `https://api.dicebear.com/10.x/thumbs/svg?seed=${address}`
 
   return <Image alt={alt} height={size} src={avatarUrl} width={size} {...props} />
 }

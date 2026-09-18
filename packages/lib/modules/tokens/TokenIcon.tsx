@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { createAvatar } from '@dicebear/core'
-import { identicon } from '@dicebear/collection'
 import { Address } from 'viem'
 import { useTokens } from './TokensProvider'
 import { Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
@@ -9,6 +7,10 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { SmartCircularImage } from '@repo/lib/shared/components/image/SmartCircularImage'
 import { getTokenColor } from '@repo/lib/styles/token-colors'
 import { proxyExternalImageUrl } from '../pool/utils/image-proxy'
+import { Avatar, Style } from '@dicebear/core'
+import identicon from '@dicebear/styles/identicon.json' with { type: 'json' }
+
+const identiconStyle = new Style(identicon)
 
 type Props = {
   address?: Address | string
@@ -44,12 +46,10 @@ export function TokenIcon({
       ? { rowColor: [getTokenColor(chain, address as Address).from.replace('#', '')] }
       : {}
 
-  const fallbackSVG = createAvatar(identicon, {
+  const fallbackSVG = new Avatar(identiconStyle, {
     seed: address || 'unknown',
-    backgroundColor: ['transparent'],
-    radius: 50,
-    backgroundType: ['solid'],
-    scale: 80,
+    borderRadius: 50,
+    scale: 0.8,
     ...tokenColor,
   })
 

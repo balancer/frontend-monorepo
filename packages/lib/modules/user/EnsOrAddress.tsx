@@ -4,11 +4,13 @@ import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useEnsAvatar, useEnsName } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
-import { createAvatar } from '@dicebear/core'
-import { identicon } from '@dicebear/collection'
+import { Avatar, Style } from '@dicebear/core'
+import identicon from '@dicebear/styles/identicon.json' with { type: 'json' }
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { HStack, Image, Link, Text } from '@chakra-ui/react'
 import { ArrowUpRight } from 'lucide-react'
+
+const identiconStyle = new Style(identicon)
 
 export function EnsOrAddress({
   userAddress,
@@ -25,7 +27,7 @@ export function EnsOrAddress({
     chainId,
   })
 
-  const fallbackSVG = createAvatar(identicon, {
+  const fallbackSVG = new Avatar(identiconStyle, {
     seed: userAddress || 'unknown',
   })
 
