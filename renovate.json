@@ -170,19 +170,6 @@
       "description": "Keep @x402 packages in sync.",
       "groupName": "@x402",
       "matchPackageNames": ["@x402/**"]
-    },
-    {
-      "description": "Block GraphQL / Apollo major upgrades except the four codegen packages we just migrated (they follow their own cadence).",
-      "matchPackageNames": [
-        "graphql",
-        "graphql-request",
-        "graphql-tag",
-        "@apollo/client",
-        "@apollo/client-integration-nextjs",
-        "@graphql-typed-document-node/core"
-      ],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
     }
   ]
 }
