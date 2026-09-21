@@ -1,4 +1,5 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
+import { Mock } from 'vitest'
 
 export const testQueryClient = () =>
   new QueryClient({
@@ -23,7 +24,18 @@ export const testQueryClient = () =>
     }),
   })
 
-export function aSuccessfulQueryResultMock() {
+export function aSuccessfulQueryResultMock(): {
+  status: 'success'
+  isLoading: false
+  isPending: false
+  isLoadingError: false
+  isRefetchError: false
+  isRefetching: false
+  isSuccess: true
+  isError: false
+  error: null
+  refetch: Mock
+} {
   return {
     status: 'success',
     isLoading: false,
@@ -35,5 +47,5 @@ export function aSuccessfulQueryResultMock() {
     isError: false,
     error: null,
     refetch: vi.fn(),
-  } as const
+  }
 }

@@ -15,6 +15,9 @@ export function createIntegrationVitestConfig(monorepoRoot: string): ViteUserCon
 
   const integrationTestOptions: Partial<InlineConfig> = {
     include: ['./**/*.integration.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    // The base config excludes integration specs from the unit run; this config
+    // selects them, so it must not inherit that exclusion.
+    exclude: ['**/node_modules/**'],
     // Integration tests call third-party endpoints (Balancer API, raw.githubusercontent.com)
     // that do not answer a browser preflight. happy-dom's fetch enforces the same-origin
     // policy, which blocks those responses and doubles every cross-origin POST with an
