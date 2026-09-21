@@ -167,7 +167,7 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: balancer
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
       E2E_SHARD: ${{ matrix.shard }}
-      E2E_FORK_BLOCK_NUMBER: 25900000
+      E2E_FORK_BLOCK_NUMBER: 26000000
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup
