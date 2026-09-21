@@ -503,8 +503,8 @@ importers:
         specifier: 1.2.1
         version: 1.2.1
       eslint-plugin-turbo:
-        specifier: 2.10.12
-        version: 2.10.12(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(turbo@2.10.12)
+        specifier: 2.10.13
+        version: 2.10.13(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(turbo@2.10.12)
       globals:
         specifier: 17.12.0
         version: 17.12.0
@@ -5698,8 +5698,8 @@ packages:
       eslint: '*'
       typescript: '*'
 
-  eslint-plugin-turbo@2.10.12:
-    resolution: {integrity: sha512-QZ9u3sV3ky4bl3XUpsVG8Ehk11I0omsGV2K7dCDut6sGvaVErFvWbgd46oh5tsnLt/5i+KvuOWgKJneleMqk2Q==}
+  eslint-plugin-turbo@2.10.13:
+    resolution: {integrity: sha512-pmeUnTwKBA6CMjmKxmux/CW5oOrCzysT171slRJywQy4snfd6BHtB+RQ/+iuzU6Idt3kI8nmnDcWnZdm8DOZdA==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -15032,7 +15032,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-turbo@2.10.12(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(turbo@2.10.12):
+  eslint-plugin-turbo@2.10.13(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(turbo@2.10.12):
     dependencies:
       dotenv: 16.0.3
       eslint: 10.10.0(jiti@2.7.0)(supports-color@10.2.2)
