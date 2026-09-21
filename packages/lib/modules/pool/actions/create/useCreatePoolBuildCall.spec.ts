@@ -9,9 +9,9 @@ vi.mock('@balancer/sdk', async () => {
   const actual = await vi.importActual<typeof import('@balancer/sdk')>('@balancer/sdk')
   return {
     ...actual,
-    CreatePool: vi.fn().mockImplementation(() => ({
-      buildCall: vi.fn(),
-    })),
+    CreatePool: vi.fn().mockImplementation(function () {
+      return { buildCall: vi.fn() }
+    }),
   }
 })
 
@@ -67,7 +67,9 @@ describe('useCreatePoolBuildCall', () => {
 
     const mockInstance = { buildCall: vi.fn().mockReturnValue(mockBuildCall) }
 
-    ;(CreatePool as ReturnType<typeof vi.fn>).mockImplementation(() => mockInstance)
+    ;(CreatePool as ReturnType<typeof vi.fn>).mockImplementation(function () {
+      return mockInstance
+    })
 
     ;(useUserAccount as ReturnType<typeof vi.fn>).mockReturnValue({
       userAddress: defaultTestUserAccount,
@@ -149,7 +151,9 @@ describe('useCreatePoolBuildCall', () => {
 
     const mockInstance = { buildCall: vi.fn() }
 
-    ;(CreatePool as ReturnType<typeof vi.fn>).mockImplementation(() => mockInstance)
+    ;(CreatePool as ReturnType<typeof vi.fn>).mockImplementation(function () {
+      return mockInstance
+    })
 
     const { useUserAccount } = await import('@repo/lib/modules/web3/UserAccountProvider')
 

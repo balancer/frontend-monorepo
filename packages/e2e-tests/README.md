@@ -46,8 +46,10 @@ whole spec files to each job. Keep that granularity: the specs share fork state 
 test-level `--shard` cuts those groups apart and the later half fails. Add a spec and it is picked
 up automatically — no list to rebalance.
 
-CI forks mainnet and sonic at a pinned block (the anvil steps in `.github/workflows/checks.yml`) so
-runs are reproducible. Bump it to a recent block if specs start failing on stale pool state.
+CI forks mainnet and sonic at a freshly resolved block (a small `E2E_FORK_BLOCK_BUFFER` behind chain
+head, see `.github/workflows/checks.yml`) so runs stay reproducible within a job without the fork
+drifting stale against the API. When running anvil locally, either omit `--fork-block-number` or
+pass a recent block for the same reason.
 
 ## Local E2E tests
 

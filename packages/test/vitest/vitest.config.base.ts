@@ -21,10 +21,11 @@ export function createVitestConfig(monorepoRoot: string): ViteUserConfig {
         provider: 'v8',
         reporter: process.env.SILENT_TESTS ? ['lcov'] : ['text', 'lcov'],
       },
-      include: [
-        './**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-        '!./**/*.integration.{test,spec}.*',
-        '!./**/*.script.{test,spec}.*',
+      include: ['./**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+      exclude: [
+        '**/node_modules/**',
+        '**/*.integration.{test,spec}.*',
+        '**/*.script.{test,spec}.*',
       ],
       setupFiles: [
         resolveFromRoot('./packages/lib/test/vitest/setup-sentry.ts'),
