@@ -144,7 +144,44 @@ jobs:
             ./packages/e2e-tests/test-results/
           retention-days: 30
 
+  # Resolve the fork blocks once per run so all four dev forks (3 Balancer shards
+  # + Beets) share one block, and the block is floored to a bucket so runs within
+  # the same window fork at the identical block and hit drpc's warm state cache
+  # instead of re-reading the trie at a fresh head every run. Max staleness =
+  # depth + bucket: ~8h mainnet, ~6h sonic — recent enough to match the test API
+  # indexer (a pinned block drifted stale for weeks: PR #2811/#2812).
+  Resolve-Fork-Blocks:
+    runs-on: ubuntu-latest
+    outputs:
+      mainnet: ${{ steps.mainnet.outputs.block }}
+      sonic: ${{ steps.sonic.outputs.block }}
+    env:
+      # Reorg-safety depth and bucket size, per chain (mainnet ~12s blocks,
+      # sonic ~1s blocks).
+      MAINNET_MIN_DEPTH: 500
+      MAINNET_BUCKET: 2000
+      SONIC_MIN_DEPTH: 1000
+      SONIC_BUCKET: 20000
+    steps:
+      - name: Set up foundry (includes cast)
+        uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
+      - name: Resolve mainnet fork block
+        id: mainnet
+        run: |
+          LATEST=$(cast block-number --rpc-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}")
+          BLOCK=$(( (LATEST - MAINNET_MIN_DEPTH) / MAINNET_BUCKET * MAINNET_BUCKET ))
+          echo "Forking mainnet at block $BLOCK (latest: $LATEST)"
+          echo "block=$BLOCK" >> "$GITHUB_OUTPUT"
+      - name: Resolve sonic fork block
+        id: sonic
+        run: |
+          LATEST=$(cast block-number --rpc-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}")
+          BLOCK=$(( (LATEST - SONIC_MIN_DEPTH) / SONIC_BUCKET * SONIC_BUCKET ))
+          echo "Forking sonic at block $BLOCK (latest: $LATEST)"
+          echo "block=$BLOCK" >> "$GITHUB_OUTPUT"
+
   E2E-Dev-Test-Balancer:
+    needs: Resolve-Fork-Blocks
     timeout-minutes: 25
     runs-on: ubuntu-latest
     container:
@@ -167,21 +204,13 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: balancer
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
       E2E_SHARD: ${{ matrix.shard }}
-      # Fork this many blocks behind head so the fork stays slightly behind the
-      # test API indexer (and clear of reorgs) instead of drifting stale.
-      E2E_FORK_BLOCK_BUFFER: 100
+      E2E_FORK_BLOCK_NUMBER: ${{ needs.Resolve-Fork-Blocks.outputs.mainnet }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
-      - name: Resolve mainnet fork block
-        run: |
-          LATEST=$(cast block-number --rpc-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}")
-          FORK_BLOCK=$((LATEST - E2E_FORK_BLOCK_BUFFER))
-          echo "Forking mainnet at block $FORK_BLOCK (latest: $LATEST)"
-          echo "E2E_FORK_BLOCK_NUMBER=$FORK_BLOCK" >> "$GITHUB_ENV"
       - name: Start anvil fork in mainnet
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --fork-block-number ${{ env.E2E_FORK_BLOCK_NUMBER }} --fork-retry-backoff 1000 --no-rate-limit --port 8545 &
       - name: Run Playwright dev tests (Balancer shard ${{ matrix.shard }})
@@ -196,6 +225,7 @@ jobs:
           retention-days: 30
 
   E2E-Dev-Test-Beets:
+    needs: Resolve-Fork-Blocks
     timeout-minutes: 25
     runs-on: ubuntu-latest
     container:
@@ -204,20 +234,13 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: beets
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-      # Same idea as the mainnet fork; sonic blocks are ~1s so the buffer is larger.
-      E2E_FORK_BLOCK_BUFFER: 1000
+      E2E_FORK_BLOCK_NUMBER: ${{ needs.Resolve-Fork-Blocks.outputs.sonic }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
-      - name: Resolve sonic fork block
-        run: |
-          LATEST=$(cast block-number --rpc-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}")
-          FORK_BLOCK=$((LATEST - E2E_FORK_BLOCK_BUFFER))
-          echo "Forking sonic at block $FORK_BLOCK (latest: $LATEST)"
-          echo "E2E_FORK_BLOCK_NUMBER=$FORK_BLOCK" >> "$GITHUB_ENV"
       - name: Start anvil fork in sonic
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --fork-block-number ${{ env.E2E_FORK_BLOCK_NUMBER }} --fork-retry-backoff 1000 --no-rate-limit --port 8545 &
       - name: Run Playwright dev tests (Beets)
