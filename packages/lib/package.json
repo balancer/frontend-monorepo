@@ -46,7 +46,7 @@
     "@sentry/nextjs": "10.74.0",
     "@tanstack/react-query": "5.102.8",
     "@tanstack/react-query-devtools": "5.102.8",
-    "@walletconnect/ethereum-provider": "2.24.0",
+    "@walletconnect/ethereum-provider": "2.25.0",
     "@x402/core": "2.25.0",
     "@x402/evm": "2.25.0",
     "@x402/extensions": "2.25.0",
