@@ -132,6 +132,11 @@
       "enabled": false
     },
     {
+      "description": "Block TypeScript 7 until typescript-eslint supports it (tracked in #2828).",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7.0.0"
+    },
+    {
       "description": "Block @nktkas/hyperliquid updates. The library introduces frequent breaking changes (client redesigns, schema refactors, renamed parameters) between minor versions. Updating past 0.23.1 would require significant refactoring of packages/lib/modules/chains/hyperevm/useHyperEvm.ts.",
       "matchPackageNames": ["@nktkas/hyperliquid"],
       "enabled": false
