@@ -573,7 +573,7 @@ importers:
         version: 0.23.1
       '@rainbow-me/rainbowkit':
         specifier: 2.2.11
-        version: 2.2.11(869913b61beaebb82847e2ad6cf23336)
+        version: 2.2.11(f40ec491adb5dad1eff6365741ad0923)
       '@safe-global/safe-apps-provider':
         specifier: 0.18.6
         version: 0.18.6(typescript@6.0.3)(zod@3.25.76)
@@ -591,19 +591,19 @@ importers:
         version: 5.102.8(@tanstack/react-query@5.102.8(react@19.3.0))(react@19.3.0)
       '@walletconnect/ethereum-provider':
         specifier: 2.25.0
-        version: 2.25.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
+        version: 2.25.0(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@x402/core':
-        specifier: 2.25.0
-        version: 2.25.0
+        specifier: 2.26.0
+        version: 2.26.0
       '@x402/evm':
-        specifier: 2.25.0
-        version: 2.25.0(typescript@6.0.3)
+        specifier: 2.26.0
+        version: 2.26.0(typescript@6.0.3)
       '@x402/extensions':
-        specifier: 2.25.0
-        version: 2.25.0(typescript@6.0.3)
+        specifier: 2.26.0
+        version: 2.26.0(typescript@6.0.3)
       '@x402/svm':
-        specifier: 2.25.0
-        version: 2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3))
+        specifier: 2.26.0
+        version: 2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3))
       bignumber.js:
         specifier: 11.1.5
         version: 11.1.5
@@ -4551,17 +4551,17 @@ packages:
     resolution: {integrity: sha512-FNoYzHawTMk/6KMQoEG5O4PuioX19UbwdQKF44yw0nLfOypfQdjtfZzo/UIJWAJ23sNIFbD1Ug9lbaDGMwbqQA==}
     engines: {node: '>=8'}
 
-  '@x402/core@2.25.0':
-    resolution: {integrity: sha512-5Ys0XYz3FKutxVKoXC46R/XPT/oaAbuj7ahzrlVHwQxZJPH9u6u91IOh0ztz+7G/zYGsaXR8l3ety205QtEnUw==}
+  '@x402/core@2.26.0':
+    resolution: {integrity: sha512-8dlXip9u0JjyELzzFz48vntuMajvUjA8IYpitfaW423m53bR49amZDIn3n4gXRYoNEKzGB9Rtn8at35WHz61cA==}
 
-  '@x402/evm@2.25.0':
-    resolution: {integrity: sha512-EmnL4MyGW8weEUlq0qC1uJUeoBmtp9GWGwyPl+qkC0CYItRHn748puhYAxK8GsrofscQrt63HsFCB0Gp3iEROA==}
+  '@x402/evm@2.26.0':
+    resolution: {integrity: sha512-dcDxdWsEqyqmr0BsTXbvDNbL2KCjSvqcQV6VtSu7eTeDmi6RfI/T4IPSst5iI8M2Ys34Wc48AikJepuE7Bojgw==}
 
-  '@x402/extensions@2.25.0':
-    resolution: {integrity: sha512-7gXpYoHX8CkQ4bwUfzx0GS6VQlx810+GiGOAYhwsbTtIZFt/ahz/5CjCs7qfoKYcgAWcVyvBCl9U3FYYBX01nA==}
+  '@x402/extensions@2.26.0':
+    resolution: {integrity: sha512-ItD85ryWsUa86TV8AjtY31SYqZhnnhoVKuVihtmv6r1cuLTgIxE21ugZmGswbLkS+rTvP0gy3M/6xp00i5S5lQ==}
 
-  '@x402/svm@2.25.0':
-    resolution: {integrity: sha512-Xs0GbtmVGiDiFz6RAuJXh0DFRbbpfXqlZzZQjX2k7O78G4gX2+segX6Aw76u4wWax7Xx+HGUBj68YPuyfPQBnw==}
+  '@x402/svm@2.26.0':
+    resolution: {integrity: sha512-mQGqErpM9D0Z0CMH3JLiFlsFQymwwO8Y7ykCTujpI3jatO3d1Xp5RdO6m55gwoYkGqZb+xdr/hSQTb0sSa8PPQ==}
     peerDependencies:
       '@solana/kit': '>=5.1.0'
 
@@ -9148,9 +9148,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@base-org/account@2.4.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
+  '@base-org/account@2.4.0(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
-      '@coinbase/cdp-sdk': 1.56.0(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
+      '@coinbase/cdp-sdk': 1.56.0(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       '@noble/hashes': 1.4.0
       clsx: 1.2.1
       eventemitter3: 5.0.1
@@ -9474,7 +9474,7 @@ snapshots:
       fast-wrap-ansi: 0.2.2
       sisteransi: 1.0.5
 
-  '@coinbase/cdp-sdk@1.56.0(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)':
+  '@coinbase/cdp-sdk@1.56.0(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)':
     dependencies:
       '@solana-program/system': 0.10.0(@solana/kit@5.5.1(typescript@6.0.3))
       '@solana-program/token': 0.9.0(@solana/kit@5.5.1(typescript@6.0.3))
@@ -9489,10 +9489,10 @@ snapshots:
       viem: 2.56.0(typescript@6.0.3)(zod@3.25.76)
       zod: 3.25.76
     optionalDependencies:
-      '@x402/core': 2.25.0
-      '@x402/evm': 2.25.0(typescript@6.0.3)
-      '@x402/extensions': 2.25.0(typescript@6.0.3)
-      '@x402/svm': 2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3))
+      '@x402/core': 2.26.0
+      '@x402/evm': 2.26.0(typescript@6.0.3)
+      '@x402/extensions': 2.26.0(typescript@6.0.3)
+      '@x402/svm': 2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3))
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -11392,7 +11392,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.2': {}
 
-  '@rainbow-me/rainbowkit@2.2.11(869913b61beaebb82847e2ad6cf23336)':
+  '@rainbow-me/rainbowkit@2.2.11(f40ec491adb5dad1eff6365741ad0923)':
     dependencies:
       '@tanstack/react-query': 5.102.8(react@19.3.0)
       '@vanilla-extract/css': 1.20.1(babel-plugin-macros@3.1.0)
@@ -11457,12 +11457,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-pay@1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
+  '@reown/appkit-pay@1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@6.0.3)(zod@3.25.76)
       '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@6.0.3)(zod@3.25.76)
       '@reown/appkit-ui': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@6.0.3)(zod@3.25.76)
-      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
       lit: 3.3.0
       valtio: 2.1.7(@types/react@19.3.0)(react@19.3.0)
     transitivePeerDependencies:
@@ -11506,13 +11506,13 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@reown/appkit-scaffold-ui@1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)':
+  '@reown/appkit-scaffold-ui@1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@6.0.3)(zod@3.25.76)
       '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@6.0.3)(zod@3.25.76)
-      '@reown/appkit-pay': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit-pay': 1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@reown/appkit-ui': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@6.0.3)(zod@3.25.76)
-      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
       '@reown/appkit-wallet': 1.8.19(typescript@6.0.3)
       lit: 3.3.0
     transitivePeerDependencies:
@@ -11589,7 +11589,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-utils@1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)':
+  '@reown/appkit-utils@1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@6.0.3)(zod@3.25.76)
       '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@6.0.3)(zod@3.25.76)
@@ -11601,7 +11601,7 @@ snapshots:
       valtio: 2.1.7(@types/react@19.3.0)(react@19.3.0)
       viem: 2.56.0(typescript@6.0.3)(zod@3.25.76)
     optionalDependencies:
-      '@base-org/account': 2.4.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
+      '@base-org/account': 2.4.0(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@safe-global/safe-apps-provider': 0.18.6(typescript@6.0.3)(zod@3.25.76)
       '@safe-global/safe-apps-sdk': 9.1.0(typescript@6.0.3)(zod@3.25.76)
     transitivePeerDependencies:
@@ -11652,15 +11652,15 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@reown/appkit@1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
+  '@reown/appkit@1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
       '@reown/appkit-common': 1.8.19(typescript@6.0.3)(zod@3.25.76)
       '@reown/appkit-controllers': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@6.0.3)(zod@3.25.76)
-      '@reown/appkit-pay': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit-pay': 1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@reown/appkit-polyfills': 1.8.19
-      '@reown/appkit-scaffold-ui': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit-scaffold-ui': 1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
       '@reown/appkit-ui': 1.8.19(@types/react@19.3.0)(react@19.3.0)(typescript@6.0.3)(zod@3.25.76)
-      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit-utils': 1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(valtio@2.1.7(@types/react@19.3.0)(react@19.3.0))(zod@3.25.76)
       '@reown/appkit-wallet': 1.8.19(typescript@6.0.3)
       '@walletconnect/universal-provider': 2.23.7(typescript@6.0.3)(zod@3.25.76)
       bs58: 6.0.0
@@ -11839,7 +11839,7 @@ snapshots:
 
   '@scure/bip32@1.7.0':
     dependencies:
-      '@noble/curves': 1.9.1
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
 
@@ -13031,7 +13031,7 @@ snapshots:
       '@metamask/connect-evm': 2.1.1(supports-color@10.2.2)
       '@safe-global/safe-apps-provider': 0.18.6(typescript@6.0.3)(zod@3.25.76)
       '@safe-global/safe-apps-sdk': 9.1.0(typescript@6.0.3)(zod@3.25.76)
-      '@walletconnect/ethereum-provider': 2.25.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
+      '@walletconnect/ethereum-provider': 2.25.0(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       typescript: 6.0.3
 
   '@wagmi/core@3.6.5(@tanstack/query-core@5.102.8)(@types/react@19.3.0)(react@19.3.0)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(viem@2.56.0(typescript@6.0.3)(zod@3.25.76))':
@@ -13147,9 +13147,9 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/ethereum-provider@2.25.0(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
+  '@walletconnect/ethereum-provider@2.25.0(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)':
     dependencies:
-      '@reown/appkit': 1.8.19(@types/react@19.3.0)(@x402/core@2.25.0)(@x402/evm@2.25.0(typescript@6.0.3))(@x402/extensions@2.25.0(typescript@6.0.3))(@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
+      '@reown/appkit': 1.8.19(@types/react@19.3.0)(@x402/core@2.26.0)(@x402/evm@2.26.0(typescript@6.0.3))(@x402/extensions@2.26.0(typescript@6.0.3))(@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3)))(debug@4.4.3(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2)(typescript@6.0.3)(use-sync-external-store@1.4.0(react@19.3.0))(zod@3.25.76)
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/keyvaluestorage': 1.1.1
       '@walletconnect/types': 2.25.0
@@ -13707,13 +13707,13 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@x402/core@2.25.0':
+  '@x402/core@2.26.0':
     dependencies:
       zod: 3.25.76
 
-  '@x402/evm@2.25.0(typescript@6.0.3)':
+  '@x402/evm@2.26.0(typescript@6.0.3)':
     dependencies:
-      '@x402/core': 2.25.0
+      '@x402/core': 2.26.0
       viem: 2.56.0(typescript@6.0.3)(zod@3.25.76)
       zod: 3.25.76
     transitivePeerDependencies:
@@ -13721,12 +13721,12 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@x402/extensions@2.25.0(typescript@6.0.3)':
+  '@x402/extensions@2.26.0(typescript@6.0.3)':
     dependencies:
       '@noble/curves': 1.9.7
       '@scure/base': 1.2.6
       '@signinwithethereum/siwe': 4.2.1(viem@2.56.0(typescript@6.0.3)(zod@3.25.76))
-      '@x402/core': 2.25.0
+      '@x402/core': 2.26.0
       ajv: 8.20.0
       jose: 5.10.0
       tweetnacl: 1.0.3
@@ -13738,14 +13738,14 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@x402/svm@2.25.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3))':
+  '@x402/svm@2.26.0(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3))':
     dependencies:
       '@noble/hashes': 1.8.0
       '@solana-program/compute-budget': 0.11.0(@solana/kit@5.5.1(typescript@6.0.3))
       '@solana-program/token': 0.9.0(@solana/kit@5.5.1(typescript@6.0.3))
       '@solana-program/token-2022': 0.6.1(@solana/kit@5.5.1(typescript@6.0.3))(@solana/sysvars@5.5.1(typescript@6.0.3))
       '@solana/kit': 5.5.1(typescript@6.0.3)
-      '@x402/core': 2.25.0
+      '@x402/core': 2.26.0
     transitivePeerDependencies:
       - '@solana/sysvars'
 
