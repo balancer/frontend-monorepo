@@ -46,11 +46,8 @@ whole spec files to each job. Keep that granularity: the specs share fork state 
 test-level `--shard` cuts those groups apart and the later half fails. Add a spec and it is picked
 up automatically — no list to rebalance.
 
-CI resolves the fork block for mainnet and sonic once per run (the `Resolve-Fork-Blocks` job in
-`.github/workflows/checks.yml`): head minus a reorg-safety depth, floored to a bucket. All shards
-then fork at the _same_ block, so runs within a bucket window reuse drpc's warm state cache instead
-of re-reading a fresh head every run — while the block stays recent enough to match the test API
-indexer. When running anvil locally, either omit `--fork-block-number` or pass a recent block.
+CI forks mainnet and sonic at a pinned block (the anvil steps in `.github/workflows/checks.yml`) so
+runs are reproducible. Bump it to a recent block if specs start failing on stale pool state.
 
 ## Local E2E tests
 
