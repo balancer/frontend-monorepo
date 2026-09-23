@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 import { configure } from '@testing-library/react'
 import { apolloTestClient } from '../../../test/utils/apollo-test-client'
 
