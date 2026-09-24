@@ -2,6 +2,7 @@ import { Page, expect } from '@playwright/test'
 import { setErc20Balance } from '@repo/lib/test/anvil/useSetErc20Balance'
 import { defaultManualForkOptions } from '@repo/lib/test/utils/wagmi/fork-options'
 import { forkClient, impersonatedAddressStorageKey } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 
 type Address = `0x${string}`
 
@@ -14,10 +15,24 @@ type Address = `0x${string}`
 export async function impersonate(page: Page, impersonationAddress: Address) {
   await fundImpersonatedAccount(impersonationAddress)
 
-  await page.addInitScript(({ key, address }) => window.localStorage.setItem(key, address), {
-    key: impersonatedAddressStorageKey,
-    address: impersonationAddress,
-  })
+  await page.addInitScript(
+    ({ addressKey, address, hasV1PoolsKey, hasV1PoolsAddressKey }) => {
+      window.localStorage.setItem(addressKey, address)
+      /*
+        Seeds a "no V1 positions" answer for this address so useLegacyV1Positions skips its sweep.
+        Playwright gives each test a fresh profile, so without this every test re-scans all 3215
+        mainnet V1 pool contracts against the fork.
+      */
+      window.localStorage.setItem(hasV1PoolsKey, 'false')
+      window.localStorage.setItem(hasV1PoolsAddressKey, address)
+    },
+    {
+      addressKey: impersonatedAddressStorageKey,
+      address: impersonationAddress,
+      hasV1PoolsKey: LS_KEYS.HasV1Pools,
+      hasV1PoolsAddressKey: `${LS_KEYS.HasV1Pools}:address`,
+    },
+  )
 
   await page.reload({ waitUntil: 'commit' })
   await waitForConnected(page)
