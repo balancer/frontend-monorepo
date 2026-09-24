@@ -3,15 +3,21 @@ import { clickButton, selectPopularToken } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
-test.skip(true, 'Migrated to beets: tests/dev/beets/swap.spec.ts')
+/*
+  Ported from tests/dev/balancer/swap.spec.ts
 
-test('Swap 1 ETH to GHO)', async ({ page }) => {
-  await page.goto('http://localhost:3000/swap/ethereum/ETH')
+  Balancer swaps native ETH for GHO on the mainnet fork; Beets swaps native S for USDC.e on the
+  Sonic fork. The token in is passed as the native address because, unlike mainnet's popularTokens,
+  the Sonic config has no entry for the native asset so a "S" slug would not resolve
+  (see SwapProvider.setInitialTokenIn).
+*/
+test('Swap 0.1 S to USDC', async ({ page }) => {
+  await page.goto('http://localhost:3001/swap/sonic/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 
   await impersonate(page, defaultAnvilAccount)
 
   await page.getByRole('textbox', { name: 'TokenIn' }).fill('0.1')
-  await selectPopularToken(page, 'GHO')
+  await selectPopularToken(page, 'USDC')
   await clickButton(page, 'Next')
 
   await clickButton(page, 'Swap')
