@@ -31,9 +31,9 @@ import {
 } from 'viem'
 import { erc20Abi } from 'viem'
 import { aWjAuraWethPoolElementMock } from '../msw/builders/gqlPoolElement.builders'
-import { mainnet } from 'viem/chains'
+import { sonic } from 'viem/chains'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { sonicTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 
 /*
@@ -43,8 +43,8 @@ import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
   - Check the new state of the pool after the test updates (i.e check the balances of the tokens in the pool)
 */
 export async function getSdkTestUtils({
-  client = mainnetTestPublicClient,
-  chainId = ChainId.MAINNET,
+  client = sonicTestPublicClient,
+  chainId = sonic.id as ChainId,
   account = defaultTestUserAccount,
   pool = aWjAuraWethPoolElementMock(),
 }: {
@@ -75,7 +75,7 @@ export async function getSdkTestUtils({
       address: token,
       abi: erc20Abi,
       functionName: 'approve',
-      args: [VAULT_V2[client?.chain?.id || mainnet.id] || ZERO_ADDRESS, amount],
+      args: [VAULT_V2[client?.chain?.id || sonic.id] || ZERO_ADDRESS, amount],
     })
 
     const txReceipt = await client.waitForTransactionReceipt({

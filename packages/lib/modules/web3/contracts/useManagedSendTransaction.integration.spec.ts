@@ -3,7 +3,7 @@ import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { act, waitFor } from '@testing-library/react'
 import { encodeFunctionData, erc20Abi, parseUnits } from 'viem'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
-import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { sonicTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { useManagedSendTransaction } from './useManagedSendTransaction'
 import { TransactionConfig } from './contract.types'
 import {
@@ -54,10 +54,7 @@ describe('useManagedSendTransaction', () => {
     })
 
     const transactionReceipt = await act(async () =>
-      mainnetTestPublicClient.waitForTransactionReceipt({
-        hash: hash!,
-        chainId: SONIC_CHAIN_ID,
-      })
+      sonicTestPublicClient.waitForTransactionReceipt({ hash: hash! })
     )
 
     expect(transactionReceipt.status).to.eq('success')

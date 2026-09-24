@@ -101,6 +101,14 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
 }
 
 /*
+  Chains that get a running anvil fork. Each fork costs a proxy, an anvil process and a warm-up
+  round trip against its upstream rpc, so only Sonic is forked: the suite runs as Beets and the
+  Beets app only supports Sonic. testWagmiConfig and the test clients are derived from this list,
+  so adding a chain here is the single place to change.
+*/
+export const forkedChainIds: ChainIdWithFork[] = [sonic.id]
+
+/*
     In vitest, each thread is assigned a unique numerical id (`process.env.VITEST_POOL_ID`).
     When jobId is provided, the fork proxy uses this id to create a different local rpc url (e.g. `http://127.0.0.1:/port/jobId>/`
     so that tests can be run in parallel (depending on the number of threads of the host machine)

@@ -1,41 +1,25 @@
-import { alternativeTestUserAccount, defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { setUserTokenBalance } from '@repo/lib/test/integration/sdk-utils'
-import {
-  baseTestPublicClient,
-  sonicTestPublicClient,
-} from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { sonicTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { erc20Abi } from 'viem'
 import { ChainContractConfig, useMulticall } from './useMulticall'
-import { base, sonic } from 'viem/chains'
+import { sonic } from 'viem/chains'
 import { sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
 
-describe('Performs multicall in multiple chains', () => {
+describe('Performs multicall on the Sonic fork', () => {
   beforeAll(async () => {
-    await Promise.all([
-      setUserTokenBalance({
-        client: sonicTestPublicClient,
-        account: defaultTestUserAccount,
-        tokenAddress: sonicTokens.ws,
-        slot: 0,
-        balance: 1n,
-      }),
-      setUserTokenBalance({
-        client: baseTestPublicClient,
-        account: defaultTestUserAccount,
-        tokenAddress: '0x4200000000000000000000000000000000000006',
-        slot: 3,
-        balance: 7702n,
-      }),
-      sonicTestPublicClient.setBalance({
-        address: alternativeTestUserAccount,
-        value: 721n,
-      }),
-    ])
+    await setUserTokenBalance({
+      client: sonicTestPublicClient,
+      account: defaultTestUserAccount,
+      tokenAddress: sonicTokens.ws,
+      slot: 0,
+      balance: 1n,
+    })
   })
 
-  const sonicRequest: ChainContractConfig = {
+  const wsBalanceRequest: ChainContractConfig = {
     id: 'wsBalanceOnSonic',
     chainId: sonic.id,
     abi: erc20Abi,
@@ -44,7 +28,12 @@ describe('Performs multicall in multiple chains', () => {
     args: [defaultTestUserAccount],
   }
 
-  const sonicStsRequest: ChainContractConfig = {
+  /*
+    Sonic is the only forked chain, so cross-chain batching is no longer exercised. What these
+    two requests still cover is the parts useMulticall owns: grouping a request list per chain,
+    batching each group into one multicall and keying every result back to its request id.
+  */
+  const stsDecimalsRequest: ChainContractConfig = {
     id: 'stsDecimalsOnSonic',
     chainId: sonic.id,
     abi: erc20Abi,
@@ -52,44 +41,22 @@ describe('Performs multicall in multiple chains', () => {
     functionName: 'decimals',
   }
 
-  const baseRequest: ChainContractConfig = {
-    id: 'wethBalanceOnBase',
-    chainId: base.id,
-    abi: erc20Abi,
-    address: '0x4200000000000000000000000000000000000006',
-    functionName: 'balanceOf',
-    args: [defaultTestUserAccount],
-  }
+  test('returning one result per request id', async () => {
+    const { result } = testHook(() => useMulticall([wsBalanceRequest, stsDecimalsRequest]))
 
-  test('including mixed sonic and base contracts', async () => {
-    const multicallRequests: ChainContractConfig[] = [sonicRequest, sonicStsRequest, baseRequest]
+    await waitFor(() => {
+      const sonicResults = result.current.results[sonic.id]
 
-    const { result } = testHook(() => useMulticall(multicallRequests))
+      if (sonicResults?.error) {
+        console.error('useMulticall error on sonic:', sonicResults.error)
+      }
 
-    const waitForChainData = async (chainId: number, label: string) => {
-      await waitFor(() => {
-        const r = result.current.results[chainId]
+      expect(sonicResults?.data).toBeDefined()
+    })
 
-        if (r?.error) {
-          console.error(`useMulticall error for ${label} (chainId ${chainId}):`, r.error)
-        }
-
-        expect(r?.data).toBeDefined()
-      })
-    }
-
-    await waitForChainData(sonic.id, 'sonic')
-
-    // Requests for the same chain are batched and keyed by request id
     expect(result.current.results[sonic.id]!.data).toMatchObject({
       wsBalanceOnSonic: { result: 1n, status: 'success' },
       stsDecimalsOnSonic: { result: 18, status: 'success' },
-    })
-
-    await waitForChainData(base.id, 'base')
-
-    expect(result.current.results[base.id]!.data).toMatchObject({
-      wethBalanceOnBase: { result: 7702n, status: 'success' },
     })
   })
 })
