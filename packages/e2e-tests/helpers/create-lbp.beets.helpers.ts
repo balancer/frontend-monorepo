@@ -45,31 +45,42 @@ export const BEETS_LBP_CONFIGS: [BeetsLbpConfig, ...BeetsLbpConfig[]] = [
   { saleType: 'fixed-price', saleToken: BEETS },
 ]
 
+/*
+  The Beets API URL has no graphql path segment (CI sets it to
+  https://backend-v3.beets-ftm-node.com/), so the Balancer helper's graphql-suffix route would never
+  match and the CreateLBP mutation would hit the real backend and fail metadata syncing. Match the
+  configured API URL instead, keeping the suffix match as a fallback.
+*/
 export async function mockCreateLbpMetadata(page: Page) {
-  await page.route('**/graphql', async route => {
-    const request = route.request()
-    if (request.method() !== 'POST') {
-      await route.continue()
-      return
-    }
+  const apiUrl = process.env.NEXT_PUBLIC_BALANCER_API_URL?.replace(/\/$/, '')
 
-    const payload = request.postDataJSON?.()
-    const operationName = payload?.operationName as string | undefined
-    const query = payload?.query as string | undefined
-    const isCreateLbpMutation =
-      operationName === 'CreateLBP' || query?.includes('mutation CreateLBP')
+  await page.route(
+    url => url.href.replace(/\/$/, '') === apiUrl || url.pathname.endsWith('/graphql'),
+    async route => {
+      const request = route.request()
+      if (request.method() !== 'POST') {
+        await route.continue()
+        return
+      }
 
-    if (!isCreateLbpMutation) {
-      await route.continue()
-      return
-    }
+      const payload = request.postDataJSON?.()
+      const operationName = payload?.operationName as string | undefined
+      const query = payload?.query as string | undefined
+      const isCreateLbpMutation =
+        operationName === 'CreateLBP' || query?.includes('mutation CreateLBP')
 
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({ data: { createLBP: true } }),
-    })
-  })
+      if (!isCreateLbpMutation) {
+        await route.continue()
+        return
+      }
+
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: { createLBP: true } }),
+      })
+    },
+  )
 }
 
 export async function doSaleStructureStep(
