@@ -1,16 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices"],
-  "schedule": ["before 6am on Monday"],
-  "timezone": "UTC",
   "labels": ["dependencies"],
   "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
   "automerge": false,
   "ignoreDeps": ["viem", "@balancer/sdk"],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor"],
       "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Automerge minor and patch updates via GitHub auto-merge, which gates the merge on required status checks (green CI).",
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "platformAutomerge": true
     },
     {
       "matchUpdateTypes": ["major"],
