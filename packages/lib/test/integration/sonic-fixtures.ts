@@ -24,10 +24,17 @@ export const sonicTokens = {
   anS: '0x0c4e186eae8acaa7f7de1315d5ad174be39ec987',
 } as const satisfies Record<string, Address>
 
-/* stS stores balances in a mapping that is not at slot 0 (see sonicTokenBalances in fork-default-balances) */
-const STS_BALANCE_SLOT = BigInt(
+/*
+  OpenZeppelin v5 ERC20 holds balances in a mapping inside a namespaced storage struct, so the
+  mapping is not at slot 0 and the slot prober in useSetErc20Balance never finds it.
+  Proven on a Sonic fork at block 32600000 for stS, FLY and SiloWS.
+*/
+export const OZ5_ERC20_BALANCE_SLOT = BigInt(
   '0x52c63247e1f47db19d5ce0460030c497f067ca4cebf71ba98eeadabe20bace00'
 )
+
+/* Sonic USDC keeps balances at slot 9 */
+export const SONIC_USDC_BALANCE_SLOT = 9n
 
 export const sonicContracts = getNetworkConfig(GqlChainValues.Sonic).contracts.balancer
 
@@ -63,11 +70,15 @@ export async function seedSonicTestAccount({
 
 export const defaultSonicTokenBalances: TokenBalance[] = [
   { tokenAddress: sonicTokens.ws, value: '1000' },
-  { tokenAddress: sonicTokens.usdc, value: '1000', decimals: 6 },
-  { tokenAddress: sonicTokens.fly, value: '1000' },
-  { tokenAddress: sonicTokens.sts, value: '1000', slot: STS_BALANCE_SLOT },
-  { tokenAddress: sonicTokens.siloWs, value: '1000' },
-  { tokenAddress: sonicTokens.anS, value: '1000' },
+  { tokenAddress: sonicTokens.usdc, value: '1000', decimals: 6, slot: SONIC_USDC_BALANCE_SLOT },
+  { tokenAddress: sonicTokens.fly, value: '1000', slot: OZ5_ERC20_BALANCE_SLOT },
+  { tokenAddress: sonicTokens.sts, value: '1000', slot: OZ5_ERC20_BALANCE_SLOT },
+  { tokenAddress: sonicTokens.siloWs, value: '1000', slot: OZ5_ERC20_BALANCE_SLOT },
+  /*
+    anS (Angles) uses a balance layout that none of the probed candidates (slots 0-23, Vyper
+    ordering, OZ5 namespaced struct) cover, so it stays unseeded. Specs that need anS must not
+    depend on a forged balance.
+  */
 ]
 
 export const SONIC_CHAIN_ID = sonic.id

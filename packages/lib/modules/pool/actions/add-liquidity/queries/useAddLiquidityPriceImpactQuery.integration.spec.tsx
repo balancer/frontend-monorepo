@@ -28,8 +28,9 @@ test('queries price impact for add liquidity', async () => {
 
   // Unbalanced add: only one of the three pool tokens is provided
   const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
-    { tokenAddress: sonicTokens.ws, humanAmount: '1', symbol: 'wS' },
+    { tokenAddress: sonicTokens.fly, humanAmount: '1', symbol: 'FLY' },
     { tokenAddress: sonicTokens.usdc, humanAmount: '0', symbol: 'USDC' },
+    { tokenAddress: sonicTokens.sts, humanAmount: '0', symbol: 'stS' },
   ]
 
   const result = await testQuery(humanAmountsIn)

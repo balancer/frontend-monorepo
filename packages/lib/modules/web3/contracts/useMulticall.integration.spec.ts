@@ -18,7 +18,7 @@ describe('Performs multicall in multiple chains', () => {
         client: sonicTestPublicClient,
         account: defaultTestUserAccount,
         tokenAddress: sonicTokens.ws,
-        slot: 2,
+        slot: 0,
         balance: 1n,
       }),
       setUserTokenBalance({

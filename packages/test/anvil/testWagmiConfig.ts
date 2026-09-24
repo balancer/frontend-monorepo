@@ -1,4 +1,5 @@
 import { ChainIdWithFork, getTestRpcSetup, testAccounts } from '@repo/test/anvil/anvil-setup'
+import { isBeets } from '@repo/lib/config/getProjectConfig'
 import { Address, Chain, http } from 'viem'
 import { base, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 import { createConfig } from 'wagmi'
@@ -36,7 +37,7 @@ export const sonicTest = {
   ...getTestRpcUrls(sonic.id),
 } as const satisfies Chain
 
-export const testChains = [
+const allTestChains = [
   mainnetTest,
   polygonTest,
   sepoliaTest,
@@ -44,6 +45,15 @@ export const testChains = [
   baseTest,
   sonicTest,
 ] as const
+
+/*
+  The first entry is the default chain of the mock connectors, so it must be the chain the
+  suite runs for: Beets only supports Sonic, and hooks that resolve a client from the
+  connected chain (usePublicClient, useSendTransaction) would otherwise hit mainnet.
+*/
+export const testChains = (
+  isBeets ? [sonicTest, ...allTestChains.filter(chain => chain.id !== sonicTest.id)] : allTestChains
+) as typeof allTestChains
 
 function getTestRpcUrls(chainId: ChainIdWithFork) {
   const { port, rpcUrl } = getTestRpcSetup(chainId)

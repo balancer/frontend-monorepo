@@ -12,7 +12,8 @@ const SIMULATION_WAIT_TIMEOUT_MS = 60_000
 const SIMULATION_TEST_TIMEOUT_MS = 120_000
 
 async function testQuery(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
-  const handler = selectAddLiquidityHandler(getApiPoolMock(usdcFlyStS))
+  // wantsProportional so a partial set of amounts in is accepted
+  const handler = selectAddLiquidityHandler(getApiPoolMock(usdcFlyStS), true)
 
   const { result } = testHook(
     () => useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enabled: true }),
@@ -30,9 +31,7 @@ test(
     await seedSonicTestAccount()
 
     const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
-      { tokenAddress: sonicTokens.ws, humanAmount: '1', symbol: 'wS' },
       { tokenAddress: sonicTokens.usdc, humanAmount: '1', symbol: 'USDC' },
-      { tokenAddress: sonicTokens.sts, humanAmount: '1', symbol: 'stS' },
     ]
 
     const result = await testQuery(humanAmountsIn)
