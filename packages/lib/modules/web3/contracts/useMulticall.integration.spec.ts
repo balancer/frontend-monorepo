@@ -1,70 +1,68 @@
-import { daiAddress, polAddress } from '@repo/lib/debug-helpers'
 import { alternativeTestUserAccount, defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { setUserTokenBalance } from '@repo/lib/test/integration/sdk-utils'
 import {
-  mainnetTestPublicClient,
-  polygonTestPublicClient,
   baseTestPublicClient,
+  sonicTestPublicClient,
 } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { erc20Abi } from 'viem'
 import { ChainContractConfig, useMulticall } from './useMulticall'
-import { mainnet, polygon, base } from 'viem/chains'
+import { base, sonic } from 'viem/chains'
+import { sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
 
 describe('Performs multicall in multiple chains', () => {
   beforeAll(async () => {
     await Promise.all([
       setUserTokenBalance({
-        client: mainnetTestPublicClient,
+        client: sonicTestPublicClient,
         account: defaultTestUserAccount,
-        tokenAddress: daiAddress,
+        tokenAddress: sonicTokens.ws,
         slot: 2,
         balance: 1n,
       }),
       setUserTokenBalance({
         client: baseTestPublicClient,
         account: defaultTestUserAccount,
-        tokenAddress: '0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee',
-        slot: 4,
+        tokenAddress: '0x4200000000000000000000000000000000000006',
+        slot: 3,
         balance: 7702n,
       }),
-      polygonTestPublicClient.setBalance({
+      sonicTestPublicClient.setBalance({
         address: alternativeTestUserAccount,
         value: 721n,
       }),
     ])
   })
 
-  const mainnetRequest: ChainContractConfig = {
-    id: 'daiBalanceOnMainnet',
-    chainId: mainnet.id,
+  const sonicRequest: ChainContractConfig = {
+    id: 'wsBalanceOnSonic',
+    chainId: sonic.id,
     abi: erc20Abi,
-    address: daiAddress,
+    address: sonicTokens.ws,
     functionName: 'balanceOf',
     args: [defaultTestUserAccount],
+  }
+
+  const sonicStsRequest: ChainContractConfig = {
+    id: 'stsDecimalsOnSonic',
+    chainId: sonic.id,
+    abi: erc20Abi,
+    address: sonicTokens.sts,
+    functionName: 'decimals',
   }
 
   const baseRequest: ChainContractConfig = {
-    id: 'ghoBalanceOnBase',
+    id: 'wethBalanceOnBase',
     chainId: base.id,
     abi: erc20Abi,
-    address: '0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee',
+    address: '0x4200000000000000000000000000000000000006',
     functionName: 'balanceOf',
     args: [defaultTestUserAccount],
   }
 
-  const polygonRequest: ChainContractConfig = {
-    id: 'polBalanceOnPolygon',
-    chainId: polygon.id,
-    abi: erc20Abi,
-    address: polAddress,
-    functionName: 'balanceOf',
-    args: [alternativeTestUserAccount],
-  }
-
-  test('including mixed mainnet and polygon contracts', async () => {
-    const multicallRequests: ChainContractConfig[] = [mainnetRequest, baseRequest, polygonRequest]
+  test('including mixed sonic and base contracts', async () => {
+    const multicallRequests: ChainContractConfig[] = [sonicRequest, sonicStsRequest, baseRequest]
 
     const { result } = testHook(() => useMulticall(multicallRequests))
 
@@ -80,37 +78,18 @@ describe('Performs multicall in multiple chains', () => {
       })
     }
 
-    await waitForChainData(mainnet.id, 'mainnet')
+    await waitForChainData(sonic.id, 'sonic')
 
-    expect(result.current.results[mainnet.id]!.data).toMatchInlineSnapshot(`
-      {
-        "daiBalanceOnMainnet": {
-          "result": 1n,
-          "status": "success",
-        },
-      }
-    `)
+    // Requests for the same chain are batched and keyed by request id
+    expect(result.current.results[sonic.id]!.data).toMatchObject({
+      wsBalanceOnSonic: { result: 1n, status: 'success' },
+      stsDecimalsOnSonic: { result: 18, status: 'success' },
+    })
 
     await waitForChainData(base.id, 'base')
 
-    expect(result.current.results[base.id]!.data).toMatchInlineSnapshot(`
-      {
-        "ghoBalanceOnBase": {
-          "result": 7702n,
-          "status": "success",
-        },
-      }
-    `)
-
-    await waitForChainData(polygon.id, 'polygon')
-
-    expect(result.current.results[polygon.id]!.data).toMatchInlineSnapshot(`
-    {
-      "polBalanceOnPolygon": {
-        "result": 721n,
-        "status": "success",
-      },
-    }
-  `)
+    expect(result.current.results[base.id]!.data).toMatchObject({
+      wethBalanceOnBase: { result: 7702n, status: 'success' },
+    })
   })
 })

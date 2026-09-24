@@ -25,8 +25,8 @@ describe('Smart contract wallets', () => {
   })
 
   it('should return true when contract wallet', async () => {
-    // Default test user for Anvil has an underlying contract
-    await connectWith('0x90F79bf6EB2c4f870365E785982E1f101E93b906')
+    // Beets Reliquary contract, so it always has bytecode on the Sonic fork
+    await connectWith('0x973670ce19594f857a7cd85ee834c7a74a941684')
 
     const { result } = testHook(() => useContractWallet())
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())

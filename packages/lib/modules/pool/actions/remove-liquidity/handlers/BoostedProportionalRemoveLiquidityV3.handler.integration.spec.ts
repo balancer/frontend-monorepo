@@ -1,4 +1,3 @@
-import { mainnetCompositeRouterBoosted, usdcAddress, waUsdtAddress } from '@repo/lib/debug-helpers'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
@@ -7,7 +6,12 @@ import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquid
 import { BoostedProportionalRemoveLiquidityV3Handler } from './BoostedProportionalRemoveLiquidityV3.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
-import { usdcUsdtAaveBoosted } from '../../../__mocks__/pool-examples/boosted'
+import { anSSiloWSBoosted } from '../../../__mocks__/pool-examples/boosted'
+import {
+  seedSonicTestAccount,
+  sonicContracts,
+  sonicTokens,
+} from '@repo/lib/test/integration/sonic-fixtures'
 
 function selectProportionalHandler(pool: Pool): BoostedProportionalRemoveLiquidityV3Handler {
   return selectRemoveLiquidityHandler(
@@ -20,30 +24,34 @@ const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0
 
 await connectWithDefaultUser()
 
-describe('When proportionally removing liquidity for a BOOSTED v3 pool (with 1 underlying and 1 wrapped)', async () => {
-  const v3Pool = getApiPoolMock(usdcUsdtAaveBoosted)
+describe('When proportionally removing liquidity for a BOOSTED v3 pool (with 1 pool token and 1 ERC4626)', async () => {
+  const v3Pool = getApiPoolMock(anSSiloWSBoosted)
 
   const defaultQueryInput: QueryRemoveLiquidityInput = {
-    humanBptIn: '0.1',
+    humanBptIn: '0.01',
     tokenOut: emptyAddress, // We don't use in this scenario it but it is required to simplify TS interfaces
-    tokensOut: [waUsdtAddress, usdcAddress],
+    tokensOut: [sonicTokens.siloWs, sonicTokens.anS],
     userAddress: defaultTestUserAccount,
   }
+
+  beforeAll(async () => {
+    await seedSonicTestAccount()
+  })
 
   test('queries amounts out', async () => {
     const handler = selectProportionalHandler(v3Pool)
 
     const result = await handler.simulate(defaultQueryInput)
 
-    expect(result.sdkQueryOutput.to).toBe(mainnetCompositeRouterBoosted)
+    expect(result.sdkQueryOutput.to).toBe(sonicContracts.compositeLiquidityRouterBoosted)
 
-    const [waUsdtTokenAmountOut, aUsdcTokenAmountOut] = result.amountsOut.sort()
+    const [siloWsTokenAmountOut, anSTokenAmountOut] = result.amountsOut
 
-    expect(waUsdtTokenAmountOut!.token.address).toBe(waUsdtAddress)
-    expect(waUsdtTokenAmountOut!.amount).toBeGreaterThan(0n)
+    expect(siloWsTokenAmountOut!.token.address).toBe(sonicTokens.siloWs)
+    expect(siloWsTokenAmountOut!.amount).toBeGreaterThan(0n)
 
-    expect(aUsdcTokenAmountOut!.token.address).toBe(usdcAddress)
-    expect(aUsdcTokenAmountOut!.amount).toBeGreaterThan(0n)
+    expect(anSTokenAmountOut!.token.address).toBe(sonicTokens.anS)
+    expect(anSTokenAmountOut!.amount).toBeGreaterThan(0n)
   })
 
   test('builds Tx Config', async () => {
@@ -56,7 +64,7 @@ describe('When proportionally removing liquidity for a BOOSTED v3 pool (with 1 u
       queryOutput,
     })
 
-    expect(result.to).toBe(mainnetCompositeRouterBoosted)
+    expect(result.to).toBe(sonicContracts.compositeLiquidityRouterBoosted)
     expect(result.data).toBeDefined()
   })
 })

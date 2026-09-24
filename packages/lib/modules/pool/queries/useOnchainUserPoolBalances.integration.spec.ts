@@ -1,16 +1,16 @@
 import { getSdkTestUtils } from '@repo/lib/test/integration/sdk-utils'
-import {
-  aBalWethPoolElementMock,
-  toGqlWeighedPoolMock,
-} from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
+import { toGqlWeighedPoolMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
-import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { sonicTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { ChainId } from '@balancer/sdk'
 import { waitFor } from '@testing-library/react'
 import { useOnchainUserPoolBalances } from './useOnchainUserPoolBalances'
 import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
+import { getApiPoolMock } from '../__mocks__/api-mocks/api-mocks'
+import { usdcFlyStS } from '../__mocks__/pool-examples/flat'
+import { SONIC_CHAIN_ID } from '@repo/lib/test/integration/sonic-fixtures'
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {
   const weightedPoolMock = toGqlWeighedPoolMock(pool)
@@ -25,8 +25,8 @@ async function testUseChainPoolBalances(pool: GqlPoolElement) {
 async function createSdkUtils(pool: GqlPoolElement) {
   return getSdkTestUtils({
     account: defaultTestUserAccount,
-    chainId: ChainId.MAINNET,
-    client: mainnetTestPublicClient,
+    chainId: SONIC_CHAIN_ID as ChainId,
+    client: sonicTestPublicClient,
     pool,
   })
 }
@@ -35,7 +35,7 @@ await connectWithDefaultUser()
 
 describe('fetches onchain and overrides user balances', async () => {
   test('when the user has wallet balance', async () => {
-    const poolMock = aBalWethPoolElementMock() // Provides 80BAL-20WETH pool by default
+    const poolMock = getApiPoolMock(usdcFlyStS) as unknown as GqlPoolElement
     const utils = await createSdkUtils(poolMock)
 
     // sets pool wallet balance
@@ -47,17 +47,17 @@ describe('fetches onchain and overrides user balances', async () => {
   })
 
   test('when the pool does not have staking info', async () => {
-    const poolMockWithUndefinedStaking = aBalWethPoolElementMock() // Provides 80BAL-20WETH pool by default
-    poolMockWithUndefinedStaking.staking = undefined as any
+    const poolMock = getApiPoolMock(usdcFlyStS) as unknown as GqlPoolElement
+    poolMock.staking = undefined as any
 
-    expect(poolMockWithUndefinedStaking.staking).toBeUndefined()
+    expect(poolMock.staking).toBeUndefined()
 
-    const utils = await createSdkUtils(poolMockWithUndefinedStaking)
+    const utils = await createSdkUtils(poolMock)
 
     // sets pool wallet balance
     await utils.setUserPoolBalance('50')
 
-    const result = await testUseChainPoolBalances(poolMockWithUndefinedStaking)
+    const result = await testUseChainPoolBalances(poolMock)
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy())
 
@@ -65,79 +65,23 @@ describe('fetches onchain and overrides user balances', async () => {
   })
 
   test('when the pool has no gaugeAddress', async () => {
-    const poolMockWithEmptyGaugeAddress = aBalWethPoolElementMock() // Provides 80BAL-20WETH pool by default
+    const poolMock = getApiPoolMock(usdcFlyStS) as unknown as GqlPoolElement
 
     // Empty staking address
-    if (poolMockWithEmptyGaugeAddress.staking?.gauge?.gaugeAddress) {
-      poolMockWithEmptyGaugeAddress.staking.gauge.gaugeAddress = ''
+    if (poolMock.staking?.gauge?.gaugeAddress) {
+      poolMock.staking.gauge.gaugeAddress = ''
     }
 
-    expect(poolMockWithEmptyGaugeAddress.staking?.gauge).toMatchInlineSnapshot(`
-    {
-      "__typename": "GqlPoolStakingGauge",
-      "gaugeAddress": "",
-      "id": "0x2d42910d826e5500579d121596e98a6eb33c0a1b",
-      "otherGauges": [],
-      "rewards": [],
-      "status": "ACTIVE",
-      "version": 2,
-      "workingSupply": "",
-    }
-  `)
+    expect(poolMock.staking?.gauge?.gaugeAddress).toBe('')
 
-    const utils = await createSdkUtils(poolMockWithEmptyGaugeAddress)
+    const utils = await createSdkUtils(poolMock)
 
     // sets pool wallet balance
     await utils.setUserPoolBalance('60')
 
-    const result = await testUseChainPoolBalances(poolMockWithEmptyGaugeAddress)
+    const result = await testUseChainPoolBalances(poolMock)
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy())
     expect(result.current.data[0]!.userBalance?.walletBalance).toBe('60')
   })
-
-  // TODO: Fix test, extremely flaky
-  // test('@slow: when the pool user is staked in a non-preferential gauge (polygon)', async () => {
-  //   const holder = '0xE0Dd0C6a3F0A34c5175b65Bbd227710d9A5E09c8'
-  //   await connectWith(holder)
-  //   const poolId = '0xeab6455f8a99390b941a33bbdaf615abdf93455e000200000000000000000a66' // Pool with user staked in non preferential gauge
-  //   const pool = await getPoolMock(poolId, GqlChainValues.Polygon, holder)
-
-  //   const result = await testUseChainPoolBalances(pool)
-
-  //   await waitFor(() => expect(result.current.isLoading).toBeFalsy())
-
-  //   expect(result.current.data[0].userBalance).toMatchObject({
-  //     stakedBalances: [
-  //       {
-  //         __typename: 'GqlUserStakedBalance',
-  //         balance: '52.364668984347889717',
-  //         balanceUsd: 0,
-  //         poolId: '0xeab6455f8a99390b941a33bbdaf615abdf93455e000200000000000000000a66',
-  //         stakingId: '0x55ec14e951b1c25ab09132dae12363bea0d20105',
-  //         stakingType: 'GAUGE',
-  //       },
-  //       {
-  //         __typename: 'GqlUserStakedBalance',
-  //         balance: '0',
-  //         balanceUsd: 0,
-  //         poolId: '0xeab6455f8a99390b941a33bbdaf615abdf93455e000200000000000000000a66',
-  //         stakingId: '0x2cd2b37e574b73e103eb61116afc51463f254f02',
-  //         stakingType: 'AURA',
-  //       },
-  //       {
-  //         __typename: 'GqlUserStakedBalance',
-  //         balance: '0',
-  //         balanceUsd: 0,
-  //         poolId: '0xeab6455f8a99390b941a33bbdaf615abdf93455e000200000000000000000a66',
-  //         stakingId: '0xe99a452a65e5bb316febac5de83a1ca59f6a3a94',
-  //         stakingType: 'GAUGE',
-  //       },
-  //     ],
-  //     totalBalance: '52.364668984347889717',
-  //     totalBalanceUsd: expect.any(Number),
-  //     walletBalance: '0',
-  //     walletBalanceUsd: 0,
-  //   })
-  // })
 })

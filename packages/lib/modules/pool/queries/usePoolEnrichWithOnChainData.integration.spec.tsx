@@ -1,19 +1,18 @@
-import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { Pool } from '../pool.types'
-import { fetchPoolMock, poolEnrichQuery } from '../__mocks__/fetchPoolMock'
 import { usePoolEnrichWithOnChainData } from './usePoolEnrichWithOnChainData'
-import { balWeth8020 } from '../__mocks__/pool-examples/flat'
+import { usdcFlyStS } from '../__mocks__/pool-examples/flat'
 import { getApiPoolMock } from '../__mocks__/api-mocks/api-mocks'
+import { anSSiloWSBoosted } from '../__mocks__/pool-examples/boosted'
 
 function testPoolEnrichWithOnChainData(pool: Pool) {
   const { result } = testHook(() => usePoolEnrichWithOnChainData(pool))
   return result
 }
 
-test('enriches V3 pool with on-chain data', async () => {
-  const pool = getApiPoolMock(balWeth8020)
+function enrichesWithOnChainData(example: typeof usdcFlyStS) {
+  const pool = getApiPoolMock(example)
 
   // delete values to ensure that onchain data is used
   pool.dynamicData.totalLiquidity = '0'
@@ -21,44 +20,23 @@ test('enriches V3 pool with on-chain data', async () => {
 
   const result = testPoolEnrichWithOnChainData(pool)
 
+  return result
+}
+
+test('enriches V3 weighted pool with on-chain data', async () => {
+  const result = enrichesWithOnChainData(usdcFlyStS)
+
   await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
-  expect(Number(result.current.pool.dynamicData.totalLiquidity)).toBeGreaterThan(0) // Sum(api token balances  * mocked token prices (see defaultTokenPriceListMock))
+  expect(Number(result.current.pool.dynamicData.totalLiquidity)).toBeGreaterThan(0)
   expect(Number(result.current.pool.dynamicData.totalShares)).toBeGreaterThan(0)
 })
 
-test('enriches V2 pool with on-chain data', async () => {
-  const pool = getApiPoolMock(balWeth8020)
-
-  // delete values to ensure that onchain data is used
-  pool.dynamicData.totalLiquidity = '0'
-  pool.dynamicData.totalShares = '0'
-
-  const result = testPoolEnrichWithOnChainData(pool)
+test('enriches V3 boosted pool with on-chain data', async () => {
+  const result = enrichesWithOnChainData(anSSiloWSBoosted)
 
   await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
-  expect(Number(result.current.pool.dynamicData.totalLiquidity)).toBeGreaterThan(0) // Sum(api token balances  * mocked token prices (see defaultTokenPriceListMock))
-  expect(Number(result.current.pool.dynamicData.totalShares)).toBeGreaterThan(0)
-})
-
-test('enriches V1 Cow AMM pool with on-chain data', async () => {
-  const cowPoolId = '0xf08d4dea369c456d26a3168ff0024b904f2d8b91'
-
-  const pool = await fetchPoolMock({
-    poolId: cowPoolId,
-    chain: GqlChainValues.Mainnet,
-    query: poolEnrichQuery,
-  })
-
-  // delete values to ensure that onchain data is used
-  pool.dynamicData.totalLiquidity = '0'
-  pool.dynamicData.totalShares = '0'
-
-  const result = testPoolEnrichWithOnChainData(pool)
-
-  await waitFor(() => expect(result.current.isLoading).toBeFalsy())
-
-  expect(Number(result.current.pool.dynamicData.totalLiquidity)).toBeGreaterThan(0) // Sum(api token balances  * mocked token prices (see defaultTokenPriceListMock))
+  expect(Number(result.current.pool.dynamicData.totalLiquidity)).toBeGreaterThan(0)
   expect(Number(result.current.pool.dynamicData.totalShares)).toBeGreaterThan(0)
 })

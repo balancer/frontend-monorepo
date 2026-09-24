@@ -1,9 +1,9 @@
 import { ChainIdWithFork } from '@repo/test/anvil/anvil-setup'
 import { testWagmiConfig } from '@repo/test/anvil/testWagmiConfig'
 import { publicActions, testActions, walletActions } from 'viem'
-import { base, gnosis, mainnet, polygon, sepolia } from 'viem/chains'
+import { base, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 
-export function createTestHttpClient(chainId: 1 | 137 | 11155111 | 100 | 8453) {
+export function createTestHttpClient(chainId: 1 | 137 | 11155111 | 100 | 8453 | 146) {
   return testWagmiConfig
     .getClient({ chainId })
     .extend(testActions({ mode: 'anvil' }))
@@ -16,6 +16,7 @@ export const polygonTestPublicClient = createTestHttpClient(polygon.id)
 export const sepoliaTestPublicClient = createTestHttpClient(sepolia.id)
 export const baseTestPublicClient = createTestHttpClient(base.id)
 export const gnosisTestPublicClient = createTestHttpClient(gnosis.id)
+export const sonicTestPublicClient = createTestHttpClient(sonic.id)
 
 export function getTestClient(chainId: ChainIdWithFork) {
   switch (chainId) {
@@ -29,6 +30,8 @@ export function getTestClient(chainId: ChainIdWithFork) {
       return baseTestPublicClient
     case gnosis.id:
       return gnosisTestPublicClient
+    case sonic.id:
+      return sonicTestPublicClient
     default:
       throw new Error(`No test client for chainId ${chainId}`)
   }

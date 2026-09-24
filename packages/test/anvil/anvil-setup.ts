@@ -88,7 +88,9 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
     chainId: sonic.id,
     fallBackRpc: 'https://gateway.tenderly.co/public/sonic',
     port: ANVIL_PORTS[sonic.id],
-    forkBlockNumber: 2687659n,
+    // Must be after the deployment of the Sonic pools used by the integration
+    // suite (usdcFlyStS, anSSiloWSBoosted) and their tokens.
+    forkBlockNumber: 32_600_000n,
   },
   [gnosis.id]: {
     chainId: gnosis.id,

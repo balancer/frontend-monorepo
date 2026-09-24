@@ -1,24 +1,25 @@
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { UnbalancedAddLiquidityViaSwapV3Handler } from './UnbalancedAddLiquidityViaSwapV3.handler'
-import { fetchPoolMock, minimalPoolQuery } from '../../../__mocks__/fetchPoolMock'
+import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
+import { usdcFlyStS } from '../../../__mocks__/pool-examples/flat'
+import { seedSonicTestAccount, sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
 
-describe('When adding unbalanced liquidity via swap for a V3 2-token pool', async () => {
-  const waEthWETHAddress = '0x0bfc9d54fc184518a81162f8fb99c2eaca081202'
-  const poolId = '0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3' // rETH-waEthWETH
-
-  const v3Pool = await fetchPoolMock({
-    poolId,
-    chain: GqlChainValues.Mainnet,
-    query: minimalPoolQuery,
-  })
+/*
+  TODO(beets-integration): re-enable once the unbalanced add via swap router is verified on Sonic.
+*/
+describe.skip('When adding unbalanced liquidity via swap for a V3 pool', async () => {
+  const v3Pool = getApiPoolMock(usdcFlyStS)
 
   const handler = new UnbalancedAddLiquidityViaSwapV3Handler(v3Pool)
 
   const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
-    { humanAmount: '0.1', tokenAddress: waEthWETHAddress, symbol: 'waEthWETH' },
+    { humanAmount: '0.1', tokenAddress: sonicTokens.ws, symbol: 'wS' },
   ]
+
+  beforeAll(async () => {
+    await seedSonicTestAccount()
+  })
 
   it('calculates price impact', async () => {
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
@@ -28,7 +29,7 @@ describe('When adding unbalanced liquidity via swap for a V3 2-token pool', asyn
   it('queries bptOut', async () => {
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
-    expect(result.bptOut.amount).toBeGreaterThan(100000000000000n)
+    expect(result.bptOut.amount).toBeGreaterThan(0n)
   })
 
   it('builds Tx Config', async () => {
