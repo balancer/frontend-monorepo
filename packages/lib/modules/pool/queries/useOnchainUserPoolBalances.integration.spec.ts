@@ -9,7 +9,7 @@ import { waitFor } from '@testing-library/react'
 import { useOnchainUserPoolBalances } from './useOnchainUserPoolBalances'
 import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { getApiPoolMock } from '../__mocks__/api-mocks/api-mocks'
-import { usdcFlyStS } from '../__mocks__/pool-examples/flat'
+import { scUsdStS } from '../__mocks__/pool-examples/flat'
 import { SONIC_CHAIN_ID } from '@repo/lib/test/integration/sonic-fixtures'
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {
@@ -33,9 +33,14 @@ async function createSdkUtils(pool: GqlPoolElement) {
 
 await connectWithDefaultUser()
 
+/*
+  Uses a v2 pool on purpose: setUserPoolBalance forges the BPT balance by writing the pool
+  contract's own storage, which only works when the BPT is a real ERC20. V3 BPTs are virtual
+  (the Vault keeps internal balances), so the same call cannot move their balanceOf.
+*/
 describe('fetches onchain and overrides user balances', async () => {
   test('when the user has wallet balance', async () => {
-    const poolMock = getApiPoolMock(usdcFlyStS) as unknown as GqlPoolElement
+    const poolMock = getApiPoolMock(scUsdStS) as unknown as GqlPoolElement
     const utils = await createSdkUtils(poolMock)
 
     // sets pool wallet balance
@@ -47,7 +52,7 @@ describe('fetches onchain and overrides user balances', async () => {
   })
 
   test('when the pool does not have staking info', async () => {
-    const poolMock = getApiPoolMock(usdcFlyStS) as unknown as GqlPoolElement
+    const poolMock = getApiPoolMock(scUsdStS) as unknown as GqlPoolElement
     poolMock.staking = undefined as any
 
     expect(poolMock.staking).toBeUndefined()
@@ -65,7 +70,7 @@ describe('fetches onchain and overrides user balances', async () => {
   })
 
   test('when the pool has no gaugeAddress', async () => {
-    const poolMock = getApiPoolMock(usdcFlyStS) as unknown as GqlPoolElement
+    const poolMock = getApiPoolMock(scUsdStS) as unknown as GqlPoolElement
 
     // Empty staking address
     if (poolMock.staking?.gauge?.gaugeAddress) {

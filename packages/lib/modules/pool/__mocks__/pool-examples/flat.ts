@@ -80,6 +80,16 @@ export const usdcFlyStS: PoolExample = {
   mockName: 'bpt_25USDC_50FLY_25stSMock',
 }
 
+export const scUsdStS: PoolExample = {
+  name: 'BPT-scUSD-stS',
+  description: 'Sonic v2 pool whose BPT is a real ERC20 (unlike virtual v3 BPTs)',
+  poolId: '0x25ca5451cd5a50ab1d324b5e64f32c0799661891000200000000000000000018',
+  poolAddress: '0x25ca5451cd5a50ab1d324b5e64f32c0799661891',
+  poolChain: GqlChainValues.Sonic,
+  version: 2,
+  mockName: 'bpt_scUSD_stSMock',
+}
+
 export const flatPoolExamples = [
   balWeth8020,
   aaveWstETH8020,
@@ -90,4 +100,5 @@ export const flatPoolExamples = [
   v3StableNonBoosted,
   gyroV3,
   usdcFlyStS,
+  scUsdStS,
 ]

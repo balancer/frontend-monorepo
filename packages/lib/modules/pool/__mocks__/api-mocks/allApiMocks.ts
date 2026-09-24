@@ -16,6 +16,7 @@ import { b_csUSDC_csUSDLMock } from './b_csUSDC_csUSDLMock'
 import { aave_USDC_Aave_GHOMock } from './aave_USDC_Aave_GHOMock'
 import { aave_GHO_USDT_USDCMock } from './aave_GHO_USDT_USDCMock'
 import { bpt_anS_SiloWSMock } from './bpt_anS_SiloWSMock'
+import { bpt_scUSD_stSMock } from './bpt_scUSD_stSMock'
 import { staBAL3_WETH_WBTC_BPTMock } from './staBAL3_WETH_WBTC_BPTMock'
 import { b_auraBAL_STABLEMock } from './b_auraBAL_STABLEMock'
 import { Pool } from '../../pool.types'
@@ -38,6 +39,7 @@ export const allApiMocks: Pool[] = [
   aave_USDC_Aave_GHOMock,
   aave_GHO_USDT_USDCMock,
   bpt_anS_SiloWSMock,
+  bpt_scUSD_stSMock,
   staBAL3_WETH_WBTC_BPTMock,
   b_auraBAL_STABLEMock,
 ]
