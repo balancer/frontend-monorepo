@@ -70,6 +70,16 @@ export const gyroV3: PoolExample = {
   version: 3,
 }
 
+export const usdcFlyStS: PoolExample = {
+  name: 'bpt-25USDC-50FLY-25stS',
+  description: 'v3 weighted',
+  poolId: '0xa476b33460e792bac5cc294ba19f0543ab00dc01',
+  poolChain: GqlChainValues.Sonic,
+  version: 3,
+  // Symbol starts with a number so an explicit mock name is required
+  mockName: 'bpt_25USDC_50FLY_25stSMock',
+}
+
 export const flatPoolExamples = [
   balWeth8020,
   aaveWstETH8020,
@@ -79,4 +89,5 @@ export const flatPoolExamples = [
   cowAmmPoolWethGno,
   v3StableNonBoosted,
   gyroV3,
+  usdcFlyStS,
 ]
