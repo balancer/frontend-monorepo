@@ -88,6 +88,15 @@ export async function setErc20Balance({
       slot: keccak256(encodedData),
     })
 
+    // balanceOf before touching this slot, to tell "this is the balance slot" from
+    // "this slot is unrelated but the account already holds the token"
+    const balanceBefore = await anvilClient.readContract({
+      abi: [balanceOfAbiItem],
+      address: balance.tokenAddress,
+      functionName: 'balanceOf',
+      args: [address],
+    })
+
     // user value might be something that might have collision (like 0)
     await client.setStorageAt({
       address: balance.tokenAddress,
@@ -134,6 +143,23 @@ export async function setErc20Balance({
           address: balance.tokenAddress,
           index: keccak256(encodedData),
           value: pad(toHex(value)),
+        })
+
+        break
+      }
+
+      /*
+        Multiplicative-rate token (ERC4626-style, e.g. anS): balanceOf returns shares * rate, so
+        writing a sentinel moves balanceOf to a multiple of it instead of echoing it. Derive the
+        rate from that multiple and write the matching share amount.
+      */
+      if (newBalance > 0n && newBalance !== balanceBefore) {
+        const shares = (value * SLOT_VALUE_TO_CHECK) / newBalance
+
+        await client.setStorageAt({
+          address: balance.tokenAddress,
+          index: keccak256(encodedData),
+          value: pad(toHex(shares)),
         })
 
         break
