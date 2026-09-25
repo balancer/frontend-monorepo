@@ -1,4 +1,3 @@
-import { mainnetRouter } from '@repo/lib/debug-helpers'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { Pool } from '../../../pool.types'
@@ -6,8 +5,13 @@ import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquid
 import { ProportionalRemoveLiquidityV3Handler } from './ProportionalRemoveLiquidityV3.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
-import { v3StableNonBoosted } from '../../../__mocks__/pool-examples/flat'
+import { usdcFlyStS } from '../../../__mocks__/pool-examples/flat'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
+import {
+  seedSonicTestAccount,
+  sonicContracts,
+  sonicTokens,
+} from '@repo/lib/test/integration/sonic-fixtures'
 
 function selectProportionalHandler(pool: Pool): ProportionalRemoveLiquidityV3Handler {
   return selectRemoveLiquidityHandler(
@@ -20,16 +24,18 @@ const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0
 
 await connectWithDefaultUser()
 
-describe('When proportionally removing liquidity for stable (non boosted) v3 pool', async () => {
-  const rstEthAddress = '0xa1290d69c65a6fe4df752f95823fae25cb99e5a7'
-  const hgETH = '0xc824a08db624942c5e5f330d56530cd1598859fd'
-  const v3Pool = getApiPoolMock(v3StableNonBoosted)
+describe('When proportionally removing liquidity for a weighted (non boosted) v3 pool', async () => {
+  const v3Pool = getApiPoolMock(usdcFlyStS)
 
   const defaultQueryInput: QueryRemoveLiquidityInput = {
     humanBptIn: '0.01',
     tokenOut: emptyAddress, // We don't use in this scenario it but it is required to simplify TS interfaces
     userAddress: defaultTestUserAccount,
   }
+
+  beforeAll(async () => {
+    await seedSonicTestAccount()
+  })
 
   test('returns ZERO price impact', async () => {
     const handler = selectProportionalHandler(v3Pool)
@@ -44,13 +50,16 @@ describe('When proportionally removing liquidity for stable (non boosted) v3 poo
 
     const result = await handler.simulate(defaultQueryInput)
 
-    const [rstEthTokenAmountOut, hgEthTokenAmountOut] = result.amountsOut
+    const [usdcTokenAmountOut, flyTokenAmountOut, stSTokenAmountOut] = result.amountsOut
 
-    expect(rstEthTokenAmountOut!.token.address).toBe(rstEthAddress)
-    expect(rstEthTokenAmountOut!.amount).toBeGreaterThan(100000000000000n)
+    expect(usdcTokenAmountOut!.token.address).toBe(sonicTokens.usdc)
+    expect(usdcTokenAmountOut!.amount).toBeGreaterThan(0n)
 
-    expect(hgEthTokenAmountOut!.token.address).toBe(hgETH)
-    expect(hgEthTokenAmountOut!.amount).toBeGreaterThan(200000000000000n)
+    expect(flyTokenAmountOut!.token.address).toBe(sonicTokens.fly)
+    expect(flyTokenAmountOut!.amount).toBeGreaterThan(0n)
+
+    expect(stSTokenAmountOut!.token.address).toBe(sonicTokens.sts)
+    expect(stSTokenAmountOut!.amount).toBeGreaterThan(0n)
   })
 
   test('builds Tx Config', async () => {
@@ -63,7 +72,7 @@ describe('When proportionally removing liquidity for stable (non boosted) v3 poo
       queryOutput,
     })
 
-    expect(result.to).toBe(mainnetRouter)
+    expect(result.to).toBe(sonicContracts.router)
     expect(result.data).toBeDefined()
   })
 })

@@ -7,14 +7,16 @@ import { v2SepoliaStableWithERC4626Mock } from './v2SepoliaStableWithERC4626Mock
 import { bCoW_50WETH_50GNOMock } from './bCoW_50WETH_50GNOMock'
 import { rsETH_hgETHMock } from './rsETH_hgETHMock'
 import { eCLP_GYD_sDAIMock } from './eCLP_GYD_sDAIMock'
+import { bpt_25USDC_50FLY_25stSMock } from './bpt_25USDC_50FLY_25stSMock'
 import { v3SepoliaNestedBoostedMock } from './v3SepoliaNestedBoostedMock'
 import { aave_USDC_USDTMock } from './aave_USDC_USDTMock'
 import { b_csUSDL_steakUSDCMock } from './b_csUSDL_steakUSDCMock'
 import { aGNO_sDAIMock } from './aGNO_sDAIMock'
-import { partialBoostedSepoliaWethStataUsdtMock } from './partialBoostedSepoliaWethStataUsdtMock'
 import { b_csUSDC_csUSDLMock } from './b_csUSDC_csUSDLMock'
 import { aave_USDC_Aave_GHOMock } from './aave_USDC_Aave_GHOMock'
 import { aave_GHO_USDT_USDCMock } from './aave_GHO_USDT_USDCMock'
+import { bpt_anS_SiloWSMock } from './bpt_anS_SiloWSMock'
+import { bpt_scUSD_stSMock } from './bpt_scUSD_stSMock'
 import { staBAL3_WETH_WBTC_BPTMock } from './staBAL3_WETH_WBTC_BPTMock'
 import { b_auraBAL_STABLEMock } from './b_auraBAL_STABLEMock'
 import { Pool } from '../../pool.types'
@@ -28,14 +30,16 @@ export const allApiMocks: Pool[] = [
   bCoW_50WETH_50GNOMock,
   rsETH_hgETHMock,
   eCLP_GYD_sDAIMock,
+  bpt_25USDC_50FLY_25stSMock,
   v3SepoliaNestedBoostedMock,
   aave_USDC_USDTMock,
   b_csUSDL_steakUSDCMock,
   aGNO_sDAIMock,
-  partialBoostedSepoliaWethStataUsdtMock,
   b_csUSDC_csUSDLMock,
   aave_USDC_Aave_GHOMock,
   aave_GHO_USDT_USDCMock,
+  bpt_anS_SiloWSMock,
+  bpt_scUSD_stSMock,
   staBAL3_WETH_WBTC_BPTMock,
   b_auraBAL_STABLEMock,
 ]

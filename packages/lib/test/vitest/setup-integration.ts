@@ -1,9 +1,7 @@
 import { chainsByKey } from '@repo/lib/modules/web3/ChainConfig'
 import * as transportsModule from '@repo/lib/modules/web3/transports'
-import type { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 import { ChainIdWithFork, getTestRpcSetup } from '@repo/test/anvil/anvil-setup'
-import { mainnetTest, polygonTest } from '@repo/test/anvil/testWagmiConfig'
+import { sonicTest } from '@repo/test/anvil/testWagmiConfig'
 import {
   connectWithDefaultUser,
   disconnectDefaultUser,
@@ -18,8 +16,7 @@ configure({ asyncUtilTimeout: 30_000 })
   Specific setup for integration tests (that it is not needed in unit tests)
 */
 beforeAll(async () => {
-  // By default all the integration tests use MAINNET
-  // If not, they must explicitly call startFork(<networkName>)
+  // The suite runs against the Sonic fork, which is the only chain Beets supports
   await connectWithDefaultUser()
 })
 
@@ -43,14 +40,14 @@ vi.mock('@repo/lib/modules/web3/transports', async importOriginal => {
 })
 
 /*
-  Mocks getViemClient to use the test chain definitions,
-  which use test rpcUrls ('http://127.0.0.1:port/poolId')
+  Mocks getViemClient to use the test chain definition,
+  which uses a test rpcUrl ('http://127.0.0.1:port/poolId')
 */
 vi.mock('@repo/lib/shared/services/viem/viem.client', () => {
   return {
-    getViemClient: (chain: GqlChain) => {
+    getViemClient: () => {
       return createPublicClient({
-        chain: chain === GqlChainValues.Mainnet ? mainnetTest : polygonTest,
+        chain: sonicTest,
         transport: http(),
       })
     },

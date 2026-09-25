@@ -1,116 +1,62 @@
-import { daiAddress, polAddress } from '@repo/lib/debug-helpers'
-import { alternativeTestUserAccount, defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { setUserTokenBalance } from '@repo/lib/test/integration/sdk-utils'
-import {
-  mainnetTestPublicClient,
-  polygonTestPublicClient,
-  baseTestPublicClient,
-} from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { sonicTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { erc20Abi } from 'viem'
 import { ChainContractConfig, useMulticall } from './useMulticall'
-import { mainnet, polygon, base } from 'viem/chains'
+import { sonic } from 'viem/chains'
+import { sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
 
-describe('Performs multicall in multiple chains', () => {
+describe('Performs multicall on the Sonic fork', () => {
   beforeAll(async () => {
-    await Promise.all([
-      setUserTokenBalance({
-        client: mainnetTestPublicClient,
-        account: defaultTestUserAccount,
-        tokenAddress: daiAddress,
-        slot: 2,
-        balance: 1n,
-      }),
-      setUserTokenBalance({
-        client: baseTestPublicClient,
-        account: defaultTestUserAccount,
-        tokenAddress: '0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee',
-        slot: 4,
-        balance: 7702n,
-      }),
-      polygonTestPublicClient.setBalance({
-        address: alternativeTestUserAccount,
-        value: 721n,
-      }),
-    ])
+    await setUserTokenBalance({
+      client: sonicTestPublicClient,
+      account: defaultTestUserAccount,
+      tokenAddress: sonicTokens.ws,
+      slot: 0,
+      balance: 1n,
+    })
   })
 
-  const mainnetRequest: ChainContractConfig = {
-    id: 'daiBalanceOnMainnet',
-    chainId: mainnet.id,
+  const wsBalanceRequest: ChainContractConfig = {
+    id: 'wsBalanceOnSonic',
+    chainId: sonic.id,
     abi: erc20Abi,
-    address: daiAddress,
+    address: sonicTokens.ws,
     functionName: 'balanceOf',
     args: [defaultTestUserAccount],
   }
 
-  const baseRequest: ChainContractConfig = {
-    id: 'ghoBalanceOnBase',
-    chainId: base.id,
+  /*
+    Sonic is the only forked chain, so cross-chain batching is no longer exercised. What these
+    two requests still cover is the parts useMulticall owns: grouping a request list per chain,
+    batching each group into one multicall and keying every result back to its request id.
+  */
+  const stsDecimalsRequest: ChainContractConfig = {
+    id: 'stsDecimalsOnSonic',
+    chainId: sonic.id,
     abi: erc20Abi,
-    address: '0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee',
-    functionName: 'balanceOf',
-    args: [defaultTestUserAccount],
+    address: sonicTokens.sts,
+    functionName: 'decimals',
   }
 
-  const polygonRequest: ChainContractConfig = {
-    id: 'polBalanceOnPolygon',
-    chainId: polygon.id,
-    abi: erc20Abi,
-    address: polAddress,
-    functionName: 'balanceOf',
-    args: [alternativeTestUserAccount],
-  }
+  test('returning one result per request id', async () => {
+    const { result } = testHook(() => useMulticall([wsBalanceRequest, stsDecimalsRequest]))
 
-  test('including mixed mainnet and polygon contracts', async () => {
-    const multicallRequests: ChainContractConfig[] = [mainnetRequest, baseRequest, polygonRequest]
+    await waitFor(() => {
+      const sonicResults = result.current.results[sonic.id]
 
-    const { result } = testHook(() => useMulticall(multicallRequests))
-
-    const waitForChainData = async (chainId: number, label: string) => {
-      await waitFor(() => {
-        const r = result.current.results[chainId]
-
-        if (r?.error) {
-          console.error(`useMulticall error for ${label} (chainId ${chainId}):`, r.error)
-        }
-
-        expect(r?.data).toBeDefined()
-      })
-    }
-
-    await waitForChainData(mainnet.id, 'mainnet')
-
-    expect(result.current.results[mainnet.id]!.data).toMatchInlineSnapshot(`
-      {
-        "daiBalanceOnMainnet": {
-          "result": 1n,
-          "status": "success",
-        },
+      if (sonicResults?.error) {
+        console.error('useMulticall error on sonic:', sonicResults.error)
       }
-    `)
 
-    await waitForChainData(base.id, 'base')
+      expect(sonicResults?.data).toBeDefined()
+    })
 
-    expect(result.current.results[base.id]!.data).toMatchInlineSnapshot(`
-      {
-        "ghoBalanceOnBase": {
-          "result": 7702n,
-          "status": "success",
-        },
-      }
-    `)
-
-    await waitForChainData(polygon.id, 'polygon')
-
-    expect(result.current.results[polygon.id]!.data).toMatchInlineSnapshot(`
-    {
-      "polBalanceOnPolygon": {
-        "result": 721n,
-        "status": "success",
-      },
-    }
-  `)
+    expect(result.current.results[sonic.id]!.data).toMatchObject({
+      wsBalanceOnSonic: { result: 1n, status: 'success' },
+      stsDecimalsOnSonic: { result: 18, status: 'success' },
+    })
   })
 })

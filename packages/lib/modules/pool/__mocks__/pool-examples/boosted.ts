@@ -45,16 +45,6 @@ export const partialBoosted: PoolExample = {
   isFrozen: true,
 }
 
-export const partialBoostedSepolia: PoolExample = {
-  name: 'WETH/stataUSDT',
-  description:
-    'Edge case: Sepolia PARTIAL BOOSTED with 1 ERC4626 (stataUSDT) and one non ERC4626 (WETH)',
-  poolId: '0x445A49D1Ad280B68026629fE029Ed0Fbef549a94',
-  poolChain: GqlChainValues.Sepolia,
-  version: 3,
-  mockName: 'partialBoostedSepoliaWethStataUsdtMock',
-}
-
 export const boostedCoinshiftUsdcUsdl: PoolExample = {
   name: 'B-csUSDC-csUSDL',
   description: 'Full Boosted csUSDC-csUSDL',
@@ -73,13 +63,21 @@ export const stableSurgeBoosted: PoolExample = {
   version: 3,
 }
 
+export const anSSiloWSBoosted: PoolExample = {
+  name: 'bpt-anS-SiloWS',
+  description: 'Edge case: V3 partial boosted stable (anS + SiloWS ERC4626)',
+  poolId: '0x944d4ae892de4bfd38742cc8295d6d5164c5593c',
+  poolChain: GqlChainValues.Sonic,
+  version: 3,
+}
+
 export const boostedPoolExamples = [
   v3SepoliaNestedBoosted,
   usdcUsdtAaveBoosted,
+  usdcGhoUsdtAaveBoosted,
   morphoStakeHouse,
   partialBoosted,
-  partialBoostedSepolia,
   boostedCoinshiftUsdcUsdl,
   stableSurgeBoosted,
-  usdcGhoUsdtAaveBoosted,
+  anSSiloWSBoosted,
 ]

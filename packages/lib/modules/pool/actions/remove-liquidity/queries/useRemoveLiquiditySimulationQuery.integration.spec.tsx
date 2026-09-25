@@ -1,7 +1,6 @@
 import { DefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
-import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { HumanAmount, TokenAmount } from '@balancer/sdk'
 import { toHumanAmount } from '../../LiquidityActionHelpers'
 import { selectRemoveLiquidityHandler } from '../handlers/selectRemoveLiquidityHandler'
@@ -9,11 +8,13 @@ import { RemoveLiquidityType } from '../remove-liquidity.types'
 import { useRemoveLiquiditySimulationQuery } from './useRemoveLiquiditySimulationQuery'
 import { Address } from 'viem'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
-import { AMOUNT_LOWER_THRESHOLD } from '@repo/lib/shared/utils/numbers'
+import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
+import { usdcFlyStS } from '../../../__mocks__/pool-examples/flat'
+import { SONIC_CHAIN_ID, seedSonicTestAccount } from '@repo/lib/test/integration/sonic-fixtures'
 
 async function testQuery(humanBptIn: HumanAmount) {
   const handler = selectRemoveLiquidityHandler(
-    aWjAuraWethPoolElementMock(),
+    getApiPoolMock(usdcFlyStS),
     RemoveLiquidityType.Proportional
   )
 
@@ -22,7 +23,7 @@ async function testQuery(humanBptIn: HumanAmount) {
   const { result } = testHook(
     () =>
       useRemoveLiquiditySimulationQuery({
-        chainId: 1,
+        chainId: SONIC_CHAIN_ID,
         handler,
         humanBptIn,
         tokenOut: emptyTokenOut,
@@ -39,18 +40,20 @@ async function testQuery(humanBptIn: HumanAmount) {
 
 test('runs preview query for proportional remove liquidity', async () => {
   await connectWithDefaultUser()
+  await seedSonicTestAccount()
 
-  const humanBptIn: HumanAmount = '642.164532327890776754'
+  const humanBptIn: HumanAmount = '10'
 
   const result = await testQuery(humanBptIn)
 
   await waitFor(() => expect(result.current.data?.amountsOut).toBeDefined())
 
-  const wjAmountOut = result.current.data?.amountsOut?.[0] as TokenAmount
-  const wjOutUnits = toHumanAmount(wjAmountOut)
-  const wethAmountOut = result.current.data?.amountsOut?.[1] as TokenAmount
-  const wethOutUnits = toHumanAmount(wethAmountOut)
+  const amountsOut = result.current.data?.amountsOut as TokenAmount[]
 
-  expect(Number(wjOutUnits)).toBeGreaterThan(1800)
-  expect(Number(wethOutUnits)).toBeGreaterThan(AMOUNT_LOWER_THRESHOLD)
+  // One amount out per pool token, all non zero for a proportional removal
+  expect(amountsOut).toHaveLength(3)
+
+  amountsOut.forEach(amountOut => {
+    expect(Number(toHumanAmount(amountOut))).toBeGreaterThan(0)
+  })
 })

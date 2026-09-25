@@ -1,49 +1,22 @@
 import { ChainIdWithFork, getTestRpcSetup, testAccounts } from '@repo/test/anvil/anvil-setup'
 import { Address, Chain, http } from 'viem'
-import { base, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
+import { sonic } from 'viem/chains'
 import { createConfig } from 'wagmi'
 import { mock } from 'wagmi/connectors'
 
 const TEST_RPC_TIMEOUT_MS = 60_000
 
-export const mainnetTest = {
-  ...mainnet,
-  ...getTestRpcUrls(mainnet.id),
-} as const satisfies Chain
-
-export const polygonTest = {
-  ...polygon,
-  ...getTestRpcUrls(polygon.id),
-} as const satisfies Chain
-
-export const sepoliaTest = {
-  ...sepolia,
-  ...getTestRpcUrls(sepolia.id),
-} as const satisfies Chain
-
-export const baseTest = {
-  ...base,
-  ...getTestRpcUrls(base.id),
-} as const satisfies Chain
-
-export const gnosisTest = {
-  ...gnosis,
-  ...getTestRpcUrls(gnosis.id),
-} as const satisfies Chain
-
+/*
+  Sonic is the only chain the Beets integration suite forks (see forkedChainIds in
+  anvil-setup), so it is the only chain configured here. A chain without a running fork would
+  resolve to a dead local rpc url and fail with a confusing timeout instead of a clear error.
+*/
 export const sonicTest = {
   ...sonic,
   ...getTestRpcUrls(sonic.id),
 } as const satisfies Chain
 
-export const testChains = [
-  mainnetTest,
-  polygonTest,
-  sepoliaTest,
-  gnosisTest,
-  baseTest,
-  sonicTest,
-] as const
+export const testChains = [sonicTest] as const satisfies readonly Chain[]
 
 function getTestRpcUrls(chainId: ChainIdWithFork) {
   const { port, rpcUrl } = getTestRpcSetup(chainId)
@@ -70,11 +43,6 @@ function createTestWagmiConfig() {
     pollingInterval: 100,
     storage: null,
     transports: {
-      [mainnetTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
-      [polygonTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
-      [sepoliaTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
-      [baseTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
-      [gnosisTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
       [sonicTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
     },
     ssr: false,

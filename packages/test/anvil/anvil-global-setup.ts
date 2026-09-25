@@ -3,8 +3,7 @@ import { dirname, resolve } from 'path'
 import { Instance, Server } from 'prool'
 import { fileURLToPath } from 'url'
 
-import { ANVIL_NETWORKS, getForkUrl } from './anvil-setup'
-import { testChains } from './testWagmiConfig'
+import { ANVIL_NETWORKS, forkedChainIds, getForkUrl } from './anvil-setup'
 import { polygon } from 'viem/chains'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
@@ -55,28 +54,30 @@ async function waitForAnvilReady(port: number, chainName: string, maxAttempts = 
 export async function setup() {
   const promises = []
 
-  for (const chain of Object.values(testChains)) {
-    const forkUrl = getForkUrl(chain.id, false)
+  const forkedChains = forkedChainIds.map(chainId => ANVIL_NETWORKS[chainId])
+
+  for (const chain of forkedChains) {
+    const forkUrl = getForkUrl(chain.chainId, false)
 
     console.log('Starting proxy ', {
       port: chain.port,
       forkUrl,
-      forkBlockNumber: ANVIL_NETWORKS[chain.id].forkBlockNumber,
+      forkBlockNumber: chain.forkBlockNumber,
     })
 
     const server = Server.create({
       port: chain.port,
       host: '::',
       instance: Instance.anvil({
-        chainId: chain.id,
+        chainId: chain.chainId,
         forkUrl,
-        forkBlockNumber: ANVIL_NETWORKS[chain.id].forkBlockNumber,
+        forkBlockNumber: chain.forkBlockNumber,
         mnemonic: process.env.TEST_ACCOUNT_MNEMONIC,
         // anvil >= 1.8.0 fails every eth_call on Polygon forks with
         // "Excess blob gas not set" (Polygon headers have no excessBlobGas
         // field). Pinning the EVM spec below Cancun avoids the blob-gas
         // code path. See https://github.com/balancer/frontend-monorepo/issues/2717
-        ...(chain.id === polygon.id ? { hardfork: 'Shanghai' as const } : {}),
+        ...(chain.chainId === polygon.id ? { hardfork: 'Shanghai' as const } : {}),
       }),
     })
 
@@ -86,9 +87,7 @@ export async function setup() {
   const results = await Promise.all(promises)
 
   // Warm up each anvil instance so the first test using a chain doesn't hit a cold fork
-  await Promise.all(
-    Object.values(testChains).map(chain => waitForAnvilReady(chain.port, chain.name))
-  )
+  await Promise.all(forkedChains.map(chain => waitForAnvilReady(chain.port, String(chain.chainId))))
 
   return async () => {
     await Promise.all(results.map(shutdown => shutdown()))
