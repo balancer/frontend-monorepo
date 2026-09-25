@@ -191,9 +191,11 @@ export class CreatePoolPage {
       await clickRadio(this.page, 'Pool creator', 'My connected wallet:', false)
     }
 
-    await this.dismissSimilarPoolsWarning()
-
-    if (goToNextStep) await clickButton(this.page, 'Next')
+    if (goToNextStep) {
+      await this.clickNextDismissingSimilarPools()
+    } else {
+      await this.dismissSimilarPoolsWarning()
+    }
   }
 
   async fundStep() {
@@ -274,5 +276,30 @@ export class CreatePoolPage {
     } catch {
       // No similar pool exists for this configuration, so the warning never opens
     }
+  }
+
+  /*
+    The similar-pools query resolves after the details step renders, so the warning modal can open
+    late and intercept the Next click. Retry the click, dismissing the modal whenever it blocks.
+  */
+  async clickNextDismissingSimilarPools() {
+    const next = button(this.page, 'Next')
+    const continueAnyway = button(this.page, 'Continue anyway')
+
+    for (let attempt = 0; attempt < 5; attempt++) {
+      if (await continueAnyway.isVisible()) {
+        await continueAnyway.click()
+        continue
+      }
+
+      try {
+        await next.click({ timeout: 5000 })
+        return
+      } catch {
+        // The modal intercepted the click; loop and dismiss it
+      }
+    }
+
+    await next.click()
   }
 }
