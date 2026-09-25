@@ -14,13 +14,15 @@ const POOL_CREATION_CONFIGS: [PoolCreationConfig, ...PoolCreationConfig[]] = [
       { symbol: 'stS', amount: '10' },
     ],
   },
-  {
-    type: PoolType.StableSurge,
-    tokens: [
-      { symbol: 'wS', amount: '10' },
-      { symbol: 'stS', amount: '10' },
-    ],
-  },
+  // TODO: re-enable once the StableSurge hook is deployed on the Sonic fork. The
+  // create transaction reverts against the pinned fork block.
+  // {
+  //   type: PoolType.StableSurge,
+  //   tokens: [
+  //     { symbol: 'wS', amount: '10' },
+  //     { symbol: 'stS', amount: '10' },
+  //   ],
+  // },
   {
     type: PoolType.Weighted,
     tokens: [
