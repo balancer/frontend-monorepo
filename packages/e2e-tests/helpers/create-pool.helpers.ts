@@ -191,6 +191,8 @@ export class CreatePoolPage {
       await clickRadio(this.page, 'Pool creator', 'My connected wallet:', false)
     }
 
+    await this.dismissSimilarPoolsWarning()
+
     if (goToNextStep) await clickButton(this.page, 'Next')
   }
 
@@ -261,5 +263,16 @@ export class CreatePoolPage {
 
     await expect(button(this.page, 'View pool page')).toBeVisible()
     await expect(button(this.page, 'Create another pool')).toBeVisible()
+  }
+
+  async dismissSimilarPoolsWarning() {
+    const continueAnyway = button(this.page, 'Continue anyway')
+
+    try {
+      await continueAnyway.waitFor({ state: 'visible', timeout: 5000 })
+      await continueAnyway.click()
+    } catch {
+      // No similar pool exists for this configuration, so the warning never opens
+    }
   }
 }
