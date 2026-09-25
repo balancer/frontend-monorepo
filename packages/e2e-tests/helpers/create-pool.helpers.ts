@@ -5,7 +5,7 @@ import {
   checkbox,
   selectPopularToken,
 } from '@/helpers/user.helpers'
-import { expect, Page } from '@playwright/test'
+import { expect, Page, Locator } from '@playwright/test'
 import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/constants'
 import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'
 import { PoolType } from '@balancer/sdk'
@@ -183,19 +183,23 @@ export class CreatePoolPage {
 
   async detailsStep(goToNextStep?: boolean) {
     await expect(this.page).toHaveURL(this.urls.details)
+
+    // The similar-pools query can resolve before this step renders, leaving the warning modal
+    // already open and intercepting every interaction on the page.
+    await this.dismissSimilarPoolsWarning()
+
     await expect(this.page.getByText('Pool details')).toBeVisible()
 
     if (!this.isCowAmm) await expect(this.page.getByText('Pool settings')).toBeVisible()
 
     if (isPoolCreatorEnabled(this.config.type)) {
-      await clickRadio(this.page, 'Pool creator', 'My connected wallet:', false)
+      const poolCreatorRadio = this.page
+        .getByRole('radiogroup', { name: 'Pool creator' })
+        .getByText(/^My connected wallet:/i)
+      await this.clickDismissingSimilarPools(poolCreatorRadio)
     }
 
-    if (goToNextStep) {
-      await this.clickNextDismissingSimilarPools()
-    } else {
-      await this.dismissSimilarPoolsWarning()
-    }
+    if (goToNextStep) await this.clickDismissingSimilarPools(button(this.page, 'Next'))
   }
 
   async fundStep() {
@@ -273,33 +277,35 @@ export class CreatePoolPage {
     try {
       await continueAnyway.waitFor({ state: 'visible', timeout: 5000 })
       await continueAnyway.click()
+      await continueAnyway.waitFor({ state: 'hidden', timeout: 5000 })
     } catch {
       // No similar pool exists for this configuration, so the warning never opens
     }
   }
 
   /*
-    The similar-pools query resolves after the details step renders, so the warning modal can open
-    late and intercept the Next click. Retry the click, dismissing the modal whenever it blocks.
+    The similar-pools query resolves asynchronously, so the warning modal can open at any point after
+    the details step renders and intercept clicks. Retry the action, dismissing the modal whenever it
+    is in the way.
   */
-  async clickNextDismissingSimilarPools() {
-    const next = button(this.page, 'Next')
+  async clickDismissingSimilarPools(locator: Locator) {
     const continueAnyway = button(this.page, 'Continue anyway')
 
     for (let attempt = 0; attempt < 5; attempt++) {
       if (await continueAnyway.isVisible()) {
         await continueAnyway.click()
+        await continueAnyway.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {})
         continue
       }
 
       try {
-        await next.click({ timeout: 5000 })
+        await locator.click({ timeout: 5000 })
         return
       } catch {
         // The modal intercepted the click; loop and dismiss it
       }
     }
 
-    await next.click()
+    await locator.click()
   }
 }
