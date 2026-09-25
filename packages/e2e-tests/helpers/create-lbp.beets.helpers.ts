@@ -180,8 +180,11 @@ export async function doReviewStep(page: Page, { lbpConfig }: { lbpConfig: Beets
   await clickButton(page, 'Deploy pool on Sonic')
 
   if (lbpConfig.saleType === 'seeded') {
-    await clickButton(page, `Approve ${COLLATERAL_SYMBOL}`)
-    await clickButton(page, `Approve ${lbpConfig.saleToken.symbol}`)
+    const collateralApproval = button(page, `Approve ${COLLATERAL_SYMBOL}`)
+    const saleTokenApproval = button(page, `Approve ${lbpConfig.saleToken.symbol}`)
+    await expect(collateralApproval.or(saleTokenApproval).first()).toBeVisible()
+    if (await collateralApproval.isVisible()) await collateralApproval.click()
+    await saleTokenApproval.click()
     await clickButton(page, `Sign approvals: ${COLLATERAL_SYMBOL}, ${lbpConfig.saleToken.symbol}`)
   } else {
     await clickButton(page, `Approve ${lbpConfig.saleToken.symbol}`)
