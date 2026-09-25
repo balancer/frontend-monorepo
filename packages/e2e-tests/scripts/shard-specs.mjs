@@ -9,11 +9,11 @@
   Reads E2E_SHARD ("current/total", 1-based). Unset means "run everything", so
   the local scripts behave exactly as before.
 
-  Usage: node scripts/shard-specs.mjs [dir]
+  Usage: node scripts/shard-specs.mjs [dir]  (dir defaults to tests/dev/beets)
 */
 import { execFileSync } from 'node:child_process'
 
-const dir = process.argv[2] ?? 'tests/dev/balancer'
+const dir = process.argv[2] ?? 'tests/dev/beets'
 const shard = process.env.E2E_SHARD
 
 if (!shard) {
