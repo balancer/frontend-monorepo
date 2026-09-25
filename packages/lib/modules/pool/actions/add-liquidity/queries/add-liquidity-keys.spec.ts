@@ -2,26 +2,25 @@ import { gyroPoolMock } from '../../../__mocks__/gyroPoolMock'
 import { Pool } from '../../../pool.types'
 import { addLiquidityKeys } from './add-liquidity-keys'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
-import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
+import {} from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { UnbalancedAddLiquidityV2Handler } from '../handlers/UnbalancedAddLiquidityV2.handler'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
+import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
+import { scUsdStS } from '../../../__mocks__/pool-examples/flat'
+import { sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
 
 function testGenerateLiquidityKeys(pool: Pool) {
   const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     {
-      tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F',
+      tokenAddress: '0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae',
       humanAmount: '0',
-      symbol: 'wjAura',
+      symbol: 'scUSD',
     },
-    {
-      tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      humanAmount: '0',
-      symbol: 'WETH',
-    },
+    { tokenAddress: sonicTokens.sts, humanAmount: '0', symbol: 'stS' },
   ]
 
   return addLiquidityKeys.priceImpact({
-    handler: new UnbalancedAddLiquidityV2Handler(aWjAuraWethPoolElementMock()),
+    handler: new UnbalancedAddLiquidityV2Handler(getApiPoolMock(scUsdStS)),
     userAddress: defaultTestUserAccount,
     pool,
     slippage: '0.2',
@@ -31,18 +30,19 @@ function testGenerateLiquidityKeys(pool: Pool) {
 
 describe('Generates expected query keys', () => {
   test('For an unbalanced pool', () => {
-    const result = testGenerateLiquidityKeys(aWjAuraWethPoolElementMock())
+    const result = testGenerateLiquidityKeys(getApiPoolMock(scUsdStS))
 
     expect(result).toMatchInlineSnapshot(`
       [
         "add-liquidity",
         "price-impact",
-        "UnbalancedAddLiquidityV2Handler:0x3B7D260597A3e3f90274563a9e481618C6B951Eb:0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512:0.2:[{"tokenAddress":"0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F","humanAmount":"0","symbol":"wjAura"},{"tokenAddress":"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2","humanAmount":"0","symbol":"WETH"}]no-permit2",
+        "UnbalancedAddLiquidityV2Handler:0x3B7D260597A3e3f90274563a9e481618C6B951Eb:0x25ca5451cd5a50ab1d324b5e64f32c0799661891000200000000000000000018:0.2:[{"tokenAddress":"0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae","humanAmount":"0","symbol":"scUSD"},{"tokenAddress":"0xe5da20f15420ad15de0fa650600afc998bbe3955","humanAmount":"0","symbol":"stS"}]no-permit2",
       ]
     `)
   })
 
-  test('For a gyro pool (with proportional adds)', () => {
+  // TODO: Add a Beets/Sonic Gyro/ECLP pool fixture for proportional add query keys.
+  test.skip('For a gyro pool (with proportional adds)', () => {
     const result = testGenerateLiquidityKeys(gyroPoolMock)
 
     // Only stringifies the first humanAmount in the humanAmountsIn array

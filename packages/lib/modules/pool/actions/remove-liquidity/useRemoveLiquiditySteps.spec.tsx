@@ -1,11 +1,11 @@
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { getApiPoolMock } from '../../__mocks__/api-mocks/api-mocks'
-import { partialBoosted } from '../../__mocks__/pool-examples/boosted'
-import { balWeth8020 } from '../../__mocks__/pool-examples/flat'
+import { anSSiloWSBoosted } from '../../__mocks__/pool-examples/boosted'
+import { scUsdStS } from '../../__mocks__/pool-examples/flat'
 import { getApprovalAndRemoveSteps } from './useRemoveLiquiditySteps'
 
-const v2Pool = getApiPoolMock(balWeth8020)
-const v3Pool = getApiPoolMock(partialBoosted)
+const v2Pool = getApiPoolMock(scUsdStS)
+const v3Pool = getApiPoolMock(anSSiloWSBoosted)
 
 const mockTransactionStep = (id: string, completed = false): TransactionStep =>
   ({

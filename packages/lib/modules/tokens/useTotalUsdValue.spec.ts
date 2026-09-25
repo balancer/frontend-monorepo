@@ -1,30 +1,31 @@
-import { balAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { fakeTokenBySymbol } from '@repo/lib/test/data/all-gql-tokens.fake'
+import { sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
 import { actSleep, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { act } from '@testing-library/react'
 import { useTotalUsdValue } from './useTotalUsdValue'
 import { mockTokenPricesList } from '@repo/lib/test/msw/handlers/Tokens.handlers'
 import { aTokenPriceMock } from '@repo/lib/modules/tokens/__mocks__/token.builders'
 import { HumanTokenAmountWithSymbol } from './token.types'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
 
-const balPrice = 2
-const wethPrice = 3
+const stSPrice = 2
+const wsPrice = 3
 
 mockTokenPricesList([
-  aTokenPriceMock({ address: balAddress, price: balPrice }),
-  aTokenPriceMock({ address: wETHAddress, price: wethPrice }),
+  aTokenPriceMock({ address: sonicTokens.sts, chain: GqlChainValues.Sonic, price: stSPrice }),
+  aTokenPriceMock({ address: sonicTokens.ws, chain: GqlChainValues.Sonic, price: wsPrice }),
 ])
 
 test('calculates total USD for human amounts in', async () => {
-  const tokens = [fakeTokenBySymbol('BAL'), fakeTokenBySymbol('WETH')]
+  const tokens = [fakeTokenBySymbol('stS'), fakeTokenBySymbol('wS')]
 
   const { result } = testHook(() => {
     return useTotalUsdValue(tokens)
   })
 
   const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
-    { tokenAddress: balAddress, humanAmount: '100', symbol: 'BAL' },
-    { tokenAddress: wETHAddress, humanAmount: '50', symbol: 'WETH' },
+    { tokenAddress: sonicTokens.sts, humanAmount: '100', symbol: 'stS' },
+    { tokenAddress: sonicTokens.ws, humanAmount: '50', symbol: 'wS' },
   ]
 
   //Wait for price mocks to be loaded
@@ -34,6 +35,6 @@ test('calculates total USD for human amounts in', async () => {
     return result.current.usdValueFor(humanAmountsIn)
   })
 
-  // balTotal + wethTotal = (100 x 2) + (50 x 3) = 350
+  // stSTotal + wsTotal = (100 x 2) + (50 x 3) = 350
   expect(totalUsd).toBe('350')
 })

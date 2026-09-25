@@ -1,4 +1,3 @@
-import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import type {
   GqlPoolUserBalance,
   GqlUserStakedBalance,
@@ -19,26 +18,28 @@ import {
   hasBalancerStakedBalance,
   hasTinyBalance,
 } from './user-balance.helpers'
+import { getApiPoolMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/api-mocks'
+import { scUsdStS } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
 
 const apiStakedBalances: GqlUserStakedBalance[] = [
   {
     balance: '0',
     balanceUsd: 0,
     stakingType: GqlPoolStakingTypeValues.Gauge,
-    stakingId: '0xe99a452a65e5bb316febac5de83a1ca59f6a3a94', //Preferential gauge
+    stakingId: '0xa472438718fe7785107fcbe584d39183a6420d36', // Preferred scUSD/stS gauge
     __typename: 'GqlUserStakedBalance',
   },
   {
     balance: '52.123',
     balanceUsd: 7.9,
     stakingType: GqlPoolStakingTypeValues.Gauge,
-    stakingId: '0x55ec14e951b1c25ab09132dae12363bea0d20105', //Non preferential gauge
+    stakingId: '0x27aaf70334cc564bcedfe0cca43cf3dadc850bea', // Other Sonic gauge
     __typename: 'GqlUserStakedBalance',
   },
 ]
 
 test('User balance helpers', () => {
-  const pool = aWjAuraWethPoolElementMock()
+  const pool = getApiPoolMock(scUsdStS)
 
   const userBalanceMock: GqlPoolUserBalance = {
     __typename: 'GqlPoolUserBalance',
@@ -71,7 +72,7 @@ test('User balance helpers', () => {
 })
 
 test('has tiny balance', () => {
-  const pool = aWjAuraWethPoolElementMock()
+  const pool = getApiPoolMock(scUsdStS)
 
   const userBalanceMock: GqlPoolUserBalance = {
     __typename: 'GqlPoolUserBalance',
@@ -88,7 +89,7 @@ test('has tiny balance', () => {
 
 describe('invalid balance fallbacks', () => {
   test('getUserTotalBalance returns 0 when totalBalance is invalid', () => {
-    const pool = aWjAuraWethPoolElementMock()
+    const pool = getApiPoolMock(scUsdStS)
 
     pool.userBalance = {
       __typename: 'GqlPoolUserBalance',
@@ -103,7 +104,7 @@ describe('invalid balance fallbacks', () => {
   })
 
   test('getUserTotalBalanceInt returns 0n when totalBalance is invalid', () => {
-    const pool = aWjAuraWethPoolElementMock()
+    const pool = getApiPoolMock(scUsdStS)
 
     pool.userBalance = {
       __typename: 'GqlPoolUserBalance',
@@ -118,7 +119,7 @@ describe('invalid balance fallbacks', () => {
   })
 
   test('calcStakedBalance handles invalid staked balances', () => {
-    const pool = aWjAuraWethPoolElementMock()
+    const pool = getApiPoolMock(scUsdStS)
 
     pool.userBalance = {
       __typename: 'GqlPoolUserBalance',
@@ -149,7 +150,7 @@ describe('invalid balance fallbacks', () => {
   })
 
   test('handles scientific notation from API balances', () => {
-    const pool = aWjAuraWethPoolElementMock()
+    const pool = getApiPoolMock(scUsdStS)
 
     pool.userBalance = {
       __typename: 'GqlPoolUserBalance',

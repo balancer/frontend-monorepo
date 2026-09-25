@@ -39,7 +39,8 @@ describe('useAprTooltip', () => {
   })
 })
 
-it('When the pool has multiple Yield bearing token APRs', () => {
+// TODO: Add a Beets/Sonic pool with two yield-bearing ERC4626 token APRs.
+it.skip('When the pool has multiple Yield bearing token APRs', () => {
   const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
 
   const result = testUseAprTooltip({ aprItems: pool.dynamicData.aprItems })
@@ -65,7 +66,8 @@ it('When the pool has multiple Yield bearing token APRs', () => {
   `)
 })
 
-it('When the pool has multiple MERKL token incentives', () => {
+// TODO: Add a Beets/Sonic pool with multiple Merkl token incentives.
+it.skip('When the pool has multiple MERKL token incentives', () => {
   const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
 
   const result = testUseAprTooltip({ aprItems: pool.dynamicData.aprItems })

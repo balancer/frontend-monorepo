@@ -1,5 +1,5 @@
 import { getApiPoolMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/api-mocks'
-import { boostedCoinshiftUsdcUsdl } from '@repo/lib/modules/pool/__mocks__/pool-examples/boosted'
+import { anSSiloWSBoosted } from '@repo/lib/modules/pool/__mocks__/pool-examples/boosted'
 import type { GqlPoolStakingGaugeReward } from '@repo/lib/shared/services/api/graphql-derived-types'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { GetUserPoolRewardsParams, useGetUserPoolRewards } from './useGetUserPoolRewards'
@@ -7,18 +7,18 @@ import { BalTokenReward } from '../portfolio/PortfolioClaim/useBalRewards'
 import { formatUnits } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { BPT_DECIMALS } from './pool.constants'
-import { balAddress } from '@repo/lib/debug-helpers'
+import {} from '@repo/lib/debug-helpers'
+import { sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
 
 function getPoolWithStakingGaugeRewards() {
-  const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
+  const pool = getApiPoolMock(anSSiloWSBoosted)
   if (!pool.staking?.gauge?.rewards) throw new Error('Pool should have staking gauge rewards')
 
-  // Add fixed rewards to avoid breaking tests if the pool mock is updated
   pool.staking.gauge.rewards = [
     {
-      id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0xba100000625a3754423978a60c9317c58a424e3d-balgauge',
+      id: `${pool.staking.gauge.gaugeAddress}-${sonicTokens.sts}-reward`,
       rewardPerSecond: '0.000518908841708722',
-      tokenAddress: balAddress,
+      tokenAddress: sonicTokens.sts,
     } as GqlPoolStakingGaugeReward,
   ]
 
@@ -31,29 +31,29 @@ function testUseGetUserPoolRewards(params: GetUserPoolRewardsParams) {
 }
 
 describe('useGetPoolRewards', () => {
-  test('when pool has BAL rewards', () => {
+  test('when pool has stS rewards', () => {
     const pool = getPoolWithStakingGaugeRewards()
 
-    const balRewardsMock: BalTokenReward[] = [
+    const rewardsMock: BalTokenReward[] = [
       {
         gaugeAddress: '0x1',
         balance: 1500000000000000000n,
         decimals: BPT_DECIMALS,
         fiatBalance: bn(formatUnits(1500000000000000000n, BPT_DECIMALS)),
         humanBalance: '1.5',
-        tokenAddress: balAddress,
+        tokenAddress: sonicTokens.sts,
         pool: pool,
       },
     ]
 
     const result = testUseGetUserPoolRewards({
       pool,
-      balRewards: balRewardsMock,
+      balRewards: rewardsMock,
       nonBalRewards: [],
     })
 
     expect(result.current.rewardsByToken).toEqual({
-      [balAddress]: '1.5',
+      [sonicTokens.sts]: '1.5',
     })
   })
 })
