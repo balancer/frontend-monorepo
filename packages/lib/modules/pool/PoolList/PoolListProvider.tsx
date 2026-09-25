@@ -20,6 +20,7 @@ import { useQuery as useReactQuery } from '@tanstack/react-query'
 import { useTokens } from '../../tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useWalletTokenBalances } from '../../tokens/useWalletTokenBalances'
+import { findPoolsByAddress, isPoolAddressSearch } from './findPoolsByAddress'
 
 export function usePoolListLogic({
   fixedPoolTypes,
@@ -39,11 +40,16 @@ export function usePoolListLogic({
 
   const { queryVariables, toggleUserAddress, joinablePools } = queryState
 
+  const isAddressSearch = isPoolAddressSearch(queryVariables.textSearch)
+
   const variables = {
     ...queryVariables,
     where: {
       ...queryVariables.where,
-      poolTypeIn: fixedPoolTypes || queryVariables.where.poolTypeIn,
+      // Keep fixed type pages (e.g. CoW) scoped, unless the user is searching by address.
+      poolTypeIn: isAddressSearch
+        ? queryVariables.where.poolTypeIn
+        : fixedPoolTypes || queryVariables.where.poolTypeIn,
       chainIn: fixedChains || queryVariables.where.chainIn,
     },
   }
@@ -61,6 +67,23 @@ export function usePoolListLogic({
 
   const selectedChains = variables.where.chainIn || []
   const joinableChains = selectedChains.filter(chain => chain !== GqlChainValues.Sepolia)
+
+  const addressSearchFallback = useReactQuery({
+    queryKey: [
+      'pool-list-address-search',
+      queryVariables.textSearch || '',
+      selectedChains.join(','),
+    ],
+    queryFn: () =>
+      findPoolsByAddress(apolloClient, queryVariables.textSearch!, selectedChains as GqlChain[]),
+    enabled: isAddressSearch && !loading && poolsData.length === 0 && selectedChains.length > 0,
+    staleTime: 30_000,
+  })
+
+  const poolsWithAddressFallback =
+    isAddressSearch && poolsData.length === 0 && addressSearchFallback.data?.length
+      ? addressSearchFallback.data
+      : poolsData
 
   const {
     tokenBalancesByChain: walletTokenAddressesByChain,
@@ -130,8 +153,8 @@ export function usePoolListLogic({
   })
 
   const joinablePoolsData = useMemo(() => {
-    if (!joinablePools || !isConnected || !isAddress(userAddress)) return poolsData
-    if (walletBalanceErrors.length > 0) return poolsData
+    if (!joinablePools || !isConnected || !isAddress(userAddress)) return poolsWithAddressFallback
+    if (walletBalanceErrors.length > 0) return poolsWithAddressFallback
 
     const allJoinablePools = joinablePoolsQuery.data || []
     const uniquePools = new Map<string, PoolListItem>()
@@ -147,7 +170,7 @@ export function usePoolListLogic({
     })
   }, [
     joinablePools,
-    poolsData,
+    poolsWithAddressFallback,
     isConnected,
     userAddress,
     joinablePoolsQuery.data,
@@ -162,11 +185,16 @@ export function usePoolListLogic({
       joinablePoolsQuery.isLoading ||
       joinablePoolsQuery.isFetching)
 
+  const isAddressFallbackLoading =
+    isAddressSearch &&
+    poolsData.length === 0 &&
+    (addressSearchFallback.isLoading || addressSearchFallback.isFetching)
+
   const filteredPools = joinablePools
     ? isJoinableBalanceLoading
-      ? poolsData
+      ? poolsWithAddressFallback
       : joinablePoolsData
-    : poolsData
+    : poolsWithAddressFallback
 
   const isFixedPoolType = !!fixedPoolTypes && fixedPoolTypes.length > 0
 
@@ -180,9 +208,13 @@ export function usePoolListLogic({
 
   return {
     pools: filteredPools,
-    count: joinablePools ? filteredPools.length : data?.count || previousData?.count,
+    count: joinablePools
+      ? filteredPools.length
+      : isAddressSearch && poolsData.length === 0 && addressSearchFallback.data?.length
+        ? addressSearchFallback.data.length
+        : data?.count || previousData?.count,
     queryState,
-    loading: loading || isJoinableBalanceLoading,
+    loading: loading || isJoinableBalanceLoading || isAddressFallbackLoading,
     error,
     networkStatus,
     isFixedPoolType,

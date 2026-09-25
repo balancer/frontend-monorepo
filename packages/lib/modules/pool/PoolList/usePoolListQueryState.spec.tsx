@@ -86,4 +86,28 @@ describe('Pool list state query', () => {
 
     expect(result.current.totalFilterCount).toBe(0)
   })
+
+  it('relaxes browse filters when searching by pool address', () => {
+    const poolAddress = '0xAE4f5c7767db2931a7e82200C14EdCFf4A5fa1fE'
+
+    const { result } = testHook(() => usePoolListQueryState(), {
+      wrapper: withNuqsTestingAdapter({ searchParams: `?textSearch=${poolAddress}` }),
+    })
+
+    expect(result.current.queryVariables.where.poolTypeNotIn).toBeUndefined()
+    expect(result.current.queryVariables.where.poolTypeIn).toBeUndefined()
+    expect(result.current.queryVariables.where.reviewedOnly).toBe(false)
+    expect(result.current.queryVariables.where.minTvl).toBeUndefined()
+    expect(result.current.queryVariables.textSearch).toBe(poolAddress)
+  })
+
+  it('keeps LBP exclusion and reviewedOnly for non-address search', () => {
+    const { result } = testHook(() => usePoolListQueryState(), {
+      wrapper: withNuqsTestingAdapter({ searchParams: '?textSearch=wstETH' }),
+    })
+
+    expect(result.current.queryVariables.where.poolTypeNotIn).toEqual(['LIQUIDITY_BOOTSTRAPPING'])
+    expect(result.current.queryVariables.where.reviewedOnly).toBe(true)
+    expect(result.current.queryVariables.where.poolTypeIn).toBeDefined()
+  })
 })

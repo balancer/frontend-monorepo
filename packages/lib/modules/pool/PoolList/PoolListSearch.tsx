@@ -16,7 +16,7 @@ export function PoolListSearch() {
             ariaLabel="search for a pool"
             autoFocus={false}
             isLoading={loading}
-            placeholder="Search..."
+            placeholder="Search by name, symbol or address"
             search={searchText}
             setSearch={setSearch}
           />

@@ -35,6 +35,7 @@ import { PaginationState } from '@repo/lib/shared/components/pagination/paginati
 
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isPoolAddressSearch } from './findPoolsByAddress'
 
 export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
   {
@@ -312,26 +313,31 @@ export function usePoolListQueryState() {
 
   const mappedPoolTags = poolTags.length > 0 ? poolTags : []
 
+  // Exact address search should bypass browse filters (LBP hide, reviewedOnly, minTvl, tags)
+  // so users can find a pool by pasting its contract address.
+  const isAddressSearch = isPoolAddressSearch(textSearch)
+
   const queryVariables = {
     first,
     skip,
     orderBy,
     orderDirection,
     where: {
-      poolTypeIn: mappedPoolTypes.filter(
-        poolType => poolType !== GqlPoolTypeValues.LiquidityBootstrapping
-      ),
-      poolTypeNotIn: [GqlPoolTypeValues.LiquidityBootstrapping],
+      poolTypeIn: isAddressSearch
+        ? undefined
+        : mappedPoolTypes.filter(poolType => poolType !== GqlPoolTypeValues.LiquidityBootstrapping),
+      poolTypeNotIn: isAddressSearch ? undefined : [GqlPoolTypeValues.LiquidityBootstrapping],
       chainIn: networks.length > 0 ? networks : PROJECT_CONFIG.supportedNetworks,
       userAddress,
-      minTvl,
-      tagIn:
-        mappedPoolTags.length > 0 || poolHookTags.length > 0
+      minTvl: isAddressSearch ? undefined : minTvl,
+      tagIn: isAddressSearch
+        ? null
+        : mappedPoolTags.length > 0 || poolHookTags.length > 0
           ? [...mappedPoolTags, ...(poolHookTags || [])]
           : null,
       tagNotIn: ['BLACK_LISTED'],
-      protocolVersionIn: protocolVersion ? [protocolVersion] : undefined,
-      reviewedOnly: true,
+      protocolVersionIn: isAddressSearch || !protocolVersion ? undefined : [protocolVersion],
+      reviewedOnly: isAddressSearch ? false : true,
     },
     textSearch,
   }
