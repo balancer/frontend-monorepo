@@ -65,25 +65,33 @@ export const POOL_CREATION_CONFIGS: [PoolCreationConfig, ...PoolCreationConfig[]
   },
 ]
 
-function stepUrl(index: number) {
+function stepUrl(index: number, baseUrl = BASE_URL) {
   const step = POOL_CREATION_FORM_STEPS[index]
   if (!step) throw new Error(`Missing pool creation form step at index ${index}`)
-  return `${BASE_URL}/${step.id}`
+  return `${baseUrl}/${step.id}`
 }
 
 export class CreatePoolPage {
-  readonly urls = {
-    base: BASE_URL,
-    type: stepUrl(0),
-    tokens: stepUrl(1),
-    details: stepUrl(2),
-    fund: stepUrl(3),
-    buildCow: `${BASE_URL}?protocol=cow`,
+  get urls() {
+    const baseUrl = this.options.baseUrl ?? BASE_URL
+    return {
+      base: baseUrl,
+      type: stepUrl(0, baseUrl),
+      tokens: stepUrl(1, baseUrl),
+      details: stepUrl(2, baseUrl),
+      fund: stepUrl(3, baseUrl),
+      buildCow: `${baseUrl}?protocol=cow`,
+    }
   }
 
   constructor(
     private page: Page,
     private config: PoolCreationConfig = POOL_CREATION_CONFIGS[0],
+    private readonly options: {
+      baseUrl?: string
+      networkName?: string
+      hasProtocolChoice?: boolean
+    } = {},
   ) {}
 
   get isStable() {
@@ -151,7 +159,8 @@ export class CreatePoolPage {
 
   async expectInitialFormState() {
     await expect(this.page).toHaveURL(this.urls.type)
-    await expect(this.page.getByText('Choose protocol')).toBeVisible()
+    if (this.options.hasProtocolChoice ?? true)
+      await expect(this.page.getByText('Choose protocol')).toBeVisible()
     await expect(this.page.getByText('Choose network')).toBeVisible()
     await expect(this.page.getByText('Choose a pool type')).toBeVisible()
   }
@@ -195,7 +204,10 @@ export class CreatePoolPage {
     if (this.isAutoRange) {
       await generalRisksCheckbox.click()
       await clickButton(this.page, 'Create Pool')
-      await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
+      await clickButton(
+        this.page,
+        `Deploy pool on ${this.options.networkName ?? 'Ethereum Mainnet'}`,
+      )
     }
 
     await this.fillTokenAmounts()
@@ -213,11 +225,26 @@ export class CreatePoolPage {
       await clickButton(this.page, 'Initialize Pool')
     } else {
       await clickButton(this.page, 'Create Pool')
-      await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
+      await clickButton(
+        this.page,
+        `Deploy pool on ${this.options.networkName ?? 'Ethereum Mainnet'}`,
+      )
       await expect(this.page.getByText('Pool creation confirmed!')).toBeVisible()
     }
 
-    for (const token of this.config.tokens) {
+    const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
+    for (const [index, token] of this.config.tokens.entries()) {
+      if (!this.isCowAmm) {
+        const remainingApprovals = this.config.tokens
+          .slice(index)
+          .map(t => button(this.page, `Approve ${t.symbol}`))
+        const nextAction = remainingApprovals.reduce(
+          (locator, approval) => locator.or(approval),
+          button(this.page, signApprovalsButtonText),
+        )
+        await expect(nextAction.first()).toBeVisible()
+        if (!(await button(this.page, `Approve ${token.symbol}`).isVisible())) continue
+      }
       await clickButton(this.page, `Approve ${token.symbol}`)
     }
 
@@ -228,7 +255,6 @@ export class CreatePoolPage {
       await clickButton(this.page, 'Set Swap Fee')
       await clickButton(this.page, 'Finalize')
     } else {
-      const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
       await clickButton(this.page, signApprovalsButtonText)
       await clickButton(this.page, 'Seed pool liquidity')
     }
