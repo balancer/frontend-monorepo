@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 import { balWeth8020 } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
 
+test.skip(true, 'Migrated to beets: tests/build/beets/beets.add-liquidity.spec.ts')
+
 test('Balancer: add liquidity page renders', async ({ page }) => {
   await page.goto(`http://localhost:3000/pools/ethereum/v2/${balWeth8020.poolId}`)
 

@@ -79,5 +79,6 @@ export const boostedPoolExamples = [
   partialBoosted,
   boostedCoinshiftUsdcUsdl,
   stableSurgeBoosted,
+  usdcGhoUsdtAaveBoosted,
   anSSiloWSBoosted,
 ]

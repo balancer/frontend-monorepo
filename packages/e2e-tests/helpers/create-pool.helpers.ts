@@ -5,7 +5,7 @@ import {
   checkbox,
   selectPopularToken,
 } from '@/helpers/user.helpers'
-import { expect, Page } from '@playwright/test'
+import { expect, Page, Locator } from '@playwright/test'
 import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/constants'
 import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'
 import { PoolType } from '@balancer/sdk'
@@ -65,25 +65,33 @@ export const POOL_CREATION_CONFIGS: [PoolCreationConfig, ...PoolCreationConfig[]
   },
 ]
 
-function stepUrl(index: number) {
+function stepUrl(index: number, baseUrl = BASE_URL) {
   const step = POOL_CREATION_FORM_STEPS[index]
   if (!step) throw new Error(`Missing pool creation form step at index ${index}`)
-  return `${BASE_URL}/${step.id}`
+  return `${baseUrl}/${step.id}`
 }
 
 export class CreatePoolPage {
-  readonly urls = {
-    base: BASE_URL,
-    type: stepUrl(0),
-    tokens: stepUrl(1),
-    details: stepUrl(2),
-    fund: stepUrl(3),
-    buildCow: `${BASE_URL}?protocol=cow`,
+  get urls() {
+    const baseUrl = this.options.baseUrl ?? BASE_URL
+    return {
+      base: baseUrl,
+      type: stepUrl(0, baseUrl),
+      tokens: stepUrl(1, baseUrl),
+      details: stepUrl(2, baseUrl),
+      fund: stepUrl(3, baseUrl),
+      buildCow: `${baseUrl}?protocol=cow`,
+    }
   }
 
   constructor(
     private page: Page,
     private config: PoolCreationConfig = POOL_CREATION_CONFIGS[0],
+    private readonly options: {
+      baseUrl?: string
+      networkName?: string
+      hasProtocolChoice?: boolean
+    } = {},
   ) {}
 
   get isStable() {
@@ -151,7 +159,8 @@ export class CreatePoolPage {
 
   async expectInitialFormState() {
     await expect(this.page).toHaveURL(this.urls.type)
-    await expect(this.page.getByText('Choose protocol')).toBeVisible()
+    if (this.options.hasProtocolChoice ?? true)
+      await expect(this.page.getByText('Choose protocol')).toBeVisible()
     await expect(this.page.getByText('Choose network')).toBeVisible()
     await expect(this.page.getByText('Choose a pool type')).toBeVisible()
   }
@@ -174,15 +183,23 @@ export class CreatePoolPage {
 
   async detailsStep(goToNextStep?: boolean) {
     await expect(this.page).toHaveURL(this.urls.details)
+
+    // The similar-pools query can resolve before this step renders, leaving the warning modal
+    // already open and intercepting every interaction on the page.
+    await this.dismissSimilarPoolsWarning()
+
     await expect(this.page.getByText('Pool details')).toBeVisible()
 
     if (!this.isCowAmm) await expect(this.page.getByText('Pool settings')).toBeVisible()
 
     if (isPoolCreatorEnabled(this.config.type)) {
-      await clickRadio(this.page, 'Pool creator', 'My connected wallet:', false)
+      const poolCreatorRadio = this.page
+        .getByRole('radiogroup', { name: 'Pool creator' })
+        .getByText(/^My connected wallet:/i)
+      await this.clickDismissingSimilarPools(poolCreatorRadio)
     }
 
-    if (goToNextStep) await clickButton(this.page, 'Next')
+    if (goToNextStep) await this.clickDismissingSimilarPools(button(this.page, 'Next'))
   }
 
   async fundStep() {
@@ -195,7 +212,10 @@ export class CreatePoolPage {
     if (this.isAutoRange) {
       await generalRisksCheckbox.click()
       await clickButton(this.page, 'Create Pool')
-      await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
+      await clickButton(
+        this.page,
+        `Deploy pool on ${this.options.networkName ?? 'Ethereum Mainnet'}`,
+      )
     }
 
     await this.fillTokenAmounts()
@@ -213,11 +233,26 @@ export class CreatePoolPage {
       await clickButton(this.page, 'Initialize Pool')
     } else {
       await clickButton(this.page, 'Create Pool')
-      await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
+      await clickButton(
+        this.page,
+        `Deploy pool on ${this.options.networkName ?? 'Ethereum Mainnet'}`,
+      )
       await expect(this.page.getByText('Pool creation confirmed!')).toBeVisible()
     }
 
-    for (const token of this.config.tokens) {
+    const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
+    for (const [index, token] of this.config.tokens.entries()) {
+      if (!this.isCowAmm) {
+        const remainingApprovals = this.config.tokens
+          .slice(index)
+          .map(t => button(this.page, `Approve ${t.symbol}`))
+        const nextAction = remainingApprovals.reduce(
+          (locator, approval) => locator.or(approval),
+          button(this.page, signApprovalsButtonText),
+        )
+        await expect(nextAction.first()).toBeVisible()
+        if (!(await button(this.page, `Approve ${token.symbol}`).isVisible())) continue
+      }
       await clickButton(this.page, `Approve ${token.symbol}`)
     }
 
@@ -228,12 +263,49 @@ export class CreatePoolPage {
       await clickButton(this.page, 'Set Swap Fee')
       await clickButton(this.page, 'Finalize')
     } else {
-      const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
       await clickButton(this.page, signApprovalsButtonText)
       await clickButton(this.page, 'Seed pool liquidity')
     }
 
     await expect(button(this.page, 'View pool page')).toBeVisible()
     await expect(button(this.page, 'Create another pool')).toBeVisible()
+  }
+
+  async dismissSimilarPoolsWarning() {
+    const continueAnyway = button(this.page, 'Continue anyway')
+
+    try {
+      await continueAnyway.waitFor({ state: 'visible', timeout: 5000 })
+      await continueAnyway.click()
+      await continueAnyway.waitFor({ state: 'hidden', timeout: 5000 })
+    } catch {
+      // No similar pool exists for this configuration, so the warning never opens
+    }
+  }
+
+  /*
+    The similar-pools query resolves asynchronously, so the warning modal can open at any point after
+    the details step renders and intercept clicks. Retry the action, dismissing the modal whenever it
+    is in the way.
+  */
+  async clickDismissingSimilarPools(locator: Locator) {
+    const continueAnyway = button(this.page, 'Continue anyway')
+
+    for (let attempt = 0; attempt < 5; attempt++) {
+      if (await continueAnyway.isVisible()) {
+        await continueAnyway.click()
+        await continueAnyway.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {})
+        continue
+      }
+
+      try {
+        await locator.click({ timeout: 5000 })
+        return
+      } catch {
+        // The modal intercepted the click; loop and dismiss it
+      }
+    }
+
+    await locator.click()
   }
 }

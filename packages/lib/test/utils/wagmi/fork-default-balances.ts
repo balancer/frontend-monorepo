@@ -116,6 +116,19 @@ export const gnosisTokenBalances: TokenBalance[] = [
 
 export const sonicTokenBalances: TokenBalance[] = [
   {
+    // bpt-anS-SiloWS pool token, added directly (not ERC4626). Shares slot; balanceOf applies a
+    // multiplicative rate, so setErc20Balance derives the share amount rather than writing it raw.
+    tokenAddress: '0x0c4e186eae8acaa7f7de1315d5ad174be39ec987', // anS
+    value: '1000',
+    slot: 157n,
+  },
+  {
+    // Underlying of the SiloWS ERC4626 token in the bpt-anS-SiloWS boosted pool
+    tokenAddress: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38', // wS
+    value: '1000',
+    slot: 0n,
+  },
+  {
     tokenAddress: '0xe6cc4d855b4fd4a9d02f46b9adae4c5efb1764b5', // LUDWIG
     value: '100000',
   },

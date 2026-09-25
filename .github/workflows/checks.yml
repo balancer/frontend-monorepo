@@ -16,19 +16,6 @@ env:
   SLACK_BOT_TOKEN: ${{secrets.SLACK_BOT_TOKEN}}
 
 jobs:
-  # Skip this job as it is already part of the E2E-Smoke-Test job
-  # Build:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-  #   steps:
-  #     - uses: actions/checkout@v5
-  #     - name: Setup
-  #       uses: ./.github/actions/setup
-  #     - name: Run build
-  #       env:
-  #         NODE_OPTIONS: "--max_old_space_size=4096"
-  #       run: pnpm run build
-
   Lint:
     runs-on: ubuntu-latest
     steps:
@@ -193,10 +180,25 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+    strategy:
+      fail-fast: false
+      matrix:
+        # tests/dev/beets is split by whole spec files (see
+        # packages/e2e-tests/scripts/shard-specs.mjs), so adding a spec no longer
+        # means rebalancing hardcoded file lists. `id` only names artifacts —
+        # shard values contain a slash.
+        include:
+          - id: 1
+            shard: 1/3
+          - id: 2
+            shard: 2/3
+          - id: 3
+            shard: 3/3
     env:
       NEXT_PUBLIC_PROJECT_ID: beets
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      E2E_SHARD: ${{ matrix.shard }}
       E2E_FORK_BLOCK_NUMBER: 78800000
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -206,12 +208,12 @@ jobs:
         uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
       - name: Start anvil fork in sonic
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --fork-block-number ${{ env.E2E_FORK_BLOCK_NUMBER }} --fork-retry-backoff 1000 --no-rate-limit --port 8545 &
-      - name: Run Playwright dev tests (Beets)
+      - name: Run Playwright dev tests (Beets shard ${{ matrix.shard }})
         run: pnpm test:e2e:dev:beets
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ !cancelled() }}
         with:
-          name: playwright-dev-report-beets
+          name: playwright-dev-report-beets-${{ matrix.id }}
           path: |
             ./packages/e2e-tests/playwright-report/
             ./packages/e2e-tests/test-results/
