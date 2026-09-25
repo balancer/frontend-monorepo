@@ -88,7 +88,9 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
     chainId: sonic.id,
     fallBackRpc: 'https://gateway.tenderly.co/public/sonic',
     port: ANVIL_PORTS[sonic.id],
-    forkBlockNumber: 2687659n,
+    // Must be after the deployment of the Sonic pools used by the integration
+    // suite (usdcFlyStS, anSSiloWSBoosted) and their tokens.
+    forkBlockNumber: 32_600_000n,
   },
   [gnosis.id]: {
     chainId: gnosis.id,
@@ -97,6 +99,14 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
     forkBlockNumber: 37902207n,
   },
 }
+
+/*
+  Chains that get a running anvil fork. Each fork costs a proxy, an anvil process and a warm-up
+  round trip against its upstream rpc, so only Sonic is forked: the suite runs as Beets and the
+  Beets app only supports Sonic. testWagmiConfig and the test clients are derived from this list,
+  so adding a chain here is the single place to change.
+*/
+export const forkedChainIds: ChainIdWithFork[] = [sonic.id]
 
 /*
     In vitest, each thread is assigned a unique numerical id (`process.env.VITEST_POOL_ID`).

@@ -8,6 +8,7 @@ import { PropsWithChildren, act } from 'react'
 import { useSignRelayerApproval } from './signRelayerApproval.hooks'
 import { useRelayerSignature } from './RelayerSignatureProvider'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
+import { SONIC_CHAIN_ID } from '@repo/lib/test/integration/sonic-fixtures'
 
 function Providers({ children }: PropsWithChildren) {
   return (
@@ -23,8 +24,7 @@ test('Signs relayer approval and saves signature in the addLiquidity provider st
   const { result } = testHook(
     () => {
       const { relayerApprovalSignature } = useRelayerSignature()
-      const mainnetId = 1
-      const signResult = useSignRelayerApproval(mainnetId)
+      const signResult = useSignRelayerApproval(SONIC_CHAIN_ID)
       return { ...signResult, relayerApprovalSignature }
     },
     {

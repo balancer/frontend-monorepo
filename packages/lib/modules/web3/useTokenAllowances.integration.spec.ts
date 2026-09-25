@@ -1,16 +1,20 @@
-import { vaultV2Address, wETHAddress, wjAuraAddress } from '@repo/lib/debug-helpers'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { act, waitFor } from '@testing-library/react'
 import { Address } from 'viem'
 import { useTokenAllowances } from './useTokenAllowances'
+import {
+  SONIC_CHAIN_ID,
+  sonicContracts,
+  sonicTokens,
+} from '@repo/lib/test/integration/sonic-fixtures'
 
 function testTokenAllowances(tokenAddresses: Address[]) {
   const { result } = testHook(() =>
     useTokenAllowances({
-      chainId: 1,
+      chainId: SONIC_CHAIN_ID,
       userAddress: defaultTestUserAccount,
-      spenderAddress: vaultV2Address,
+      spenderAddress: sonicContracts.vaultV2,
       tokenAddresses,
     })
   )
@@ -18,7 +22,7 @@ function testTokenAllowances(tokenAddresses: Address[]) {
   return result
 }
 
-const tokenAddresses = [wETHAddress, wjAuraAddress]
+const tokenAddresses = [sonicTokens.ws, sonicTokens.sts]
 
 test('fetches token allowances', async () => {
   const result = testTokenAllowances(tokenAddresses)
@@ -26,8 +30,8 @@ test('fetches token allowances', async () => {
 
   expect(result.current.allowances).toEqual(
     expect.objectContaining({
-      [wjAuraAddress]: expect.any(BigInt),
-      [wETHAddress]: expect.any(BigInt),
+      [sonicTokens.ws]: expect.any(BigInt),
+      [sonicTokens.sts]: expect.any(BigInt),
     })
   )
 })
