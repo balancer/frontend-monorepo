@@ -8,28 +8,28 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { Address, Hex } from 'viem'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
-import { partialBoosted } from '../../../__mocks__/pool-examples/boosted'
+import { anSSiloWSBoosted } from '../../../__mocks__/pool-examples/boosted'
 import { isBoosted } from '../../../pool.helpers'
 import { Pool, ProtocolVersion } from '../../../pool.types'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { _calculateProportionalHumanAmountsIn } from './useProportionalInputs'
 
-const pool = getApiPoolMock(partialBoosted)
+const pool = getApiPoolMock(anSSiloWSBoosted)
 const helpers = new LiquidityActionHelpers(pool)
 
 function apiToken(address: string): ApiToken {
   return { address } as ApiToken
 }
 
-const gnoTokenAddress = '0x9c58bacc331c9aa871afd802db6379a98e80cedb' // underlying
-const waGnoGNOTokenAddress = '0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644' // wrapped
+const wrappedSonicAddress = '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38' // underlying
+const siloWsAddress = '0x016c306e103fbf48ec24810d078c65ad13c5f11b' // wrapped
 
-const sDaiAddress = '0xaf204776c7245bf4147c2612bf6e5972ee483701' // non boosted token
+const anSAddress = '0x0c4e186eae8acaa7f7de1315d5ad174be39ec987' // non boosted token
 
 describe('_calculateProportionalHumanAmountsIn', () => {
-  it('when reference is first token: underlying GNO', () => {
+  it('when reference is first token: underlying wS', () => {
     const humanAmountsIn = _calculateProportionalHumanAmountsIn({
-      token: apiToken(gnoTokenAddress),
+      token: apiToken(wrappedSonicAddress),
       humanAmount: '5',
       helpers,
       wethIsEth: false,
@@ -39,19 +39,19 @@ describe('_calculateProportionalHumanAmountsIn', () => {
 
     expect(humanAmountsIn).toMatchObject([
       {
-        tokenAddress: gnoTokenAddress,
+        tokenAddress: wrappedSonicAddress,
         humanAmount: '5',
       },
       {
-        tokenAddress: sDaiAddress,
-        humanAmount: '681.631126139661118619',
+        tokenAddress: anSAddress,
+        humanAmount: '0.009554310547792584',
       },
     ])
   })
 
-  it('when reference is first token: wrapped waGnoGNO', () => {
+  it('when reference is first token: wrapped SiloWS', () => {
     const humanAmountsIn = _calculateProportionalHumanAmountsIn({
-      token: apiToken(waGnoGNOTokenAddress),
+      token: apiToken(siloWsAddress),
       humanAmount: '5',
       helpers,
       wethIsEth: false,
@@ -61,19 +61,19 @@ describe('_calculateProportionalHumanAmountsIn', () => {
 
     expect(humanAmountsIn).toMatchObject([
       {
-        tokenAddress: waGnoGNOTokenAddress,
+        tokenAddress: siloWsAddress,
         humanAmount: '5',
       },
       {
-        tokenAddress: sDaiAddress,
-        humanAmount: '681.631126139661118619',
+        tokenAddress: anSAddress,
+        humanAmount: '0.009554310547792584',
       },
     ])
   })
 
-  it('when reference is second token (no boosted sDAI) and the first token is in "underlying mode"', () => {
+  it('when reference is second token (non-boosted anS) and the first token is in "underlying mode"', () => {
     const humanAmountsIn = _calculateProportionalHumanAmountsIn({
-      token: apiToken(sDaiAddress),
+      token: apiToken(anSAddress),
       humanAmount: '50',
       helpers,
       wethIsEth: false,
@@ -81,22 +81,22 @@ describe('_calculateProportionalHumanAmountsIn', () => {
       wrapUnderlying: [true, false],
     })
 
-    // Sorts the results moving sDAI human amount to the first position
+    // Sorts the results moving anS human amount to the first position
     expect(humanAmountsIn).toMatchObject([
       {
-        tokenAddress: sDaiAddress,
+        tokenAddress: anSAddress,
         humanAmount: '50',
       },
       {
-        tokenAddress: gnoTokenAddress,
-        humanAmount: '0.366767288659253153',
+        tokenAddress: wrappedSonicAddress,
+        humanAmount: '26166.199931181512589915',
       },
     ])
   })
 
-  it('when reference is second token (no boosted sDAI) and the first token is in "wrapped mode"', () => {
+  it('when reference is second token (non-boosted anS) and the first token is in "wrapped mode"', () => {
     const humanAmountsIn = _calculateProportionalHumanAmountsIn({
-      token: apiToken(sDaiAddress),
+      token: apiToken(anSAddress),
       humanAmount: '50',
       helpers,
       wethIsEth: false,
@@ -104,15 +104,15 @@ describe('_calculateProportionalHumanAmountsIn', () => {
       wrapUnderlying: [false, false],
     })
 
-    // Sorts the results moving sDAI human amount to the first position
+    // Sorts the results moving anS human amount to the first position
     expect(humanAmountsIn).toMatchObject([
       {
-        tokenAddress: sDaiAddress,
+        tokenAddress: anSAddress,
         humanAmount: '50',
       },
       {
-        tokenAddress: waGnoGNOTokenAddress,
-        humanAmount: '0.366767288659253153',
+        tokenAddress: siloWsAddress,
+        humanAmount: '26166.199931181512589915',
       },
     ])
   })

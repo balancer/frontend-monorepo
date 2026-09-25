@@ -1,7 +1,5 @@
-import { balAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { aTokenPriceMock } from '@repo/lib/modules/tokens/__mocks__/token.builders'
 import type { GqlPoolElement } from '@repo/lib/shared/services/api/graphql-derived-types'
-import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { aUserPoolBalance } from '@repo/lib/test/msw/builders/gqlUserBalance.builders'
 import { mockTokenPricesList } from '@repo/lib/test/msw/handlers/Tokens.handlers'
 import {
@@ -18,17 +16,24 @@ import { RemoveLiquidityHandler } from './handlers/RemoveLiquidity.handler'
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { useRemoveLiquidityLogic } from './RemoveLiquidityProvider'
 import { aSuccessfulQueryResultMock } from '@repo/lib/test/utils/react-query'
+import { getApiPoolMock } from '../../__mocks__/api-mocks/api-mocks'
+import { scUsdStS } from '../../__mocks__/pool-examples/flat'
+import { sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
+import { GqlChainValues } from '@repo/lib/shared/services/api/graphql-enums'
+import { mockPool } from '@repo/lib/test/msw/handlers/Pool.handlers'
 
-const balTokenOutUnits = '1'
-const wEthTokenOutUnits = '0.5'
+const scUsdAddress = '0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae' as const
+
+const scUsdTokenOutUnits = '1'
+const stSTokenOutUnits = '0.5'
 
 const simulationQueryResult = {
   ...mock<RemoveLiquiditySimulationQueryResult>(),
   ...aSuccessfulQueryResultMock(),
   data: {
     amountsOut: [
-      aTokenAmountMock(balAddress, balTokenOutUnits),
-      aTokenAmountMock(wETHAddress, wEthTokenOutUnits),
+      aTokenAmountMock(scUsdAddress, scUsdTokenOutUnits),
+      aTokenAmountMock(sonicTokens.sts, stSTokenOutUnits),
     ],
     sdkQueryOutput: { bptIn: { amount: 100000n } },
   },
@@ -43,7 +48,7 @@ vi.mock('./queries/useRemoveLiquiditySimulationQuery', () => {
   }
 })
 
-const poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
+const poolMock = getApiPoolMock(scUsdStS) as unknown as GqlPoolElement // Sonic v2 scUSD/stS
 
 poolMock.userBalance = aUserPoolBalance({ totalBalance: '200' }) // maxBptUnits
 poolMock.dynamicData.totalLiquidity = '1000'
@@ -51,6 +56,8 @@ poolMock.dynamicData.totalShares = '100'
 // bptPrice = 1000/100 = 10
 
 async function testUseRemoveLiquidity(pool: GqlPoolElement = poolMock) {
+  mockPool(pool)
+
   const { result } = testHook(() => useRemoveLiquidityLogic(), {
     wrapper: buildDefaultPoolTestProvider(pool, DefaultRemoveLiquidityTestProvider),
   })
@@ -59,13 +66,13 @@ async function testUseRemoveLiquidity(pool: GqlPoolElement = poolMock) {
 }
 
 describe('When the user choses proportional remove liquidity', () => {
-  const balPrice = 2
-  const wethPrice = 3
+  const scUsdPrice = 2
+  const stSPrice = 3
 
   beforeEach(() => {
     mockTokenPricesList([
-      aTokenPriceMock({ address: balAddress, price: balPrice }),
-      aTokenPriceMock({ address: wETHAddress, price: wethPrice }),
+      aTokenPriceMock({ address: scUsdAddress, chain: GqlChainValues.Sonic, price: scUsdPrice }),
+      aTokenPriceMock({ address: sonicTokens.sts, chain: GqlChainValues.Sonic, price: stSPrice }),
     ])
   })
 
@@ -82,16 +89,16 @@ describe('When the user choses proportional remove liquidity', () => {
   test('calculates token amounts out', async () => {
     const result = await testUseRemoveLiquidity()
 
-    expect(result.current.amountOutForToken(balAddress)).toBe(balTokenOutUnits)
-    expect(result.current.amountOutForToken(wETHAddress)).toBe(wEthTokenOutUnits)
+    expect(result.current.amountOutForToken(scUsdAddress)).toBe(scUsdTokenOutUnits)
+    expect(result.current.amountOutForToken(sonicTokens.sts)).toBe(stSTokenOutUnits)
   })
 
   test('calculates token usd out ', async () => {
     const result = await testUseRemoveLiquidity()
 
-    await waitFor(() => expect(result.current.usdOutForToken(balAddress) !== '0.00').toBeTruthy())
-    expect(result.current.usdOutForToken(balAddress)).toBe('2') // balTokenOutUnits * balPrice = 1 * 2 = 2.00
-    expect(result.current.usdOutForToken(wETHAddress)).toBe('1.5')
+    await waitFor(() => expect(result.current.usdOutForToken(scUsdAddress)).toBe('2'))
+    expect(result.current.usdOutForToken(scUsdAddress)).toBe('2') // scUsdTokenOutUnits * scUsdPrice = 1 * 2 = 2.00
+    expect(result.current.usdOutForToken(sonicTokens.sts)).toBe('1.5')
 
     // total usd value is the sum of the token out usd values (2.00 + 1.50 = 3.50)
     expect(result.current.totalUSDValue).toBe('3.5')
@@ -103,9 +110,9 @@ describe('When the user choses single token remove liquidity', () => {
     const result = await testUseRemoveLiquidity()
 
     act(() => result.current.setSingleTokenType())
-    act(() => result.current.setSingleTokenAddress(wETHAddress))
+    act(() => result.current.setSingleTokenAddress(sonicTokens.sts))
 
-    expect(result.current.singleTokenOutAddress).toEqual(wETHAddress)
+    expect(result.current.singleTokenOutAddress).toEqual(sonicTokens.sts)
   })
 })
 

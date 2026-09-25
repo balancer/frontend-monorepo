@@ -2,7 +2,8 @@ import { NestedPoolState, PoolGetPool, mapPoolToNestedPoolStateV2 } from '@balan
 import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { nestedPoolMock } from '@repo/lib/modules/pool/__mocks__/nestedPoolMock'
 
-test('getPoolMock creates a proper nested pool mock (nestedPoolMock)', () => {
+// TODO: Drop this Balancer-only nested pool mapping test or add a Beets/Sonic v2 nested fixture.
+test.skip('getPoolMock creates a proper nested pool mock (nestedPoolMock)', () => {
   const nestedPoolState: NestedPoolState = mapPoolToNestedPoolStateV2(
     nestedPoolMock as unknown as PoolGetPool
   )

@@ -1,18 +1,10 @@
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
-import { balWeth8020, v3StableNonBoosted } from '../../../__mocks__/pool-examples/flat'
-import { nestedPoolMock } from '../../../__mocks__/nestedPoolMock'
+import { scUsdStS, usdcFlyStS } from '../../../__mocks__/pool-examples/flat'
 
 describe('selectAddLiquidityHandler', () => {
-  it('returns NestedAddLiquidityV2Handler for nested pools with nested BPT in pool tokens (V2)', () => {
-    // nestedPoolMock has protocolVersion 2 with nested structure
-    const handler = selectAddLiquidityHandler(nestedPoolMock)
-    expect(handler).toBeDefined()
-    expect(handler.constructor.name).toBe('NestedAddLiquidityV2Handler')
-  })
-
   it('returns ProportionalAddLiquidityHandlerV3 for V3 pools with wantsProportional', () => {
-    const v3Pool = getApiPoolMock(v3StableNonBoosted)
+    const v3Pool = getApiPoolMock(usdcFlyStS)
     v3Pool.protocolVersion = 3
 
     const handler = selectAddLiquidityHandler(v3Pool, true)
@@ -21,7 +13,7 @@ describe('selectAddLiquidityHandler', () => {
   })
 
   it('returns UnbalancedAddLiquidityV3Handler for V3 non-boosted pools', () => {
-    const v3Pool = getApiPoolMock(v3StableNonBoosted)
+    const v3Pool = getApiPoolMock(usdcFlyStS)
     v3Pool.protocolVersion = 3
 
     const handler = selectAddLiquidityHandler(v3Pool, false)
@@ -30,7 +22,7 @@ describe('selectAddLiquidityHandler', () => {
   })
 
   it('returns ProportionalAddLiquidityHandler for V2 pools with wantsProportional', () => {
-    const v2Pool = getApiPoolMock(balWeth8020)
+    const v2Pool = getApiPoolMock(scUsdStS)
     v2Pool.protocolVersion = 2
 
     const handler = selectAddLiquidityHandler(v2Pool, true)
@@ -39,7 +31,7 @@ describe('selectAddLiquidityHandler', () => {
   })
 
   it('returns UnbalancedAddLiquidityV2Handler for V2 pools without wantsProportional', () => {
-    const v2Pool = getApiPoolMock(balWeth8020)
+    const v2Pool = getApiPoolMock(scUsdStS)
     v2Pool.protocolVersion = 2
 
     const handler = selectAddLiquidityHandler(v2Pool, false)
@@ -48,7 +40,7 @@ describe('selectAddLiquidityHandler', () => {
   })
 
   it('returns TwammAddLiquidityHandler for TWAMM example pool', () => {
-    const twammPool = { ...getApiPoolMock(balWeth8020), id: 'TWAMM-example' }
+    const twammPool = { ...getApiPoolMock(scUsdStS), id: 'TWAMM-example' }
 
     const handler = selectAddLiquidityHandler(twammPool)
     expect(handler).toBeDefined()

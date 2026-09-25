@@ -1,12 +1,13 @@
 import { getApiPoolMock } from '../__mocks__/api-mocks/api-mocks'
-import { boostedCoinshiftUsdcUsdl } from '../__mocks__/pool-examples/boosted'
+import { anSSiloWSBoosted } from '../__mocks__/pool-examples/boosted'
 import type { GqlPoolStakingGaugeReward } from '../../../shared/services/api/graphql-derived-types'
 import { getCanStake } from './stake.helpers'
+import { sonicTokens } from '@repo/lib/test/integration/sonic-fixtures'
 
 describe('stake.helpers', () => {
   describe('getCanStake', () => {
     function getPoolWithRewards(rewards: GqlPoolStakingGaugeReward[]) {
-      const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
+      const pool = getApiPoolMock(anSSiloWSBoosted)
       if (!pool.staking?.gauge) throw new Error('Pool should have staking gauge')
       pool.staking.gauge.rewards = rewards
       return pool
@@ -20,9 +21,9 @@ describe('stake.helpers', () => {
     test('returns false when all rewards have rewardPerSecond === "0"', () => {
       const pool = getPoolWithRewards([
         {
-          id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0xba100000625a3754423978a60c9317c58a424e3d-balgauge',
+          id: `0x27aaf70334cc564bcedfe0cca43cf3dadc850bea-${sonicTokens.sts}-reward`,
           rewardPerSecond: '0',
-          tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+          tokenAddress: sonicTokens.sts,
         } as GqlPoolStakingGaugeReward,
       ])
 
@@ -32,9 +33,9 @@ describe('stake.helpers', () => {
     test('returns true when at least one reward has rewardPerSecond !== "0"', () => {
       const pool = getPoolWithRewards([
         {
-          id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0xba100000625a3754423978a60c9317c58a424e3d-balgauge',
+          id: `0x27aaf70334cc564bcedfe0cca43cf3dadc850bea-${sonicTokens.sts}-reward`,
           rewardPerSecond: '0.000518908841708722',
-          tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+          tokenAddress: sonicTokens.sts,
         } as GqlPoolStakingGaugeReward,
       ])
 
@@ -44,12 +45,12 @@ describe('stake.helpers', () => {
     test('returns true when mixed zero and non-zero rewards exist', () => {
       const pool = getPoolWithRewards([
         {
-          id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0xba100000625a3754423978a60c9317c58a424e3d-balgauge',
+          id: `0x27aaf70334cc564bcedfe0cca43cf3dadc850bea-${sonicTokens.sts}-reward`,
           rewardPerSecond: '0.0001',
-          tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+          tokenAddress: sonicTokens.sts,
         } as GqlPoolStakingGaugeReward,
         {
-          id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103-0x0000000000000000000000000000000000000000-zerogauge',
+          id: '0x27aaf70334cc564bcedfe0cca43cf3dadc850bea-0x0000000000000000000000000000000000000000-reward',
           rewardPerSecond: '0',
           tokenAddress: '0x0000000000000000000000000000000000000000',
         } as GqlPoolStakingGaugeReward,
@@ -59,7 +60,7 @@ describe('stake.helpers', () => {
     })
 
     test('returns false when pool has no staking', () => {
-      const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
+      const pool = getApiPoolMock(anSSiloWSBoosted)
       delete (pool as any).staking
       expect(getCanStake(pool)).toBe(false)
     })
