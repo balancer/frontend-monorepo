@@ -111,7 +111,7 @@
     "@wagmi/cli": "2.10.0",
     "autoprefixer": "10.6.1",
     "cross-fetch": "4.1.0",
-    "eslint": "10.10.0",
+    "eslint": "10.11.0",
     "msw": "2.15.0",
     "prool": "0.2.16",
     "sentry-testkit": "7.6.0",
