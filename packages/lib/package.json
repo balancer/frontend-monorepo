@@ -68,7 +68,7 @@
     "pluralize": "^8.0.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "react-error-boundary": "6.1.5",
+    "react-error-boundary": "6.1.6",
     "react-hook-form": "7.88.0",
     "react-hotkeys-hook": "5.3.3",
     "react-swipeable": "7.0.2",
