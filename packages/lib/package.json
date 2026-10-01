@@ -31,7 +31,7 @@
     "@chakra-ui/icons": "2.2.4",
     "@chakra-ui/react": "2.10.10",
     "@chakra-ui/theme-tools": "2.2.6",
-    "@coinbase/wallet-sdk": "4.3.7",
+    "@coinbase/wallet-sdk": "4.4.0",
     "@dicebear/core": "10.7.0",
     "@dicebear/styles": "10.6.0",
     "@emotion/react": "11.14.0",
