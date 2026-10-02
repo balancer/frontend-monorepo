@@ -16,8 +16,6 @@ import { useQuery } from '@apollo/client/react'
 import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
-import { BuildPromo } from './BuildPromo'
-
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
 }
@@ -148,11 +146,6 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
       <DefaultPageContainer mb="0" py="0" rounded="2xl">
         <FeaturedPartners />
       </DefaultPageContainer>
-      {isBalancer && (
-        <DefaultPageContainer mb="0" py="0" rounded="2xl">
-          <BuildPromo />
-        </DefaultPageContainer>
-      )}
     </>
   )
 }

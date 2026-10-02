@@ -33,6 +33,19 @@ const nextConfig: NextConfig = {
   headers: manifestHeaders,
   reactCompiler: true,
   redirects: async () => [
+    // Pool + LBP creation is disabled for now: the pages still exist, but every
+    // entry point lands on home. Temporary (307) so browsers/search engines do
+    // not cache it before the creator is re-enabled.
+    {
+      source: '/create/:path*',
+      destination: '/',
+      permanent: false,
+    },
+    {
+      source: '/lbp/create/:path*',
+      destination: '/',
+      permanent: false,
+    },
     {
       source: '/pools/mode/:path*',
       destination: 'https://legacy.balancer.fi',

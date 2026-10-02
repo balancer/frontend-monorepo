@@ -6,9 +6,7 @@ import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BalancerLogoType } from '../imgs/BalancerLogoType'
-import { BuildNavLink } from './BuildNavLink'
-import { MobileBuildAccordion } from './MobileBuildAccordion'
-import { PROJECT_CONFIG, isBalancer } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function NavBarContainer() {
   const { defaultAppLinks } = useNav()
@@ -30,13 +28,9 @@ export function NavBarContainer() {
         <NavBar
           allowCreateWallet={allowCreateWallet}
           appLinks={allAppLinks}
-          customLinks={isBalancer ? <BuildNavLink key="build-nav-link" /> : undefined}
           mobileNav={
             <MobileNav
               appLinks={allAppLinks}
-              buildSection={
-                isBalancer ? onClose => <MobileBuildAccordion onClose={onClose} /> : undefined
-              }
               ecosystemLinks={ecosystemLinks}
               LogoType={BalancerLogoType}
               socialLinks={socialLinks}
