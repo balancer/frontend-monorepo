@@ -19,6 +19,8 @@ import { ApiOutageAlert } from '../alerts/ApiOutageAlert'
 import { useApiHealth } from '../../hooks/useApiHealth'
 import { useLegacyV1Positions } from '@repo/lib/modules/pool/legacy/useLegacyV1Positions'
 import { LegacyV1PositionsAlert } from '../alerts/LegacyV1PositionsAlert'
+import { WinddownAlert } from '../alerts/WinddownAlert'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
   mobileNav?: ReactNode
@@ -242,9 +244,9 @@ export function NavBar({
   const top = useTransform(scrollYBoundedProgressDelayed, [0, 1], [0, -72])
   const opacity = useTransform(scrollYBoundedProgressDelayed, [0, 1], [1, 0])
 
-  // Determine navbar height based on alerts
-  const hasAlerts = !apiOK || hasLegacyV1Positions
-  const navbarHeight = hasAlerts ? '120px' : '72px'
+  // Determine navbar height based on alerts — each alert adds 48px to the 72px nav row
+  const alertCount = [!apiOK, hasLegacyV1Positions, isBalancer].filter(Boolean).length
+  const navbarHeight = alertCount === 0 ? '72px' : `${72 + alertCount * 48}px`
 
   // Set CSS variable on document root
   useEffect(() => {
@@ -280,6 +282,7 @@ export function NavBar({
       zIndex={100}
       {...rest}
     >
+      {isBalancer && <WinddownAlert />}
       {hasLegacyV1Positions && <LegacyV1PositionsAlert />}
       {!apiOK && <ApiOutageAlert />}
 
