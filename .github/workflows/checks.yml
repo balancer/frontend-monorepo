@@ -89,7 +89,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run Playwright smoke tests (Balancer)
         run: pnpm test:e2e:build:bal
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-smoke-report-bal
@@ -135,7 +135,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run Playwright smoke tests (Analytics)
         run: pnpm test:e2e:build:analytics
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-smoke-report-analytics
@@ -178,7 +178,7 @@ jobs:
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --fork-block-number ${{ env.E2E_FORK_BLOCK_NUMBER }} --fork-retry-backoff 1000 --no-rate-limit --port 8545 &
       - name: Run Playwright dev tests (Balancer shard ${{ matrix.shard }})
         run: pnpm test:e2e:dev:bal
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-dev-report-bal-${{ matrix.id }}
