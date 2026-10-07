@@ -15,15 +15,15 @@
     "@next/eslint-plugin-next": "16.3.8",
     "@repo/prettier-config": "workspace:*",
     "@stylistic/eslint-plugin-jsx": "4.4.1",
-    "@typescript-eslint/eslint-plugin": "8.70.1",
-    "@typescript-eslint/parser": "8.70.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/parser": "8.71.0",
     "eslint": "10.11.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-only-warn": "1.2.1",
-    "eslint-plugin-turbo": "2.11.6",
+    "eslint-plugin-turbo": "2.11.7",
     "globals": "17.12.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.70.1"
+    "typescript-eslint": "8.71.0"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0 --cache",
