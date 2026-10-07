@@ -27,7 +27,7 @@
     "@playwright/test": "1.63.0",
     "@repo/lib": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "24.19.0",
+    "@types/node": "24.19.1",
     "beets-frontend-v3": "workspace:*",
     "dotenv": "18.0.5",
     "frontend-v3": "workspace:*",
