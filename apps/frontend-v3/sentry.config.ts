@@ -1,11 +1,11 @@
-import type { SentryBuildOptions } from '@sentry/nextjs'
+import type { SentryBuildOptions } from '@sentry/nextjs/config'
 
 const isProd = process.env.NEXT_PUBLIC_APP_ENV === 'prod'
 
 // Source map generation and upload makes the build much slower so we only enable it for vercel production builds from main branch
 const shouldEnableSourceMaps = isProd && process.env.VERCEL_GIT_COMMIT_REF === 'main'
 
-/** @type {import('@sentry/nextjs').SentryBuildOptions} */
+/** @type {import('@sentry/nextjs/config').SentryBuildOptions} */
 export const sentryOptions: SentryBuildOptions = {
   // Suppresses source map uploading logs during build
   silent: true,
@@ -23,6 +23,8 @@ export const sentryOptions: SentryBuildOptions = {
 
   sourcemaps: { disable: !shouldEnableSourceMaps },
   telemetry: shouldEnableSourceMaps,
+  // Server tracing is disabled; avoid v11's additional dependency instrumentation during builds.
+  buildTimeInstrumentation: false,
   _experimental: {
     turbopackReactComponentAnnotation: {
       enabled: shouldEnableSourceMaps,
