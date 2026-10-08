@@ -23,6 +23,8 @@ export const sentryOptions: SentryBuildOptions = {
 
   sourcemaps: { disable: !shouldEnableSourceMaps },
   telemetry: shouldEnableSourceMaps,
+  // Server tracing is disabled; avoid v11's additional dependency instrumentation during builds.
+  buildTimeInstrumentation: false,
   _experimental: {
     turbopackReactComponentAnnotation: {
       enabled: shouldEnableSourceMaps,
