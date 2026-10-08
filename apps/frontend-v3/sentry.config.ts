@@ -1,11 +1,11 @@
-import type { SentryBuildOptions } from '@sentry/nextjs'
+import type { SentryBuildOptions } from '@sentry/nextjs/config'
 
 const isProd = process.env.NEXT_PUBLIC_APP_ENV === 'prod'
 
 // Source map generation and upload makes the build much slower so we only enable it for vercel production builds from main branch
 const shouldEnableSourceMaps = isProd && process.env.VERCEL_GIT_COMMIT_REF === 'main'
 
-/** @type {import('@sentry/nextjs').SentryBuildOptions} */
+/** @type {import('@sentry/nextjs/config').SentryBuildOptions} */
 export const sentryOptions: SentryBuildOptions = {
   // Suppresses source map uploading logs during build
   silent: true,
