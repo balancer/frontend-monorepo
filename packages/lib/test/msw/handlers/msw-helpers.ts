@@ -1,4 +1,5 @@
 import { HttpResponse } from 'msw'
+import { graphql } from 'msw/graphql'
 
 export function GQLResponse(jsonResponse: object) {
   /*
@@ -7,3 +8,5 @@ export function GQLResponse(jsonResponse: object) {
   */
   return HttpResponse.json({ data: jsonResponse }) as any
 }
+
+export const gqlApi = graphql.link('*')
