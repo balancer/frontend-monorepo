@@ -238,8 +238,8 @@ importers:
         specifier: 2.2.6
         version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.3.0))(react@19.3.0)
       '@neondatabase/serverless':
-        specifier: 1.1.0
-        version: 1.1.0
+        specifier: 1.2.0
+        version: 1.2.0
       '@repo/lib':
         specifier: workspace:*
         version: link:../../packages/lib
@@ -288,7 +288,7 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0)
+        version: 2.5.8(@neondatabase/serverless@1.2.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0)
       '@chakra-ui/styled-system':
         specifier: 2.12.0
         version: 2.12.0(react@19.3.0)
@@ -2761,8 +2761,8 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@neondatabase/serverless@1.1.0':
-    resolution: {integrity: sha512-r3ZZhRjEcfEdKIZnoB1RusNgvHuaBRqfCzV4Gi+5A9yUX0S4HTws/ASWqt13wL4y4I+0rqsWGdA2w7EQXHi3+Q==}
+  '@neondatabase/serverless@1.2.0':
+    resolution: {integrity: sha512-tnaqgixUengZQNd9ZrS3ytQfamJzLKY8QxgqWQTNHHtB+KrFQWk77JTbbpg4RD+J3qE4eO2lVytvGDX5Kj6FdQ==}
     engines: {node: '>=19.0.0'}
 
   '@next/env@16.3.8':
@@ -9900,11 +9900,11 @@ snapshots:
 
   '@chakra-ui/anatomy@2.3.6': {}
 
-  '@chakra-ui/cli@2.5.8(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0)':
+  '@chakra-ui/cli@2.5.8(@neondatabase/serverless@1.2.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0)':
     dependencies:
       bundle-n-require: 1.1.2
       chokidar: 3.6.0
-      cli-welcome: 2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0)
+      cli-welcome: 2.2.3(@neondatabase/serverless@1.2.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0)
       commander: 11.1.0
       ora: 7.0.1
       prettier: 3.9.9
@@ -12054,7 +12054,7 @@ snapshots:
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
 
-  '@neondatabase/serverless@1.1.0': {}
+  '@neondatabase/serverless@1.2.0': {}
 
   '@next/env@16.3.8': {}
 
@@ -15546,9 +15546,9 @@ snapshots:
 
   ci-info@3.9.0: {}
 
-  clear-any-console@1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0):
+  clear-any-console@1.16.4(@neondatabase/serverless@1.2.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0):
     dependencies:
-      command-code: 1.62.1(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(supports-color@8.1.1)
+      command-code: 1.62.1(@neondatabase/serverless@1.2.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(supports-color@8.1.1)
       langbase: 1.2.4(react@19.3.0)(ws@8.21.0)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
@@ -15673,10 +15673,10 @@ snapshots:
       slice-ansi: 9.0.1
       string-width: 8.2.2
 
-  cli-welcome@2.2.3(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0):
+  cli-welcome@2.2.3(@neondatabase/serverless@1.2.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0):
     dependencies:
       chalk: 2.4.2
-      clear-any-console: 1.16.4(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0)
+      clear-any-console: 1.16.4(@neondatabase/serverless@1.2.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(react@19.3.0)(supports-color@8.1.1)(ws@8.21.0)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -15815,7 +15815,7 @@ snapshots:
     dependencies:
       delayed-stream: 1.0.0
 
-  command-code@1.62.1(@neondatabase/serverless@1.1.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(supports-color@8.1.1):
+  command-code@1.62.1(@neondatabase/serverless@1.2.0)(@types/react@19.3.0)(babel-plugin-macros@3.1.0)(supports-color@8.1.1):
     dependencies:
       '@ai-sdk/anthropic': 3.0.119(zod@3.25.76)
       '@ai-sdk/openai': 3.0.115(zod@3.25.76)
@@ -15836,7 +15836,7 @@ snapshots:
       dedent: 1.7.2(babel-plugin-macros@3.1.0)
       diff: 8.0.4
       dotenv: 17.4.2
-      drizzle-orm: 0.45.3(@neondatabase/serverless@1.1.0)(@opentelemetry/api@1.9.1)(postgres@3.4.9)
+      drizzle-orm: 0.45.3(@neondatabase/serverless@1.2.0)(@opentelemetry/api@1.9.1)(postgres@3.4.9)
       fast-wrap-ansi: 0.2.2
       figures: 6.1.0
       giget: 3.3.1
@@ -15923,7 +15923,7 @@ snapshots:
       dedent: 1.7.2(babel-plugin-macros@3.1.0)
       diff: 8.0.4
       dotenv: 17.4.2
-      drizzle-orm: 0.45.3(@neondatabase/serverless@1.1.0)(@opentelemetry/api@1.9.1)(postgres@3.4.9)
+      drizzle-orm: 0.45.3(@neondatabase/serverless@1.2.0)(@opentelemetry/api@1.9.1)(postgres@3.4.9)
       fast-wrap-ansi: 0.2.2
       figures: 6.1.0
       giget: 3.3.1
@@ -16256,9 +16256,9 @@ snapshots:
 
   dotenv@18.0.7: {}
 
-  drizzle-orm@0.45.3(@neondatabase/serverless@1.1.0)(@opentelemetry/api@1.9.1)(postgres@3.4.9):
+  drizzle-orm@0.45.3(@neondatabase/serverless@1.2.0)(@opentelemetry/api@1.9.1)(postgres@3.4.9):
     optionalDependencies:
-      '@neondatabase/serverless': 1.1.0
+      '@neondatabase/serverless': 1.2.0
       '@opentelemetry/api': 1.9.1
       postgres: 3.4.9
 
