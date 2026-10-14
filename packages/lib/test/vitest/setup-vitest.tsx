@@ -1,6 +1,10 @@
-import '@testing-library/jest-dom/vitest'
+import type {} from '@testing-library/jest-dom/vitest'
 import { configure } from '@testing-library/react'
 import { apolloTestClient } from '../../../test/utils/apollo-test-client'
+import * as matchers from '@testing-library/jest-dom/matchers'
+
+// Extend the runner's expect without importing a separate pnpm Vitest peer instance.
+expect.extend(matchers)
 
 // Set timezone to GMT for consistent date handling in tests
 process.env.TZ = 'Europe/Madrid'
