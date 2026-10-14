@@ -172,7 +172,7 @@ overrides:
   '@types/react': '19.3'
   '@types/react-dom': '19.3'
   zod: 3.25.76
-  '@vitest/mocker>msw': 3.0.0
+  '@vitest/mocker>msw': 3.0.3
 
 importers:
 
@@ -4772,7 +4772,7 @@ packages:
   '@vitest/mocker@5.0.3':
     resolution: {integrity: sha512-T8sWAIbkSyAjkwTcaEc3Iu0o9A27X1/kdXrizhZkGuSKScRQtRzclfAMpOTcGdXCsqxeWlpGy3XjqaW8CpLORg==}
     peerDependencies:
-      msw: 3.0.0
+      msw: 3.0.3
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
     peerDependenciesMeta:
       msw:

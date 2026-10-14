@@ -32,7 +32,7 @@ overrides:
   # imports zod/v4/core as a phantom dep. Force 3.25.76 so both resolve correctly.
   "zod": "3.25.76"
   # Keep @vitest/mocker on the same MSW version as the test handlers.
-  "@vitest/mocker>msw": "3.0.0"
+  "@vitest/mocker>msw": "3.0.3"
 
 publicHoistPattern:
   - "*graphql*" # https://github.com/vercel/next.js/issues/68805
