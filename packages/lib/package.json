@@ -112,7 +112,7 @@
     "autoprefixer": "10.6.1",
     "cross-fetch": "4.1.0",
     "eslint": "10.12.0",
-    "msw": "3.0.0",
+    "msw": "3.0.3",
     "prool": "0.2.16",
     "sentry-testkit": "7.6.0",
     "typescript": "6.0.3"
