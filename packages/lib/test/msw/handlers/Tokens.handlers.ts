@@ -8,12 +8,11 @@ import {
   GetTokenPricesQuery,
   GetTokensDocument,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { graphql } from 'msw'
 import { getQueryName, mockGQL } from '../utils'
-import { GQLResponse } from './msw-helpers'
+import { GQLResponse, gqlApi } from './msw-helpers'
 
 export function buildTokenListMswHandler(tokenList = defaultTokenListMock) {
-  return graphql.query(getQueryName(GetTokensDocument), () => {
+  return gqlApi.query(getQueryName(GetTokensDocument), () => {
     return GQLResponse({ tokens: tokenList })
   })
 }
@@ -23,7 +22,7 @@ export function mockTokenList(tokenList = defaultTokenListMock) {
 }
 
 export function buildTokenPricesMswHandler(tokenPrices = defaultGetTokenPricesQueryMock) {
-  return graphql.query(getQueryName(GetTokenPricesDocument), () => {
+  return gqlApi.query(getQueryName(GetTokenPricesDocument), () => {
     return GQLResponse(tokenPrices)
   })
 }

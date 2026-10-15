@@ -40,13 +40,13 @@
     "playwright:install:chromium": "pnpm --filter=e2e-tests playwright:install:chromium"
   },
   "devDependencies": {
-    "@types/node": "24.19.1",
+    "@types/node": "24.19.2",
     "@vitejs/plugin-react": "6.1.2",
     "@vitest/coverage-v8": "5.0.3",
     "happy-dom": "20.14.6",
     "husky": "9.1.7",
     "lint-staged": "17.6.0",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "sharp": "0.35.5",
     "stylelint": "17.16.0",
     "stylelint-config-standard": "40.0.0",
@@ -56,7 +56,7 @@
     "vitest": "5.0.3",
     "vitest-mock-extended": "5.1.1"
   },
-  "packageManager": "pnpm@12.9.1",
+  "packageManager": "pnpm@12.10.1",
   "engines": {
     "node": "24.x",
     "pnpm": ">=8"
