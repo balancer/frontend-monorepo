@@ -12,6 +12,20 @@ export const defaultPostMswHandlers = [
       },
     })
   }),
-  http.post('http://127.0.0.1:8*/*', () => {}),
+  /*
+    The test anvil forks listen on 127.0.0.1:8645..9145 (see @repo/test/anvil/anvil-setup).
+    A chain RPC that leaks out of a unit test would open a real socket to one of those
+    ports. On CI that connection is refused during teardown and @mswjs/interceptors then
+    aborts the socket, crashing the vitest worker with
+    "Assertion failed: !wrap->started_" (SIGABRT) and failing the whole run.
+    Answering with a JSON-RPC error keeps the request local: no socket is ever opened.
+  */
+  http.post(/^http:\/\/127\.0\.0\.1:\d+\//, () => {
+    return HttpResponse.json({
+      jsonrpc: '2.0',
+      id: null,
+      error: { code: -32000, message: 'Local anvil RPC is not available in unit tests' },
+    })
+  }),
   http.get('/', () => {}),
 ]
