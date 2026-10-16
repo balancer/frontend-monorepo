@@ -85,18 +85,9 @@
       "matchManagers": ["github-actions"]
     },
     {
-      "description": "Keep @playwright/test and the mcr.microsoft.com/playwright container in lockstep. The container has no releaseTimestamp, so it is never pending and would otherwise be raised on its own while the npm package waits out minimumReleaseAge. prCreation=not-pending holds the branch until every update in the group is ready, so both move in one PR. internalChecksAsSuccess lets the release-age check turn the branch green, since CI only runs on pull_request events. minimumGroupSize is deliberately absent: it counts file occurrences, not distinct packages, so the three checks.yml references would satisfy it on their own.",
-      "groupName": "Playwright",
-      "prCreation": "not-pending",
-      "internalChecksAsSuccess": true,
-      "matchPackageNames": ["@playwright/test", "mcr.microsoft.com/playwright"],
-      "matchUpdateTypes": ["major", "minor", "patch"]
-    },
-    {
-      "description": "Playwright image digest changes that come without a version bump (Microsoft republishes an existing tag). Kept out of the Playwright group so a pinDigest cannot collide with a pending tag bump on the same branch.",
-      "groupName": "Playwright image digest",
+      "description": "The mcr.microsoft.com/playwright container is not managed by Renovate. Its tag is derived from @playwright/test by packages/e2e-tests/scripts/sync-playwright-image.mjs, which runs as a pre-commit hook. Renovate cannot keep the two together: MCR's tags API returns no releaseTimestamp, so the container never participates in minimumReleaseAge and is always raised ahead of the npm package, leaving the image's browsers out of step with the runner.",
       "matchPackageNames": ["mcr.microsoft.com/playwright"],
-      "matchUpdateTypes": ["pinDigest", "digest"]
+      "enabled": false
     },
     {
       "description": "Keep Next server external workaround packages pinned to the transitive versions required by the current WalletConnect/pino stack.",
