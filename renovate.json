@@ -85,8 +85,9 @@
       "matchManagers": ["github-actions"]
     },
     {
-      "description": "Keep the @playwright/test npm package and the mcr.microsoft.com/playwright Docker image in sync so the test runner and browser container stay aligned. Limited to version bumps: a tag bump always carries its own new digest, so npm and the container move in one PR.",
+      "description": "Wait for all three version updates: @playwright/test and both Playwright container references in checks.yml. Container tag bumps include their new digests; digest-only updates stay separate.",
       "groupName": "Playwright",
+      "minimumGroupSize": 3,
       "matchPackageNames": ["@playwright/test", "mcr.microsoft.com/playwright"],
       "matchUpdateTypes": ["major", "minor", "patch"]
     },
