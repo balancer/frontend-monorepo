@@ -36,6 +36,8 @@
     "test:save-api-mocks": "turbo test:save-api-mocks --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
     "prepare": "husky",
+    "sync:playwright": "node packages/e2e-tests/scripts/sync-playwright-image.mjs",
+    "sync:playwright:check": "node packages/e2e-tests/scripts/sync-playwright-image.mjs --check",
     "playwright:install": "pnpm --filter=e2e-tests playwright:install",
     "playwright:install:chromium": "pnpm --filter=e2e-tests playwright:install:chromium"
   },
