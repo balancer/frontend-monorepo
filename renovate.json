@@ -85,9 +85,10 @@
       "matchManagers": ["github-actions"]
     },
     {
-      "description": "Wait for all three version updates: @playwright/test and both Playwright container references in checks.yml. Container tag bumps include their new digests; digest-only updates stay separate.",
+      "description": "Keep @playwright/test and the mcr.microsoft.com/playwright container in lockstep. The container has no releaseTimestamp, so it is never pending and would otherwise be raised on its own while the npm package waits out minimumReleaseAge. prCreation=not-pending holds the branch until every update in the group is ready, so both move in one PR. internalChecksAsSuccess lets the release-age check turn the branch green, since CI only runs on pull_request events. minimumGroupSize is deliberately absent: it counts file occurrences, not distinct packages, so the three checks.yml references would satisfy it on their own.",
       "groupName": "Playwright",
-      "minimumGroupSize": 3,
+      "prCreation": "not-pending",
+      "internalChecksAsSuccess": true,
       "matchPackageNames": ["@playwright/test", "mcr.microsoft.com/playwright"],
       "matchUpdateTypes": ["major", "minor", "patch"]
     },
