@@ -18,10 +18,15 @@ const usdcAaveAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // Sepolia 
 const usdtAaveAddress = '0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0' // Sepolia underlying usdcAave faucet address
 const poolId = '0x693cc6a39bbf35464f53d6a5dbf7d6c2fa93741c' // Boosted Aave USDC-USDT / WETH
 const chain = GqlChainValues.Sepolia
-const nestedPool = await fetchPoolMock({ poolId, chain, query: minimalPoolQuery })
 
-// Unskip when sepolia V3 pools are available in production api
-describe('When adding nested liquidity for a weighted pool', () => {
+// Unskip when Sepolia V3 pools are available in the production API.
+describe.skip('When adding nested liquidity for a weighted pool', () => {
+  let nestedPool: Pool
+
+  beforeAll(async () => {
+    nestedPool = await fetchPoolMock({ poolId, chain, query: minimalPoolQuery })
+  })
+
   test('has zero price impact', async () => {
     const handler = selectNestedHandler(nestedPool)
 
