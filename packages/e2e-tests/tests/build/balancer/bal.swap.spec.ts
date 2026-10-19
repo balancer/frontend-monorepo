@@ -1,7 +1,7 @@
 import { button, clickButton } from '@/helpers/user.helpers'
 import { test, expect } from '@playwright/test'
 
-const GRAPHQL_URL = 'https://test-api-v3.balancer.fi/graphql'
+const GRAPHQL_URL = 'https://api-v3.balancer.fi/graphql'
 
 test('Balancer: swap page renders', async ({ page }) => {
   const tokensResponsePromise = page.waitForResponse(

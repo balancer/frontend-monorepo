@@ -16,15 +16,20 @@ function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityV3Handl
 
 const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0.2' }
 
-describe('When removing unbalanced liquidity for a weighted V3 pool', async () => {
+// Unskip when Sepolia V3 pools are available in the production API.
+describe.skip('When removing unbalanced liquidity for a weighted V3 pool', () => {
   const balAddress = '0xb19382073c7a0addbb56ac6af1808fa49e377b75'
   const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9'
   const poolId = '0xb790fa0ba5d563b814b0ca1716c414f6b99937b2' // Sepolia B-50BAL-50WETH
 
-  const v3Pool = await fetchPoolMock({
-    poolId,
-    chain: GqlChainValues.Sepolia,
-    query: minimalPoolQuery,
+  let v3Pool: Pool
+
+  beforeAll(async () => {
+    v3Pool = await fetchPoolMock({
+      poolId,
+      chain: GqlChainValues.Sepolia,
+      query: minimalPoolQuery,
+    })
   })
 
   const defaultQueryInput: QueryRemoveLiquidityInput = {
