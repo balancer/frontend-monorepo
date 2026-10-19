@@ -835,8 +835,8 @@ importers:
         specifier: ^2.1.7
         version: 2.1.7(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react-virtuoso:
-        specifier: 4.18.16
-        version: 4.18.16(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: 4.18.19
+        version: 4.18.19(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
@@ -8124,8 +8124,8 @@ packages:
       react-dom:
         optional: true
 
-  react-virtuoso@4.18.16:
-    resolution: {integrity: sha512-BumVOhd0mNKlBkqeHojlLP8IRlJ2oYU7haU92GvBSlSzcdlWUAxIu1gphKm5gLQm07gMzmoQRXdVQeiG4TKSeQ==}
+  react-virtuoso@4.18.19:
+    resolution: {integrity: sha512-dewyZisA5IiQTldh7eHM5KpI+qxi0nKRVYi2iM01XmPkNa5tjvVUKJKAIc6ted1hAK1/NFlXuhXpVYqGHHdcdQ==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -17658,7 +17658,7 @@ snapshots:
     optionalDependencies:
       react-dom: 19.3.0(react@19.3.0)
 
-  react-virtuoso@4.18.16(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  react-virtuoso@4.18.19(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
