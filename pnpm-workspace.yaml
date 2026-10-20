@@ -2,8 +2,6 @@ packages:
   - "apps/*"
   - "packages/*"
 
-pnpmfile: ".pnpmfile.cjs"
-
 allowBuilds:
   "@parcel/watcher": true
   "@sentry/cli": true
@@ -18,6 +16,13 @@ allowBuilds:
 catalog:
   "@apollo/client": "4.3.3"
 
+packageExtensions:
+  # debug declares only optional peer metadata. Declare the peer explicitly so
+  # the removal override runs before pnpm infers a wildcard peer from metadata.
+  debug:
+    peerDependencies:
+      supports-color: "*"
+
 peerDependencyRules:
   allowedVersions:
     "@types/react": ^19.0.0
@@ -28,6 +33,10 @@ peerDependencyRules:
     msw: ">=2.4.9"
 
 overrides:
+  # Remove debug's optional color peer so every app shares the same
+  # Chakra/Emotion/Next instances (see PR #2883). Keep this declarative:
+  # Renovate disables pnpmfile hooks when generating lockfiles.
+  "debug>supports-color": "-"
   "@types/react": "19.3"
   "@types/react-dom": "19.3"
   # @reown/appkit-wallet pins zod@3.22.4 (no v4/ subpath), but @hookform/resolvers
