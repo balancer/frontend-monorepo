@@ -44,7 +44,7 @@
   "devDependencies": {
     "@types/node": "24.19.2",
     "@vitejs/plugin-react": "6.1.2",
-    "@vitest/coverage-v8": "5.0.3",
+    "@vitest/coverage-v8": "5.0.5",
     "happy-dom": "20.14.6",
     "husky": "9.1.7",
     "lint-staged": "17.6.0",
@@ -53,9 +53,9 @@
     "stylelint": "17.16.0",
     "stylelint-config-standard": "40.0.0",
     "stylelint-prettier": "5.0.3",
-    "turbo": "2.11.7",
+    "turbo": "2.11.9",
     "typescript": "6.0.3",
-    "vitest": "5.0.3",
+    "vitest": "5.0.5",
     "vitest-mock-extended": "5.1.1"
   },
   "packageManager": "pnpm@12.10.1",
