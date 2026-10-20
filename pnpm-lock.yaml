@@ -169,12 +169,13 @@ catalogs:
       version: 4.3.3
 
 overrides:
+  debug>supports-color: '-'
   '@types/react': '19.3'
   '@types/react-dom': '19.3'
   zod: 3.25.76
   '@vitest/mocker>msw': 3.0.3
 
-pnpmfileChecksum: sha256-976iQQPKWTdZq5jrD87DFULr4TQPm3zjwptAglnPCag=
+packageExtensionsChecksum: sha256-LNzfmoQZCJWT/eHP0cDh09N+6lxV4LesGXxOa08j4wE=
 
 importers:
 
