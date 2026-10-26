@@ -14,7 +14,7 @@ allowBuilds:
   utf-8-validate: true
 
 catalog:
-  "@apollo/client": "4.3.4"
+  "@apollo/client": "4.3.5"
 
 packageExtensions:
   # debug declares only optional peer metadata. Declare the peer explicitly so
