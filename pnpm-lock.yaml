@@ -177,6 +177,9 @@ overrides:
 
 packageExtensionsChecksum: sha256-LNzfmoQZCJWT/eHP0cDh09N+6lxV4LesGXxOa08j4wE=
 
+patchedDependencies:
+  cuer@0.0.3: 0d1088ae60a84f5fba136ec250a5e6c36ab67bcf19c758d4e8feaecae859b599
+
 importers:
 
   .:
@@ -11787,7 +11790,7 @@ snapshots:
       '@vanilla-extract/dynamic': 2.1.5
       '@vanilla-extract/sprinkles': 1.6.5(@vanilla-extract/css@1.20.1(babel-plugin-macros@3.1.0))
       clsx: 2.1.1
-      cuer: 0.0.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@6.0.3)
+      cuer: 0.0.3(patch_hash=0d1088ae60a84f5fba136ec250a5e6c36ab67bcf19c758d4e8feaecae859b599)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@6.0.3)
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
       react-remove-scroll: 2.7.2(@types/react@19.3.0)(react@19.3.1)
@@ -15264,7 +15267,7 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  cuer@0.0.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@6.0.3):
+  cuer@0.0.3(patch_hash=0d1088ae60a84f5fba136ec250a5e6c36ab67bcf19c758d4e8feaecae859b599)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@6.0.3):
     dependencies:
       qr: 0.7.2
       react: 19.3.1
