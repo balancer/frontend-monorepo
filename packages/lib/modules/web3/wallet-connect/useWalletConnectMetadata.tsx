@@ -7,7 +7,7 @@ export function useWalletConnectMetadata() {
 
   useEffect(() => {
     if (!connector?.getProvider) return
-    if (connector.id !== 'walletConnect') return
+    if (connector.type !== 'walletConnect') return
 
     connector.getProvider().then(provider => {
       const walletConnectProvider = provider as any

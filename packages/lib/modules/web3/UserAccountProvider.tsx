@@ -92,7 +92,7 @@ export function useUserAccountLogic() {
     isConnected: isMounted && !!query.address && !checkingAuth,
     connector: isMounted ? query.connector : undefined,
     isBlocked,
-    isWCConnector: isMounted ? query.connector?.id === 'walletConnect' : false,
+    isWCConnector: isMounted ? query.connector?.type === 'walletConnect' : false,
   }
 
   useSafeAppConnectionGuard(result.connector, result.chainId)
