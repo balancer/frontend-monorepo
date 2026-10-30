@@ -59,6 +59,8 @@ export const oathWallet = ({
     return config => ({
       ...createConnector(config),
       // Keep the identity stable in Wagmi storage and RainbowKit's named wallet UI.
+      // RainbowKit materializes the delegate getter before this id override.
+      requestedChainsStorageKey: `${OATH_WALLET_ID}.requestedChains`,
       id: OATH_WALLET_ID,
       name: 'Oath Wallet',
     })
