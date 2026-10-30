@@ -11,6 +11,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { createConfig } from 'wagmi'
 import { chains } from './ChainConfig'
 import { transports } from './transports'
+import { oathWallet } from './wallet-connect/oathWallet'
 import { createWalletConnectConnector } from './wallet-connect/createWalletConnectConnector'
 import { isConnectedToWC } from './wallet-connect/useWCConnectionLocalStorage'
 import { createMockConnector } from './impersonation/createMockConnector'
@@ -36,6 +37,7 @@ if (isBrowser()) {
           rabbyWallet,
           coinbaseWallet,
           rainbowWallet,
+          oathWallet,
           injectedWallet,
         ],
       },

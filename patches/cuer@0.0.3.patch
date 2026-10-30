@@ -1,0 +1,47 @@
+diff --git a/QrCode.ts b/QrCode.ts
+index 9d29de4c7e0d6e1088af98f45417a7ed0e0ef1e7..e4f0b0e35faf2c0e54f503f74f210fa363fe25f6 100644
+--- a/QrCode.ts
++++ b/QrCode.ts
+@@ -10,13 +10,16 @@ export type QrCode = {
+ export function create(value: string, options: QrCode.Options = {}): QrCode {
+   const { errorCorrection, version } = options
+ 
+-  const grid = encodeQR(value, 'raw', {
+-    border: 0,
++  // qr >= 0.7 requires a quiet zone. Remove its padding for Cuer's module renderer.
++  const paddedGrid = encodeQR(value, 'raw', {
++    border: 1,
+     ecc: errorCorrection,
+     scale: 1,
+     version: version,
+   })
+ 
++  const grid = paddedGrid.slice(1, -1).map(row => row.slice(1, -1))
++
+   const finderLength = 7
+   const edgeLength = grid.length
+ 
+diff --git a/_dist/QrCode.js b/_dist/QrCode.js
+index b1806526c3d100ca6f1e9259b4dfbcd416a33927..7de1ef3541bf2512349ce191fc136277ef14b626 100644
+--- a/_dist/QrCode.js
++++ b/_dist/QrCode.js
+@@ -1,13 +1,16 @@
+ import { encodeQR } from 'qr';
+ export function create(value, options = {}) {
+     const { errorCorrection, version } = options;
+-    const grid = encodeQR(value, 'raw', {
+-        border: 0,
++    // qr >= 0.7 requires a quiet zone. Remove its padding for Cuer's module renderer.
++    const paddedGrid = encodeQR(value, 'raw', {
++        border: 1,
+         ecc: errorCorrection,
+         scale: 1,
+         version: version,
+     });
+-    const finderLength = 7;
++    const grid = paddedGrid.slice(1, -1).map(row => row.slice(1, -1));
++
++    const finderLength = 7;
+     const edgeLength = grid.length;
+     return {
+         edgeLength,
