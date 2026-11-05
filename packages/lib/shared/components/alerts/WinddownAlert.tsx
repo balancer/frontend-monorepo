@@ -1,5 +1,4 @@
 import { Alert, Box, Link, Text } from '@chakra-ui/react'
-import { ArrowRight } from 'lucide-react'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 const BIP_928_URL =
@@ -22,8 +21,8 @@ export function WinddownAlert() {
   return (
     <Alert justifyContent="center" rounded="none" status="warning" textAlign="center">
       <Text {...fontProps}>
-        Balancer DAO has approved an orderly winddown (BIP-928). Most pools move to withdrawals only
-        on 30 October 2026. Withdrawals remain available after that date.{' '}
+        Balancer protocol is winding down. Pools are in withdrawal mode only since Oct 30, 2026. For
+        more information, see{' '}
         <Link
           _hover={{ ...fontProps, textDecoration: 'none' }}
           alignItems="center"
@@ -34,12 +33,10 @@ export function WinddownAlert() {
           {...fontProps}
         >
           <Box as="span" {...fontProps}>
-            Learn more
-          </Box>
-          <Box as="span" ml={1} {...fontProps}>
-            <ArrowRight size={12} />
+            BIP-928
           </Box>
         </Link>
+        .
       </Text>
     </Alert>
   )
